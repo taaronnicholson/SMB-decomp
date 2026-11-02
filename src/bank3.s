@@ -1081,7 +1081,7 @@ B3_BD7F:
     RTS
 B3_BDDB:
     LDA #$00
-    JSR F_CE61
+    JSR PlaySfxSq1
     JMP B3_BDF1
 B3_BDE3:
     LDA player_y_lo
@@ -1151,7 +1151,7 @@ B3_BE9C:
     STA zp_53
     JSR F_F6B0
     LDA #$28
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDY zp_53
     LDA B3_BE38,y
     BEQ B3_BE9C

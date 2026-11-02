@@ -4705,7 +4705,7 @@ B1_B21A:
     LDA #$18
     STA zp_63
     LDA #$43
-    JMP F_CE61
+    JMP PlaySfxSq1
     .byte $60
 B1_B22E:
     LDA #$02
@@ -4976,7 +4976,7 @@ B1_BD99:
     LDA #$FF
     LDY #$BD
     JSR B1_BE3C
-    LDA zp_D7
+    LDA items_found
     CLC
     ADC #$C4
     STA PPUDATA

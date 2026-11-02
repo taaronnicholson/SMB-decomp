@@ -11,12 +11,12 @@ B6_8006:
     JMP Sound_Silence
 B6_8009:
     JMP Sound_Resume
-B6_800C:
-    JMP Sound_PlaySfxSq1
-B6_800F:
-    JMP Sound_PlaySfxSq2
-B6_8012:
-    JMP Sound_PlaySfxNoise
+Sound_PlaySfxSq1:
+    JMP Sound_PlaySfxSq1Impl
+Sound_PlaySfxSq2:
+    JMP Sound_PlaySfxSq2Impl
+Sound_PlaySfxNoise:
+    JMP Sound_PlaySfxNoiseImpl
 Sound_PlaySongImpl:
     TAY
     JSR Sound_Silence
@@ -1195,7 +1195,7 @@ PeriodTable:
     .word $0013
     .word $0012
     .word $0011
-Sound_PlaySfxSq1:
+Sound_PlaySfxSq1Impl:
     ASL a
     TAY
     LDA #$00
@@ -1241,7 +1241,7 @@ B6_8993:
     STA SQ1_HI
     DEC snd_sfx_sq1
     RTS
-Sound_PlaySfxSq2:
+Sound_PlaySfxSq2Impl:
     STA ram_07DD
     ASL a
     TAY
@@ -1298,7 +1298,7 @@ B6_8A52:
     STA SQ2_HI
     DEC snd_sfx_sq2
     RTS
-Sound_PlaySfxNoise:
+Sound_PlaySfxNoiseImpl:
     ASL a
     TAY
     LDA #$00

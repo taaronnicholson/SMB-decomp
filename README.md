@@ -133,7 +133,17 @@ timers and counters by many handlers).
 Example, type `$4E` (the seven red propeller creatures of area 0, group 14): after the player-overlap and touch checks it
 walks one pixel per frame along X (direction = `ent_flags` bit 1), turns when `Ent_PatrolStep` reports a wall or ledge, counts
 `ent_radius` down as a timer and changes into type `$4F` when it expires. Hit detection and the player-hurt routine are shared
-helpers (`Ent_CheckPlayerOverlap`, `Ent_CheckPlayerTouch`). The other handlers have not been read in detail.
+helpers (`Ent_CheckPlayerOverlap`, `Ent_CheckPlayerTouch`). Other handlers read so far (stage 0 types):
+- `$01` **balloon** (inferred, the level goal): on touching the player it stores the respawn point (`spawn_y/x`, area), becomes `$02`
+  (a popped balloon that rises along a displacement table) and decrements `balloons_left` (`$A8`, set from the stage data at level
+  load and drawn on the HUD; `balloons_popped` is `$A9`); at 0 the level-end state (`$16`) starts. Slots 0-7 are reserved for
+  balloons, so they come from the per-area list after the entity list, not from the spawn records.
+- `$08` hidden bonus item: on touch plays sfx `$19` (`PlaySfxSq2`), turns into type `$07` and increments `items_found` (`$D7`), which the
+  "FOUND n / NOW FIND ALL 4 / ONE ON EACH STAGE" message prints.
+- `$51` → `$52` orbiter: `$51` saves its position as a centre point and becomes `$52`, which adds `ent_param2` to `ent_angle` each frame
+  and places itself on a circle of radius `ent_radius` around the centre (`SetEntityPolarPos`).
+- `$2E` follows a scripted displacement table (`$9CA2`, `ent_radius` = step index, `$FF` loops): the green butterfly's flight path.
+The remaining handlers have not been read in detail.
 
 ## Sound engine (bank 6)
 `$8000` is a jump table: `Sound_PlaySong` (A = song 0-8), `Sound_Update` (`$8003`, once per frame),

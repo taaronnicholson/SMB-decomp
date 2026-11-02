@@ -357,8 +357,8 @@ F_C659:
     STA ram_01AB,x
     DEX
     BPL F_C659
-    STA zp_D7
-    STA zp_A8
+    STA items_found
+    STA balloons_left
     STA zp_A7
     STA stage_index
 F_C667:
@@ -870,8 +870,8 @@ F_CA09:
     PLA
     STA ptr_lo
     LDA (ptr_lo),y
-    STA zp_A8
-    STY zp_A9
+    STA balloons_left
+    STY balloons_popped
     RTS
 F_CA31:
     LDX #$27
@@ -1448,7 +1448,7 @@ SilenceSound:
     JSR B6_8006
     PLA
     JMP SwitchBank
-F_CE61:
+PlaySfxSq1:
     STA zp_08
     LDA cur_bank
     PHA
@@ -1457,12 +1457,12 @@ F_CE61:
     LDA #$06
     JSR SwitchBankKeepX
     LDA zp_08
-    JSR B6_800C
+    JSR Sound_PlaySfxSq1
     PLA
     TAX
     PLA
     JMP SwitchBankKeepX
-F_CE78:
+PlaySfxSq2:
     STA zp_08
     LDA cur_bank
     PHA
@@ -1471,7 +1471,7 @@ F_CE78:
     LDA #$06
     JSR SwitchBankKeepX
     LDA zp_08
-    JSR B6_800F
+    JSR Sound_PlaySfxSq2
     PLA
     TAX
     PLA
@@ -1485,7 +1485,7 @@ F_CE8F:
     LDA #$06
     JSR SwitchBankKeepX
     LDA zp_08
-    JSR B6_8012
+    JSR Sound_PlaySfxNoise
     PLA
     TAX
     PLA
@@ -3595,14 +3595,14 @@ F_DD72:
     STA zp_63
     STA zp_7C
     LDA #$27
-    JMP F_CE61
+    JMP PlaySfxSq1
 F_DD8F:
     LDX #$01
     STX zp_63
     DEX
     STX zp_8F
     LDA #$07
-    JMP F_CE61
+    JMP PlaySfxSq1
 F_DD9B:
     JMP F_DD46
 F_DD9E:
@@ -4929,7 +4929,7 @@ F_E70B:
 F_E718:
     STA zp_80
     LDA #$11
-    JSR F_CE61
+    JSR PlaySfxSq1
     JMP F_E72C
 F_E722:
     LDA #$04
@@ -5122,7 +5122,7 @@ F_E858:
     LDA zp_77
     STA zp_57
     LDA #$27
-    JSR F_CE61
+    JSR PlaySfxSq1
     RTS
 F_E87B:
     PLA
@@ -5187,7 +5187,7 @@ F_E89E:
     JSR SwitchBank
     JMP $B517
     .byte $A9,$02,$20,$0D,$C9,$4C,$3A
-    LDA zp_A9,x
+    LDA balloons_popped,x
     ASL zp_20
     ORA $4CC9
     LDX $A9A2,y
@@ -6000,7 +6000,7 @@ F_EF5D:
     EOR #$01
     STA zp_DD
     LDA #$16
-    JSR F_CE78
+    JSR PlaySfxSq2
 F_EF68:
     LDA zp_DD
     ASL a
@@ -6019,7 +6019,7 @@ F_EF81:
     EOR #$01
     STA zp_DE
     LDA #$16
-    JSR F_CE78
+    JSR PlaySfxSq2
 F_EF8C:
     LDA zp_DE
     ASL a
@@ -6044,7 +6044,7 @@ F_EFAB:
     EOR #$01
     STA zp_DC
     LDA #$16
-    JSR F_CE78
+    JSR PlaySfxSq2
 F_EFB6:
     LDA zp_DC
     ASL a
@@ -6127,7 +6127,7 @@ F_F020:
     CMP #$E0
     BCC F_F03E
     LDA #$1B
-    JSR F_CE61
+    JSR PlaySfxSq1
 F_F03E:
     LDA (ptr_lo),y
 F_F040:
@@ -6289,7 +6289,7 @@ F_F14F:
     LDA #$2C
     STA ram_0720
     LDA #$17
-    JSR F_CE78
+    JSR PlaySfxSq2
     RTS
 F_F16F:
     INC zp_A7
@@ -7097,7 +7097,7 @@ F_F751:
 F_F770:
     PHA
     LDA #$16
-    JSR F_CE61
+    JSR PlaySfxSq1
     LDA zp_66
     BEQ F_F793
     INC ram_0730
@@ -7416,7 +7416,7 @@ F_F9D7:
     STA zp_55
     JSR F_F8B1
     LDA #$1A
-    JSR F_CE61
+    JSR PlaySfxSq1
     LDA #$1A
     STA zp_53
     JMP F_F9F9

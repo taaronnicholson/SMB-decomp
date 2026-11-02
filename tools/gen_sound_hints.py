@@ -90,7 +90,8 @@ for i in range(NSEQ):
     nxt = min([e for e in sq if e > a] + [SEQ_END])
     out.append(f'name 6 {a:X} SfxSeq{i}')
     out.append(f'struct 6 {a:X} 1 ' + 'b' * (nxt - a))
-out += ['name 6 8980 Sound_PlaySfxSq1       ; A = sfx id (0-74)', 'name 6 89EC Sound_PlaySfxSq2', 'name 6 8A6F Sound_PlaySfxNoise']
+out += ['name 6 800C Sound_PlaySfxSq1       ; jump-table entry: A = sfx id (0-74)', 'name 6 800F Sound_PlaySfxSq2', 'name 6 8012 Sound_PlaySfxNoise',
+        'name 6 8980 Sound_PlaySfxSq1Impl', 'name 6 89EC Sound_PlaySfxSq2Impl', 'name 6 8A6F Sound_PlaySfxNoiseImpl']
 out += ['ram 074A snd_playing', 'ram 074B snd_sfx_sq1', 'ram 074C snd_sfx_sq2', 'ram 074D snd_sfx_noise',
         'ram 074E snd_tempo', 'ram 074F snd_tempo_base', 'ram 0756 snd_tempo_acc', 'ram 0757 snd_song_transpose',
         'ram 0758 snd_song_ended',

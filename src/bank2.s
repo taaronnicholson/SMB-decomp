@@ -3050,7 +3050,7 @@ B2_B64F:
     LDA #$00
     STA zp_53
     STA ptr_hi
-    LDA zp_A8
+    LDA balloons_left
     STA ptr_lo
     JSR B2_B732
     LDA #$01

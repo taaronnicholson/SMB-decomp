@@ -924,7 +924,7 @@ B4_AD39:
     JSR F_C9A5
     LDA #$F0
     JSR F_C8B4
-    LDA zp_D7
+    LDA items_found
     CMP #$04
     BEQ B4_AD60
     LDY #$01
@@ -1062,7 +1062,7 @@ B4_AE8F:
     BNE B4_AEA2
 B4_AE9B:
     LDA #$13
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDA ptr_lo
 B4_AEA2:
     CLC
@@ -1990,7 +1990,7 @@ B4_B6B6:
     LDA #$32
     STA ram_01B7
     LDA #$29
-    JSR F_CE61
+    JSR PlaySfxSq1
     JSR F_FA3D
     LDA player_x_lo
     STA ent_x_lo,y

@@ -1155,7 +1155,7 @@ B5_88D8:
     CMP #$02
     BNE B5_8901
     LDA #$0C
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDA zp_7F
     STA zp_66
     LDA #$14
@@ -1692,7 +1692,7 @@ B5_8CBB:
     STA ent_radius,x
     LDA #$02
     STA ent_type,x
-    DEC zp_A8
+    DEC balloons_left
     BNE B5_8D33
     LDA #$00
     STA zp_B9
@@ -1711,8 +1711,8 @@ B5_8D33:
     LDA #$42
     JSR F_CE8F
     JSR B5_8A55
-    LDA zp_A9
-    INC zp_A9
+    LDA balloons_popped
+    INC balloons_popped
     CMP #$05
     BCC B5_8D45
     LDA #$05
@@ -1987,7 +1987,7 @@ B5_8FB3:
     CMP zp_56
     BCC B5_8FF0
     LDA #$19
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDA #$0E
     STA zp_E1
     LDA #$07
@@ -2072,7 +2072,7 @@ B5_9081:
     STA ent_type,x
     JSR B5_8A55
     LDA #$19
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDA #$07
     STA ent_type,x
     LDA #$00
@@ -2082,7 +2082,7 @@ B5_9081:
     STA ent_param,x
     LDA #$08
     STA ent_param2,x
-    INC zp_D7
+    INC items_found
 B5_90BF:
     LDA ent_dy,x
     LSR a
@@ -2268,7 +2268,7 @@ B5_9328:
     CMP #$7E
     BNE B5_9331
     LDA #$00
-    JMP F_CE78
+    JMP PlaySfxSq2
 B5_9331:
     LDA ent_y_lo,x
     CLC
@@ -2304,7 +2304,7 @@ B5_9351:
     STA zp_DF
     JSR B5_91C1
     LDA #$19
-    JSR F_CE78
+    JSR PlaySfxSq2
     JSR F_FA3D
     LDA #$04
     STA ent_type,y
@@ -2512,7 +2512,7 @@ B5_956D:
 B5_95A5:
     JSR B5_90BF
     LDA #$19
-    JSR F_CE78
+    JSR PlaySfxSq2
     JMP B5_91C1
 B5_95B0:
     LDA zp_B1
@@ -2595,7 +2595,7 @@ Ent11_Update:
     LDA #$04
     STA ent_param2,x
     LDA #$19
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDA #$20
     STA zp_7A
     LDA #$03
@@ -3353,7 +3353,7 @@ B5_9D2F:
     CMP zp_56
     BCC B5_9D55
     LDA #$43
-    JSR F_CE78
+    JSR PlaySfxSq2
     JMP B5_9D7A
 B5_9D55:
     LDA #$6F
@@ -3451,7 +3451,7 @@ Ent33_Update:
     STA zp_D3
     JSR B5_91C1
     LDA #$22
-    JSR F_CE78
+    JSR PlaySfxSq2
     JMP B5_8A55
 B5_9F0B:
     STA ptr_lo
@@ -3523,7 +3523,7 @@ Ent35_Update:
     CMP zp_56
     BCC B5_9FAE
     LDA #$29
-    JSR F_CE61
+    JSR PlaySfxSq1
     LDA #$07
     STA ent_type,x
     LDA #$00
@@ -3581,7 +3581,7 @@ Ent37_Update:
     CMP zp_56
     BCC B5_A01E
     LDA #$17
-    JSR F_CE78
+    JSR PlaySfxSq2
     JSR F_F16F
     BCC B5_A015
     LDA #$00
@@ -4114,7 +4114,7 @@ B5_A4A0:
     LDA #$04
     JSR F_CE8F
     LDA #$41
-    JSR F_CE61
+    JSR PlaySfxSq1
     LDA #$D7
     LDY #$A4
     JMP F_F917
@@ -4180,7 +4180,7 @@ Ent48_Update:
     CMP zp_56
     BCC B5_A5FD
     LDA #$19
-    JSR F_CE61
+    JSR PlaySfxSq1
     JSR B5_91C1
     LDA #$0B
     STA ent_param2,x
@@ -5118,7 +5118,7 @@ B5_AD95:
     LDA #$00
     STA ent_radius,x
     LDA #$00
-    JMP F_CE78
+    JMP PlaySfxSq2
 B5_ADAB:
     .byte $FE
 B5_ADAC:
@@ -5534,7 +5534,7 @@ B5_B181:
     LDA #$76
     STA ent_type,x
     LDA #$43
-    JMP F_CE78
+    JMP PlaySfxSq2
 B5_B1CB:
     LDA zp_B1
     AND #$06
@@ -6078,7 +6078,7 @@ B5_B652:
     LDA #$00
     STA ram_05DA
     LDA #$30
-    JMP F_CE78
+    JMP PlaySfxSq2
 Ent89_Update:
     JSR B5_A96E
     JSR B5_A99A
@@ -6113,7 +6113,7 @@ Ent8A_Update:
     RTS
 B5_B6CB:
     LDA #$34
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDA #$8B
     STA ent_type,x
     LDA #$0E
@@ -6140,7 +6140,7 @@ B5_B701:
     DEC zp_53
     BNE B5_B71C
     LDA #$38
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDA #$0A
     STA zp_53
     JSR B5_AA15
@@ -6418,7 +6418,7 @@ Ent92_Update:
     BCC B5_BA7E
     JSR B5_91C1
     LDA #$19
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDA #$0B
     STA ent_param2,x
     JSR F_F192
@@ -6445,7 +6445,7 @@ B5_BA7E:
     AND #$7F
     BNE B5_BA7D
     LDA #$2C
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDA #$4C
     LDY #$91
     JMP F_F917
@@ -6530,7 +6530,7 @@ B5_BB3F:
     LDA ent_angle,x
     BPL B5_BB3E
     LDA #$00
-    JSR F_CE78
+    JSR PlaySfxSq2
     LDA #$93
     STA ent_type,x
     LDA #$1D
@@ -6670,7 +6670,7 @@ B5_BC5B:
     BNE B5_BCA9
     INC zp_D9
     LDA #$29
-    JSR F_CE78
+    JSR PlaySfxSq2
     JSR F_FA3D
     LDA player_y_lo
     STA ent_y_lo,y

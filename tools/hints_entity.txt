@@ -3,14 +3,14 @@ name 5 8AF5 EntityHandlerTable
 struct 5 8AF5 1 w   ; type 0 (unused)
 words 5 8AF7 160 5
 name 5 BC46 Ent_Noop
-name 5 8CB3 Ent01_Update   ; handler for ent_type $01
-name 5 8D58 Ent02_Update   ; handler for ent_type $02
+name 5 8CB3 Ent01_Update   ; handler for ent_type $01 - balloon (goal): on touch sets the respawn point, becomes $02, decrements balloons_left; at 0 the level ends
+name 5 8D58 Ent02_Update   ; handler for ent_type $02 - popped balloon: rises along a displacement table
 name 5 8E9A Ent03_Update   ; handler for ent_type $03
 name 5 8EC4 Ent04_Update   ; handler for ent_type $04
 name 5 8F17 Ent05_Update   ; handler for ent_type $05
 name 5 8FAB Ent06_Update   ; handler for ent_type $06
 name 5 9047 Ent07_Update   ; handler for ent_type $07
-name 5 9073 Ent08_Update   ; handler for ent_type $08
+name 5 9073 Ent08_Update   ; handler for ent_type $08 - hidden bonus item: on touch plays sfx $19, becomes $07 and increments items_found
 name 5 90D8 Ent09_Update   ; handler for ent_type $09
 name 5 9183 Ent0A_Update   ; handler for ent_type $0A
 name 5 92F3 Ent0B_Update   ; handler for ent_type $0B
@@ -38,7 +38,7 @@ name 5 9B3E Ent25_Update   ; handler for ent_type $25
 name 5 9B64 Ent26_Update   ; handler for ent_type $26
 name 5 9BAB Ent27_Update   ; handler for ent_type $27
 name 5 9BD7 Ent28_Update   ; handler for ent_type $28
-name 5 9C42 Ent2E_Update   ; handler for ent_type $2E
+name 5 9C42 Ent2E_Update   ; handler for ent_type $2E - follows a scripted displacement path (table at $9CA2, ent_radius = step; $FF loops)
 name 5 9CBC Ent2F_Update   ; handler for ent_type $2F
 name 5 9CF4 Ent30_Update   ; handler for ent_type $30
 name 5 9D22 Ent31_Update   ; handler for ent_type $31
@@ -69,11 +69,11 @@ name 5 A604 Ent49_Update   ; handler for ent_type $49
 name 5 AA23 Ent4A_Update   ; handler for ent_type $4A
 name 5 AAB0 Ent4C_Update   ; handler for ent_type $4C
 name 5 AAE4 Ent4D_Update   ; handler for ent_type $4D
-name 5 AB35 Ent4E_Update   ; handler for ent_type $4E
+name 5 AB35 Ent4E_Update   ; handler for ent_type $4E - patrol creature: walks 1 px/frame in X, turns at walls/ledges, becomes $4F when ent_radius expires
 name 5 ABD1 Ent4F_Update   ; handler for ent_type $4F
 name 5 ACEC Ent50_Update   ; handler for ent_type $50
-name 5 AD1F Ent51_Update   ; handler for ent_type $51
-name 5 AD24 Ent52_Update   ; handler for ent_type $52
+name 5 AD1F Ent51_Update   ; handler for ent_type $51 - orbiter, inactive: saves its position as the circle centre and becomes $52
+name 5 AD24 Ent52_Update   ; handler for ent_type $52 - orbiter: ent_angle += ent_param2 each frame, placed on a circle of radius ent_radius around the centre
 name 5 AD3B Ent53_Update   ; handler for ent_type $53
 name 5 AD54 Ent54_Update   ; handler for ent_type $54
 name 5 AE21 Ent55_Update   ; handler for ent_type $55

@@ -158,3 +158,10 @@ name 5 8904 Ent_CheckPlayerOverlap   ; box overlap with the player; sets zp_53 t
 name 5 8A06 Ent_CheckPlayerTouch     ; second overlap test; leads to the player-hurt routine (F_F492) when the player is vulnerable
 name 5 AC25 Ent_PatrolStep           ; per-entity tick (ent_angle low 3 bits), checks map tiles ahead; returns zero flag when it must turn
 name f FAFE UpdateEntities           ; loops over the 48 entity slots, JMP (handler) with bank 5 mapped
+
+; ---- gameplay counters and sound wrappers ----
+name f CE61 PlaySfxSq1           ; A = sfx id (bank-safe wrapper for Sound_PlaySfxSq1)
+name f CE78 PlaySfxSq2           ; A = sfx id (bank-safe wrapper for Sound_PlaySfxSq2)
+ram 00A8 balloons_left           ; set from the stage data at level load, drawn on the HUD; level ends at 0 (inferred)
+ram 00A9 balloons_popped
+ram 00D7 items_found             ; hidden bonus items found (the "FOUND n" message)

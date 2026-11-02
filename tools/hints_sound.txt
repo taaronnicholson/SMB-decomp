@@ -473,9 +473,12 @@ name 6 92F6 SfxSeq14
 struct 6 92F6 1 bbbbbbbbbbbbb
 name 6 9303 SfxSeq15
 struct 6 9303 1 bbbbbbbbbb
-name 6 8980 Sound_PlaySfxSq1       ; A = sfx id (0-74)
-name 6 89EC Sound_PlaySfxSq2
-name 6 8A6F Sound_PlaySfxNoise
+name 6 800C Sound_PlaySfxSq1       ; jump-table entry: A = sfx id (0-74)
+name 6 800F Sound_PlaySfxSq2
+name 6 8012 Sound_PlaySfxNoise
+name 6 8980 Sound_PlaySfxSq1Impl
+name 6 89EC Sound_PlaySfxSq2Impl
+name 6 8A6F Sound_PlaySfxNoiseImpl
 ram 074A snd_playing
 ram 074B snd_sfx_sq1
 ram 074C snd_sfx_sq2
