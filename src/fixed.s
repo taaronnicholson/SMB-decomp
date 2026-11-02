@@ -695,7 +695,7 @@ SwitchBank:
     TAX
     LDA F_C000,x
     STA F_C000,x
-F_C916:
+GameState00:
     RTS
 SwitchBankFromAC:
     .byte $A5,$AC
@@ -7255,7 +7255,7 @@ F_F843:
     STA ptr_hi
     LDA #$C9
     STA tmp_a
-    JSR $BEA9
+    JSR B3_BEA9
     PLA
     JMP SwitchBankKeepX
 PlayerState19:

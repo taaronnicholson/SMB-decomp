@@ -29,6 +29,7 @@ regen:
 	python3 -I tools/gen_spawn_hints.py
 	python3 -I tools/gen_anim_hints.py
 	python3 -I tools/gen_player_hints.py
+	python3 -I tools/gen_gamestate_hints.py
 	python3 -I tools/gen_map_hints.py
 	python3 -I tools/gen_entity_hints.py
 	python3 -I tools/decomp.py

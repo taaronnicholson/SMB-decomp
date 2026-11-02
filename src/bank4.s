@@ -371,17 +371,16 @@ Gfx_B4_90AC:
     .byte $22,$BD,$87,$16,$97,$C2,$0F,$03,$B1,$DC,$6F,$37,$98,$FD,$9F,$35
     .byte $63,$B6,$EB,$B5,$DB,$18,$D8,$05,$2F,$D9,$EC,$D6,$4B,$85,$C2,$C1
     .byte $40,$BF,$D6,$8B,$25,$B3,$79,$BC,$BE,$3F,$5C,$EB,$F6,$CA,$60,$FE
-    .byte $35,$1F,$F6,$91,$19,$EC,$38,$D4,$79
-B4_9685:
-    .byte $AC,$D2,$68,$74,$3A,$0E,$07,$C5,$A4,$D3,$69,$EE,$79,$A0,$7D,$03
-    .byte $45,$79,$AF,$C2,$01,$0B,$FE,$CF,$FF,$6F,$13,$AF,$98,$AE,$8A,$45
-    .byte $E1,$9C,$F9,$D9,$28,$1B,$EE,$7C,$D3,$BB,$D9,$EE,$23,$7B,$75,$C9
-    .byte $6B,$2B,$18,$03,$80,$2F,$8C,$FD,$F1,$15,$9A,$DB,$4A,$64,$A2,$5B
-    .byte $A6,$94,$CC,$94,$DA,$7A,$E7,$A5,$E8,$98,$D7,$D5,$7D,$6F,$B7,$3A
-    .byte $06,$7A,$F3,$A7,$CF,$A9,$FA,$95,$AA,$FE,$E2,$24,$B3,$78,$19,$C1
-    .byte $00,$1F,$CD,$59,$27,$56,$F2,$10,$10,$10,$37,$BB,$B8,$3B,$BF,$44
-    .byte $4C,$45,$8A,$07,$10,$01,$E0,$2C,$A8,$74,$3A,$19,$14,$4E,$28,$00
-    .byte $C8,$24,$38,$CD,$32,$7C,$32,$FF,$58,$E7,$5B,$80,$00
+    .byte $35,$1F,$F6,$91,$19,$EC,$38,$D4,$79,$AC,$D2,$68,$74,$3A,$0E,$07
+    .byte $C5,$A4,$D3,$69,$EE,$79,$A0,$7D,$03,$45,$79,$AF,$C2,$01,$0B,$FE
+    .byte $CF,$FF,$6F,$13,$AF,$98,$AE,$8A,$45,$E1,$9C,$F9,$D9,$28,$1B,$EE
+    .byte $7C,$D3,$BB,$D9,$EE,$23,$7B,$75,$C9,$6B,$2B,$18,$03,$80,$2F,$8C
+    .byte $FD,$F1,$15,$9A,$DB,$4A,$64,$A2,$5B,$A6,$94,$CC,$94,$DA,$7A,$E7
+    .byte $A5,$E8,$98,$D7,$D5,$7D,$6F,$B7,$3A,$06,$7A,$F3,$A7,$CF,$A9,$FA
+    .byte $95,$AA,$FE,$E2,$24,$B3,$78,$19,$C1,$00,$1F,$CD,$59,$27,$56,$F2
+    .byte $10,$10,$10,$37,$BB,$B8,$3B,$BF,$44,$4C,$45,$8A,$07,$10,$01,$E0
+    .byte $2C,$A8,$74,$3A,$19,$14,$4E,$28,$00,$C8,$24,$38,$CD,$32,$7C,$32
+    .byte $FF,$58,$E7,$5B,$80,$00
 ; Gfx_B4_9712: LZ-compressed, 48 bytes -> 120 bytes to RAM $03A4 (stage 1)
 Gfx_B4_9712:
     .byte $00,$01,$76,$00,$00,$34,$00,$70,$0A,$02,$92,$B0,$02,$09,$F4,$11
@@ -884,48 +883,58 @@ DispatchGameState:
     LDA game_state
     ASL a
     TAY
-    LDA B4_ADE1,y
+    LDA GameStateHandlers,y
     STA ptr_lo
-    LDA B4_ADE1+1,y
+    LDA GameStateHandlers+1,y
     STA ptr_hi
     JMP (ptr_lo)
-B4_ADE1:
-    .word F_C916
-    .word B4_AE39
-    .word B4_AE56
-    .word B4_AE55
-    .word B4_AF1B
-    .word B4_AF32
-    .word B4_AFD8
-    .word B4_AFD8
-    .word B4_AFD8
-    .word B4_AFF5
-    .word B4_B033
-    .word B4_B084
-    .word B4_AFEC
-    .word B4_B337
-    .word B4_B43C
-    .word B4_B445
-    .word B4_B46B
-    .word B4_B4CE
-    .word B4_B4E4
-    .byte $F6,$B4,$ED,$B4,$F6,$B4,$F6,$B4,$B7,$BC,$B2,$BC,$2B,$AE,$19,$AE
-    .byte $22,$AE
+GameStateHandlers:
+    .word GameState00
+    .word GameState01
+    .word GameState02
+    .word GameState03
+    .word GameState04
+    .word GameState05
+    .word GameState06
+    .word GameState06
+    .word GameState06
+    .word GameState09
+    .word GameState0A
+    .word GameState0B
+    .word GameState0C
+    .word GameState0D
+    .word GameState0E
+    .word GameState0F
+    .word GameState10
+    .word GameState11
+    .word GameState12
+    .word GameState13
+    .word GameState14
+    .word GameState13
+    .word GameState13
+    .word GameState17
+    .word GameState18
+    .word GameState19
+    .word GameState1A
+    .word GameState1B
+GameState1A:
     LDY #$06
     LDX #$5E
     LDA #$BD
     JMP FarCall
+GameState1B:
     LDY #$06
     LDX #$99
     LDA #$BD
     JMP FarCall
+GameState19:
     LDA ram_0101
     ORA #$08
     STA ram_0101
     LDA #$00
     STA game_state
     RTS
-B4_AE39:
+GameState01:
     LDA powerup_shot
     BEQ B4_AE4C
     LDA #$03
@@ -940,9 +949,9 @@ B4_AE4C:
     STA game_state
     LDA #$00
     STA zp_C5
-B4_AE55:
+GameState03:
     RTS
-B4_AE56:
+GameState02:
     JSR B4_AEF6
     LDA zp_A6
     BEQ B4_AE8F
@@ -966,7 +975,7 @@ B4_AE56:
     STA ram_0738
     LDA #$01
     STA ram_0737
-    JMP B4_AF32
+    JMP GameState05
 B4_AE8F:
     LDA zp_C5
     STA ptr_lo
@@ -1014,7 +1023,7 @@ B4_AEF6:
     LDA #$00
     STA ram_073A
     RTS
-B4_AF1B:
+GameState04:
     LDA #$B3
     STA tmp_c
     LDA #$AF
@@ -1025,7 +1034,7 @@ B4_AF1B:
     LDA #$03
     STA game_state
     JMP F_F843
-B4_AF32:
+GameState05:
     LDA #$B3
     STA tmp_c
     LDA #$AF
@@ -1091,7 +1100,7 @@ B4_AF7B:
     .byte $49,$57,$20,$53,$49,$48,$54,$FF,$21,$82,$89
     .byte ":UOY PLEH"   ; reads: "HELP YOU:"
     .byte $00
-B4_AFD8:
+GameState06:
     LDA #$00
     STA tmp_a
     JSR B4_B4F7
@@ -1100,13 +1109,13 @@ B4_AFD8:
     LDA #$0C
     STA game_state
     STA ram_0736
-B4_AFEC:
+GameState0C:
     LDA #$03
     STA camera_mode
     JSR B4_B515
 B4_AFF4:
     RTS
-B4_AFF5:
+GameState09:
     LDA player_state
     CMP #$09
     BEQ B4_AFF4
@@ -1132,7 +1141,7 @@ B4_AFF5:
     STA ram_073F
     STA ram_0740
     RTS
-B4_B033:
+GameState0A:
     LDA #$74
     STA tmp_c
     LDA #$B0
@@ -1169,7 +1178,7 @@ B4_B06F:
     .byte $26,$6A,$8C,$40
     .byte "RAELC EGATS"   ; reads: "STAGE CLEAR"
     .byte $00
-B4_B084:
+GameState0B:
     LDA ram_072F
     ASL a
     TAY
@@ -1466,7 +1475,7 @@ B4_B2D9:
     RTS
     .byte $26,$EF,$84,$30,$31,$20,$58,$00,$26,$EF,$84,$30,$35,$20,$58,$00
     .byte $26,$EF,$84,$20,$20,$20,$20,$00
-B4_B337:
+GameState0D:
     LDA focus_y_lo
     SEC
     SBC #$18
@@ -1604,12 +1613,12 @@ B4_B40E:
     LDA tmp_c
 B4_B43B:
     RTS
-B4_B43C:
+GameState0E:
     LDY #$03
     LDX #$05
     LDA #$BF
     JMP FarCall
-B4_B445:
+GameState0F:
     JSR B4_AEF6
     LDA #$01
     STA ram_0736
@@ -1626,7 +1635,7 @@ B4_B445:
     BNE B4_B43B
     INC game_state
     RTS
-B4_B46B:
+GameState10:
     LDA #$A9
     STA tmp_c
     LDA #$B4
@@ -1664,7 +1673,7 @@ B4_B4A8:
     .byte $FF,$21,$82,$88
     .byte ":REVO SI"   ; reads: "IS OVER:"
     .byte $00
-B4_B4CE:
+GameState11:
     DEC ram_0737
     BNE B4_B4A8
     LDX #$12
@@ -1676,20 +1685,28 @@ B4_B4CE:
     LDA #$02
     STA credits_ptr_hi
     RTS
-B4_B4E4:
+GameState12:
     LDY #$04
     LDX #$DC
     LDA #$AB
     JMP FarCall
+GameState14:
     LDY #$01
     LDX #$57
     LDA #$BE
     JMP FarCall
-    .byte $60
+GameState13:
+    RTS
 B4_B4F7:
-    .byte $A5,$60,$38,$E5,$53,$85,$94,$A5,$61,$E9,$00,$85
-    STA zp_A5,x
-    LSR B4_9685,x
+    LDA player_y_lo
+    SEC
+    SBC tmp_a
+    STA spawn_y_lo
+    LDA player_y_hi
+    SBC #$00
+    STA spawn_y_hi
+    LDA player_x_lo
+    STA spawn_x_lo
     LDA player_x_hi
     STA spawn_x_hi
     LDA current_area
@@ -2425,8 +2442,12 @@ B4_BCAA:
     STA ppu_buffer,x
     STX ppu_buffer_idx
     RTS
-    .byte $A9,$20,$4C,$B9,$BC
+GameState18:
+    LDA #$20
+    JMP B4_BCB9
+GameState17:
     LDA #$1C
+B4_BCB9:
     STA tmp_08
     LDA zp_48
     AND #$03

@@ -1137,6 +1137,7 @@ B3_BE9D:
     BEQ B3_BE9C
     CMP #$02
     BEQ B3_BE9C
+B3_BEA9:
     LDA tmp_a
     PHA
     LDA tmp_b
