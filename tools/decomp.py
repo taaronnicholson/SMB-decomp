@@ -268,7 +268,7 @@ def fmt_instr(p, pc):
     if val < 0x100: s = f'a:{s}'
     return {'abs': f'{mn} {s}', 'abx': f'{mn} {s},x', 'aby': f'{mn} {s},y'}[m]
 
-# auto-detect tables of code pointers sitting in data: >=3 consecutive words that each
+# auto-detect tables of code pointers sitting in data: >=4 consecutive words that each
 # point at a known instruction start (same bank, or fixed bank)
 auto_tables = []
 for p in range(NB):
@@ -282,7 +282,7 @@ for p in range(NB):
             tp = FIXED if t >= 0xC000 else (p if p != FIXED else None)
             if tp is not None and t >= 0x8000 and (tp, t) in starts: run.append((b, t, tp)); b += 2
             else: break
-        if len(run) >= 3:
+        if len(run) >= 4:
             auto_tables.append((p, a, run)); a = b
         else: a += 1
 # word tables of code pointers (from hints) get .word emission
@@ -356,11 +356,13 @@ os.makedirs(os.path.join(ROOT, 'src'), exist_ok=True)
 for i in range(3): want(FIXED, byte(FIXED, 0x3FFA + 2 * i) | byte(FIXED, 0x3FFB + 2 * i) << 8)
 # two rounds so labels created by later banks (cross refs) appear in earlier outputs
 emitted = set()
-for _ in range(12):
+for _ in range(2):          # let cross-bank references create their labels
+    banks = {p: emit_bank(p) for p in range(NB)}
+for _ in range(12):         # then drop labels that could not be emitted (inside a cell, etc.)
     emitted = set()
     banks = {p: emit_bank(p) for p in range(NB)}
-    missing = {k for k in labels if k not in emitted and k not in badlabels}
-    if not missing and _ >= 1: break
+    missing = {k for k in labels if k not in emitted}
+    if not missing: break
     badlabels |= missing
     for k in missing: labels.pop(k, None)
 for p in range(NB):
@@ -404,3 +406,5 @@ if os.environ.get('MAP'):
             while a < base + 0x4000 and (p, a) not in code_bytes: a += 1
             runs.append((s0, a))
         print(f'bank {p} data/unreached runs:', ' '.join(f'{s:04X}-{e-1:04X}({e-s})' for s, e in runs if e - s >= 8))
+if os.environ.get('DBG'):
+    k = (FIXED, 0xC5EA); print('ctx C5EA', ctx.get(k), instr.get(k), (0, 0x8245) in starts, (0,0x8245) in code_bytes)
