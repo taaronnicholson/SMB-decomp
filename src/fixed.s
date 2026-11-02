@@ -379,20 +379,20 @@ F_C66C:
     STA ptr_hi
     LDY #$00
     LDA (ptr_lo),y
-    STA player_x_lo
-    STA spawn_x_lo
-    INY
-    LDA (ptr_lo),y
-    STA player_x_hi
-    STA spawn_x_hi
-    INY
-    LDA (ptr_lo),y
     STA player_y_lo
     STA spawn_y_lo
     INY
     LDA (ptr_lo),y
     STA player_y_hi
     STA spawn_y_hi
+    INY
+    LDA (ptr_lo),y
+    STA player_x_lo
+    STA spawn_x_lo
+    INY
+    LDA (ptr_lo),y
+    STA player_x_hi
+    STA spawn_x_hi
     INY
     LDA (ptr_lo),y
     STA zp_98
@@ -416,7 +416,7 @@ F_C66C:
     STA zp_63
     PLA
 F_C6CC:
-    JSR F_D05C
+    JSR LoadArea
     JSR F_CA31
     JSR F_C956
     LDA #$02
@@ -752,7 +752,7 @@ F_C959:
     LDX #$32
     LDA #$BF
     JSR FarCall
-    LDA zp_AB
+    LDA current_area
     CMP #$04
     BNE F_C96F
     LDY stage_index
@@ -890,24 +890,24 @@ F_CA3D:
     STA ram_0120
     LDA #$08
     STA zp_77
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBank
     LDY #$00
     STY ptr_hi
-    LDA zp_23
+    LDA map_width
     ASL a
     ROL ptr_hi
-    ADC zp_25
+    ADC map_ptr_lo
     STA ptr_lo
-    LDA zp_26
+    LDA map_ptr_hi
     ADC ptr_hi
     STA ptr_hi
-    LDA zp_24
+    LDA map_height
     SEC
     SBC #$02
     STA zp_55
 F_CA6B:
-    LDA zp_23
+    LDA map_width
     STA zp_56
 F_CA6F:
     LDY #$00
@@ -973,7 +973,7 @@ F_CAD9:
     BNE F_CA6B
     LDA #$01
     JSR SwitchBank
-    LDA zp_AB
+    LDA current_area
     ASL a
     TAY
     LDA B1_9F25,y
@@ -1256,7 +1256,7 @@ F_CCCD:
 F_CCD4:
     LDX #$00
 F_CCD6:
-    LDA zp_AB
+    LDA current_area
     CMP ent_angle,x
     BNE F_CCFC
     LDA ent_dx,x
@@ -1298,7 +1298,7 @@ F_CD03:
     LDA #$00
     STA ent_flags,x
     STA ram_05A0,x
-    LDA zp_AB
+    LDA current_area
     STA ent_angle,x
     JMP F_CD44
 F_CD3F:
@@ -1738,17 +1738,17 @@ F_D047:
     LDA #$02
     JSR SwitchBank
     JMP $B618
-F_D05C:
-    STA zp_AB
+LoadArea:
+    STA current_area
     TAX
     LDA #$00
     JSR SwitchBankKeepX
-    LDA B0_83B9,x
+    LDA AreaHeaderPtrLo,x
     STA tmp_ptr_lo
-    LDA B0_83D1,x
+    LDA AreaHeaderPtrHi,x
     STA tmp_ptr_hi
-    LDA B0_83E9,x
-    STA zp_AC
+    LDA AreaMapBank,x
+    STA map_bank
     LDY #$00
     STY zp_09
     STY zp_0A
@@ -1764,7 +1764,7 @@ F_D05C:
     LDA #$02
     JSR SwitchBank
     JSR B2_B4A7
-    LDA zp_AB
+    LDA current_area
     CMP #$04
     BEQ F_D09F
     JSR B2_AF27
@@ -1778,23 +1778,23 @@ F_D09F:
     JSR F_CE3B
     INY
     LDA (tmp_ptr_lo),y
-    STA zp_25
+    STA map_ptr_lo
     INY
     LDA (tmp_ptr_lo),y
-    STA zp_26
+    STA map_ptr_hi
     INY
     LDA (tmp_ptr_lo),y
-    STA zp_33
+    STA map_log2_width
     TAX
     LDA #$08
-    STA zp_23
+    STA map_width
 F_D0C3:
-    ASL zp_23
+    ASL map_width
     DEX
     BNE F_D0C3
     INY
     LDA (tmp_ptr_lo),y
-    STA zp_24
+    STA map_height
     LDA #$00
     STA zp_38
     STA zp_39
@@ -1804,7 +1804,7 @@ F_D0C3:
 F_D0D9:
     LDA zp_38
     CLC
-    ADC zp_23
+    ADC map_width
 F_D0DE:
     STA zp_38
     LDA zp_39
@@ -1812,7 +1812,7 @@ F_D0DE:
     STA zp_39
     DEX
     BPL F_D0D9
-    LDA zp_24
+    LDA map_height
     ASL a
     ROL zp_37
     ASL a
@@ -1823,7 +1823,7 @@ F_D0F4:
     ASL a
     ROL zp_37
     STA zp_36
-    LDA zp_23
+    LDA map_width
     ASL a
     ROL zp_35
     ASL a
@@ -1927,7 +1927,7 @@ F_D16B:
     BNE F_D1DA
     JSR B0_B563
 F_D1C0:
-    LDA zp_AB
+    LDA current_area
     CMP #$04
     BNE F_D1DA
     LDA #$40
@@ -1997,7 +1997,7 @@ F_D237:
     LDA #$02
     JSR SwitchBank
     JSR B2_A554
-    LDA zp_AB
+    LDA current_area
     CMP #$04
     BEQ F_D27F
     JSR B2_A606
@@ -2040,11 +2040,11 @@ F_D29A:
     BPL F_D29A
     RTS
 F_D2A1:
-    LDA player_x_lo
+    LDA player_y_lo
     SEC
     SBC zp_4B
     STA zp_1D
-    LDA player_x_hi
+    LDA player_y_hi
     SBC #$00
     STA zp_1E
     BCC F_D2BB
@@ -2080,11 +2080,11 @@ F_D2D3:
     LDA zp_54
     STA zp_1E
 F_D2E3:
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC zp_4A
     STA zp_1B
-    LDA player_y_hi
+    LDA player_x_hi
     SBC #$00
     STA zp_1C
     BCS F_D2F8
@@ -2134,11 +2134,11 @@ F_D318:
     LSR tmp_ptr_lo
     ROR a
     STA zp_32
-    LDA zp_25
+    LDA map_ptr_lo
     CLC
     ADC zp_31
     STA zp_21
-    LDA zp_26
+    LDA map_ptr_hi
     ADC #$00
     STA zp_22
     LDX zp_32
@@ -2147,7 +2147,7 @@ F_D318:
 F_D351:
     LDA zp_21
     CLC
-    ADC zp_23
+    ADC map_width
     STA zp_21
     LDA zp_22
     ADC #$00
@@ -2172,7 +2172,7 @@ F_D361:
 F_D37F:
     LDX #$00
 F_D381:
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
@@ -2200,7 +2200,7 @@ F_D3A3:
     STA zp_22
     LDX #$00
 F_D3B7:
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
@@ -2228,7 +2228,7 @@ F_D3D9:
     STA zp_22
     LDA zp_21
     CLC
-    ADC zp_23
+    ADC map_width
     STA zp_21
     LDA zp_22
     ADC #$00
@@ -2243,7 +2243,7 @@ F_D3FF:
     STA PPUADDR
     LDX #$00
 F_D40B:
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
@@ -2284,7 +2284,7 @@ F_D44C:
     PHA
 F_D454:
     LDY #$00
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
     TAY
@@ -2294,7 +2294,7 @@ F_D454:
     AND #$03
     STA tmp_ptr_lo
     LDY #$01
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
     TAY
@@ -2304,8 +2304,8 @@ F_D454:
     AND #$0C
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
-    LDY zp_23
-    LDA zp_AC
+    LDY map_width
+    LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
     TAY
@@ -2315,9 +2315,9 @@ F_D454:
     AND #$30
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
-    LDY zp_23
+    LDY map_width
     INY
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
     TAY
@@ -2342,7 +2342,7 @@ F_D454:
     STA zp_21
     LDA zp_21
     CLC
-    ADC zp_23
+    ADC map_width
     STA zp_21
     LDA zp_22
     ADC #$00
@@ -2351,7 +2351,7 @@ F_D4D3:
     LDA zp_21
 F_D4D5:
     CLC
-    ADC zp_23
+    ADC map_width
 F_D4D8:
     STA zp_21
     LDA zp_22
@@ -2363,7 +2363,7 @@ F_D4D8:
 F_D4E7:
     LDA zp_21
     SEC
-    SBC zp_23
+    SBC map_width
     STA zp_21
     LDA zp_22
     SBC #$00
@@ -2375,7 +2375,7 @@ F_D4E7:
 F_D4FE:
     LDX #$08
 F_D500:
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
@@ -2385,7 +2385,7 @@ F_D500:
     LDA (zp_27),y
     AND #$03
     STA tmp_ptr_lo
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDY #$01
     LDA (zp_21),y
@@ -2396,9 +2396,9 @@ F_D500:
     AND #$0C
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
-    LDY zp_23
+    LDY map_width
     LDA (zp_21),y
     TAY
     LDA #$00
@@ -2407,9 +2407,9 @@ F_D500:
     AND #$30
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
-    LDY zp_23
+    LDY map_width
     INY
     LDA (zp_21),y
     TAY
@@ -2696,7 +2696,7 @@ F_D715:
     BNE F_D732
     LDA zp_21
     CLC
-    ADC zp_23
+    ADC map_width
     STA zp_21
     LDA zp_22
     ADC #$00
@@ -2768,7 +2768,7 @@ F_D78F:
     BEQ F_D7A0
     LDA zp_21
     SEC
-    SBC zp_23
+    SBC map_width
     STA zp_21
     LDA zp_22
     SBC #$00
@@ -2857,7 +2857,7 @@ F_D811:
     LDA zp_43
     AND #$01
     BEQ F_D854
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
@@ -2870,7 +2870,7 @@ F_D811:
     DEX
     LDA zp_21
     CLC
-    ADC zp_23
+    ADC map_width
     STA zp_21
     LDA zp_22
     ADC #$00
@@ -2880,7 +2880,7 @@ F_D850:
     BEQ F_D885
 F_D854:
     LDY #$00
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
     JSR F_DBB7
@@ -2895,7 +2895,7 @@ F_D854:
     DEX
     LDA zp_21
     CLC
-    ADC zp_23
+    ADC map_width
     STA zp_21
     LDA zp_22
     ADC #$00
@@ -2932,7 +2932,7 @@ F_D898:
     DEX
 F_D8B3:
     LDY #$00
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
     JSR F_DBB7
@@ -2951,7 +2951,7 @@ F_D8D4:
     LDA zp_21
 F_D8D7:
     CLC
-    ADC zp_23
+    ADC map_width
     STA zp_21
     LDA zp_22
     ADC #$00
@@ -2978,7 +2978,7 @@ F_D8F7:
     BCC F_D910
     LDA zp_21
     SEC
-    SBC zp_23
+    SBC map_width
     STA zp_21
     LDA zp_22
     SBC #$00
@@ -2989,7 +2989,7 @@ F_D910:
     LDX #$00
 F_D916:
     LDY tmp_ptr_lo
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
     STA ram_0370,x
@@ -2998,7 +2998,7 @@ F_D916:
     STA ram_0381,x
     LDA zp_21
     CLC
-    ADC zp_23
+    ADC map_width
     STA zp_21
     LDA zp_22
     ADC #$00
@@ -3131,7 +3131,7 @@ F_DA03:
     AND #$01
     BEQ F_DA43
     LDY #$00
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
     JSR F_DBB7
@@ -3149,7 +3149,7 @@ F_DA3F:
     BEQ F_DA6D
 F_DA43:
     LDY #$00
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
     JSR F_DBB7
@@ -3204,7 +3204,7 @@ F_DA82:
     DEX
 F_DAA6:
     LDY #$00
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
     JSR F_DBB7
@@ -3247,7 +3247,7 @@ F_DAE3:
     BEQ F_DAFE
     LDA zp_21
     SEC
-    SBC zp_23
+    SBC map_width
     STA zp_21
     LDA zp_22
     SBC #$00
@@ -3291,7 +3291,7 @@ F_DB2C:
     STA zp_43
     DEC zp_43
     LDY #$0F
-    LDA zp_AC
+    LDA map_bank
     JSR SwitchBankKeepX
 F_DB47:
     LDA (zp_21),y
@@ -3300,7 +3300,7 @@ F_DB47:
     BPL F_DB47
     LDA zp_21
     CLC
-    ADC zp_23
+    ADC map_width
     STA zp_21
     LDA zp_22
     ADC #$00
@@ -3378,7 +3378,7 @@ F_DBB7:
     LDA #$00
     RTS
 F_DBDC:
-    LDA zp_AB
+    LDA current_area
     CMP #$06
     BEQ F_DBF1
     LDA zp_21
@@ -3477,10 +3477,10 @@ F_DCA1:
     LDA ram_01B0
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     SEC
     SBC ptr_lo
-    LDA player_x_hi
+    LDA player_y_hi
     SBC ptr_hi
     BCC F_DCE0
     LDA zp_63
@@ -3744,9 +3744,9 @@ F_DE75:
     LDA ram_01B0
     SBC #$00
     STA ent_x_hi,y
-    LDA player_y_lo
+    LDA player_x_lo
     STA ent_y_lo,y
-    LDA player_y_hi
+    LDA player_x_hi
     STA ent_y_hi,y
     LDA #$61
     STA ram_0480,y
@@ -3783,43 +3783,43 @@ F_DED4:
     STA zp_65
     JMP F_E0C6
 F_DEE3:
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC zp_64
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     SBC #$00
     STA ptr_hi
     BCS F_DEFB
     LDA #$00
-    STA player_y_lo
-    STA player_y_hi
+    STA player_x_lo
+    STA player_x_hi
     JMP F_E035
 F_DEFB:
     LDA ptr_lo
-    STA player_y_lo
+    STA player_x_lo
     CLC
 F_DF00:
     ADC #$05
     STA ptr_lo
     LDA ptr_hi
-    STA player_y_hi
+    STA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_E514
     AND #$01
     BNE F_DF54
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BEQ F_DF60
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
@@ -3842,11 +3842,11 @@ F_DF3E:
     CMP (ptr_lo),y
     BCS F_DF60
 F_DF54:
-    LDA player_y_lo
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC #$0A
-    STA player_y_lo
+    STA player_x_lo
     JMP F_E035
 F_DF60:
     JSR F_EEBB
@@ -3865,11 +3865,11 @@ F_DF6F:
     STA zp_66
     JMP F_E0C6
 F_DF7E:
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC zp_64
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
     LDA zp_34
@@ -3887,36 +3887,36 @@ F_DF7E:
     BCS F_DFB2
     LDA zp_53
     ADC #$01
-    STA player_y_lo
+    STA player_x_lo
     LDA zp_54
     ADC #$00
-    STA player_y_hi
+    STA player_x_hi
     JMP F_E035
 F_DFB2:
     LDA ptr_lo
-    STA player_y_lo
+    STA player_x_lo
     CLC
     ADC #$0B
     STA ptr_lo
     LDA ptr_hi
-    STA player_y_hi
+    STA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_E514
     AND #$01
     BNE F_E023
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BEQ F_E02F
     LDA ptr_lo
     CLC
 F_DFDE:
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
@@ -3954,11 +3954,11 @@ F_E003:
     CMP (ptr_lo),y
     BCS F_E02F
 F_E023:
-    LDA player_y_lo
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC #$05
-    STA player_y_lo
+    STA player_x_lo
     JMP F_E035
 F_E02F:
     JSR F_EEBB
@@ -4074,14 +4074,14 @@ F_E0EF:
 F_E0F8:
     DEC zp_54
 F_E0FA:
-    LDA player_x_lo
+    LDA player_y_lo
     CLC
     ADC zp_55
 F_E0FF:
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     ADC zp_54
-    STA player_x_hi
+    STA player_y_hi
     LDA ent_dy,x
     STA zp_73
     LDA #$00
@@ -4095,22 +4095,22 @@ F_E119:
     STA zp_74
     BIT zp_54
     BPL F_E194
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_F80D
     PLA
     STA zp_56
@@ -4120,14 +4120,14 @@ F_E119:
     STA zp_53
     AND #$01
     BNE F_E170
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_F80D
     JSR F_E51C
     STA zp_53
@@ -4145,37 +4145,37 @@ F_E179:
 F_E17D:
     RTS
 F_E17E:
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC #$10
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     ADC #$00
-    STA player_x_hi
+    STA player_y_hi
     LDA #$08
     STA zp_7E
     JMP F_E505
 F_E194:
-    LDA player_x_lo
+    LDA player_y_lo
     CLC
     ADC #$10
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     ADC #$00
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     PLA
     STA zp_56
     PLA
@@ -4184,14 +4184,14 @@ F_E194:
     STA zp_53
     AND #$01
     BNE F_E1DF
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_E51C
     STA zp_53
     AND #$01
@@ -4204,49 +4204,49 @@ F_E1DF:
 F_E1E8:
     CMP #$0F
     BEQ F_E17D
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
 F_E1F0:
-    STA player_x_lo
+    STA player_y_lo
     LDA #$00
     STA zp_79
     RTS
 F_E1F7:
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC zp_73
-    STA player_y_lo
-    LDA player_y_hi
+    STA player_x_lo
+    LDA player_x_hi
 F_E200:
     ADC zp_74
-    STA player_y_hi
+    STA player_x_hi
     BIT zp_74
     BMI F_E20B
     JMP F_E275
 F_E20B:
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$05
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_E514
     AND #$01
     BNE F_E269
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BNE F_E233
     JMP F_E2EB
 F_E233:
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
@@ -4272,34 +4272,34 @@ F_E250:
     BCC F_E269
     JMP F_E2EB
 F_E269:
-    LDA player_y_lo
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC #$0A
-    STA player_y_lo
+    STA player_x_lo
     JMP F_E2EB
 F_E275:
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$0B
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_E514
     AND #$01
     BNE F_E2E2
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BEQ F_E2EB
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
@@ -4335,19 +4335,19 @@ F_E275:
     CMP (ptr_lo),y
     BCS F_E2EB
 F_E2E2:
-    LDA player_y_lo
+    LDA player_x_lo
     AND #$F0
 F_E2E6:
     CLC
     ADC #$05
-    STA player_y_lo
+    STA player_x_lo
 F_E2EB:
     LDX zp_B6
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$09
     STA zp_55
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA zp_56
     LDA zp_55
@@ -4365,18 +4365,18 @@ F_E2FC:
 F_E310:
     JMP F_E505
 F_E313:
-    LDA player_x_lo
-    STA zp_55
-    LDA player_x_hi
-    STA zp_56
     LDA player_y_lo
+    STA zp_55
+    LDA player_y_hi
+    STA zp_56
+    LDA player_x_lo
     CLC
     ADC #$08
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     LDA ptr_lo
     STA zp_73
     LDA ptr_hi
@@ -4391,19 +4391,19 @@ F_E313:
     STA zp_16
     LDA ptr_hi
     STA zp_17
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     SEC
     SBC #$10
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     SBC #$00
-    STA player_x_hi
+    STA player_y_hi
     RTS
 F_E359:
-    LDA ram_03A4,x
+    LDA tile_props,x
     JSR F_EEA6
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$08
     AND #$0F
@@ -4417,7 +4417,7 @@ F_E359:
     STA zp_53
     CMP #$FF
     BEQ F_E3A4
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     CLC
     ADC #$10
@@ -4430,24 +4430,24 @@ F_E359:
     STA zp_16
     LDA zp_74
     STA zp_17
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC zp_53
     SEC
     SBC #$10
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     SBC #$00
-    STA player_x_hi
+    STA player_y_hi
     RTS
 F_E3A4:
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BEQ F_E3CF
     LDA zp_73
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA zp_74
     ADC #$00
@@ -4460,34 +4460,34 @@ F_E3A4:
     STA zp_16
     LDA ptr_hi
     STA zp_17
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
-    STA player_x_lo
+    STA player_y_lo
     RTS
 F_E3CF:
-    LDA player_x_lo
+    LDA player_y_lo
     CLC
     ADC #$10
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     ADC #$00
     STA zp_56
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
 F_E3DF:
     ADC #$08
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     LDA ptr_lo
     STA zp_75
     LDA ptr_hi
     STA zp_76
     JSR F_E514
     JSR F_EEA6
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$08
     AND #$0F
@@ -4502,7 +4502,7 @@ F_E408:
     STA zp_53
     CMP #$FF
     BEQ F_E436
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     SEC
     SBC zp_53
@@ -4516,22 +4516,22 @@ F_E421:
     STA zp_16
     LDA zp_76
     STA zp_17
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     ADC zp_53
-    STA player_x_lo
+    STA player_y_lo
     RTS
 F_E436:
     LDA zp_73
     STA ptr_lo
     LDA zp_74
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BEQ F_E451
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
@@ -4539,7 +4539,7 @@ F_E436:
 F_E451:
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     STA zp_73
     LDA ptr_hi
@@ -4553,7 +4553,7 @@ F_E451:
     BEQ F_E4B4
     LDA zp_53
     JSR F_EEA6
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$08
     AND #$0F
@@ -4567,7 +4567,7 @@ F_E451:
     CLC
     ADC #$10
     STA zp_53
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     SEC
     SBC zp_53
@@ -4581,35 +4581,35 @@ F_E498:
     STA zp_16
     LDA zp_74
     STA zp_17
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC zp_53
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     ADC #$00
-    STA player_x_hi
+    STA player_y_hi
     RTS
 F_E4B4:
-    LDA player_x_lo
+    LDA player_y_lo
     CLC
     ADC #$10
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     ADC #$00
     STA zp_56
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    JSR F_EF24
+    JSR MapPtrFromPos
     PLA
     STA zp_56
     PLA
@@ -4619,15 +4619,15 @@ F_E4B4:
     BEQ F_E4E5
     RTS
 F_E4E5:
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
 F_E4E8:
     ADC #$06
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_E514
     AND #$01
     BEQ F_E4FD
@@ -4647,14 +4647,14 @@ F_E505:
     STA zp_7C
     RTS
 F_E514:
-    JSR F_FC26
+    JSR GetMapTile
     TAX
-    LDA ram_03A4,x
+    LDA tile_props,x
     RTS
 F_E51C:
-    JSR F_FC26
+    JSR GetMapTile
     TAY
-    LDA ram_03A4,y
+    LDA tile_props,y
     RTS
 F_E524:
     LDX zp_7E
@@ -4676,13 +4676,13 @@ F_E53D:
     STX zp_7D
     LDA F_C27D,x
     STA zp_73
-    LDA player_x_lo
+    LDA player_y_lo
     CLC
     ADC F_C27D,x
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     ADC #$00
-    STA player_x_hi
+    STA player_y_hi
     LDA buttons
     AND #$01
     BEQ F_E579
@@ -4768,9 +4768,9 @@ F_E5E0:
     STA zp_65
     LDA #$00
     STA zp_66
-    INC player_x_lo
+    INC player_y_lo
     BNE F_E5EE
-    INC player_x_hi
+    INC player_y_hi
 F_E5EE:
     INC zp_73
     LDA zp_73
@@ -4829,25 +4829,25 @@ F_E641:
 F_E64C:
     .byte $A9,$09,$85,$65
 F_E650:
-    LDA player_x_lo
+    LDA player_y_lo
     CLC
     ADC #$10
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     ADC #$00
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     PLA
     STA zp_56
     PLA
@@ -4855,14 +4855,14 @@ F_E650:
     JSR F_E514
     AND #$01
     BNE F_E69A
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_E514
     AND #$01
     BNE F_E69A
@@ -4870,7 +4870,7 @@ F_E650:
 F_E69A:
     LDA zp_7C
     BEQ F_E6C5
-    JSR F_FC26
+    JSR GetMapTile
     CMP #$D1
     BNE F_E6C5
     JSR F_F6B0
@@ -4897,9 +4897,9 @@ F_E6D1:
     BNE F_E6D6
     RTS
 F_E6D6:
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
-    STA player_x_lo
+    STA player_y_lo
 F_E6DC:
     LDA zp_7C
     BEQ F_E722
@@ -4951,18 +4951,18 @@ F_E734:
     LDA #$06
     JSR SwitchBank
     JSR $BA04
-    LDA player_x_lo
-    STA zp_55
-    LDA player_x_hi
-    STA zp_56
     LDA player_y_lo
+    STA zp_55
+    LDA player_y_hi
+    STA zp_56
+    LDA player_x_lo
     CLC
     ADC #$08
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     LDA ptr_lo
     PHA
     LDA ptr_hi
@@ -4971,9 +4971,9 @@ F_E734:
     AND #$03
     CMP #$02
     BNE F_E784
-    LDA ram_03A4,x
+    LDA tile_props,x
     JSR F_EEA6
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$08
     AND #$0F
@@ -4991,7 +4991,7 @@ F_E734:
 F_E784:
     JMP F_E87B
 F_E787:
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     CLC
     ADC #$10
@@ -5004,16 +5004,16 @@ F_E787:
     ADC #$04
     CMP zp_54
     BCC F_E784
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC zp_53
     SEC
     SBC #$10
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     SBC #$00
-    STA player_x_hi
+    STA player_y_hi
     PLA
     STA ptr_hi
     PLA
@@ -5063,7 +5063,7 @@ F_E7F9:
     PLA
     STA ptr_lo
     LDY #$00
-    JSR F_FC26
+    JSR GetMapTile
     CMP #$B4
     BCS F_E80B
     JMP F_E6DC
@@ -5135,7 +5135,7 @@ F_E87B:
     STA ptr_lo
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     STA zp_75
     LDA ptr_hi
@@ -5150,9 +5150,9 @@ F_E87B:
 F_E89D:
     RTS
 F_E89E:
-    LDA ram_03A4,x
+    LDA tile_props,x
     JSR F_EEA6
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$08
     AND #$0F
@@ -5166,7 +5166,7 @@ F_E89E:
     STA zp_53
     CMP #$FF
     BEQ F_E89D
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     SEC
     SBC zp_53
@@ -5177,11 +5177,11 @@ F_E89E:
     ADC #$04
     CMP zp_54
     BCC F_E89D
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC zp_53
-    STA player_x_lo
+    STA player_y_lo
     LDA zp_75
     STA ptr_lo
     LDA zp_76
@@ -5213,17 +5213,17 @@ F_E90E:
     STA zp_66
     JMP F_E965
 F_E922:
-    LDA player_x_lo
+    LDA player_y_lo
     SEC
     SBC zp_8B
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     SBC #$00
     BCS F_E933
     LDA #$00
-    STA player_x_lo
+    STA player_y_lo
 F_E933:
-    STA player_x_hi
+    STA player_y_hi
     LDA zp_8F
     AND #$01
     BEQ F_E94E
@@ -5270,7 +5270,7 @@ F_E97F:
     .byte $A9,$02,$85,$7A,$A9,$00,$85,$7B,$A4,$B9,$F0,$28,$C8,$84,$B9,$C0
     .byte $30,$D0,$34,$A9,$CD,$85,$60,$A9,$03,$85,$61,$A9,$78,$85,$5E,$A9
     .byte $00
-    STA player_y_hi
+    STA player_x_hi
     LDA #$04
     STA zp_9C
     LDA #$0C
@@ -5289,10 +5289,10 @@ F_E97F:
     LDA ent_y_hi,y
     SBC #$00
     STA zp_54
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC zp_53
-    LDA player_y_lo
+    LDA player_x_lo
     SBC zp_54
     BCC F_EA07
 F_EA00:
@@ -5321,33 +5321,33 @@ F_EA1F:
     LDA zp_54
     ADC zp_56
     STA zp_54
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC zp_53
     STA zp_53
-    LDA player_y_hi
+    LDA player_x_hi
     SBC zp_54
     BCS F_EA42
-    INC player_y_lo
+    INC player_x_lo
     BNE F_EA3F
-    INC player_y_hi
+    INC player_x_hi
 F_EA3F:
     JMP F_EA81
 F_EA42:
     LDA zp_53
     BEQ F_EA81
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC #$01
-    STA player_y_lo
-    LDA player_y_hi
+    STA player_x_lo
+    LDA player_x_hi
     SBC #$00
-    STA player_y_hi
+    STA player_x_hi
     JMP F_EA81
     LDA zp_53
-    STA player_x_lo
+    STA player_y_lo
     LDA zp_54
-    STA player_x_hi
+    STA player_y_hi
     LDA #$FA
     STA zp_53
     LDA #$FF
@@ -5362,10 +5362,10 @@ F_EA72:
     LDA ent_y_lo,y
     CLC
     ADC zp_53
-    STA player_y_lo
+    STA player_x_lo
     LDA ent_y_hi,y
     ADC zp_54
-    STA player_y_hi
+    STA player_x_hi
 F_EA81:
     LDA zp_B1
     LSR a
@@ -5455,37 +5455,37 @@ F_EB2F:
 F_EB3B:
     LDA zp_64
     STA zp_53
-    LDA player_x_lo
+    LDA player_y_lo
     SEC
     SBC zp_53
     STA ptr_lo
-    LDA player_x_hi
+    LDA player_y_hi
     SBC #$00
     STA ptr_hi
     BCS F_EB57
     LDA #$00
-    STA player_x_lo
-    STA player_x_hi
+    STA player_y_lo
+    STA player_y_hi
     JMP F_EC73
 F_EB57:
     LDA ptr_lo
-    STA player_x_lo
+    STA player_y_lo
     STA zp_55
     LDA ptr_hi
-    STA player_x_hi
+    STA player_y_hi
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_F80D
     JSR F_E514
     STA zp_53
@@ -5496,14 +5496,14 @@ F_EB57:
     LDA zp_53
     AND #$01
     BNE F_EBAC
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_F80D
     JSR F_E514
     STA zp_53
@@ -5516,14 +5516,14 @@ F_EBAC:
     BEQ F_EBB5
     JSR F_F492
 F_EBB5:
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC #$10
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     ADC #$00
-    STA player_x_hi
+    STA player_y_hi
     JMP F_EC73
 F_EBC7:
     .byte $A5,$12
@@ -5534,11 +5534,11 @@ F_EBC9:
 F_EBD0:
     LDA zp_64
     STA zp_53
-    LDA player_x_lo
+    LDA player_y_lo
     CLC
     ADC zp_53
     STA ptr_lo
-    LDA player_x_hi
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     LDA zp_36
@@ -5557,35 +5557,35 @@ F_EBD0:
     LDA zp_53
     CLC
     ADC #$01
-    STA player_x_lo
+    STA player_y_lo
     STA zp_53
     LDA zp_54
     ADC #$00
-    STA player_x_hi
+    STA player_y_hi
     STA zp_54
     JMP F_EC73
 F_EC0D:
     LDA ptr_lo
-    STA player_x_lo
+    STA player_y_lo
     CLC
     ADC #$10
     STA zp_55
     LDA ptr_hi
-    STA player_x_hi
+    STA player_y_hi
     ADC #$00
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_F80D
     JSR F_E514
     STA zp_53
@@ -5596,14 +5596,14 @@ F_EC0D:
     LDA zp_53
     AND #$01
     BNE F_EC64
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_F80D
     JSR F_E514
     STA zp_53
@@ -5615,9 +5615,9 @@ F_EC64:
     BEQ F_EC6D
     JSR F_F492
 F_EC6D:
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
-    STA player_x_lo
+    STA player_y_lo
 F_EC73:
     LDA buttons
     AND #$20
@@ -5632,43 +5632,43 @@ F_EC7C:
 F_EC87:
     LDA zp_64
     STA zp_53
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC zp_53
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     SBC #$00
     STA ptr_hi
     BCS F_ECA3
     LDA #$00
-    STA player_y_lo
-    STA player_y_hi
+    STA player_x_lo
+    STA player_x_hi
     JMP F_EDE8
 F_ECA3:
     LDA ptr_lo
-    STA player_y_lo
+    STA player_x_lo
     CLC
     ADC #$05
     STA ptr_lo
     LDA ptr_hi
-    STA player_y_hi
+    STA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_F80D
     JSR F_E514
     AND #$01
     BNE F_ED0B
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BNE F_ECD2
     JMP F_EDE8
 F_ECD2:
-    LDA zp_23
+    LDA map_width
     CLC
     ADC ptr_lo
     STA ptr_lo
@@ -5698,11 +5698,11 @@ F_ECF2:
     BCC F_ED0B
     JMP F_EDE8
 F_ED0B:
-    LDA player_y_lo
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC #$0A
-    STA player_y_lo
+    STA player_x_lo
     JMP F_EDE8
 F_ED17:
     .byte $A5,$12,$29,$10,$D0,$03,$4C,$E8,$ED,$A5,$66,$D0,$07,$A9,$01,$85
@@ -5712,29 +5712,29 @@ F_ED17:
     .byte $69,$01,$85,$53,$85,$5E,$A5,$54,$69,$00,$85,$54,$85,$5F,$4C
     INX
     SBC $51A5
-    STA player_y_lo
+    STA player_x_lo
     CLC
     ADC #$0B
     STA ptr_lo
     LDA ptr_hi
-    STA player_y_hi
+    STA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_F80D
     JSR F_E514
     AND #$01
     BNE F_EDDF
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BEQ F_EDE8
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
@@ -5772,24 +5772,24 @@ F_EDDB:
     CMP (ptr_lo),y
     BCS F_EDE8
 F_EDDF:
-    LDA player_y_lo
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC #$05
-    STA player_y_lo
+    STA player_x_lo
 F_EDE8:
-    LDA player_x_lo
-    CLC
-    ADC #$08
-    STA zp_55
-    LDA player_x_hi
-    ADC #$00
-    STA zp_56
     LDA player_y_lo
     CLC
     ADC #$08
-    STA ptr_lo
+    STA zp_55
     LDA player_y_hi
+    ADC #$00
+    STA zp_56
+    LDA player_x_lo
+    CLC
+    ADC #$08
+    STA ptr_lo
+    LDA player_x_hi
     ADC #$00
 F_EE00:
     STA ptr_hi
@@ -5797,17 +5797,17 @@ F_EE00:
     PHA
     LDA ptr_hi
     PHA
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_EFD3
     PLA
     STA ptr_hi
     PLA
     STA ptr_lo
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
-    JSR F_EF24
+    JSR MapPtrFromPos
     LDA ptr_lo
     PHA
     LDA ptr_hi
@@ -5815,7 +5815,7 @@ F_EE24:
     PHA
     JSR F_E514
     JSR F_EEA6
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$08
     AND #$0F
@@ -5824,7 +5824,7 @@ F_EE24:
     STA zp_53
     CMP #$FF
     BEQ F_EE64
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     CLC
     ADC #$10
@@ -5833,16 +5833,16 @@ F_EE24:
     BCC F_EE64
     CMP #$0A
     BCS F_EE64
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC zp_53
     SEC
     SBC #$10
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     SBC #$00
-    STA player_x_hi
+    STA player_y_hi
     PLA
     STA ptr_hi
     PLA
@@ -5853,7 +5853,7 @@ F_EE64:
     STA ptr_hi
     PLA
     STA ptr_lo
-    LDA zp_23
+    LDA map_width
     CLC
     ADC ptr_lo
     STA ptr_lo
@@ -5863,7 +5863,7 @@ F_EE64:
     LDY #$00
     JSR F_E514
     JSR F_EEA6
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$08
     AND #$0F
@@ -5872,18 +5872,18 @@ F_EE64:
     STA zp_53
     CMP #$FF
     BEQ F_EEA5
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     SEC
     SBC zp_53
     BCC F_EEA5
     CMP #$0A
     BCS F_EEA5
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC zp_53
-    STA player_x_lo
+    STA player_y_lo
 F_EEA5:
     RTS
 F_EEA6:
@@ -5924,12 +5924,12 @@ F_EED5:
 F_EEDF:
     LDA ptr_lo
     SEC
-    SBC zp_25
+    SBC map_ptr_lo
     STA ptr_lo
     LDA ptr_hi
-    SBC zp_26
+    SBC map_ptr_hi
     STA ptr_hi
-    LDA zp_33
+    LDA map_log2_width
     STA zp_55
     LDA ptr_lo
     DEC zp_55
@@ -5947,7 +5947,7 @@ F_EEFD:
     LDA ptr_hi
     SBC #$00
     STA zp_54
-    LDA zp_23
+    LDA map_width
     SEC
     SBC #$01
     AND ptr_lo
@@ -5963,7 +5963,7 @@ F_EEFD:
     ROL a
     STA zp_56
     RTS
-F_EF24:
+MapPtrFromPos:
     LDA ptr_hi
 F_EF26:
     LSR a
@@ -5979,7 +5979,7 @@ F_EF26:
     AND #$F0
     LSR zp_56
     ROR a
-    LDY zp_33
+    LDY map_log2_width
 F_EF3D:
     ASL a
     ROL zp_56
@@ -5992,10 +5992,10 @@ F_EF3D:
     STA ptr_hi
     LDA ptr_lo
     CLC
-    ADC zp_25
+    ADC map_ptr_lo
     STA ptr_lo
     LDA ptr_hi
-    ADC zp_26
+    ADC map_ptr_hi
     STA ptr_hi
     LDY #$00
     RTS
@@ -6113,17 +6113,17 @@ F_F00F:
     JSR SwitchBankKeepX
     LDY #$00
     LDA (ptr_lo),y
-    STA player_x_lo
+    STA player_y_lo
 F_F020:
     INY
     LDA (ptr_lo),y
-    STA player_x_hi
-    INY
-    LDA (ptr_lo),y
-    STA player_y_lo
-    INY
-    LDA (ptr_lo),y
     STA player_y_hi
+    INY
+    LDA (ptr_lo),y
+    STA player_x_lo
+    INY
+    LDA (ptr_lo),y
+    STA player_x_hi
     INY
     LDA (ptr_lo),y
     STA zp_9C
@@ -6182,18 +6182,18 @@ F_F08F:
     RTS
 F_F090:
     JSR SwitchBankFromAC
-    LDA player_x_lo
-    STA zp_55
-    LDA player_x_hi
-    STA zp_56
     LDA player_y_lo
+    STA zp_55
+    LDA player_y_hi
+    STA zp_56
+    LDA player_x_lo
     CLC
     ADC #$08
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     LDA ptr_lo
     PHA
     LDA ptr_hi
@@ -6203,12 +6203,12 @@ F_F090:
     STA ptr_hi
     PLA
     STA ptr_lo
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BEQ F_F08F
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
@@ -6234,7 +6234,7 @@ F_F0EA:
 F_F0F0:
     STA zp_78
     LDY #$00
-    JSR F_FC26
+    JSR GetMapTile
 F_F0F7:
     SEC
     SBC #$80
@@ -6451,11 +6451,11 @@ F_F298:
     PHA
     LDA zp_53
     SEC
-    SBC zp_25
+    SBC map_ptr_lo
     STA zp_53
     STA ptr_lo
     LDA zp_54
-    SBC zp_26
+    SBC map_ptr_hi
     STA zp_54
     LSR zp_54
     ROR zp_53
@@ -6463,7 +6463,7 @@ F_F298:
     ROR zp_53
     LSR zp_54
     ROR zp_53
-    LDX zp_33
+    LDX map_log2_width
     LDA zp_53
     DEX
     BEQ F_F2CE
@@ -6479,7 +6479,7 @@ F_F2CE:
     CMP #$20
     BCS F_F27E
     STA zp_53
-    LDA zp_23
+    LDA map_width
     SBC #$00
     AND ptr_lo
     ASL a
@@ -6796,14 +6796,14 @@ F_F548:
     LDA #$01
     STA zp_55
     JSR F_F8C4
-    LDA spawn_x_lo
-    STA player_x_lo
-    LDA spawn_x_hi
-    STA player_x_hi
     LDA spawn_y_lo
     STA player_y_lo
     LDA spawn_y_hi
     STA player_y_hi
+    LDA spawn_x_lo
+    STA player_x_lo
+    LDA spawn_x_hi
+    STA player_x_hi
     LDA zp_99
     STA zp_92
     LDA #$11
@@ -7022,12 +7022,12 @@ F_F6E0:
     LDA ptr_lo
 F_F6EE:
     SEC
-    SBC zp_25
+    SBC map_ptr_lo
     STA zp_55
     LDA ptr_hi
-    SBC zp_26
+    SBC map_ptr_hi
     STA zp_56
-    LDA zp_33
+    LDA map_log2_width
     STA ram_072F
     LSR zp_56
 F_F700:
@@ -7041,13 +7041,13 @@ F_F70A:
     ROR zp_55
     DEC ram_072F
     BNE F_F70A
-    LDA zp_23
+    LDA map_width
     SEC
     SBC #$01
     STA ram_072F
     LDA ptr_lo
     SEC
-    SBC zp_25
+    SBC map_ptr_lo
     AND ram_072F
     STA zp_56
     LDA zp_55
@@ -7157,13 +7157,13 @@ F_F7E1:
     LDA #$05
     JSR SwitchBank
     JSR F_FA3D
-    LDA player_x_lo
-    STA ent_x_lo,y
-    LDA player_x_hi
-    STA ent_x_hi,y
     LDA player_y_lo
-    STA ent_y_lo,y
+    STA ent_x_lo,y
     LDA player_y_hi
+    STA ent_x_hi,y
+    LDA player_x_lo
+    STA ent_y_lo,y
+    LDA player_x_hi
     STA ent_y_hi,y
 F_F800:
     STY zp_42
@@ -7193,7 +7193,7 @@ F_F81C:
     PHA
     LDA #$03
     JSR SwitchBankKeepX
-    JSR F_FC26
+    JSR GetMapTile
     JSR $BE9D
     PLA
     JSR SwitchBankKeepX
@@ -7247,13 +7247,13 @@ F_F885:
     JSR F_FA3D
     TYA
     TAX
-    LDA player_y_lo
-    STA ent_y_lo,x
-    LDA player_y_hi
-    STA ent_y_hi,x
     LDA player_x_lo
-    STA ent_x_lo,x
+    STA ent_y_lo,x
     LDA player_x_hi
+    STA ent_y_hi,x
+    LDA player_y_lo
+    STA ent_x_lo,x
+    LDA player_y_hi
     STA ent_x_hi,x
     JSR F_F9B6
     PLA
@@ -7284,7 +7284,7 @@ F_F8CE:
     RTS
 F_F8D8:
     .byte $AD,$AA,$01,$18,$65,$55,$8D,$AA
-    ORA (player_x_lo,x)
+    ORA (player_y_lo,x)
 F_F8E2:
     LDA ram_01AB
     CLC
@@ -7436,7 +7436,7 @@ F_FA7A:
     BEQ F_FA8F
     CPX #$08
     BCS F_FA8A
-    LDA zp_AB
+    LDA current_area
     CMP ent_angle,x
     BNE F_FA8F
 F_FA8A:
@@ -7485,7 +7485,7 @@ F_FACB:
     BEQ F_FAE0
     CPX #$08
     BCS F_FADB
-    LDA zp_AB
+    LDA current_area
     CMP ent_angle,x
     BNE F_FAE0
 F_FADB:
@@ -7676,7 +7676,7 @@ F_FC1C:
     PLA
     PLA
     JMP F_C700
-F_FC26:
+GetMapTile:
     STX zp_42
     LDA cur_bank
     PHA
@@ -7701,12 +7701,12 @@ F_FC3F:
     PHA
     LDA ptr_lo
     SEC
-    SBC zp_25
+    SBC map_ptr_lo
     STA zp_55
     LDA ptr_hi
-    SBC zp_26
+    SBC map_ptr_hi
     STA zp_56
-    LDA zp_33
+    LDA map_log2_width
     STA tmp_ptr_lo
     LSR zp_56
     ROR zp_55
@@ -7720,13 +7720,13 @@ F_FC68:
     ROR zp_55
     DEC tmp_ptr_lo
     BNE F_FC68
-    LDA zp_23
+    LDA map_width
     SEC
     SBC #$01
     STA tmp_ptr_lo
     LDA ptr_lo
     SEC
-    SBC zp_25
+    SBC map_ptr_lo
     AND tmp_ptr_lo
     STA zp_56
     ASL zp_55

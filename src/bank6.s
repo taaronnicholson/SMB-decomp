@@ -3360,7 +3360,7 @@ B6_A03B:
     LDA #$24
     JMP B6_A38F
     TAX
-    LDA ram_03A4,x
+    LDA tile_props,x
     AND #$01
     BEQ B6_A323
     LDA #$23
@@ -3386,22 +3386,22 @@ B6_A335:
     BNE B6_A33F
     STA zp_53
 B6_A33F:
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC zp_53
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     CLC
     ADC #$10
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     ADC #$00
     STA zp_56
-    JSR F_EF24
-    JSR F_FC26
+    JSR MapPtrFromPos
+    JSR GetMapTile
     PHA
     CMP #$CE
     BNE B6_A367
@@ -3446,7 +3446,7 @@ B6_A38F:
     RTS
 B6_A3AF:
     TAX
-    LDA ram_03A4,x
+    LDA tile_props,x
     LDX #$17
     AND #$01
     BEQ B6_A3C0
@@ -3495,13 +3495,13 @@ B6_A403:
     STA zp_66
 B6_A40B:
     STA zp_65
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC B6_A44F,y
-    STA player_y_lo
-    LDA player_y_hi
+    STA player_x_lo
+    LDA player_x_hi
     SBC #$00
-    STA player_y_hi
+    STA player_x_hi
     INC zp_BD
 B6_A41D:
     RTS
@@ -3583,11 +3583,11 @@ B6_A524:
     STA ram_024A
     RTS
 B6_A535:
-    LDA player_x_lo
+    LDA player_y_lo
     SEC
     SBC zp_6A
     STA zp_53
-    LDA player_x_hi
+    LDA player_y_hi
     SBC zp_6B
     BNE B6_A56E
     LDA zp_53
@@ -3597,11 +3597,11 @@ B6_A535:
     BCS B6_A54D
     LDA #$00
 B6_A54D:
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC zp_68
     STA zp_54
-    LDA player_y_hi
+    LDA player_x_hi
     SBC zp_69
     BNE B6_A56E
     LDA zp_54
@@ -3784,7 +3784,7 @@ B6_A6AE:
     .byte $E8,$B1,$0C,$00,$6E,$B0,$12,$00,$E0,$A9,$12,$00,$64,$B3,$64,$00
     .byte $D0,$B2,$10,$00,$00,$00,$00,$00,$1C,$AE,$14,$00,$30,$A9,$08,$00
     .byte $F6,$B6,$08,$00,$38,$B7,$1A,$00
-; Gfx_B6_A79E: LZ-compressed, 300 bytes -> 602 bytes (stages 0,3 + title)
+; Gfx_B6_A79E: LZ-compressed, 300 bytes -> 544 bytes to PPU $0720,$09A0 (stages 0,3 + title)
 Gfx_B6_A79E:
     .byte $00,$68,$00,$00,$81,$41,$5B,$01,$C0,$00,$20,$28,$3C,$1C,$71,$75
     .byte $B9,$0F,$E3,$00,$7C,$09,$83,$8B,$E1,$F0,$3C,$03,$3F,$C3,$C1,$A3
@@ -3805,7 +3805,7 @@ Gfx_B6_A79E:
     .byte $8A,$44,$E1,$6E,$40,$81,$98,$84,$42,$33,$0F,$60,$20,$20,$03,$03
     .byte $43,$C1,$E0,$B0,$58,$13,$90,$20,$13,$90,$00,$0D,$80,$81,$00,$30
     .byte $2C,$1A,$40,$00,$90,$49,$90,$23,$60,$06,$00,$00
-; Gfx_B6_A8CA: LZ-compressed, 102 bytes -> 138 bytes (stages 0,1,3,4 + title)
+; Gfx_B6_A8CA: LZ-compressed, 102 bytes -> 128 bytes to PPU $0580,$06A0,$0E20 (stages 0,1,3,4 + title)
 Gfx_B6_A8CA:
     .byte $61,$AB,$CA,$C2,$F2,$F9,$7D,$DC,$A1,$00,$10,$05,$E1,$F1,$F8,$FC
     .byte $3E,$7F,$7E,$AB,$8F,$E7,$F1,$F9,$7D,$5C,$C3,$39,$9C,$40,$10,$00
@@ -3819,7 +3819,7 @@ Gfx_B6_A8CA:
     .byte $7F,$2B,$60,$7E,$03,$C1,$C0,$00,$09,$CF,$01,$20,$FE,$02,$03,$F3
     .byte $E8,$FC,$BE,$AD,$D0,$7E,$03,$01,$08,$88,$78,$0B,$0F,$F0,$08,$0F
     .byte $E0,$00
-; Gfx_B6_A97C: LZ-compressed, 100 bytes -> 170 bytes (stages 2,4)
+; Gfx_B6_A97C: LZ-compressed, 100 bytes -> 160 bytes to PPU $0920,$0A00 (stages 2,4)
 Gfx_B6_A97C:
     .byte $00,$60,$18,$00,$7F,$B3,$93,$ED,$F6,$F9,$80,$7E,$04,$00,$0D,$CD
     .byte $E6,$93,$48,$FC,$00,$03,$C0,$40,$3E,$C0,$40,$37,$D8,$1A,$07,$C7
@@ -3828,7 +3828,7 @@ Gfx_B6_A97C:
     .byte $02,$0E,$08,$08,$04,$01,$00,$40,$10,$10,$18,$18,$18,$0C,$03,$08
     .byte $CC,$3C,$04,$80,$01,$20,$A0,$30,$10,$00,$03,$88,$C6,$61,$60,$F0
     .byte $71,$01,$18,$00
-; Gfx_B6_A9E0: LZ-compressed, 150 bytes -> 317 bytes (stages 0,1,3,4 + title)
+; Gfx_B6_A9E0: LZ-compressed, 150 bytes -> 288 bytes to PPU $0580,$08E0,$0D00 (stages 0,1,3,4 + title)
 Gfx_B6_A9E0:
     .byte $5D,$80,$60,$04,$B6,$01,$15,$81,$CF,$8F,$E3,$E1,$F8,$78,$3E,$0E
     .byte $00,$01,$60,$C0,$40,$10,$06,$03,$02,$82,$C0,$F0,$00,$03,$00,$00
@@ -3840,7 +3840,7 @@ Gfx_B6_A9E0:
     .byte $A3,$D1,$CB,$01,$83,$10,$F0,$B4,$A1,$E0,$44,$3C,$3F,$60,$34,$22
     .byte $0C,$0D,$0D,$45,$E1,$60,$63,$60,$40,$93,$40,$36,$02,$82,$0E,$82
     .byte $E1,$8C,$05,$83,$D8,$00
-; Gfx_B6_AA76: LZ-compressed, 356 bytes -> 776 bytes (stages 1,2,4)
+; Gfx_B6_AA76: LZ-compressed, 356 bytes -> 736 bytes to PPU $0600,$0720,$09C0 (stages 1,2,4)
 Gfx_B6_AA76:
     .byte $1E,$16,$90,$2A,$94,$0A,$14,$B2,$21,$00,$0F,$0F,$C5,$63,$F1,$E8
     .byte $4C,$1E,$11,$08,$C8,$A6,$73,$39,$4C,$40,$1F,$0E,$87,$47,$70,$00
@@ -3873,13 +3873,13 @@ Gfx_B6_AA76:
     .byte $32,$05,$0C,$07,$F9,$05,$1F,$CE,$17,$F3,$09,$E4,$92,$69,$34,$A0
     .byte $20,$00,$FC,$06,$3B,$20,$02,$02,$52,$4F,$26,$16,$41,$4C,$81,$40
     .byte $C7,$E6,$41,$4C,$00,$00
-; Gfx_B6_AC5C: LZ-compressed, 63 bytes -> 71 bytes (stages 0 + title)
+; Gfx_B6_AC5C: LZ-compressed, 63 bytes -> 64 bytes to PPU $0940 (stages 0 + title)
 Gfx_B6_AC5C:
     .byte $00,$40,$01,$C5,$DA,$B3,$7C,$99,$32,$03,$80,$0E,$0F,$C3,$30,$0C
     .byte $0A,$07,$04,$02,$72,$00,$83,$C0,$40,$10,$3E,$80,$08,$1E,$3C,$29
     .byte $06,$44,$92,$2B,$94,$2B,$90,$21,$98,$86,$41,$00,$9C,$40,$92,$D3
     .byte $91,$68,$E4,$2A,$01,$1F,$8F,$67,$A3,$E3,$40,$00,$03,$00,$00,$00
-; Gfx_B6_AC9C: LZ-compressed, 210 bytes -> 289 bytes (stage 5)
+; Gfx_B6_AC9C: LZ-compressed, 210 bytes -> 256 bytes to PPU $0580 (stage 5)
 Gfx_B6_AC9C:
     .byte $01,$83,$02,$C2,$F1,$30,$80,$FE,$7F,$00,$00,$C1,$E1,$F8,$00,$00
     .byte $0F,$CB,$04,$81,$20,$7C,$28,$1F,$1F,$0F,$E0,$02,$03,$01,$F0,$24
@@ -3901,14 +3901,14 @@ Gfx_B6_AC9C:
     .byte $00,$0B,$0A,$65,$2A,$14,$8A,$4C,$49,$98,$20,$20,$B4,$7A,$1D,$0C
     .byte $E0,$1B,$00,$E1,$00,$D9,$92,$41,$2A,$97,$4A,$AD,$51,$14,$04,$2F
     .byte $95,$4A,$25,$14,$03,$60,$00,$00
-; Gfx_B6_ADD4: LZ-compressed, 71 bytes -> 68 bytes (stage 3)
+; Gfx_B6_ADD4: LZ-compressed, 71 bytes -> 64 bytes to PPU $0EA0 (stage 3)
 Gfx_B6_ADD4:
     .byte $06,$04,$83,$41,$00,$48,$18,$FE,$EB,$00,$03,$01,$80,$E0,$30,$04
     .byte $00,$7D,$61,$BF,$8F,$A7,$D7,$F3,$0D,$06,$7E,$3E,$80,$5F,$EF,$F0
     .byte $0C,$05,$00,$46,$04,$81,$42,$40,$C0,$80,$7F,$36,$40,$03,$03,$84
     .byte $03,$00,$00,$0B,$E6,$09,$FD,$7C,$BE,$3F,$B0,$58,$27,$E5,$F2,$02
     .byte $07,$D0,$10,$14,$80,$C0,$00,$00
-; Gfx_B6_AE1C: LZ-compressed, 260 bytes -> 369 bytes (stages 2,3)
+; Gfx_B6_AE1C: LZ-compressed, 260 bytes -> 320 bytes to PPU $0BC0,$0CA0 (stages 2,3)
 Gfx_B6_AE1C:
     .byte $1F,$9C,$1B,$ED,$B7,$C6,$40,$00,$00,$BC,$EE,$77,$2B,$E4,$00,$D0
     .byte $16,$D8,$6C,$1C,$07,$FA,$02,$E0,$44,$5E,$00,$1C,$3F,$0F,$8B,$21
@@ -3927,7 +3927,7 @@ Gfx_B6_AE1C:
     .byte $1C,$0F,$D0,$08,$04,$86,$C3,$F3,$F9,$FC,$DE,$AA,$62,$C0,$66,$83
     .byte $F2,$A8,$EA,$03,$30,$04,$1F,$81,$7A,$1F,$BF,$80,$3D,$0F,$E1,$27
     .byte $81,$FE,$00,$00
-; Gfx_B6_AF20: LZ-compressed, 333 bytes -> 964 bytes (stages 2,3,4)
+; Gfx_B6_AF20: LZ-compressed, 333 bytes -> 896 bytes to PPU $0580,$0600,$0AA0 (stages 2,3,4)
 Gfx_B6_AF20:
     .byte $03,$81,$43,$E2,$02,$01,$01,$3C,$80,$00,$00,$C0,$01,$F1,$F8,$FC
     .byte $C2,$7F,$50,$40,$01,$00,$A0,$20,$0C,$01,$CF,$F0,$01,$01,$C1,$F0
@@ -3998,7 +3998,7 @@ Gfx_B6_AF20:
     .byte $37,$C3,$E2,$F1,$9E,$02,$C7,$FE,$07,$E8,$0C,$07,$8F,$FD,$2F,$D7
     .byte $AB,$E0,$F9,$7F,$01,$83,$FB,$79,$58,$D4,$74,$68,$7F,$1E,$B6,$1D
     .byte $5A,$1F,$F0,$00
-; Gfx_B6_B364: LZ-compressed, 913 bytes -> 1819 bytes (stage 5)
+; Gfx_B6_B364: LZ-compressed, 913 bytes -> 1600 bytes to PPU $0680 (stage 5)
 Gfx_B6_B364:
     .byte $00,$00,$40,$C0,$90,$B8,$B8,$58,$44,$00,$40,$40,$1C,$1E,$1F,$0F
     .byte $8F,$CB,$09,$84,$06,$80,$02,$00,$FC,$FF,$B0,$00,$7E,$7E,$40,$80
@@ -4058,7 +4058,7 @@ Gfx_B6_B364:
     .byte $ED,$1F,$AF,$E7,$D3,$D1,$B1,$B2,$FE,$74,$E6,$20,$BE,$3F,$17,$87
     .byte $43,$A1,$E0,$D0,$52,$3A,$C3,$C0,$E0,$70,$30,$19,$80,$84,$83,$00
     .byte $00,$00
-; Gfx_B6_B6F6: LZ-compressed, 66 bytes -> 143 bytes (stage 3)
+; Gfx_B6_B6F6: LZ-compressed, 66 bytes -> 128 bytes to PPU $0580 (stage 3)
 Gfx_B6_B6F6:
     .byte $00,$60,$18,$00,$1D,$9F,$DE,$EF,$D5,$F9,$3C,$76,$07,$C8,$11,$00
     .byte $03,$C8,$06,$C0,$38,$3E,$03,$1F,$95,$4F,$E5,$7C,$83,$D9,$02,$07
@@ -4110,25 +4110,25 @@ B6_B86F:
     BEQ B6_B876
     JMP B6_B937
 B6_B876:
-    LDA player_x_lo
-    STA zp_55
-    LDA player_x_hi
-    STA zp_56
     LDA player_y_lo
+    STA zp_55
+    LDA player_y_hi
+    STA zp_56
+    LDA player_x_lo
     CLC
     ADC #$08
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     LDA ptr_lo
     PHA
     LDA ptr_hi
     PHA
     JSR F_E514
     JSR F_EEA6
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$08
     AND #$0F
@@ -4142,7 +4142,7 @@ B6_B876:
     STA zp_53
     CMP #$FF
     BEQ B6_B8DF
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     CLC
     ADC #$10
@@ -4151,16 +4151,16 @@ B6_B876:
     BCC B6_B8DF
     CMP #$05
     BCS B6_B8DF
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC zp_53
     SEC
     SBC #$10
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     SBC #$00
-    STA player_x_hi
+    STA player_y_hi
     PLA
     STA ptr_hi
     PLA
@@ -4173,14 +4173,14 @@ B6_B8DF:
     STA ptr_lo
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
     JSR F_E514
     JSR F_EEA6
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$08
     AND #$0F
@@ -4193,18 +4193,18 @@ B6_B8DF:
     STA zp_53
     CMP #$FF
     BEQ B6_B927
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     SEC
     SBC zp_53
     BCC B6_B927
     CMP #$05
     BCS B6_B927
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC zp_53
-    STA player_x_lo
+    STA player_y_lo
 B6_B927:
     JMP B6_BA04
 B6_B92A:
@@ -4215,38 +4215,38 @@ B6_B92A:
     STA zp_7C
     JMP F_E524
 B6_B937:
-    LDA player_x_lo
+    LDA player_y_lo
     SEC
     SBC zp_53
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     SBC #$00
     BCS B6_B948
     LDA #$00
-    STA player_x_lo
+    STA player_y_lo
 B6_B948:
-    STA player_x_hi
+    STA player_y_hi
     LDA zp_7D
     LSR a
     TAX
     LDA F_C235,x
     STA zp_65
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_F80D
     PLA
     STA zp_56
@@ -4255,21 +4255,21 @@ B6_B948:
     JSR F_E514
     AND #$01
     BNE B6_B998
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_E514
     AND #$01
     BEQ B6_BA04
 B6_B998:
     LDA zp_7C
     BEQ B6_B9C0
-    JSR F_FC26
+    JSR GetMapTile
     CMP #$D1
     BNE B6_B9C0
     JSR F_F6B0
@@ -4294,14 +4294,14 @@ B6_B9CC:
     BNE B6_B9D1
     RTS
 B6_B9D1:
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC #$10
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     ADC #$00
-    STA player_x_hi
+    STA player_y_hi
     LDA zp_8F
     BEQ B6_B9FA
     LDX #$00
@@ -4342,37 +4342,37 @@ B6_BA1A:
     STA zp_66
     RTS
 B6_BA23:
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC zp_64
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     SBC #$00
     STA ptr_hi
     BCS B6_BA39
     LDA #$00
-    STA player_y_lo
-    STA player_y_hi
+    STA player_x_lo
+    STA player_x_hi
     RTS
 B6_BA39:
     LDA ptr_lo
-    STA player_y_lo
+    STA player_x_lo
     CLC
     ADC #$05
     STA ptr_lo
     LDA ptr_hi
-    STA player_y_hi
+    STA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_E514
     AND #$01
     BNE B6_BA77
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BNE B6_BA63
 B6_BA62:
@@ -4380,7 +4380,7 @@ B6_BA62:
 B6_BA63:
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
@@ -4389,11 +4389,11 @@ B6_BA63:
     AND #$01
     BEQ B6_BA62
 B6_BA77:
-    LDA player_y_lo
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC #$0A
-    STA player_y_lo
+    STA player_x_lo
     RTS
 B6_BA81:
     LDA buttons
@@ -4415,11 +4415,11 @@ B6_BA94:
     STX zp_66
     RTS
 B6_BA9C:
-    LDA player_y_lo
+    LDA player_x_lo
     CLC
     ADC zp_64
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
     LDA zp_34
@@ -4437,30 +4437,30 @@ B6_BA9C:
     BCS B6_BACE
     LDA zp_53
     ADC #$01
-    STA player_y_lo
+    STA player_x_lo
     LDA zp_54
     ADC #$00
-    STA player_y_hi
+    STA player_x_hi
     RTS
 B6_BACE:
     LDA ptr_lo
-    STA player_y_lo
+    STA player_x_lo
     CLC
     ADC #$0B
     STA ptr_lo
     LDA ptr_hi
-    STA player_y_hi
+    STA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     STA zp_56
-    JSR F_EF24
+    JSR MapPtrFromPos
     JSR F_E514
     AND #$01
     BNE B6_BB0C
-    LDA player_x_lo
+    LDA player_y_lo
     AND #$0F
     BNE B6_BAF8
 B6_BAF7:
@@ -4468,7 +4468,7 @@ B6_BAF7:
 B6_BAF8:
     LDA ptr_lo
     CLC
-    ADC zp_23
+    ADC map_width
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
@@ -4477,11 +4477,11 @@ B6_BAF8:
     AND #$01
     BEQ B6_BAF7
 B6_BB0C:
-    LDA player_y_lo
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC #$05
-    STA player_y_lo
+    STA player_x_lo
     RTS
     LDA zp_1D
     CLC
@@ -4490,11 +4490,11 @@ B6_BB0C:
     LDA zp_1E
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     SEC
     SBC ptr_lo
     STA zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     SBC ptr_hi
     STA zp_56
     BCS B6_BB53
@@ -4523,11 +4523,11 @@ B6_BB53:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    LDA player_x_lo
+    LDA player_y_lo
     SEC
     SBC ptr_lo
     STA ptr_lo
-    LDA player_x_hi
+    LDA player_y_hi
     SBC ptr_hi
     STA ptr_hi
     BCS B6_BB7A
@@ -4581,7 +4581,7 @@ B6_BBBE:
     LDA zp_56
     STA zp_1E
 B6_BBC6:
-    LDA player_y_hi
+    LDA player_x_hi
     BMI B6_BC06
     LDA zp_1B
     CLC
@@ -4590,11 +4590,11 @@ B6_BBC6:
     LDA zp_1C
     ADC #$00
     STA ptr_hi
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC ptr_lo
     STA zp_55
-    LDA player_y_hi
+    LDA player_x_hi
     SBC ptr_hi
     STA zp_56
     BCS B6_BC0D
@@ -4630,11 +4630,11 @@ B6_BC0D:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC ptr_lo
     STA ptr_lo
-    LDA player_y_hi
+    LDA player_x_hi
     SBC ptr_hi
     STA ptr_hi
     BCC B6_BC0C
@@ -4747,14 +4747,14 @@ B6_BCE2:
     STA zp_56
     LDA zp_55
     SEC
-    SBC player_x_lo
+    SBC player_y_lo
     LDA zp_56
-    SBC player_x_hi
+    SBC player_y_hi
     BCC B6_BD05
     LDA zp_55
-    STA player_x_lo
+    STA player_y_lo
     LDA zp_56
-    STA player_x_hi
+    STA player_y_hi
     JMP B6_BD25
 B6_BD05:
     LDA zp_55
@@ -4764,29 +4764,29 @@ B6_BD05:
     LDA zp_56
     ADC #$00
     STA zp_56
-    LDA player_x_lo
+    LDA player_y_lo
     SEC
     SBC zp_55
-    LDA player_x_hi
+    LDA player_y_hi
     SBC zp_56
     BCC B6_BD25
-    LDA zp_55
-    STA player_x_lo
-    LDA zp_56
-    STA player_x_hi
-B6_BD25:
-    LDA zp_1B
-    STA zp_55
-    SEC
-    SBC player_y_lo
-    LDA zp_1C
-    STA zp_56
-    SBC player_y_hi
-    BCC B6_BD3D
     LDA zp_55
     STA player_y_lo
     LDA zp_56
     STA player_y_hi
+B6_BD25:
+    LDA zp_1B
+    STA zp_55
+    SEC
+    SBC player_x_lo
+    LDA zp_1C
+    STA zp_56
+    SBC player_x_hi
+    BCC B6_BD3D
+    LDA zp_55
+    STA player_x_lo
+    LDA zp_56
+    STA player_x_hi
 B6_BD3C:
     RTS
 B6_BD3D:
@@ -4797,16 +4797,16 @@ B6_BD3D:
     LDA zp_56
     ADC #$00
     STA zp_56
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC zp_55
-    LDA player_y_hi
+    LDA player_x_hi
     SBC zp_56
     BCC B6_BD3C
     LDA zp_55
-    STA player_y_lo
+    STA player_x_lo
     LDA zp_56
-    STA player_y_hi
+    STA player_x_hi
     RTS
     LDA zp_B1
     AND #$7E

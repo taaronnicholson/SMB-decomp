@@ -10,6 +10,8 @@ for r in rows:
            ('stage' + ('s ' if len(st) > 1 else ' ') + ','.join(str(s) for s in st if s >= 0) +
             (' + title' if -1 in st else '')))
     name = f"Gfx_B{r['bank']}_{r['src']:04X}"
-    out.append(f"blob {r['bank']} {r['src']:X} {r['insize']} {name} LZ-compressed, {r['insize']} bytes -> {r['outsize']} bytes ({who})")
+    dst = ','.join('$%04X' % d for d in r.get('dsts', []))
+    kind = 'RAM' if r.get('ram') else 'PPU'
+    out.append(f"blob {r['bank']} {r['src']:X} {r['insize']} {name} LZ-compressed, {r['insize']} bytes -> {r['outsize']} bytes to {kind} {dst} ({who})")
 open(os.path.join(HERE, 'hints_gfx.txt'), 'w').write('\n'.join(out) + '\n')
 print(len(rows), 'blocks')

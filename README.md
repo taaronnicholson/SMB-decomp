@@ -42,19 +42,28 @@ Main loop per frame: `WaitForNMI`, then (state 3) bank 1 sprite clear → `ReadC
 dispatch (bank 4) → object/collision updates → `Sound_Update`. The NMI handler does OAM DMA,
 applies the `ppuctrl_shadow`/`ppumask_shadow` values and calls one of 6 state handlers.
 
-## Stage records (bank 0 `$8263`)
-`stage_index` selects one of 6 records through a pointer table. Each record is decoded as:
+## Stage records (bank 0 `$8263`) and areas
+`stage_index` (0-5) selects one of 6 stage records through a pointer table. A stage is a set of **areas**
+(24 in total) joined by doors. Each record is:
 
 | Offset | Size | Meaning |
 |--------|------|---------|
-| 0 | 4 | spawn X, Y (16-bit each) → `player_x/y_lo/hi`, copied to `spawn_*` |
-| 4 | 1 | destination code (≥ `$E0` = go to stage `code-$E0`) |
+| 0 | 4 | spawn **Y**, **X** (16-bit each) → `player_y/x_lo/hi`, copied to `spawn_*` |
+| 4 | 1 | starting area number (≥ `$E0` = go to stage `code-$E0`) |
 | 5 | 1 | parameter (`$0E` in every entry) |
 | 6 | 1 | unknown per-record byte (skipped by the loader) |
-| 7… | 6 each | entries: X, Y (16-bit), destination code, parameter — indexed as `6*n` from `entry_list` |
+| 7… | 6 each | door entries: Y, X (16-bit), destination area, parameter — indexed as `6*n` from `entry_list` |
 
-Records 0–3 have 11 entries, record 4 has 3, record 5 has none. The meaning of the destination
-codes below `$E0` (which area/room an entry leads to) is not yet confirmed.
+Records 0–3 have 11 entries, record 4 has 3, record 5 has none. The six starting areas are 0, 16, 3, 10, 21 and 6.
+
+**Areas** (`LoadArea` = `F_D05C`, A = area number): `AreaHeaderPtrLo/Hi` (`$83B9`/`$83D1`) point to a 6-byte
+`AreaHeaderN` (tileset byte, map address, log2 width, height, one more byte) and `AreaMapBank` (`$83E9`) gives the PRG
+bank of the map. A map is one byte per 16×16 tile, `8 << log2width` tiles wide (16, 32, 64 or 128), `height` rows tall,
+row-major, and the levels scroll **vertically**. The address of tile (x, y) is `map_ptr + (x>>4) + (y>>4)*width`
+(`MapPtrFromPos`); `GetMapTile` reads it. The first two rows are phantom (above the playfield, not stored), so the real
+data starts at `base + 2*width` (area 23's base is `$7F80`, just below its bank). Maps live in bank 3 (areas 0-5, 7-10,
+12-20), bank 1 (6, 11), bank 4 (21, 23) and bank 6 (22). `tools/extract_maps.py` dumps them to `build/maps/`.
+`tile_props` (`$03A4`, 120 bytes, loaded per stage) holds tile flags; bit 0 means solid.
 
 ## Sound engine (bank 6)
 `$8000` is a jump table: `Sound_PlaySong` (A = song 0-8), `Sound_Update` (`$8003`, once per frame),
@@ -109,7 +118,16 @@ calls to the game's LZ-style decompressor (`F_FDEF`, source in `ptr_lo/hi`, dest
 target, clear = VRAM). Rendered images are not committed.
 `tools/gfx_scan.py` (slow, ~2.5 min) walks every stage and caches the result in `tools/gfx_blocks.json`;
 `tools/gen_gfx_hints.py` turns it into labelled `Gfx_B<bank>_<addr>` blobs (26 LZ-compressed blocks: shared title/font
-graphics in banks 0/1, per-stage tile sets in bank 4, stage map/screen data in bank 6).
+graphics in banks 0/1, per-stage background tile sets and `tile_props` tables in bank 4, sprite tile sets in bank 6).
+
+## Compression
+`tools/lzdec.py` is a Python port of the game's decompressor, validated against the emulator (all calls match, bytes
+and end pointer). MSB-first bit stream; the first byte only primes the bit buffer and the first token is a literal.
+Flag `0` = literal byte. Flag `1` = match: next bit `0` → length 2; else 3 bits `v`: `v≠0` → length `v+2`, `v=0` → 8 bits
+`e`: `e=0` ends the stream, else length `e+9`; then a 10-bit distance-1. The routine stores the offset's high bits at the
+output position as scratch and reads them back for 16-bit address arithmetic.
+`tools/extract_gfx.py` decompresses all 26 blocks to `build/gfx/*.bin` and grayscale tile sheets
+(derived from the ROM, not committed); `tools/check_decomp.py` re-validates the port.
 
 ## Shared helpers
 - `SineTable` (bank 0 `$BE8A`): 256 signed entries, amplitude ±64, index = angle (256 = full turn).

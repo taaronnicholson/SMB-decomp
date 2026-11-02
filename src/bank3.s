@@ -1057,25 +1057,25 @@ B3_BD7F:
     JSR F_FA3D
     TYA
     TAX
-    LDA player_y_lo
-    STA ent_y_lo,x
-    LDA player_y_hi
-    STA ent_y_hi,x
     LDA player_x_lo
-    STA ent_x_lo,x
+    STA ent_y_lo,x
     LDA player_x_hi
+    STA ent_y_hi,x
+    LDA player_y_lo
+    STA ent_x_lo,x
+    LDA player_y_hi
     STA ent_x_hi,x
     LDA #$02
     STA zp_53
     JSR F_F876
     LDA ent_y_lo,x
-    STA player_y_lo
-    LDA ent_y_hi,x
-    STA player_y_hi
-    LDA ent_x_lo,x
     STA player_x_lo
-    LDA ent_x_hi,x
+    LDA ent_y_hi,x
     STA player_x_hi
+    LDA ent_x_lo,x
+    STA player_y_lo
+    LDA ent_x_hi,x
+    STA player_y_hi
     LDA ent_angle,x
     BMI B3_BDDB
     RTS
@@ -1084,13 +1084,13 @@ B3_BDDB:
     JSR F_CE61
     JMP B3_BDF1
 B3_BDE3:
-    LDA player_x_lo
+    LDA player_y_lo
     CLC
     ADC zp_53
-    STA player_x_lo
-    LDA player_x_hi
+    STA player_y_lo
+    LDA player_y_hi
     ADC B3_BE2B,y
-    STA player_x_hi
+    STA player_y_hi
 B3_BDF1:
     INC zp_81
     RTS
@@ -1130,7 +1130,7 @@ B3_BE38:
 B3_BE9C:
     RTS
     STA zp_53
-    LDA zp_AB
+    LDA current_area
     CMP #$05
     BEQ B3_BE9C
     CMP #$02
@@ -1162,7 +1162,7 @@ B3_BE9C:
     PHA
     LDA ptr_lo
     SEC
-    SBC zp_23
+    SBC map_width
     STA ptr_lo
     LDA ptr_hi
     SBC #$00

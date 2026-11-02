@@ -280,7 +280,7 @@
     .byte $04,$06,$01,$03,$00,$00,$01,$02,$36,$02,$02,$04,$35,$06,$3B,$3B
     .byte $04,$05,$06,$3B,$3B,$04,$06,$3B,$3B,$04,$06,$3B,$3B,$3B,$3B,$3B
     .byte $37,$06,$04,$06,$3B,$3B,$37,$05,$05,$35,$05
-; Gfx_B4_8CA0: LZ-compressed, 998 bytes -> 1756 bytes (stages 0 + title)
+; Gfx_B4_8CA0: LZ-compressed, 998 bytes -> 1504 bytes to PPU $1530 (stages 0 + title)
 Gfx_B4_8CA0:
     .byte $00,$60,$34,$00,$7F,$F4,$00,$00,$28,$3A,$00,$1F,$FA,$00,$60,$1C
     .byte $20,$00,$80,$44,$21,$20,$10,$10,$30,$E0,$7F,$40,$03,$B5,$FA,$FB
@@ -349,12 +349,12 @@ Gfx_B4_8CA0:
     .byte $37,$88,$82,$80,$8D,$8D,$81,$C0,$45,$D1,$75,$AF,$0F,$B9,$EB,$95
     .byte $FB,$96,$BF,$CE,$7D,$B4,$37,$D7,$EB,$FC,$B9,$F8,$02,$6F,$D7,$7A
     .byte $DF,$F0,$00
-; Gfx_B4_9086: LZ-compressed, 37 bytes -> 134 bytes (stages 0 + title)
+; Gfx_B4_9086: LZ-compressed, 37 bytes -> 120 bytes to RAM $03A4 (stages 0 + title)
 Gfx_B4_9086:
     .byte $00,$00,$00,$B0,$03,$00,$01,$AC,$80,$61,$EC,$81,$7B,$00,$20,$4F
     .byte $A0,$4E,$80,$8D,$03,$BB,$01,$F0,$04,$02,$01,$F2,$01,$60,$28,$16
     .byte $C1,$18,$1F,$80,$00,$00
-; Gfx_B4_90AC: LZ-compressed, 1638 bytes -> 2794 bytes (stage 1)
+; Gfx_B4_90AC: LZ-compressed, 1638 bytes -> 2336 bytes to PPU $1530 (stage 1)
 Gfx_B4_90AC:
     .byte $00,$60,$1C,$00,$3F,$9F,$0E,$06,$03,$01,$00,$80,$FF,$7F,$B0,$D9
     .byte $ED,$F6,$FC,$02,$80,$20,$07,$61,$14,$07,$F0,$01,$81,$9E,$00,$3E
@@ -464,12 +464,12 @@ B4_9685:
     .byte $00,$1F,$CD,$59,$27,$56,$F2,$10,$10,$10,$37,$BB,$B8,$3B,$BF,$44
     .byte $4C,$45,$8A,$07,$10,$01,$E0,$2C,$A8,$74,$3A,$19,$14,$4E,$28,$00
     .byte $C8,$24,$38,$CD,$32,$7C,$32,$FF,$58,$E7,$5B,$80,$00
-; Gfx_B4_9712: LZ-compressed, 48 bytes -> 136 bytes (stage 1)
+; Gfx_B4_9712: LZ-compressed, 48 bytes -> 120 bytes to RAM $03A4 (stage 1)
 Gfx_B4_9712:
     .byte $00,$01,$76,$00,$00,$34,$00,$70,$0A,$02,$92,$B0,$02,$09,$F4,$11
     .byte $C8,$3F,$E0,$8E,$0A,$0A,$C5,$A8,$2C,$03,$01,$B6,$18,$11,$89,$D9
     .byte $0F,$4A,$5F,$09,$3C,$16,$81,$F0,$18,$0B,$74,$3E,$E8,$8B,$80,$00
-; Gfx_B4_9742: LZ-compressed, 1827 bytes -> 2704 bytes (stages 2,5)
+; Gfx_B4_9742: LZ-compressed, 1827 bytes -> 2336 bytes to PPU $1530 (stages 2,5)
 Gfx_B4_9742:
     .byte $00,$60,$18,$00,$4E,$A6,$92,$4E,$37,$AB,$90,$AC,$7F,$75,$3B,$5D
     .byte $AD,$D6,$DB,$6D,$D6,$80,$7B,$BF,$CB,$67,$F1,$BB,$6D,$2E,$FF,$54
@@ -586,13 +586,13 @@ Gfx_B4_9742:
     .byte $F3,$06,$33,$4E,$48,$3C,$97,$E5,$93,$E0,$D8,$B3,$A3,$35,$CE,$9B
     .byte $6C,$A9,$B4,$5F,$BB,$5F,$C3,$A7,$6E,$8B,$F6,$90,$35,$9A,$12,$BE
     .byte $DC,$00,$00,$00
-; Gfx_B4_9E66: LZ-compressed, 52 bytes -> 136 bytes (stages 2,5)
+; Gfx_B4_9E66: LZ-compressed, 52 bytes -> 120 bytes to RAM $03A4 (stages 2,5)
 Gfx_B4_9E66:
     .byte $00,$01,$76,$00,$01,$C0,$C0,$50,$30,$1C,$01,$90,$00,$0D,$00,$02
     .byte $2D,$00,$F0,$2C,$00,$13,$40,$5F,$01,$C1,$96,$C2,$31,$50,$B8,$00
     .byte $3A,$82,$18,$04,$82,$51,$B4,$14,$0F,$B8,$1B,$EC,$28,$F0,$13,$82
     .byte $40,$0B,$00,$00
-; Gfx_B4_9E9A: LZ-compressed, 1637 bytes -> 2587 bytes (stage 3)
+; Gfx_B4_9E9A: LZ-compressed, 1637 bytes -> 2144 bytes to PPU $1530 (stage 3)
 Gfx_B4_9E9A:
     .byte $00,$60,$18,$00,$7F,$BF,$F8,$03,$64,$08,$D0,$02,$00,$02,$81,$C0
     .byte $80,$60,$3C,$01,$81,$C0,$60,$00,$1C,$00,$00,$A0,$14,$40,$E0,$10
@@ -701,12 +701,12 @@ Gfx_B4_9E9A:
     .byte $70,$54,$5D,$24,$98,$C9,$24,$96,$40,$83,$E1,$F3,$20,$14,$04,$EC
     .byte $01,$63,$40,$66,$C0,$11,$C3,$F9,$44,$A2,$7D,$3F,$8A,$90,$33,$0A
     .byte $10,$3C,$00,$80,$50,$06,$00,$00,$00
-; Gfx_B4_A500: LZ-compressed, 42 bytes -> 133 bytes (stage 3)
+; Gfx_B4_A500: LZ-compressed, 42 bytes -> 120 bytes to RAM $03A4 (stage 3)
 Gfx_B4_A500:
     .byte $00,$01,$72,$00,$00,$36,$00,$64,$06,$02,$81,$81,$C7,$A0,$76,$00
     .byte $41,$1D,$82,$E7,$ED,$04,$3F,$04,$34,$16,$EC,$10,$F0,$0D,$80,$20
     .byte $14,$0F,$80,$20,$D7,$02,$E0,$56,$00,$00
-; Gfx_B4_A52A: LZ-compressed, 1672 bytes -> 2422 bytes (stage 4)
+; Gfx_B4_A52A: LZ-compressed, 1672 bytes -> 2128 bytes to PPU $1530 (stage 4)
 Gfx_B4_A52A:
     .byte $00,$60,$18,$00,$7F,$B5,$15,$ED,$F5,$C3,$D9,$6C,$B0,$00,$0A,$CB
     .byte $E3,$F3,$F8,$F4,$F2,$7F,$7F,$C0,$8C,$01,$6C,$18,$E0,$00,$B0,$E8
@@ -819,7 +819,7 @@ Gfx_B4_A52A:
     .word F_EBC9
     .byte $5B,$00,$D7,$3E,$01,$B5,$FC,$03,$EC,$FE,$E0,$D9,$8F,$F1,$8E,$01
     .byte $49,$FF,$89,$FD,$E9,$F0,$00
-; Gfx_B4_ABB2: LZ-compressed, 42 bytes -> 136 bytes (stage 4)
+; Gfx_B4_ABB2: LZ-compressed, 42 bytes -> 120 bytes to RAM $03A4 (stage 4)
 Gfx_B4_ABB2:
     .byte $00,$01,$7E,$00,$00,$38,$00,$60,$10,$0C,$F8,$0D,$B0,$7B,$41,$1E
     .byte $42,$7D,$06,$40,$A8,$2D,$03,$81,$F4,$1A,$60,$04,$3F,$C0,$28,$71
@@ -1083,10 +1083,10 @@ B4_AEB6:
     .byte $FF,$02,$01,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
     .res 16, $FF
 B4_AEF6:
-    LDA player_y_lo
+    LDA player_x_lo
     SEC
     SBC #$C0
-    LDA player_y_hi
+    LDA player_x_hi
     SBC #$00
     BCC B4_AEB5
     LDA #$01
@@ -1776,9 +1776,9 @@ B4_B4F7:
     .byte $A5,$60,$38,$E5,$53,$85,$94,$A5,$61,$E9,$00,$85
     STA zp_A5,x
     LSR B4_9685,x
-    LDA player_y_hi
-    STA spawn_y_hi
-    LDA zp_AB
+    LDA player_x_hi
+    STA spawn_x_hi
+    LDA current_area
     STA zp_98
     LDA zp_92
     STA zp_99
@@ -1992,13 +1992,13 @@ B4_B6B6:
     LDA #$29
     JSR F_CE61
     JSR F_FA3D
-    LDA player_y_lo
-    STA ent_y_lo,y
-    LDA player_y_hi
-    STA ent_y_hi,y
     LDA player_x_lo
-    STA ent_x_lo,y
+    STA ent_y_lo,y
     LDA player_x_hi
+    STA ent_y_hi,y
+    LDA player_y_lo
+    STA ent_x_lo,y
+    LDA player_y_hi
     STA ent_x_hi,y
     STY zp_42
     LDA #$EF

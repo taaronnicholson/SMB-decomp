@@ -392,34 +392,179 @@ StageRecord5:
     .word $0036, $0078
     .byte $06, $0E, $00
     .byte $D0,$00,$19,$00,$02,$1C
-B0_83B9:
-    .byte $25,$31,$19,$79,$0D,$01,$15,$85,$91,$9D,$A9,$B5,$C1,$CD,$D9,$E5
-    .byte $3D,$49,$55,$61,$6D,$F1,$FD,$09
-B0_83D1:
-    .byte $84,$84,$84,$84,$84,$84,$85,$84,$84,$84,$84,$84,$84,$84,$84,$84
-    .byte $84,$84,$84,$84,$84,$84,$84,$85
-B0_83E9:
-    .byte $03,$03,$03,$03,$03,$03,$01,$03,$03,$03,$03,$01,$03,$03,$03,$03
-    .byte $03,$03,$03,$03,$03,$04,$06,$04,$08,$17,$89,$02,$11,$02,$3F,$AD
-    .byte $00,$FF,$01,$00,$08,$37,$84,$01,$50,$07,$00,$00,$00,$FF,$08,$00
-    .byte $08,$17,$89,$02,$11,$02,$3F,$AD,$00,$FF,$0F,$00,$03,$57,$8B,$01
-    .byte $48,$01,$00,$00,$00,$FF,$00,$01,$03,$B7,$8F,$02,$18,$01,$00,$00
-    .byte $00,$FF,$00,$01,$04,$97,$92,$01,$48,$03,$E3,$AF,$00,$FF,$00,$02
-    .byte $04,$F7,$96,$01,$30,$03,$7B,$B0,$00,$FF,$00,$02,$04,$77,$99,$03
-    .byte $12,$03,$DB,$B0,$00,$FF,$00,$02,$04,$D7,$9D,$01,$12,$03,$FD,$B0
-    .byte $00,$FF,$00,$02,$04,$D7,$9E,$01,$34,$03,$00,$00,$6C,$00,$17,$02
-    .byte $03,$47,$AF,$01,$48,$04,$65,$AD,$00,$FF,$00,$03,$03,$A7,$B3,$01
-    .byte $3B,$04,$33,$AE,$00,$FF,$00,$03,$03,$D7,$B6,$03,$12,$04,$4B,$AF
-    .byte $00,$FF,$00,$03,$03,$47,$BB,$01,$22,$04,$8D,$AF,$00,$FF,$00,$03
-    .byte $04,$17,$A3,$01,$48,$05,$A9,$B2,$00,$FF,$1A,$04,$04,$D5,$B2,$02
-    .byte $20,$05,$4D,$B1,$00,$FF,$00,$04,$04,$F7,$A1,$01,$12,$05,$BF,$B1
-    .byte $00,$FF,$00,$04,$04,$77,$A7,$01,$12,$05,$E9,$B1,$00,$FF,$00,$04
-    .byte $04,$17,$A8,$03,$18,$05,$31,$B2,$00,$FF,$19,$04,$04,$F7,$AD,$01
-    .byte $16,$05,$7B,$B2,$00,$FF,$00,$04,$06,$60,$88,$02,$22,$06,$00,$00
-    .byte $00,$FF,$00,$05,$06,$3E,$A0,$01,$1E,$06,$BB,$B3,$00,$FF,$1B,$05
-    .byte $06,$80,$7F,$04,$12,$06,$00,$00,$9C,$00,$18,$05,$08,$B5,$B6,$01
-    .byte $42,$06,$43,$B4,$00,$FF,$0E,$03
-; Gfx_B0_8521: LZ-compressed, 551 bytes -> 878 bytes (title/all stages)
+AreaHeaderPtrLo:
+    .byte <(AreaHeader0)
+    .byte <(AreaHeader1)
+    .byte <(AreaHeader2)
+    .byte <(AreaHeader3)
+    .byte <(AreaHeader4)
+    .byte <(AreaHeader5)
+    .byte <(AreaHeader6)
+    .byte <(AreaHeader7)
+    .byte <(AreaHeader8)
+    .byte <(AreaHeader9)
+    .byte <(AreaHeader10)
+    .byte <(AreaHeader11)
+    .byte <(AreaHeader12)
+    .byte <(AreaHeader13)
+    .byte <(AreaHeader14)
+    .byte <(AreaHeader15)
+    .byte <(AreaHeader16)
+    .byte <(AreaHeader17)
+    .byte <(AreaHeader18)
+    .byte <(AreaHeader19)
+    .byte <(AreaHeader20)
+    .byte <(AreaHeader21)
+    .byte <(AreaHeader22)
+    .byte <(AreaHeader23)
+AreaHeaderPtrHi:
+    .byte >(AreaHeader0)
+    .byte >(AreaHeader1)
+    .byte >(AreaHeader2)
+    .byte >(AreaHeader3)
+    .byte >(AreaHeader4)
+    .byte >(AreaHeader5)
+    .byte >(AreaHeader6)
+    .byte >(AreaHeader7)
+    .byte >(AreaHeader8)
+    .byte >(AreaHeader9)
+    .byte >(AreaHeader10)
+    .byte >(AreaHeader11)
+    .byte >(AreaHeader12)
+    .byte >(AreaHeader13)
+    .byte >(AreaHeader14)
+    .byte >(AreaHeader15)
+    .byte >(AreaHeader16)
+    .byte >(AreaHeader17)
+    .byte >(AreaHeader18)
+    .byte >(AreaHeader19)
+    .byte >(AreaHeader20)
+    .byte >(AreaHeader21)
+    .byte >(AreaHeader22)
+    .byte >(AreaHeader23)
+AreaMapBank:
+    .byte $03, $03, $03, $03, $03, $03, $01, $03, $03, $03, $03, $01, $03, $03, $03, $03, $03, $03, $03, $03, $03, $04, $06, $04
+AreaHeader5:
+    .byte $08
+    .word $8917
+    .byte $02, $11, $02
+    .byte $3F,$AD,$00,$FF,$01,$00
+AreaHeader4:
+    .byte $08
+    .word $8437
+    .byte $01, $50, $07
+    .byte $00,$00,$00,$FF,$08,$00
+AreaHeader2:
+    .byte $08
+    .word $8917
+    .byte $02, $11, $02
+    .byte $3F,$AD,$00,$FF,$0F,$00
+AreaHeader0:
+    .byte $03
+    .word $8B57
+    .byte $01, $48, $01
+    .byte $00,$00,$00,$FF,$00,$01
+AreaHeader1:
+    .byte $03
+    .word $8FB7
+    .byte $02, $18, $01
+    .byte $00,$00,$00,$FF,$00,$01
+AreaHeader16:
+    .byte $04
+    .word $9297
+    .byte $01, $48, $03
+    .byte $E3,$AF,$00,$FF,$00,$02
+AreaHeader17:
+    .byte $04
+    .word $96F7
+    .byte $01, $30, $03
+    .byte $7B,$B0,$00,$FF,$00,$02
+AreaHeader18:
+    .byte $04
+    .word $9977
+    .byte $03, $12, $03
+    .byte $DB,$B0,$00,$FF,$00,$02
+AreaHeader19:
+    .byte $04
+    .word $9DD7
+    .byte $01, $12, $03
+    .byte $FD,$B0,$00,$FF,$00,$02
+AreaHeader20:
+    .byte $04
+    .word $9ED7
+    .byte $01, $34, $03
+    .byte $00,$00,$6C,$00,$17,$02
+AreaHeader3:
+    .byte $03
+    .word $AF47
+    .byte $01, $48, $04
+    .byte $65,$AD,$00,$FF,$00,$03
+AreaHeader7:
+    .byte $03
+    .word $B3A7
+    .byte $01, $3B, $04
+    .byte $33,$AE,$00,$FF,$00,$03
+AreaHeader8:
+    .byte $03
+    .word $B6D7
+    .byte $03, $12, $04
+    .byte $4B,$AF,$00,$FF,$00,$03
+AreaHeader9:
+    .byte $03
+    .word $BB47
+    .byte $01, $22, $04
+    .byte $8D,$AF,$00,$FF,$00,$03
+AreaHeader10:
+    .byte $04
+    .word $A317
+    .byte $01, $48, $05
+    .byte $A9,$B2,$00,$FF,$1A,$04
+AreaHeader11:
+    .byte $04
+    .word $B2D5
+    .byte $02, $20, $05
+    .byte $4D,$B1,$00,$FF,$00,$04
+AreaHeader12:
+    .byte $04
+    .word $A1F7
+    .byte $01, $12, $05
+    .byte $BF,$B1,$00,$FF,$00,$04
+AreaHeader13:
+    .byte $04
+    .word $A777
+    .byte $01, $12, $05
+    .byte $E9,$B1,$00,$FF,$00,$04
+AreaHeader14:
+    .byte $04
+    .word $A817
+    .byte $03, $18, $05
+    .byte $31,$B2,$00,$FF,$19,$04
+AreaHeader15:
+    .byte $04
+    .word $ADF7
+    .byte $01, $16, $05
+    .byte $7B,$B2,$00,$FF,$00,$04
+AreaHeader21:
+    .byte $06
+    .word $8860
+    .byte $02, $22, $06
+    .byte $00,$00,$00,$FF,$00,$05
+AreaHeader22:
+    .byte $06
+    .word $A03E
+    .byte $01, $1E, $06
+    .byte $BB,$B3,$00,$FF,$1B,$05
+AreaHeader23:
+    .byte $06
+    .word $7F80
+    .byte $04, $12, $06
+    .byte $00,$00,$9C,$00,$18,$05
+AreaHeader6:
+    .byte $08
+    .word $B6B5
+    .byte $01, $42, $06
+    .byte $43,$B4,$00,$FF,$0E,$03
+; Gfx_B0_8521: LZ-compressed, 551 bytes -> 736 bytes to PPU $1C40 (title/all stages)
 Gfx_B0_8521:
     .byte $00,$00,$07,$04,$46,$33,$18,$88,$38,$80,$73,$E3,$BA,$01,$DD,$C7
     .byte $CC,$81,$E1,$8C,$80,$03,$C8,$17,$3C,$68,$07,$3F,$64,$17,$41,$11
@@ -478,7 +623,7 @@ Gfx_B0_8521:
     .byte $00,$7D,$00,$34,$93,$69,$2A,$40,$74,$00,$81,$9E,$00,$3C,$12,$21
     .byte $56,$B8,$C0,$F8,$02,$12,$30,$02,$25,$70,$48,$87,$58,$49,$60,$78
     .byte $62,$C0,$25,$37,$80,$00
-; Gfx_B0_88A7: LZ-compressed, 1005 bytes -> 1578 bytes (title/all stages)
+; Gfx_B0_88A7: LZ-compressed, 1005 bytes -> 1328 bytes to PPU $1000 (title/all stages)
 Gfx_B0_88A7:
     .byte $3F,$B6,$97,$EF,$F7,$FE,$40,$20,$00,$FC,$C0,$40,$D0,$00,$FE,$01
     .byte $BE,$5F,$BA,$00,$00,$0F,$C0,$30,$0B,$40,$02,$FF,$A0,$06,$C1,$CC
@@ -1499,7 +1644,7 @@ B0_B8D2:
     STA ptr_hi
     CLC
     JMP DecompressAndFinish
-; Gfx_B0_B8E6: LZ-compressed, 1443 bytes -> 1834 bytes (title/all stages)
+; Gfx_B0_B8E6: LZ-compressed, 1443 bytes -> 1616 bytes to PPU $1000 (title/all stages)
 Gfx_B0_B8E6:
     .byte $00,$00,$C0,$80,$80,$80,$84,$06,$1F,$00,$81,$01,$41,$61,$70,$74
     .byte $C6,$5F,$78,$02,$5E,$AF,$B7,$E9,$75,$FC,$FE,$04,$A5,$1E,$4F,$87

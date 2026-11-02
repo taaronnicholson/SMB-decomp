@@ -69,8 +69,8 @@ ram 0690 ent_dy
 ram 0570 ent_flags            ; bit tests (e.g. AND #$04) seen in bank 5 movement code
 
 ; ---- stage records (bank 0): 6 records, pointer table at $8263 ----
-; record = spawn entry (x16, y16, dest, param) + 1 byte + N entries of (x16, y16, dest, param)
-; dest >= $E0 means "go to stage (dest-$E0)"; the main loop indexes entries as 6*n from record+7
+; record = spawn entry (y16, x16, area, param) + 1 byte + N door entries of (y16, x16, area, param)
+; area = destination area number (0-23, see AreaHeader*); >= $E0 means "go to stage (code-$E0)"; entries are indexed 6*n from record+7
 name 0 826F StageRecord0
 name 0 82B8 StageRecord1
 name 0 8301 StageRecord2
@@ -88,14 +88,14 @@ struct 0 8351 11 wwbb
 struct 0 8393 1 wwbbb
 struct 0 839A 3 wwbb
 struct 0 83AC 1 wwbbb
-ram 0060 player_x_lo          ; loaded from the stage-record spawn entry
-ram 0061 player_x_hi
-ram 005E player_y_lo
-ram 005F player_y_hi
-ram 0094 spawn_x_lo           ; copies of the spawn entry kept for respawn
-ram 0095 spawn_x_hi
-ram 0096 spawn_y_lo
-ram 0097 spawn_y_hi
+ram 0060 player_y_lo          ; loaded from the stage-record spawn entry (y first, then x)
+ram 0061 player_y_hi
+ram 005E player_x_lo
+ram 005F player_x_hi
+ram 0094 spawn_y_lo           ; copies of the spawn entry kept for respawn
+ram 0095 spawn_y_hi
+ram 0096 spawn_x_lo
+ram 0097 spawn_x_hi
 ram 009A entry_list_lo        ; pointer to the current record's entry list (record+7)
 ram 009B entry_list_hi
 
@@ -115,3 +115,16 @@ name f FDBB Decomp_ReadBack
 name f FDD7 Decomp_NextSrc
 name f FDE0 Decomp_NextDst
 ram 0397 decomp_to_ram         ; bit 7 set = output to RAM instead of VRAM
+
+; ---- areas and maps ----
+name f D05C LoadArea            ; A = area number (0-23): sets map bank, pointer, width, height
+name f FC26 GetMapTile          ; returns the tile id at (ptr_lo/hi = x, $55/$56 = y), applying collected-item flags
+name f EF24 MapPtrFromPos       ; map address = map_ptr + (x>>4) + (y>>4) * map_width
+ram 00AB current_area
+ram 00AC map_bank
+ram 0025 map_ptr_lo
+ram 0026 map_ptr_hi
+ram 0033 map_log2_width         ; width = 8 << this
+ram 0023 map_width              ; tiles per row: 16, 32, 64 or 128
+ram 0024 map_height             ; rows
+ram 03A4 tile_props             ; per-tile property table (bit 0 = solid), 120 bytes decompressed per stage
