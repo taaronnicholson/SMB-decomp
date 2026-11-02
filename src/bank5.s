@@ -4748,7 +4748,7 @@ B5_AAA7:
     JMP EntityDeltaFromCentre
 Ent4C_Update:
     LDA #$4D
-B5_AAB2:
+Ent_BecomeOrbiter:
     STA ent_type,x
     LDA ent_y_hi,x
     STA tmp_a
@@ -5040,7 +5040,7 @@ B5_AD1A:
     .byte $00,$03,$02,$04,$01
 Ent51_Update:
     LDA #$52
-    JMP B5_AAB2
+    JMP Ent_BecomeOrbiter
 Ent52_Update:
     JSR Ent_CheckPlayerOverlap
     JSR Ent_HurtOnTouch
