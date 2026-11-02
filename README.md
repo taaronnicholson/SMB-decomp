@@ -102,7 +102,25 @@ number. A frame is a count byte followed by 6-byte sprites `dx(16) dy(16) tile a
 Observed in stage 0 (spawn flags → group): type `01` (flags `04`) → group 0 (green dome balloon with a stalk, a star, and
 the score popups 10/20/30/50/100/200/300/500/1000); `08` (`14`) → group 2 (green worm); `4E` (`70`-`76`) → group 14 (red
 creature with a propeller, 6 frames); `51` (`78`) → group 15 (white and black creature); `2E` (`B8`) → group 23 (green butterfly).
-Which groups exist, and their tile bases, differ per stage.
+Which groups a stage loads (their tile bases are non-zero) differs per stage; as rendered, by stage:
+
+| Group | Looks like | Stages |
+|-------|------------|--------|
+| 0 | green dome balloon on a stalk, star, score popups 10-1000 | all |
+| 2 | green worm | 0 |
+| 3 | small purple/yellow shapes and bubbles | 5 |
+| 7 | small purple winged shape | 3 |
+| 11 | green snail-like creature | 1, 2, 4 |
+| 13 | purple dome blob | 2, 3, 4 |
+| 14 | red creature with a propeller | 0, 3 |
+| 15 | white and black creature | 0, 1, 3, 4 |
+| 17 | small green curls | 2, 4 |
+| 23 | green butterfly | 0-4 |
+| 24 | large green spiky creature (probably a boss) | 5 |
+| 27 | green grass-like creature, purple slug | 2, 3 |
+
+(Group 29 has a tile base in stage 3 but showed nothing in frame 0-7; groups also share tables, e.g. 8-10 and 12-13.)
+These are descriptions of the pictures only: what each creature does is not decoded.
 
 ## Sound engine (bank 6)
 `$8000` is a jump table: `Sound_PlaySong` (A = song 0-8), `Sound_Update` (`$8003`, once per frame),

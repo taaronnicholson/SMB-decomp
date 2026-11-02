@@ -1800,7 +1800,7 @@ AnimGroupPtrs:
     .word AnimGroup28
     .word AnimGroup29
     .word AnimGroup30
-; AnimGroup0: frame offsets for entity animation group(s) 0: 65 frames
+; AnimGroup0: frame offsets for entity animation group(s) 0: 65 frames - green dome balloon on a stalk, a star, score popups 10-1000 (all stages)
 AnimGroup0:
     .word $0082
     .word $0093
@@ -2302,7 +2302,7 @@ AnimGroup1:
     .byte $02, $03
     .word $0000, $0000
     .byte $00, $03
-; AnimGroup2: frame offsets for entity animation group(s) 2: 1 frames
+; AnimGroup2: frame offsets for entity animation group(s) 2: 1 frames - green worm (stage 0)
 AnimGroup2:
     .word $0002
     .byte $02
@@ -2310,7 +2310,7 @@ AnimGroup2:
     .byte $00, $02
     .word $0008, $0000
     .byte $02, $02
-; AnimGroup3: frame offsets for entity animation group(s) 3: 4 frames
+; AnimGroup3: frame offsets for entity animation group(s) 3: 4 frames - small purple/yellow shapes and bubbles (stage 5)
 AnimGroup3:
     .word $0008
     .word $0013
@@ -2414,7 +2414,7 @@ AnimGroup6:
     .byte $0A, $03
     .word $0008, $FFF8
     .byte $0C, $03
-; AnimGroup7: frame offsets for entity animation group(s) 7: 1 frames
+; AnimGroup7: frame offsets for entity animation group(s) 7: 1 frames - small purple winged shape (stage 3)
 AnimGroup7:
     .word $0002
     .byte $02
@@ -2430,7 +2430,7 @@ AnimGroup8:
     .byte $00, $00
     .word $0008, $0000
     .byte $02, $00
-; AnimGroup11: frame offsets for entity animation group(s) 11: 21 frames
+; AnimGroup11: frame offsets for entity animation group(s) 11: 21 frames - green snail-like creature (stages 1, 2, 4)
 AnimGroup11:
     .word $002A
     .word $003B
@@ -2754,7 +2754,7 @@ AnimGroup12:
     .byte $02, $03
     .word $0004, $FFF0
     .byte $36, $01
-; AnimGroup14: frame offsets for entity animation group(s) 14: 6 frames
+; AnimGroup14: frame offsets for entity animation group(s) 14: 6 frames - red creature with a propeller (stages 0, 3)
 AnimGroup14:
     .word $000C
     .word $0029
@@ -2826,7 +2826,7 @@ AnimGroup14:
     .byte $1C, $01
     .word $0009, $FFF0
     .byte $1C, $41
-; AnimGroup15: frame offsets for entity animation group(s) 15: 3 frames
+; AnimGroup15: frame offsets for entity animation group(s) 15: 3 frames - white and black creature (stages 0, 1, 3, 4)
 AnimGroup15:
     .word $0006
     .word $0011
@@ -2948,7 +2948,7 @@ AnimGroup22:
     .byte $01
     .word $0000, $0000
     .byte $10, $03
-; AnimGroup23: frame offsets for entity animation group(s) 23: 14 frames
+; AnimGroup23: frame offsets for entity animation group(s) 23: 14 frames - green butterfly (stages 0, 1, 2, 3, 4)
 AnimGroup23:
     .word $001C
     .word $0027
@@ -3058,7 +3058,7 @@ AnimGroup23:
     .byte $02, $02
     .word $0004, $0016
     .byte $10, $01
-; AnimGroup24: frame offsets for entity animation group(s) 24: 18 frames
+; AnimGroup24: frame offsets for entity animation group(s) 24: 18 frames - large green spiky creature (stage 5)
 AnimGroup24:
     .word $0024
     .word $004D
