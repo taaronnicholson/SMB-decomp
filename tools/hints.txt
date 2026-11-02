@@ -33,3 +33,18 @@ ram 0015 buttons_released
 name 0 8205 ReadController
 name 0 8245 ClearRAM           ; zeroes RAM $0000-$06FF except the $0100 stack page
 dwords 0 8263 6                ; table of 6 pointers to record lists
+
+; ---- routines identified by reading the main loop / callees ----
+name f C9AC WaitForNMI         ; spins until frame_counter changes
+name f C99E EnableNMI          ; sets PPUCTRL bit 7
+name f C7C8 EnableRendering    ; render_enable = $FF (NMI keeps BG+sprites on)
+name 1 BD95 HideSprites        ; Y=$FF for OAM entries 15..63
+name 2 B868 ResetGameState
+name 2 B7F4 ResetLevelState
+name 4 ADCF DispatchGameState  ; indirect jump via table indexed by game_state
+name 6 8003 Sound_Update       ; per-frame sound engine tick (bank 6 = sound engine)
+ram 000D render_enable
+ram 0051 ptr_lo                  ; scratch pointer used with (ptr_lo),y
+ram 0052 ptr_hi
+ram 0093 stage_index             ; index into the stage record pointer table (bank 0 $8263)
+ram 072C game_state            ; index for DispatchGameState table

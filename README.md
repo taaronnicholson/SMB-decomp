@@ -21,6 +21,22 @@ back into buildable ca65 assembly. `make verify` rebuilds the ROM and checks tha
 - `FarCall` (`$CEEE`): A=high, X=low, Y=bank – calls a routine in another bank and restores the bank.
 - NMI dispatches through a state table at `$C825` indexed by `$00`.
 
+## What each bank does (from reading the code)
+| Bank | Role |
+|------|------|
+| 0 | Controller input (`ReadController` → `buttons*`), `ClearRAM`, stage record pointer table at `$8263` (indexed by `stage_index`, `$93`) and the stage data it points to |
+| 1 | Sprite/OAM management (`HideSprites`), per-frame object code |
+| 2 | Nametable/PPU drawing (≈800 `PPUDATA` writes), `ResetGameState`, `ResetLevelState` |
+| 3 | Mostly data (tile/pattern and map-like tables) with a little code |
+| 4 | Game-state machine: `DispatchGameState` jumps through a 16-entry table indexed by `game_state` (`$072C`) |
+| 5 | Code and tables, not yet characterised |
+| 6 | **Sound engine** – owns almost all APU writes; `$8000` is a jump-table API, `Sound_Update` (`$8003`) runs every frame |
+| 7 | Fixed: vectors, `Reset`, `NMI`, bank switching/`FarCall`, main loop (`F_C700`–`F_C6FD`) |
+
+Main loop per frame: `WaitForNMI`, then (state 3) bank 1 sprite clear → `ReadController` → game-state
+dispatch (bank 4) → object/collision updates → `Sound_Update`. The NMI handler does OAM DMA,
+applies the `ppuctrl_shadow`/`ppumask_shadow` values and calls one of 6 state handlers.
+
 ## Status
 Code is found by (1) tracing from the vectors with bank-context and constant tracking,
 (2) far-call resolution, and (3) automatic detection of code-pointer tables (emitted as `.word label`), and (4) a conservative speculative decode (blocks are accepted only

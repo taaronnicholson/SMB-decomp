@@ -65,7 +65,7 @@ F_C0E7:
     LDA $801F,y
     STA jump_ptr_hi
     STY zp_44
-    JMP ($0006)
+    JMP (jump_ptr_lo)
 F_C0F7:
     STA zp_44
     STA ram_0300
@@ -326,56 +326,56 @@ F_C659:
     STA zp_D7
     STA zp_A8
     STA zp_A7
-    STA zp_93
+    STA stage_index
 F_C667:
     LDA #$00
     JSR F_C9C2
 F_C66C:
     LDA #$02
     JSR SwitchBank
-    JSR B2_B868
+    JSR ResetGameState
     LDA #$00
     JSR SwitchBank
-    LDA zp_93
+    LDA stage_index
     ASL a
     TAX
     LDA B0_8263,x
-    STA zp_51
-    LDA B0_8264,x
-    STA zp_52
+    STA ptr_lo
+    LDA B0_8263+1,x
+    STA ptr_hi
     LDY #$00
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_60
     STA zp_94
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_61
     STA zp_95
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_5E
     STA zp_96
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_5F
     STA zp_97
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_98
     INY
     PHA
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_92
     STA zp_99
     INY
     LDA #$3C
     STA ram_01AA
     JSR F_C9D7
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC #$01
     STA zp_9A
-    LDA zp_52
+    LDA ptr_hi
     ADC #$00
     STA zp_9B
     LDA #$09
@@ -387,23 +387,23 @@ F_C6CC:
     JSR F_C956
     LDA #$02
     JSR SwitchBank
-    JSR B2_B7F4
+    JSR ResetLevelState
     JSR F_D2A1
     LDA ppumask_shadow
     AND #$F9
     JSR SetPPUMask
-    JSR F_C99E
-    JSR F_C9AC
-    JSR F_C7C8
+    JSR EnableNMI
+    JSR WaitForNMI
+    JSR EnableRendering
     INC zp_11
 F_C6F2:
-    JSR F_C9AC
+    JSR WaitForNMI
     LDA zp_11
     BNE F_C6F2
     LDA #$02
     STA nmi_state
 F_C6FD:
-    JSR F_C9AC
+    JSR WaitForNMI
 F_C700:
     LDA #$FF
     STA ram_0749
@@ -415,14 +415,14 @@ F_C700:
 F_C710:
     LDA #$01
     JSR SwitchBank
-    JSR B1_BD95
+    JSR HideSprites
     LDA #$00
     JSR SwitchBank
     JSR ReadController
     JSR F_CD53
     LDA #$04
     JSR SwitchBank
-    JSR B4_ADCF
+    JSR DispatchGameState
     JSR F_DC21
     JSR F_D00E
     JSR F_D5E4
@@ -437,7 +437,7 @@ F_C710:
     LDA #$06
     JSR SwitchBank
     JSR B6_A4E1
-    JSR B6_8003
+    JSR Sound_Update
     LDA #$00
     JSR SwitchBank
     JSR B0_BF8A
@@ -446,7 +446,7 @@ F_C710:
 F_C763:
     LDA #$01
     JSR SwitchBank
-    JSR B1_BD95
+    JSR HideSprites
     LDA #$00
     JSR SwitchBank
     JSR ReadController
@@ -463,7 +463,7 @@ F_C763:
     LDA #$06
     JSR SwitchBank
     JSR B6_A4E1
-    JSR B6_8003
+    JSR Sound_Update
     JSR F_FABC
     JMP F_C6FD
 F_C7A1:
@@ -487,14 +487,14 @@ F_C7B5:
     LDA zp_0A
     STA PPUSCROLL
     RTS
-F_C7C8:
+EnableRendering:
     LDA #$FF
-    STA zp_0D
+    STA render_enable
     RTS
 F_C7CD:
     LDA #$00
-    STA zp_0D
-    JMP F_C9AC
+    STA render_enable
+    JMP WaitForNMI
 F_C7D4:
     BIT PPUSTATUS
     LDA ram_07FF
@@ -520,7 +520,7 @@ NMI:
     LDA ppumask_shadow
 F_C800:
     ORA #$18
-    LDY zp_0D
+    LDY render_enable
     BNE F_C808
     AND #$E7
 F_C808:
@@ -535,13 +535,11 @@ F_C808:
     TAY
     LDA F_C825,y
     STA jump_ptr_lo
-    LDA F_C826,y
+    LDA F_C825+1,y
     STA jump_ptr_hi
-    JMP ($0006)
+    JMP (jump_ptr_lo)
 F_C825:
-    .byte <F_C82F
-F_C826:
-    .byte >F_C82F
+    .word F_C82F
     .word F_C863
     .word F_C882
     .word F_C89F
@@ -723,7 +721,7 @@ F_C959:
     LDA zp_AB
     CMP #$04
     BNE F_C96F
-    LDY zp_93
+    LDY stage_index
     LDA F_C988,y
     BNE F_C98D
 F_C96F:
@@ -759,7 +757,7 @@ F_C993:
     DEX
     BPL F_C993
     RTS
-F_C99E:
+EnableNMI:
     LDA ppuctrl_shadow
     ORA #$80
     JMP SetPPUCtrl
@@ -767,7 +765,7 @@ F_C9A5:
     LDA ppuctrl_shadow
     AND #$7F
     JMP SetPPUCtrl
-F_C9AC:
+WaitForNMI:
     LDA frame_counter
 F_C9AE:
     CMP frame_counter
@@ -795,14 +793,14 @@ F_C9C2:
 F_C9D7:
     TYA
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
-    LDA zp_51
+    STA ptr_hi
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
 F_C9E8:
     PHA
     LDA cur_bank
@@ -813,9 +811,9 @@ F_C9E8:
     STA zp_55
     STA zp_56
     LDA #$D5
-    STA zp_51
+    STA ptr_lo
     LDA #$BA
-    STA zp_52
+    STA ptr_hi
     CLC
 F_CA00:
     JSR F_FDE9
@@ -835,10 +833,10 @@ F_CA09:
     BPL F_CA09
     LDY #$00
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
-    LDA (zp_51),y
+    STA ptr_lo
+    LDA (ptr_lo),y
     STA zp_A8
     STY zp_A9
     RTS
@@ -861,15 +859,15 @@ F_CA3D:
     LDA zp_AC
     JSR SwitchBank
     LDY #$00
-    STY zp_52
+    STY ptr_hi
     LDA zp_23
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ADC zp_25
-    STA zp_51
+    STA ptr_lo
     LDA zp_26
-    ADC zp_52
-    STA zp_52
+    ADC ptr_hi
+    STA ptr_hi
     LDA zp_24
     SEC
     SBC #$02
@@ -879,7 +877,7 @@ F_CA6B:
     STA zp_56
 F_CA6F:
     LDY #$00
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     CMP #$C4
     BNE F_CA7A
     JMP F_CCC1
@@ -896,9 +894,9 @@ F_CA7A:
     PHA
     LDA zp_56
     PHA
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     LDA #$0D
     STA zp_56
@@ -922,18 +920,18 @@ F_CA7A:
     LDA #$00
     STA ram_05D0,x
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
 F_CACB:
-    STA zp_51
+    STA ptr_lo
     PLA
     STA zp_56
     PLA
     STA zp_55
 F_CAD3:
-    INC zp_51
+    INC ptr_lo
     BNE F_CAD9
-    INC zp_52
+    INC ptr_hi
 F_CAD9:
     DEC zp_56
     BNE F_CA6F
@@ -945,107 +943,107 @@ F_CAD9:
     ASL a
     TAY
     LDA B1_9F25,y
-    STA zp_51
+    STA ptr_lo
     LDA B1_9F26,y
-    STA zp_52
+    STA ptr_hi
     LDA #$A8
     STA zp_DB
     LDY #$00
 F_CAFA:
-    LDA (zp_51),y
-    INC zp_51
+    LDA (ptr_lo),y
+    INC ptr_lo
     BNE F_CB02
-    INC zp_52
+    INC ptr_hi
 F_CB02:
     CMP #$FF
     BEQ F_CB1C
     STA tmp_ptr_lo
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     LDA tmp_ptr_lo
     JSR F_CC65
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     JMP F_CAFA
 F_CB1C:
     LDX zp_77
 F_CB1E:
     LDY #$00
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     CMP #$FF
     BEQ F_CB81
     STA ram_0480,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_04B0,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_04E0,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_0510,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_0540,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA ram_0570,x
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     JSR F_CC51
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_05A0,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_05D0,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_0600,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_0630,x
     TYA
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     INX
     JMP F_CB1E
 F_CB81:
     TYA
     CLC
-    ADC zp_51
+    ADC ptr_lo
     STA zp_B4
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
     STA zp_B5
-    STA zp_52
-    LDA zp_51
+    STA ptr_hi
+    LDA ptr_lo
     CLC
     ADC #$02
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDY #$00
 F_CBA0:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     CMP #$FE
     BEQ F_CBB0
     CMP #$FF
@@ -1059,14 +1057,14 @@ F_CBB0:
     INY
     TYA
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
 F_CBBD:
     LDY #$00
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     CMP #$FF
     BNE F_CBCD
@@ -1086,47 +1084,47 @@ F_CBCD:
     AND F_C53C,x
     BEQ F_CBF2
     LDX zp_42
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC #$08
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JMP F_CBBD
 F_CBF2:
     LDX zp_42
     LDY #$01
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA ram_0480,x
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA ram_04B0,x
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA ram_04E0,x
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA ram_0510,x
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA ram_0540,x
     INY
     LDA zp_53
     STA ram_0660,x
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA ram_0570,x
     INY
     JSR F_CC51
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
-    LDA (zp_51),y
+    STA ptr_lo
+    LDA (ptr_lo),y
     STA ram_05A0,x
     INY
     LDA #$00
@@ -1137,11 +1135,11 @@ F_CBF2:
     INX
     TYA
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JMP F_CBBD
 F_CC51:
     STY zp_42
@@ -1166,22 +1164,22 @@ F_CC6A:
     SEC
     SBC zp_DB
     STA ram_0120,y
-    STA zp_51
+    STA ptr_lo
     LDA #$00
-    ASL zp_51
+    ASL ptr_lo
     ROL a
-    ASL zp_51
+    ASL ptr_lo
     ROL a
-    ASL zp_51
+    ASL ptr_lo
     ROL a
-    ASL zp_51
+    ASL ptr_lo
     ROL a
-    STA zp_52
-    LDA zp_51
+    STA ptr_hi
+    LDA ptr_lo
     CLC
     ADC #$00
     STA zp_55
-    LDA zp_52
+    LDA ptr_hi
     ADC #$00
     STA zp_56
     LDA #$06
@@ -1191,9 +1189,9 @@ F_CC6A:
     ASL a
     TAY
     LDA B1_A722,y
-    STA zp_51
+    STA ptr_lo
     LDA B1_A723,y
-    STA zp_52
+    STA ptr_hi
     LDA B1_A724,y
     STA zp_53
     BEQ F_CCB7
@@ -1213,9 +1211,9 @@ F_CCC1:
     PHA
     LDA zp_56
     PHA
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
 F_CCCD:
     LDA #$05
@@ -1275,9 +1273,9 @@ F_CD3F:
     BNE F_CD03
 F_CD44:
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     PLA
     STA zp_56
     PLA
@@ -1320,7 +1318,7 @@ F_CD74:
     JSR SwitchBank
     JSR B2_B64F
 F_CD9A:
-    JSR F_C9AC
+    JSR WaitForNMI
     LDA #$04
     JSR SwitchBank
     JSR B4_BEDF
@@ -1332,13 +1330,13 @@ F_CD9A:
     LDA #$00
     JSR SwitchBank
 F_CDB6:
-    JSR F_C9AC
+    JSR WaitForNMI
     JSR ReadController
     LDA buttons_pressed
     AND #$08
     BNE F_CDB6
 F_CDC2:
-    JSR F_C9AC
+    JSR WaitForNMI
     LDA #$04
     JSR SwitchBank
     JSR B4_BEDF
@@ -1373,10 +1371,10 @@ F_CE05:
     LDA #$06
     JSR SwitchBank
     JSR B6_8009
-    JSR F_C99E
-    JSR F_C9AC
+    JSR EnableNMI
+    JSR WaitForNMI
     INC zp_11
-    JSR F_C7C8
+    JSR EnableRendering
 F_CE1B:
     LDA zp_11
     BNE F_CE1B
@@ -1513,7 +1511,7 @@ FarCall:
     PHA
     LDA #$01
     PHA
-    JMP ($0004)
+    JMP (tmp_ptr_lo)
     .byte $68,$4C,$0D,$C9
 F_CF06:
     LDA #$3E
@@ -1521,7 +1519,7 @@ F_CF06:
     LDA #$BC
     STA zp_56
     LDA #$11
-    STA zp_51
+    STA ptr_lo
     LDA ram_01BA
     BEQ F_CF1D
     JSR $BAE7
@@ -1682,7 +1680,7 @@ F_D00E:
     PHA
     LDA #$06
     JSR SwitchBank
-    JMP ($0004)
+    JMP (tmp_ptr_lo)
     LDA zp_1D
     CLC
     ADC #$01
@@ -1818,7 +1816,7 @@ F_D0F4:
     STA ram_01B0
     INY
     LDA (tmp_ptr_lo),y
-    STA ram_072C
+    STA game_state
     INY
     LDA (tmp_ptr_lo),y
     CMP zp_1A
@@ -1838,9 +1836,9 @@ F_D139:
     PHA
     TAX
     LDA B0_8C9B,x
-    STA zp_51
+    STA ptr_lo
     LDA B0_8C9C,x
-    STA zp_52
+    STA ptr_hi
     LDA ram_01A5
     JSR F_C919
     LDA #$A4
@@ -1871,9 +1869,9 @@ F_D16B:
     LDA #$10
     STA zp_56
     LDA #$A7
-    STA zp_51
+    STA ptr_lo
     LDA #$88
-    STA zp_52
+    STA ptr_hi
     CLC
     JSR F_FDE9
     LDA #$30
@@ -1881,9 +1879,9 @@ F_D16B:
     LDA #$15
     STA zp_56
     LDA tmp_ptr_lo
-    STA zp_51
+    STA ptr_lo
     LDA tmp_ptr_hi
-    STA zp_52
+    STA ptr_hi
     LDA ram_01A5
     JSR F_C919
     CLC
@@ -1903,9 +1901,9 @@ F_D1C0:
     LDA #$11
     STA zp_56
     LDA #$49
-    STA zp_51
+    STA ptr_lo
     LDA #$87
-    STA zp_52
+    STA ptr_hi
     CLC
     JSR F_FDE9
 F_D1DA:
@@ -1949,15 +1947,15 @@ F_D200:
     STA PPUADDR
     LDA #$80
     STA PPUADDR
-    LDX zp_93
+    LDX stage_index
     LDA B3_82EB,x
-    STA zp_51
+    STA ptr_lo
 F_D230:
     LDA B3_82F1,x
-    STA zp_52
+    STA ptr_hi
     LDY #$00
 F_D237:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA PPUDATA
     INY
     CPY #$40
@@ -2421,28 +2419,28 @@ F_D500:
     STA zp_3D
     LDA zp_1B
     AND #$0F
-    STA zp_51
+    STA ptr_lo
     AND #$08
     STA zp_1B
     LDA zp_1D
     AND #$0F
-    STA zp_52
+    STA ptr_hi
     AND #$08
     STA zp_1D
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     JSR F_D5E4
     JSR F_C0A8
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
-    LDA zp_51
+    STA ptr_lo
+    LDA ptr_lo
     AND #$07
     STA zp_1B
-    LDA zp_52
+    LDA ptr_hi
     AND #$07
     STA zp_1D
     JSR F_D5E4
@@ -3350,9 +3348,9 @@ F_DBDC:
     CMP #$06
     BEQ F_DBF1
     LDA zp_21
-    STA zp_51
+    STA ptr_lo
     LDA zp_22
-    STA zp_52
+    STA ptr_hi
     LDX zp_56
     LDA zp_54
     JMP F_F679
@@ -3441,15 +3439,15 @@ F_DCA1:
     LDA ram_01AF
     CLC
     ADC #$08
-    STA zp_51
+    STA ptr_lo
     LDA ram_01B0
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     SEC
-    SBC zp_51
+    SBC ptr_lo
     LDA zp_61
-    SBC zp_52
+    SBC ptr_hi
     BCC F_DCE0
     LDA zp_63
     CMP #$0D
@@ -3493,11 +3491,11 @@ F_DD00:
     ASL a
     TAY
     LDA B2_B5AA,y
-    STA zp_51
+    STA ptr_lo
     LDA B2_B5AB,y
-    STA zp_52
+    STA ptr_hi
     JSR SwitchBankFromAC
-    JMP ($0051)
+    JMP (ptr_lo)
     JSR F_F47A
     JSR F_F088
     LDY zp_63
@@ -3754,26 +3752,26 @@ F_DEE3:
     LDA zp_5E
     SEC
     SBC zp_64
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     SBC #$00
-    STA zp_52
+    STA ptr_hi
     BCS F_DEFB
     LDA #$00
     STA zp_5E
     STA zp_5F
     JMP F_E035
 F_DEFB:
-    LDA zp_51
+    LDA ptr_lo
     STA zp_5E
     CLC
 F_DF00:
     ADC #$05
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     STA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     STA zp_55
     LDA zp_61
@@ -3785,19 +3783,19 @@ F_DF00:
     LDA zp_60
     AND #$0F
     BEQ F_DF60
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_E514
     AND #$01
     BEQ F_DF60
-    INC zp_51
+    INC ptr_lo
     BNE F_DF3E
-    INC zp_52
+    INC ptr_hi
 F_DF3E:
     JSR F_E514
     STA zp_53
@@ -3807,7 +3805,7 @@ F_DF3E:
     LDA zp_53
     JSR F_EEA6
     LDA #$04
-    CMP (zp_51),y
+    CMP (ptr_lo),y
     BCS F_DF60
 F_DF54:
     LDA zp_5E
@@ -3836,10 +3834,10 @@ F_DF7E:
     LDA zp_5E
     CLC
     ADC zp_64
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_34
     SEC
     SBC #$11
@@ -3849,9 +3847,9 @@ F_DF7E:
     STA zp_54
     LDA zp_53
     SEC
-    SBC zp_51
+    SBC ptr_lo
     LDA zp_54
-    SBC zp_52
+    SBC ptr_hi
     BCS F_DFB2
     LDA zp_53
     ADC #$01
@@ -3861,15 +3859,15 @@ F_DF7E:
     STA zp_5F
     JMP F_E035
 F_DFB2:
-    LDA zp_51
+    LDA ptr_lo
     STA zp_5E
     CLC
     ADC #$0B
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     STA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     STA zp_55
     LDA zp_61
@@ -3881,24 +3879,24 @@ F_DFB2:
     LDA zp_60
     AND #$0F
     BEQ F_E02F
-    LDA zp_51
+    LDA ptr_lo
     CLC
 F_DFDE:
     ADC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_E514
     AND #$01
     BEQ F_E02F
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC #$01
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     SBC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_E514
     STA zp_53
 F_E001:
@@ -3907,19 +3905,19 @@ F_E003:
     CMP #$02
     BNE F_E023
     LDA zp_53
-    STY zp_52
+    STY ptr_hi
     AND #$FC
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ADC #$4B
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$C3
-    STA zp_52
+    STA ptr_hi
     LDA #$04
-    CMP (zp_51),y
+    CMP (ptr_lo),y
     BCS F_E02F
 F_E023:
     LDA zp_5E
@@ -3943,15 +3941,15 @@ F_E035:
     STA zp_55
     SEC
     SBC #$58
-    STA zp_51
+    STA ptr_lo
     LDA zp_71
     STA zp_56
     SBC #$02
     BCC F_E09A
-    LDA zp_51
+    LDA ptr_lo
     ASL a
     CLC
-    ADC zp_51
+    ADC ptr_lo
     TAY
     LDA zp_72
     BEQ F_E066
@@ -4073,10 +4071,10 @@ F_E119:
     LDA zp_5E
     CLC
     ADC #$0A
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_F80D
     PLA
@@ -4090,10 +4088,10 @@ F_E119:
     LDA zp_5E
     CLC
     ADC #$06
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_F80D
     JSR F_E51C
@@ -4138,10 +4136,10 @@ F_E194:
     LDA zp_5E
     CLC
     ADC #$0A
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     PLA
     STA zp_56
@@ -4154,10 +4152,10 @@ F_E194:
     LDA zp_5E
     CLC
     ADC #$06
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_E51C
     STA zp_53
@@ -4194,10 +4192,10 @@ F_E20B:
     LDA zp_5E
     CLC
     ADC #$05
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     STA zp_55
     LDA zp_61
@@ -4211,21 +4209,21 @@ F_E20B:
     BNE F_E233
     JMP F_E2EB
 F_E233:
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_E514
     AND #$01
     BNE F_E24A
     JMP F_E2EB
 F_E24A:
-    INC zp_51
+    INC ptr_lo
     BNE F_E250
-    INC zp_52
+    INC ptr_hi
 F_E250:
     JSR F_E514
     STA zp_53
@@ -4235,7 +4233,7 @@ F_E250:
     LDA zp_53
     JSR F_EEA6
     LDA #$04
-    CMP (zp_51),y
+    CMP (ptr_lo),y
     BCC F_E269
     JMP F_E2EB
 F_E269:
@@ -4249,10 +4247,10 @@ F_E275:
     LDA zp_5E
     CLC
     ADC #$0B
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     STA zp_55
     LDA zp_61
@@ -4264,23 +4262,23 @@ F_E275:
     LDA zp_60
     AND #$0F
     BEQ F_E2EB
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_E514
     AND #$01
     BEQ F_E2EB
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC #$01
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     SBC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_E514
     STA zp_53
     AND #$03
@@ -4288,18 +4286,18 @@ F_E275:
     BNE F_E2E2
     LDA zp_53
     AND #$FC
-    STY zp_52
+    STY ptr_hi
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ADC #$4B
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$C3
-    STA zp_52
+    STA ptr_hi
     LDA #$04
-    CMP (zp_51),y
+    CMP (ptr_lo),y
     BCS F_E2EB
 F_E2E2:
     LDA zp_5E
@@ -4339,14 +4337,14 @@ F_E313:
     LDA zp_5E
     CLC
     ADC #$08
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
-    LDA zp_51
+    LDA ptr_lo
     STA zp_73
-    LDA zp_52
+    LDA ptr_hi
     STA zp_74
     JSR F_EFD3
     JSR F_E514
@@ -4354,9 +4352,9 @@ F_E313:
     BEQ F_E3A4
     CMP #$02
     BEQ F_E359
-    LDA zp_51
+    LDA ptr_lo
     STA zp_16
-    LDA zp_52
+    LDA ptr_hi
     STA zp_17
     LDA zp_60
     AND #$F0
@@ -4375,12 +4373,12 @@ F_E359:
     ADC #$08
     AND #$0F
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
-    LDA (zp_51),y
+    STA ptr_hi
+    LDA (ptr_lo),y
     STA zp_53
     CMP #$FF
     BEQ F_E3A4
@@ -4415,17 +4413,17 @@ F_E3A4:
     LDA zp_73
     CLC
     ADC zp_23
-    STA zp_51
+    STA ptr_lo
     LDA zp_74
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDY #$00
     JSR F_E514
     AND #$01
     BEQ F_E3CF
-    LDA zp_51
+    LDA ptr_lo
     STA zp_16
-    LDA zp_52
+    LDA ptr_hi
     STA zp_17
     LDA zp_60
     AND #$F0
@@ -4443,14 +4441,14 @@ F_E3CF:
     CLC
 F_E3DF:
     ADC #$08
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
-    LDA zp_51
+    LDA ptr_lo
     STA zp_75
-    LDA zp_52
+    LDA ptr_hi
     STA zp_76
     JSR F_E514
     JSR F_EEA6
@@ -4459,13 +4457,13 @@ F_E3DF:
     ADC #$08
     AND #$0F
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
 F_E408:
     ADC #$00
-    STA zp_52
-    LDA (zp_51),y
+    STA ptr_hi
+    LDA (ptr_lo),y
     STA zp_53
     CMP #$FF
     BEQ F_E436
@@ -4490,28 +4488,28 @@ F_E421:
     RTS
 F_E436:
     LDA zp_73
-    STA zp_51
+    STA ptr_lo
     LDA zp_74
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     AND #$0F
     BEQ F_E451
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
 F_E451:
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
+    STA ptr_lo
     STA zp_73
-    LDA zp_52
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     STA zp_74
     LDY #$00
     JSR F_E514
@@ -4525,12 +4523,12 @@ F_E451:
     ADC #$08
     AND #$0F
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
-    LDA (zp_51),y
+    STA ptr_hi
+    LDA (ptr_lo),y
     CLC
     ADC #$10
     STA zp_53
@@ -4568,10 +4566,10 @@ F_E4B4:
     LDA zp_5E
     CLC
     ADC #$0A
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_55
     PHA
     LDA zp_56
@@ -4590,10 +4588,10 @@ F_E4E5:
     CLC
 F_E4E8:
     ADC #$06
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_E514
     AND #$01
@@ -4810,10 +4808,10 @@ F_E650:
     LDA zp_5E
     CLC
     ADC #$0A
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     PLA
     STA zp_56
@@ -4825,10 +4823,10 @@ F_E650:
     LDA zp_5E
     CLC
     ADC #$06
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_E514
     AND #$01
@@ -4844,9 +4842,9 @@ F_E69A:
     LDA #$39
     JSR F_CE8F
     JSR F_F192
-    LDA zp_51
+    LDA ptr_lo
     STA ram_0721
-    LDA zp_52
+    LDA ptr_hi
     STA ram_0722
     LDA #$02
     STA ram_0720
@@ -4925,14 +4923,14 @@ F_E734:
     LDA zp_5E
     CLC
     ADC #$08
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     JSR F_E514
     AND #$03
@@ -4945,12 +4943,12 @@ F_E734:
     ADC #$08
     AND #$0F
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
-    LDA (zp_51),y
+    STA ptr_hi
+    LDA (ptr_lo),y
     STA zp_53
     CLC
     ADC #$01
@@ -4982,17 +4980,17 @@ F_E787:
     SBC #$00
     STA zp_61
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
 F_E7B6:
-    LDA zp_51
+    LDA ptr_lo
     STA zp_16
-    LDA zp_52
+    LDA ptr_hi
     STA zp_17
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     LDA #$00
     STA zp_84
@@ -5026,9 +5024,9 @@ F_E7B6:
     RTS
 F_E7F9:
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     LDY #$00
     JSR F_FC26
     CMP #$B4
@@ -5097,17 +5095,17 @@ F_E858:
     RTS
 F_E87B:
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
-    LDA zp_51
+    STA ptr_lo
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
+    STA ptr_lo
     STA zp_75
-    LDA zp_52
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     STA zp_76
     LDY #$00
     JSR F_E514
@@ -5124,12 +5122,12 @@ F_E89E:
     ADC #$08
     AND #$0F
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
-    LDA (zp_51),y
+    STA ptr_hi
+    LDA (ptr_lo),y
     STA zp_53
     CMP #$FF
     BEQ F_E89D
@@ -5150,9 +5148,9 @@ F_E89E:
     ADC zp_53
     STA zp_60
     LDA zp_75
-    STA zp_51
+    STA ptr_lo
     LDA zp_76
-    STA zp_52
+    STA ptr_hi
     JMP F_E7B6
     LDA #$02
     JSR SwitchBank
@@ -5399,20 +5397,20 @@ F_EB3B:
     LDA zp_60
     SEC
     SBC zp_53
-    STA zp_51
+    STA ptr_lo
     LDA zp_61
     SBC #$00
-    STA zp_52
+    STA ptr_hi
     BCS F_EB57
     LDA #$00
     STA zp_60
     STA zp_61
     JMP F_EC73
 F_EB57:
-    LDA zp_51
+    LDA ptr_lo
     STA zp_60
     STA zp_55
-    LDA zp_52
+    LDA ptr_hi
     STA zp_61
     STA zp_56
     LDA zp_55
@@ -5422,10 +5420,10 @@ F_EB57:
     LDA zp_5E
     CLC
     ADC #$0A
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_F80D
     JSR F_E514
@@ -5440,10 +5438,10 @@ F_EB57:
     LDA zp_5E
     CLC
     ADC #$06
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_F80D
     JSR F_E514
@@ -5478,10 +5476,10 @@ F_EBD0:
     LDA zp_60
     CLC
     ADC zp_53
-    STA zp_51
+    STA ptr_lo
     LDA zp_61
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_36
     SEC
     SBC #$11
@@ -5491,9 +5489,9 @@ F_EBD0:
     STA zp_54
     LDA zp_53
     SEC
-    SBC zp_51
+    SBC ptr_lo
     LDA zp_54
-    SBC zp_52
+    SBC ptr_hi
     BCS F_EC0D
     LDA zp_53
     CLC
@@ -5506,12 +5504,12 @@ F_EBD0:
     STA zp_54
     JMP F_EC73
 F_EC0D:
-    LDA zp_51
+    LDA ptr_lo
     STA zp_60
     CLC
     ADC #$10
     STA zp_55
-    LDA zp_52
+    LDA ptr_hi
     STA zp_61
     ADC #$00
     STA zp_56
@@ -5522,10 +5520,10 @@ F_EC0D:
     LDA zp_5E
     CLC
     ADC #$0A
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_F80D
     JSR F_E514
@@ -5540,10 +5538,10 @@ F_EC0D:
     LDA zp_5E
     CLC
     ADC #$06
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_F80D
     JSR F_E514
@@ -5576,25 +5574,25 @@ F_EC87:
     LDA zp_5E
     SEC
     SBC zp_53
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     SBC #$00
-    STA zp_52
+    STA ptr_hi
     BCS F_ECA3
     LDA #$00
     STA zp_5E
     STA zp_5F
     JMP F_EDE8
 F_ECA3:
-    LDA zp_51
+    LDA ptr_lo
     STA zp_5E
     CLC
     ADC #$05
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     STA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     STA zp_55
     LDA zp_61
@@ -5611,21 +5609,21 @@ F_ECA3:
 F_ECD2:
     LDA zp_23
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_F80D
     JSR F_E514
     AND #$01
     BNE F_ECEC
     JMP F_EDE8
 F_ECEC:
-    INC zp_51
+    INC ptr_lo
     BNE F_ECF2
 F_ECF0:
-    INC zp_52
+    INC ptr_hi
 F_ECF2:
     JSR F_E514
     STA zp_53
@@ -5635,7 +5633,7 @@ F_ECF2:
     LDA zp_53
     JSR F_EEA6
     LDA #$04
-    CMP (zp_51),y
+    CMP (ptr_lo),y
     BCC F_ED0B
     JMP F_EDE8
 F_ED0B:
@@ -5656,11 +5654,11 @@ F_ED17:
     STA zp_5E
     CLC
     ADC #$0B
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     STA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     STA zp_55
     LDA zp_61
@@ -5673,44 +5671,44 @@ F_ED17:
     LDA zp_60
     AND #$0F
     BEQ F_EDE8
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_F80D
     JSR F_E514
     AND #$01
     BEQ F_EDE8
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC #$01
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     SBC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_E514
     STA zp_53
     AND #$03
     CMP #$02
     BNE F_EDDF
     LDA zp_53
-    STY zp_52
+    STY ptr_hi
     AND #$FC
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ADC #$4B
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$C3
-    STA zp_52
+    STA ptr_hi
     LDA #$04
 F_EDDB:
-    CMP (zp_51),y
+    CMP (ptr_lo),y
     BCS F_EDE8
 F_EDDF:
     LDA zp_5E
@@ -5729,29 +5727,29 @@ F_EDE8:
     LDA zp_5E
     CLC
     ADC #$08
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
 F_EE00:
-    STA zp_52
-    LDA zp_51
+    STA ptr_hi
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     JSR F_EF24
     JSR F_EFD3
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     LDA zp_60
     STA zp_55
     LDA zp_61
     STA zp_56
     JSR F_EF24
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
 F_EE24:
     PHA
     JSR F_E514
@@ -5761,7 +5759,7 @@ F_EE24:
     ADC #$08
     AND #$0F
     TAY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     CMP #$FF
     BEQ F_EE64
@@ -5785,22 +5783,22 @@ F_EE24:
     SBC #$00
     STA zp_61
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     RTS
 F_EE64:
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     LDA zp_23
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDY #$00
     JSR F_E514
     JSR F_EEA6
@@ -5809,7 +5807,7 @@ F_EE64:
     ADC #$08
     AND #$0F
     TAY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     CMP #$FF
     BEQ F_EEA5
@@ -5829,16 +5827,16 @@ F_EEA5:
     RTS
 F_EEA6:
     AND #$FC
-    STY zp_52
+    STY ptr_hi
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ADC #$3C
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$C3
-    STA zp_52
+    STA ptr_hi
     RTS
 F_EEBB:
     LDX zp_6C
@@ -5863,20 +5861,20 @@ F_EED5:
     STA zp_65
     RTS
 F_EEDF:
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC zp_25
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     SBC zp_26
-    STA zp_52
+    STA ptr_hi
     LDA zp_33
     STA zp_55
-    LDA zp_51
+    LDA ptr_lo
     DEC zp_55
     BEQ F_EEFD
 F_EEF6:
-    LSR zp_52
+    LSR ptr_hi
     ROR a
     DEC zp_55
     BNE F_EEF6
@@ -5885,13 +5883,13 @@ F_EEFD:
     SEC
     SBC zp_56
     STA zp_53
-    LDA zp_52
+    LDA ptr_hi
     SBC #$00
     STA zp_54
     LDA zp_23
     SEC
     SBC #$01
-    AND zp_51
+    AND ptr_lo
     STA zp_55
     LDA #$00
     ASL zp_55
@@ -5905,17 +5903,17 @@ F_EEFD:
     STA zp_56
     RTS
 F_EF24:
-    LDA zp_52
+    LDA ptr_hi
 F_EF26:
     LSR a
-    ROR zp_51
+    ROR ptr_lo
     LSR a
-    ROR zp_51
+    ROR ptr_lo
     LSR a
-    ROR zp_51
+    ROR ptr_lo
     LSR a
-    ROR zp_51
-    STA zp_52
+    ROR ptr_lo
+    STA ptr_hi
     LDA zp_55
     AND #$F0
     LSR zp_56
@@ -5926,18 +5924,18 @@ F_EF3D:
     ROL zp_56
     DEY
     BNE F_EF3D
-    ADC zp_51
-    STA zp_51
+    ADC ptr_lo
+    STA ptr_lo
     LDA zp_56
-    ADC zp_52
-    STA zp_52
-    LDA zp_51
+    ADC ptr_hi
+    STA ptr_hi
+    LDA ptr_lo
     CLC
     ADC zp_25
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC zp_26
-    STA zp_52
+    STA ptr_hi
     LDY #$00
     RTS
 F_EF5D:
@@ -6025,7 +6023,7 @@ F_EFE9:
     AND #$40
 F_EFEF:
     BEQ F_EFDA
-    LDA zp_93
+    LDA stage_index
     CMP #$05
     BNE F_F002
     LDA #$00
@@ -6045,27 +6043,27 @@ F_F008:
     ADC zp_53
     CLC
     ADC zp_9A
-    STA zp_51
+    STA ptr_lo
 F_F00F:
     LDA zp_9B
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA #$00
     JSR F_C919
     LDY #$00
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_60
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_61
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_5E
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_5F
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_9C
     INY
     CMP #$E0
@@ -6073,7 +6071,7 @@ F_F00F:
     LDA #$1B
     JSR F_CE61
 F_F03E:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
 F_F040:
     STA zp_92
     INY
@@ -6082,7 +6080,7 @@ F_F040:
     STA nmi_state
     DEC zp_11
 F_F04C:
-    JSR F_C9AC
+    JSR WaitForNMI
     LDA zp_11
     BNE F_F04C
     JSR F_C7CD
@@ -6108,7 +6106,7 @@ F_F074:
     SEC
     SBC #$E0
     BCC F_F083
-    STA zp_93
+    STA stage_index
 F_F080:
     JMP F_C667
 F_F083:
@@ -6128,37 +6126,37 @@ F_F090:
     LDA zp_5E
     CLC
     ADC #$08
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     JSR F_F0CD
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     LDA zp_60
     AND #$0F
     BEQ F_F08F
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
 F_F0CD:
-    LDA zp_51
+    LDA ptr_lo
     STA zp_77
-    LDA zp_52
+    LDA ptr_hi
     STA zp_78
     LDY #$00
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     JSR F_F679
     CMP #$D6
     BNE F_F0F7
@@ -6167,9 +6165,9 @@ F_F0CD:
     STA zp_A6
     JMP F_F14F
 F_F0EA:
-    LDA zp_51
+    LDA ptr_lo
     STA zp_77
-    LDA zp_52
+    LDA ptr_hi
 F_F0F0:
     STA zp_78
     LDY #$00
@@ -6221,13 +6219,13 @@ F_F130:
     LDX zp_08
 F_F14F:
     LDA zp_77
-    STA zp_51
+    STA ptr_lo
     LDA zp_78
-    STA zp_52
+    STA ptr_hi
     JSR F_F192
-    LDA zp_51
+    LDA ptr_lo
     STA ram_0721
-    LDA zp_52
+    LDA ptr_hi
     STA ram_0722
     LDA #$2C
     STA ram_0720
@@ -6364,9 +6362,9 @@ F_F27D:
     RTS
 F_F27E:
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     PLA
     STA zp_54
     PLA
@@ -6385,15 +6383,15 @@ F_F298:
     PHA
     LDA zp_54
     PHA
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     LDA zp_53
     SEC
     SBC zp_25
     STA zp_53
-    STA zp_51
+    STA ptr_lo
     LDA zp_54
     SBC zp_26
     STA zp_54
@@ -6421,7 +6419,7 @@ F_F2CE:
     STA zp_53
     LDA zp_23
     SBC #$00
-    AND zp_51
+    AND ptr_lo
     ASL a
     SEC
     SBC ram_01A2
@@ -6513,23 +6511,23 @@ F_F379:
     STA ram_01A1
     LDA zp_1E
 F_F392:
-    STA zp_52
+    STA ptr_hi
     LDA zp_1D
-    LSR zp_52
+    LSR ptr_hi
     ROR a
-    LSR zp_52
+    LSR ptr_hi
     ROR a
-    LSR zp_52
+    LSR ptr_hi
     ROR a
     STA ram_01A3
     LDA zp_1C
-    STA zp_52
+    STA ptr_hi
     LDA zp_1B
-    LSR zp_52
+    LSR ptr_hi
     ROR a
-    LSR zp_52
+    LSR ptr_hi
     ROR a
-    LSR zp_52
+    LSR ptr_hi
     ROR a
     STA ram_01A2
     RTS
@@ -6564,9 +6562,9 @@ F_F3DE:
     LDY #$00
     STY zp_5D
     LDA zp_55
-    STA zp_51
+    STA ptr_lo
     LDA zp_56
-    STA zp_52
+    STA ptr_hi
     LDA (zp_55),y
     JSR F_F679
     CMP #$B4
@@ -6611,14 +6609,14 @@ F_F43E:
     ASL a
     TAY
     LDA F_C326,y
-    STA zp_51
+    STA ptr_lo
     LDA F_C327,y
-    STA zp_52
+    STA ptr_hi
     INC zp_5D
     LDA zp_5D
     LSR a
     TAY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     CMP #$FF
     BNE F_F45F
     LDA #$00
@@ -6635,7 +6633,7 @@ F_F45F:
     STA zp_53
     LDA zp_5C
     STA zp_54
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     JSR F_F28D
     RTS
 F_F477:
@@ -6645,9 +6643,9 @@ F_F47A:
     LDA zp_63
     BNE F_F496
     LDA zp_16
-    STA zp_51
+    STA ptr_lo
     LDA zp_17
-    STA zp_52
+    STA ptr_hi
     JSR SwitchBankFromAC
     JSR F_E51C
     AND #$03
@@ -6765,35 +6763,35 @@ F_F580:
     ADC #$01
     STA zp_BF
     LDY #$00
-    STY zp_52
+    STY ptr_hi
     ASL a
-    ROL zp_52
-    STA zp_51
+    ROL ptr_hi
+    STA ptr_lo
     STA zp_53
-    LDA zp_52
+    LDA ptr_hi
     STA zp_54
-    LDA zp_51
+    LDA ptr_lo
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     CLC
     ADC zp_53
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC zp_54
-    STA zp_52
-    LDA zp_51
+    STA ptr_hi
+    LDA ptr_lo
     CLC
     ADC #$93
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$80
-    STA zp_52
+    STA ptr_hi
     LDA #$03
     JSR SwitchBank
     LDY #$00
     LDX #$0C
 F_F5BA:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA ram_0398,y
     INY
     DEX
@@ -6955,16 +6953,16 @@ F_F6E0:
     PHA
     LDA zp_56
     PHA
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
-    LDA zp_51
+    LDA ptr_lo
 F_F6EE:
     SEC
     SBC zp_25
     STA zp_55
-    LDA zp_52
+    LDA ptr_hi
     SBC zp_26
     STA zp_56
     LDA zp_33
@@ -6985,7 +6983,7 @@ F_F70A:
     SEC
     SBC #$01
     STA ram_072F
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC zp_25
     AND ram_072F
@@ -7003,22 +7001,22 @@ F_F70A:
     LDA (zp_CD),y
     CLC
     ADC zp_CD
-    STA zp_51
+    STA ptr_lo
     INY
     LDA (zp_CD),y
     ADC zp_CE
-    STA zp_52
+    STA ptr_hi
     LDY #$00
     LDA zp_56
 F_F749:
-    CMP (zp_51),y
+    CMP (ptr_lo),y
     BEQ F_F751
     INY
     INY
     BNE F_F749
 F_F751:
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_56
     LSR a
     LSR a
@@ -7030,9 +7028,9 @@ F_F751:
     AND #$07
     TAX
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     PLA
     STA zp_56
     PLA
@@ -7146,9 +7144,9 @@ F_F843:
     LDA #$03
     JSR F_C919
     LDA #$89
-    STA zp_51
+    STA ptr_lo
     LDA #$8A
-    STA zp_52
+    STA ptr_hi
     LDA #$C9
     STA zp_53
     JSR $BEA9
@@ -7242,12 +7240,12 @@ F_F900:
     LDX #$07
 F_F904:
     ROL zp_54
-    ROL zp_51
-    LDA zp_51
+    ROL ptr_lo
+    LDA ptr_lo
     SEC
     SBC zp_53
     BCC F_F911
-    STA zp_51
+    STA ptr_lo
 F_F911:
     ROL zp_55
     DEX
@@ -7262,19 +7260,19 @@ F_F91B:
     .byte $71,$51,$C8,$48,$BD,$40,$05,$71,$51,$C8,$A6,$04,$9D,$60,$05,$68
     .byte $9D,$30,$05,$68,$9D,$00,$05,$68,$9D
     .byte $D0,$04   ; BNE $F96A (target not an instruction start)
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_0590,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_05C0,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_05F0,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_0620,x
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     STA ram_0650,x
     LDA #$FF
@@ -7282,11 +7280,11 @@ F_F91B:
     STA ram_0190,x
     TYA
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JMP F_F91B
     .byte $A6,$42,$60
 F_F99E:
@@ -7459,19 +7457,19 @@ F_FB00:
     BEQ F_FB72
 F_FB0C:
     LDY #$00
-    STY zp_52
+    STY ptr_hi
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ADC #$F5
     STA zp_55
-    LDA zp_52
+    LDA ptr_hi
     ADC #$8A
     STA zp_56
     LDA (zp_55),y
-    STA zp_51
+    STA ptr_lo
     INY
     LDA (zp_55),y
-    STA zp_52
+    STA ptr_hi
     LDA #$FB
     PHA
     LDA #$71
@@ -7493,7 +7491,7 @@ F_FB0C:
     STA zp_56
 F_FB4D:
     STX zp_42
-    JMP ($0051)
+    JMP (ptr_lo)
 F_FB52:
     CPX #$20
     BCC F_FB5D
@@ -7531,19 +7529,19 @@ F_FB86:
     LDA ram_0480,x
     BEQ F_FBBD
     LDY #$00
-    STY zp_52
+    STY ptr_hi
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ADC #$F5
     STA zp_55
-    LDA zp_52
+    LDA ptr_hi
     ADC #$8A
     STA zp_56
     LDA (zp_55),y
-    STA zp_51
+    STA ptr_lo
     INY
     LDA (zp_55),y
-    STA zp_52
+    STA ptr_hi
     LDA #$FB
     PHA
     LDA #$BC
@@ -7552,7 +7550,7 @@ F_FB86:
     STA zp_55
     STA zp_56
     STX zp_42
-    JMP ($0051)
+    JMP (ptr_lo)
 F_FBBD:
     LDA zp_01
     BEQ F_FBCA
@@ -7576,19 +7574,19 @@ F_FBD6:
     LDA ram_0480,x
     BEQ F_FC0D
     LDY #$00
-    STY zp_52
+    STY ptr_hi
     ASL a
-    ROL zp_52
+    ROL ptr_hi
     ADC #$F5
     STA zp_55
-    LDA zp_52
+    LDA ptr_hi
     ADC #$8A
     STA zp_56
     LDA (zp_55),y
-    STA zp_51
+    STA ptr_lo
     INY
     LDA (zp_55),y
-    STA zp_52
+    STA ptr_hi
     LDA #$FC
     PHA
     LDA #$0C
@@ -7597,7 +7595,7 @@ F_FBD6:
     STA zp_55
     STA zp_56
     STX zp_42
-    JMP ($0051)
+    JMP (ptr_lo)
 F_FC0D:
     LDA zp_01
     BEQ F_FC1C
@@ -7620,7 +7618,7 @@ F_FC26:
     JSR SwitchBankFromAC
     LDY #$00
 F_FC30:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_08
     PLA
     JSR SwitchBank
@@ -7632,15 +7630,15 @@ F_FC3F:
     PHA
     LDA zp_56
     PHA
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC zp_25
     STA zp_55
-    LDA zp_52
+    LDA ptr_hi
     SBC zp_26
     STA zp_56
     LDA zp_33
@@ -7661,7 +7659,7 @@ F_FC68:
     SEC
     SBC #$01
     STA tmp_ptr_lo
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC zp_25
     AND tmp_ptr_lo
@@ -7675,29 +7673,29 @@ F_FC68:
     LDA zp_B4
     CLC
     ADC (zp_B4),y
-    STA zp_51
+    STA ptr_lo
     INY
     LDA (zp_B4),y
     ADC zp_B5
-    STA zp_52
+    STA ptr_hi
     LDY zp_55
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     CLC
     ADC zp_B4
     PHA
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     ADC zp_B5
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     LDY #$00
 F_FCAE:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     CMP #$FE
     BCS F_FCBF
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     CMP zp_56
     BEQ F_FCC3
     INY
@@ -7708,15 +7706,15 @@ F_FCBF:
     BEQ F_FCC6
 F_FCC3:
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
 F_FCC6:
     STA tmp_ptr_lo
     PLA
     JSR F_C919
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     PLA
     STA zp_56
     PLA
@@ -7727,7 +7725,7 @@ F_FCC6:
 F_FCDC:
     LDA zp_55
     STA tmp_ptr_lo
-    LDA zp_52
+    LDA ptr_hi
     STA tmp_ptr_hi
     TXA
     PHA
@@ -7829,8 +7827,8 @@ F_FD60:
 F_FD70:
     ASL tmp_ptr_hi
     ROL zp_55
-    STY zp_51
-    STX zp_52
+    STY ptr_lo
+    STX ptr_hi
     PLA
     TAY
     PLA
@@ -7872,13 +7870,13 @@ F_FDA7:
 F_FDBB:
     BIT ram_0397
     BPL F_FDC3
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     RTS
 F_FDC3:
     LDA PPUSTATUS
-    LDA zp_52
+    LDA ptr_hi
     STA PPUADDR
-    LDA zp_51
+    LDA ptr_lo
     STA PPUADDR
     LDA PPUDATA
     LDA PPUDATA
@@ -7886,9 +7884,9 @@ F_FDC3:
 F_FDD7:
     PHP
 F_FDD8:
-    INC zp_51
+    INC ptr_lo
     BNE F_FDDE
-    INC zp_52
+    INC ptr_hi
 F_FDDE:
     PLP
     RTS
@@ -7907,7 +7905,7 @@ F_FDEF:
     ROR ram_0397
 F_FDF2:
     LDY #$00
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_08
     JSR F_FDD7
     SEC
@@ -7927,7 +7925,7 @@ F_FE0E:
     BEQ F_FE15
     JMP F_FE23
 F_FE15:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_08
     JSR F_FDD7
     LDA zp_08
@@ -7944,7 +7942,7 @@ F_FE28:
     BEQ F_FE33
     JMP F_FE3C
 F_FE33:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
     JSR F_FDD7
@@ -7965,9 +7963,9 @@ F_FE52:
     LDA zp_08
     STA zp_54
     JSR F_FEF5
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     LDA zp_08
     EOR #$FF
@@ -7977,14 +7975,14 @@ F_FE52:
     ADC zp_55
     STA zp_08
     LDA zp_08
-    STA zp_51
+    STA ptr_lo
     JSR F_FD9F
     STA zp_08
     LDA zp_56
     ADC zp_08
     STA zp_08
     LDA zp_08
-    STA zp_52
+    STA ptr_hi
 F_FE7F:
     JSR F_FDBB
     STA zp_08
@@ -7997,9 +7995,9 @@ F_FE7F:
     JMP F_FE7F
 F_FE96:
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     JMP F_FE0E
 F_FE9F:
     JSR F_FF26
@@ -8020,10 +8018,10 @@ F_FEB6:
     LDA zp_08
     STA zp_54
     JSR F_FEF5
-    LDA zp_51
+    LDA ptr_lo
     PHA
 F_FEC0:
-    LDA zp_52
+    LDA ptr_hi
     PHA
     LDA zp_08
     EOR #$FF
@@ -8032,12 +8030,12 @@ F_FEC0:
     LDA zp_55
     ADC zp_08
     STA zp_08
-    STA zp_51
+    STA ptr_lo
 F_FED2:
     JSR F_FD9F
     ADC zp_56
     STA zp_08
-    STA zp_52
+    STA ptr_hi
 F_FEDB:
     JSR F_FDBB
     STA zp_08
@@ -8058,7 +8056,7 @@ F_FEF5:
 F_FEFD:
     JMP F_FF09
 F_FF00:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
     JSR F_FDD7
@@ -8069,7 +8067,7 @@ F_FF09:
 F_FF0F:
     JMP F_FF1B
 F_FF12:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
     JSR F_FDD7
@@ -8085,7 +8083,7 @@ F_FF28:
     BEQ F_FF2D
     JMP F_FF36
 F_FF2D:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
     JSR F_FDD7
@@ -8095,7 +8093,7 @@ F_FF36:
     BEQ F_FF3F
     JMP F_FF48
 F_FF3F:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
     JSR F_FDD7
@@ -8105,7 +8103,7 @@ F_FF48:
     BEQ F_FF51
     JMP F_FF5A
 F_FF51:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
     JSR F_FDD7
@@ -8115,7 +8113,7 @@ F_FF5A:
     BEQ F_FF63
     JMP F_FF6C
 F_FF63:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
     JSR F_FDD7
@@ -8125,7 +8123,7 @@ F_FF6C:
     BEQ F_FF75
     JMP F_FF7E
 F_FF75:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
     JSR F_FDD7
@@ -8136,7 +8134,7 @@ F_FF80:
     BEQ F_FF87
     JMP F_FF90
 F_FF87:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
 F_FF8D:
@@ -8147,7 +8145,7 @@ F_FF90:
     BEQ F_FF99
     JMP F_FFA2
 F_FF99:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
     JSR F_FDD7
@@ -8157,7 +8155,7 @@ F_FFA2:
     BEQ F_FFAB
     JMP F_FFB4
 F_FFAB:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
     JSR F_FDD7

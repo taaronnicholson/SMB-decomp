@@ -4,7 +4,7 @@
 .segment "BANK6"
 
     .byte $4C,$15,$80
-B6_8003:
+Sound_Update:
     JMP B6_8115
 B6_8006:
     JMP B6_80EA
@@ -1923,10 +1923,10 @@ B6_A33F:
     LDA zp_5E
     CLC
     ADC zp_53
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     CLC
     ADC #$10
@@ -1967,9 +1967,9 @@ B6_A38F:
     STA zp_65
     JSR F_F6B0
     JSR F_F192
-    LDA zp_51
+    LDA ptr_lo
     STA ram_0721
-    LDA zp_52
+    LDA ptr_hi
     STA ram_0722
     LDA #$02
     STA ram_0720
@@ -2051,14 +2051,14 @@ B6_A41E:
     JSR F_CE52
     DEC zp_11
 B6_A433:
-    JSR F_C9AC
+    JSR WaitForNMI
     LDA zp_10
     BNE B6_A433
     JSR F_C7CD
     JSR F_C9A5
     JSR F_C956
     JSR F_C9B2
-    INC zp_93
+    INC stage_index
     LDX #$FF
     TXS
     JMP F_C667
@@ -2174,10 +2174,10 @@ B6_A57F:
     LDY #$00
     LDA (zp_55),y
     INY
-    STA zp_51
+    STA ptr_lo
     LDA (zp_55),y
     INY
-    STA zp_52
+    STA ptr_hi
     LDA (zp_55),y
     STA zp_55
     LDX #$00
@@ -2187,7 +2187,7 @@ B6_A57F:
     LDA zp_4F
     BEQ B6_A5D4
 B6_A5AB:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     CLC
     ADC zp_53
@@ -2203,7 +2203,7 @@ B6_A5C1:
     INX
     LDA #$08
     SEC
-    SBC (zp_51),y
+    SBC (ptr_lo),y
     INY
     CLC
     ADC zp_54
@@ -2213,7 +2213,7 @@ B6_A5C1:
     BNE B6_A5AB
     RTS
 B6_A5D4:
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     CLC
     ADC zp_53
@@ -2227,7 +2227,7 @@ B6_A5D4:
     STA ram_023C,x
 B6_A5EA:
     INX
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     CLC
     ADC zp_54
@@ -2242,7 +2242,7 @@ B6_A5FA:
 B6_A5FE:
     LDA #$00
     SEC
-    SBC (zp_51),y
+    SBC (ptr_lo),y
     INY
     CLC
     ADC zp_53
@@ -2258,7 +2258,7 @@ B6_A617:
     INX
     LDA #$08
     SEC
-    SBC (zp_51),y
+    SBC (ptr_lo),y
     INY
     CLC
     ADC zp_54
@@ -2270,7 +2270,7 @@ B6_A617:
 B6_A62A:
     LDA #$00
     SEC
-    SBC (zp_51),y
+    SBC (ptr_lo),y
     INY
     CLC
     ADC zp_53
@@ -2284,7 +2284,7 @@ B6_A62A:
     STA ram_023C,x
 B6_A643:
     INX
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     INY
     CLC
     ADC zp_54
@@ -2625,14 +2625,14 @@ B6_B876:
     LDA zp_5E
     CLC
     ADC #$08
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     JSR F_E514
     JSR F_EEA6
@@ -2641,12 +2641,12 @@ B6_B876:
     ADC #$08
     AND #$0F
     CLC
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
-    LDA (zp_51),y
+    STA ptr_hi
+    LDA (ptr_lo),y
     STA zp_53
     CMP #$FF
     BEQ B6_B8DF
@@ -2670,34 +2670,34 @@ B6_B876:
     SBC #$00
     STA zp_61
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     JMP B6_BA04
 B6_B8DF:
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
-    LDA zp_51
+    STA ptr_lo
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_E514
     JSR F_EEA6
     LDA zp_5E
     CLC
     ADC #$08
     AND #$0F
-    ADC zp_51
-    STA zp_51
-    LDA zp_52
+    ADC ptr_lo
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
-    LDA (zp_51),y
+    STA ptr_hi
+    LDA (ptr_lo),y
     STA zp_53
     CMP #$FF
     BEQ B6_B927
@@ -2750,10 +2750,10 @@ B6_B948:
     LDA zp_5E
     CLC
     ADC #$0A
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_F80D
     PLA
@@ -2766,10 +2766,10 @@ B6_B948:
     LDA zp_5E
     CLC
     ADC #$06
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_EF24
     JSR F_E514
     AND #$01
@@ -2784,9 +2784,9 @@ B6_B998:
     LDA #$39
     JSR F_CE8F
     JSR F_F192
-    LDA zp_51
+    LDA ptr_lo
     STA ram_0721
-    LDA zp_52
+    LDA ptr_hi
     STA ram_0722
     LDA #$02
     STA ram_0720
@@ -2853,25 +2853,25 @@ B6_BA23:
     LDA zp_5E
     SEC
     SBC zp_64
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     SBC #$00
-    STA zp_52
+    STA ptr_hi
     BCS B6_BA39
     LDA #$00
     STA zp_5E
     STA zp_5F
     RTS
 B6_BA39:
-    LDA zp_51
+    LDA ptr_lo
     STA zp_5E
     CLC
     ADC #$05
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     STA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     STA zp_55
     LDA zp_61
@@ -2886,13 +2886,13 @@ B6_BA39:
 B6_BA62:
     RTS
 B6_BA63:
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_E514
     AND #$01
     BEQ B6_BA62
@@ -2926,10 +2926,10 @@ B6_BA9C:
     LDA zp_5E
     CLC
     ADC zp_64
-    STA zp_51
+    STA ptr_lo
     LDA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_34
     SEC
     SBC #$11
@@ -2939,9 +2939,9 @@ B6_BA9C:
     STA zp_54
     LDA zp_53
     SEC
-    SBC zp_51
+    SBC ptr_lo
     LDA zp_54
-    SBC zp_52
+    SBC ptr_hi
     BCS B6_BACE
     LDA zp_53
     ADC #$01
@@ -2951,15 +2951,15 @@ B6_BA9C:
     STA zp_5F
     RTS
 B6_BACE:
-    LDA zp_51
+    LDA ptr_lo
     STA zp_5E
     CLC
     ADC #$0B
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     STA zp_5F
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     STA zp_55
     LDA zp_61
@@ -2974,13 +2974,13 @@ B6_BACE:
 B6_BAF7:
     RTS
 B6_BAF8:
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_E514
     AND #$01
     BEQ B6_BAF7
@@ -2994,69 +2994,69 @@ B6_BB0C:
     LDA zp_1D
     CLC
     ADC zp_4B
-    STA zp_51
+    STA ptr_lo
     LDA zp_1E
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     SEC
-    SBC zp_51
+    SBC ptr_lo
     STA zp_55
     LDA zp_61
-    SBC zp_52
+    SBC ptr_hi
     STA zp_56
     BCS B6_BB53
     LDA zp_55
     EOR #$FF
     CLC
     ADC #$01
-    STA zp_51
+    STA ptr_lo
     LDA zp_56
     EOR #$FF
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_1D
     SEC
-    SBC zp_51
-    STA zp_51
+    SBC ptr_lo
+    STA ptr_lo
     LDA zp_1E
-    SBC zp_52
-    STA zp_52
+    SBC ptr_hi
+    STA ptr_hi
     JMP B6_BB87
 B6_BB53:
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC #$10
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_60
     SEC
-    SBC zp_51
-    STA zp_51
+    SBC ptr_lo
+    STA ptr_lo
     LDA zp_61
-    SBC zp_52
-    STA zp_52
+    SBC ptr_hi
+    STA ptr_hi
     BCS B6_BB7A
     LDA zp_1D
-    STA zp_51
+    STA ptr_lo
     LDA zp_1E
-    STA zp_52
+    STA ptr_hi
     JMP B6_BB87
 B6_BB7A:
     LDA zp_1D
     CLC
-    ADC zp_51
-    STA zp_51
+    ADC ptr_lo
+    STA ptr_lo
     LDA zp_1E
-    ADC zp_52
-    STA zp_52
+    ADC ptr_hi
+    STA ptr_hi
 B6_BB87:
-    LDA zp_52
+    LDA ptr_hi
     BMI B6_BB93
     BNE B6_BB9E
-    LDA zp_51
+    LDA ptr_lo
     CMP #$20
     BCS B6_BB9E
 B6_BB93:
@@ -3073,15 +3073,15 @@ B6_BB9E:
     LDA zp_37
     SBC #$00
     STA zp_56
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC zp_55
-    LDA zp_52
+    LDA ptr_hi
     SBC zp_56
     BCS B6_BBBE
-    LDA zp_51
+    LDA ptr_lo
     STA zp_55
-    LDA zp_52
+    LDA ptr_hi
     STA zp_56
 B6_BBBE:
     LDA zp_55
@@ -3094,34 +3094,34 @@ B6_BBC6:
     LDA zp_1B
     CLC
     ADC zp_4A
-    STA zp_51
+    STA ptr_lo
     LDA zp_1C
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_5E
     SEC
-    SBC zp_51
+    SBC ptr_lo
     STA zp_55
     LDA zp_5F
-    SBC zp_52
+    SBC ptr_hi
     STA zp_56
     BCS B6_BC0D
     LDA zp_55
     EOR #$FF
     CLC
     ADC #$01
-    STA zp_51
+    STA ptr_lo
     LDA zp_56
     EOR #$FF
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_1B
     SEC
-    SBC zp_51
+    SBC ptr_lo
     STA zp_1B
     LDA zp_1C
 B6_BC00:
-    SBC zp_52
+    SBC ptr_hi
     STA zp_1C
     BCS B6_BC0C
 B6_BC06:
@@ -3131,44 +3131,44 @@ B6_BC06:
 B6_BC0C:
     RTS
 B6_BC0D:
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC #$0A
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     ADC #$00
-    STA zp_52
+    STA ptr_hi
     LDA zp_5E
     SEC
-    SBC zp_51
-    STA zp_51
+    SBC ptr_lo
+    STA ptr_lo
     LDA zp_5F
-    SBC zp_52
-    STA zp_52
+    SBC ptr_hi
+    STA ptr_hi
     BCC B6_BC0C
     LDA zp_1B
     SEC
-    ADC zp_51
+    ADC ptr_lo
     STA zp_55
     LDA zp_1C
-    ADC zp_52
+    ADC ptr_hi
     STA zp_56
     LDA zp_34
     SEC
     SBC #$F0
-    STA zp_51
+    STA ptr_lo
     LDA zp_35
     SBC #$00
-    STA zp_52
-    LDA zp_51
+    STA ptr_hi
+    LDA ptr_lo
     SEC
     SBC zp_55
-    LDA zp_52
+    LDA ptr_hi
     SBC zp_56
     BCS B6_BC56
-    LDA zp_51
+    LDA ptr_lo
     STA zp_55
-    LDA zp_52
+    LDA ptr_hi
     STA zp_56
 B6_BC56:
     LDA zp_55
@@ -3212,17 +3212,17 @@ B6_BC98:
     LDA zp_1B
     SEC
     SBC ram_0739
-    STA zp_51
+    STA ptr_lo
     LDA zp_1C
     SBC ram_073A
-    STA zp_52
+    STA ptr_hi
     BCS B6_BCB6
     LDY #$01
     STY zp_55
     DEY
     STY zp_56
 B6_BCB6:
-    ORA zp_51
+    ORA ptr_lo
     BEQ B6_BCD1
     LDA zp_55
 B6_BCBC:
@@ -3238,8 +3238,8 @@ B6_BCBC:
     STA zp_1C
 B6_BCD1:
     LDA zp_73
-    ORA zp_51
-    ORA zp_52
+    ORA ptr_lo
+    ORA ptr_hi
     STA ram_072D
     LDA ram_01A6
     CMP #$04
@@ -3387,9 +3387,9 @@ B6_BDA0:
     LSR zp_8C
 B6_BDFC:
     LDA B6_BEE9,y
-    STA zp_51
+    STA ptr_lo
     LDA B6_BEEC,y
-    STA zp_52
+    STA ptr_hi
     LDA PPUSTATUS
     LDA #$23
     STA PPUADDR
@@ -3404,7 +3404,7 @@ B6_BE17:
     LDY #$00
     LDA #$E0
     CLC
-    ADC (zp_51),y
+    ADC (ptr_lo),y
     STA zp_55
     LDA #$21
     ADC #$00
@@ -3413,7 +3413,7 @@ B6_BE17:
     STA PPUADDR
 B6_BE32:
     INY
-    LDA (zp_51),y
+    LDA (ptr_lo),y
     BEQ B6_BE40
     CLC
     ADC #$94
@@ -3422,7 +3422,7 @@ B6_BE32:
 B6_BE40:
     LDA ram_0745
     BNE B6_BE4D
-    LDA zp_93
+    LDA stage_index
     CLC
     ADC #$C5
     STA PPUDATA
@@ -3431,13 +3431,13 @@ B6_BE4D:
     STA zp_0F
     LDA #$01
     STA nmi_state
-    JSR F_C99E
-    JSR F_C9AC
+    JSR EnableNMI
+    JSR WaitForNMI
     INC zp_11
-    JSR F_C9AC
-    JSR F_C7C8
+    JSR WaitForNMI
+    JSR EnableRendering
 B6_BE63:
-    JSR F_C9AC
+    JSR WaitForNMI
     LDA ram_0389
     CLC
     ADC #$04
@@ -3447,7 +3447,7 @@ B6_BE63:
     LDA zp_11
     BNE B6_BE63
 B6_BE79:
-    JSR F_C9AC
+    JSR WaitForNMI
     JSR F_C9B3
     LDA ram_0389
     CLC
@@ -3483,7 +3483,7 @@ B6_BEA1:
     LDA ram_01AD
     STA ram_0748
 B6_BECA:
-    JSR F_C9AC
+    JSR WaitForNMI
     LDY #$06
     LDX #$03
     LDA #$80
@@ -3522,7 +3522,7 @@ B6_BF02:
     EOR zp_BB
     STA zp_BC
     ADC zp_BB
-    ADC zp_93
+    ADC stage_index
     STA zp_BB
     RTS
     LDA zp_FC

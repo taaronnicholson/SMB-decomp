@@ -248,6 +248,8 @@ def fmt_instr(p, pc):
         if a < 0x2000 or 0x6000 <= a < 0x8000: return ramname(a)
         b = res_bank(a, p, pc)
         if b is not None:
+            if (b, a - 1) in word_cells and (b, a) not in labels:   # high byte of a pointer word
+                return f'{want(b, a - 1)}+1'
             n = want(b, a)
             if n: return n
         return f'${a:04X}'
@@ -263,7 +265,7 @@ def fmt_instr(p, pc):
         s = ramname(val)
         return {'zp': f'{mn} {s}', 'zpx': f'{mn} {s},x', 'zpy': f'{mn} {s},y',
                 'izx': f'{mn} ({s},x)', 'izy': f'{mn} ({s}),y'}[m]
-    if m == 'ind': return f'{mn} (${val:04X})'
+    if m == 'ind': return f'{mn} ({ramname(val) if val < 0x2000 else "$%04X" % val})'
     s = sym(val)
     if val < 0x100: s = f'a:{s}'
     return {'abs': f'{mn} {s}', 'abx': f'{mn} {s},x', 'aby': f'{mn} {s},y'}[m]

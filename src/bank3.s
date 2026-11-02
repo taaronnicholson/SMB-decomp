@@ -1144,9 +1144,9 @@ B3_BE9D:
     PHA
     LDA zp_54
     PHA
-    LDA zp_51
+    LDA ptr_lo
     STA zp_53
-    LDA zp_52
+    LDA ptr_hi
     STA zp_54
     LDA #$D7
     JSR F_F28D
@@ -1161,27 +1161,27 @@ B3_BE9D:
     LDA B3_BE38,y
     BEQ B3_BE9C
     PHA
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC zp_23
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     SBC #$00
-    STA zp_52
+    STA ptr_hi
     JSR F_F6B0
     JSR F_F192
-    LDA zp_51
+    LDA ptr_lo
     STA ram_0721
-    LDA zp_52
+    LDA ptr_hi
     STA ram_0722
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     PLA
     STA ram_0720
     RTS

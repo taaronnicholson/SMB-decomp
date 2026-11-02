@@ -780,13 +780,11 @@ B2_9E1E:
     TAY
     LDA B2_9E2F,y
     STA jump_ptr_lo
-    LDA B2_9E30,y
+    LDA B2_9E2F+1,y
     STA jump_ptr_hi
-    JMP ($0006)
+    JMP (jump_ptr_lo)
 B2_9E2F:
-    .byte <B2_9E37
-B2_9E30:
-    .byte >B2_9E37
+    .word B2_9E37
     .word B2_9E62
     .word B2_9E76
     .word B2_9E8A
@@ -1153,13 +1151,11 @@ B2_A219:
     TAY
     LDA B2_A22C,y
     STA jump_ptr_lo
-    LDA B2_A22D,y
+    LDA B2_A22C+1,y
     STA jump_ptr_hi
-    JMP ($0006)
+    JMP (jump_ptr_lo)
 B2_A22C:
-    .byte <B2_A325
-B2_A22D:
-    .byte >B2_A325
+    .word B2_A325
     .word B2_A325
     .word B2_A325
     .word B2_A325
@@ -1191,13 +1187,11 @@ B2_A25C:
     TAY
     LDA B2_A26F,y
     STA jump_ptr_lo
-    LDA B2_A270,y
+    LDA B2_A26F+1,y
     STA jump_ptr_hi
-    JMP ($0006)
+    JMP (jump_ptr_lo)
 B2_A26F:
-    .byte <B2_A339
-B2_A270:
-    .byte >B2_A339
+    .word B2_A339
     .word B2_A339
     .word B2_A339
     .word B2_A339
@@ -1229,13 +1223,11 @@ B2_A29F:
     TAY
     LDA B2_A2B2,y
     STA jump_ptr_lo
-    LDA B2_A2B3,y
+    LDA B2_A2B2+1,y
     STA jump_ptr_hi
-    JMP ($0006)
+    JMP (jump_ptr_lo)
 B2_A2B2:
-    .byte <B2_A34B
-B2_A2B3:
-    .byte >B2_A34B
+    .word B2_A34B
     .word B2_A34B
     .word B2_A34B
     .word B2_A34B
@@ -1267,13 +1259,11 @@ B2_A2E2:
     TAY
     LDA B2_A2F5,y
     STA jump_ptr_lo
-    LDA B2_A2F6,y
+    LDA B2_A2F5+1,y
     STA jump_ptr_hi
-    JMP ($0006)
+    JMP (jump_ptr_lo)
 B2_A2F5:
-    .byte <B2_A325
-B2_A2F6:
-    .byte >B2_A325
+    .word B2_A325
     .word B2_A325
     .word B2_A325
     .word B2_A325
@@ -3010,9 +3000,8 @@ B2_B5AB:
     .word F_F86E
     .word F_FA50
     .word F_FA59
-    .byte <F_FA62
-B2_B5E7:
-    .byte >F_FA62
+B2_B5E6:
+    .word F_FA62
     .word F_FEFD
     .byte $FE,$FE,$FF,$FF,$00,$01,$01,$02,$02,$02,$03,$FD,$FE,$FE,$FE,$FF
     .byte $FF,$00,$01,$01,$02,$02,$02,$03,$FE,$FE,$FF,$FF,$00,$01,$01,$02
@@ -3021,7 +3010,7 @@ B2_B5E7:
     INC ram_01A5
     LDA #$00
     STA zp_56
-    LDA B2_B5E7,x
+    LDA B2_B5E6+1,x
     STA zp_53
     CMP #$80
     BNE B2_B639
@@ -3046,82 +3035,82 @@ B2_B641:
     RTS
 B2_B64F:
     LDA ram_01AB
-    STA zp_51
+    STA ptr_lo
     LDA ram_01AC
-    STA zp_52
+    STA ptr_hi
     LDA ram_01AD
     STA zp_53
     JSR B2_B732
     LDA #$06
     STA zp_53
     LDA #$21
-    STA zp_52
+    STA ptr_hi
     LDA #$8E
-    STA zp_51
+    STA ptr_lo
     JSR B2_B6EF
     LDA #$00
     STA zp_53
-    STA zp_52
+    STA ptr_hi
     LDA zp_A8
-    STA zp_51
+    STA ptr_lo
     JSR B2_B732
     LDA #$01
     STA zp_53
     LDA #$21
-    STA zp_52
+    STA ptr_hi
     LDA #$D2
-    STA zp_51
+    STA ptr_lo
     JSR B2_B6EF
     LDA #$00
     STA zp_53
     LDA ram_01A8
-    STA zp_51
+    STA ptr_lo
     LDA ram_01A9
-    STA zp_52
+    STA ptr_hi
     JSR B2_B732
     LDA #$03
     STA zp_53
     LDA #$22
-    STA zp_52
+    STA ptr_hi
     LDA #$0F
-    STA zp_51
+    STA ptr_lo
     JSR B2_B6EF
     LDA #$00
     STA zp_53
-    STA zp_52
+    STA ptr_hi
     LDA ram_01AA
-    STA zp_51
+    STA ptr_lo
     JSR B2_B732
     LDA #$02
     STA zp_53
     LDA #$22
-    STA zp_52
+    STA ptr_hi
     LDA #$52
-    STA zp_51
+    STA ptr_lo
     JSR B2_B6EF
     LDA #$00
     STA zp_53
-    STA zp_52
+    STA ptr_hi
     LDA ram_01AE
-    STA zp_51
+    STA ptr_lo
     JSR B2_B732
     LDA #$02
     STA zp_53
     LDA #$22
-    STA zp_52
+    STA ptr_hi
     LDA #$90
-    STA zp_51
+    STA ptr_lo
     JSR B2_B6EF
     INC zp_11
-    JSR F_C9AC
-    JSR F_C7C8
+    JSR WaitForNMI
+    JSR EnableRendering
     RTS
 B2_B6EF:
     LDX zp_44
-    LDA zp_52
+    LDA ptr_hi
     STA ram_0300,x
     INX
-    LDA zp_51
+    LDA ptr_lo
     STA ram_0300,x
     INX
     LDA zp_53
@@ -3163,21 +3152,21 @@ B2_B734:
     ASL a
     TAX
 B2_B73D:
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC B2_B777,x
-    LDA zp_52
+    LDA ptr_hi
     SBC B2_B778,x
     LDA zp_53
     SBC B2_B779,x
     BCC B2_B771
-    LDA zp_51
+    LDA ptr_lo
     SEC
     SBC B2_B777,x
-    STA zp_51
-    LDA zp_52
+    STA ptr_lo
+    LDA ptr_hi
     SBC B2_B778,x
-    STA zp_52
+    STA ptr_hi
     LDA zp_53
     SBC B2_B779,x
     STA zp_53
@@ -3215,7 +3204,7 @@ B2_B79F:
     STA jump_ptr_hi
     LDA #$00
     STA zp_47
-    JMP ($0006)
+    JMP (jump_ptr_lo)
 B2_B7B0:
     .byte $00,$67,$7A,$8D,$54,$06,$B7,$73,$EF,$DA,$35,$47,$65,$F0,$B5,$5D
     .byte $D7,$0D,$20,$33,$B4,$C7,$DA,$27,$77,$5B,$8B,$71,$91,$9C,$A7,$D8
@@ -3224,7 +3213,7 @@ B2_B7D2:
     .byte $9E,$A5,$A5,$A5,$A5,$A6,$A6,$A6,$A7,$A5,$A9,$A6,$AA,$A5,$AB,$A6
     .byte $AC,$AE,$AE,$AE,$AE,$AE,$AE,$AF,$B0,$B1,$B2,$B3,$B4,$B4,$B4,$B4
     .byte $B4,$B4
-B2_B7F4:
+ResetLevelState:
     LDA #$00
     STA zp_4D
     STA zp_44
@@ -3282,7 +3271,7 @@ B2_B84C:
     LDA #$63
     STA zp_4B
     RTS
-B2_B868:
+ResetGameState:
     LDA #$FF
     STA zp_1A
     LDA #$00

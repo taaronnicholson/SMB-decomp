@@ -845,14 +845,14 @@ B4_ACA1:
     STA ram_0395
     ASL a
     STA nmi_state
-    JSR F_C99E
+    JSR EnableNMI
     LDA #$07
     JSR F_CE3B
     INC zp_11
-    JSR F_C9AC
-    JSR F_C7C8
+    JSR WaitForNMI
+    JSR EnableRendering
 B4_ACD8:
-    JSR F_C9AC
+    JSR WaitForNMI
     INC ram_0389
     INC ram_038A
     JSR F_CEE1
@@ -904,7 +904,7 @@ B4_AD30:
     STA nmi_state
     DEC zp_11
 B4_AD39:
-    JSR F_C9AC
+    JSR WaitForNMI
     INC ram_038A
     JSR F_CEE1
     LDA zp_11
@@ -922,7 +922,7 @@ B4_AD39:
     JMP FarCall
 B4_AD60:
     LDA #$13
-    STA ram_072C
+    STA game_state
     LDA ppumask_shadow
     AND #$F9
     JSR SetPPUMask
@@ -938,15 +938,15 @@ B4_AD60:
     STA zp_0F
     LDA #$01
     STA nmi_state
-    JSR F_C99E
-    JSR F_C9AC
+    JSR EnableNMI
+    JSR WaitForNMI
     LDA #$06
     JSR F_CE3B
     INC zp_11
-    JSR F_C9AC
-    JSR F_C7C8
+    JSR WaitForNMI
+    JSR EnableRendering
 B4_AD99:
-    JSR F_C9AC
+    JSR WaitForNMI
     LDA zp_11
     BNE B4_AD99
     LDA #$02
@@ -955,19 +955,17 @@ B4_AD99:
     .byte $40,$E8,$FF,$04,$00,$C0,$09,$50,$00,$00,$FF,$90,$00,$00,$00,$00
     .byte $F0,$02,$00,$00,$00,$FF,$14,$14,$15,$15,$14,$14,$15,$15,$14,$14
     .byte $14,$15,$15,$15,$15,$15,$15,$15,$15,$15
-B4_ADCF:
-    LDA ram_072C
+DispatchGameState:
+    LDA game_state
     ASL a
     TAY
     LDA B4_ADE1,y
-    STA zp_51
-    LDA B4_ADE2,y
-    STA zp_52
-    JMP ($0051)
+    STA ptr_lo
+    LDA B4_ADE1+1,y
+    STA ptr_hi
+    JMP (ptr_lo)
 B4_ADE1:
-    .byte <F_C916
-B4_ADE2:
-    .byte >F_C916
+    .word F_C916
     .word B4_AE39
     .word B4_AE56
     .word B4_AE55
@@ -1000,13 +998,13 @@ B4_ADE2:
     ORA #$08
     STA ram_0101
     LDA #$00
-    STA ram_072C
+    STA game_state
     RTS
 B4_AE39:
     LDA zp_DF
     BEQ B4_AE4C
     LDA #$03
-    STA ram_072C
+    STA game_state
     LDA #$07
     STA ram_0100
     LDA #$16
@@ -1014,7 +1012,7 @@ B4_AE39:
     RTS
 B4_AE4C:
     LDA #$02
-    STA ram_072C
+    STA game_state
     LDA #$00
     STA zp_C5
 B4_AE55:
@@ -1038,7 +1036,7 @@ B4_AE56:
     STA zp_53
     JSR F_F9B6
     LDA #$05
-    STA ram_072C
+    STA game_state
     LDA #$05
     STA ram_0738
     LDA #$01
@@ -1046,7 +1044,7 @@ B4_AE56:
     JMP B4_AF32
 B4_AE8F:
     LDA zp_C5
-    STA zp_51
+    STA ptr_lo
     CMP #$17
     BEQ B4_AE9B
     AND #$FF
@@ -1054,13 +1052,13 @@ B4_AE8F:
 B4_AE9B:
     LDA #$13
     JSR F_CE78
-    LDA zp_51
+    LDA ptr_lo
 B4_AEA2:
     CLC
     ADC #$01
     AND #$3F
     STA zp_C5
-    LDY zp_51
+    LDY ptr_lo
     LDA B4_AEB6,y
     BMI B4_AEB5
     CLC
@@ -1100,7 +1098,7 @@ B4_AF1B:
     STA zp_54
     JSR B4_BC4E
     LDA #$03
-    STA ram_072C
+    STA game_state
     JMP F_F843
 B4_AF32:
     LDA #$B3
@@ -1161,7 +1159,7 @@ B4_AF7B:
     STA ram_05D0,y
     STA ram_0600,y
     LDA #$03
-    STA ram_072C
+    STA game_state
     LDA #$4A
     JMP F_CE8F
     .byte $21,$22,$87,$40,$44,$45,$52,$46,$4C,$41,$FF,$21,$62,$89,$4C,$4C
@@ -1174,7 +1172,7 @@ B4_AFD8:
     LDA #$00
     STA ram_0735
     LDA #$0C
-    STA ram_072C
+    STA game_state
     STA ram_0736
 B4_AFEC:
     LDA #$03
@@ -1200,7 +1198,7 @@ B4_AFF5:
     LDA #$03
     STA ram_0738
     LDA #$0D
-    STA ram_072C
+    STA game_state
     LDA #$0A
     STA ram_073D
     STA ram_073E
@@ -1230,7 +1228,7 @@ B4_B048:
     CMP #$0E
     BNE B4_B069
     LDA #$0B
-    STA ram_072C
+    STA game_state
     LDA #$00
     STA ram_072F
     RTS
@@ -1248,14 +1246,12 @@ B4_B084:
     ASL a
     TAY
     LDA B4_B096,y
-    STA zp_51
-    LDA B4_B097,y
-    STA zp_52
-    JMP ($0051)
+    STA ptr_lo
+    LDA B4_B096+1,y
+    STA ptr_hi
+    JMP (ptr_lo)
 B4_B096:
-    .byte <B4_B0D8
-B4_B097:
-    .byte >B4_B0D8
+    .word B4_B0D8
     .word B4_B109
     .word B4_B0AC
     .word B4_B140
@@ -1656,16 +1652,16 @@ B4_B40A:
     RTS
 B4_B40E:
     STA zp_73
-    LDA zp_51
+    LDA ptr_lo
     PHA
-    LDA zp_52
+    LDA ptr_hi
     PHA
     LDA ram_073F
-    STA zp_52
+    STA ptr_hi
     LDA #$07
     STA zp_55
     JSR F_FCDC
-    LDA zp_51
+    LDA ptr_lo
     CLC
     ADC #$09
     STA ram_073F
@@ -1674,9 +1670,9 @@ B4_B40E:
     STA zp_53
     JSR F_F8FC
     PLA
-    STA zp_52
+    STA ptr_hi
     PLA
-    STA zp_51
+    STA ptr_lo
     LDA zp_55
 B4_B43B:
     RTS
@@ -1700,7 +1696,7 @@ B4_B445:
     LDA zp_1B
     CMP #$C0
     BNE B4_B43B
-    INC ram_072C
+    INC game_state
     RTS
 B4_B46B:
     LDA #$A9
@@ -1725,7 +1721,7 @@ B4_B480:
     BNE B4_B49F
     LDA #$23
     STA ram_0737
-    INC ram_072C
+    INC game_state
     RTS
 B4_B49F:
     EOR #$01
@@ -1742,7 +1738,7 @@ B4_B4CE:
     DEC ram_0737
     BNE B4_B4A8
     LDX #$12
-    STX ram_072C
+    STX game_state
     INX
     STX zp_D1
     LDA #$00
@@ -1776,10 +1772,10 @@ B4_B515:
     ASL a
     TAY
     LDA B4_B527,y
-    STA zp_51
+    STA ptr_lo
     LDA B4_B528,y
-    STA zp_52
-    JMP ($0051)
+    STA ptr_hi
+    JMP (ptr_lo)
 B4_B527:
     .byte $39
 B4_B528:
@@ -1801,14 +1797,14 @@ B4_B540:
     LDA #$00
     STA zp_80
     LDA #$09
-    STA ram_072C
+    STA game_state
     LDA #$08
     JMP F_CE3B
     .byte $8D,$B1,$01,$A9,$06,$20,$3B,$CE,$20,$8D,$C9,$AD,$B1
     ORA (zp_0A,x)
     ASL a
     ASL a
-    STA zp_51
+    STA ptr_lo
     LDA #$50
 B4_B56B:
     STA ram_01B2
@@ -1818,7 +1814,7 @@ B4_B56B:
     STA ram_0735
     RTS
 B4_B579:
-    LDY zp_51
+    LDY ptr_lo
     LDA B4_B7B1,y
     STA ram_01B9
     LDA $B7B2,y
@@ -2061,7 +2057,7 @@ B4_B776:
     STA nmi_state
     DEC zp_11
 B4_B77C:
-    JSR F_C9AC
+    JSR WaitForNMI
     LDA zp_11
     BNE B4_B77C
     JSR F_C7CD
@@ -2086,7 +2082,7 @@ B4_B7A7:
     TXS
     JSR F_C9B2
     LDA #$05
-    STA zp_93
+    STA stage_index
 B4_B7B1:
     JMP F_C66C
 B4_B7B4:
@@ -2216,9 +2212,7 @@ B4_BA82:
     BPL B4_BA82
     JMP B4_BA5D
 B4_BA8C:
-    .byte <B4_BAA6
-B4_BA8D:
-    .byte >B4_BAA6
+    .word B4_BAA6
     .word B4_BABC
     .word B4_BB60
     .word B4_BABB
@@ -2227,10 +2221,10 @@ B4_BA94:
     ASL a
     TAY
     LDA B4_BA8C,y
-    STA zp_51
-    LDA B4_BA8D,y
-    STA zp_52
-    JMP ($0051)
+    STA ptr_lo
+    LDA B4_BA8C+1,y
+    STA ptr_hi
+    JMP (ptr_lo)
 B4_BAA6:
     LDA #$00
     STA ram_01BB
@@ -2260,7 +2254,7 @@ B4_BACA:
 B4_BAD9:
     PHA
     LDA #$11
-    STA zp_51
+    STA ptr_lo
     LDA #$1E
     STA zp_55
     LDA #$BC
@@ -2299,7 +2293,7 @@ B4_BB1A:
     LDA (zp_55),y
     CPY #$0F
     BEQ B4_BB2A
-    CPY zp_51
+    CPY ptr_lo
     BCS B4_BB28
     CMP #$20
     BNE B4_BB2A
@@ -2315,7 +2309,7 @@ B4_BB2A:
     LDA #$00
     STA ram_0300,x
     STX zp_44
-    LDY zp_51
+    LDY ptr_lo
     LDA (zp_55),y
     RTS
 B4_BB40:
@@ -2333,7 +2327,7 @@ B4_BB4F:
     LDA #$BC
     STA zp_56
     LDA #$11
-    STA zp_51
+    STA ptr_lo
     PLA
     JMP B4_BAE7
 B4_BB60:
@@ -2348,7 +2342,7 @@ B4_BB60:
     INC ram_01BD
     LDA ram_01BD
 B4_BB76:
-    STA zp_51
+    STA ptr_lo
     CMP #$10
     BEQ B4_BB9E
     LDA ram_01BA
@@ -2591,7 +2585,7 @@ B4_BD91:
     STA ram_038A
     STA zp_74
     JSR B4_BEDF
-    JMP F_C9AC
+    JMP WaitForNMI
     .byte $21,$28,$90,$44,$45,$52,$45,$54,$53,$49,$47,$45,$52,$20,$20,$41
     .byte $20,$53,$49,$FF,$21,$6A,$8C,$46,$4F,$20,$4B,$52,$41,$4D,$45,$44
     .byte $41,$52,$54,$FF,$21,$AC,$88,$54,$48,$47,$49,$4C,$49,$57,$54,$FF
@@ -2614,8 +2608,8 @@ B4_BE47:
     STA PPUDATA
     DEX
     BPL B4_BE47
-    JSR F_C99E
-    JSR F_C9AC
+    JSR EnableNMI
+    JSR WaitForNMI
     LDA #$5F
     STA ram_0389
     LDA #$00
@@ -2628,7 +2622,7 @@ B4_BE47:
     LDA #$FF
     STA zp_54
     JSR B4_BC4E
-    JSR F_C9AC
+    JSR WaitForNMI
     LDA #$F7
     STA zp_55
     LDA #$BD
@@ -2637,18 +2631,18 @@ B4_BE47:
     STA zp_54
     JSR B4_BC4E
     LDA #$68
-    STA zp_51
+    STA ptr_lo
     LDA #$20
-    STA zp_52
+    STA ptr_hi
     JSR F_CE2C
-    JSR F_C7C8
+    JSR EnableRendering
     LDA #$00
     STA ram_01A8
     INC zp_11
     LDA #$01
     STA nmi_state
 B4_BE99:
-    JSR F_C9AC
+    JSR WaitForNMI
     JSR B4_BEE7
     DEC zp_B1
     LDA zp_B1
@@ -2664,7 +2658,7 @@ B4_BE99:
 B4_BEB7:
     DEC zp_11
 B4_BEB9:
-    JSR F_C9AC
+    JSR WaitForNMI
     JSR F_C9B3
     JSR B4_BEE7
     DEC zp_B1
@@ -2725,24 +2719,24 @@ B4_BF0B:
     STA zp_53
     JSR F_CEBA
     STA zp_54
-    STA zp_52
+    STA ptr_hi
     BPL B4_BF41
     EOR #$FF
     CLC
     ADC #$01
-    STA zp_52
+    STA ptr_hi
 B4_BF41:
     LDA ram_038B
     STA zp_55
-    ASL zp_52
+    ASL ptr_hi
     JSR F_FCDC
-    INC zp_52
+    INC ptr_hi
     LDX zp_73
     LDA zp_75
     BIT zp_54
     BPL B4_BF62
     SEC
-    SBC zp_52
+    SBC ptr_hi
     BCS B4_BF5C
     LDA #$FF
 B4_BF5C:
@@ -2750,36 +2744,36 @@ B4_BF5C:
     JMP B4_BF6C
 B4_BF62:
     CLC
-    ADC zp_52
+    ADC ptr_hi
     BCC B4_BF69
     LDA #$FF
 B4_BF69:
     STA ram_0200,x
 B4_BF6C:
     LDA zp_53
-    STA zp_52
+    STA ptr_hi
     BPL B4_BF79
     EOR #$FF
     CLC
     ADC #$01
-    STA zp_52
+    STA ptr_hi
 B4_BF79:
     LDA ram_038B
     STA zp_55
-    ASL zp_52
+    ASL ptr_hi
     JSR F_FCDC
-    INC zp_52
+    INC ptr_hi
     LDX zp_73
     LDA zp_76
     BIT zp_53
     BPL B4_BF96
     SEC
-    SBC zp_52
+    SBC ptr_hi
     STA ram_0203,x
     JMP B4_BF9C
 B4_BF96:
     CLC
-    ADC zp_52
+    ADC ptr_hi
     STA ram_0203,x
 B4_BF9C:
     LDA #$28
