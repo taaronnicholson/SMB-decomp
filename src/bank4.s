@@ -1072,10 +1072,10 @@ B4_AEB6:
     .byte $FF,$02,$01,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
     .res 16, $FF
 B4_AEF6:
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC #$C0
-    LDA zp_5F
+    LDA player_y_hi
     SBC #$00
     BCC B4_AEB5
     LDA #$01
@@ -1760,8 +1760,8 @@ B4_B4F7:
     .byte $A5,$60,$38,$E5,$53,$85,$94,$A5,$61,$E9,$00,$85
     STA zp_A5,x
     LSR B4_9685,x
-    LDA zp_5F
-    STA zp_97
+    LDA player_y_hi
+    STA spawn_y_hi
     LDA zp_AB
     STA zp_98
     LDA zp_92
@@ -1976,13 +1976,13 @@ B4_B6B6:
     LDA #$29
     JSR F_CE61
     JSR F_FA3D
-    LDA zp_5E
+    LDA player_y_lo
     STA ent_y_lo,y
-    LDA zp_5F
+    LDA player_y_hi
     STA ent_y_hi,y
-    LDA zp_60
+    LDA player_x_lo
     STA ent_x_lo,y
-    LDA zp_61
+    LDA player_x_hi
     STA ent_x_hi,y
     STY zp_42
     LDA #$EF

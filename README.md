@@ -37,6 +37,20 @@ Main loop per frame: `WaitForNMI`, then (state 3) bank 1 sprite clear → `ReadC
 dispatch (bank 4) → object/collision updates → `Sound_Update`. The NMI handler does OAM DMA,
 applies the `ppuctrl_shadow`/`ppumask_shadow` values and calls one of 6 state handlers.
 
+## Stage records (bank 0 `$8263`)
+`stage_index` selects one of 6 records through a pointer table. Each record is decoded as:
+
+| Offset | Size | Meaning |
+|--------|------|---------|
+| 0 | 4 | spawn X, Y (16-bit each) → `player_x/y_lo/hi`, copied to `spawn_*` |
+| 4 | 1 | destination code (≥ `$E0` = go to stage `code-$E0`) |
+| 5 | 1 | parameter (`$0E` in every entry) |
+| 6 | 1 | unknown per-record byte (skipped by the loader) |
+| 7… | 6 each | entries: X, Y (16-bit), destination code, parameter — indexed as `6*n` from `entry_list` |
+
+Records 0–3 have 11 entries, record 4 has 3, record 5 has none. The meaning of the destination
+codes below `$E0` (which area/room an entry leads to) is not yet confirmed.
+
 ## Shared helpers
 - `SineTable` (bank 0 `$BE8A`): 256 signed entries, amplitude ±64, index = angle (256 = full turn).
   `SinLookup`/`CosLookup` read it from fixed code (cos = index + `$40`); `ScaledMultiply` scales by a radius.

@@ -67,3 +67,34 @@ ram 0600 ent_radius
 ram 0660 ent_dx
 ram 0690 ent_dy
 ram 0570 ent_flags            ; bit tests (e.g. AND #$04) seen in bank 5 movement code
+
+; ---- stage records (bank 0): 6 records, pointer table at $8263 ----
+; record = spawn entry (x16, y16, dest, param) + 1 byte + N entries of (x16, y16, dest, param)
+; dest >= $E0 means "go to stage (dest-$E0)"; the main loop indexes entries as 6*n from record+7
+name 0 826F StageRecord0
+name 0 82B8 StageRecord1
+name 0 8301 StageRecord2
+name 0 834A StageRecord3
+name 0 8393 StageRecord4
+name 0 83AC StageRecord5
+struct 0 826F 1 wwbbb
+struct 0 8276 11 wwbb
+struct 0 82B8 1 wwbbb
+struct 0 82BF 11 wwbb
+struct 0 8301 1 wwbbb
+struct 0 8308 11 wwbb
+struct 0 834A 1 wwbbb
+struct 0 8351 11 wwbb
+struct 0 8393 1 wwbbb
+struct 0 839A 3 wwbb
+struct 0 83AC 1 wwbbb
+ram 0060 player_x_lo          ; loaded from the stage-record spawn entry
+ram 0061 player_x_hi
+ram 005E player_y_lo
+ram 005F player_y_hi
+ram 0094 spawn_x_lo           ; copies of the spawn entry kept for respawn
+ram 0095 spawn_x_hi
+ram 0096 spawn_y_lo
+ram 0097 spawn_y_hi
+ram 009A entry_list_lo        ; pointer to the current record's entry list (record+7)
+ram 009B entry_list_hi

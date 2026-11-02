@@ -1057,25 +1057,25 @@ B3_BD7F:
     JSR F_FA3D
     TYA
     TAX
-    LDA zp_5E
+    LDA player_y_lo
     STA ent_y_lo,x
-    LDA zp_5F
+    LDA player_y_hi
     STA ent_y_hi,x
-    LDA zp_60
+    LDA player_x_lo
     STA ent_x_lo,x
-    LDA zp_61
+    LDA player_x_hi
     STA ent_x_hi,x
     LDA #$02
     STA zp_53
     JSR F_F876
     LDA ent_y_lo,x
-    STA zp_5E
+    STA player_y_lo
     LDA ent_y_hi,x
-    STA zp_5F
+    STA player_y_hi
     LDA ent_x_lo,x
-    STA zp_60
+    STA player_x_lo
     LDA ent_x_hi,x
-    STA zp_61
+    STA player_x_hi
     LDA ent_angle,x
     BMI B3_BDDB
     RTS
@@ -1084,13 +1084,13 @@ B3_BDDB:
     JSR F_CE61
     JMP B3_BDF1
 B3_BDE3:
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC zp_53
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     ADC B3_BE2B,y
-    STA zp_61
+    STA player_x_hi
 B3_BDF1:
     INC zp_81
     RTS

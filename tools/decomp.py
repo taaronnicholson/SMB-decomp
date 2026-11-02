@@ -22,6 +22,7 @@ def bn(t): return FIXED if t == 'f' else int(t)
 # ---- hints ----------------------------------------------------------------
 entries, words_tab, lohi_tab, names, datas = [], [], [], {}, []
 ramnames = {}
+struct_tab = []
 refbank = {}
 dwords_tab = []
 for ln in open(os.path.join(HERE, 'hints.txt')):
@@ -39,6 +40,8 @@ for ln in open(os.path.join(HERE, 'hints.txt')):
         dwords_tab.append((bn(t[1]), int(t[2], 16), int(t[3])))
     elif t[0] == 'refbank':  # refbank <addr> <bank> : fixed-code operands equal to addr refer to this bank
         refbank[int(t[1], 16)] = int(t[2])
+    elif t[0] == 'struct':  # struct <bank> <addr> <n> <fmt>  : n rows; fmt letters w=.word b=.byte
+        struct_tab.append((bn(t[1]), int(t[2], 16), int(t[3]), t[4]))
     elif t[0] == 'ram':   # ram <addr> <name>
         ramnames[int(t[1], 16)] = t[2]
     elif t[0] == 'name':  # name <bank|f> <addr> <label>
@@ -320,6 +323,12 @@ for b, lo, hi, n, tb, adj in lohi_tab:
         if nm:
             lo_cells[(b, lo + i)] = ('<', nm, adj); lo_cells[(b, hi + i)] = ('>', nm, adj)
 
+struct_rows = {}   # (p, addr) -> fmt
+for b, a, n, fmt in struct_tab:
+    sz = sum(2 if c == 'w' else 1 for c in fmt)
+    for i in range(n):
+        struct_rows[(b, a + i * sz)] = fmt
+
 # ---- emit -------------------------------------------------------------------------
 def emit_bank(p):
     base = 0xC000 if p == FIXED else 0x8000
@@ -342,18 +351,31 @@ def emit_bank(p):
         if (p, a) in lo_cells:
             k, nm, adj = lo_cells[(p, a)]
             out.append(f'    .byte {k}({nm}{"-%d" % -adj if adj < 0 else "+%d" % adj if adj else ""})'); a += 1; continue
+        if (p, a) in struct_rows:
+            fmt = struct_rows[(p, a)]; vals = []; q = a
+            for c in fmt:
+                if c == 'w': vals.append(('.word', f'${byte(p, q) | byte(p, q + 1) << 8:04X}')); q += 2
+                else: vals.append(('.byte', f'${byte(p, q):02X}')); q += 1
+            groups = []
+            for d, v in vals:
+                if groups and groups[-1][0] == d: groups[-1][1].append(v)
+                else: groups.append((d, [v]))
+            for d, vs in groups: out.append(f'    {d} ' + ', '.join(vs))
+            a = q; continue
         # long fill runs
         n = 0
         while (a + n < base + 0x4000 and byte(p, a + n) == byte(p, a)
                and (n == 0 or ((p, a + n) not in labels and a + n not in text
-                               and (p, a + n) not in word_cells and (p, a + n) not in lo_cells))):
+                               and (p, a + n) not in word_cells and (p, a + n) not in lo_cells
+                               and (p, a + n) not in struct_rows))):
             n += 1
         if n >= 8:
             out.append(f'    .res {n}, ${byte(p, a):02X}'); a += n; continue
         # data run until next label / instr / special cell
         run = []
         while a < base + 0x4000 and len(run) < 16 and (run == [] or ((p, a) not in labels and a not in text
-                                   and (p, a) not in word_cells and (p, a) not in lo_cells)):
+                                   and (p, a) not in word_cells and (p, a) not in lo_cells
+                                   and (p, a) not in struct_rows)):
             run.append(byte(p, a)); a += 1
         out.append('    .byte ' + ','.join(f'${x:02X}' for x in run))
     return out

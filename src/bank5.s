@@ -142,10 +142,10 @@ B5_80D8:
     LDA ent_x_lo,x
     SEC
     SBC #$10
-    STA zp_60
+    STA player_x_lo
     LDA ent_x_hi,x
     SBC #$00
-    STA zp_61
+    STA player_x_hi
 B5_8121:
     RTS
     .byte $40,$81,$40,$81,$40,$81,$40,$81,$40,$81,$49,$81,$5B,$81,$66,$81
@@ -1555,7 +1555,7 @@ B5_8EAD:
     .byte $01,$00,$01,$00,$01,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00,$00
     .res 9, $00
     .byte $FF,$FE,$D0,$05,$BD,$D0,$05,$29,$01,$D0
-    ORA (zp_60,x)
+    ORA (player_x_lo,x)
     STA zp_53
     LDA ent_x_lo,x
     CLC
@@ -2472,11 +2472,11 @@ B5_A18A:
     BEQ B5_A1E0
     CMP #$FE
     BNE B5_A1CC
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC #$1A
     STA ptr_lo
-    LDA zp_61
+    LDA player_x_hi
     SBC #$00
     STA ptr_hi
     LDA ent_x_lo,x
@@ -2592,11 +2592,11 @@ B5_A336:
 B5_A37C:
     LDA B5_ADFA,y
     STA zp_55
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC ent_y_lo,x
     STA zp_53
-    LDA zp_5F
+    LDA player_y_hi
     SBC ent_y_hi,x
     BCS B5_A3C4
     LDA ent_angle,x
@@ -2659,18 +2659,18 @@ B5_A3DA:
     STA ram_0480,x
     RTS
 B5_A406:
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC #$18
     STA ent_x_lo,x
-    LDA zp_61
+    LDA player_x_hi
     SBC #$00
     STA ent_x_hi,x
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$04
     STA ent_y_lo,x
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ent_y_hi,x
     RTS
@@ -4238,9 +4238,9 @@ B5_B4A8:
     PHA
     LDA #$DE
     PHA
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
     LDA #$01
     STA zp_53
@@ -4256,9 +4256,9 @@ B5_B4D8:
     LDA zp_55
     BEQ B5_B485
     JMP B5_8A9F
-    LDA zp_5E
+    LDA player_y_lo
     STA zp_55
-    LDA zp_5F
+    LDA player_y_hi
     STA zp_56
     LDA #$01
     STA zp_53
@@ -4494,13 +4494,13 @@ B5_B71C:
 B5_B727:
     RTS
 B5_B728:
-    LDA zp_60
+    LDA player_x_lo
     STA zp_53
-    LDA zp_61
+    LDA player_x_hi
     STA zp_54
-    LDA zp_5E
+    LDA player_y_lo
     STA zp_55
-    LDA zp_5F
+    LDA player_y_hi
     STA zp_56
     LDA zp_B1
     AND #$0F

@@ -556,17 +556,17 @@ B1_8422:
 B1_8440:
     LDA ptr_lo
     STA zp_F3,x
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC #$08
     STA zp_E9,x
-    LDA zp_61
+    LDA player_x_hi
     ADC #$00
     STA zp_EB,x
-    LDA zp_5E
+    LDA player_y_lo
     ADC zp_53
     STA zp_E5,x
-    LDA zp_5F
+    LDA player_y_hi
     ADC zp_54
     STA zp_E7,x
     DEC zp_E3,x
@@ -770,18 +770,18 @@ B1_85B6:
     STA zp_E7,x
     JMP B1_8568
 B1_85CE:
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC #$02
     STA zp_E9,x
-    LDA zp_61
+    LDA player_x_hi
     ADC #$00
     STA zp_EB,x
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$04
     STA zp_E5,x
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA zp_E7,x
     LDA #$08
@@ -820,18 +820,18 @@ B1_8622:
     JSR B1_814F
     RTS
 B1_862C:
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC #$0D
     STA zp_E9,x
-    LDA zp_61
+    LDA player_x_hi
     SBC #$00
     STA zp_EB,x
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$04
     STA zp_E5,x
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA zp_E7,x
     INC zp_E3,x
@@ -1034,20 +1034,20 @@ B1_87AE:
     INC ptr_hi
     LDA zp_54
     BPL B1_87CB
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC ptr_hi
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     SBC #$00
     STA ptr_hi
     JMP B1_87D8
 B1_87CB:
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC ptr_hi
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
 B1_87D8:
@@ -1073,20 +1073,20 @@ B1_87F4:
     INC ptr_hi
     LDA zp_53
     BPL B1_880F
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC ptr_hi
     STA zp_E9,x
-    LDA zp_61
+    LDA player_x_hi
     SBC #$00
     STA zp_EB,x
     RTS
 B1_880F:
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC ptr_hi
     STA zp_E9,x
-    LDA zp_61
+    LDA player_x_hi
     ADC #$00
     STA zp_EB,x
     RTS
@@ -1180,11 +1180,11 @@ B1_8889:
     CPY #$C0
     BNE B1_88AF
 B1_88AF:
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC #$03
     STA zp_E9,x
-    LDA zp_61
+    LDA player_x_hi
     ADC #$00
     STA zp_EB,x
     LDA #$FC
@@ -1198,11 +1198,11 @@ B1_88AF:
     LDA #$00
     STA zp_54
 B1_88D0:
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC zp_53
     STA zp_E5,x
-    LDA zp_5F
+    LDA player_y_hi
     ADC zp_54
     STA zp_E7,x
     LDA #$0C
@@ -2322,37 +2322,37 @@ B1_AAA8:
     .byte $FE,$FF,$1E,$18,$02,$FF,$FF,$00,$00,$FE,$FF
     LDA #$02
     STA ram_01A6
-    LDA zp_60
+    LDA player_x_lo
     STA zp_F8
-    LDA zp_61
+    LDA player_x_hi
     STA zp_F9
-    LDA zp_5E
+    LDA player_y_lo
     STA zp_53
     STA zp_FA
-    LDA zp_5F
+    LDA player_y_hi
     STA zp_54
     STA zp_FB
     LDA zp_1D
     CLC
     ADC #$12
-    STA zp_60
+    STA player_x_lo
     LDA zp_1E
     ADC #$01
-    STA zp_61
+    STA player_x_hi
     LDA zp_1B
     CLC
     ADC #$7C
-    STA zp_5E
+    STA player_y_lo
     LDA zp_1C
     ADC #$00
-    STA zp_5F
+    STA player_y_hi
     LDA #$00
     STA zp_55
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC zp_53
     STA zp_53
-    LDA zp_5F
+    LDA player_y_hi
     SBC zp_54
     STA zp_54
     BCS B1_AF74
@@ -2395,15 +2395,15 @@ B1_AF90:
     STA zp_63
     RTS
     JSR B1_B129
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC #$02
     STA zp_53
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     SBC #$00
     STA zp_54
-    STA zp_61
+    STA player_x_hi
     LDA zp_F8
     SEC
     SBC zp_53
@@ -2423,13 +2423,13 @@ B1_AFD2:
     JMP B1_AFF8
 B1_AFE4:
     STA zp_53
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC zp_53
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     SBC #$00
-    STA zp_61
+    STA player_x_hi
     INC zp_D6
     JMP B1_B015
 B1_AFF8:
@@ -2442,13 +2442,13 @@ B1_AFF8:
     RTS
 B1_B005:
     LDY zp_D6
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC B1_B06A,y
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     ADC #$00
-    STA zp_61
+    STA player_x_hi
 B1_B015:
     LDA #$00
     STA zp_56
@@ -2483,22 +2483,22 @@ B1_B048:
     STA zp_D5
     LDA zp_D1
     BEQ B1_B05C
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC zp_56
-    STA zp_5E
-    LDA zp_5F
+    STA player_y_lo
+    LDA player_y_hi
     ADC #$00
-    STA zp_5F
+    STA player_y_hi
     RTS
 B1_B05C:
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC zp_56
-    STA zp_5E
-    LDA zp_5F
+    STA player_y_lo
+    LDA player_y_hi
     SBC #$00
-    STA zp_5F
+    STA player_y_hi
     RTS
 B1_B06A:
     .res 8, $02
@@ -2527,21 +2527,21 @@ B1_B06A:
     STA zp_F5
     LDA #$10
     STA zp_F6
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC #$08
     STA zp_E9
     STA zp_EA
-    LDA zp_61
+    LDA player_x_hi
     SBC #$00
     STA zp_EB
     STA zp_EC
-    LDA zp_5E
+    LDA player_y_lo
     STA zp_E5
     CLC
     ADC #$08
     STA zp_E6
-    LDA zp_5F
+    LDA player_y_hi
     STA zp_E7
     ADC #$00
     STA zp_E8
@@ -2568,27 +2568,27 @@ B1_B151:
     .byte $3E,$3E,$3F,$40,$41,$42,$43,$4C,$4D,$FF
     LDA ram_072D
     BEQ B1_B193
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC ram_0741
-    STA zp_60
+    STA player_x_lo
     LDA #$00
     STA ram_0741
-    LDA zp_61
+    LDA player_x_hi
     ADC ram_0742
-    STA zp_61
+    STA player_x_hi
     LDA #$00
     STA ram_0742
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC ram_0743
-    STA zp_5E
+    STA player_y_lo
     LDA #$00
     STA ram_0743
     INY
-    LDA zp_5F
+    LDA player_y_hi
     ADC ram_0744
-    STA zp_5F
+    STA player_y_hi
     LDA #$00
     STA ram_0744
 B1_B193:
@@ -2605,11 +2605,11 @@ B1_B1A1:
     LDA #$FF
     STA zp_55
     STA zp_56
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC #$63
     STA zp_53
-    LDA zp_61
+    LDA player_x_hi
     SBC #$00
     BCS B1_B1C3
     PHA
@@ -2626,24 +2626,24 @@ B1_B1C3:
     STA ram_0741
     LDA zp_56
     STA ram_0742
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC zp_55
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     ADC zp_56
-    STA zp_61
+    STA player_x_hi
 B1_B1E0:
     LDA #$01
     STA zp_55
     STA zp_53
     LDA #$00
     STA zp_56
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC #$77
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     SBC #$00
     STA ptr_hi
     BCC B1_B205
@@ -2659,13 +2659,13 @@ B1_B205:
     BEQ B1_B21A
     LDA zp_53
     STA zp_66
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC zp_55
-    STA zp_5E
-    LDA zp_5F
+    STA player_y_lo
+    LDA player_y_hi
     ADC zp_56
-    STA zp_5F
+    STA player_y_hi
 B1_B21A:
     LDA zp_73
     ORA ptr_lo
@@ -2706,13 +2706,13 @@ B1_B240:
     STX game_state
 B1_B25B:
     STA zp_65
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC B1_B272,y
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     ADC #$00
-    STA zp_61
+    STA player_x_hi
     INC zp_BD
     LDA #$01
     STA zp_66

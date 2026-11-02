@@ -345,20 +345,20 @@ F_C66C:
     STA ptr_hi
     LDY #$00
     LDA (ptr_lo),y
-    STA zp_60
-    STA zp_94
+    STA player_x_lo
+    STA spawn_x_lo
     INY
     LDA (ptr_lo),y
-    STA zp_61
-    STA zp_95
+    STA player_x_hi
+    STA spawn_x_hi
     INY
     LDA (ptr_lo),y
-    STA zp_5E
-    STA zp_96
+    STA player_y_lo
+    STA spawn_y_lo
     INY
     LDA (ptr_lo),y
-    STA zp_5F
-    STA zp_97
+    STA player_y_hi
+    STA spawn_y_hi
     INY
     LDA (ptr_lo),y
     STA zp_98
@@ -374,10 +374,10 @@ F_C66C:
     LDA ptr_lo
     CLC
     ADC #$01
-    STA zp_9A
+    STA entry_list_lo
     LDA ptr_hi
     ADC #$00
-    STA zp_9B
+    STA entry_list_hi
     LDA #$09
     STA zp_63
     PLA
@@ -2006,11 +2006,11 @@ F_D29A:
     BPL F_D29A
     RTS
 F_D2A1:
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC zp_4B
     STA zp_1D
-    LDA zp_61
+    LDA player_x_hi
     SBC #$00
     STA zp_1E
     BCC F_D2BB
@@ -2046,11 +2046,11 @@ F_D2D3:
     LDA zp_54
     STA zp_1E
 F_D2E3:
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC zp_4A
     STA zp_1B
-    LDA zp_5F
+    LDA player_y_hi
     SBC #$00
     STA zp_1C
     BCS F_D2F8
@@ -3443,10 +3443,10 @@ F_DCA1:
     LDA ram_01B0
     ADC #$00
     STA ptr_hi
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC ptr_lo
-    LDA zp_61
+    LDA player_x_hi
     SBC ptr_hi
     BCC F_DCE0
     LDA zp_63
@@ -3710,9 +3710,9 @@ F_DE75:
     LDA ram_01B0
     SBC #$00
     STA ent_x_hi,y
-    LDA zp_5E
+    LDA player_y_lo
     STA ent_y_lo,y
-    LDA zp_5F
+    LDA player_y_hi
     STA ent_y_hi,y
     LDA #$61
     STA ram_0480,y
@@ -3749,38 +3749,38 @@ F_DED4:
     STA zp_65
     JMP F_E0C6
 F_DEE3:
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC zp_64
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     SBC #$00
     STA ptr_hi
     BCS F_DEFB
     LDA #$00
-    STA zp_5E
-    STA zp_5F
+    STA player_y_lo
+    STA player_y_hi
     JMP F_E035
 F_DEFB:
     LDA ptr_lo
-    STA zp_5E
+    STA player_y_lo
     CLC
 F_DF00:
     ADC #$05
     STA ptr_lo
     LDA ptr_hi
-    STA zp_5F
+    STA player_y_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
     JSR F_EF24
     JSR F_E514
     AND #$01
     BNE F_DF54
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     BEQ F_DF60
     LDA ptr_lo
@@ -3808,11 +3808,11 @@ F_DF3E:
     CMP (ptr_lo),y
     BCS F_DF60
 F_DF54:
-    LDA zp_5E
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC #$0A
-    STA zp_5E
+    STA player_y_lo
     JMP F_E035
 F_DF60:
     JSR F_EEBB
@@ -3831,11 +3831,11 @@ F_DF6F:
     STA zp_66
     JMP F_E0C6
 F_DF7E:
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC zp_64
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     LDA zp_34
@@ -3853,30 +3853,30 @@ F_DF7E:
     BCS F_DFB2
     LDA zp_53
     ADC #$01
-    STA zp_5E
+    STA player_y_lo
     LDA zp_54
     ADC #$00
-    STA zp_5F
+    STA player_y_hi
     JMP F_E035
 F_DFB2:
     LDA ptr_lo
-    STA zp_5E
+    STA player_y_lo
     CLC
     ADC #$0B
     STA ptr_lo
     LDA ptr_hi
-    STA zp_5F
+    STA player_y_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
     JSR F_EF24
     JSR F_E514
     AND #$01
     BNE F_E023
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     BEQ F_E02F
     LDA ptr_lo
@@ -3920,11 +3920,11 @@ F_E003:
     CMP (ptr_lo),y
     BCS F_E02F
 F_E023:
-    LDA zp_5E
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC #$05
-    STA zp_5E
+    STA player_y_lo
     JMP F_E035
 F_E02F:
     JSR F_EEBB
@@ -4039,14 +4039,14 @@ F_E0EF:
 F_E0F8:
     DEC zp_54
 F_E0FA:
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC zp_55
 F_E0FF:
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     ADC zp_54
-    STA zp_61
+    STA player_x_hi
     LDA ent_dy,x
     STA zp_73
     LDA #$00
@@ -4060,19 +4060,19 @@ F_E119:
     STA zp_74
     BIT zp_54
     BPL F_E194
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -4085,11 +4085,11 @@ F_E119:
     STA zp_53
     AND #$01
     BNE F_E170
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -4110,34 +4110,34 @@ F_E179:
 F_E17D:
     RTS
 F_E17E:
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC #$10
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     ADC #$00
-    STA zp_61
+    STA player_x_hi
     LDA #$08
     STA zp_7E
     JMP F_E505
 F_E194:
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC #$10
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     ADC #$00
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -4149,11 +4149,11 @@ F_E194:
     STA zp_53
     AND #$01
     BNE F_E1DF
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -4169,42 +4169,42 @@ F_E1DF:
 F_E1E8:
     CMP #$0F
     BEQ F_E17D
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
 F_E1F0:
-    STA zp_60
+    STA player_x_lo
     LDA #$00
     STA zp_79
     RTS
 F_E1F7:
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC zp_73
-    STA zp_5E
-    LDA zp_5F
+    STA player_y_lo
+    LDA player_y_hi
 F_E200:
     ADC zp_74
-    STA zp_5F
+    STA player_y_hi
     BIT zp_74
     BMI F_E20B
     JMP F_E275
 F_E20B:
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$05
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
     JSR F_EF24
     JSR F_E514
     AND #$01
     BNE F_E269
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     BNE F_E233
     JMP F_E2EB
@@ -4237,29 +4237,29 @@ F_E250:
     BCC F_E269
     JMP F_E2EB
 F_E269:
-    LDA zp_5E
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC #$0A
-    STA zp_5E
+    STA player_y_lo
     JMP F_E2EB
 F_E275:
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$0B
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
     JSR F_EF24
     JSR F_E514
     AND #$01
     BNE F_E2E2
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     BEQ F_E2EB
     LDA ptr_lo
@@ -4300,19 +4300,19 @@ F_E275:
     CMP (ptr_lo),y
     BCS F_E2EB
 F_E2E2:
-    LDA zp_5E
+    LDA player_y_lo
     AND #$F0
 F_E2E6:
     CLC
     ADC #$05
-    STA zp_5E
+    STA player_y_lo
 F_E2EB:
     LDX zp_B6
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$09
     STA zp_55
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA zp_56
     LDA zp_55
@@ -4330,15 +4330,15 @@ F_E2FC:
 F_E310:
     JMP F_E505
 F_E313:
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -4356,19 +4356,19 @@ F_E313:
     STA zp_16
     LDA ptr_hi
     STA zp_17
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
     SEC
     SBC #$10
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     SBC #$00
-    STA zp_61
+    STA player_x_hi
     RTS
 F_E359:
     LDA ram_03A4,x
     JSR F_EEA6
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     AND #$0F
@@ -4382,7 +4382,7 @@ F_E359:
     STA zp_53
     CMP #$FF
     BEQ F_E3A4
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     CLC
     ADC #$10
@@ -4395,19 +4395,19 @@ F_E359:
     STA zp_16
     LDA zp_74
     STA zp_17
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC zp_53
     SEC
     SBC #$10
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     SBC #$00
-    STA zp_61
+    STA player_x_hi
     RTS
 F_E3A4:
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     BEQ F_E3CF
     LDA zp_73
@@ -4425,24 +4425,24 @@ F_E3A4:
     STA zp_16
     LDA ptr_hi
     STA zp_17
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
-    STA zp_60
+    STA player_x_lo
     RTS
 F_E3CF:
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC #$10
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     ADC #$00
     STA zp_56
-    LDA zp_5E
+    LDA player_y_lo
     CLC
 F_E3DF:
     ADC #$08
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -4452,7 +4452,7 @@ F_E3DF:
     STA zp_76
     JSR F_E514
     JSR F_EEA6
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     AND #$0F
@@ -4467,7 +4467,7 @@ F_E408:
     STA zp_53
     CMP #$FF
     BEQ F_E436
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     SEC
     SBC zp_53
@@ -4481,17 +4481,17 @@ F_E421:
     STA zp_16
     LDA zp_76
     STA zp_17
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
     ADC zp_53
-    STA zp_60
+    STA player_x_lo
     RTS
 F_E436:
     LDA zp_73
     STA ptr_lo
     LDA zp_74
     STA ptr_hi
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     BEQ F_E451
     LDA ptr_lo
@@ -4518,7 +4518,7 @@ F_E451:
     BEQ F_E4B4
     LDA zp_53
     JSR F_EEA6
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     AND #$0F
@@ -4532,7 +4532,7 @@ F_E451:
     CLC
     ADC #$10
     STA zp_53
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     SEC
     SBC zp_53
@@ -4546,28 +4546,28 @@ F_E498:
     STA zp_16
     LDA zp_74
     STA zp_17
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC zp_53
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     ADC #$00
-    STA zp_61
+    STA player_x_hi
     RTS
 F_E4B4:
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC #$10
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     ADC #$00
     STA zp_56
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     LDA zp_55
@@ -4584,12 +4584,12 @@ F_E4B4:
     BEQ F_E4E5
     RTS
 F_E4E5:
-    LDA zp_5E
+    LDA player_y_lo
     CLC
 F_E4E8:
     ADC #$06
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -4641,13 +4641,13 @@ F_E53D:
     STX zp_7D
     LDA F_C27D,x
     STA zp_73
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC F_C27D,x
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     ADC #$00
-    STA zp_61
+    STA player_x_hi
     LDA buttons
     AND #$01
     BEQ F_E579
@@ -4733,9 +4733,9 @@ F_E5E0:
     STA zp_65
     LDA #$00
     STA zp_66
-    INC zp_60
+    INC player_x_lo
     BNE F_E5EE
-    INC zp_61
+    INC player_x_hi
 F_E5EE:
     INC zp_73
     LDA zp_73
@@ -4794,22 +4794,22 @@ F_E641:
 F_E64C:
     .byte $A9,$09,$85,$65
 F_E650:
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC #$10
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     ADC #$00
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -4820,11 +4820,11 @@ F_E650:
     JSR F_E514
     AND #$01
     BNE F_E69A
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -4862,9 +4862,9 @@ F_E6D1:
     BNE F_E6D6
     RTS
 F_E6D6:
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
-    STA zp_60
+    STA player_x_lo
 F_E6DC:
     LDA zp_7C
     BEQ F_E722
@@ -4916,15 +4916,15 @@ F_E734:
     LDA #$06
     JSR SwitchBank
     JSR $BA04
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -4938,7 +4938,7 @@ F_E734:
     BNE F_E784
     LDA ram_03A4,x
     JSR F_EEA6
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     AND #$0F
@@ -4956,7 +4956,7 @@ F_E734:
 F_E784:
     JMP F_E87B
 F_E787:
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     CLC
     ADC #$10
@@ -4969,16 +4969,16 @@ F_E787:
     ADC #$04
     CMP zp_54
     BCC F_E784
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC zp_53
     SEC
     SBC #$10
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     SBC #$00
-    STA zp_61
+    STA player_x_hi
     PLA
     STA ptr_hi
     PLA
@@ -5117,7 +5117,7 @@ F_E89D:
 F_E89E:
     LDA ram_03A4,x
     JSR F_EEA6
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     AND #$0F
@@ -5131,7 +5131,7 @@ F_E89E:
     STA zp_53
     CMP #$FF
     BEQ F_E89D
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     SEC
     SBC zp_53
@@ -5142,11 +5142,11 @@ F_E89E:
     ADC #$04
     CMP zp_54
     BCC F_E89D
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC zp_53
-    STA zp_60
+    STA player_x_lo
     LDA zp_75
     STA ptr_lo
     LDA zp_76
@@ -5178,17 +5178,17 @@ F_E90E:
     STA zp_66
     JMP F_E965
 F_E922:
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC zp_8B
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     SBC #$00
     BCS F_E933
     LDA #$00
-    STA zp_60
+    STA player_x_lo
 F_E933:
-    STA zp_61
+    STA player_x_hi
     LDA zp_8F
     AND #$01
     BEQ F_E94E
@@ -5245,10 +5245,10 @@ F_E97F:
     LDA ent_y_hi,y
     SBC #$00
     STA zp_54
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC zp_53
-    LDA zp_5E
+    LDA player_y_lo
     SBC zp_54
     BCC F_EA07
 F_EA00:
@@ -5277,33 +5277,33 @@ F_EA1F:
     LDA zp_54
     ADC zp_56
     STA zp_54
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC zp_53
     STA zp_53
-    LDA zp_5F
+    LDA player_y_hi
     SBC zp_54
     BCS F_EA42
-    INC zp_5E
+    INC player_y_lo
     BNE F_EA3F
-    INC zp_5F
+    INC player_y_hi
 F_EA3F:
     JMP F_EA81
 F_EA42:
     LDA zp_53
     BEQ F_EA81
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC #$01
-    STA zp_5E
-    LDA zp_5F
+    STA player_y_lo
+    LDA player_y_hi
     SBC #$00
-    STA zp_5F
+    STA player_y_hi
     JMP F_EA81
     LDA zp_53
-    STA zp_60
+    STA player_x_lo
     LDA zp_54
-    STA zp_61
+    STA player_x_hi
     LDA #$FA
     STA zp_53
     LDA #$FF
@@ -5319,10 +5319,10 @@ F_EA72:
     LDA ent_y_lo,y
     CLC
     ADC zp_53
-    STA zp_5E
+    STA player_y_lo
     LDA ent_y_hi,y
     ADC zp_54
-    STA zp_5F
+    STA player_y_hi
 F_EA81:
     LDA zp_B1
     LSR a
@@ -5394,34 +5394,34 @@ F_EB2F:
 F_EB3B:
     LDA zp_64
     STA zp_53
-    LDA zp_60
+    LDA player_x_lo
     SEC
     SBC zp_53
     STA ptr_lo
-    LDA zp_61
+    LDA player_x_hi
     SBC #$00
     STA ptr_hi
     BCS F_EB57
     LDA #$00
-    STA zp_60
-    STA zp_61
+    STA player_x_lo
+    STA player_x_hi
     JMP F_EC73
 F_EB57:
     LDA ptr_lo
-    STA zp_60
+    STA player_x_lo
     STA zp_55
     LDA ptr_hi
-    STA zp_61
+    STA player_x_hi
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -5435,11 +5435,11 @@ F_EB57:
     LDA zp_53
     AND #$01
     BNE F_EBAC
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -5455,14 +5455,14 @@ F_EBAC:
     BEQ F_EBB5
     JSR F_F492
 F_EBB5:
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC #$10
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     ADC #$00
-    STA zp_61
+    STA player_x_hi
     JMP F_EC73
 F_EBC7:
     .byte $A5,$12
@@ -5473,11 +5473,11 @@ F_EBC9:
 F_EBD0:
     LDA zp_64
     STA zp_53
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC zp_53
     STA ptr_lo
-    LDA zp_61
+    LDA player_x_hi
     ADC #$00
     STA ptr_hi
     LDA zp_36
@@ -5496,32 +5496,32 @@ F_EBD0:
     LDA zp_53
     CLC
     ADC #$01
-    STA zp_60
+    STA player_x_lo
     STA zp_53
     LDA zp_54
     ADC #$00
-    STA zp_61
+    STA player_x_hi
     STA zp_54
     JMP F_EC73
 F_EC0D:
     LDA ptr_lo
-    STA zp_60
+    STA player_x_lo
     CLC
     ADC #$10
     STA zp_55
     LDA ptr_hi
-    STA zp_61
+    STA player_x_hi
     ADC #$00
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$0A
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -5535,11 +5535,11 @@ F_EC0D:
     LDA zp_53
     AND #$01
     BNE F_EC64
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$06
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -5554,9 +5554,9 @@ F_EC64:
     BEQ F_EC6D
     JSR F_F492
 F_EC6D:
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
-    STA zp_60
+    STA player_x_lo
 F_EC73:
     LDA buttons
     AND #$20
@@ -5571,38 +5571,38 @@ F_EC7C:
 F_EC87:
     LDA zp_64
     STA zp_53
-    LDA zp_5E
+    LDA player_y_lo
     SEC
     SBC zp_53
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     SBC #$00
     STA ptr_hi
     BCS F_ECA3
     LDA #$00
-    STA zp_5E
-    STA zp_5F
+    STA player_y_lo
+    STA player_y_hi
     JMP F_EDE8
 F_ECA3:
     LDA ptr_lo
-    STA zp_5E
+    STA player_y_lo
     CLC
     ADC #$05
     STA ptr_lo
     LDA ptr_hi
-    STA zp_5F
+    STA player_y_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
     JSR F_EF24
     JSR F_F80D
     JSR F_E514
     AND #$01
     BNE F_ED0B
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     BNE F_ECD2
     JMP F_EDE8
@@ -5637,11 +5637,11 @@ F_ECF2:
     BCC F_ED0B
     JMP F_EDE8
 F_ED0B:
-    LDA zp_5E
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC #$0A
-    STA zp_5E
+    STA player_y_lo
     JMP F_EDE8
 F_ED17:
     .byte $A5,$12,$29,$10,$D0,$03,$4C,$E8,$ED,$A5,$66,$D0,$07,$A9,$01,$85
@@ -5651,24 +5651,24 @@ F_ED17:
     .byte $69,$01,$85,$53,$85,$5E,$A5,$54,$69,$00,$85,$54,$85,$5F,$4C
     INX
     SBC $51A5
-    STA zp_5E
+    STA player_y_lo
     CLC
     ADC #$0B
     STA ptr_lo
     LDA ptr_hi
-    STA zp_5F
+    STA player_y_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
     JSR F_EF24
     JSR F_F80D
     JSR F_E514
     AND #$01
     BNE F_EDDF
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     BEQ F_EDE8
     LDA ptr_lo
@@ -5711,24 +5711,24 @@ F_EDDB:
     CMP (ptr_lo),y
     BCS F_EDE8
 F_EDDF:
-    LDA zp_5E
+    LDA player_y_lo
     AND #$F0
     CLC
     ADC #$05
-    STA zp_5E
+    STA player_y_lo
 F_EDE8:
-    LDA zp_60
+    LDA player_x_lo
     CLC
     ADC #$08
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     ADC #$00
     STA zp_56
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
 F_EE00:
     STA ptr_hi
@@ -5742,9 +5742,9 @@ F_EE00:
     STA ptr_hi
     PLA
     STA ptr_lo
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
     JSR F_EF24
     LDA ptr_lo
@@ -5754,7 +5754,7 @@ F_EE24:
     PHA
     JSR F_E514
     JSR F_EEA6
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     AND #$0F
@@ -5763,7 +5763,7 @@ F_EE24:
     STA zp_53
     CMP #$FF
     BEQ F_EE64
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     CLC
     ADC #$10
@@ -5772,16 +5772,16 @@ F_EE24:
     BCC F_EE64
     CMP #$0A
     BCS F_EE64
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC zp_53
     SEC
     SBC #$10
-    STA zp_60
-    LDA zp_61
+    STA player_x_lo
+    LDA player_x_hi
     SBC #$00
-    STA zp_61
+    STA player_x_hi
     PLA
     STA ptr_hi
     PLA
@@ -5802,7 +5802,7 @@ F_EE64:
     LDY #$00
     JSR F_E514
     JSR F_EEA6
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     AND #$0F
@@ -5811,18 +5811,18 @@ F_EE64:
     STA zp_53
     CMP #$FF
     BEQ F_EEA5
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     SEC
     SBC zp_53
     BCC F_EEA5
     CMP #$0A
     BCS F_EEA5
-    LDA zp_60
+    LDA player_x_lo
     AND #$F0
     CLC
     ADC zp_53
-    STA zp_60
+    STA player_x_lo
 F_EEA5:
     RTS
 F_EEA6:
@@ -6042,26 +6042,26 @@ F_F007:
 F_F008:
     ADC zp_53
     CLC
-    ADC zp_9A
+    ADC entry_list_lo
     STA ptr_lo
 F_F00F:
-    LDA zp_9B
+    LDA entry_list_hi
     ADC #$00
     STA ptr_hi
     LDA #$00
     JSR SwitchBankKeepX
     LDY #$00
     LDA (ptr_lo),y
-    STA zp_60
+    STA player_x_lo
     INY
     LDA (ptr_lo),y
-    STA zp_61
+    STA player_x_hi
     INY
     LDA (ptr_lo),y
-    STA zp_5E
+    STA player_y_lo
     INY
     LDA (ptr_lo),y
-    STA zp_5F
+    STA player_y_hi
     INY
     LDA (ptr_lo),y
     STA zp_9C
@@ -6119,15 +6119,15 @@ F_F08F:
     RTS
 F_F090:
     JSR SwitchBankFromAC
-    LDA zp_60
+    LDA player_x_lo
     STA zp_55
-    LDA zp_61
+    LDA player_x_hi
     STA zp_56
-    LDA zp_5E
+    LDA player_y_lo
     CLC
     ADC #$08
     STA ptr_lo
-    LDA zp_5F
+    LDA player_y_hi
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -6140,7 +6140,7 @@ F_F090:
     STA ptr_hi
     PLA
     STA ptr_lo
-    LDA zp_60
+    LDA player_x_lo
     AND #$0F
     BEQ F_F08F
     LDA ptr_lo
@@ -6734,14 +6734,14 @@ F_F548:
     LDA #$01
     STA zp_55
     JSR F_F8C4
-    LDA zp_94
-    STA zp_60
-    LDA zp_95
-    STA zp_61
-    LDA zp_96
-    STA zp_5E
-    LDA zp_97
-    STA zp_5F
+    LDA spawn_x_lo
+    STA player_x_lo
+    LDA spawn_x_hi
+    STA player_x_hi
+    LDA spawn_y_lo
+    STA player_y_lo
+    LDA spawn_y_hi
+    STA player_y_hi
     LDA zp_99
     STA zp_92
     LDA #$11
@@ -7095,13 +7095,13 @@ F_F7E1:
     LDA #$05
     JSR SwitchBank
     JSR F_FA3D
-    LDA zp_60
+    LDA player_x_lo
     STA ent_x_lo,y
-    LDA zp_61
+    LDA player_x_hi
     STA ent_x_hi,y
-    LDA zp_5E
+    LDA player_y_lo
     STA ent_y_lo,y
-    LDA zp_5F
+    LDA player_y_hi
     STA ent_y_hi,y
 F_F800:
     STY zp_42
@@ -7183,13 +7183,13 @@ F_F885:
     JSR F_FA3D
     TYA
     TAX
-    LDA zp_5E
+    LDA player_y_lo
     STA ent_y_lo,x
-    LDA zp_5F
+    LDA player_y_hi
     STA ent_y_hi,x
-    LDA zp_60
+    LDA player_x_lo
     STA ent_x_lo,x
-    LDA zp_61
+    LDA player_x_hi
     STA ent_x_hi,x
     JSR F_F9B6
     PLA
@@ -7220,7 +7220,7 @@ F_F8CE:
     RTS
 F_F8D8:
     .byte $AD,$AA,$01,$18,$65,$55,$8D,$AA
-    ORA (zp_60,x)
+    ORA (player_x_lo,x)
 F_F8E2:
     LDA ram_01AB
     CLC
