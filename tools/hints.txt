@@ -1,0 +1,2 @@
+; extra analysis hints.  entry <bank|f> <addr> [curbank]
+words f C825 6    ; NMI dispatch table
