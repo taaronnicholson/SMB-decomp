@@ -1052,11 +1052,11 @@ F_CB81:
     TYA
     CLC
     ADC ptr_lo
-    STA zp_B4
+    STA area_extra_ptr_lo
     STA ptr_lo
     LDA ptr_hi
     ADC #$00
-    STA zp_B5
+    STA area_extra_ptr_hi
     STA ptr_hi
     LDA ptr_lo
     CLC
@@ -7640,7 +7640,7 @@ GetMapTile:
     LDX zp_42
     LDA zp_08
     JMP ApplyCollectedFlag
-F_FC3F:
+GetTileSpecial:
     LDA zp_55
     PHA
     LDA zp_56
@@ -7684,22 +7684,22 @@ F_FC68:
     LDA #$01
     JSR SwitchBankKeepX
     LDY #$00
-    LDA zp_B4
+    LDA area_extra_ptr_lo
     CLC
-    ADC (zp_B4),y
+    ADC (area_extra_ptr_lo),y
     STA ptr_lo
     INY
-    LDA (zp_B4),y
-    ADC zp_B5
+    LDA (area_extra_ptr_lo),y
+    ADC area_extra_ptr_hi
     STA ptr_hi
     LDY zp_55
     LDA (ptr_lo),y
     CLC
-    ADC zp_B4
+    ADC area_extra_ptr_lo
     PHA
     INY
     LDA (ptr_lo),y
-    ADC zp_B5
+    ADC area_extra_ptr_hi
     STA ptr_hi
     PLA
     STA ptr_lo

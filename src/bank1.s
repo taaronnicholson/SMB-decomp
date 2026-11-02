@@ -1150,7 +1150,7 @@ B1_887B:
     RTS
 B1_8889:
     CPY #$C0
-    LDY zp_B4,x
+    LDY area_extra_ptr_lo,x
     LDY zp_A4
     LDY zp_98
     TYA
@@ -1171,7 +1171,7 @@ B1_8889:
     TAY
     TAY
     TAY
-    LDY zp_B4
+    LDY area_extra_ptr_lo
     LDY zp_B0,x
     CPY #$C0
     BNE B1_88AF
@@ -3552,7 +3552,7 @@ AreaSpawnPtrs:
     .word AreaSpawn14
     .word AreaSpawn15
     .byte $4D,$AB
-; AreaSpawn0: spawn data for area(s) 18: 0 setup actions, 9 entities, 15 3-byte entries, 2 one-time objects
+; AreaSpawn0: spawn data for area(s) 18: 0 setup actions, 9 entities, 15 look-ahead entries, 2 one-time objects, 13 rows
 AreaSpawn0:
     .byte $FF
     .byte $75
@@ -3612,19 +3612,13 @@ AreaSpawn0:
     .word $0070, $01D0
     .byte $18, $00
     .byte $FF
-    .byte $34,$00,$34,$00,$34,$00,$34,$00,$34,$00,$34,$00,$02,$00,$34,$00
-    .byte $09,$00,$10,$00,$1A,$00,$27,$00,$2E,$00
-; AreaSpawn1: spawn data for area(s) 19: 0 setup actions, 0 entities, 0 3-byte entries, 1 one-time objects
+    .word $0034, $0034, $0034, $0034, $0034, $0034, $0002, $0034, $0009, $0010, $001A, $0027, $002E
+; AreaSpawn1: spawn data for area(s) 19: 0 setup actions, 0 entities
 AreaSpawn1:
     .byte $FF
     .byte $FF
-    .word $000C
-    .byte $FE
-    .byte $01, $08
-    .word $0060, $00B8
-    .byte $10, $00
-    .byte $FF
-; AreaSpawn2: spawn data for area(s) 20: 0 setup actions, 16 entities, 24 3-byte entries, 0 one-time objects
+    .byte $0C,$00,$FE,$01,$08,$60,$00,$B8,$00,$10,$00,$FF
+; AreaSpawn2: spawn data for area(s) 20: 0 setup actions, 16 entities, 24 look-ahead entries, 0 one-time objects, 49 rows
 AreaSpawn2:
     .byte $FF
     .byte $56
@@ -3714,14 +3708,8 @@ AreaSpawn2:
     .byte $30, $0B, $06
     .byte $FE
     .byte $FF
-    .byte $55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00
-    .byte $55,$00,$55,$00,$55,$00,$55,$00,$02,$00,$55,$00,$55,$00,$06,$00
-    .byte $55,$00,$55,$00,$0D,$00,$55,$00,$14,$00,$18,$00,$1F,$00,$55,$00
-    .byte $55,$00,$55,$00,$55,$00,$55,$00,$26,$00,$55,$00,$2D,$00,$55,$00
-    .byte $55,$00,$55,$00,$55,$00,$55,$00,$34,$00,$55,$00,$55,$00,$55,$00
-    .byte $3B,$00,$55,$00,$55,$00,$55,$00,$55,$00,$42,$00,$55,$00,$55,$00
-    .byte $4F,$00
-; AreaSpawn3: spawn data for area(s) 3: 0 setup actions, 10 entities, 7 3-byte entries, 0 one-time objects
+    .word $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0002, $0055, $0055, $0006, $0055, $0055, $000D, $0055, $0014, $0018, $001F, $0055, $0055, $0055, $0055, $0055, $0026, $0055, $002D, $0055, $0055, $0055, $0055, $0055, $0034, $0055, $0055, $0055, $003B, $0055, $0055, $0055, $0055, $0042, $0055, $0055, $004F
+; AreaSpawn3: spawn data for area(s) 3: 0 setup actions, 10 entities, 7 look-ahead entries, 0 one-time objects, 42 rows
 AreaSpawn3:
     .byte $FF
     .byte $31
@@ -3770,23 +3758,13 @@ AreaSpawn3:
     .byte $17, $09, $02
     .byte $FE
     .byte $FF
-    .byte $1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$02,$00,$1C,$00,$1C,$00
-    .byte $1C,$00,$1C,$00,$1C,$00,$06,$00,$0A,$00,$1C,$00,$1C,$00,$1C,$00
-    .byte $1C,$00,$0E,$00,$1C,$00,$1C,$00,$12,$00,$1C,$00,$1C,$00,$19,$00
-    .byte $1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00
-    .byte $1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00
-    .byte $1C,$00,$1C,$00
-; AreaSpawn4: spawn data for area(s) 7: 0 setup actions, 0 entities, 0 3-byte entries, 1 one-time objects
+    .word $001C, $001C, $001C, $001C, $001C, $0002, $001C, $001C, $001C, $001C, $001C, $0006, $000A, $001C, $001C, $001C, $001C, $000E, $001C, $001C, $0012, $001C, $001C, $0019, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C, $001C
+; AreaSpawn4: spawn data for area(s) 7: 0 setup actions, 0 entities
 AreaSpawn4:
     .byte $FF
     .byte $FF
-    .word $000C
-    .byte $FE
-    .byte $01, $08
-    .word $0040, $0060
-    .byte $10, $00
-    .byte $FF
-; AreaSpawn5: spawn data for area(s) 8: 0 setup actions, 12 entities, 4 3-byte entries, 1 one-time objects
+    .byte $0C,$00,$FE,$01,$08,$40,$00,$60,$00,$10,$00,$FF
+; AreaSpawn5: spawn data for area(s) 8: 0 setup actions, 12 entities, 4 look-ahead entries, 1 one-time objects, 12 rows
 AreaSpawn5:
     .byte $FF
     .byte $19
@@ -3839,9 +3817,8 @@ AreaSpawn5:
     .word $0060, $0150
     .byte $08, $00
     .byte $FF
-    .byte $11,$00,$11,$00,$11,$00,$11,$00,$11,$00,$11,$00,$02,$00,$11,$00
-    .byte $06,$00,$0A,$00,$11,$00,$0E,$00
-; AreaSpawn6: spawn data for area(s) 9: 0 setup actions, 7 entities, 2 3-byte entries, 2 one-time objects
+    .word $0011, $0011, $0011, $0011, $0011, $0011, $0002, $0011, $0006, $000A, $0011, $000E
+; AreaSpawn6: spawn data for area(s) 9: 0 setup actions, 7 entities, 2 look-ahead entries, 2 one-time objects, 29 rows
 AreaSpawn6:
     .byte $FF
     .byte $19
@@ -3878,11 +3855,8 @@ AreaSpawn6:
     .word $0200, $0020
     .byte $28, $00
     .byte $FF
-    .byte $09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00
-    .byte $09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00
-    .byte $09,$00,$09,$00,$09,$00,$09,$00,$02,$00,$09,$00,$09,$00,$09,$00
-    .byte $09,$00,$09,$00,$09,$00,$09,$00,$06,$00
-; AreaSpawn7: spawn data for area(s) 10: 1 setup actions, 15 entities, 23 3-byte entries, 1 one-time objects
+    .word $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0002, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0006
+; AreaSpawn7: spawn data for area(s) 10: 1 setup actions, 15 entities, 23 look-ahead entries, 1 one-time objects, 70 rows
 AreaSpawn7:
     .byte $1D, $FF
     .byte $31
@@ -3974,16 +3948,8 @@ AreaSpawn7:
     .word $0360, $0060
     .byte $38, $00
     .byte $FF
-    .byte $55,$00,$55,$00,$55,$00,$55,$00,$02,$00,$55,$00,$55,$00,$55,$00
-    .byte $55,$00,$55,$00,$55,$00,$09,$00,$55,$00,$55,$00,$55,$00,$55,$00
-    .byte $55,$00,$55,$00,$10,$00,$55,$00,$55,$00,$14,$00,$55,$00,$55,$00
-    .byte $55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$1B,$00,$55,$00
-    .byte $55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$1F,$00,$55,$00,$55,$00
-    .byte $55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$23,$00,$55,$00,$27,$00
-    .byte $2E,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00
-    .byte $55,$00,$55,$00,$32,$00,$55,$00,$39,$00,$55,$00,$40,$00,$55,$00
-    .byte $55,$00,$55,$00,$44,$00,$55,$00,$4B,$00,$4F,$00
-; AreaSpawn8: spawn data for area(s) 11: 0 setup actions, 16 entities, 5 3-byte entries, 3 one-time objects
+    .word $0055, $0055, $0055, $0055, $0002, $0055, $0055, $0055, $0055, $0055, $0055, $0009, $0055, $0055, $0055, $0055, $0055, $0055, $0010, $0055, $0055, $0014, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $001B, $0055, $0055, $0055, $0055, $0055, $0055, $001F, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0023, $0055, $0027, $002E, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0055, $0032, $0055, $0039, $0055, $0040, $0055, $0055, $0055, $0044, $0055, $004B, $004F
+; AreaSpawn8: spawn data for area(s) 11: 0 setup actions, 16 entities, 5 look-ahead entries, 3 one-time objects, 29 rows
 AreaSpawn8:
     .byte $FF
     .byte $4E
@@ -4055,11 +4021,8 @@ AreaSpawn8:
     .word $0040, $0050
     .byte $18, $00
     .byte $FF
-    .byte $14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00
-    .byte $14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00
-    .byte $14,$00,$14,$00,$14,$00,$02,$00,$06,$00,$0D,$00,$14,$00,$14,$00
-    .byte $14,$00,$14,$00,$14,$00,$14,$00,$11,$00
-; AreaSpawn9: spawn data for area(s) 12: 0 setup actions, 2 entities, 0 3-byte entries, 1 one-time objects
+    .word $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0014, $0002, $0006, $000D, $0014, $0014, $0014, $0014, $0014, $0014, $0011
+; AreaSpawn9: spawn data for area(s) 12: 0 setup actions, 2 entities, 0 look-ahead entries, 1 one-time objects, 18 rows
 AreaSpawn9:
     .byte $FF
     .byte $50
@@ -4075,10 +4038,8 @@ AreaSpawn9:
     .word $0040, $00D0
     .byte $30, $00
     .byte $FF
-    .byte $01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00
-    .byte $01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00
-    .byte $01,$00,$01,$00
-; AreaSpawn10: spawn data for area(s) 13: 0 setup actions, 2 entities, 8 3-byte entries, 1 one-time objects
+    .word $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001, $0001
+; AreaSpawn10: spawn data for area(s) 13: 0 setup actions, 2 entities, 8 look-ahead entries, 1 one-time objects, 17 rows
 AreaSpawn10:
     .byte $FF
     .byte $2E
@@ -4105,10 +4066,8 @@ AreaSpawn10:
     .word $00E0, $0080
     .byte $10, $00
     .byte $FF
-    .byte $1D,$00,$1D,$00,$1D,$00,$02,$00,$1D,$00,$1D,$00,$1D,$00,$1D,$00
-    .byte $1D,$00,$1D,$00,$1D,$00,$1D,$00,$09,$00,$10,$00,$1D,$00,$1D,$00
-    .byte $17,$00
-; AreaSpawn11: spawn data for area(s) 15: 0 setup actions, 2 entities, 2 3-byte entries, 0 one-time objects
+    .word $001D, $001D, $001D, $0002, $001D, $001D, $001D, $001D, $001D, $001D, $001D, $001D, $0009, $0010, $001D, $001D, $0017
+; AreaSpawn11: spawn data for area(s) 15: 0 setup actions, 2 entities, 2 look-ahead entries, 0 one-time objects, 18 rows
 AreaSpawn11:
     .byte $FF
     .byte $83
@@ -4124,10 +4083,8 @@ AreaSpawn11:
     .byte $11, $04, $04
     .byte $FE
     .byte $FF
-    .byte $09,$00,$09,$00,$09,$00,$09,$00,$02,$00,$09,$00,$09,$00,$09,$00
-    .byte $09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00
-    .byte $09,$00,$06,$00
-; AreaSpawn12: spawn data for area(s) 14: 0 setup actions, 14 entities, 15 3-byte entries, 2 one-time objects
+    .word $0009, $0009, $0009, $0009, $0002, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0009, $0006
+; AreaSpawn12: spawn data for area(s) 14: 0 setup actions, 14 entities, 15 look-ahead entries, 2 one-time objects, 23 rows
 AreaSpawn12:
     .byte $FF
     .byte $83
@@ -4201,10 +4158,8 @@ AreaSpawn12:
     .word $0140, $03C0
     .byte $28, $00
     .byte $FF
-    .byte $33,$00,$33,$00,$33,$00,$33,$00,$33,$00,$02,$00,$33,$00,$06,$00
-    .byte $0D,$00,$33,$00,$33,$00,$33,$00,$33,$00,$33,$00,$33,$00,$33,$00
-    .byte $33,$00,$33,$00,$14,$00,$33,$00,$33,$00,$33,$00,$24,$00
-; AreaSpawn13: spawn data for area(s) 21: 0 setup actions, 17 entities, 25 3-byte entries, 0 one-time objects
+    .word $0033, $0033, $0033, $0033, $0033, $0002, $0033, $0006, $000D, $0033, $0033, $0033, $0033, $0033, $0033, $0033, $0033, $0033, $0014, $0033, $0033, $0033, $0024
+; AreaSpawn13: spawn data for area(s) 21: 0 setup actions, 17 entities, 25 look-ahead entries, 0 one-time objects, 32 rows
 AreaSpawn13:
     .byte $FF
     .byte $2E
@@ -4299,11 +4254,8 @@ AreaSpawn13:
     .byte $1F, $10, $02
     .byte $FE
     .byte $FF
-    .byte $59,$00,$59,$00,$59,$00,$59,$00,$59,$00,$59,$00,$02,$00,$59,$00
-    .byte $09,$00,$59,$00,$0D,$00,$11,$00,$15,$00,$59,$00,$59,$00,$19,$00
-    .byte $20,$00,$59,$00,$59,$00,$59,$00,$59,$00,$59,$00,$59,$00,$27,$00
-    .byte $2E,$00,$59,$00,$35,$00,$39,$00,$59,$00,$59,$00,$46,$00,$53,$00
-; AreaSpawn14: spawn data for area(s) 22: 1 setup actions, 0 entities, 3 3-byte entries, 0 one-time objects
+    .word $0059, $0059, $0059, $0059, $0059, $0059, $0002, $0059, $0009, $0059, $000D, $0011, $0015, $0059, $0059, $0019, $0020, $0059, $0059, $0059, $0059, $0059, $0059, $0027, $002E, $0059, $0035, $0039, $0059, $0059, $0046, $0053
+; AreaSpawn14: spawn data for area(s) 22: 1 setup actions, 0 entities, 3 look-ahead entries, 0 one-time objects, 30 rows
 AreaSpawn14:
     .byte $0B, $FF
     .byte $FF
@@ -4314,13 +4266,10 @@ AreaSpawn14:
     .byte $2A, $07, $14
     .byte $FE
     .byte $FF
-    .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00
-    .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00
-    .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00
-    .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00
-    .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$02,$00,$0C,$00,$0C,$00,$0C,$00
-    .byte $0C,$00,$0C,$00,$09,$00
-; AreaSpawn15: spawn data for area(s) 23: 0 setup actions, 20 entities, 43 3-byte entries, 1 one-time objects
+    .word $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C
+    .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$02,$00,$0C,$00
+    .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$09,$00
+; AreaSpawn15: spawn data for area(s) 23: 0 setup actions, 20 entities, 43 look-ahead entries, 1 one-time objects, 14 rows
 AreaSpawn15:
     .byte $FF
     .byte $56
@@ -4441,9 +4390,8 @@ B1_AAA8:
     .word $0070, $0220
     .byte $08, $00
     .byte $FF
-    .byte $8A,$00,$8A,$00,$8A,$00,$8A,$00,$8A,$00,$02,$00,$15,$00,$2E,$00
-    .byte $35,$00,$45,$00,$8A,$00,$49,$00,$62,$00,$78,$00
-; AreaSpawn16: spawn data for area(s) 0: 0 setup actions, 9 entities, 4 3-byte entries, 1 one-time objects
+    .word $008A, $008A, $008A, $008A, $008A, $0002, $0015, $002E, $0035, $0045, $008A, $0049, $0062, $0078
+; AreaSpawn16: spawn data for area(s) 0: 0 setup actions, 9 entities, 4 look-ahead entries, 1 one-time objects, 72 rows
 AreaSpawn16:
     .byte $FF
     .byte $2E
@@ -4485,19 +4433,11 @@ AreaSpawn16:
     .word $00E0, $0050
     .byte $10, $00
     .byte $FF
-    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
-    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$02,$00,$0F,$00,$0F,$00
-    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$09,$00,$0F,$00,$0F,$00
-    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
-    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
-    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
-    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
-    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
-    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+    .word $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $0002, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $0009, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F
     .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
     .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
     .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
-; AreaSpawn17: spawn data for area(s) 1: 0 setup actions, 12 entities, 5 3-byte entries, 0 one-time objects
+; AreaSpawn17: spawn data for area(s) 1: 0 setup actions, 12 entities, 5 look-ahead entries, 0 one-time objects, 24 rows
 AreaSpawn17:
     .byte $FF
     .byte $2E
@@ -4547,10 +4487,8 @@ AreaSpawn17:
     .byte $14, $0F, $08
     .byte $FE
     .byte $FF
-    .byte $13,$00,$13,$00,$13,$00,$13,$00,$13,$00,$13,$00,$02,$00,$13,$00
-    .byte $13,$00,$13,$00,$13,$00,$09,$00,$13,$00,$13,$00,$13,$00,$13,$00
-    .byte $13,$00,$13,$00,$13,$00,$13,$00,$10,$00,$13,$00,$13,$00,$13,$00
-; AreaSpawn18: spawn data for area(s) 16: 0 setup actions, 18 entities, 29 3-byte entries, 0 one-time objects
+    .word $0013, $0013, $0013, $0013, $0013, $0013, $0002, $0013, $0013, $0013, $0013, $0009, $0013, $0013, $0013, $0013, $0013, $0013, $0013, $0013, $0010, $0013, $0013, $0013
+; AreaSpawn18: spawn data for area(s) 16: 0 setup actions, 18 entities, 29 look-ahead entries, 0 one-time objects, 68 rows
 AreaSpawn18:
     .byte $FF
     .byte $51
@@ -4656,56 +4594,38 @@ AreaSpawn18:
     .byte $43, $09, $02
     .byte $FE
     .byte $FF
-    .byte $69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$02,$00
-    .byte $69,$00,$69,$00,$09,$00,$69,$00,$69,$00,$16,$00,$69,$00,$69,$00
-    .byte $69,$00,$69,$00,$1D,$00,$21,$00,$69,$00,$69,$00,$69,$00,$69,$00
-    .byte $28,$00,$2F,$00,$69,$00,$69,$00,$69,$00,$36,$00,$3A,$00,$3E,$00
-    .byte $69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$45,$00,$69,$00,$49,$00
-    .byte $69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$4D,$00,$69,$00,$69,$00
-    .byte $69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$54,$00
-    .byte $5B,$00,$69,$00,$69,$00,$5F,$00,$69,$00,$69,$00,$69,$00,$69,$00
-    .byte $69,$00,$69,$00,$69,$00,$66,$00
-; AreaSpawn19: spawn data for area(s) 17: 0 setup actions, 1 entities, 0 3-byte entries, 0 one-time objects
+    .word $0069, $0069, $0069, $0069, $0069, $0069, $0069, $0002, $0069, $0069, $0009, $0069, $0069, $0016, $0069, $0069, $0069, $0069, $001D, $0021, $0069, $0069, $0069, $0069, $0028, $002F, $0069, $0069, $0069, $0036, $003A, $003E, $0069, $0069, $0069, $0069, $0069, $0045, $0069, $0049, $0069, $0069, $0069, $0069, $0069, $004D, $0069, $0069, $0069, $0069, $0069, $0069, $0069, $0069, $0069, $0054, $005B, $0069, $0069, $005F, $0069, $0069, $0069, $0069, $0069, $0069, $0069, $0066
+; AreaSpawn19: spawn data for area(s) 17: 0 setup actions, 1 entities
 AreaSpawn19:
     .byte $FF
     .byte $31
     .word $02D0, $00D9
     .byte $68, $00, $00, $00, $00
     .byte $FF
-    .word $0004
-    .byte $FE
-    .byte $FF
-; AreaSpawn20: spawn data for area(s) 5: 1 setup actions, 0 entities, 0 3-byte entries, 0 one-time objects
+    .byte $04,$00,$FE,$FF
+; AreaSpawn20: spawn data for area(s) 5: 1 setup actions, 0 entities
 AreaSpawn20:
     .byte $04, $FF
     .byte $FF
-    .word $0000
-    .byte $FE
-    .byte $FF
-; AreaSpawn21: spawn data for area(s) 4: 6 setup actions, 0 entities, 0 3-byte entries, 0 one-time objects
+    .byte $00,$00,$FE,$FF
+; AreaSpawn21: spawn data for area(s) 4: 6 setup actions, 0 entities
 AreaSpawn21:
     .byte $0F, $06, $02, $07, $18, $15, $FF
     .byte $FF
-    .word $0000
-    .byte $FE
-    .byte $FF
-; AreaSpawn22: spawn data for area(s) 6: 1 setup actions, 1 entities, 0 3-byte entries, 0 one-time objects
+    .byte $00,$00,$FE,$FF
+; AreaSpawn22: spawn data for area(s) 6: 1 setup actions, 1 entities
 AreaSpawn22:
     .byte $03, $FF
     .byte $92
     .word $0400, $0020
     .byte $C0, $0B, $00, $00, $00
     .byte $FF
-    .word $0000
-    .byte $FE
-    .byte $FF
-; AreaSpawn23: spawn data for area(s) 2: 3 setup actions, 0 entities, 0 3-byte entries, 0 one-time objects
+    .byte $00,$00,$FE,$FF
+; AreaSpawn23: spawn data for area(s) 2: 3 setup actions, 0 entities
 AreaSpawn23:
     .byte $1E, $18, $02, $FF
     .byte $FF
-    .word $0000
-    .byte $FE
-    .byte $FF
+    .byte $00,$00,$FE,$FF
     LDA #$02
     STA ram_01A6
     LDA player_y_lo

@@ -85,10 +85,15 @@ the entity arrays (`ent_type`, `ent_y_lo/hi`, `ent_x_lo/hi`, `ent_flags`, `ent_p
 `ent_param2`). Y is the long axis for tall areas: coordinates are (Y, X) throughout, like the stage-record spawn points
 (an earlier version of the entity names had X and Y swapped). Area 0 has 9 entities (types `$2E`, `$51`, `$4E`×7).
 Some pointers sit right before code in bank 1, so only the parsed span is claimed as data.
-After the entity records each area has: a word (`zp_B4`) giving the offset to a per-row table read by `F_FC3F` (used by the
-patrol step to look ahead; not decoded), 3-byte entries grouped by `$FF` and ended by `$FE` (not decoded), and **one-time objects**:
-8-byte records `flag bit, type, Y, X, flags, frame` ended by `$FF`, skipped when their bit in `onetime_flags` (`$0733`) is set.
-Area 0's one is the type `$08` hidden bonus item at (Y `$E0`, X `$50`), inside a dotted-outline secret area of the map.
+After the entity records each area has a block at `area_extra_ptr` (`$B4/$B5`): a word giving the offset to a **row table**, then
+**special-tile entries** `kind, column, value` in lists ended by `$FF` (the whole group ended by `$FE`), then the **one-time
+objects** (8-byte records `flag bit, type, Y, X, flags, frame`, ended by `$FF`; skipped when their bit in `onetime_flags`
+(`$0733`) is set), and finally the row table itself: one word per map row, an offset (from the start of the block) to that
+row's entry list (rows without entries point at the `$FE`). `GetTileSpecial` (`F_FC3F`) takes a map address, works out
+row/column, finds the entry whose column matches and returns `value*2` (0 when none). Values seen: 2-8 and 16-21 (214
+entries over the 24 areas); patrol enemies (`Ent_PatrolStep`) treat `$04` and `$10` (values 2 and 8) as "turn around here"
+markers. The kind byte is not used by the lookup. Area 0's one-time object is the type `$08` hidden bonus item at (Y `$E0`,
+X `$50`), inside a dotted-outline secret area of the map.
 `build/maps/area_NN_spawns.png` marks spawn records (red), balloons (cyan) and one-time objects (green). `tools/render_maps.py` also writes `build/maps/area_NN_spawns.png` with each record drawn at (X, Y-32) and labelled with
 its type. Observed in the emulator at the start of stage 0 (area 0): slots 0-2 hold type `01` (X = `$30`, `$30`, `$80`;
 slots 0-1 are not in the spawn list, so they are created elsewhere), slot 8 type `2E`, slot 9 type `51` (it changes to `52`

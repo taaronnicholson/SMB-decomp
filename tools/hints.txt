@@ -170,3 +170,8 @@ ram 00D7 items_found             ; hidden bonus items found (the "FOUND n" messa
 name f CCC1 SpawnBalloon          ; called for each map tile $C4: reuses or takes a free slot 0-7, type $01, ent_angle = area
 name f CA6F ScanMapForBalloons    ; level load: walks every map tile of the area
 ram 0733 onetime_flags            ; bitmap: one-time objects (from the area spawn data) already taken
+
+; ---- per-tile special codes ----
+name f FC3F GetTileSpecial       ; ptr = map address -> A = special value*2 for that tile (0 if none), from the area's lookup block
+ram 00B4 area_extra_ptr_lo       ; start of the area's lookup block (after the entity records)
+ram 00B5 area_extra_ptr_hi

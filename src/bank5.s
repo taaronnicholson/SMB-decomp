@@ -258,7 +258,7 @@ B5_81F8:
     LDA ent_x_lo,x
     AND #$0F
     BNE B5_822A
-    JSR F_FC3F
+    JSR GetTileSpecial
     LSR a
     BEQ B5_822A
     CMP #$0A
@@ -352,7 +352,7 @@ B5_82A4:
     LDA ent_x_lo,x
     AND #$0F
     BNE B5_82CB
-    JSR F_FC3F
+    JSR GetTileSpecial
     LSR a
     BEQ B5_82CB
     CMP #$0A
@@ -424,7 +424,7 @@ B5_832E:
     LDA ent_y_lo,x
     AND #$0F
     BNE B5_835A
-    JSR F_FC3F
+    JSR GetTileSpecial
     LSR a
     BEQ B5_835A
     CMP #$0A
@@ -506,7 +506,7 @@ B5_83C9:
     LDA ent_y_lo,x
     AND #$0F
     BNE B5_83FA
-    JSR F_FC3F
+    JSR GetTileSpecial
     LSR a
     BEQ B5_83FA
     CMP #$0A
@@ -4951,7 +4951,7 @@ B5_AC3F:
     STA ptr_lo
     LDA zp_78
     STA ptr_hi
-    JSR F_FC3F
+    JSR GetTileSpecial
     AND #$FE
     CMP #$10
     BEQ B5_AC9A
@@ -4967,7 +4967,7 @@ B5_AC3F:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_FC3F
+    JSR GetTileSpecial
     AND #$FE
     CMP #$10
     BEQ B5_AC9A
@@ -4986,7 +4986,7 @@ B5_ACA5:
     STA ptr_lo
     LDA zp_78
     STA ptr_hi
-    JSR F_FC3F
+    JSR GetTileSpecial
     AND #$FE
     CMP #$10
     BEQ B5_AC9A
@@ -5002,7 +5002,7 @@ B5_ACA5:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_FC3F
+    JSR GetTileSpecial
     AND #$FE
     CMP #$10
     BEQ B5_AC9A
@@ -5465,7 +5465,7 @@ B5_B14F:
     STA ptr_lo
     LDA zp_78
     STA ptr_hi
-    JSR F_FC3F
+    JSR GetTileSpecial
     CMP #$10
     BEQ B5_B147
     CMP #$06
@@ -5480,7 +5480,7 @@ B5_B14F:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_FC3F
+    JSR GetTileSpecial
     CMP #$10
     BEQ B5_B147
     CMP #$06
@@ -5555,7 +5555,7 @@ B5_B200:
     STA ptr_lo
     LDA zp_78
     STA ptr_hi
-    JSR F_FC3F
+    JSR GetTileSpecial
     AND #$FE
     CMP #$10
     BEQ B5_B1F8
@@ -5571,7 +5571,7 @@ B5_B200:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_FC3F
+    JSR GetTileSpecial
     AND #$FE
     CMP #$10
     BEQ B5_B1F8
