@@ -57,12 +57,17 @@ applies the `ppuctrl_shadow`/`ppumask_shadow` values and calls one of 6 state ha
 Records 0–3 have 11 entries, record 4 has 3, record 5 has none. The six starting areas are 0, 16, 3, 10, 21 and 6.
 
 **Areas** (`LoadArea` = `F_D05C`, A = area number): `AreaHeaderPtrLo/Hi` (`$83B9`/`$83D1`) point to a 6-byte
-12-byte `AreaHeaderN` (song number, map address, log2 width, height, palette set, object pointer, two more bytes, initial `game_state`, tileset id) and `AreaMapBank` (`$83E9`) gives the PRG
+12-byte `AreaHeaderN` (song number, map address, log2 width, height, palette set, collectible-table pointer, two more bytes, initial `game_state`, tileset id) and `AreaMapBank` (`$83E9`) gives the PRG
 bank of the map. A map is one byte per 16×16 tile, `8 << log2width` tiles wide (16, 32, 64 or 128), `height` rows tall,
 row-major, and the levels scroll **vertically**. The address of tile (x, y) is `map_ptr + (x>>4) + (y>>4)*width`
 (`MapPtrFromPos`); `GetMapTile` reads it. The first two rows are phantom (above the playfield, not stored), so the real
 data starts at `base + 2*width` (area 23's base is `$7F80`, just below its bank). Maps live in bank 3 (areas 0-5, 7-10,
 12-20), bank 1 (6, 11), bank 4 (21, 23) and bank 6 (22). `tools/extract_maps.py` dumps them to `build/maps/`.
+**Collectibles:** header bytes 6-7 point (in bank 0) to a `CollectTableN`: one word per map row from row 2 (an offset
+from the table start, 0 = none), then per-row lists of (column, flag index) pairs. Tile ids `$80`-`$BB` are collectible
+tiles; `GetCollectibleBit` finds the flag index for a map cell and the game keeps collected state in `collected_flags`
+(`$0100`, per placement) and `collected_by_kind` (`$9D`, per tile kind), so picked-up items stay gone (`ApplyCollectedFlag`).
+Enemy/object placement is not decoded yet.
 `tile_props` (`$03A4`, 120 bytes, loaded per tileset) holds tile flags; bit 0 means solid.
 
 **Tileset records** (bank 0, 8 bytes at `$8C9B + 8*t`, `t` = header byte 11, bank of the compressed blocks in `B0_8C95[t]`):

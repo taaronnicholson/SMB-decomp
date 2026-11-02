@@ -2176,7 +2176,7 @@ F_D381:
     JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
-    JSR F_DBB7
+    JSR FilterCollectedTile
     TAY
     LDA #$00
     JSR SwitchBankKeepX
@@ -2204,7 +2204,7 @@ F_D3B7:
     JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
-    JSR F_DBB7
+    JSR FilterCollectedTile
     TAY
     LDA #$00
     JSR SwitchBankKeepX
@@ -2247,7 +2247,7 @@ F_D40B:
     JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
-    JSR F_DBB7
+    JSR FilterCollectedTile
     TAY
     LDA #$00
     JSR SwitchBankKeepX
@@ -2861,7 +2861,7 @@ F_D811:
     JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
-    JSR F_DBB7
+    JSR FilterCollectedTile
     TAY
     LDA #$00
     JSR SwitchBankKeepX
@@ -2883,7 +2883,7 @@ F_D854:
     LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
-    JSR F_DBB7
+    JSR FilterCollectedTile
     TAY
     LDA #$00
     JSR SwitchBankKeepX
@@ -2935,7 +2935,7 @@ F_D8B3:
     LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
-    JSR F_DBB7
+    JSR FilterCollectedTile
     TAY
     LDA #$00
     JSR SwitchBankKeepX
@@ -3134,7 +3134,7 @@ F_DA03:
     LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
-    JSR F_DBB7
+    JSR FilterCollectedTile
     TAY
     LDA #$00
     JSR SwitchBankKeepX
@@ -3152,7 +3152,7 @@ F_DA43:
     LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
-    JSR F_DBB7
+    JSR FilterCollectedTile
     TAY
     LDA #$00
     JSR SwitchBankKeepX
@@ -3207,7 +3207,7 @@ F_DAA6:
     LDA map_bank
     JSR SwitchBankKeepX
     LDA (zp_21),y
-    JSR F_DBB7
+    JSR FilterCollectedTile
     TAY
     LDA #$00
     JSR SwitchBankKeepX
@@ -3355,7 +3355,7 @@ F_DB87:
     STA ppu_buffer,y
     STA ram_0749
     RTS
-F_DBB7:
+FilterCollectedTile:
     STX zp_56
     STA zp_54
     SEC
@@ -3371,7 +3371,7 @@ F_DBB7:
     LDA zp_55
     AND #$07
     TAX
-    LDA a:zp_9D,y
+    LDA a:collected_by_kind,y
     AND F_C53C,x
     BEQ F_DBF1
     LDX zp_56
@@ -3387,7 +3387,7 @@ F_DBDC:
     STA ptr_hi
     LDX zp_56
     LDA zp_54
-    JMP F_F679
+    JMP ApplyCollectedFlag
 F_DBF1:
     LDX zp_56
     LDA zp_54
@@ -6089,7 +6089,7 @@ F_EFEF:
     BNE F_F002
     LDA #$00
     STA zp_53
-    LDA ram_0100
+    LDA collected_flags
 F_EFFE:
     AND #$01
 F_F000:
@@ -6220,7 +6220,7 @@ F_F0CD:
     STA zp_78
     LDY #$00
     LDA (ptr_lo),y
-    JSR F_F679
+    JSR ApplyCollectedFlag
     CMP #$D6
     BNE F_F0F7
     JSR F_F6B0
@@ -6261,15 +6261,15 @@ F_F118:
     LDA zp_55
     AND #$07
     TAX
-    LDA a:zp_9D,y
+    LDA a:collected_by_kind,y
     AND F_C53C,x
     BEQ F_F130
     LDX zp_08
     RTS
 F_F130:
-    LDA a:zp_9D,y
+    LDA a:collected_by_kind,y
     ORA F_C53C,x
-    STA a:zp_9D,y
+    STA a:collected_by_kind,y
     LDA #$01
     STA zp_55
     JSR F_F8CE
@@ -6628,7 +6628,7 @@ F_F3DE:
     LDA zp_56
     STA ptr_hi
     LDA (zp_55),y
-    JSR F_F679
+    JSR ApplyCollectedFlag
     CMP #$B4
 F_F3FD:
     BCS F_F40E
@@ -6966,12 +6966,12 @@ F_F671:
     LDA #$01
     JSR SwitchBank
     JMP $B241
-F_F679:
+ApplyCollectedFlag:
     STA zp_C6
     STX zp_42
-    JSR F_F6D1
+    JSR GetCollectibleBit
     LDA F_C53C,x
-    AND ram_0100,y
+    AND collected_flags,y
     BNE F_F68F
 F_F688:
     LDA zp_C6
@@ -6994,13 +6994,13 @@ F_F6B0:
     STX zp_42
     JSR F_F6E0
     LDA F_C53C,x
-    ORA ram_0100,y
-    STA ram_0100,y
+    ORA collected_flags,y
+    STA collected_flags,y
     LDX zp_42
     RTS
 F_F6C1:
     .byte $BC,$D1,$DB,$D6,$D9,$C8,$C9,$CA,$CB,$CC,$CD,$BD,$BE,$BF,$C2,$C3
-F_F6D1:
+GetCollectibleBit:
     LDX #$0F
 F_F6D3:
     CMP F_F6C1,x
@@ -7689,7 +7689,7 @@ F_FC30:
     JSR SwitchBank
     LDX zp_42
     LDA zp_08
-    JMP F_F679
+    JMP ApplyCollectedFlag
 F_FC3F:
     LDA zp_55
     PHA

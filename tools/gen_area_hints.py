@@ -13,5 +13,28 @@ for i in range(N):
     h = by(LO + i) | by(HI + i) << 8
     out.append(f'name 0 {h:X} AreaHeader{i}')
     out.append(f'struct 0 {h:X} 1 bwbbbwbbbb   ; song, map address, log2 width, height, palette set, object ptr, byte8, byte9, initial game_state, tileset')
+# ---- collectible tables (area header bytes 6-7): per-row offsets, then (column, flag index) pair lists ----
+def wd(a): return by(a) | by(a + 1) << 8
+tabs = {}
+for i in range(N):
+    h = by(LO + i) | by(HI + i) << 8
+    P = by(h + 6) | by(h + 7) << 8
+    if P: tabs.setdefault(P, (by(h + 4) - 2, 8 << by(h + 3), []))[2].append(i)
+Ps = sorted(tabs)
+for k, P in enumerate(Ps):
+    rows, width, areas = tabs[P]
+    offs = [wd(P + 2 * r) for r in range(rows)]
+    starts = sorted({o for o in offs if o})
+    if k + 1 < len(Ps): end = Ps[k + 1]
+    else:                                   # last table: read pairs while they look valid
+        end = P + starts[-1]; prev = -1
+        while by(end) < width and by(end + 1) in (prev + 1, 0):
+            prev = by(end + 1); end += 2
+    name = f'CollectTable{k}'
+    out.append(f'blob 0 {P:X} {end - P} {name} collectible flags for area(s) {",".join(map(str, areas))}: {rows} row offsets, then (column, flag index) pairs')
+    out.append(f'struct 0 {P:X} 1 ' + 'w' * rows)
+    bounds = starts + [end - P]
+    for a, b in zip(bounds, bounds[1:]):
+        if b > a and (b - a) % 2 == 0: out.append(f'struct 0 {P + a:X} {(b - a) // 2} bb')
 open(os.path.join(ROOT, 'tools/hints_areas.txt'), 'w').write('\n'.join(out) + '\n')
-print(N, 'areas')
+print(N, 'areas,', len(Ps), 'collectible tables')

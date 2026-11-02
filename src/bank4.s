@@ -1017,7 +1017,7 @@ B4_AE39:
     LDA #$03
     STA game_state
     LDA #$07
-    STA ram_0100
+    STA collected_flags
     LDA #$16
     STA zp_47
     RTS
@@ -1702,7 +1702,7 @@ B4_B445:
     STA zp_66
     STA ram_0737
     LDA #$04
-    STA ram_0100
+    STA collected_flags
     STA ram_0738
     LDA ram_01A6
     CMP #$01

@@ -132,3 +132,10 @@ name f CE3B PlaySong             ; A = song number: switches to bank 6 and calls
 name f CE52 SilenceSound         ; calls Sound_Silence in bank 6
 ram 000F palette_set             ; area header byte 5: index into the palette fade tables (bank 0 $8040/$8049)
 ram 001A tileset_id              ; area header byte 11: selects the tileset record at $8C9B + 8*id
+
+; ---- collectibles (diamonds etc.): tile ids $80-$BB, collected state kept in two bitmaps ----
+name f F6D1 GetCollectibleBit   ; map position -> Y = byte, X = bit in collected_flags (via the area's collectible table)
+name f F679 ApplyCollectedFlag  ; GetMapTile helper: returns 0 instead of the tile once its flag is set
+name f DBB7 FilterCollectedTile ; tile ids $80-$BB: hide if that kind's bit in collected_by_kind is set
+ram 009D collected_by_kind      ; 8-byte bitmap, one bit per collectible tile kind ($80 + n)
+ram 0100 collected_flags        ; bitmap, one bit per collectible placement (flag index from the collectible table)

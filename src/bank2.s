@@ -3251,7 +3251,7 @@ ResetLevelState:
     STA ram_0730
     LDX #$1F
 B2_B844:
-    STA ram_0100,x
+    STA collected_flags,x
     DEX
     BPL B2_B844
     LDX #$0B
@@ -3289,7 +3289,7 @@ ResetGameState:
     STA ram_01B1
     LDX #$07
 B2_B88F:
-    STA zp_9D,x
+    STA collected_by_kind,x
     DEX
     BPL B2_B88F
     LDA #$00
