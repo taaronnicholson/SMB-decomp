@@ -122,6 +122,19 @@ Which groups a stage loads (their tile bases are non-zero) differs per stage; as
 (Group 29 has a tile base in stage 3 but showed nothing in frame 0-7; groups also share tables, e.g. 8-10 and 12-13.)
 These are descriptions of the pictures only: what each creature does is not decoded.
 
+## Entity behaviour (bank 5)
+`UpdateEntities` (fixed bank `$FAFE`; the loop also exists in variants for off-screen entities) walks the 48 slots with
+bank 5 mapped. For each active entity it reads a handler address from `EntityHandlerTable` (`$8AF5`, one word per
+`ent_type`, types `$01`-`$A0`, `$A0` being the value the free-slot search also treats as empty) and jumps to it with the slot in
+X. `Ent_Noop` (`$BC46`) is the shared handler of the 39 unused types; the other 120 handlers are named `EntXX_Update`
+(`tools/gen_entity_hints.py`). Entity state lives in the per-slot arrays: `ent_flags` (bit 2 = off-screen, bit 1 is
+commonly a direction flag, bits 3-7 = animation group), `ent_param` (frame), `ent_angle`/`ent_radius`/`ent_param2` (used as
+timers and counters by many handlers).
+Example, type `$4E` (the seven red propeller creatures of area 0, group 14): after the player-overlap and touch checks it
+walks one pixel per frame along X (direction = `ent_flags` bit 1), turns when `Ent_PatrolStep` reports a wall or ledge, counts
+`ent_radius` down as a timer and changes into type `$4F` when it expires. Hit detection and the player-hurt routine are shared
+helpers (`Ent_CheckPlayerOverlap`, `Ent_CheckPlayerTouch`). The other handlers have not been read in detail.
+
 ## Sound engine (bank 6)
 `$8000` is a jump table: `Sound_PlaySong` (A = song 0-8), `Sound_Update` (`$8003`, once per frame),
 `Sound_Silence` (`$8006`), `Sound_Resume` (`$8009`), plus three more entry points.

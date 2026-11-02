@@ -666,7 +666,3 @@ ram_07F8 = $07F8
 ram_07FD = $07FD
 ram_07FE = $07FE
 ram_07FF = $07FF
-ram_0D0D = $0D0D
-ram_0E0E = $0E0E
-ram_0EFF = $0EFF
-ram_7FA5 = $7FA5

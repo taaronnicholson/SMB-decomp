@@ -152,3 +152,9 @@ ram 00C3 credits_ptr_hi
 name 1 8A5B DrawEntity          ; X = slot: builds OAM sprites from the entity's animation group/frame
 name 1 8A52 MarkEntityOffscreen ; sets ent_flags bit 2 when the entity is outside the screen window
 ram 0120 anim_tile_base         ; per animation group: first CHR tile number of its sprite sheet (loaded per stage)
+
+; ---- entity behaviour (bank 5) ----
+name 5 8904 Ent_CheckPlayerOverlap   ; box overlap with the player; sets zp_53 to the hit kind
+name 5 8A06 Ent_CheckPlayerTouch     ; second overlap test; leads to the player-hurt routine (F_F492) when the player is vulnerable
+name 5 AC25 Ent_PatrolStep           ; per-entity tick (ent_angle low 3 bits), checks map tiles ahead; returns zero flag when it must turn
+name f FAFE UpdateEntities           ; loops over the 48 entity slots, JMP (handler) with bank 5 mapped

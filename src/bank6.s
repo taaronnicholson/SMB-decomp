@@ -11,7 +11,9 @@ B6_8006:
     JMP Sound_Silence
 B6_8009:
     JMP Sound_Resume
+B6_800C:
     JMP Sound_PlaySfxSq1
+B6_800F:
     JMP Sound_PlaySfxSq2
 B6_8012:
     JMP Sound_PlaySfxNoise

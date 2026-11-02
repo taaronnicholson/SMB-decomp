@@ -101,6 +101,7 @@ EntityDeltaFromCentre:
     SEC
     SBC zp_56
     STA ent_dx,x
+Ent18_Update:
     RTS
 B5_80B7:
     .byte $01,$00,$01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00
@@ -184,7 +185,7 @@ B5_8151:
     STA zp_54
     JMP B5_8151
     .byte $E6
-    LDY B5_BCA5,x
+    LDY $BCA5,x
     AND #$03
     CLC
     ADC #$01
@@ -686,9 +687,12 @@ B5_853D:
     STA ent_angle,x
     RTS
 B5_8546:
-    .byte $BD,$D0,$05,$29,$7F,$9D,$D0,$05,$BD,$B0,$04,$85
-    EOR zp_BD,x
-    CPX #$04
+    LDA ent_angle,x
+    AND #$7F
+    STA ent_angle,x
+    LDA ent_y_lo,x
+    STA zp_55
+    LDA ent_y_hi,x
     STA zp_56
     LDA ent_x_lo,x
     CLC
@@ -731,7 +735,6 @@ B5_8591:
     ADC #$C3
     STA ptr_hi
     LDA ent_x_lo,x
-B5_85AD:
     CLC
     ADC #$08
     AND #$0F
@@ -1172,7 +1175,7 @@ B5_8901:
     STA zp_53
 B5_8903:
     RTS
-B5_8904:
+Ent_CheckPlayerOverlap:
     LDA #$00
     STA zp_53
     LDA ent_flags,x
@@ -1263,6 +1266,7 @@ B5_8993:
     CMP zp_56
     BCC B5_8982
     JMP F_F492
+B5_89BB:
     LDA ent_flags,x
     AND #$04
     BNE B5_8982
@@ -1302,15 +1306,52 @@ B5_89E3:
     JMP F_F492
 B5_8A05:
     RTS
-B5_8A06:
-    .byte $BD,$70,$05,$29,$04,$D0,$23,$A5,$19,$C5,$55,$B0,$1D,$69,$1A,$C5
-    .byte $55,$90,$17,$A5,$18,$C5,$56,$B0,$11,$69,$16,$C5,$56,$90,$0B,$A5
-    .byte $C0,$D0,$07,$A5,$7C,$D0,$04,$4C,$92,$F4,$60,$68,$68,$A9,$03,$20
-    .byte $8F,$CE,$A5,$63,$C9,$02,$F0,$1E,$A9,$07,$9D,$80,$04,$A9,$00,$9D
-    .byte $00,$06,$9D,$70,$05,$A9,$1E,$9D,$A0,$05,$A9,$03,$9D,$30,$06
+Ent_CheckPlayerTouch:
+    LDA ent_flags,x
+    AND #$04
+    BNE B5_8A30
+    LDA zp_19
+    CMP zp_55
+    BCS B5_8A30
+    ADC #$1A
+    CMP zp_55
+    BCC B5_8A30
+    LDA zp_18
+    CMP zp_56
+    BCS B5_8A30
+    ADC #$16
+    CMP zp_56
+    BCC B5_8A30
+    LDA zp_C0
+    BNE B5_8A30
+    LDA zp_7C
+    BNE B5_8A31
+    JMP F_F492
+B5_8A30:
+    RTS
+B5_8A31:
+    PLA
+    PLA
+    LDA #$03
+    JSR F_CE8F
+    LDA zp_63
+    CMP #$02
+    BEQ B5_8A5C
+    LDA #$07
+    STA ent_type,x
+    LDA #$00
+    STA ent_radius,x
+    STA ent_flags,x
+    LDA #$1E
+    STA ent_param,x
+    LDA #$03
+    STA ent_param2,x
 B5_8A55:
-    .byte $A9,$4D,$A0,$8D,$4C,$17
-    SBC ram_7FA5,y
+    LDA #$4D
+    LDY #$8D
+    JMP F_F917
+B5_8A5C:
+    LDA zp_7F
     STA zp_66
     LDA #$07
     STA ent_type,x
@@ -1381,73 +1422,269 @@ B5_8A9F:
     STA ent_angle,x
 B5_8AF6:
     RTS
-    .byte $B3,$8C,$58,$8D,$9A,$8E,$C4,$8E,$17,$8F,$AB,$8F,$47,$90,$73,$90
-    .byte $D8,$90,$83,$91,$F3,$92,$04,$93,$44,$93,$51,$94,$2E,$95,$65,$95
-    .byte $23,$96,$46,$BC,$46,$BC,$46,$BC,$46,$BC,$69,$96,$46,$BC,$B6,$80
-    .byte $6D,$97,$AF,$97,$24,$98,$D5,$98
-    .word B5_991D
-    .word B5_9932
-    .word B5_9964
-    .word B5_99A0
-    .byte $0F,$9A,$D3,$9A
-    .word B5_9AE9
-    .word B5_9B01
-    .word B5_9B3E
-    .word B5_9B64
-    .word B5_9BAB
-    .word B5_9BD7
-    .byte $46,$BC,$46,$BC,$46,$BC,$46,$BC,$46,$BC,$42,$9C,$BC,$9C,$F4,$9C
-    .byte $22,$9D,$07,$9E,$DC,$9E,$6C,$9F,$77,$9F,$B1,$9F,$ED,$9F,$D0,$A0
-    .byte $F8,$A0,$31,$A1,$31,$A2,$3A,$A2,$73,$A2,$23,$A3,$D3,$A6,$FB,$A3
-    .byte $8B,$A2
-    .word B5_A425
-    .word B5_A442
-    .word B5_A621
-    .word B5_A479
-    .word B5_A485
-    .byte $85,$A5,$CD,$A5,$04,$A6,$23,$AA,$46,$BC,$B0,$AA,$E4,$AA,$35,$AB
-    .byte $D1,$AB,$EC,$AC,$1F,$AD,$24,$AD,$3B,$AD,$54,$AD,$21,$AE,$51,$AE
-    .byte $46,$BC,$46,$BC,$46,$BC,$46,$BC,$46,$BC,$46,$BC,$5A,$AE,$A3,$AE
-    .word B5_AF5E
-    .word B5_AF82
-    .word B5_B005
-    .word B5_B023
-    .byte $46,$BC,$46,$BC,$46,$BC,$6A,$B0,$8D,$B0,$F1,$B0,$10,$B1,$46,$BC
-    .byte $46,$BC,$46,$BC,$46,$BC,$46,$BC,$46,$BC,$46,$BC,$46,$BC,$46,$BC
-    .byte $46,$BC,$2F,$B1,$DD,$B1,$3D,$B2,$A5,$B2,$C3,$B2,$46,$BC,$46,$BC
-    .byte $46,$BC,$F1,$B2,$46,$BC,$46,$BC,$46,$BC,$46,$BC,$6F,$B9,$46,$BC
-    .word B5_B46C
-    .word B5_B49A
-    .word B5_B504
-    .word B5_B54A
-    .byte $EC,$B5,$17,$B6
-    .word B5_B68C
-    .word B5_B6AD
-    .word B5_B6ED
-    .word B5_B74A
-    .word B5_B7A7
-    .word B5_B7BC
-    .word B5_B7C7
-    .byte $B7,$BA,$31,$BB,$31,$BA,$5A,$BB,$7E,$BB,$AE,$BB,$CF,$BB,$0B,$BC
-    .byte $23,$A3,$72,$B8,$AB,$B8,$1C,$BA,$E1,$99,$DF,$B8,$FE,$B8,$46,$BC
-    .byte $37,$8C,$A9,$00,$85,$51,$BD,$30,$06,$38,$FD,$D0,$05,$9D,$30,$06
-    .byte $90,$0C,$69,$06,$9D,$30,$06,$20,$35,$8F,$A9,$01,$85,$51,$BD,$B0
-    .byte $04,$38,$E5,$51,$85,$53,$9D,$B0,$04,$BD,$E0,$04,$E9,$00,$85,$54
-    .byte $9D,$E0,$04,$A5,$53,$38,$E5,$1D,$A5,$54,$E5,$1E,$90,$0E,$A5,$53
-    .byte $38,$ED,$AF,$01,$A5,$54,$ED,$B0,$01,$90,$01,$60,$BD,$B0,$04,$18
-    .byte $69,$FF,$BD,$E0,$04,$69,$00,$9D,$E0,$04,$A5,$BC,$18,$65,$1B,$9D
-    .byte $10,$05,$A5,$1C,$69,$00,$9D,$40,$05,$A5,$BB,$29,$1F,$C9,$12,$90
-    .byte $02,$E9,$12,$9D,$00
-    ASL zp_A5
-    LDY ram_0729,x
+    .word Ent01_Update
+    .word Ent02_Update
+    .word Ent03_Update
+    .word Ent04_Update
+    .word Ent05_Update
+    .word Ent06_Update
+    .word Ent07_Update
+    .word Ent08_Update
+    .word Ent09_Update
+    .word Ent0A_Update
+    .word Ent0B_Update
+    .word Ent0C_Update
+    .word Ent0D_Update
+    .word Ent0E_Update
+    .word Ent0F_Update
+    .word Ent10_Update
+    .word Ent11_Update
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent16_Update
+    .word Ent_Noop
+    .word Ent18_Update
+    .word Ent19_Update
+    .word Ent1A_Update
+    .word Ent1B_Update
+    .word Ent1C_Update
+    .word Ent1D_Update
+    .word Ent1E_Update
+    .word Ent1F_Update
+    .word Ent20_Update
+    .word Ent21_Update
+    .word Ent22_Update
+    .word Ent23_Update
+    .word Ent24_Update
+    .word Ent25_Update
+    .word Ent26_Update
+    .word Ent27_Update
+    .word Ent28_Update
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent2E_Update
+    .word Ent2F_Update
+    .word Ent30_Update
+    .word Ent31_Update
+    .word Ent32_Update
+    .word Ent33_Update
+    .word Ent34_Update
+    .word Ent35_Update
+    .word Ent36_Update
+    .word Ent37_Update
+    .word Ent38_Update
+    .word Ent39_Update
+    .word Ent3A_Update
+    .word Ent3B_Update
+    .word Ent3C_Update
+    .word Ent3D_Update
+    .word Ent3E_Update
+    .word Ent3F_Update
+    .word Ent40_Update
+    .word Ent41_Update
+    .word Ent42_Update
+    .word Ent43_Update
+    .word Ent44_Update
+    .word Ent45_Update
+    .word Ent46_Update
+    .word Ent47_Update
+    .word Ent48_Update
+    .word Ent49_Update
+    .word Ent4A_Update
+    .word Ent_Noop
+    .word Ent4C_Update
+    .word Ent4D_Update
+    .word Ent4E_Update
+    .word Ent4F_Update
+    .word Ent50_Update
+    .word Ent51_Update
+    .word Ent52_Update
+    .word Ent53_Update
+    .word Ent54_Update
+    .word Ent55_Update
+    .word Ent56_Update
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent5D_Update
+    .word Ent5E_Update
+    .word Ent5F_Update
+    .word Ent60_Update
+    .word Ent61_Update
+    .word Ent62_Update
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent66_Update
+    .word Ent67_Update
+    .word Ent68_Update
+    .word Ent69_Update
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent74_Update
+    .word Ent75_Update
+    .word Ent76_Update
+    .word Ent77_Update
+    .word Ent78_Update
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent7C_Update
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent_Noop
+    .word Ent81_Update
+    .word Ent_Noop
+    .word Ent83_Update
+    .word Ent84_Update
+    .word Ent85_Update
+    .word Ent86_Update
+    .word Ent87_Update
+    .word Ent88_Update
+    .word Ent89_Update
+    .word Ent8A_Update
+    .word Ent8B_Update
+    .word Ent8C_Update
+    .word Ent8D_Update
+    .word Ent8E_Update
+    .word Ent8F_Update
+    .word Ent90_Update
+    .word Ent91_Update
+    .word Ent92_Update
+    .word Ent93_Update
+    .word Ent94_Update
+    .word Ent95_Update
+    .word Ent96_Update
+    .word Ent97_Update
+    .word Ent3E_Update
+    .word Ent99_Update
+    .word Ent9A_Update
+    .word Ent9B_Update
+    .word Ent9C_Update
+    .word Ent9D_Update
+    .word Ent9E_Update
+    .word Ent_Noop
+    .word EntA0_Update
+EntA0_Update:
+    LDA #$00
+    STA ptr_lo
+    LDA ent_param2,x
+    SEC
+    SBC ent_angle,x
+    STA ent_param2,x
+    BCC B5_8C53
+    ADC #$06
+    STA ent_param2,x
+    JSR B5_8F35
+    LDA #$01
+    STA ptr_lo
+B5_8C53:
+    LDA ent_y_lo,x
+    SEC
+    SBC ptr_lo
+    STA zp_53
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
+    SBC #$00
+    STA zp_54
+    STA ent_y_hi,x
+    LDA zp_53
+    SEC
+    SBC zp_1D
+    LDA zp_54
+    SBC zp_1E
+    BCC B5_8C81
+    LDA zp_53
+    SEC
+    SBC ram_01AF
+    LDA zp_54
+    SBC ram_01B0
+    BCC B5_8C81
+    RTS
+B5_8C81:
+    LDA ent_y_lo,x
+    CLC
+    ADC #$FF
+    LDA ent_y_hi,x
+    ADC #$00
+    STA ent_y_hi,x
+    LDA zp_BC
+    CLC
+    ADC zp_1B
+    STA ent_x_lo,x
+    LDA zp_1C
+    ADC #$00
+    STA ent_x_hi,x
+    LDA zp_BB
+    AND #$1F
+    CMP #$12
+    BCC B5_8CA8
+    SBC #$12
+B5_8CA8:
+    STA ent_radius,x
+    LDA zp_BC
+    AND #$07
     STA ent_angle,x
     RTS
-    .byte $A5,$AB,$DD,$D0,$05,$F0,$01,$60,$A5,$B1,$4A,$4A,$4A,$4A,$29,$01
-    .byte $9D,$A0,$05,$A5,$19,$C5,$55,$B0,$EE,$69,$1A,$C5,$55,$90,$E8,$A5
-    .byte $18,$C5,$56,$B0,$E2,$69,$16,$C5,$56,$90,$DC,$A5,$63,$C9,$07,$D0
-    .byte $D6,$BD,$B0,$04,$38,$E9,$06,$85,$94,$BD,$E0,$04,$E9,$00,$85,$95
-    .byte $BD,$10,$05,$85,$96,$BD,$40,$05,$85,$97,$A5,$AB,$85
-    TYA
+Ent01_Update:
+    LDA current_area
+    CMP ent_angle,x
+    BEQ B5_8CBB
+B5_8CBA:
+    RTS
+B5_8CBB:
+    LDA zp_B1
+    LSR a
+    LSR a
+    LSR a
+    LSR a
+    AND #$01
+    STA ent_param,x
+    LDA zp_19
+    CMP zp_55
+    BCS B5_8CBA
+    ADC #$1A
+    CMP zp_55
+    BCC B5_8CBA
+    LDA zp_18
+    CMP zp_56
+    BCS B5_8CBA
+    ADC #$16
+    CMP zp_56
+    BCC B5_8CBA
+    LDA zp_63
+    CMP #$07
+    BNE B5_8CBA
+    LDA ent_y_lo,x
+    SEC
+    SBC #$06
+    STA spawn_y_lo
+    LDA ent_y_hi,x
+    SBC #$00
+    STA spawn_y_hi
+    LDA ent_x_lo,x
+    STA spawn_x_lo
+    LDA ent_x_hi,x
+    STA spawn_x_hi
+    LDA current_area
+    STA zp_98
     LDA zp_92
     STA zp_99
     LDA #$00
@@ -1484,22 +1721,128 @@ B5_8D45:
     ADC #$03
     STA zp_53
     JMP F_F9B6
-    .byte $03,$00,$00,$00,$00,$00,$0F,$00,$00,$00,$FF,$BC,$00,$06,$C0,$11
-    .byte $F0,$03,$FE,$00,$06,$BD,$B0,$04,$38,$F9,$36,$8E,$9D,$B0,$04,$BD
-    .byte $E0,$04,$E9,$00,$9D,$E0,$04,$A9,$00,$9D,$A0,$05,$A5,$63,$C9,$16
-    .byte $F0,$01,$60,$BD,$30,$06,$38,$E9,$01,$D0,$10,$20,$48,$8E,$A9,$0A
-    .byte $85,$55,$A9,$00,$85,$56,$20,$E2,$F8,$A9,$08,$9D,$30,$06,$A5,$12
-    .byte $29,$20,$F0,$34,$BD,$10,$05,$38,$E9,$01,$85,$51,$BD,$40,$05,$E9
-    .byte $00,$85,$52,$B0,$06,$A9,$00,$85,$51,$85,$52,$A5,$5E,$38,$E9,$01
-    .byte $A5,$5F,$E9,$00,$B0,$07,$A9,$00,$85,$5E,$85,$5F,$60,$A5,$51,$9D
-    .byte $10,$05,$A5,$52,$9D,$40,$05,$60,$A5,$12,$29,$10,$F0,$F9,$BD,$10
-    .byte $05,$18,$69,$01,$85,$51,$BD,$40,$05,$69,$00,$85,$52,$A5,$34,$38
-    .byte $E9,$10,$85,$53,$A5,$35,$E9,$00,$85,$54,$A5,$51,$38,$E5,$53,$A5
-    .byte $52,$E5,$54,$90,$08,$A5,$53,$85,$51,$A5,$54,$85,$52,$A5,$5E,$18
-    .byte $69,$01,$85,$55,$A5,$5F,$69,$00,$85,$56,$A5,$55,$38,$E5,$53,$A5
-    .byte $56,$E5,$54,$90,$09,$A5,$53,$85,$5E,$A5,$54,$85,$5F,$60,$A5,$51
-    .byte $9D,$10,$05,$A5,$52,$9D,$40,$05,$60,$00,$01,$00,$00,$01,$00,$01
-    .byte $00,$01,$01,$02,$01,$01,$02,$01,$02,$02,$03
+    .byte $03,$00,$00,$00,$00,$00,$0F,$00,$00,$00,$FF
+Ent02_Update:
+    LDY ent_radius,x
+    CPY #$11
+    BEQ B5_8D62
+    INC ent_radius,x
+B5_8D62:
+    LDA ent_y_lo,x
+    SEC
+    SBC B5_8E36,y
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
+    SBC #$00
+    STA ent_y_hi,x
+    LDA #$00
+    STA ent_param,x
+    LDA zp_63
+    CMP #$16
+    BEQ B5_8D80
+    RTS
+B5_8D80:
+    LDA ent_param2,x
+    SEC
+    SBC #$01
+    BNE B5_8D98
+    JSR B5_8E48
+    LDA #$0A
+    STA zp_55
+    LDA #$00
+    STA zp_56
+    JSR F_F8E2
+    LDA #$08
+B5_8D98:
+    STA ent_param2,x
+    LDA buttons
+    AND #$20
+    BEQ B5_8DD5
+    LDA ent_x_lo,x
+    SEC
+    SBC #$01
+    STA ptr_lo
+    LDA ent_x_hi,x
+    SBC #$00
+    STA ptr_hi
+    BCS B5_8DB8
+    LDA #$00
+    STA ptr_lo
+    STA ptr_hi
+B5_8DB8:
+    LDA player_x_lo
+    SEC
+    SBC #$01
+    LDA player_x_hi
+    SBC #$00
+    BCS B5_8DCA
+    LDA #$00
+    STA player_x_lo
+    STA player_x_hi
+    RTS
+B5_8DCA:
+    LDA ptr_lo
+    STA ent_x_lo,x
+    LDA ptr_hi
+    STA ent_x_hi,x
+B5_8DD4:
+    RTS
+B5_8DD5:
+    LDA buttons
+    AND #$10
+    BEQ B5_8DD4
+    LDA ent_x_lo,x
+    CLC
+    ADC #$01
+    STA ptr_lo
+    LDA ent_x_hi,x
+    ADC #$00
+    STA ptr_hi
+    LDA zp_34
+    SEC
+    SBC #$10
+    STA zp_53
+    LDA zp_35
+    SBC #$00
+    STA zp_54
+    LDA ptr_lo
+    SEC
+    SBC zp_53
+    LDA ptr_hi
+    SBC zp_54
+    BCC B5_8E0A
+    LDA zp_53
+    STA ptr_lo
+    LDA zp_54
+    STA ptr_hi
+B5_8E0A:
+    LDA player_x_lo
+    CLC
+    ADC #$01
+    STA zp_55
+    LDA player_x_hi
+    ADC #$00
+    STA zp_56
+    LDA zp_55
+    SEC
+    SBC zp_53
+    LDA zp_56
+    SBC zp_54
+    BCC B5_8E2B
+    LDA zp_53
+    STA player_x_lo
+    LDA zp_54
+    STA player_x_hi
+    RTS
+B5_8E2B:
+    LDA ptr_lo
+    STA ent_x_lo,x
+    LDA ptr_hi
+    STA ent_x_hi,x
+    RTS
+B5_8E36:
+    .byte $00,$01,$00,$00,$01,$00,$01,$00,$01,$01,$02,$01,$01,$02,$01,$02
+    .byte $02,$03
 B5_8E48:
     JSR F_FA3D
     LDA #$05
@@ -1537,6 +1880,7 @@ B5_8E48:
     LDA zp_53
     STA ent_radius,y
     RTS
+Ent03_Update:
     LDY ent_angle,x
     INC ent_angle,x
     LDA B5_8EAD,y
@@ -1548,14 +1892,42 @@ B5_8EA9:
     RTS
 B5_8EAD:
     .byte $0F,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$1A,$1B,$1C,$1C,$1C
-    .byte $1C,$1C,$1C,$1C,$1C,$1C,$00,$FE,$D0,$05,$BD,$D0,$05,$4A,$B0,$21
-    .byte $A8,$B9,$EF,$8E,$C9,$FF,$D0,$06,$A9,$00,$9D,$80,$04,$60,$85,$53
-    .byte $BD,$B0,$04,$38,$E5,$53,$9D,$B0,$04,$BD,$E0,$04,$E9,$00,$9D,$E0
-    .byte $04,$60,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$00,$01
-    .byte $01,$00,$01,$00,$01,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00,$00
-    .res 9, $00
-    .byte $FF,$FE,$D0,$05,$BD,$D0,$05,$29,$01,$D0
-    ORA (player_y_lo,x)
+    .byte $1C,$1C,$1C,$1C,$1C,$1C,$00
+Ent04_Update:
+    INC ent_angle,x
+    LDA ent_angle,x
+    LSR a
+    BCS B5_8EEE
+    TAY
+    LDA B5_8EEF,y
+    CMP #$FF
+    BNE B5_8EDB
+    LDA #$00
+    STA ent_type,x
+    RTS
+B5_8EDB:
+    STA zp_53
+    LDA ent_y_lo,x
+    SEC
+    SBC zp_53
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
+    SBC #$00
+    STA ent_y_hi,x
+B5_8EEE:
+    RTS
+B5_8EEF:
+    .res 12, $01
+    .byte $00,$01,$01,$00,$01,$00,$01,$00,$01,$00,$00,$01,$00,$00,$01,$00
+    .res 11, $00
+    .byte $FF
+Ent05_Update:
+    INC ent_angle,x
+    LDA ent_angle,x
+    AND #$01
+    BNE B5_8F22
+    RTS
+B5_8F22:
     STA zp_53
     LDA ent_y_lo,x
     CLC
@@ -1595,13 +1967,53 @@ B5_8F4A:
     .byte $00,$00,$01,$00,$00,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00,$00
     .byte $FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$01,$00,$01,$00,$00,$00,$FF,$FF
     .byte $FF,$FF,$00,$00,$01,$00,$01,$00,$00,$00,$FF,$FF,$FF,$FF,$00,$00
-    .byte $01,$00,$01,$00,$00,$00,$FF,$FF,$BD,$70,$05,$29,$04,$F0,$01,$60
-    .byte $A5,$19,$C5,$55,$B0,$37,$69,$1A,$C5,$55,$90,$31,$A5,$18,$C5,$56
-    .byte $B0,$2B,$69,$16,$C5,$56,$90,$25,$A9,$19,$20,$78,$CE,$A9,$0E,$85
-    .byte $E1,$A9,$07,$9D,$80,$04,$A9,$00,$9D,$00,$06,$9D,$70,$05,$85,$E0
-    .byte $A9,$1E,$9D,$A0,$05,$A9,$04,$9D,$30,$06,$4C,$55,$8A,$BD,$00,$06
-    .byte $0A,$A8,$B9,$1A,$90,$85,$53,$C9,$80,$D0,$06,$A9,$00,$9D,$00,$06
-    .byte $60,$BD,$B0,$04
+    .byte $01,$00,$01,$00,$00,$00,$FF,$FF
+Ent06_Update:
+    LDA ent_flags,x
+    AND #$04
+    BEQ B5_8FB3
+    RTS
+B5_8FB3:
+    LDA zp_19
+    CMP zp_55
+    BCS B5_8FF0
+    ADC #$1A
+    CMP zp_55
+    BCC B5_8FF0
+    LDA zp_18
+    CMP zp_56
+    BCS B5_8FF0
+    ADC #$16
+    CMP zp_56
+    BCC B5_8FF0
+    LDA #$19
+    JSR F_CE78
+    LDA #$0E
+    STA zp_E1
+    LDA #$07
+    STA ent_type,x
+    LDA #$00
+    STA ent_radius,x
+    STA ent_flags,x
+    STA zp_E0
+    LDA #$1E
+    STA ent_param,x
+    LDA #$04
+    STA ent_param2,x
+    JMP B5_8A55
+B5_8FF0:
+    LDA ent_radius,x
+    ASL a
+    TAY
+    LDA B5_901A,y
+    STA zp_53
+    CMP #$80
+    BNE B5_9004
+    LDA #$00
+    STA ent_radius,x
+    RTS
+B5_9004:
+    LDA ent_y_lo,x
     CLC
     ADC zp_53
     STA ent_y_lo,x
@@ -1610,43 +2022,172 @@ B5_8F4A:
     STA ent_y_hi,x
     INC ent_radius,x
     RTS
+B5_901A:
     .byte $FE
 B5_901B:
     .byte $FF,$FE,$FF,$FE,$FF,$FF,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF
     .byte $FF,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$01,$00,$01
-    .byte $00,$02,$00,$01,$00,$02,$00,$02,$00,$02,$00,$80,$FE,$00,$06,$BD
-    .byte $00,$06,$4A,$A8,$B9,$67,$90,$D0,$0F
+    .byte $00,$02,$00,$01,$00,$02,$00,$02,$00,$02,$00,$80
+Ent07_Update:
+    INC ent_radius,x
+    LDA ent_radius,x
+    LSR a
+    TAY
+    LDA B5_9067,y
+    BNE B5_9063
     STA ent_type,x
     LDA ent_param2,x
     STA zp_53
     CMP #$FF
     BEQ B5_9066
     JMP F_F9B6
-    .byte $9D,$A0,$05
+B5_9063:
+    STA ent_param,x
 B5_9066:
     RTS
-    .byte $1E,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$00,$A9,$02,$85,$53
-    .byte $BD,$70,$05,$29,$04,$F0,$03,$4C,$34,$84,$A5,$19,$C5,$55,$B0,$F7
-    .byte $69,$1A,$C5,$55,$90,$F1,$A5,$18,$C5,$56,$B0,$EB,$69,$16,$C5,$56
-    .byte $90,$E5,$A9,$00,$9D,$80,$04,$20,$55,$8A,$A9,$19,$20,$78,$CE,$A9
-    .byte $07,$9D,$80,$04,$A9,$00,$9D,$00,$06,$9D,$70,$05,$A9,$1E,$9D,$A0
-    .byte $05,$A9,$08,$9D,$30,$06,$E6,$D7,$BD,$60,$06,$4A,$4A,$4A,$A8,$BD
-    .byte $60,$06,$29,$07,$AA,$BD,$3C,$C5,$19,$33,$07,$99,$33,$07,$A6,$42
-    .byte $60,$A9,$02,$85,$53,$BD,$70,$05,$29,$04,$F0,$03,$4C,$34,$84,$A5
-    .byte $19,$C5,$55,$B0,$2F,$69,$1A,$C5,$55,$90,$29,$A5,$18,$C5,$56,$B0
-    .byte $23,$69,$16,$C5,$56,$90,$1D,$20,$C1,$91,$20,$BF,$90,$A9,$0C,$9D
-    .byte $30,$06,$A9,$10,$A0,$91,$4C,$17,$F9,$0A,$FA,$FF,$00,$00,$18,$02
-    .byte $00,$00,$00,$FF,$20,$34,$84,$BD,$30,$06,$38,$E9,$01,$D0,$09,$A9
-    .byte $4C,$A0,$91,$20,$17,$F9,$A9,$8C,$9D,$30,$06,$C9,$17,$B0,$15,$0A
-    .byte $A8,$BD,$10,$05,$18,$79,$55,$91,$9D,$10,$05,$BD,$40,$05,$79,$56
-    .byte $91,$9D,$40,$05,$60,$04,$FC,$FF,$00,$00,$18,$01,$00,$00,$00,$FF
-    .byte $FF,$FF,$01,$00,$00,$00,$01,$00,$FF,$FF,$FF,$FF,$01,$00,$00,$00
-    .byte $00,$00,$01,$00,$FF,$FF,$FF,$FF,$01,$00,$00,$00,$01,$00,$FF,$FF
-    .byte $FF,$FF,$01,$00,$00,$00,$00,$00,$01,$00,$FF,$FF,$A5,$B1,$4A,$4A
-    .byte $29,$01,$18,$69,$02,$9D,$A0,$05,$BC,$00,$06,$B9,$FD,$91,$C9,$80
-    .byte $F0,$17,$85,$53,$BD,$B0,$04,$38,$E5,$53,$9D,$B0,$04,$BD,$E0,$04
-    .byte $E9,$00,$9D,$E0,$04,$FE,$00,$06,$60,$BD,$D0,$05,$FE,$D0,$05,$0A
-    .byte $A8,$B9,$3A,$92,$85,$53,$C9,$80,$D0,$18
+B5_9067:
+    .byte $1E,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$00
+Ent08_Update:
+    LDA #$02
+    STA zp_53
+    LDA ent_flags,x
+    AND #$04
+    BEQ B5_9081
+B5_907E:
+    JMP B5_8434
+B5_9081:
+    LDA zp_19
+    CMP zp_55
+    BCS B5_907E
+    ADC #$1A
+    CMP zp_55
+    BCC B5_907E
+    LDA zp_18
+    CMP zp_56
+    BCS B5_907E
+    ADC #$16
+    CMP zp_56
+    BCC B5_907E
+    LDA #$00
+    STA ent_type,x
+    JSR B5_8A55
+    LDA #$19
+    JSR F_CE78
+    LDA #$07
+    STA ent_type,x
+    LDA #$00
+    STA ent_radius,x
+    STA ent_flags,x
+    LDA #$1E
+    STA ent_param,x
+    LDA #$08
+    STA ent_param2,x
+    INC zp_D7
+B5_90BF:
+    LDA ent_dy,x
+    LSR a
+    LSR a
+    LSR a
+    TAY
+    LDA ent_dy,x
+    AND #$07
+    TAX
+    LDA F_C53C,x
+    ORA ram_0733,y
+    STA ram_0733,y
+    LDX zp_42
+    RTS
+Ent09_Update:
+    LDA #$02
+    STA zp_53
+    LDA ent_flags,x
+    AND #$04
+    BEQ B5_90E6
+    JMP B5_8434
+B5_90E6:
+    LDA zp_19
+    CMP zp_55
+    BCS B5_911B
+    ADC #$1A
+    CMP zp_55
+    BCC B5_911B
+    LDA zp_18
+    CMP zp_56
+    BCS B5_911B
+    ADC #$16
+    CMP zp_56
+    BCC B5_911B
+    JSR B5_91C1
+    JSR B5_90BF
+    LDA #$0C
+    STA ent_param2,x
+    LDA #$10
+    LDY #$91
+    JMP F_F917
+    .byte $0A,$FA,$FF,$00,$00,$18,$02,$00,$00,$00,$FF
+B5_911B:
+    JSR B5_8434
+    LDA ent_param2,x
+    SEC
+    SBC #$01
+    BNE B5_912F
+    LDA #$4C
+    LDY #$91
+    JSR F_F917
+    LDA #$8C
+B5_912F:
+    STA ent_param2,x
+    CMP #$17
+    BCS B5_914B
+    ASL a
+    TAY
+    LDA ent_x_lo,x
+    CLC
+    ADC B5_9155,y
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
+    ADC B5_9156,y
+    STA ent_x_hi,x
+B5_914B:
+    RTS
+    .byte $04,$FC,$FF,$00,$00,$18,$01,$00,$00
+B5_9155:
+    .byte $00
+B5_9156:
+    .byte $FF,$FF,$FF,$01,$00,$00,$00,$01,$00,$FF,$FF,$FF,$FF,$01,$00,$00
+    .byte $00,$00,$00,$01,$00,$FF,$FF,$FF,$FF,$01,$00,$00,$00,$01,$00,$FF
+    .byte $FF,$FF,$FF,$01,$00,$00,$00,$00,$00,$01,$00,$FF,$FF
+Ent0A_Update:
+    LDA zp_B1
+    LSR a
+    LSR a
+    AND #$01
+    CLC
+    ADC #$02
+    STA ent_param,x
+    LDY ent_radius,x
+    LDA B5_91FD,y
+    CMP #$80
+    BEQ B5_91B0
+    STA zp_53
+    LDA ent_y_lo,x
+    SEC
+    SBC zp_53
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
+    SBC #$00
+    STA ent_y_hi,x
+    INC ent_radius,x
+    RTS
+B5_91B0:
+    LDA ent_angle,x
+    INC ent_angle,x
+    ASL a
+    TAY
+    LDA B5_923A,y
+    STA zp_53
+    CMP #$80
+    BNE B5_91D9
 B5_91C1:
     LDA #$07
     STA ent_type,x
@@ -1658,6 +2199,7 @@ B5_91C1:
     LDA #$FF
     STA ent_param2,x
     RTS
+B5_91D9:
     LDA ent_y_lo,x
     SEC
     SBC #$01
@@ -1673,10 +2215,13 @@ B5_91C1:
     ADC B5_923B,y
     STA ent_x_hi,x
     RTS
+B5_91FD:
     .byte $00,$01,$01,$01,$01,$01,$01,$01,$00,$01,$00,$01,$00,$01,$00,$01
     .byte $00,$01,$00,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00,$00,$01,$00
     .byte $00,$00,$00,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00
-    .byte $00,$01,$00,$00,$01,$00,$01,$00,$01,$00,$01,$01,$80,$FF
+    .byte $00,$01,$00,$00,$01,$00,$01,$00,$01,$00,$01,$01,$80
+B5_923A:
+    .byte $FF
 B5_923B:
     .byte $FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00
     .byte $00,$01,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00,$00,$00,$00,$00
@@ -1691,34 +2236,170 @@ B5_923B:
     .res 10, $00
     .byte $01,$00,$00,$00,$01,$00,$01,$00,$01,$00,$01,$00,$00,$00,$01,$00
     .res 10, $00
-    .byte $FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$80,$BD,$10,$05,$38,$E9,$01,$9D
-    .byte $10,$05,$BD,$40,$05,$E9,$00,$9D,$40,$05,$BD,$D0,$05,$FE,$D0,$05
-    .byte $0A,$A8,$B9,$C6,$93,$85,$53,$C9,$7F,$D0,$09,$A9,$0D,$9D,$80,$04
-    .byte $9D,$D0,$05,$60,$C9,$80,$D0,$06,$A9,$0C,$9D,$80,$04,$60,$C9,$7E
-    .byte $D0,$05,$A9,$00,$4C,$78,$CE,$BD,$B0,$04,$18,$65,$53,$9D,$B0,$04
-    .byte $BD,$E0,$04,$79,$C7,$93,$9D,$E0,$04,$60,$BD,$D0,$05,$38,$E9,$01
-    .byte $D0,$05,$20,$55,$8A,$A9,$12,$9D,$D0,$05,$A5,$19,$C5,$55,$B0,$E9
-    .byte $69,$1A,$C5,$55,$90,$E3,$A5,$18,$C5,$56,$B0,$DD,$69,$16,$C5,$56
-    .byte $90,$D7,$A9,$01,$85,$DF,$20,$C1,$91,$A9,$19,$20,$78,$CE,$20,$3D
-    .byte $FA,$A9,$04,$99,$80,$04,$A5,$60,$99,$B0,$04,$A5,$61,$99,$E0,$04
-    .byte $A9,$F9,$85,$53,$A9,$FF,$85,$54,$A5,$66,$F0,$06,$A9,$08,$85,$53
-    .byte $E6,$54,$A5,$5E,$18,$65,$53,$99,$10,$05,$A5,$5F,$65,$54,$99,$40
-    .byte $05,$A9,$20,$99,$70,$05,$A9,$01,$99,$A0,$05,$A9,$00,$99,$D0,$05
-    .byte $99,$00,$06,$99,$30,$06,$A9,$04,$8D,$2C,$07,$60,$FE,$FF,$FE,$FF
-    .byte $FE,$FF,$FF,$FF,$FE,$FF,$FF,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00
-    .byte $FF,$FF,$00,$00,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$01,$00,$00,$00,$00,$00,$01,$00,$00,$00,$01,$00,$00,$00
-    .byte $01,$00,$00,$00,$01,$00,$01,$00,$02,$00,$01,$00,$02,$00,$01,$00
-    .byte $02,$00,$02,$00,$02,$00,$80,$00,$02,$00,$03,$00,$02,$00,$02,$00
-    .byte $03,$00,$02,$00,$03,$00,$02,$00,$03,$00,$02,$00,$03,$00,$03,$00
-    .byte $03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$7E,$00
-    .byte $FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$01,$00,$01,$00,$02,$00
-    .byte $FF,$FF,$00,$00,$01,$00,$7F,$BD,$70,$05,$29,$04,$F0,$01,$60,$BD
-    .byte $D0,$05,$D0,$35,$9D,$A0,$05,$A5,$19,$C5,$55,$90,$08,$BD,$00,$06
-    .byte $F0,$EC,$4C,$ED,$94,$69,$1A,$C5,$55,$90,$F2,$A5,$18,$C5,$56,$B0
-    .byte $EC,$69,$16,$C5,$56,$90,$E6,$A5,$63,$C9,$07,$D0,$E0,$A9,$05,$20
-    .byte $3B,$CE,$A6,$42,$A9,$01,$9D,$D0,$05,$A5,$B1,$4A,$4A,$4A,$4A,$29
-    .byte $01,$9D,$A0,$05,$BD,$30,$06,$38,$E9,$01,$D0,$44,$20,$3D,$FA
+    .byte $FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$80
+Ent0B_Update:
+    LDA ent_x_lo,x
+    SEC
+    SBC #$01
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
+    SBC #$00
+    STA ent_x_hi,x
+Ent0C_Update:
+    LDA ent_angle,x
+    INC ent_angle,x
+    ASL a
+    TAY
+    LDA B5_93C6,y
+    STA zp_53
+    CMP #$7F
+    BNE B5_931E
+    LDA #$0D
+    STA ent_type,x
+    STA ent_angle,x
+    RTS
+B5_931E:
+    CMP #$80
+    BNE B5_9328
+    LDA #$0C
+    STA ent_type,x
+    RTS
+B5_9328:
+    CMP #$7E
+    BNE B5_9331
+    LDA #$00
+    JMP F_CE78
+B5_9331:
+    LDA ent_y_lo,x
+    CLC
+    ADC zp_53
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
+    ADC B5_93C7,y
+    STA ent_y_hi,x
+B5_9343:
+    RTS
+Ent0D_Update:
+    LDA ent_angle,x
+    SEC
+    SBC #$01
+    BNE B5_9351
+    JSR B5_8A55
+    LDA #$12
+B5_9351:
+    STA ent_angle,x
+    LDA zp_19
+    CMP zp_55
+    BCS B5_9343
+    ADC #$1A
+    CMP zp_55
+    BCC B5_9343
+    LDA zp_18
+    CMP zp_56
+    BCS B5_9343
+    ADC #$16
+    CMP zp_56
+    BCC B5_9343
+    LDA #$01
+    STA zp_DF
+    JSR B5_91C1
+    LDA #$19
+    JSR F_CE78
+    JSR F_FA3D
+    LDA #$04
+    STA ent_type,y
+    LDA player_y_lo
+    STA ent_y_lo,y
+    LDA player_y_hi
+    STA ent_y_hi,y
+    LDA #$F9
+    STA zp_53
+    LDA #$FF
+    STA zp_54
+    LDA zp_66
+    BEQ B5_939C
+    LDA #$08
+    STA zp_53
+    INC zp_54
+B5_939C:
+    LDA player_x_lo
+    CLC
+    ADC zp_53
+    STA ent_x_lo,y
+    LDA player_x_hi
+    ADC zp_54
+    STA ent_x_hi,y
+    LDA #$20
+    STA ent_flags,y
+    LDA #$01
+    STA ent_param,y
+    LDA #$00
+    STA ent_angle,y
+    STA ent_radius,y
+    STA ent_param2,y
+    LDA #$04
+    STA game_state
+    RTS
+B5_93C6:
+    .byte $FE
+B5_93C7:
+    .byte $FF,$FE,$FF,$FE,$FF,$FF,$FF,$FE,$FF,$FF,$FF,$FE,$FF,$FF,$FF,$FF
+    .byte $FF,$00,$00,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00
+    .byte $00,$00,$00,$00,$00,$01,$00,$00,$00,$00,$00,$01,$00,$00,$00,$01
+    .byte $00,$00,$00,$01,$00,$00,$00,$01,$00,$01,$00,$02,$00,$01,$00,$02
+    .byte $00,$01,$00,$02,$00,$02,$00,$02,$00,$80,$00,$02,$00,$03,$00,$02
+    .byte $00,$02,$00,$03,$00,$02,$00,$03,$00,$02,$00,$03,$00,$02,$00,$03
+    .byte $00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03
+    .byte $00,$7E,$00,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$01,$00,$01
+    .byte $00,$02,$00,$FF,$FF,$00,$00,$01,$00,$7F
+Ent0E_Update:
+    LDA ent_flags,x
+    AND #$04
+    BEQ B5_9459
+B5_9458:
+    RTS
+B5_9459:
+    LDA ent_angle,x
+    BNE B5_9493
+    STA ent_param,x
+    LDA zp_19
+    CMP zp_55
+    BCC B5_946F
+B5_9467:
+    LDA ent_radius,x
+    BEQ B5_9458
+    JMP B5_94ED
+B5_946F:
+    ADC #$1A
+    CMP zp_55
+    BCC B5_9467
+    LDA zp_18
+    CMP zp_56
+    BCS B5_9467
+    ADC #$16
+    CMP zp_56
+    BCC B5_9467
+    LDA zp_63
+    CMP #$07
+    BNE B5_9467
+    LDA #$05
+    JSR PlaySong
+    LDX zp_42
+    LDA #$01
+    STA ent_angle,x
+B5_9493:
+    LDA zp_B1
+    LSR a
+    LSR a
+    LSR a
+    LSR a
+    AND #$01
+    STA ent_param,x
+    LDA ent_param2,x
+    SEC
+    SBC #$01
+    BNE B5_94EA
+    JSR F_FA3D
     LDA #$0F
     STA ent_type,y
     LDA ent_y_lo,x
@@ -1746,7 +2427,9 @@ B5_923B:
     AND #$07
     CLC
     ADC #$26
+B5_94EA:
     STA ent_param2,x
+B5_94ED:
     LDA ent_radius,x
     CLC
     ADC #$01
@@ -1766,48 +2449,271 @@ B5_950E:
     .byte $FE
 B5_950F:
     .byte $FF,$FE,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00
-    .byte $00,$01,$00,$00,$00,$01,$00,$01,$00,$01,$00,$02,$00,$02,$00,$A5
-    .byte $B1,$29,$01,$F0,$0A,$DE,$D0,$05,$D0,$06,$A9,$00,$9D,$80,$04,$60
-    .byte $BD,$B0,$04,$38,$E9,$01,$9D,$B0,$04,$BD,$E0,$04,$E9,$00,$9D,$E0
-    .byte $04,$BD,$A0,$05,$C9,$04,$F0,$03,$4C,$35,$8F,$A9,$87,$85,$53,$A9
-    .byte $8F,$85,$54,$4C,$3D,$8F,$BD,$70,$05,$29,$04,$F0,$01,$60,$A5,$19
-    .byte $C5,$55,$B0,$3D,$69,$1A,$C5,$55,$90,$37,$A5,$18,$C5,$56,$B0,$31
-    .byte $69,$16,$C5,$56,$90,$2B,$A9,$00,$8D,$A7,$01,$AD,$A8,$01,$38,$E9
-    .byte $96,$8D,$A8,$01,$AD,$A9,$01,$E9,$00,$8D,$A9,$01,$B0,$08,$A9,$00
-    .byte $8D,$A8,$01,$8D,$A9,$01,$20,$BF,$90,$A9,$19,$20,$78,$CE,$4C,$C1
-    .byte $91,$A5,$B1,$4A,$4A,$29,$01,$9D,$A0,$05,$BD,$30,$06,$38,$E9,$01
-    .byte $D0,$5E,$20,$3D,$FA,$A9,$FF,$85,$54,$A9,$FD,$85,$53,$BD,$00,$06
-    .byte $49,$01,$9D,$00,$06,$D0,$06,$85,$54,$A9,$03,$85,$53,$A9,$0F,$99
-    .byte $80,$04,$BD,$B0,$04,$38,$E9,$04,$99,$B0,$04,$BD,$E0,$04,$E9,$00
-    .byte $99,$E0,$04,$BD,$10,$05,$18,$65,$53,$99,$10,$05,$BD,$40,$05,$65
-    .byte $54,$99,$40,$05,$A9,$30,$99,$70,$05,$BD,$00,$06,$18,$69,$02,$99
-    .byte $A0,$05,$A5,$53,$29,$0F,$99,$00,$06,$A9,$32,$99,$D0,$05,$A9,$2A
-    .byte $9D,$30,$06,$60,$BD,$70,$05,$29,$04,$D0,$F8,$A5,$19,$C5,$55,$B0
-    .byte $F2,$69,$1A,$C5,$55,$90,$EC,$A5,$18,$C5,$56,$B0,$E6,$69,$16,$C5
-    .byte $56,$90,$E0,$A9,$07,$9D,$80,$04,$A9,$00,$9D,$00,$06,$9D,$70,$05
-    .byte $A9,$1E,$9D,$A0,$05,$A9,$04,$9D,$30,$06,$A9,$19,$20,$78,$CE,$A9
-    .byte $20,$85,$7A,$A9,$03,$85,$7B,$4C,$55,$8A,$20,$D3,$80,$BD,$B0,$04
-    .byte $85,$55,$BD,$10,$05,$85,$56,$A5,$55,$48,$A5,$56,$48,$A9,$96,$48
-    .byte $A9,$E7,$48,$BD,$D0,$05,$0A,$A8,$B9,$94,$96,$85,$51,$B9,$95,$96
-    .byte $85,$52,$6C,$51,$00,$AD,$96,$CC,$96,$9A,$96,$A9,$FA,$85,$55,$E4
-    .byte $B6,$D0,$05,$A5,$79,$F0,$01,$60,$A9,$00,$9D,$D0,$05,$60,$A9,$F8
-    .byte $85,$55,$A5,$79,$F0,$F7,$E4,$B6,$D0,$F3,$A5,$63,$F0,$23,$A9,$00
-    .byte $9D,$00,$06,$A9,$01,$9D,$D0,$05,$A9,$00,$4C,$8F,$CE,$FE,$00,$06
-    .byte $BD,$00,$06,$4A,$A8,$B9,$20,$97,$38,$E9,$07,$85,$55,$C9,$79,$D0
-    .byte $CC,$A9,$02,$9D,$D0,$05,$4C,$9A,$96,$A9,$00,$85,$56,$A5,$B1,$4A
-    .byte $4A,$29,$1F,$A8,$B9,$4D,$97,$18,$65,$55,$85,$53,$10,$02,$C6,$56
-    .byte $A5,$53,$18,$69,$04,$85,$53,$A5,$56,$69,$00,$85,$56,$AD,$AF,$01
-    .byte $18,$65,$53,$9D,$B0,$04,$AD,$B0,$01,$65,$56,$9D,$E0,$04,$4C,$9E
-    .byte $80,$02,$04,$06,$07,$09,$0A,$0B,$0B,$0C,$0C,$0C,$0C,$0B,$0B,$0A
-    .byte $09,$07,$06,$04,$02,$00
+    .byte $00,$01,$00,$00,$00,$01,$00,$01,$00,$01,$00,$02,$00,$02,$00
+Ent0F_Update:
+    LDA zp_B1
+    AND #$01
+    BEQ B5_953E
+    DEC ent_angle,x
+    BNE B5_953F
+    LDA #$00
+    STA ent_type,x
+B5_953E:
+    RTS
+B5_953F:
+    LDA ent_y_lo,x
+    SEC
+    SBC #$01
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
+    SBC #$00
+    STA ent_y_hi,x
+    LDA ent_param,x
+    CMP #$04
+    BEQ B5_955A
+    JMP B5_8F35
+B5_955A:
+    LDA #$87
+    STA zp_53
+    LDA #$8F
+    STA zp_54
+    JMP B5_8F3D
+Ent10_Update:
+    LDA ent_flags,x
+    AND #$04
+    BEQ B5_956D
+    RTS
+B5_956D:
+    LDA zp_19
+    CMP zp_55
+    BCS B5_95B0
+    ADC #$1A
+    CMP zp_55
+    BCC B5_95B0
+    LDA zp_18
+    CMP zp_56
+    BCS B5_95B0
+    ADC #$16
+    CMP zp_56
+    BCC B5_95B0
+    LDA #$00
+    STA ram_01A7
+    LDA ram_01A8
+    SEC
+    SBC #$96
+    STA ram_01A8
+    LDA ram_01A9
+    SBC #$00
+    STA ram_01A9
+    BCS B5_95A5
+    LDA #$00
+    STA ram_01A8
+    STA ram_01A9
+B5_95A5:
+    JSR B5_90BF
+    LDA #$19
+    JSR F_CE78
+    JMP B5_91C1
+B5_95B0:
+    LDA zp_B1
+    LSR a
+    LSR a
+    AND #$01
+    STA ent_param,x
+    LDA ent_param2,x
+    SEC
+    SBC #$01
+    BNE B5_961F
+    JSR F_FA3D
+    LDA #$FF
+    STA zp_54
+    LDA #$FD
+    STA zp_53
+    LDA ent_radius,x
+    EOR #$01
+    STA ent_radius,x
+    BNE B5_95DC
+    STA zp_54
+    LDA #$03
+    STA zp_53
+B5_95DC:
+    LDA #$0F
+    STA ent_type,y
+    LDA ent_y_lo,x
+    SEC
+    SBC #$04
+    STA ent_y_lo,y
+    LDA ent_y_hi,x
+    SBC #$00
+    STA ent_y_hi,y
+    LDA ent_x_lo,x
+    CLC
+    ADC zp_53
+    STA ent_x_lo,y
+    LDA ent_x_hi,x
+    ADC zp_54
+    STA ent_x_hi,y
+    LDA #$30
+    STA ent_flags,y
+    LDA ent_radius,x
+    CLC
+    ADC #$02
+    STA ent_param,y
+    LDA zp_53
+    AND #$0F
+    STA ent_radius,y
+    LDA #$32
+    STA ent_angle,y
+    LDA #$2A
+B5_961F:
+    STA ent_param2,x
+B5_9622:
+    RTS
+Ent11_Update:
+    LDA ent_flags,x
+    AND #$04
+    BNE B5_9622
+    LDA zp_19
+    CMP zp_55
+    BCS B5_9622
+    ADC #$1A
+    CMP zp_55
+    BCC B5_9622
+    LDA zp_18
+    CMP zp_56
+    BCS B5_9622
+    ADC #$16
+    CMP zp_56
+    BCC B5_9622
+    LDA #$07
+    STA ent_type,x
+    LDA #$00
+    STA ent_radius,x
+    STA ent_flags,x
+    LDA #$1E
+    STA ent_param,x
+    LDA #$04
+    STA ent_param2,x
+    LDA #$19
+    JSR F_CE78
+    LDA #$20
+    STA zp_7A
+    LDA #$03
+    STA zp_7B
+    JMP B5_8A55
+Ent16_Update:
+    JSR B5_80D3
+    LDA ent_y_lo,x
+    STA zp_55
+    LDA ent_x_lo,x
+    STA zp_56
+    LDA zp_55
+    PHA
+    LDA zp_56
+    PHA
+    LDA #$96
+    PHA
+    LDA #$E7
+    PHA
+    LDA ent_angle,x
+    ASL a
+    TAY
+    LDA B5_9694,y
+    STA ptr_lo
+    LDA B5_9695,y
+    STA ptr_hi
+    JMP (ptr_lo)
+B5_9694:
+    .byte $AD
+B5_9695:
+    .byte $96,$CC,$96,$9A,$96
+B5_969A:
+    LDA #$FA
+    STA zp_55
+    CPX zp_B6
+    BNE B5_96A7
+    LDA zp_79
+    BEQ B5_96A7
+    RTS
+B5_96A7:
+    LDA #$00
+    STA ent_angle,x
+B5_96AC:
+    RTS
+    LDA #$F8
+    STA zp_55
+    LDA zp_79
+    BEQ B5_96AC
+    CPX zp_B6
+    BNE B5_96AC
+    LDA zp_63
+    BEQ B5_96E0
+    LDA #$00
+    STA ent_radius,x
+    LDA #$01
+    STA ent_angle,x
+    LDA #$00
+    JMP F_CE8F
+    INC ent_radius,x
+    LDA ent_radius,x
+    LSR a
+    TAY
+    LDA B5_9720,y
+    SEC
+    SBC #$07
+    STA zp_55
+    CMP #$79
+    BNE B5_96AC
+B5_96E0:
+    LDA #$02
+    STA ent_angle,x
+    JMP B5_969A
+    LDA #$00
+    STA zp_56
+    LDA zp_B1
+    LSR a
+    LSR a
+    AND #$1F
+    TAY
+    LDA B5_974D,y
+    CLC
+    ADC zp_55
+    STA zp_53
+    BPL B5_96FF
+    DEC zp_56
+B5_96FF:
+    LDA zp_53
+    CLC
+    ADC #$04
+    STA zp_53
+    LDA zp_56
+    ADC #$00
+    STA zp_56
+    LDA ram_01AF
+    CLC
+    ADC zp_53
+    STA ent_y_lo,x
+    LDA ram_01B0
+    ADC zp_56
+    STA ent_y_hi,x
+    JMP EntityDeltaFromCentre
+B5_9720:
+    .byte $02,$04,$06,$07,$09,$0A,$0B,$0B,$0C,$0C,$0C,$0C,$0B,$0B,$0A,$09
+    .byte $07,$06,$04,$02,$00
     .word F_FDFE
     .word F_FCFD
     .word F_FDFC
     .word F_FEFD
     .byte $00,$01,$02,$03,$03,$04,$04,$04,$03,$03,$02,$02,$01,$01,$00,$80
+B5_974D:
     .byte $FF,$FE,$FE,$FD,$FD,$FD,$FD,$FD,$FD,$FD,$FE,$FE,$FF,$00,$00,$00
     .byte $01,$02,$02,$03,$03,$03,$03,$03,$03,$03,$02,$02,$01,$00,$00,$00
-    .byte $20,$04,$89,$20,$86,$88,$20,$06,$8A,$20,$25,$AC,$F0,$11
+Ent19_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_8886
+    JSR Ent_CheckPlayerTouch
+    JSR Ent_PatrolStep
+    BEQ B5_978C
 B5_977B:
     LDA ent_type,x
     STA ent_dy,x
@@ -1816,6 +2722,7 @@ B5_977B:
     LDA #$00
     STA ent_param2,x
     RTS
+B5_978C:
     LDA ent_radius,x
     SEC
     SBC #$01
@@ -1827,40 +2734,138 @@ B5_977B:
     RTS
 B5_979F:
     .res 10, $00
-    .byte $01,$01,$01,$01,$01,$01,$20,$04,$89,$20,$E3,$89,$BD,$30,$06,$FE
-    .byte $30,$06,$0A,$A8,$B9,$E7,$97,$C9,$80,$D0,$0E,$A9,$1E,$9D,$80,$04
-    .byte $A9,$00,$9D,$30,$06,$9D,$00,$06,$60,$85,$53,$BD,$B0,$04,$18,$65
-    .byte $53,$9D,$B0,$04,$BD,$E0,$04,$79,$E8,$97,$9D,$E0,$04,$60,$FD,$FF
-    .byte $FD,$FF,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$00,$00
-    .byte $01,$00,$01,$00,$02,$00,$02,$00,$03,$00,$03,$00,$FE,$FF,$FE,$FF
-    .byte $FF,$FF,$FF,$FF,$00,$00,$00,$00,$01,$00,$01,$00,$02,$00,$02,$00
-    .byte $FF,$FF,$FF,$FF,$00,$00,$01,$00,$01,$00,$80,$20,$04,$89,$20,$E3
-    .byte $89,$BD,$30,$06,$85,$51,$18,$69,$01,$C9,$14,$D0,$13,$A9,$02,$85
-    .byte $53,$A5,$B1,$4A,$29,$1F,$A8,$B9,$AA,$98,$9D,$A0,$05,$4C,$5B,$98
-    .byte $9D,$30,$06,$A5,$51,$0A,$A8,$B9,$82,$98,$9D,$A0,$05,$B9,$83,$98
-    .byte $85,$53,$20,$34,$84,$BD,$D0,$05,$10,$1E,$A5,$B2,$85,$51,$A5,$B3
-    .byte $85,$52,$20,$1C,$E5,$29,$03,$C9,$03,$D0,$03,$4C,$C1,$91,$A9,$1A
-    .byte $9D,$80,$04,$A9,$00,$9D,$30,$06,$60,$02,$00,$02,$00,$02,$00,$02
-    .byte $00,$02,$00,$02,$01,$02,$00,$02,$01,$02,$01,$03,$00,$03,$01,$03
-    .byte $01,$03,$02,$03,$01,$03,$02,$03,$02,$03,$02,$03,$02,$03,$02,$03
-    .byte $02,$03,$03,$03,$03,$03,$03,$03,$03,$04,$04,$04,$04,$03,$03,$03
-    .byte $04,$04,$04,$03,$03,$03,$03,$03
+    .byte $01,$01,$01,$01,$01,$01
+Ent1A_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_89E3
+    LDA ent_param2,x
+    INC ent_param2,x
+    ASL a
+    TAY
+    LDA B5_97E7,y
+    CMP #$80
+    BNE B5_97D2
+    LDA #$1E
+    STA ent_type,x
+    LDA #$00
+    STA ent_param2,x
+    STA ent_radius,x
+    RTS
+B5_97D2:
+    STA zp_53
+    LDA ent_y_lo,x
+    CLC
+    ADC zp_53
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
+    ADC B5_97E8,y
+    STA ent_y_hi,x
+    RTS
+B5_97E7:
+    .byte $FD
+B5_97E8:
+    .byte $FF,$FD,$FF,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$00
+    .byte $00,$01,$00,$01,$00,$02,$00,$02,$00,$03,$00,$03,$00,$FE,$FF,$FE
+    .byte $FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$01,$00,$01,$00,$02,$00,$02
+    .byte $00,$FF,$FF,$FF,$FF,$00,$00,$01,$00,$01,$00,$80
+Ent1B_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_89E3
+    LDA ent_param2,x
+    STA ptr_lo
+    CLC
+    ADC #$01
+    CMP #$14
+    BNE B5_9849
+    LDA #$02
+    STA zp_53
+    LDA zp_B1
+    LSR a
+    AND #$1F
+    TAY
+    LDA B5_98AA,y
+    STA ent_param,x
+    JMP B5_985B
+B5_9849:
+    STA ent_param2,x
+    LDA ptr_lo
+    ASL a
+    TAY
+    LDA B5_9882,y
+    STA ent_param,x
+    LDA B5_9883,y
+    STA zp_53
+B5_985B:
+    JSR B5_8434
+    LDA ent_angle,x
+    BPL B5_9881
+    LDA zp_B2
+    STA ptr_lo
+    LDA zp_B3
+    STA ptr_hi
+    JSR F_E51C
+    AND #$03
+    CMP #$03
+    BNE B5_9877
+    JMP B5_91C1
+B5_9877:
+    LDA #$1A
+    STA ent_type,x
+    LDA #$00
+    STA ent_param2,x
+B5_9881:
+    RTS
+B5_9882:
+    .byte $02
+B5_9883:
+    .byte $00,$02,$00,$02,$00,$02,$00,$02,$00,$02,$01,$02,$00,$02,$01,$02
+    .byte $01,$03,$00,$03,$01,$03,$01,$03,$02,$03,$01,$03,$02,$03,$02,$03
+    .byte $02,$03,$02,$03,$02,$03,$02
+B5_98AA:
+    .res 8, $03
+    .byte $04,$04,$04,$04,$03,$03,$03,$04,$04,$04,$03,$03,$03,$03,$03
 B5_98C1:
     .res 9, $03
     .res 10, $02
-    .byte $00,$20,$04,$89,$20,$E3,$89,$BD,$30,$06,$38,$E9,$01,$D0,$16,$9D
-    .byte $30,$06,$A9,$1E,$9D,$80,$04,$A5,$BC,$09,$80,$9D,$00,$06,$A5,$BB
-    .byte $45,$BC,$85,$BC,$60,$9D,$30,$06,$4A,$29,$3F,$C9,$20,$B0,$07,$A8
-    .byte $B9,$AA,$98,$9D,$A0,$05,$20,$46,$85,$BD,$D0
-    ORA fade_step
-    ASL a
+    .byte $00
+Ent1C_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_89E3
+    LDA ent_param2,x
+    SEC
+    SBC #$01
+    BNE B5_98F9
+    STA ent_param2,x
+    LDA #$1E
+    STA ent_type,x
+    LDA zp_BC
+    ORA #$80
+    STA ent_radius,x
+    LDA zp_BB
+    EOR zp_BC
+    STA zp_BC
+    RTS
+B5_98F9:
+    STA ent_param2,x
+    LSR a
+    AND #$3F
+    CMP #$20
+    BCS B5_990A
+    TAY
+    LDA B5_98AA,y
+    STA ent_param,x
+B5_990A:
+    JSR B5_8546
+    LDA ent_angle,x
+    BPL B5_991C
     LDA #$1B
     STA ent_type,x
     LDA #$09
     STA ent_param2,x
+B5_991C:
     RTS
-B5_991D:
-    JSR B5_8904
+Ent1D_Update:
+    JSR Ent_CheckPlayerOverlap
     LDA ent_param2,x
     TAY
     SEC
@@ -1870,8 +2875,8 @@ B5_991D:
     LDA #$1C
     STA ent_type,x
     RTS
-B5_9932:
-    JSR B5_8904
+Ent1E_Update:
+    JSR Ent_CheckPlayerOverlap
     LDA ent_param2,x
     TAY
     CLC
@@ -1885,7 +2890,7 @@ B5_993C:
     RTS
 B5_994B:
     STA ent_param,x
-    JSR B5_8A06
+    JSR Ent_CheckPlayerTouch
     JSR B5_8546
     LDA ent_angle,x
     BPL B5_9963
@@ -1895,11 +2900,11 @@ B5_994B:
     STA ent_angle,x
 B5_9963:
     RTS
-B5_9964:
-    JSR B5_8904
+Ent1F_Update:
+    JSR Ent_CheckPlayerOverlap
     JSR B5_8886
-    JSR B5_8A06
-    JSR B5_AC25
+    JSR Ent_CheckPlayerTouch
+    JSR Ent_PatrolStep
     BEQ B5_9975
     JMP B5_977B
 B5_9975:
@@ -1923,11 +2928,11 @@ B5_9993:
     LDA B5_979F,y
     STA ent_param,x
     RTS
-B5_99A0:
-    JSR B5_8904
+Ent20_Update:
+    JSR Ent_CheckPlayerOverlap
     JSR B5_8886
-    JSR B5_8A06
-    JSR B5_AC25
+    JSR Ent_CheckPlayerTouch
+    JSR Ent_PatrolStep
     BEQ B5_99B1
     JMP B5_977B
 B5_99B1:
@@ -1949,11 +2954,37 @@ B5_99C4:
     RTS
 B5_99D1:
     .res 10, $0C
-    .byte $0D,$0D,$0D,$0D,$0D,$0D,$20,$04,$89,$20,$86,$88,$20,$06,$8A,$20
-    .byte $46,$85,$BD,$D0,$05,$10,$03,$4C,$7B,$97,$DE,$00,$06,$D0,$14,$A9
-    .byte $21,$9D,$80,$04,$A9,$00,$9D,$30,$06,$A5,$BC,$29,$03,$18,$69,$01
-    .byte $9D,$00,$06,$60,$20,$04,$89,$20,$86,$88,$BD,$30,$06,$A8,$FE,$30
-    .byte $06,$B9,$BC,$9A,$C9,$FF
+    .byte $0D,$0D,$0D,$0D,$0D,$0D
+Ent9C_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_8886
+    JSR Ent_CheckPlayerTouch
+    JSR B5_8546
+    LDA ent_angle,x
+    BPL B5_99F5
+    JMP B5_977B
+B5_99F5:
+    DEC ent_radius,x
+    BNE B5_9A0E
+    LDA #$21
+    STA ent_type,x
+    LDA #$00
+    STA ent_param2,x
+    LDA zp_BC
+    AND #$03
+    CLC
+    ADC #$01
+    STA ent_radius,x
+B5_9A0E:
+    RTS
+Ent21_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_8886
+    LDA ent_param2,x
+    TAY
+    INC ent_param2,x
+    LDA B5_9ABC,y
+    CMP #$FF
     BNE B5_9A81
     LDA ent_flags,x
     AND #$04
@@ -2017,7 +3048,7 @@ B5_9AA2:
     RTS
 B5_9AA3:
     STA ent_param,x
-    JSR B5_8A06
+    JSR Ent_CheckPlayerTouch
     JSR B5_8546
     LDA ent_angle,x
     BPL B5_9AA2
@@ -2026,15 +3057,11 @@ B5_9AA3:
     LDA #$09
     STA ent_param2,x
     RTS
-    ASL ram_0E0E
-    ASL ram_0E0E
-    ASL ram_0EFF
-    ASL ram_0E0E
-    ASL ram_0D0D
-    ORA ram_0D0D
-    ORA ram_0D0D
-    ORA B5_BC00
-    .byte $D0,$05   ; BNE $9ADB (target not an instruction start)
+B5_9ABC:
+    .byte $0E,$0E,$0E,$0E,$0E,$0E,$0E,$FF,$0E,$0E,$0E,$0E,$0E,$0D,$0D,$0D
+    .byte $0D,$0D,$0D,$0D,$0D,$0D,$00
+Ent22_Update:
+    LDY ent_angle,x
     INC ent_angle,x
 B5_9AD9:
     LDA B5_9AF7,y
@@ -2045,7 +3072,7 @@ B5_9AD9:
 B5_9AE5:
     STA ent_param,x
     RTS
-B5_9AE9:
+Ent23_Update:
     LDY ent_angle,x
     DEC ent_angle,x
     BNE B5_9AD9
@@ -2058,7 +3085,7 @@ B5_9AF7:
     AND map_ptr_lo
     AND map_ptr_lo
     ROL nmi_state
-B5_9B01:
+Ent24_Update:
     JSR B5_8993
     DEC ent_param2,x
     BNE B5_9B14
@@ -2089,7 +3116,7 @@ B5_9B32:
     ADC #$26
     STA ent_param,x
     RTS
-B5_9B3E:
+Ent25_Update:
     JSR B5_8993
     DEC ent_param2,x
     BEQ B5_9B09
@@ -2106,7 +3133,7 @@ B5_9B46:
     STA ent_x_lo,x
     STA ent_x_hi,x
     JMP B5_9B09
-B5_9B64:
+Ent26_Update:
     JSR B5_8993
     DEC ent_param2,x
     BEQ B5_9B09
@@ -2141,7 +3168,7 @@ B5_9B6C:
     ADC #$00
     STA ent_x_hi,x
     JMP B5_9B09
-B5_9BAB:
+Ent27_Update:
     JSR B5_8993
     DEC ent_param2,x
     BNE B5_9BB6
@@ -2161,7 +3188,7 @@ B5_9BCC:
     STA ent_y_lo,x
     STA ent_y_hi,x
     JMP B5_9B09
-B5_9BD7:
+Ent28_Update:
     JSR B5_8993
     DEC ent_param2,x
     BNE B5_9BE2
@@ -2204,24 +3231,87 @@ B5_9C0C:
 B5_9C29:
     CLC
     ADC zp_55
+B5_9C2C:
     STA ent_param,x
     RTS
 B5_9C30:
     .byte $01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$01
-    .byte $00,$FF,$20,$D3,$80,$BD,$B0,$04,$85,$55,$BD,$10,$05,$85,$56,$A5
-    .byte $55,$48,$A5,$56,$48,$20,$8D,$81,$BC,$00,$06,$FE,$00,$06,$B9,$A2
-    .byte $9C,$C9,$FF,$D0,$05,$A9,$00,$9D,$00,$06,$85,$53,$BD,$D0,$05,$C9
-    .byte $01,$D0,$10,$BD,$70,$05,$29,$FD,$9D,$70,$05,$A5,$53,$9D,$A0,$05
-    .byte $4C,$9E,$80,$C9,$02,$D0,$10,$BD,$70,$05,$09,$02,$9D,$70,$05,$A5
-    .byte $53,$9D,$A0,$05,$4C,$9E,$80,$A5,$53,$18,$69,$07,$9D,$A0,$05,$4C
-    .byte $9E,$80
+    .byte $00,$FF
+Ent2E_Update:
+    JSR B5_80D3
+    LDA ent_y_lo,x
+    STA zp_55
+    LDA ent_x_lo,x
+    STA zp_56
+    LDA zp_55
+    PHA
+    LDA zp_56
+    PHA
+    JSR B5_818D
+    LDY ent_radius,x
+    INC ent_radius,x
+    LDA B5_9CA2,y
+    CMP #$FF
+    BNE B5_9C6A
+    LDA #$00
+    STA ent_radius,x
+B5_9C6A:
+    STA zp_53
+    LDA ent_angle,x
+    CMP #$01
+    BNE B5_9C83
+    LDA ent_flags,x
+    AND #$FD
+    STA ent_flags,x
+    LDA zp_53
+    STA ent_param,x
+    JMP EntityDeltaFromCentre
+B5_9C83:
+    CMP #$02
+    BNE B5_9C97
+    LDA ent_flags,x
+    ORA #$02
+    STA ent_flags,x
+    LDA zp_53
+    STA ent_param,x
+    JMP EntityDeltaFromCentre
+B5_9C97:
+    LDA zp_53
+    CLC
+    ADC #$07
+    STA ent_param,x
+    JMP EntityDeltaFromCentre
 B5_9CA2:
     .byte $00,$00,$00,$00,$00,$01,$01,$01,$01,$01,$02,$02,$02,$03,$03,$03
-    .byte $04,$04,$04,$05,$05,$05,$06,$06,$06,$FF,$20,$04,$89,$20,$E3,$89
-    .byte $DE,$D0,$05,$BD,$D0,$05,$C9,$FF,$D0,$16,$A9,$E9,$A0,$9C,$20,$17
-    .byte $F9,$A9,$02,$9D,$A0,$05,$A9,$14,$9D,$00,$06,$A9,$4B,$9D,$D0,$05
-    .byte $A9,$00,$85,$55,$4C,$03,$9C,$30,$0E,$00,$04,$00,$88,$03,$00,$00
-    .byte $00,$FF,$20,$BB,$89,$A5,$B1,$29,$02,$4A,$69,$03,$9D,$A0,$05
+    .byte $04,$04,$04,$05,$05,$05,$06,$06,$06,$FF
+Ent2F_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_89E3
+    DEC ent_angle,x
+    LDA ent_angle,x
+    CMP #$FF
+    BNE B5_9CE2
+    LDA #$E9
+    LDY #$9C
+    JSR F_F917
+    LDA #$02
+    STA ent_param,x
+    LDA #$14
+    STA ent_radius,x
+    LDA #$4B
+    STA ent_angle,x
+B5_9CE2:
+    LDA #$00
+    STA zp_55
+    JMP B5_9C03
+    .byte $30,$0E,$00,$04,$00,$88,$03,$00,$00,$00,$FF
+Ent30_Update:
+    JSR B5_89BB
+    LDA zp_B1
+    AND #$02
+    LSR a
+    ADC #$03
+    STA ent_param,x
     LDA #$02
     STA zp_53
     JSR B5_8434
@@ -2237,8 +3327,10 @@ B5_9D0E:
     SBC #$00
     STA ent_x_hi,x
     JMP B5_91C1
-    .byte $BD,$00,$06,$D0,$53,$BD
-    BVS B5_9D2F
+Ent31_Update:
+    LDA ent_radius,x
+    BNE B5_9D7A
+    LDA ent_flags,x
     AND #$04
     BEQ B5_9D2F
 B5_9D2E:
@@ -2277,26 +3369,50 @@ B5_9D55:
     JMP F_F91B
     .byte $0F,$FC,$FF,$00,$00,$68,$06,$30,$00,$00,$FF
 B5_9D7A:
-    .byte $BD,$00,$06,$FE,$00,$06,$4A,$A8,$B9,$9B,$9D,$C9,$FF,$F0,$03,$4C
-    BIT $209C
-    CMP (zp_91,x)
+    LDA ent_radius,x
+    INC ent_radius,x
+    LSR a
+    TAY
+    LDA B5_9D9B,y
+    CMP #$FF
+    BEQ B5_9D8C
+    JMP B5_9C2C
+B5_9D8C:
+    JSR B5_91C1
     LDA #$05
     JSR F_CE8F
     LDA #$D4
     LDY #$9D
     JMP F_F917
+B5_9D9B:
     .byte $01,$01,$01,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$01,$01,$01
     .byte $01,$01,$00,$00,$01,$01,$01,$01,$01,$01,$01,$01,$02,$02,$02,$03
     .byte $03,$03,$03,$04,$04,$04,$05,$05,$05,$05,$07,$07,$07,$07,$08,$08
     .byte $08,$08,$09,$09,$09,$09,$09,$09,$FF,$22,$FC,$FF,$04,$00,$00,$24
     .byte $00,$24,$30,$22,$0A,$00,$FD,$FF,$00,$24,$00,$25,$30,$22,$0A,$00
     .byte $0C,$00,$00,$24,$00,$26,$30,$22,$00,$00,$FF,$FF,$00,$24,$00,$27
-    .byte $30,$22,$00,$00,$0A,$00,$00,$24,$00,$28,$30,$FF,$BD,$D0,$05,$4A
-    .byte $A8,$B9,$25,$9E,$D0,$0D,$BD,$00,$06,$9D,$70,$05,$BD,$30,$06,$9D
-    .byte $A0,$05,$60,$9D,$A0,$05,$FE,$D0,$05,$60,$1F,$1E,$1E,$1F,$1F,$1F
-    .byte $1E,$1E,$00,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F
-    .byte $0F,$0F,$0F,$0F,$0F,$0F,$0F,$1F,$0F,$0F,$1F,$0F,$0F,$1F,$0F,$1F
-    .byte $0F,$0F,$0F,$0F,$FF,$0F,$FF,$FF,$FF,$EF,$FF,$EF,$FF
+    .byte $30,$22,$00,$00,$0A,$00,$00,$24,$00,$28,$30,$FF
+Ent32_Update:
+    LDA ent_angle,x
+    LSR a
+    TAY
+    LDA B5_9E25,y
+    BNE B5_9E1E
+    LDA ent_radius,x
+    STA ent_flags,x
+    LDA ent_param2,x
+    STA ent_param,x
+    RTS
+B5_9E1E:
+    STA ent_param,x
+    INC ent_angle,x
+    RTS
+B5_9E25:
+    .byte $1F,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$00
+B5_9E2E:
+    .res 20, $0F
+    .byte $1F,$0F,$0F,$1F,$0F,$0F,$1F,$0F,$1F,$0F,$0F,$0F,$0F,$FF,$0F,$FF
+    .byte $FF,$FF,$EF,$FF,$EF,$FF
     .word F_EFEF
     .word F_EFEF
     .word F_E0EF
@@ -2315,27 +3431,168 @@ B5_9D7A:
     .word F_F00F
     .byte $F0,$FF,$F0,$FF,$F0,$00,$FF,$00,$0F,$FF,$0F,$0F,$0F,$0F,$0F,$00
     .byte $1F,$00,$0F,$10,$0F,$00,$10,$00,$1F,$10,$10,$10,$1F,$10,$10,$10
-    .byte $80,$BC,$D0,$05,$FE,$D0,$05,$B9,$2E,$9E,$C9,$80,$D0,$22,$A9,$19
-    .byte $85,$63,$A9,$0A,$8D,$2F,$07,$A9,$00,$85,$D1,$85,$BD,$A9,$01,$85
-    .byte $D2,$A9,$7D,$85,$D3,$20,$C1,$91,$A9,$22,$20,$78,$CE,$4C,$55,$8A
-    .byte $85,$51,$29,$F0,$85,$52,$4A,$4A,$4A,$4A,$24,$52,$10,$02,$09,$F0
-    .byte $85,$53,$A5,$51,$29,$0F,$85,$54,$29,$08,$F0,$06,$A5,$54,$09,$F0
-    .byte $85,$54,$BD,$B0,$04,$18,$65,$53,$9D,$B0,$04,$BD,$10,$05,$18,$65
-    .byte $54,$9D,$10,$05,$BD,$00,$06,$38,$E9,$01,$D0,$09,$A9,$60,$A0,$9F
-    .byte $20,$17,$F9,$A9,$0A,$9D,$00,$06,$A5,$B1,$4A,$4A,$29,$01,$18,$69
-    .byte $1E,$9D,$A0,$05,$60,$34,$04,$00,$04,$00,$00,$02,$19,$00,$00,$FF
-    .byte $60,$DE,$D0,$05,$D0,$05,$A9,$00,$9D,$80,$04,$60,$A5,$19,$C5,$55
-    .byte $B0,$31,$69,$1A,$C5,$55,$90,$2B,$A5,$18,$C5,$56,$B0,$25,$69,$16
-    .byte $C5,$56,$90,$1F,$A9,$29,$20,$61,$CE,$A9,$07,$9D,$80,$04,$A9,$00
-    .byte $9D,$00,$06,$9D,$70,$05,$A9,$1F,$9D,$A0,$05,$A9,$03,$9D,$30,$06
-    .byte $CE,$45,$07,$4C,$D0,$9F,$BD,$D0,$05,$38,$E9,$01,$D0,$14,$BD,$B0
-    .byte $04,$18,$69,$01,$9D,$B0,$04,$BD,$E0,$04,$69,$00,$9D,$E0,$04,$BD
-    .byte $00,$06,$9D,$D0,$05,$A5,$1D,$85,$51,$A5,$1E,$69,$01,$85,$52,$BD
-    .byte $B0,$04,$38,$E5,$51,$BD,$E0,$04,$E5,$52,$90,$05,$A9,$00,$9D,$80
-    .byte $04,$60,$A5,$19,$C5,$55,$B0,$2B,$69,$1A,$C5,$55,$90,$25,$A5,$18
-    .byte $C5,$56,$B0,$1F,$69,$16,$C5,$56,$90,$19,$A9,$17,$20,$78,$CE,$20
-    .byte $6F,$F1,$90,$06,$A9,$00,$9D,$80,$04,$60,$20,$C1,$91,$A9,$03,$9D
-    .byte $30,$06,$60
+    .byte $80
+Ent33_Update:
+    LDY ent_angle,x
+    INC ent_angle,x
+    LDA B5_9E2E,y
+    CMP #$80
+    BNE B5_9F0B
+    LDA #$19
+    STA zp_63
+    LDA #$0A
+    STA ram_072F
+    LDA #$00
+    STA zp_D1
+    STA zp_BD
+    LDA #$01
+    STA zp_D2
+    LDA #$7D
+    STA zp_D3
+    JSR B5_91C1
+    LDA #$22
+    JSR F_CE78
+    JMP B5_8A55
+B5_9F0B:
+    STA ptr_lo
+    AND #$F0
+    STA ptr_hi
+    LSR a
+    LSR a
+    LSR a
+    LSR a
+    BIT ptr_hi
+    BPL B5_9F1B
+    ORA #$F0
+B5_9F1B:
+    STA zp_53
+    LDA ptr_lo
+    AND #$0F
+    STA zp_54
+    AND #$08
+    BEQ B5_9F2D
+    LDA zp_54
+    ORA #$F0
+    STA zp_54
+B5_9F2D:
+    LDA ent_y_lo,x
+    CLC
+    ADC zp_53
+    STA ent_y_lo,x
+    LDA ent_x_lo,x
+    CLC
+    ADC zp_54
+    STA ent_x_lo,x
+    LDA ent_radius,x
+    SEC
+    SBC #$01
+    BNE B5_9F50
+    LDA #$60
+    LDY #$9F
+    JSR F_F917
+    LDA #$0A
+B5_9F50:
+    STA ent_radius,x
+    LDA zp_B1
+    LSR a
+    LSR a
+    AND #$01
+    CLC
+    ADC #$1E
+    STA ent_param,x
+    RTS
+    .byte $34,$04,$00,$04,$00,$00,$02,$19,$00,$00,$FF,$60
+Ent34_Update:
+    DEC ent_angle,x
+    BNE B5_9F76
+    LDA #$00
+    STA ent_type,x
+B5_9F76:
+    RTS
+Ent35_Update:
+    LDA zp_19
+    CMP zp_55
+    BCS B5_9FAE
+    ADC #$1A
+    CMP zp_55
+    BCC B5_9FAE
+    LDA zp_18
+    CMP zp_56
+    BCS B5_9FAE
+    ADC #$16
+    CMP zp_56
+    BCC B5_9FAE
+    LDA #$29
+    JSR F_CE61
+    LDA #$07
+    STA ent_type,x
+    LDA #$00
+    STA ent_radius,x
+    STA ent_flags,x
+    LDA #$1F
+    STA ent_param,x
+    LDA #$03
+    STA ent_param2,x
+    DEC ram_0745
+B5_9FAE:
+    JMP B5_9FD0
+Ent36_Update:
+    LDA ent_angle,x
+    SEC
+    SBC #$01
+    BNE B5_9FCD
+    LDA ent_y_lo,x
+    CLC
+    ADC #$01
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
+    ADC #$00
+    STA ent_y_hi,x
+    LDA ent_radius,x
+B5_9FCD:
+    STA ent_angle,x
+B5_9FD0:
+    LDA zp_1D
+    STA ptr_lo
+    LDA zp_1E
+    ADC #$01
+    STA ptr_hi
+    LDA ent_y_lo,x
+    SEC
+    SBC ptr_lo
+    LDA ent_y_hi,x
+    SBC ptr_hi
+    BCC B5_9FEC
+    LDA #$00
+    STA ent_type,x
+B5_9FEC:
+    RTS
+Ent37_Update:
+    LDA zp_19
+    CMP zp_55
+    BCS B5_A01E
+    ADC #$1A
+    CMP zp_55
+    BCC B5_A01E
+    LDA zp_18
+    CMP zp_56
+    BCS B5_A01E
+    ADC #$16
+    CMP zp_56
+    BCC B5_A01E
+    LDA #$17
+    JSR F_CE78
+    JSR F_F16F
+    BCC B5_A015
+    LDA #$00
+    STA ent_type,x
+    RTS
+B5_A015:
+    JSR B5_91C1
+    LDA #$03
+    STA ent_param2,x
+    RTS
+B5_A01E:
     LDA ent_param2,x
     BEQ B5_A04E
     LDY ent_radius,x
@@ -2385,9 +3642,19 @@ B5_A096:
     .byte $FD,$FE,$FE,$FE,$FF,$FE,$FF,$FF,$00,$FF,$00,$00,$00,$01,$00,$01
     .byte $01,$02,$01,$02,$02,$02,$03,$FE,$FE,$FE,$FF,$FF,$00,$FF,$00,$00
     .byte $01,$00,$01,$01,$02,$02,$02,$FE,$FF,$00,$FF,$00,$00,$01,$00,$01
-    .byte $02,$00,$00,$00,$00,$00,$00,$00,$00,$80,$BD,$70,$05,$29,$04,$D0
-    .byte $20,$20,$04,$89,$20,$86,$88,$20,$E3,$89,$A5,$19,$C5,$55,$B0,$11
-    .byte $A5,$18,$C5,$56
+    .byte $02,$00,$00,$00,$00,$00,$00,$00,$00,$80
+Ent38_Update:
+    LDA ent_flags,x
+    AND #$04
+    BNE B5_A0F7
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_8886
+    JSR B5_89E3
+    LDA zp_19
+    CMP zp_55
+    BCS B5_A0F7
+    LDA zp_18
+    CMP zp_56
     BCS B5_A0F7
     ADC #$16
     CMP zp_56
@@ -2396,10 +3663,11 @@ B5_A096:
     STA ent_type,x
 B5_A0F7:
     RTS
+Ent39_Update:
     LDA ent_flags,x
     AND #$04
     BNE B5_A138
-    JSR B5_8904
+    JSR Ent_CheckPlayerOverlap
     JSR B5_8886
     JSR B5_89E3
     LDA ent_angle,x
@@ -2421,6 +3689,7 @@ B5_A118:
     STA ent_y_hi,x
     INC ent_angle,x
     RTS
+Ent3A_Update:
     LDA ent_flags,x
     AND #$04
     BEQ B5_A158
@@ -2447,7 +3716,7 @@ B5_A158:
     DEC ent_param2,x
     RTS
 B5_A161:
-    JSR B5_8904
+    JSR Ent_CheckPlayerOverlap
     JSR B5_8886
     JSR B5_89E3
     LDA #$02
@@ -2523,21 +3792,123 @@ B5_A1FF:
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$02,$00,$02,$00,$02,$00,$02
     .byte $00,$01,$00,$01,$00,$01,$01,$01,$00,$02,$00,$02,$01,$02,$00,$02
     .byte $01,$01,$01,$01,$01,$01,$02,$01,$02,$01,$03,$01,$02,$01,$02,$00
-    .byte $02,$3A,$20,$E3,$89,$20,$04,$89,$4C,$02,$A3,$20,$6E,$A9,$20,$9A
-    .byte $A9,$BD,$70,$05,$29,$04,$D0,$05,$A5,$B1,$4A,$B0,$26,$BD,$B0,$04
-    .byte $85,$51,$38,$E9,$00,$BD,$E0,$04,$85,$52,$E9,$04,$B0,$06,$A9,$00
-    .byte $8D,$B2,$01,$60,$A5,$51,$38,$E9,$01,$9D,$B0,$04,$A5,$52,$E9,$00
-    .byte $9D,$E0,$04,$60,$AD,$B8,$01,$D0,$1D,$A9,$42,$8D,$88,$04,$A9,$FF
-    .byte $85,$7A,$85,$7B,$9D,$D0,$05,$A9,$41,$9D,$80,$04,$A9,$04,$85,$55
-    .byte $DE,$D0,$05,$4C,$FD,$A2,$20,$E3,$89,$20,$04,$89,$C6,$53,$D0,$12
-    .byte $AD,$B9,$01,$85,$53,$20,$15,$AA,$A9,$38,$20,$8F,$CE,$A9,$1E,$9D
-    .byte $D0,$05,$BD,$D0,$05,$F0,$0D,$38,$E9,$01,$9D,$D0,$05,$A9,$04,$85
-    .byte $55,$4C,$F3,$A2,$A9,$02,$85,$55,$BD,$10,$05,$38,$E9,$0C,$85,$53
-    .byte $BD,$40,$05,$E9,$00,$85,$54,$A5,$5E,$38,$E5,$53,$85,$53,$A5,$5F
-    .byte $E5,$54,$B0,$05,$C6,$55,$4C,$F3,$A2,$D0,$09,$A5,$53,$38,$E9,$18
-    .byte $B0,$02,$E6,$55,$A5,$63,$C9,$0C,$F0,$04,$A9,$07,$85,$55,$A5,$55
-    .byte $9D,$A0,$05,$AD,$B8,$04,$38,$E9,$18,$9D,$B0,$04,$AD,$E8,$04,$E9
-    .byte $00,$9D,$E0,$04,$BD,$D0,$05
+    .byte $02,$3A
+Ent3B_Update:
+    JSR B5_89E3
+    JSR Ent_CheckPlayerOverlap
+    JMP B5_A302
+Ent3C_Update:
+    JSR B5_A96E
+    JSR B5_A99A
+    LDA ent_flags,x
+    AND #$04
+    BNE B5_A24C
+    LDA zp_B1
+    LSR a
+    BCS B5_A272
+B5_A24C:
+    LDA ent_y_lo,x
+    STA ptr_lo
+    SEC
+    SBC #$00
+    LDA ent_y_hi,x
+    STA ptr_hi
+    SBC #$04
+    BCS B5_A263
+    LDA #$00
+    STA ram_01B2
+    RTS
+B5_A263:
+    LDA ptr_lo
+    SEC
+    SBC #$01
+    STA ent_y_lo,x
+    LDA ptr_hi
+    SBC #$00
+    STA ent_y_hi,x
+B5_A272:
+    RTS
+Ent3D_Update:
+    LDA ram_01B8
+    BNE B5_A295
+    LDA #$42
+    STA ram_0488
+    LDA #$FF
+    STA zp_7A
+    STA zp_7B
+    STA ent_angle,x
+    LDA #$41
+    STA ent_type,x
+Ent41_Update:
+    LDA #$04
+    STA zp_55
+    DEC ent_angle,x
+    JMP B5_A2FD
+B5_A295:
+    JSR B5_89E3
+    JSR Ent_CheckPlayerOverlap
+    DEC zp_53
+    BNE B5_A2B1
+    LDA ram_01B9
+    STA zp_53
+    JSR B5_AA15
+    LDA #$38
+    JSR F_CE8F
+    LDA #$1E
+    STA ent_angle,x
+B5_A2B1:
+    LDA ent_angle,x
+    BEQ B5_A2C3
+    SEC
+    SBC #$01
+    STA ent_angle,x
+    LDA #$04
+    STA zp_55
+    JMP B5_A2F3
+B5_A2C3:
+    LDA #$02
+    STA zp_55
+    LDA ent_x_lo,x
+    SEC
+    SBC #$0C
+    STA zp_53
+    LDA ent_x_hi,x
+    SBC #$00
+    STA zp_54
+    LDA player_x_lo
+    SEC
+    SBC zp_53
+    STA zp_53
+    LDA player_x_hi
+    SBC zp_54
+    BCS B5_A2E8
+    DEC zp_55
+    JMP B5_A2F3
+B5_A2E8:
+    BNE B5_A2F3
+    LDA zp_53
+    SEC
+    SBC #$18
+    BCS B5_A2F3
+    INC zp_55
+B5_A2F3:
+    LDA zp_63
+    CMP #$0C
+    BEQ B5_A2FD
+    LDA #$07
+    STA zp_55
+B5_A2FD:
+    LDA zp_55
+    STA ent_param,x
+B5_A302:
+    LDA ram_04B8
+    SEC
+    SBC #$18
+    STA ent_y_lo,x
+    LDA ram_04E8
+    SBC #$00
+    STA ent_y_hi,x
+    LDA ent_angle,x
 B5_A316:
     LDA ram_0518
     STA ent_x_lo,x
@@ -2545,6 +3916,7 @@ B5_A316:
     STA ent_x_hi,x
 B5_A322:
     RTS
+Ent3E_Update:
     JSR B5_A96E
     JSR B5_A99A
     LDA #$01
@@ -2653,6 +4025,7 @@ B5_A3DA:
     LDA #$E0
     STA ent_x_lo,x
     RTS
+Ent40_Update:
     DEC ent_angle,x
     BNE B5_A406
     LDA #$00
@@ -2674,7 +4047,7 @@ B5_A406:
     ADC #$00
     STA ent_x_hi,x
     RTS
-B5_A425:
+Ent42_Update:
     LDA #$FF
     STA zp_53
     LDA #$03
@@ -2688,7 +4061,7 @@ B5_A425:
     STA ent_angle,x
     LDA #$43
     STA ent_type,x
-B5_A442:
+Ent43_Update:
     JSR B5_A785
     LDA ent_param2,x
     CMP #$10
@@ -2714,13 +4087,13 @@ B5_A452:
     STA ent_param,x
     LDA #$08
     JMP F_CE8F
-B5_A479:
+Ent45_Update:
     DEC ent_angle,x
     BNE B5_A451
     LDA ram_01B6
     STA ent_type,x
     RTS
-B5_A485:
+Ent46_Update:
     LDA #$B4
     STA zp_53
     LDA #$A4
@@ -2753,18 +4126,49 @@ B5_A4B4:
     .byte $FF,$07,$FB,$FF,$0E,$00,$00,$1E,$00,$00,$FF,$07,$FE,$FF,$F4,$FF
     .byte $00,$1F,$00,$04,$FF,$07,$0A,$00,$0A,$00,$00,$1E,$00,$00,$FF,$07
     .byte $07,$00,$FD,$FF,$00,$1E,$00,$00,$FF,$07,$0F,$00,$F7,$FF,$00,$1F
-    .byte $00,$0C,$FF,$FF,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00
-    .byte $03,$00,$03,$00,$02,$00,$03,$00,$03,$00,$02,$00,$03,$00,$02,$00
-    .byte $03,$00,$02,$00,$02,$00,$02,$00,$01,$00,$02,$00,$01,$00,$01,$00
-    .byte $00,$00,$01,$00,$00,$00,$00,$00,$01,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$FF,$FF,$FF,$FF,$FF,$FF
-    .byte $FE,$FF,$FF,$FF,$FE,$FF,$FE,$FF,$FE,$FF,$FE,$FF,$FD,$FF,$FD,$FF
-    .byte $48,$A9,$0B,$85,$55,$20,$03,$9C,$BD,$D0,$05,$0A,$A8,$B9,$28,$A5
-    .byte $85,$53,$C9,$48,$D0,$1D,$9D,$80,$04,$A9,$02,$85,$7A,$A9,$00,$85
-    .byte $7B,$A9,$AC,$A0,$A5,$4C,$17,$F9,$49,$E8,$FF,$02,$00,$C0,$0D,$96
-    .byte $00,$00,$FF,$BD,$B0,$04,$38,$E5,$53,$9D,$B0,$04,$BD,$E0,$04,$F9
-    .byte $29,$A5,$9D,$E0,$04,$FE,$D0,$05,$60,$A5
-    ORA $55C5,y
+    .byte $00,$0C,$FF,$FF
+B5_A528:
+    .byte $03
+B5_A529:
+    .byte $00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$02
+    .byte $00,$03,$00,$03,$00,$02,$00,$03,$00,$02,$00,$03,$00,$02,$00,$02
+    .byte $00,$02,$00,$01,$00,$02,$00,$01,$00,$01,$00,$00,$00,$01,$00,$00
+    .byte $00,$00,$00,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$FF,$FF,$00
+    .byte $00,$FF,$FF,$00,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FE,$FF,$FF,$FF,$FE
+    .byte $FF,$FE,$FF,$FE,$FF,$FE,$FF,$FD,$FF,$FD,$FF,$48
+Ent47_Update:
+    LDA #$0B
+    STA zp_55
+    JSR B5_9C03
+    LDA ent_angle,x
+    ASL a
+    TAY
+    LDA B5_A528,y
+    STA zp_53
+    CMP #$48
+    BNE B5_A5B7
+    STA ent_type,x
+    LDA #$02
+    STA zp_7A
+    LDA #$00
+    STA zp_7B
+    LDA #$AC
+    LDY #$A5
+    JMP F_F917
+    .byte $49,$E8,$FF,$02,$00,$C0,$0D,$96,$00,$00,$FF
+B5_A5B7:
+    LDA ent_y_lo,x
+    SEC
+    SBC zp_53
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
+    SBC B5_A529,y
+    STA ent_y_hi,x
+    INC ent_angle,x
+    RTS
+Ent48_Update:
+    LDA zp_19
+    CMP zp_55
     BCS B5_A5FD
     ADC #$1A
     CMP zp_55
@@ -2789,6 +4193,7 @@ B5_A5FD:
     LDA #$0B
     STA zp_55
     JMP B5_9C03
+Ent49_Update:
     LDA ram_0735
     CMP #$08
     BEQ B5_A610
@@ -2804,7 +4209,7 @@ B5_A616:
     LDA #$05
     STA ent_param,x
     JMP B5_A316
-B5_A621:
+Ent44_Update:
     LDA #$10
     STA ent_param,x
     LDA ent_angle,x
@@ -2878,9 +4283,21 @@ B5_A6A6:
     RTS
     .byte $07,$FC,$FF,$FA,$FF,$00,$1F,$00,$04,$FF,$07,$F8,$FF,$00,$00,$00
     .byte $1F,$00,$00,$FF,$9E,$00,$00,$00,$00,$78,$00,$00,$06,$80,$07,$FC
-    .byte $FF,$0A,$00,$00,$1F,$00,$0C,$FF,$FF,$20,$93,$89,$DE,$30,$06,$D0
-    .byte $03,$4C,$09,$9B,$BD,$B0,$04,$18,$69,$01,$9D,$B0,$04,$BD,$E0,$04
-    .byte $69,$00,$9D,$E0,$04,$4C,$32,$9B
+    .byte $FF,$0A,$00,$00,$1F,$00,$0C,$FF,$FF
+Ent3F_Update:
+    JSR B5_8993
+    DEC ent_param2,x
+    BNE B5_A6DE
+    JMP B5_9B09
+B5_A6DE:
+    LDA ent_y_lo,x
+    CLC
+    ADC #$01
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
+    ADC #$00
+    STA ent_y_hi,x
+    JMP B5_9B32
 B5_A6F2:
     LDA ent_y_lo,x
     SEC
@@ -3174,8 +4591,7 @@ B5_A934:
     STA ent_x_hi,x
     RTS
 B5_A96E:
-    .byte $BD
-    BVS B5_A976
+    LDA ent_flags,x
     AND #$04
     BEQ B5_A976
 B5_A975:
@@ -3248,7 +4664,6 @@ B5_A9DB:
     CMP zp_55
     BCC B5_A9DA
     LDA zp_F0
-B5_A9F3:
     SEC
     SBC #$14
     CMP zp_56
@@ -3268,15 +4683,15 @@ B5_A9F3:
     STA zp_E4
     RTS
 B5_AA15:
-    .byte $AD
-    CLV
-    ORA (zp_38,x)
+    LDA ram_01B8
+    SEC
     SBC zp_53
     BCS B5_AA1F
     LDA #$00
 B5_AA1F:
     STA ram_01B8
     RTS
+Ent4A_Update:
     JSR B5_80D3
     LDA ent_y_lo,x
     STA zp_55
@@ -3345,7 +4760,9 @@ B5_AAA7:
     ADC #$07
     STA ent_param,x
     JMP EntityDeltaFromCentre
+Ent4C_Update:
     LDA #$4D
+B5_AAB2:
     STA ent_type,x
     LDA ent_y_hi,x
     STA zp_53
@@ -3372,6 +4789,7 @@ B5_AAA7:
     ROR a
     STA ram_06F0,x
     RTS
+Ent4D_Update:
     JSR B5_80D3
     LDA ent_y_lo,x
     STA zp_55
@@ -3417,10 +4835,11 @@ B5_AB0E:
     LSR a
     STA zp_56
     JMP SetEntityPolarPos
-    JSR B5_8904
+Ent4E_Update:
+    JSR Ent_CheckPlayerOverlap
     JSR B5_8886
-    JSR B5_8A06
-    JSR B5_AC25
+    JSR Ent_CheckPlayerTouch
+    JSR Ent_PatrolStep
     BEQ B5_AB77
     LDA ent_flags,x
     AND #$02
@@ -3478,20 +4897,39 @@ B5_AB8E:
     STA ent_param,x
     LDA ent_param2,x
     ORA zp_54
-B5_ABB9:
     STA zp_53
 B5_ABBB:
     LDA zp_53
     STA ent_param2,x
     RTS
     .byte $01,$02,$03,$02,$01,$02,$03,$02,$01,$02,$03,$02,$00,$02,$03,$02
-    .byte $20,$04,$89,$20,$86,$88,$20,$06,$8A,$FE,$00,$06,$BD,$00,$06,$4A
-    .byte $A8,$B9,$FE,$AB,$D0,$13,$A9,$4E,$9D,$80,$04,$A5,$BC,$09,$80,$9D
-    .byte $00,$06,$A5,$BB,$45,$BC,$85,$BC,$60,$9D,$A0,$05,$60,$04,$04,$04
-    .byte $04,$04,$05,$05,$05,$05,$04,$04,$04,$04,$05,$05,$05,$04,$04,$04
-    .byte $05,$05,$05,$04,$04,$04,$05,$05,$05,$04,$04,$04,$05,$05,$05,$05
-    .byte $05,$05,$05,$00
-B5_AC25:
+Ent4F_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_8886
+    JSR Ent_CheckPlayerTouch
+    INC ent_radius,x
+    LDA ent_radius,x
+    LSR a
+    TAY
+    LDA B5_ABFE,y
+    BNE B5_ABFA
+    LDA #$4E
+    STA ent_type,x
+    LDA zp_BC
+    ORA #$80
+    STA ent_radius,x
+    LDA zp_BB
+    EOR zp_BC
+    STA zp_BC
+    RTS
+B5_ABFA:
+    STA ent_param,x
+    RTS
+B5_ABFE:
+    .byte $04,$04,$04,$04,$04,$05,$05,$05,$05,$04,$04,$04,$04,$05,$05,$05
+    .byte $04,$04,$04,$05,$05,$05,$04,$04,$04,$05,$05,$05,$04,$04,$04,$05
+    .byte $05,$05,$05,$05,$05,$05,$00
+Ent_PatrolStep:
     LDA ent_angle,x
     STA zp_53
     AND #$07
@@ -3589,7 +5027,8 @@ B5_ACE3:
     LDA ent_angle,x
     AND #$80
     RTS
-    JSR B5_8904
+Ent50_Update:
+    JSR Ent_CheckPlayerOverlap
     JSR B5_88AA
     LDA zp_B1
     LSR a
@@ -3612,16 +5051,76 @@ B5_ACE3:
 B5_AD17:
     JMP B5_818D
 B5_AD1A:
-    .byte $00,$03,$02,$04,$01,$A9,$52,$4C,$B2,$AA,$20,$04,$89,$20,$E3,$89
-    .byte $BD,$30,$06,$85,$51,$BD,$D0,$05,$18,$65,$51,$9D,$D0,$05,$4C,$0E
-    .byte $AB,$20,$04,$89,$20,$E3,$89,$20,$46,$85,$BD,$D0,$05,$10,$0A,$A9
-    .byte $54,$9D,$80,$04,$A9,$00,$9D,$00,$06,$60,$20,$04,$89,$20,$E3,$89
-    .byte $BD,$00,$06,$A8,$18,$69,$01,$C9,$19,$F0,$03,$9D,$00,$06,$B9,$FA
-    .byte $AD,$85,$53,$20,$34,$84,$BD,$D0,$05,$10,$DE,$A5,$B2,$85,$51,$A5
-    .byte $B3,$85,$52,$20,$26,$FC,$C9,$CE,$D0,$03,$20,$AB,$EF,$C9,$CF,$D0
-    .byte $03,$20,$5D,$EF,$C9,$D0,$D0,$03,$20,$81,$EF,$A9,$04,$85,$53,$20
-    .byte $34,$84,$A9,$55,$9D,$80,$04,$A9,$00,$9D,$00,$06,$A9,$00,$4C,$78
-    .byte $CE,$FE
+    .byte $00,$03,$02,$04,$01
+Ent51_Update:
+    LDA #$52
+    JMP B5_AAB2
+Ent52_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_89E3
+    LDA ent_param2,x
+    STA ptr_lo
+    LDA ent_angle,x
+    CLC
+    ADC ptr_lo
+    STA ent_angle,x
+    JMP B5_AB0E
+Ent53_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_89E3
+    JSR B5_8546
+    LDA ent_angle,x
+    BPL B5_AD53
+    LDA #$54
+    STA ent_type,x
+    LDA #$00
+    STA ent_radius,x
+B5_AD53:
+    RTS
+Ent54_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_89E3
+    LDA ent_radius,x
+    TAY
+    CLC
+    ADC #$01
+    CMP #$19
+    BEQ B5_AD68
+    STA ent_radius,x
+B5_AD68:
+    LDA B5_ADFA,y
+    STA zp_53
+    JSR B5_8434
+    LDA ent_angle,x
+    BPL B5_AD53
+    LDA zp_B2
+    STA ptr_lo
+    LDA zp_B3
+    STA ptr_hi
+    JSR GetMapTile
+    CMP #$CE
+    BNE B5_AD87
+    JSR F_EFAB
+B5_AD87:
+    CMP #$CF
+    BNE B5_AD8E
+    JSR F_EF5D
+B5_AD8E:
+    CMP #$D0
+    BNE B5_AD95
+    JSR F_EF81
+B5_AD95:
+    LDA #$04
+    STA zp_53
+    JSR B5_8434
+    LDA #$55
+    STA ent_type,x
+    LDA #$00
+    STA ent_radius,x
+    LDA #$00
+    JMP F_CE78
+B5_ADAB:
+    .byte $FE
 B5_ADAC:
     .byte $FF,$FF,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00
     .byte $00,$FF,$FF,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$00
@@ -3631,9 +5130,22 @@ B5_ADAC:
 B5_ADFA:
     .byte $00,$00,$00,$01,$00,$00,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00
     .byte $01,$00,$01,$00,$01,$00,$01,$00,$01,$01,$01,$01,$01,$01,$01,$02
-    .byte $01,$01,$02,$01,$02,$01,$02,$20,$04,$89,$20,$E3,$89,$BD,$00,$06
-    .byte $FE,$00,$06,$0A,$A8,$B9,$AB,$AD,$85,$53,$C9,$80,$D0,$06,$A9,$53
-    .byte $9D,$80,$04,$60
+    .byte $01,$01,$02,$01,$02,$01,$02
+Ent55_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_89E3
+    LDA ent_radius,x
+    INC ent_radius,x
+    ASL a
+    TAY
+    LDA B5_ADAB,y
+    STA zp_53
+    CMP #$80
+    BNE B5_AE3E
+    LDA #$53
+    STA ent_type,x
+    RTS
+B5_AE3E:
     LDA ent_y_lo,x
     CLC
     ADC zp_53
@@ -3642,9 +5154,11 @@ B5_ADFA:
     ADC B5_ADAC,y
     STA ent_y_hi,x
     RTS
-    JSR B5_8904
+Ent56_Update:
+    JSR Ent_CheckPlayerOverlap
     JSR B5_89E3
     JMP B5_818D
+Ent5D_Update:
     LDY ent_angle,x
     INC ent_angle,x
     LDA B5_AE8E,y
@@ -3672,15 +5186,67 @@ B5_AE7C:
     RTS
 B5_AE8E:
     .byte $FE,$FE,$FE,$FF,$FE,$FF,$00,$FF,$00,$00,$00,$01,$00,$01,$01,$02
-    .byte $01,$02,$02,$02,$80,$20,$04,$89,$20,$86,$88,$BD,$70,$05,$29,$04
-    .byte $D0,$5A,$A5,$19,$C5,$55,$B0,$54,$69,$1A,$C5,$55,$90,$4E,$A5,$18
-    .byte $C5,$56,$B0,$48,$69,$16,$C5,$56,$90,$42,$A5,$7C,$F0,$23,$A5,$63
-    .byte $C9,$02,$D0,$1D,$A9,$07,$9D,$80,$04,$A9,$00,$9D,$00,$06,$9D,$70
-    .byte $05,$A9,$1E,$9D,$A0,$05,$A9,$03,$9D,$30,$06,$20,$55,$8A,$4C,$0A
-    .byte $AF,$A9,$00,$85,$53,$20,$92,$F4,$C6,$53,$D0,$10,$A9,$5F,$9D,$80
-    .byte $04,$A9,$00,$9D,$00,$06,$A9,$03,$9D,$A0,$05,$60,$20,$8D,$81,$BD
-    .byte $D0,$05,$49,$01,$0A,$29,$02,$85,$53,$BD,$70,$05,$29,$FD,$05,$53
-    .byte $9D,$70,$05,$FE,$00,$06,$BD,$00,$06
+    .byte $01,$02,$02,$02,$80
+Ent5E_Update:
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_8886
+    LDA ent_flags,x
+    AND #$04
+    BNE B5_AF0A
+    LDA zp_19
+    CMP zp_55
+    BCS B5_AF0A
+    ADC #$1A
+    CMP zp_55
+    BCC B5_AF0A
+    LDA zp_18
+    CMP zp_56
+    BCS B5_AF0A
+    ADC #$16
+    CMP zp_56
+    BCC B5_AF0A
+    LDA zp_7C
+    BEQ B5_AEEF
+    LDA zp_63
+    CMP #$02
+    BNE B5_AEEF
+    LDA #$07
+    STA ent_type,x
+    LDA #$00
+    STA ent_radius,x
+    STA ent_flags,x
+    LDA #$1E
+    STA ent_param,x
+    LDA #$03
+    STA ent_param2,x
+    JSR B5_8A55
+    JMP B5_AF0A
+B5_AEEF:
+    LDA #$00
+    STA zp_53
+    JSR F_F492
+    DEC zp_53
+    BNE B5_AF0A
+    LDA #$5F
+    STA ent_type,x
+    LDA #$00
+    STA ent_radius,x
+    LDA #$03
+    STA ent_param,x
+    RTS
+B5_AF0A:
+    JSR B5_818D
+    LDA ent_angle,x
+    EOR #$01
+    ASL a
+    AND #$02
+    STA zp_53
+    LDA ent_flags,x
+    AND #$FD
+    ORA zp_53
+    STA ent_flags,x
+    INC ent_radius,x
+    LDA ent_radius,x
     LSR a
     LSR a
     AND #$1F
@@ -3711,8 +5277,8 @@ B5_AF3A:
     STA ptr_hi
 B5_AF5B:
     JMP F_F91B
-B5_AF5E:
-    JSR B5_8904
+Ent5F_Update:
+    JSR Ent_CheckPlayerOverlap
     JSR B5_8886
     INC ent_radius,x
     LDA ent_radius,x
@@ -3729,7 +5295,7 @@ B5_AF5E:
 B5_AF7E:
     STA ent_param,x
     RTS
-B5_AF82:
+Ent60_Update:
     LDA zp_B1
     AND #$01
     STA zp_53
@@ -3757,7 +5323,7 @@ B5_AFDF:
     .res 9, $04
     .byte $05,$05,$05,$05,$05,$05,$00,$60,$00,$00,$FB,$FF,$B0,$04,$00,$00
     .byte $00,$FF,$60,$00,$00,$0D,$00,$B0,$04,$00,$00,$00,$FF
-B5_B005:
+Ent61_Update:
     DEC ent_angle,x
     BNE B5_B022
     LDA #$04
@@ -3774,7 +5340,7 @@ B5_B01F:
     STA ent_param,x
 B5_B022:
     RTS
-B5_B023:
+Ent62_Update:
     LDA zp_B1
     LSR a
     BCS B5_B049
@@ -3799,14 +5365,28 @@ B5_B04A:
     .byte $00
 B5_B04B:
     .byte $00,$01,$00,$00,$00,$01,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00
-    .byte $00,$FF,$FF,$00,$00,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$20
-    .byte $AA,$88,$20,$04,$89,$20,$8D,$81,$A5,$B1,$4A,$4A,$4A,$29,$01,$9D
-    .byte $A0,$05,$DE,$00,$06,$D0,$0A,$A9,$1E,$9D,$00,$06,$A9,$67,$9D,$80
-    .byte $04
+    .byte $00,$FF,$FF,$00,$00,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00
+Ent66_Update:
+    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlap
+    JSR B5_818D
+    LDA zp_B1
+    LSR a
+    LSR a
+    LSR a
+    AND #$01
+    STA ent_param,x
+    DEC ent_radius,x
+    BNE B5_B08C
+    LDA #$1E
+    STA ent_radius,x
+    LDA #$67
+    STA ent_type,x
 B5_B08C:
     RTS
+Ent67_Update:
     JSR B5_88AA
-    JSR B5_8904
+    JSR Ent_CheckPlayerOverlap
     LDA ent_radius,x
     CMP #$0F
     BNE B5_B0C6
@@ -3841,18 +5421,60 @@ B5_B0C6:
     LDA zp_BC
     ORA #$80
     STA ent_radius,x
+B5_B0DA:
     RTS
     .byte $68,$00,$00,$F2,$FF,$D8,$03,$00,$00,$00,$FF,$69,$00,$00,$0E,$00
-    .byte $DA,$03,$00,$00,$00,$FF,$20,$AA,$88,$A5,$B1,$4A,$4A,$4A,$29,$01
-    .byte $18,$69,$03,$9D,$A0,$05,$A9,$01,$85,$53,$20,$EF,$86,$BD,$D0,$05
-    .byte $10,$CD,$4C,$C1,$91,$20,$AA,$88,$A5,$B1,$4A,$4A,$4A,$29,$01,$18
-    .byte $69,$03,$9D,$A0,$05,$A9,$01,$85,$53,$20,$A7,$87,$BD,$D0,$05,$10
-    .byte $AE,$4C,$C1,$91,$A5,$55,$48,$A5,$56,$48,$A5,$B1,$29,$03,$D0,$46
-    .byte $A9,$01,$85,$53,$20,$EF,$86,$BD,$D0,$05,$10,$08
+    .byte $DA,$03,$00,$00,$00,$FF
+Ent68_Update:
+    JSR B5_88AA
+    LDA zp_B1
+    LSR a
+    LSR a
+    LSR a
+    AND #$01
+    CLC
+    ADC #$03
+    STA ent_param,x
+    LDA #$01
+    STA zp_53
+    JSR B5_86EF
+    LDA ent_angle,x
+    BPL B5_B0DA
+    JMP B5_91C1
+Ent69_Update:
+    JSR B5_88AA
+    LDA zp_B1
+    LSR a
+    LSR a
+    LSR a
+    AND #$01
+    CLC
+    ADC #$03
+    STA ent_param,x
+    LDA #$01
+    STA zp_53
+    JSR B5_87A7
+    LDA ent_angle,x
+    BPL B5_B0DA
+    JMP B5_91C1
+Ent74_Update:
+    LDA zp_55
+    PHA
+    LDA zp_56
+    PHA
+    LDA zp_B1
+    AND #$03
+    BNE B5_B181
+    LDA #$01
+    STA zp_53
+    JSR B5_86EF
+    LDA ent_angle,x
+    BPL B5_B14F
 B5_B147:
     LDA #$75
     STA ent_type,x
     JMP B5_B181
+B5_B14F:
     LDA zp_77
     STA ptr_lo
     LDA zp_78
@@ -3886,7 +5508,7 @@ B5_B181:
     AND #$04
     BNE B5_B1CB
     JSR B5_88AA
-    JSR B5_8904
+    JSR Ent_CheckPlayerOverlap
     JSR B5_9D55
     LDA zp_19
     SEC
@@ -3923,6 +5545,7 @@ B5_B1CB:
     ADC #$0D
     STA ent_param,x
     JMP B5_B90B
+Ent75_Update:
     LDA zp_55
     PHA
     LDA zp_56
@@ -3971,9 +5594,10 @@ B5_B200:
 B5_B236:
     JMP B5_B181
 B5_B239:
-    .byte $00,$01,$02,$01,$20,$E3,$89,$20
-    TAX
-    DEY
+    .byte $00,$01,$02,$01
+Ent76_Update:
+    JSR B5_89E3
+    JSR B5_88AA
     LDA ent_angle,x
     AND #$78
     LSR a
@@ -4003,13 +5627,40 @@ B5_B275:
     .byte $0D,$0C,$0B,$0A,$08,$09,$FF,$77,$04,$00,$04,$00,$00,$26,$00,$00
     .byte $00,$77,$04,$00,$04,$00,$00,$26,$40,$00,$00,$77,$04,$00,$04,$00
     .byte $00,$26,$80,$00,$00,$77,$04,$00,$04,$00,$00,$26,$C0,$00,$00,$FF
-    .byte $BD,$B0,$04,$9D,$60,$06,$BD,$E0,$04,$9D,$90,$06,$BD,$10,$05,$9D
-    .byte $C0,$06,$BD,$40,$05,$9D,$F0,$06,$A9,$78,$9D,$80,$04,$60,$20,$93
-    .byte $89,$BD,$60,$06,$85,$53,$BD,$90,$06,$85,$54,$BD,$C0,$06,$85,$55
-    .byte $BD,$F0,$06,$85,$56,$FE,$D0,$05,$BD,$00,$06,$18,$69,$04,$D0,$03
-    .byte $4C,$09,$9B,$9D,$00,$06,$20,$00,$80,$4C,$32,$9B
-B5_B2F1:
-    JSR B5_8904
+Ent77_Update:
+    LDA ent_y_lo,x
+    STA ent_dy,x
+    LDA ent_y_hi,x
+    STA ent_dx,x
+    LDA ent_x_lo,x
+    STA ram_06C0,x
+    LDA ent_x_hi,x
+    STA ram_06F0,x
+    LDA #$78
+    STA ent_type,x
+    RTS
+Ent78_Update:
+    JSR B5_8993
+    LDA ent_dy,x
+    STA zp_53
+    LDA ent_dx,x
+    STA zp_54
+    LDA ram_06C0,x
+    STA zp_55
+    LDA ram_06F0,x
+    STA zp_56
+    INC ent_angle,x
+    LDA ent_radius,x
+    CLC
+    ADC #$04
+    BNE B5_B2E8
+    JMP B5_9B09
+B5_B2E8:
+    STA ent_radius,x
+    JSR SetEntityPolarPos
+    JMP B5_9B32
+Ent7C_Update:
+    JSR Ent_CheckPlayerOverlap
     JSR B5_89E3
     LDA ent_param2,x
     BEQ B5_B303
@@ -4197,7 +5848,7 @@ B5_B440:
     SBC #$00
     STA ent_y_hi,x
     JMP B5_B40B
-B5_B46C:
+Ent83_Update:
     JSR B5_88AA
     LDA #$00
     STA zp_55
@@ -4219,7 +5870,7 @@ B5_B486:
     LDA #$02
     STA ent_param,x
     JMP B5_B4A2
-B5_B49A:
+Ent84_Update:
     JSR B5_88AA
     LDA ram_0731
     BNE B5_B4A8
@@ -4274,7 +5925,7 @@ B5_B4FD:
     ORA zp_55
     BEQ B5_B485
     JMP B5_86EF
-B5_B504:
+Ent85_Update:
     JSR B5_88AA
     LDA #$02
     STA zp_55
@@ -4309,7 +5960,7 @@ B5_B53A:
     STA ent_radius,x
 B5_B549:
     RTS
-B5_B54A:
+Ent86_Update:
     JSR B5_88AA
     LDY ent_radius,x
     LDA B5_B591,y
@@ -4357,17 +6008,30 @@ B5_B5CE:
     .byte $78
 B5_B5CF:
     .byte $00,$D6,$03,$B8,$00,$99,$03,$1A,$00,$99,$03,$98,$00,$14,$04,$3A
-    .byte $00,$B8,$03,$D8,$00,$37,$04,$5A,$00,$F5,$03,$B8,$00,$20,$6E,$A9
-    .byte $20,$9A,$A9,$DE,$30,$06,$D0,$1F,$BC,$D0,$05,$B9,$CC,$B5,$85,$53
-    .byte $B9,$CD,$B5,$85,$54,$B9,$CE,$B5,$85,$55,$B9,$CF,$B5,$85,$56,$20
-    .byte $F2,$A6,$A9,$88,$9D,$80,$04
+    .byte $00,$B8,$03,$D8,$00,$37,$04,$5A,$00,$F5,$03,$B8,$00
+Ent87_Update:
+    JSR B5_A96E
+    JSR B5_A99A
+    DEC ent_param2,x
+    BNE B5_B616
+    LDY ent_angle,x
+    LDA B5_B5CC,y
+    STA zp_53
+    LDA B5_B5CD,y
+    STA zp_54
+    LDA B5_B5CE,y
+    STA zp_55
+    LDA B5_B5CF,y
+    STA zp_56
+    JSR B5_A6F2
+    LDA #$88
+    STA ent_type,x
 B5_B616:
     RTS
-    .byte $20
-    ROR $20A9
-    TXS
-    LDA #$20
-    STA zp_A7
+Ent88_Update:
+    JSR B5_A96E
+    JSR B5_A99A
+    JSR B5_A785
     LDA ram_01B8
     CMP #$4B
     BCS B5_B62A
@@ -4415,7 +6079,7 @@ B5_B652:
     STA ram_05DA
     LDA #$30
     JMP F_CE78
-B5_B68C:
+Ent89_Update:
     JSR B5_A96E
     JSR B5_A99A
     LDA #$87
@@ -4432,7 +6096,7 @@ B5_B6A2:
     STA ent_param2,x
 B5_B6AC:
     RTS
-B5_B6AD:
+Ent8A_Update:
     INC ent_angle,x
     LDA ent_angle,x
     LSR a
@@ -4463,7 +6127,7 @@ B5_B6CB:
     LDA #$0A
     STA ent_angle,x
     RTS
-B5_B6ED:
+Ent8B_Update:
     JSR B5_A96E
     JSR B5_A99A
     LDA ent_angle,x
@@ -4511,7 +6175,7 @@ B5_B741:
     AND #$01
     BEQ B5_B727
     JMP B5_A785
-B5_B74A:
+Ent8C_Update:
     JSR B5_A96E
     JSR B5_A99A
     LDA ram_01B8
@@ -4557,7 +6221,7 @@ B5_B783:
     STA ent_type,x
 B5_B7A6:
     RTS
-B5_B7A7:
+Ent8D_Update:
     JSR B5_A785
     LDA ent_param2,x
     CMP #$10
@@ -4567,13 +6231,13 @@ B5_B7A7:
     LDA #$8E
     STA ent_type,x
     RTS
-B5_B7BC:
+Ent8E_Update:
     LDA #$24
     STA zp_53
     LDA #$B8
     STA zp_54
     JMP B5_A48D
-B5_B7C7:
+Ent8F_Update:
     INC ent_angle,x
     LDA ent_angle,x
     LSR a
@@ -4604,17 +6268,33 @@ B5_B7ED:
 B5_B84D:
     .byte $1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1E,$0F,$0F,$0F,$0F,$0F
     .res 9, $0F
-    .byte $1E,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$00,$20,$6E,$A9,$20
-    .byte $9A,$A9,$A9,$98,$9D,$80,$04,$A0,$1F,$A9,$9A,$99,$80,$04,$BD,$10
-    .byte $05,$18,$69,$32,$99,$10,$05,$BD,$40,$05,$69,$00,$99,$40,$05,$A9
-    .byte $78,$99,$70,$05,$A9,$00,$99
-    LDY #$05
+    .byte $1E,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$00
+Ent99_Update:
+    JSR B5_A96E
+    JSR B5_A99A
+    LDA #$98
+    STA ent_type,x
+    LDY #$1F
+    LDA #$9A
+    STA ent_type,y
+    LDA ent_x_lo,x
+    CLC
+    ADC #$32
+    STA ent_x_lo,y
+    LDA ent_x_hi,x
+    ADC #$00
+    STA ent_x_hi,y
+    LDA #$78
+    STA ent_flags,y
+    LDA #$00
+    STA ent_param,y
     STA ent_angle,y
     STA ent_param2,y
     LDA #$96
     STA ent_radius,y
     RTS
-    JSR B5_8904
+Ent9A_Update:
+    JSR Ent_CheckPlayerOverlap
     JSR B5_89E3
     LDA ram_01B8
     BNE B5_B8B9
@@ -4637,9 +6317,10 @@ B5_B8C0:
     STA zp_56
     INC ent_angle,x
     JMP SetEntityPolarPos
-    JSR B5_8904
+Ent9D_Update:
+    JSR Ent_CheckPlayerOverlap
     JSR B5_8886
-    JSR B5_8A06
+    JSR Ent_CheckPlayerTouch
     JSR B5_8546
     LDA ent_angle,x
     BPL B5_B8F3
@@ -4651,10 +6332,11 @@ B5_B8F3:
     STA ent_type,x
 B5_B8FD:
     RTS
+Ent9E_Update:
     LDA ram_0488
     CMP #$8D
     BEQ B5_B908
-    JMP B5_B2F1
+    JMP Ent7C_Update
 B5_B908:
     JMP B5_91C1
 B5_B90B:
@@ -4686,148 +6368,360 @@ B5_B93C:
     .byte $00,$00,$01,$00,$00,$00,$01,$00,$00,$01,$00,$01,$01,$01,$00,$01
     .byte $00,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00,$FF,$00,$00,$00,$FF
     .byte $00,$00,$FF,$00,$FF,$FF,$FF,$00,$FF,$00,$00,$FF,$00,$00,$00,$FF
-    .byte $00,$00,$80,$20,$D3,$80,$BD,$B0,$04,$85,$55,$BD,$10,$05,$85,$56
-    .byte $A5,$55,$48,$A5,$56,$48,$A9,$90,$85,$53,$A9,$B9,$85,$54,$BD,$D0
-    .byte $05,$4C
-    .word B5_B316
-    .word B5_B996
-    .word B5_B9C0
-    .word B5_B9D0
-B5_B996:
-    LDA ent_param2,x
-    SEC
-    SBC #$01
-    BNE B5_B9BA
-    LDA ent_param,x
-    BNE B5_B9B2
-    LDA zp_BC
-    ORA #$F0
-    STA ent_param2,x
-    LDA #$02
-    STA ent_angle,x
-    JMP B5_BA00
-B5_B9B2:
-    SEC
-    SBC #$01
-    STA ent_param,x
-B5_B9B8:
-    LDA #$06
-B5_B9BA:
-    STA ent_param2,x
-    JMP B5_BA00
-B5_B9C0:
-    DEC ent_param2,x
-    BNE B5_BA00
-    LDA #$04
-    STA ent_angle,x
-    STA ent_param2,x
-    JMP B5_BA00
-B5_B9D0:
-    LDA ent_param2,x
-    SEC
-    SBC #$01
-    BNE B5_B9BA
-    LDA ent_param,x
-    CMP #$03
-    BNE B5_B9F7
-    LDA #$00
-    STA ent_type,x
-    PLA
-    STA zp_56
-    PLA
-    STA zp_55
-    LDA zp_79
-    BEQ B5_B9F6
-    CPX zp_B6
-    BNE B5_B9F6
-    LDA #$00
-    STA zp_79
-B5_B9F6:
-    RTS
-B5_B9F7:
-    CLC
-    ADC #$01
-    STA ent_param,x
-    JMP B5_B9B8
-B5_BA00:
-    LDA zp_B1
-    LSR a
-    BCS B5_BA19
+    .byte $00,$00,$80
+Ent81_Update:
+    JSR B5_80D3
     LDA ent_y_lo,x
-    SEC
-    SBC #$01
-    STA ent_y_lo,x
-    LDA ent_y_hi,x
-    SBC #$00
-    STA ent_y_hi,x
-    JSR B5_8F35
-B5_BA19:
-    JMP EntityDeltaFromCentre
+    STA zp_55
+    LDA ent_x_lo,x
+    STA zp_56
+    LDA zp_55
+    PHA
+    LDA zp_56
+    PHA
+    LDA #$90
+    STA zp_53
+    LDA #$B9
+    STA zp_54
+    LDA ent_angle,x
+    JMP B5_B316
+    .byte $96,$B9,$C0,$B9,$D0,$B9,$BD,$30,$06,$38,$E9,$01,$D0,$1C,$BD,$A0
+    .byte $05,$D0,$0F,$A5,$BC,$09,$F0,$9D,$30,$06,$A9,$02,$9D,$D0,$05,$4C
+    .byte $00,$BA,$38,$E9,$01,$9D,$A0,$05,$A9,$06,$9D,$30,$06,$4C,$00,$BA
+    .byte $DE,$30,$06,$D0,$3B,$A9,$04,$9D,$D0,$05,$9D,$30,$06,$4C,$00,$BA
+    .byte $BD,$30,$06,$38,$E9,$01,$D0,$E2,$BD,$A0,$05,$C9,$03,$D0,$18,$A9
+    .byte $00,$9D,$80,$04,$68,$85,$56,$68,$85,$55,$A5,$79,$F0,$08,$E4,$B6
+    .byte $D0,$04,$A9,$00,$85,$79,$60,$18,$69,$01,$9D,$A0,$05,$4C,$B8,$B9
+    .byte $A5,$B1,$4A,$B0,$14,$BD,$B0,$04,$38,$E9,$01,$9D,$B0,$04,$BD,$E0
+    .byte $04,$E9,$00,$9D,$E0,$04,$20,$35,$8F,$4C,$9E,$80
+Ent9B_Update:
     JSR B5_91C1
     LDA #$26
     LDY #$BA
     JMP F_F917
-    .byte $19,$08,$00,$00,$00,$58,$00,$00,$00,$00,$FF,$BD,$70,$05,$29,$04
-    .byte $D0,$45,$A5,$19,$C5,$55,$B0,$40,$69,$1A,$C5,$55,$90,$3A,$A5,$18
-    .byte $C5,$56,$B0,$34,$69,$16,$C5,$56,$90,$2E,$20,$C1,$91,$A9,$19,$20
-    .byte $78,$CE,$A9,$0B,$9D,$30,$06,$20,$92,$F1,$A5,$25,$18,$69,$0D,$85
-    .byte $51,$8D,$21,$07,$A5,$26,$69,$04,$85,$52,$8D,$22,$07,$A9,$3C,$8D
-    .byte $20,$07,$20,$B0,$F6,$A6,$42,$60,$A9,$0B,$85,$55,$20,$03,$9C,$A5
-    .byte $B1,$29,$7F,$D0,$F2,$A9,$2C,$20,$78,$CE,$A9,$4C,$A0,$91,$4C,$17
-    .byte $F9,$02,$02,$02,$02,$02,$02,$03,$02,$02,$03,$02,$02,$03,$02,$03
-    .byte $02,$03,$02,$03,$03,$03,$04,$04,$FF,$05,$06,$07,$08,$09,$0A,$0B
-    .byte $00,$BD,$D0,$05,$C9,$64,$D0,$37,$A5,$B1,$29,$03,$F0,$01,$60,$BC
-    .byte $00,$06,$FE,$00,$06,$B9,$97,$BA,$C9,$FF,$D0,$17,$A9,$22,$20,$8F
-    .byte $CE,$A9,$DE,$A0,$BA,$4C,$17,$F9,$91,$00,$00,$00,$00,$F0,$00,$14
-    .byte $00,$00,$FF,$29,$FF,$D0,$04,$9D,$80,$04,$60,$9D,$A0,$05,$60,$A8
-    .byte $FE,$D0,$05,$B9,$2E,$9E,$85,$51,$29,$F0,$85,$52,$4A,$4A,$4A,$4A
-    .byte $24,$52,$10,$02,$09,$F0,$85,$53,$A5,$51,$29,$0F,$85,$54,$29,$08
-    .byte $F0,$06,$A5,$54,$09,$F0,$85,$54,$BD,$B0,$04,$18,$65,$53,$9D,$B0
-    .byte $04,$BD,$10,$05,$18,$65,$54,$9D,$10,$05,$60,$BD,$D0,$05,$29,$7F
-    .byte $F0,$07,$38,$E9,$01,$9D,$D0,$05,$60,$A9,$03,$85,$53,$20,$34,$84
-    .byte $BD,$D0,$05,$10,$F3,$A9,$00,$20,$78,$CE,$A9,$93,$9D,$80,$04,$A9
-    .byte $1D,$85,$63,$60,$BD,$00,$06,$FE,$00,$06,$0A,$A8
-    .word B5_ABB9
-    .word B5_85AD
-    .word F_C953
-    .word F_F080
-    .byte $03,$4C,$3E,$AE,$A9,$94,$9D,$80,$04,$A9,$01,$9D,$00,$06,$A9,$14
-    .byte $9D,$D0,$05,$60,$AD,$2C,$07,$C9,$13,$D0,$0B,$A9,$95,$9D,$80,$04
-    .byte $A9,$96,$9D,$D0,$05,$60,$A9,$00,$85,$55,$20
-    .word B5_9C03
-    .word F_D0DE
-    .word F_D005
-    .word B5_A9F3
-    .byte $A3,$A0,$BB,$4C,$17,$F9,$0F,$F6,$FF,$FE,$FF,$F0,$02,$30,$00,$00
-    .byte $FF,$DE,$D0,$05,$F0,$07,$A9,$00,$85,$55,$4C,$03,$9C,$A9,$01,$9D
-    .byte $A0,$05,$A9,$00,$9D,$00,$06,$A9,$96,$9D,$80,$04,$A9,$32,$9D,$30
-    .byte $06,$60,$DE,$30,$06,$F0,$0B,$A9,$87,$85,$53,$A9,$8F,$85,$54,$4C
-    .byte $3D,$8F,$A9,$16,$85,$47,$A9,$1E,$85,$63,$A9,$34,$20,$8F,$CE,$20
-    .byte $C1,$91,$A9,$F6,$A0,$BB,$4C,$17,$F9,$97,$E0,$FF,$00,$00,$C0,$00
-    .byte $00,$0C,$00
-B5_BC00:
-    .byte $18,$F8,$FF,$00,$00,$C0,$08,$00,$00,$00,$FF,$A5,$B1,$29,$03,$D0
-    .byte $21,$BC,$D0,$05,$B9,$33,$BC,$C9,$FF,$D0,$11,$DE,$00,$06,$D0,$05
-    .byte $A9,$14,$8D,$2C,$07,$A9,$10,$9D,$D0,$05,$A9,$00,$9D,$A0,$05,$FE
-    .byte $D0,$05,$60,$00,$00,$00,$00,$01,$01,$03,$03,$02,$02,$03,$03,$01
-    .byte $01,$03,$03,$00,$03,$FF,$60,$A5,$5E,$38,$E9,$40,$85,$51,$A5,$5F
-    .byte $E9,$01,$05,$51,$D0,$05,$A9,$44,$85,$65,$60,$A5,$5E,$18,$69,$01
-    .byte $85,$5E,$A5,$5F,$69,$00,$85,$5F,$A9,$00,$8D,$97,$03,$4C,$BB,$EE
-    .byte $A9,$00,$85,$65,$60,$A4,$D8,$B9,$D7,$BC,$C9,$80,$D0,$30,$A5,$D9
-    .byte $D0,$27,$E6,$D9,$A9,$29,$20,$78,$CE,$20,$3D,$FA,$A5,$60,$99,$B0
-    .byte $04,$A5,$61,$99,$E0,$04,$A5,$5E,$99,$10,$05,$A5,$5F,$99,$40,$05
-    .byte $84,$42,$A9,$FF,$A0
-B5_BCA5:
-    .byte $BC,$20,$17,$F9,$A9,$44,$85,$65,$60,$A5,$B1,$4A,$4A,$4A,$29,$01
-    .byte $18,$69,$07,$85,$65,$A5,$60,$18,$79,$D7,$BC,$85,$60,$E6,$D8,$A5
-    .byte $B1,$4A,$B0,$E4,$A5,$5E,$38,$E9,$01,$85,$5E,$A5,$5F,$E9,$00,$85
-    .byte $5F,$60,$FE,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$00,$FF,$00,$FF,$00,$00
-    .byte $00,$01,$00,$01,$00,$01,$01,$01,$01,$02,$01,$02,$02,$FE,$FF,$FF
-    .byte $00,$FF,$00,$00,$01,$00,$01,$01,$02,$80,$40,$E8,$FF,$04,$00,$C0
-    .byte $09,$50,$00,$00,$FF,$0E,$43,$41,$53,$54,$00,$FF,$FF,$09,$41,$4C
-    .byte $46,$52,$45,$44,$20,$43,$48,$49,$43,$4B,$45,$4E,$00,$FF,$0B,$4D
-    .byte $52,$20,$20,$50,$45,$4B,$4C,$45,$53,$00,$FF,$09,$4D,$45,$4B,$41
-    .byte $20,$20,$43,$48,$49,$43,$4B,$45,$4E,$53,$00,$FF,$07
+    .byte $19,$08,$00,$00,$00,$58,$00,$00,$00,$00,$FF
+Ent92_Update:
+    LDA ent_flags,x
+    AND #$04
+    BNE B5_BA7D
+    LDA zp_19
+    CMP zp_55
+    BCS B5_BA7E
+    ADC #$1A
+    CMP zp_55
+    BCC B5_BA7E
+    LDA zp_18
+    CMP zp_56
+    BCS B5_BA7E
+    ADC #$16
+    CMP zp_56
+    BCC B5_BA7E
+    JSR B5_91C1
+    LDA #$19
+    JSR F_CE78
+    LDA #$0B
+    STA ent_param2,x
+    JSR F_F192
+    LDA map_ptr_lo
+    CLC
+    ADC #$0D
+    STA ptr_lo
+    STA ram_0721
+    LDA map_ptr_hi
+    ADC #$04
+    STA ptr_hi
+    STA ram_0722
+    LDA #$3C
+    STA ram_0720
+    JSR F_F6B0
+    LDX zp_42
+B5_BA7D:
+    RTS
+B5_BA7E:
+    LDA #$0B
+    STA zp_55
+    JSR B5_9C03
+    LDA zp_B1
+    AND #$7F
+    BNE B5_BA7D
+    LDA #$2C
+    JSR F_CE78
+    LDA #$4C
+    LDY #$91
+    JMP F_F917
+B5_BA97:
+    .byte $02,$02,$02,$02,$02,$02,$03,$02,$02,$03,$02,$02,$03,$02,$03,$02
+    .byte $03,$02,$03,$03,$03,$04,$04,$FF,$05,$06,$07,$08,$09,$0A,$0B,$00
+Ent90_Update:
+    LDA ent_angle,x
+    CMP #$64
+    BNE B5_BAF5
+    LDA zp_B1
+    AND #$03
+    BEQ B5_BAC5
+    RTS
+B5_BAC5:
+    LDY ent_radius,x
+    INC ent_radius,x
+    LDA B5_BA97,y
+    CMP #$FF
+    BNE B5_BAE9
+    LDA #$22
+    JSR F_CE8F
+    LDA #$DE
+    LDY #$BA
+    JMP F_F917
+    .byte $91,$00,$00,$00,$00,$F0,$00,$14,$00,$00,$FF
+B5_BAE9:
+    AND #$FF
+    BNE B5_BAF1
+    STA ent_type,x
+    RTS
+B5_BAF1:
+    STA ent_param,x
+    RTS
+B5_BAF5:
+    TAY
+    INC ent_angle,x
+    LDA B5_9E2E,y
+    STA ptr_lo
+    AND #$F0
+    STA ptr_hi
+    LSR a
+    LSR a
+    LSR a
+    LSR a
+    BIT ptr_hi
+    BPL B5_BB0C
+    ORA #$F0
+B5_BB0C:
+    STA zp_53
+    LDA ptr_lo
+    AND #$0F
+    STA zp_54
+    AND #$08
+    BEQ B5_BB1E
+    LDA zp_54
+    ORA #$F0
+    STA zp_54
+B5_BB1E:
+    LDA ent_y_lo,x
+    CLC
+    ADC zp_53
+    STA ent_y_lo,x
+    LDA ent_x_lo,x
+    CLC
+    ADC zp_54
+    STA ent_x_lo,x
+    RTS
+Ent91_Update:
+    LDA ent_angle,x
+    AND #$7F
+    BEQ B5_BB3F
+    SEC
+    SBC #$01
+    STA ent_angle,x
+B5_BB3E:
+    RTS
+B5_BB3F:
+    LDA #$03
+    STA zp_53
+    JSR B5_8434
+    LDA ent_angle,x
+    BPL B5_BB3E
+    LDA #$00
+    JSR F_CE78
+    LDA #$93
+    STA ent_type,x
+    LDA #$1D
+    STA zp_63
+    RTS
+Ent93_Update:
+    LDA ent_radius,x
+    INC ent_radius,x
+    ASL a
+    TAY
+    LDA B5_ADAB,y
+    STA zp_53
+    CMP #$80
+    BEQ B5_BB6E
+    JMP B5_AE3E
+B5_BB6E:
+    LDA #$94
+    STA ent_type,x
+    LDA #$01
+    STA ent_radius,x
+    LDA #$14
+    STA ent_angle,x
+    RTS
+Ent94_Update:
+    LDA game_state
+    CMP #$13
+    BNE B5_BB90
+    LDA #$95
+    STA ent_type,x
+    LDA #$96
+    STA ent_angle,x
+B5_BB8F:
+    RTS
+B5_BB90:
+    LDA #$00
+    STA zp_55
+    JSR B5_9C03
+    DEC ent_angle,x
+    BNE B5_BB8F
+    LDA #$A3
+    LDY #$BB
+    JMP F_F917
+    .byte $0F,$F6,$FF,$FE,$FF,$F0,$02,$30,$00,$00,$FF
+Ent95_Update:
+    DEC ent_angle,x
+    BEQ B5_BBBA
+    LDA #$00
+    STA zp_55
+    JMP B5_9C03
+B5_BBBA:
+    LDA #$01
+    STA ent_param,x
+    LDA #$00
+    STA ent_radius,x
+    LDA #$96
+    STA ent_type,x
+    LDA #$32
+    STA ent_param2,x
+    RTS
+Ent96_Update:
+    DEC ent_param2,x
+    BEQ B5_BBDF
+    LDA #$87
+    STA zp_53
+    LDA #$8F
+    STA zp_54
+    JMP B5_8F3D
+B5_BBDF:
+    LDA #$16
+    STA zp_47
+    LDA #$1E
+    STA zp_63
+    LDA #$34
+    JSR F_CE8F
+    JSR B5_91C1
+    LDA #$F6
+    LDY #$BB
+    JMP F_F917
+    .byte $97,$E0,$FF,$00,$00,$C0,$00,$00,$0C,$00,$18,$F8,$FF,$00,$00,$C0
+    .byte $08,$00,$00,$00,$FF
+Ent97_Update:
+    LDA zp_B1
+    AND #$03
+    BNE B5_BC32
+    LDY ent_angle,x
+    LDA B5_BC33,y
+    CMP #$FF
+    BNE B5_BC2C
+    DEC ent_radius,x
+    BNE B5_BC25
+    LDA #$14
+    STA game_state
+B5_BC25:
+    LDA #$10
+    STA ent_angle,x
+    LDA #$00
+B5_BC2C:
+    STA ent_param,x
+    INC ent_angle,x
+B5_BC32:
+    RTS
+B5_BC33:
+    .byte $00,$00,$00,$00,$01,$01,$03,$03,$02,$02,$03,$03,$01,$01,$03,$03
+    .byte $00,$03,$FF
+Ent_Noop:
+    RTS
+    LDA player_x_lo
+    SEC
+    SBC #$40
+    STA ptr_lo
+    LDA player_x_hi
+    SBC #$01
+    ORA ptr_lo
+    BNE B5_BC5B
+    LDA #$44
+    STA zp_65
+    RTS
+B5_BC5B:
+    LDA player_x_lo
+    CLC
+    ADC #$01
+    STA player_x_lo
+    LDA player_x_hi
+    ADC #$00
+    STA player_x_hi
+    LDA #$00
+    STA decomp_to_ram
+    JMP F_EEBB
+    LDA #$00
+    STA zp_65
+    RTS
+    LDY zp_D8
+    LDA B5_BCD7,y
+    CMP #$80
+    BNE B5_BCAE
+    LDA zp_D9
+    BNE B5_BCA9
+    INC zp_D9
+    LDA #$29
+    JSR F_CE78
+    JSR F_FA3D
+    LDA player_y_lo
+    STA ent_y_lo,y
+    LDA player_y_hi
+    STA ent_y_hi,y
+    LDA player_x_lo
+    STA ent_x_lo,y
+    LDA player_x_hi
+    STA ent_x_hi,y
+    STY zp_42
+    LDA #$FF
+    LDY #$BC
+    JSR F_F917
+B5_BCA9:
+    LDA #$44
+    STA zp_65
+B5_BCAD:
+    RTS
+B5_BCAE:
+    LDA zp_B1
+    LSR a
+    LSR a
+    LSR a
+    AND #$01
+    CLC
+    ADC #$07
+    STA zp_65
+    LDA player_y_lo
+    CLC
+    ADC B5_BCD7,y
+    STA player_y_lo
+    INC zp_D8
+    LDA zp_B1
+    LSR a
+    BCS B5_BCAD
+    LDA player_x_lo
+    SEC
+    SBC #$01
+    STA player_x_lo
+    LDA player_x_hi
+    SBC #$00
+    STA player_x_hi
+    RTS
+B5_BCD7:
+    .byte $FE,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$00,$FF,$00,$FF,$00,$00,$00,$01
+    .byte $00,$01,$00,$01,$01,$01,$01,$02,$01,$02,$02,$FE,$FF,$FF,$00,$FF
+    .byte $00,$00,$01,$00,$01,$01,$02,$80,$40,$E8,$FF,$04,$00,$C0,$09,$50
+    .byte $00,$00,$FF,$0E,$43,$41,$53,$54,$00,$FF,$FF,$09,$41,$4C,$46,$52
+    .byte $45,$44,$20,$43,$48,$49,$43,$4B,$45,$4E,$00,$FF,$0B,$4D,$52,$20
+    .byte $20,$50,$45,$4B,$4C,$45,$53,$00,$FF,$09,$4D,$45,$4B,$41,$20,$20
+    .byte $43,$48,$49,$43,$4B,$45,$4E,$53,$00,$FF,$07
     .byte "BILLY EGG AND BROS"
     .byte $00,$FF,$08
     .byte "FLOELLA  CHICKEN"   ; reads: "NEKCIHC  ALLEOLF"

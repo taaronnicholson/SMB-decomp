@@ -742,7 +742,6 @@ F_C93F:
     INX
     STA ram_0200,x
     INX
-F_C953:
     BNE F_C93F
     RTS
 F_C956:
@@ -1458,14 +1457,13 @@ F_CE61:
     LDA #$06
     JSR SwitchBankKeepX
     LDA zp_08
-    JSR $800C
+    JSR B6_800C
     PLA
     TAX
     PLA
     JMP SwitchBankKeepX
 F_CE78:
-    .byte $85
-    PHP
+    STA zp_08
     LDA cur_bank
     PHA
     TXA
@@ -1473,7 +1471,7 @@ F_CE78:
     LDA #$06
     JSR SwitchBankKeepX
     LDA zp_08
-    JSR $800F
+    JSR B6_800F
     PLA
     TAX
     PLA
@@ -1693,7 +1691,6 @@ F_CFF7:
     DEC ram_0204,x
 F_D004:
     TXA
-F_D005:
     CLC
     ADC #$08
     TAX
@@ -1805,7 +1802,6 @@ F_D0D9:
     LDA zp_38
     CLC
     ADC map_width
-F_D0DE:
     STA zp_38
     LDA zp_39
     ADC #$00
@@ -7260,6 +7256,7 @@ F_F885:
     TAX
     PLA
     JMP SwitchBankKeepX
+F_F8B1:
     LDA ram_01AE
     CLC
     ADC zp_55
@@ -7271,8 +7268,8 @@ F_F885:
 F_F8C3:
     RTS
 F_F8C4:
-    .byte $AD
-    LDX $3801
+    LDA ram_01AE
+    SEC
     SBC zp_55
     STA ram_01AE
     RTS
@@ -7283,8 +7280,11 @@ F_F8CE:
     STA ram_01AA
     RTS
 F_F8D8:
-    .byte $AD,$AA,$01,$18,$65,$55,$8D,$AA
-    ORA (player_y_lo,x)
+    LDA ram_01AA
+    CLC
+    ADC zp_55
+    STA ram_01AA
+    RTS
 F_F8E2:
     LDA ram_01AB
     CLC
@@ -7298,7 +7298,8 @@ F_F8E2:
     STA ram_01AD
     RTS
 F_F8FC:
-    .byte $A9,$00,$85,$51
+    LDA #$00
+    STA ptr_lo
 F_F900:
     STA zp_55
     LDX #$07
@@ -7316,14 +7317,50 @@ F_F911:
     BPL F_F904
     RTS
 F_F917:
-    .byte $85,$51,$84,$52
+    STA ptr_lo
+    STY ptr_hi
 F_F91B:
-    .byte $A2,$0F,$BD,$A0,$04,$F0,$06,$CA,$10,$F8,$4C,$9B,$F9,$A0,$00,$B1
-    .byte $51,$C9,$FF,$F0,$6B,$C8,$9D,$A0,$04,$86,$04,$A6,$42,$BD,$B0,$04
-    .byte $18,$71,$51,$C8,$48,$BD,$E0,$04,$71,$51,$C8,$48,$BD,$10,$05,$18
-    .byte $71,$51,$C8,$48,$BD,$40,$05,$71,$51,$C8,$A6,$04,$9D,$60,$05,$68
-    .byte $9D,$30,$05,$68,$9D,$00,$05,$68,$9D
-    .byte $D0,$04   ; BNE $F96A (target not an instruction start)
+    LDX #$0F
+F_F91D:
+    LDA ram_04A0,x
+    BEQ F_F928
+    DEX
+    BPL F_F91D
+    JMP F_F99B
+F_F928:
+    LDY #$00
+    LDA (ptr_lo),y
+    CMP #$FF
+    BEQ F_F99B
+    INY
+    STA ram_04A0,x
+    STX tmp_ptr_lo
+    LDX zp_42
+    LDA ent_y_lo,x
+    CLC
+    ADC (ptr_lo),y
+    INY
+    PHA
+    LDA ent_y_hi,x
+    ADC (ptr_lo),y
+    INY
+    PHA
+    LDA ent_x_lo,x
+    CLC
+    ADC (ptr_lo),y
+    INY
+    PHA
+    LDA ent_x_hi,x
+    ADC (ptr_lo),y
+    INY
+    LDX tmp_ptr_lo
+    STA ram_0560,x
+    PLA
+    STA ram_0530,x
+    PLA
+    STA ram_0500,x
+    PLA
+    STA ram_04D0,x
     LDA (ptr_lo),y
     INY
     STA ram_0590,x
@@ -7350,20 +7387,40 @@ F_F91B:
     ADC #$00
     STA ptr_hi
     JMP F_F91B
-    .byte $A6,$42,$60
+F_F99B:
+    LDX zp_42
+    RTS
 F_F99E:
     .byte $0A
 F_F99F:
     .byte $00,$14,$00,$1E,$00,$32,$00,$64,$00,$C8,$00,$2C,$01,$F4,$01,$E8
     .byte $03,$D0,$07,$B8,$0B,$88,$13
 F_F9B6:
-    .byte $A5,$53,$C9,$0C,$90,$2E,$C9,$0D,$D0,$17,$A9,$32,$A0,$FA,$20,$17
-    .byte $F9,$A4,$93,$B9,$D2,$F9,$A4,$04,$99,$C0,$05,$60,$29,$3F,$3E,$40
-    .byte $29,$A9,$01,$85,$55,$20,$B1,$F8,$A9,$1A,$20
-    ADC (zp_CE,x)
+    LDA zp_53
+    CMP #$0C
+    BCC F_F9EA
+    CMP #$0D
+    BNE F_F9D7
+    LDA #$32
+    LDY #$FA
+    JSR F_F917
+    LDY stage_index
+    LDA F_F9D2,y
+    LDY tmp_ptr_lo
+    STA ram_05C0,y
+    RTS
+F_F9D2:
+    .byte $29,$3F,$3E,$40,$29
+F_F9D7:
+    LDA #$01
+    STA zp_55
+    JSR F_F8B1
+    LDA #$1A
+    JSR F_CE61
     LDA #$1A
     STA zp_53
     JMP F_F9F9
+F_F9EA:
     ASL a
     TAY
     LDA F_F99E,y
