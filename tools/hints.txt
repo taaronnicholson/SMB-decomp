@@ -105,3 +105,13 @@ ram 0300 ppu_buffer            ; len=1: single byte; len bit7 set: horizontal (+
 name 0 8108 PaletteFadeStep    ; fades the palette at $3F00 toward/away from black (zp_10 = step 0-4, zp_11 = direction)
 ram 0010 fade_step
 ram 0011 fade_dir
+
+; ---- LZ-style decompressor (graphics and stage data) ----
+name f FDEF Decompress         ; ptr_lo/hi = source, $55/$56 = destination; carry set = RAM target, clear = VRAM
+name f FDE9 DecompressAndFinish
+name f FD84 Decomp_PutByte     ; write A to the destination (RAM via ($55),y, or PPU)
+name f FD9F Decomp_ReadOut     ; read back a byte already written (for copy matches)
+name f FDBB Decomp_ReadBack
+name f FDD7 Decomp_NextSrc
+name f FDE0 Decomp_NextDst
+ram 0397 decomp_to_ram         ; bit 7 set = output to RAM instead of VRAM

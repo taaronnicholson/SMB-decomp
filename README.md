@@ -107,6 +107,9 @@ messages are forward and printed with tile = char + `$94`. `PaletteFadeStep` (ba
 `tools/chrtrace.py` reports which code writes CHR-RAM; `tools/decomptrace.py` / `tools/gfx_scan.py` list the
 calls to the game's LZ-style decompressor (`F_FDEF`, source in `ptr_lo/hi`, destination in `$55/$56`, carry set = RAM
 target, clear = VRAM). Rendered images are not committed.
+`tools/gfx_scan.py` (slow, ~2.5 min) walks every stage and caches the result in `tools/gfx_blocks.json`;
+`tools/gen_gfx_hints.py` turns it into labelled `Gfx_B<bank>_<addr>` blobs (26 LZ-compressed blocks: shared title/font
+graphics in banks 0/1, per-stage tile sets in bank 4, stage map/screen data in bank 6).
 
 ## Shared helpers
 - `SineTable` (bank 0 `$BE8A`): 256 signed entries, amplitude ±64, index = angle (256 = full turn).

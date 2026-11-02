@@ -850,7 +850,7 @@ F_C9E8:
     STA ptr_hi
     CLC
 F_CA00:
-    JSR F_FDE9
+    JSR DecompressAndFinish
     PLA
     JSR SwitchBank
     LDX #$07
@@ -1234,7 +1234,7 @@ F_CC6A:
     SBC zp_53
     STA zp_DB
     CLC
-    JSR F_FDE9
+    JSR DecompressAndFinish
 F_CCB7:
     LDA #$01
     JSR SwitchBankKeepX
@@ -1394,7 +1394,7 @@ F_CDDD:
     LDA B0_8C95,x
     JSR SwitchBankKeepX
     CLC
-    JSR F_FDE9
+    JSR DecompressAndFinish
     LDA ram_01B1
 F_CE00:
     BEQ F_CE05
@@ -1880,7 +1880,7 @@ F_D139:
     LDA #$03
     STA zp_56
     SEC
-    JSR F_FDE9
+    JSR DecompressAndFinish
     LDA #$01
     JSR SwitchBankKeepX
     LDY #$63
@@ -1907,7 +1907,7 @@ F_D16B:
     LDA #$88
     STA ptr_hi
     CLC
-    JSR F_FDE9
+    JSR DecompressAndFinish
     LDA #$30
     STA zp_55
     LDA #$15
@@ -1919,7 +1919,7 @@ F_D16B:
     LDA ram_01A5
     JSR SwitchBankKeepX
     CLC
-    JSR F_FDE9
+    JSR DecompressAndFinish
     LDA #$00
     JSR SwitchBank
     PLA
@@ -1939,7 +1939,7 @@ F_D1C0:
     LDA #$87
     STA ptr_hi
     CLC
-    JSR F_FDE9
+    JSR DecompressAndFinish
 F_D1DA:
     PLA
     TAX
@@ -6368,7 +6368,6 @@ F_F200:
     JSR F_F28D
 F_F205:
     LDA zp_44
-F_F207:
     CMP #$40
     BCS F_F27D
     LDX ram_0723
@@ -7905,8 +7904,8 @@ F_FD7D:
     STY PPUADDR
 F_FD83:
     RTS
-F_FD84:
-    BIT ram_0397
+Decomp_PutByte:
+    BIT decomp_to_ram
     BPL F_FD8C
     STA (zp_55),y
     RTS
@@ -7920,8 +7919,8 @@ F_FD8C:
     PLA
     STA PPUDATA
     RTS
-F_FD9F:
-    BIT ram_0397
+Decomp_ReadOut:
+    BIT decomp_to_ram
     BPL F_FDA7
     LDA (zp_55),y
     RTS
@@ -7934,8 +7933,8 @@ F_FDA7:
     LDA PPUDATA
     LDA PPUDATA
     RTS
-F_FDBB:
-    BIT ram_0397
+Decomp_ReadBack:
+    BIT decomp_to_ram
     BPL F_FDC3
     LDA (ptr_lo),y
     RTS
@@ -7948,7 +7947,7 @@ F_FDC3:
     LDA PPUDATA
     LDA PPUDATA
     RTS
-F_FDD7:
+Decomp_NextSrc:
     PHP
 F_FDD8:
     INC ptr_lo
@@ -7957,7 +7956,7 @@ F_FDD8:
 F_FDDE:
     PLP
     RTS
-F_FDE0:
+Decomp_NextDst:
     PHP
     INC zp_55
     BNE F_FDE7
@@ -7965,16 +7964,16 @@ F_FDE0:
 F_FDE7:
     PLP
     RTS
-F_FDE9:
-    JSR F_FDEF
+DecompressAndFinish:
+    JSR Decompress
     JMP F_C7D4
-F_FDEF:
-    ROR ram_0397
+Decompress:
+    ROR decomp_to_ram
 F_FDF2:
     LDY #$00
     LDA (ptr_lo),y
     STA zp_08
-    JSR F_FDD7
+    JSR Decomp_NextSrc
     SEC
 F_FDFC:
     LDA zp_08
@@ -7985,8 +7984,8 @@ F_FDFE:
 F_FE03:
     JSR F_FF26
     LDA zp_08
-    JSR F_FD84
-    JSR F_FDE0
+    JSR Decomp_PutByte
+    JSR Decomp_NextDst
 F_FE0E:
     ASL zp_53
     BEQ F_FE15
@@ -7994,7 +7993,7 @@ F_FE0E:
 F_FE15:
     LDA (ptr_lo),y
     STA zp_08
-    JSR F_FDD7
+    JSR Decomp_NextSrc
     LDA zp_08
     ROL a
     STA zp_08
@@ -8012,7 +8011,7 @@ F_FE33:
     LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FE3C:
     BCS F_FE41
     JMP F_FE4E
@@ -8043,7 +8042,7 @@ F_FE52:
     STA zp_08
     LDA zp_08
     STA ptr_lo
-    JSR F_FD9F
+    JSR Decomp_ReadOut
     STA zp_08
     LDA zp_56
     ADC zp_08
@@ -8051,12 +8050,12 @@ F_FE52:
     LDA zp_08
     STA ptr_hi
 F_FE7F:
-    JSR F_FDBB
+    JSR Decomp_ReadBack
     STA zp_08
-    JSR F_FDD7
+    JSR Decomp_NextSrc
     LDA zp_08
-    JSR F_FD84
-    JSR F_FDE0
+    JSR Decomp_PutByte
+    JSR Decomp_NextDst
     DEC zp_54
     BEQ F_FE96
     JMP F_FE7F
@@ -8099,17 +8098,17 @@ F_FEC0:
     STA zp_08
     STA ptr_lo
 F_FED2:
-    JSR F_FD9F
+    JSR Decomp_ReadOut
     ADC zp_56
     STA zp_08
     STA ptr_hi
 F_FEDB:
-    JSR F_FDBB
+    JSR Decomp_ReadBack
     STA zp_08
-    JSR F_FDD7
+    JSR Decomp_NextSrc
     LDA zp_08
-    JSR F_FD84
-    JSR F_FDE0
+    JSR Decomp_PutByte
+    JSR Decomp_NextDst
     DEC zp_54
     BEQ F_FEF2
     JMP F_FEDB
@@ -8126,7 +8125,7 @@ F_FF00:
     LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FF09:
     ROL zp_08
     ASL zp_53
@@ -8137,13 +8136,13 @@ F_FF12:
     LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FF1B:
     ROL zp_08
     LDA zp_08
     EOR #$FF
     STA zp_08
-    JSR F_FD84
+    JSR Decomp_PutByte
 F_FF26:
     ASL zp_53
 F_FF28:
@@ -8153,7 +8152,7 @@ F_FF2D:
     LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FF36:
     ROL zp_08
     ASL zp_53
@@ -8163,7 +8162,7 @@ F_FF3F:
     LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FF48:
     ROL zp_08
     ASL zp_53
@@ -8173,7 +8172,7 @@ F_FF51:
     LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FF5A:
     ROL zp_08
     ASL zp_53
@@ -8183,7 +8182,7 @@ F_FF63:
     LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FF6C:
     ROL zp_08
     ASL zp_53
@@ -8193,7 +8192,7 @@ F_FF75:
     LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FF7E:
     ROL zp_08
 F_FF80:
@@ -8205,7 +8204,7 @@ F_FF87:
     STA zp_53
     ROL zp_53
 F_FF8D:
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FF90:
     ROL zp_08
     ASL zp_53
@@ -8215,7 +8214,7 @@ F_FF99:
     LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FFA2:
     ROL zp_08
     ASL zp_53
@@ -8225,7 +8224,7 @@ F_FFAB:
     LDA (ptr_lo),y
     STA zp_53
     ROL zp_53
-    JSR F_FDD7
+    JSR Decomp_NextSrc
 F_FFB4:
     ROL zp_08
     RTS
