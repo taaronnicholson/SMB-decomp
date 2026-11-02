@@ -110,7 +110,7 @@ B0_811E:
     LDA #$04
 B0_812D:
     STA fade_step
-    LDY zp_0F
+    LDY palette_set
     LDA B0_8040,y
     STA jump_ptr_lo
     LDA B0_8049,y
@@ -202,7 +202,7 @@ B0_81D7:
 B0_81DC:
     LDY #$00
     STY fade_step
-    STY zp_0F
+    STY palette_set
     LDA PPUSTATUS
     LDA ppuctrl_shadow
     AND #$FB
@@ -448,122 +448,146 @@ AreaHeader5:
     .byte $08
     .word $8917
     .byte $02, $11, $02
-    .byte $3F,$AD,$00,$FF,$01,$00
+    .word $AD3F
+    .byte $00, $FF, $01, $00
 AreaHeader4:
     .byte $08
     .word $8437
     .byte $01, $50, $07
-    .byte $00,$00,$00,$FF,$08,$00
+    .word $0000
+    .byte $00, $FF, $08, $00
 AreaHeader2:
     .byte $08
     .word $8917
     .byte $02, $11, $02
-    .byte $3F,$AD,$00,$FF,$0F,$00
+    .word $AD3F
+    .byte $00, $FF, $0F, $00
 AreaHeader0:
     .byte $03
     .word $8B57
     .byte $01, $48, $01
-    .byte $00,$00,$00,$FF,$00,$01
+    .word $0000
+    .byte $00, $FF, $00, $01
 AreaHeader1:
     .byte $03
     .word $8FB7
     .byte $02, $18, $01
-    .byte $00,$00,$00,$FF,$00,$01
+    .word $0000
+    .byte $00, $FF, $00, $01
 AreaHeader16:
     .byte $04
     .word $9297
     .byte $01, $48, $03
-    .byte $E3,$AF,$00,$FF,$00,$02
+    .word $AFE3
+    .byte $00, $FF, $00, $02
 AreaHeader17:
     .byte $04
     .word $96F7
     .byte $01, $30, $03
-    .byte $7B,$B0,$00,$FF,$00,$02
+    .word $B07B
+    .byte $00, $FF, $00, $02
 AreaHeader18:
     .byte $04
     .word $9977
     .byte $03, $12, $03
-    .byte $DB,$B0,$00,$FF,$00,$02
+    .word $B0DB
+    .byte $00, $FF, $00, $02
 AreaHeader19:
     .byte $04
     .word $9DD7
     .byte $01, $12, $03
-    .byte $FD,$B0,$00,$FF,$00,$02
+    .word $B0FD
+    .byte $00, $FF, $00, $02
 AreaHeader20:
     .byte $04
     .word $9ED7
     .byte $01, $34, $03
-    .byte $00,$00,$6C,$00,$17,$02
+    .word $0000
+    .byte $6C, $00, $17, $02
 AreaHeader3:
     .byte $03
     .word $AF47
     .byte $01, $48, $04
-    .byte $65,$AD,$00,$FF,$00,$03
+    .word $AD65
+    .byte $00, $FF, $00, $03
 AreaHeader7:
     .byte $03
     .word $B3A7
     .byte $01, $3B, $04
-    .byte $33,$AE,$00,$FF,$00,$03
+    .word $AE33
+    .byte $00, $FF, $00, $03
 AreaHeader8:
     .byte $03
     .word $B6D7
     .byte $03, $12, $04
-    .byte $4B,$AF,$00,$FF,$00,$03
+    .word $AF4B
+    .byte $00, $FF, $00, $03
 AreaHeader9:
     .byte $03
     .word $BB47
     .byte $01, $22, $04
-    .byte $8D,$AF,$00,$FF,$00,$03
+    .word $AF8D
+    .byte $00, $FF, $00, $03
 AreaHeader10:
     .byte $04
     .word $A317
     .byte $01, $48, $05
-    .byte $A9,$B2,$00,$FF,$1A,$04
+    .word $B2A9
+    .byte $00, $FF, $1A, $04
 AreaHeader11:
     .byte $04
     .word $B2D5
     .byte $02, $20, $05
-    .byte $4D,$B1,$00,$FF,$00,$04
+    .word $B14D
+    .byte $00, $FF, $00, $04
 AreaHeader12:
     .byte $04
     .word $A1F7
     .byte $01, $12, $05
-    .byte $BF,$B1,$00,$FF,$00,$04
+    .word $B1BF
+    .byte $00, $FF, $00, $04
 AreaHeader13:
     .byte $04
     .word $A777
     .byte $01, $12, $05
-    .byte $E9,$B1,$00,$FF,$00,$04
+    .word $B1E9
+    .byte $00, $FF, $00, $04
 AreaHeader14:
     .byte $04
     .word $A817
     .byte $03, $18, $05
-    .byte $31,$B2,$00,$FF,$19,$04
+    .word $B231
+    .byte $00, $FF, $19, $04
 AreaHeader15:
     .byte $04
     .word $ADF7
     .byte $01, $16, $05
-    .byte $7B,$B2,$00,$FF,$00,$04
+    .word $B27B
+    .byte $00, $FF, $00, $04
 AreaHeader21:
     .byte $06
     .word $8860
     .byte $02, $22, $06
-    .byte $00,$00,$00,$FF,$00,$05
+    .word $0000
+    .byte $00, $FF, $00, $05
 AreaHeader22:
     .byte $06
     .word $A03E
     .byte $01, $1E, $06
-    .byte $BB,$B3,$00,$FF,$1B,$05
+    .word $B3BB
+    .byte $00, $FF, $1B, $05
 AreaHeader23:
     .byte $06
     .word $7F80
     .byte $04, $12, $06
-    .byte $00,$00,$9C,$00,$18,$05
+    .word $0000
+    .byte $9C, $00, $18, $05
 AreaHeader6:
     .byte $08
     .word $B6B5
     .byte $01, $42, $06
-    .byte $43,$B4,$00,$FF,$0E,$03
+    .word $B443
+    .byte $00, $FF, $0E, $03
 ; Gfx_B0_8521: LZ-compressed, 551 bytes -> 736 bytes to PPU $1C40 (title/all stages)
 Gfx_B0_8521:
     .byte $00,$00,$07,$04,$46,$33,$18,$88,$38,$80,$73,$E3,$BA,$01,$DD,$C7
@@ -640,32 +664,30 @@ Gfx_B0_88A7:
     .byte $7C,$15,$17,$07,$E5,$D6,$47,$B6,$02,$E0,$F8,$BC,$7E,$35,$8B,$4B
     .byte $67,$E2,$D0,$94,$F0,$00,$2E,$14,$87,$88,$00,$58,$6C,$BD,$07,$04
     .byte $C3,$61,$70,$BE,$8C,$70,$60,$1C,$1E,$0F,$1B,$8A,$84,$C1,$DD,$9A
-    .byte $41,$70
-B0_8999:
-    .byte $CF,$4B,$CC,$96,$AB,$86,$A1,$D3,$85,$F3,$A1,$D0,$78,$68,$08,$18
-    .byte $1A,$3C,$F2,$5F,$7C,$1F,$C0,$28,$10,$07,$1D,$10,$0F,$E0,$50,$56
-    .byte $80,$81,$F8,$00,$07,$92,$01,$F1,$21,$CF,$E8,$C1,$D2,$0B,$19,$B1
-    .byte $FE,$66,$40,$20,$65,$5D,$38,$A0,$0C,$68,$F8,$00,$80,$C3,$E0,$73
-    .byte $30,$05,$03,$2E,$E3,$90,$2E,$80,$F9,$0D,$60,$3E,$1C,$00,$44,$42
-    .byte $24,$24,$14,$4C,$20,$0C,$D0,$72,$06,$06,$02,$32,$AE,$08,$02,$29
-    .byte $12,$40,$A0,$32,$01,$33,$49,$C9,$80,$61,$A1,$12,$0F,$D0,$12,$60
-    .byte $84,$44,$68,$4F,$93,$98,$5E,$07,$C1,$F8,$06,$4C,$04,$21,$1D,$05
-    .byte $52,$73,$2B,$CF,$00,$82,$21,$09,$2F,$B2,$AE,$66,$F2,$FA,$08,$08
-    .byte $88,$65,$B2,$1A,$4C,$CF,$09,$6E,$D2,$D9,$A0,$FF,$4A,$CF,$CD,$B8
-    .byte $7F,$08,$8A,$04,$84,$52,$2A,$13,$2E,$38,$40,$30,$38,$1C,$1E,$00
-    .byte $71,$37,$2D,$B9,$0F,$E2,$EB,$4B,$6E,$43,$F0,$48,$44,$C1,$B0,$FE
-    .byte $10,$3A,$1A,$07,$C7,$F0,$01,$98,$BF,$20,$44,$00,$4C,$B6,$8D,$68
-    .byte $00,$D8,$1E,$F0,$68,$34,$00,$0F,$6C,$83,$E2,$08,$00,$7F,$E9,$D8
-    .byte $F0,$3E,$0C,$16,$0B,$1F,$E0,$9C,$01,$03,$FE,$0F,$FD,$0E,$78,$3F
-    .byte $DC,$94,$7F,$60,$27,$D7,$0B,$05,$0A,$89,$4B,$51,$E7,$FD,$80,$15
-    .byte $1E,$F5,$92,$19,$29,$A5,$07,$E3,$FB,$60,$02,$A9,$48,$A8,$50,$20
-    .byte $14,$0C,$0E,$03,$94,$29,$95,$12,$28,$04,$32,$91,$C0,$71,$FD,$45
-    .byte $E7,$F5,$82,$00,$FE,$58,$1F,$C0,$0D,$18,$52,$90,$FC,$81,$30,$2F
-    .byte $E9,$65,$7F,$4D,$83,$F2,$A9,$E0,$FB,$55,$55,$28,$03,$C2,$95,$5A
-    .byte $0F,$D5,$6E,$0F,$CC,$AB,$30,$50,$33,$4C,$67,$84,$26,$5A,$3A,$6A
-    .byte $A7,$93,$C0,$11,$F1,$92,$07,$62,$0E,$88,$AD,$08,$35,$BF,$B1,$07
-    .byte $20,$EF,$04,$12,$70,$FC,$27,$91,$06,$C6,$A7,$6F,$81,$FC,$1F,$42
-    .byte $06
+    .byte $41,$70,$CF,$4B,$CC,$96,$AB,$86,$A1,$D3,$85,$F3,$A1,$D0,$78,$68
+    .byte $08,$18,$1A,$3C,$F2,$5F,$7C,$1F,$C0,$28,$10,$07,$1D,$10,$0F,$E0
+    .byte $50,$56,$80,$81,$F8,$00,$07,$92,$01,$F1,$21,$CF,$E8,$C1,$D2,$0B
+    .byte $19,$B1,$FE,$66,$40,$20,$65,$5D,$38,$A0,$0C,$68,$F8,$00,$80,$C3
+    .byte $E0,$73,$30,$05,$03,$2E,$E3,$90,$2E,$80,$F9,$0D,$60,$3E,$1C,$00
+    .byte $44,$42,$24,$24,$14,$4C,$20,$0C,$D0,$72,$06,$06,$02,$32,$AE,$08
+    .byte $02,$29,$12,$40,$A0,$32,$01,$33,$49,$C9,$80,$61,$A1,$12,$0F,$D0
+    .byte $12,$60,$84,$44,$68,$4F,$93,$98,$5E,$07,$C1,$F8,$06,$4C,$04,$21
+    .byte $1D,$05,$52,$73,$2B,$CF,$00,$82,$21,$09,$2F,$B2,$AE,$66,$F2,$FA
+    .byte $08,$08,$88,$65,$B2,$1A,$4C,$CF,$09,$6E,$D2,$D9,$A0,$FF,$4A,$CF
+    .byte $CD,$B8,$7F,$08,$8A,$04,$84,$52,$2A,$13,$2E,$38,$40,$30,$38,$1C
+    .byte $1E,$00,$71,$37,$2D,$B9,$0F,$E2,$EB,$4B,$6E,$43,$F0,$48,$44,$C1
+    .byte $B0,$FE,$10,$3A,$1A,$07,$C7,$F0,$01,$98,$BF,$20,$44,$00,$4C,$B6
+    .byte $8D,$68,$00,$D8,$1E,$F0,$68,$34,$00,$0F,$6C,$83,$E2,$08,$00,$7F
+    .byte $E9,$D8,$F0,$3E,$0C,$16,$0B,$1F,$E0,$9C,$01,$03,$FE,$0F,$FD,$0E
+    .byte $78,$3F,$DC,$94,$7F,$60,$27,$D7,$0B,$05,$0A,$89,$4B,$51,$E7,$FD
+    .byte $80,$15,$1E,$F5,$92,$19,$29,$A5,$07,$E3,$FB,$60,$02,$A9,$48,$A8
+    .byte $50,$20,$14,$0C,$0E,$03,$94,$29,$95,$12,$28,$04,$32,$91,$C0,$71
+    .byte $FD,$45,$E7,$F5,$82,$00,$FE,$58,$1F,$C0,$0D,$18,$52,$90,$FC,$81
+    .byte $30,$2F,$E9,$65,$7F,$4D,$83,$F2,$A9,$E0,$FB,$55,$55,$28,$03,$C2
+    .byte $95,$5A,$0F,$D5,$6E,$0F,$CC,$AB,$30,$50,$33,$4C,$67,$84,$26,$5A
+    .byte $3A,$6A,$A7,$93,$C0,$11,$F1,$92,$07,$62,$0E,$88,$AD,$08,$35,$BF
+    .byte $B1,$07,$20,$EF,$04,$12,$70,$FC,$27,$91,$06,$C6,$A7,$6F,$81,$FC
+    .byte $1F,$42,$06
     .word F_FD83
     .word F_FC08
     .word F_F80F
@@ -1350,7 +1372,7 @@ B0_B5FB:
     STA ptr_hi
     JSR B0_B5B3
     JSR F_C956
-    LDA zp_1A
+    LDA tileset_id
     ASL a
     ASL a
     ASL a
@@ -1385,12 +1407,12 @@ B0_B63F:
     STA zp_B1
     STA zp_65
     LDA #$08
-    STA zp_0F
+    STA palette_set
     LDA #$00
     STA zp_09
     STA zp_0A
     STA zp_0B
-    JSR F_CE3B
+    JSR PlaySong
     LDA #$01
     STA nmi_state
     JSR EnableNMI
@@ -1427,7 +1449,7 @@ B0_B6B3:
     JSR FarCall
     LDA fade_dir
     BNE B0_B6B3
-    JSR F_CE52
+    JSR SilenceSound
     JSR F_C7CD
     JSR ClearOAMBuffer
     JMP F_C9A5

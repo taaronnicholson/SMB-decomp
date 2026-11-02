@@ -57,13 +57,21 @@ applies the `ppuctrl_shadow`/`ppumask_shadow` values and calls one of 6 state ha
 Records 0–3 have 11 entries, record 4 has 3, record 5 has none. The six starting areas are 0, 16, 3, 10, 21 and 6.
 
 **Areas** (`LoadArea` = `F_D05C`, A = area number): `AreaHeaderPtrLo/Hi` (`$83B9`/`$83D1`) point to a 6-byte
-`AreaHeaderN` (tileset byte, map address, log2 width, height, one more byte) and `AreaMapBank` (`$83E9`) gives the PRG
+12-byte `AreaHeaderN` (song number, map address, log2 width, height, palette set, object pointer, two more bytes, initial `game_state`, tileset id) and `AreaMapBank` (`$83E9`) gives the PRG
 bank of the map. A map is one byte per 16×16 tile, `8 << log2width` tiles wide (16, 32, 64 or 128), `height` rows tall,
 row-major, and the levels scroll **vertically**. The address of tile (x, y) is `map_ptr + (x>>4) + (y>>4)*width`
 (`MapPtrFromPos`); `GetMapTile` reads it. The first two rows are phantom (above the playfield, not stored), so the real
 data starts at `base + 2*width` (area 23's base is `$7F80`, just below its bank). Maps live in bank 3 (areas 0-5, 7-10,
 12-20), bank 1 (6, 11), bank 4 (21, 23) and bank 6 (22). `tools/extract_maps.py` dumps them to `build/maps/`.
-`tile_props` (`$03A4`, 120 bytes, loaded per stage) holds tile flags; bit 0 means solid.
+`tile_props` (`$03A4`, 120 bytes, loaded per tileset) holds tile flags; bit 0 means solid.
+
+**Tileset records** (bank 0, 8 bytes at `$8C9B + 8*t`, `t` = header byte 11, bank of the compressed blocks in `B0_8C95[t]`):
+tile-properties block (LZ → RAM `$03A4`), tile-graphics block (LZ → PPU `$1530`), the metatile planes, and an attribute plane.
+Each map byte is a 16×16 metatile: four 240-entry planes (top-left, top-right, bottom-left, bottom-right) in bank 0 give its
+four 8×8 tile numbers, drawn by the code at `F_D37F`. The background pattern table is `$1000`: the shared block at
+`$88A7` (tiles 0-82), then the tileset block from tile `$53`, and the font at `$C4` (ASCII + `$94`).
+`tools/render_maps.py` draws every area to `build/maps/area_NN.png` (placeholder colours, git-ignored).
+The area header's song number is played by `PlaySong` when the area loads.
 
 ## Sound engine (bank 6)
 `$8000` is a jump table: `Sound_PlaySong` (A = song 0-8), `Sound_Update` (`$8003`, once per frame),

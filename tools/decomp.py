@@ -127,7 +127,7 @@ while queue:
         push(nxt + (val - 256 if val > 127 else val), cb, nr, why); push(nxt, cb, nr, why)
     elif mn == 'JSR':
         ncb = cb
-        if val == BANKSW: ncb = ra
+        if val == BANKSW or val == 0xC919: ncb = ra      # SwitchBank / SwitchBankKeepX
         elif val in BANKSW_DYN: ncb = None
         elif val == FARCALL:
             if None not in regs and ry < NB and (ra << 8 | rx) >= 0x8000:

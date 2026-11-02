@@ -858,7 +858,7 @@ B4_ACA1:
     STA nmi_state
     JSR EnableNMI
     LDA #$07
-    JSR F_CE3B
+    JSR PlaySong
     INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
@@ -910,7 +910,7 @@ B4_AD1F:
     BEQ B4_AD30
     JMP B4_ACE8
 B4_AD30:
-    JSR F_CE52
+    JSR SilenceSound
     LDA #$01
     STA nmi_state
     DEC fade_dir
@@ -946,13 +946,13 @@ B4_AD60:
     JSR FarCall
     JSR F_C959
     LDA #$02
-    STA zp_0F
+    STA palette_set
     LDA #$01
     STA nmi_state
     JSR EnableNMI
     JSR WaitForNMI
     LDA #$06
-    JSR F_CE3B
+    JSR PlaySong
     INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
@@ -1815,7 +1815,7 @@ B4_B540:
     LDA #$09
     STA game_state
     LDA #$08
-    JMP F_CE3B
+    JMP PlaySong
     .byte $8D,$B1,$01,$A9,$06,$20,$3B,$CE,$20,$8D,$C9,$AD,$B1
     ORA (zp_0A,x)
     ASL a
@@ -2079,7 +2079,7 @@ B4_B77C:
     JSR F_C7CD
     JSR F_C956
     JSR F_C9A5
-    JSR F_CE52
+    JSR SilenceSound
     LDA #$09
     STA zp_63
     LDA zp_E1
@@ -2626,9 +2626,9 @@ B4_BD91:
     .byte "ODNETNIN YB DESNECIL"   ; reads: "LICENSED BY NINTENDO"
     .byte $00
 B4_BE32:
-    JSR F_CE52
+    JSR SilenceSound
     LDA #$08
-    STA zp_0F
+    STA palette_set
     LDA #$23
     STA PPUADDR
     LDA #$D0

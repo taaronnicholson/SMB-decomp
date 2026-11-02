@@ -346,7 +346,7 @@ F_C5E1:
     LDA #$34
     STA ram_0754
 F_C647:
-    JSR F_CE52
+    JSR SilenceSound
     LDA #$00
     JSR SwitchBank
     JSR B0_B63F
@@ -1222,11 +1222,11 @@ F_CC6A:
     ASL a
     ASL a
     TAY
-    LDA B1_A722,y
+    LDA B6_A722,y
     STA ptr_lo
-    LDA B1_A723,y
+    LDA B6_A723,y
     STA ptr_hi
-    LDA B1_A724,y
+    LDA B6_A724,y
     STA zp_53
     BEQ F_CCB7
     LDA zp_DB
@@ -1329,10 +1329,10 @@ F_CD60:
     PHA
     LDA #$01
     STA nmi_state
-    JSR F_CE52
+    JSR SilenceSound
     LDA ram_024D
     STA zp_FD
-    LDA zp_0F
+    LDA palette_set
     PHA
     DEC fade_dir
 F_CD74:
@@ -1341,7 +1341,7 @@ F_CD74:
     JSR F_C7CD
     JSR F_C9A5
     LDA #$07
-    STA zp_0F
+    STA palette_set
     LDA #$00
     JSR SwitchBank
     JSR B0_B577
@@ -1390,7 +1390,7 @@ F_CDDD:
     LDA #$00
     JSR SwitchBank
     JSR B0_B5FB
-    LDX zp_1A
+    LDX tileset_id
     LDA B0_8C95,x
     JSR SwitchBankKeepX
     CLC
@@ -1401,7 +1401,7 @@ F_CE00:
     JSR F_C98D
 F_CE05:
     PLA
-    STA zp_0F
+    STA palette_set
     LDA #$06
     JSR SwitchBank
     JSR B6_8009
@@ -1427,7 +1427,7 @@ F_CE2C:
     JSR B0_B70A
     PLA
     JMP SwitchBank
-F_CE3B:
+PlaySong:
     STA zp_08
     LDA cur_bank
     PHA
@@ -1436,12 +1436,12 @@ F_CE3B:
     LDA #$06
     JSR SwitchBankKeepX
     LDA zp_08
-    JSR PPUCopyLo
+    JSR Sound_PlaySong
     PLA
     TAY
     PLA
     JMP SwitchBankKeepX
-F_CE52:
+SilenceSound:
     LDA cur_bank
     PHA
     LDA #$06
@@ -1487,7 +1487,7 @@ F_CE8F:
     LDA #$06
     JSR SwitchBankKeepX
     LDA zp_08
-    JSR $8012
+    JSR B6_8012
     PLA
     TAX
     PLA
@@ -1775,7 +1775,7 @@ F_D09F:
     STA zp_AA
     LDY #$00
     LDA (tmp_ptr_lo),y
-    JSR F_CE3B
+    JSR PlaySong
     INY
     LDA (tmp_ptr_lo),y
     STA map_ptr_lo
@@ -1835,7 +1835,7 @@ F_D0F4:
     STA zp_34
     INY
     LDA (tmp_ptr_lo),y
-    STA zp_0F
+    STA palette_set
     INY
     LDA (tmp_ptr_lo),y
     STA zp_CD
@@ -1853,13 +1853,13 @@ F_D0F4:
     STA game_state
     INY
     LDA (tmp_ptr_lo),y
-    CMP zp_1A
+    CMP tileset_id
     BNE F_D139
     LDA #$02
     JSR SwitchBank
     JMP B2_A554
 F_D139:
-    STA zp_1A
+    STA tileset_id
     TAX
     LDA B0_8C95,x
     STA ram_01A5
@@ -1885,7 +1885,7 @@ F_D139:
     JSR SwitchBankKeepX
     LDY #$63
 F_D16B:
-    LDA B0_8999,y
+    LDA B1_8999,y
     STA ram_041C,y
     DEY
     BPL F_D16B
@@ -6138,7 +6138,7 @@ F_F040:
     STA zp_92
     INY
 F_F043:
-    JSR F_CE52
+    JSR SilenceSound
     LDA #$01
     STA nmi_state
     DEC fade_dir
@@ -6781,7 +6781,7 @@ F_F52A:
     .byte $20
     CMP $20C7
     LDA zp_C9
-    JSR F_CE52
+    JSR SilenceSound
     LDA ram_01AE
     BNE F_F548
     LDA zp_BB

@@ -497,7 +497,8 @@ entry 6 8000
 entry 6 800C
 entry 6 800F
 entry 6 8012
-name 6 8015 Sound_PlaySong      ; A = song number (0-8): 9-byte header per song in SongTable
+name 6 8000 Sound_PlaySong      ; jump-table entry: A = song number (0-8), 9-byte header per song in SongTable
+name 6 8015 Sound_PlaySongImpl
 name 6 80EA Sound_Silence
 name 6 80DC Sound_Resume
 name 6 81A5 Snd_Sq1_Step

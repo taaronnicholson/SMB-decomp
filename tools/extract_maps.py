@@ -10,7 +10,7 @@ out = os.path.join(ROOT, 'build/maps'); os.makedirs(out, exist_ok=True)
 for i in range(N):
     h = PRG[0][LO - 0x8000 + i] | PRG[0][HI - 0x8000 + i] << 8
     bank = PRG[0][BANK - 0x8000 + i]
-    hdr = PRG[0][h - 0x8000:h - 0x8000 + 6]
+    hdr = PRG[0][h - 0x8000:h - 0x8000 + 12]
     base = hdr[1] | hdr[2] << 8; width = 8 << hdr[3]; rows = hdr[4]
     def cell(r, c):
         a = base + r * width + c - 0x8000          # physical offset in the map bank

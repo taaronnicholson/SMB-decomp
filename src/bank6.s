@@ -3,7 +3,8 @@
 
 .segment "BANK6"
 
-    JMP Sound_PlaySong
+Sound_PlaySong:
+    JMP Sound_PlaySongImpl
 Sound_Update:
     JMP B6_8115
 B6_8006:
@@ -12,8 +13,9 @@ B6_8009:
     JMP Sound_Resume
     JMP Sound_PlaySfxSq1
     JMP Sound_PlaySfxSq2
+B6_8012:
     JMP Sound_PlaySfxNoise
-Sound_PlaySong:
+Sound_PlaySongImpl:
     TAY
     JSR Sound_Silence
     LDA #$00
@@ -3514,7 +3516,7 @@ B6_A41E:
     BNE B6_A41D
     LDA #$01
     STA nmi_state
-    JSR F_CE52
+    JSR SilenceSound
     DEC fade_dir
 B6_A433:
     JSR WaitForNMI
@@ -3775,15 +3777,20 @@ B6_A6AE:
     .byte $08,$F0,$00,$F8,$F8,$00,$00,$00,$08,$00,$F8,$00,$00,$00,$08,$F4
     .byte $FF,$F4,$07,$04,$FF,$04,$07,$F0,$00,$F0,$08,$00,$00,$00,$08,$00
     .byte $F8,$00,$00,$00,$08,$FB,$00,$FB,$08,$08,$00,$08,$08,$F8,$00,$F0
-    .byte $08,$08,$00,$00,$08,$F0,$00,$00,$F8,$00,$00,$00,$08,$22,$AC,$04
-    .byte $00,$5C,$AC,$04,$00,$9C,$AC,$10,$00,$6E,$AD,$08,$00,$56,$B2,$0C
-    .byte $00,$48,$B1,$0E,$00,$D4,$AD,$04,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$DA,$AB,$04,$00,$76,$AA,$2E,$00,$00,$00,$00,$00,$20,$AF,$3A
-    .byte $00,$9E,$A7,$22,$00,$CA,$A8,$08,$00,$00,$00,$00,$00,$7C,$A9,$0A
-    .res 13, $00
-    .byte $E8,$B1,$0C,$00,$6E,$B0,$12,$00,$E0,$A9,$12,$00,$64,$B3,$64,$00
-    .byte $D0,$B2,$10,$00,$00,$00,$00,$00,$1C,$AE,$14,$00,$30,$A9,$08,$00
-    .byte $F6,$B6,$08,$00,$38,$B7,$1A,$00
+    .byte $08,$08,$00,$00,$08,$F0,$00,$00,$F8
+B6_A722:
+    .byte $00
+B6_A723:
+    .byte $00
+B6_A724:
+    .byte $00,$08,$22,$AC,$04,$00,$5C,$AC,$04,$00,$9C,$AC,$10,$00,$6E,$AD
+    .byte $08,$00,$56,$B2,$0C,$00,$48,$B1,$0E,$00,$D4,$AD,$04,$00,$00,$00
+    .byte $00,$00,$00,$00,$00,$00,$DA,$AB,$04,$00,$76,$AA,$2E,$00,$00,$00
+    .byte $00,$00,$20,$AF,$3A,$00,$9E,$A7,$22,$00,$CA,$A8,$08,$00,$00,$00
+    .byte $00,$00,$7C,$A9,$0A,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    .byte $00,$00,$E8,$B1,$0C,$00,$6E,$B0,$12,$00,$E0,$A9,$12,$00,$64,$B3
+    .byte $64,$00,$D0,$B2,$10,$00,$00,$00,$00,$00,$1C,$AE,$14,$00,$30,$A9
+    .byte $08,$00,$F6,$B6,$08,$00,$38,$B7,$1A,$00
 ; Gfx_B6_A79E: LZ-compressed, 300 bytes -> 544 bytes to PPU $0720,$09A0 (stages 0,3 + title)
 Gfx_B6_A79E:
     .byte $00,$68,$00,$00,$81,$41,$5B,$01,$C0,$00,$20,$28,$3C,$1C,$71,$75
@@ -4862,7 +4869,7 @@ B6_BDA0:
     JSR F_C8B4
     LDY ram_0745
     LDA B6_BEE6,y
-    JSR F_CE3B
+    JSR PlaySong
     LDA #$10
     STA ram_0389
     LDA #$FC
@@ -4920,7 +4927,7 @@ B6_BE40:
     STA PPUDATA
 B6_BE4D:
     LDA #$08
-    STA zp_0F
+    STA palette_set
     LDA #$01
     STA nmi_state
     JSR EnableNMI
@@ -4982,7 +4989,7 @@ B6_BECA:
     JSR FarCall
     LDA fade_dir
     BNE B6_BECA
-    JSR F_CE52
+    JSR SilenceSound
     JSR F_C7CD
     JSR ClearOAMBuffer
     JMP F_C9A5
