@@ -236,40 +236,42 @@ F_C327:
 F_C331:
     .byte $C3,$D2,$D2,$00,$CD
 F_C336:
-    .byte $CD,$D3,$D3,$C0,$D3,$D3,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$0F,$0F,$0E,$0D,$0C,$0C,$0C,$0C,$0C,$0C
-    .byte $0C,$0C,$0D,$0E,$0F,$0F,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02
-    .byte $02,$02,$02,$02,$02,$02,$0E,$0D,$0B,$0A,$0A,$0A,$0A,$0A,$0A,$0A
-    .byte $0A,$0A,$0A,$0B,$0D,$0E,$0F,$0E,$0E,$0D,$0D,$0D,$0D,$0D,$0D,$0D
-    .byte $0D,$0D,$0D,$0E,$0E,$0F,$01,$02,$02,$03,$04,$06,$07,$08,$09,$09
-    .byte $0A,$0A,$0B,$0C,$0D,$0D,$00,$01,$01,$02,$04,$05,$05,$05,$05,$05
-    .byte $05,$04,$02,$01,$01,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$0F
-    .byte $0E,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0E,$0F,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$0F,$0F,$0E,$0E,$0D,$0D,$0C,$0C,$0B,$0B
-    .byte $0A,$0A,$09,$09,$08,$08,$07,$07,$06,$06,$05,$05,$04,$04,$03,$03
-    .byte $02,$02,$01,$01,$00,$00,$00,$00,$01,$01,$02,$02,$03,$03,$04,$04
-    .byte $05,$05,$06,$06,$07,$07,$08,$08,$09,$09,$0A,$0A,$0B,$0B,$0C,$0C
-    .byte $0D,$0D,$0E,$0E,$0F,$0F,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$03,$03
-    .byte $02,$02,$01,$01,$00,$00,$00,$00,$01,$01,$02,$02,$03,$03,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F
-    .byte $0F,$0F,$0F,$0F,$0F,$0F,$06,$04,$03,$02,$01,$01,$00,$00,$00,$00
-    .byte $01,$01,$02,$03,$04,$06,$0B,$0B,$0B,$0B,$0A,$0A,$09,$09,$09,$09
-    .byte $09,$0A,$0A,$0B,$0C,$0E,$0E,$0C,$0A,$08,$07,$06,$05,$04,$03,$03
-    .byte $02,$02,$01,$01,$01,$00,$00,$01,$01,$01,$02,$02,$03,$03,$04,$05
-    .byte $06,$07,$08,$0A,$0C,$0E,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$04,$02
-    .byte $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$04,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$0F,$0D,$0C,$0B,$0B,$0A,$0A,$09,$09,$08
-    .byte $08,$07,$06,$05,$03,$01,$01,$03,$05,$06,$07,$08,$08,$09,$09,$0A
-    .byte $0A,$0B,$0B,$0C,$0D,$0F,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$0E,$0C
-    .byte $0A,$08,$06,$04,$02,$00,$0E,$0C,$0A,$08,$06,$04,$02,$00,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$00,$02,$04,$06,$08,$0A,$0C,$0E,$FF,$FF
-    .res 14, $FF
-    .byte $00,$02,$04,$06,$08,$0A,$0C,$0E,$08,$08,$08,$08,$08,$08,$08,$08
-    .res 8, $08
-    .byte $07,$06,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$06,$07
-    .byte $0E,$0C,$0B,$0A,$09,$09,$08,$08,$08,$08,$09,$09,$0A,$0B,$0C,$0E
-F_C53C:
+    .byte $CD,$D3,$D3,$C0,$D3,$D3
+; TileHeightProfiles: 32 profiles x 16 columns: ground surface height per pixel column of a tile ($FF = no surface)
+TileHeightProfiles:
+    .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+    .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
+    .byte $0F, $0F, $0E, $0D, $0C, $0C, $0C, $0C, $0C, $0C, $0C, $0C, $0D, $0E, $0F, $0F
+    .byte $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02, $02
+    .byte $0E, $0D, $0B, $0A, $0A, $0A, $0A, $0A, $0A, $0A, $0A, $0A, $0A, $0B, $0D, $0E
+    .byte $0F, $0E, $0E, $0D, $0D, $0D, $0D, $0D, $0D, $0D, $0D, $0D, $0D, $0E, $0E, $0F
+    .byte $01, $02, $02, $03, $04, $06, $07, $08, $09, $09, $0A, $0A, $0B, $0C, $0D, $0D
+    .byte $00, $01, $01, $02, $04, $05, $05, $05, $05, $05, $05, $04, $02, $01, $01, $00
+    .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $0F, $0E, $0C, $0C, $0C, $0C, $0C
+    .byte $0C, $0C, $0C, $0C, $0C, $0C, $0E, $0F, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+    .byte $0F, $0F, $0E, $0E, $0D, $0D, $0C, $0C, $0B, $0B, $0A, $0A, $09, $09, $08, $08
+    .byte $07, $07, $06, $06, $05, $05, $04, $04, $03, $03, $02, $02, $01, $01, $00, $00
+    .byte $00, $00, $01, $01, $02, $02, $03, $03, $04, $04, $05, $05, $06, $06, $07, $07
+    .byte $08, $08, $09, $09, $0A, $0A, $0B, $0B, $0C, $0C, $0D, $0D, $0E, $0E, $0F, $0F
+    .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $03, $03, $02, $02, $01, $01, $00, $00
+    .byte $00, $00, $01, $01, $02, $02, $03, $03, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+    .byte $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F, $0F
+    .byte $06, $04, $03, $02, $01, $01, $00, $00, $00, $00, $01, $01, $02, $03, $04, $06
+    .byte $0B, $0B, $0B, $0B, $0A, $0A, $09, $09, $09, $09, $09, $0A, $0A, $0B, $0C, $0E
+    .byte $0E, $0C, $0A, $08, $07, $06, $05, $04, $03, $03, $02, $02, $01, $01, $01, $00
+    .byte $00, $01, $01, $01, $02, $02, $03, $03, $04, $05, $06, $07, $08, $0A, $0C, $0E
+    .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $04, $02, $01, $00, $00, $00, $00, $00
+    .byte $00, $00, $00, $00, $00, $01, $02, $04, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+    .byte $0F, $0D, $0C, $0B, $0B, $0A, $0A, $09, $09, $08, $08, $07, $06, $05, $03, $01
+    .byte $01, $03, $05, $06, $07, $08, $08, $09, $09, $0A, $0A, $0B, $0B, $0C, $0D, $0F
+    .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $0E, $0C, $0A, $08, $06, $04, $02, $00
+    .byte $0E, $0C, $0A, $08, $06, $04, $02, $00, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+    .byte $00, $02, $04, $06, $08, $0A, $0C, $0E, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+    .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $00, $02, $04, $06, $08, $0A, $0C, $0E
+    .byte $08, $08, $08, $08, $08, $08, $08, $08, $08, $08, $08, $08, $08, $08, $08, $08
+    .byte $07, $06, $05, $05, $05, $05, $05, $05, $05, $05, $05, $05, $05, $05, $06, $07
+    .byte $0E, $0C, $0B, $0A, $09, $09, $08, $08, $08, $08, $09, $09, $0A, $0B, $0C, $0E
+BitMask:
     .byte $01
 F_C53D:
     .byte $02,$04,$08,$10,$20,$40,$80
@@ -1105,7 +1107,7 @@ F_CBCD:
     AND #$07
     TAX
     LDA onetime_flags,y
-    AND F_C53C,x
+    AND BitMask,x
     BEQ F_CBF2
     LDX zp_42
     LDA ptr_lo
@@ -3335,7 +3337,7 @@ FilterCollectedTile:
     AND #$07
     TAX
     LDA a:collected_by_kind,y
-    AND F_C53C,x
+    AND BitMask,x
     BEQ F_DBF1
     LDX zp_56
     LDA #$00
@@ -3768,7 +3770,7 @@ F_DEFB:
     LDA player_y_hi
     STA zp_56
     JSR MapPtrFromPos
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE F_DF54
     LDA player_y_lo
@@ -3781,20 +3783,20 @@ F_DEFB:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BEQ F_DF60
     INC ptr_lo
     BNE F_DF3E
     INC ptr_hi
 F_DF3E:
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     AND #$03
     CMP #$02
     BNE F_DF54
     LDA zp_53
-    JSR F_EEA6
+    JSR ProfilePtrFromProps
     LDA #$04
     CMP (ptr_lo),y
     BCS F_DF60
@@ -3864,7 +3866,7 @@ F_DFB2:
     LDA player_y_hi
     STA zp_56
     JSR MapPtrFromPos
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE F_E023
     LDA player_y_lo
@@ -3877,7 +3879,7 @@ F_DFB2:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BEQ F_E02F
     LDA ptr_lo
@@ -3887,7 +3889,7 @@ F_DFB2:
     LDA ptr_hi
     SBC #$00
     STA ptr_hi
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     AND #$03
     CMP #$02
@@ -4065,7 +4067,7 @@ F_E119:
     STA zp_56
     PLA
     STA zp_55
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     STA zp_53
     AND #$01
     BNE F_E170
@@ -4078,7 +4080,7 @@ F_E119:
     STA ptr_hi
     JSR MapPtrFromPos
     JSR F_F80D
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     STA zp_53
     AND #$01
     BNE F_E170
@@ -4087,7 +4089,7 @@ F_E170:
     LDA zp_53
     AND #$02
     BEQ F_E179
-    JSR F_F492
+    JSR HurtPlayer
 F_E179:
     CMP #$0F
     BNE F_E17E
@@ -4129,7 +4131,7 @@ F_E194:
     STA zp_56
     PLA
     STA zp_55
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     STA zp_53
     AND #$01
     BNE F_E1DF
@@ -4141,7 +4143,7 @@ F_E194:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     STA zp_53
     AND #$01
     BEQ F_E1F7
@@ -4149,7 +4151,7 @@ F_E1DF:
     LDA zp_53
     AND #$02
     BEQ F_E1E8
-    JSR F_F492
+    JSR HurtPlayer
 F_E1E8:
     CMP #$0F
     BEQ F_E17D
@@ -4183,7 +4185,7 @@ F_E20B:
     LDA player_y_hi
     STA zp_56
     JSR MapPtrFromPos
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE F_E269
     LDA player_y_lo
@@ -4198,7 +4200,7 @@ F_E233:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE F_E24A
     JMP F_E2EB
@@ -4207,13 +4209,13 @@ F_E24A:
     BNE F_E250
     INC ptr_hi
 F_E250:
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     AND #$03
     CMP #$02
     BNE F_E269
     LDA zp_53
-    JSR F_EEA6
+    JSR ProfilePtrFromProps
     LDA #$04
     CMP (ptr_lo),y
     BCC F_E269
@@ -4238,7 +4240,7 @@ F_E275:
     LDA player_y_hi
     STA zp_56
     JSR MapPtrFromPos
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE F_E2E2
     LDA player_y_lo
@@ -4251,7 +4253,7 @@ F_E275:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BEQ F_E2EB
     LDA ptr_lo
@@ -4261,7 +4263,7 @@ F_E275:
     LDA ptr_hi
     SBC #$00
     STA ptr_hi
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     AND #$03
     CMP #$02
@@ -4327,7 +4329,7 @@ F_E313:
     LDA ptr_hi
     STA zp_74
     JSR F_EFD3
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$03
     BEQ F_E3A4
     CMP #$02
@@ -4347,7 +4349,7 @@ F_E313:
     RTS
 F_E359:
     LDA tile_props,x
-    JSR F_EEA6
+    JSR ProfilePtrFromProps
     LDA player_x_lo
     CLC
     ADC #$08
@@ -4398,7 +4400,7 @@ F_E3A4:
     ADC #$00
     STA ptr_hi
     LDY #$00
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BEQ F_E3CF
     LDA ptr_lo
@@ -4429,8 +4431,8 @@ F_E3CF:
     STA zp_75
     LDA ptr_hi
     STA zp_76
-    JSR F_E514
-    JSR F_EEA6
+    JSR GetTilePropsAtPos
+    JSR ProfilePtrFromProps
     LDA player_x_lo
     CLC
     ADC #$08
@@ -4490,12 +4492,12 @@ F_E451:
     STA ptr_hi
     STA zp_74
     LDY #$00
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     AND #$03
     BEQ F_E4B4
     LDA zp_53
-    JSR F_EEA6
+    JSR ProfilePtrFromProps
     LDA player_x_lo
     CLC
     ADC #$08
@@ -4557,7 +4559,7 @@ F_E4B4:
     STA zp_56
     PLA
     STA zp_55
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BEQ F_E4E5
     RTS
@@ -4570,7 +4572,7 @@ F_E4E5:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BEQ F_E4FD
     RTS
@@ -4588,12 +4590,12 @@ F_E505:
     STA zp_7D
     STA zp_7C
     RTS
-F_E514:
+GetTilePropsAtPos:
     JSR GetMapTile
     TAX
     LDA tile_props,x
     RTS
-F_E51C:
+GetTilePropsAtPosY:
     JSR GetMapTile
     TAY
     LDA tile_props,y
@@ -4793,7 +4795,7 @@ F_E650:
     STA zp_56
     PLA
     STA zp_55
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE F_E69A
     LDA player_x_lo
@@ -4804,7 +4806,7 @@ F_E650:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE F_E69A
     JMP F_E734
@@ -4828,11 +4830,11 @@ F_E69A:
     CMP #$80
     BEQ F_E734
 F_E6C5:
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$03
     CMP #$03
     BNE F_E6D1
-    JSR F_F492
+    JSR HurtPlayer
 F_E6D1:
     CMP #$0F
     BNE F_E6D6
@@ -4908,12 +4910,12 @@ F_E734:
     PHA
     LDA ptr_hi
     PHA
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$03
     CMP #$02
     BNE F_E784
     LDA tile_props,x
-    JSR F_EEA6
+    JSR ProfilePtrFromProps
     LDA player_x_lo
     CLC
     ADC #$08
@@ -4973,7 +4975,7 @@ F_E7B6:
     LDA zp_7C
     BEQ F_E7F9
     LDY #$00
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$FC
     LSR a
     LSR a
@@ -5084,7 +5086,7 @@ F_E87B:
     STA ptr_hi
     STA zp_76
     LDY #$00
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$03
     CMP #$02
     BEQ F_E89E
@@ -5092,7 +5094,7 @@ F_E89D:
     RTS
 F_E89E:
     LDA tile_props,x
-    JSR F_EEA6
+    JSR ProfilePtrFromProps
     LDA player_x_lo
     CLC
     ADC #$08
@@ -5421,7 +5423,7 @@ F_EB57:
     STA ptr_hi
     JSR MapPtrFromPos
     JSR F_F80D
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     PLA
     STA zp_56
@@ -5439,7 +5441,7 @@ F_EB57:
     STA ptr_hi
     JSR MapPtrFromPos
     JSR F_F80D
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     AND #$01
     BNE F_EBAC
@@ -5448,7 +5450,7 @@ F_EBAC:
     LDA zp_53
     AND #$02
     BEQ F_EBB5
-    JSR F_F492
+    JSR HurtPlayer
 F_EBB5:
     LDA player_y_lo
     AND #$F0
@@ -5521,7 +5523,7 @@ F_EC0D:
     STA ptr_hi
     JSR MapPtrFromPos
     JSR F_F80D
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     PLA
     STA zp_56
@@ -5539,7 +5541,7 @@ F_EC0D:
     STA ptr_hi
     JSR MapPtrFromPos
     JSR F_F80D
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     AND #$01
     BEQ F_EC73
@@ -5547,7 +5549,7 @@ F_EC64:
     LDA zp_53
     AND #$02
     BEQ F_EC6D
-    JSR F_F492
+    JSR HurtPlayer
 F_EC6D:
     LDA player_y_lo
     AND #$F0
@@ -5594,7 +5596,7 @@ F_ECA3:
     STA zp_56
     JSR MapPtrFromPos
     JSR F_F80D
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE F_ED0B
     LDA player_y_lo
@@ -5610,7 +5612,7 @@ F_ECD2:
     ADC #$00
     STA ptr_hi
     JSR F_F80D
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE F_ECEC
     JMP F_EDE8
@@ -5619,13 +5621,13 @@ F_ECEC:
     BNE F_ECF2
     INC ptr_hi
 F_ECF2:
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     AND #$03
     CMP #$02
     BNE F_ED0B
     LDA zp_53
-    JSR F_EEA6
+    JSR ProfilePtrFromProps
     LDA #$04
     CMP (ptr_lo),y
     BCC F_ED0B
@@ -5659,7 +5661,7 @@ F_ED17:
     STA zp_56
     JSR MapPtrFromPos
     JSR F_F80D
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE F_EDDF
     LDA player_y_lo
@@ -5673,7 +5675,7 @@ F_ED17:
     ADC #$00
     STA ptr_hi
     JSR F_F80D
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BEQ F_EDE8
     LDA ptr_lo
@@ -5683,7 +5685,7 @@ F_ED17:
     LDA ptr_hi
     SBC #$00
     STA ptr_hi
-    JSR F_E514
+    JSR GetTilePropsAtPos
     STA zp_53
     AND #$03
     CMP #$02
@@ -5743,8 +5745,8 @@ F_EDE8:
     PHA
     LDA ptr_hi
     PHA
-    JSR F_E514
-    JSR F_EEA6
+    JSR GetTilePropsAtPos
+    JSR ProfilePtrFromProps
     LDA player_x_lo
     CLC
     ADC #$08
@@ -5791,8 +5793,8 @@ F_EE64:
     ADC #$00
     STA ptr_hi
     LDY #$00
-    JSR F_E514
-    JSR F_EEA6
+    JSR GetTilePropsAtPos
+    JSR ProfilePtrFromProps
     LDA player_x_lo
     CLC
     ADC #$08
@@ -5816,7 +5818,7 @@ F_EE64:
     STA player_y_lo
 F_EEA5:
     RTS
-F_EEA6:
+ProfilePtrFromProps:
     AND #$FC
     STY ptr_hi
     ASL a
@@ -6181,13 +6183,13 @@ F_F118:
     AND #$07
     TAX
     LDA a:collected_by_kind,y
-    AND F_C53C,x
+    AND BitMask,x
     BEQ F_F130
     LDX zp_08
     RTS
 F_F130:
     LDA a:collected_by_kind,y
-    ORA F_C53C,x
+    ORA BitMask,x
     STA a:collected_by_kind,y
     LDA #$01
     STA zp_55
@@ -6624,11 +6626,11 @@ F_F47A:
     LDA zp_17
     STA ptr_hi
     JSR SwitchBankFromAC
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     AND #$03
     CMP #$03
     BNE F_F496
-F_F492:
+HurtPlayer:
     LDA zp_C0
     BEQ F_F497
 F_F496:
@@ -6876,7 +6878,7 @@ ApplyCollectedFlag:
     STA zp_C6
     STX zp_42
     JSR GetCollectibleBit
-    LDA F_C53C,x
+    LDA BitMask,x
     AND collected_flags,y
     BNE F_F68F
 F_F688:
@@ -6899,7 +6901,7 @@ F_F699:
 F_F6B0:
     STX zp_42
     JSR F_F6E0
-    LDA F_C53C,x
+    LDA BitMask,x
     ORA collected_flags,y
     STA collected_flags,y
     LDX zp_42

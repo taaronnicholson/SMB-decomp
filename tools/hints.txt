@@ -175,3 +175,12 @@ ram 0733 onetime_flags            ; bitmap: one-time objects (from the area spaw
 name f FC3F GetTileSpecial       ; ptr = map address -> A = special value*2 for that tile (0 if none), from the area's lookup block
 ram 00B4 area_extra_ptr_lo       ; start of the area's lookup block (after the entity records)
 ram 00B5 area_extra_ptr_hi
+
+; ---- tile properties ($03A4 table): bits 0-1 class (0 passable, 1 solid, 2 sloped ground, 3 hurts the player), bits 2-7 height profile ----
+blob f C33C 512 TileHeightProfiles 32 profiles x 16 columns: ground surface height per pixel column of a tile ($FF = no surface); index = tile_props >> 2
+struct f C33C 32 bbbbbbbbbbbbbbbb
+name f C53C BitMask             ; 1 << n, n = 0-7
+name f F492 HurtPlayer          ; called when the player touches a hazard tile or enemy
+name f E514 GetTilePropsAtPos   ; GetMapTile then tile_props lookup (A = properties, X = tile id)
+name f E51C GetTilePropsAtPosY  ; same but leaves the tile id in Y
+name f EEA6 ProfilePtrFromProps ; ptr = TileHeightProfiles + (props & $FC) * 4

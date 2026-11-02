@@ -575,7 +575,7 @@ B5_8434:
     PHA
     LDA ptr_hi
     PHA
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     LDY #$00
     AND #$FC
     STY ptr_hi
@@ -643,7 +643,7 @@ B5_84DC:
     ADC #$00
     STA ptr_hi
     STA zp_B3
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     LDY #$00
     AND #$FC
     STY ptr_hi
@@ -706,7 +706,7 @@ B5_8546:
     STA zp_75
     LDA ptr_hi
     STA zp_76
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     AND #$03
     BEQ B5_85E3
     CMP #$02
@@ -774,7 +774,7 @@ B5_85E3:
     LDA zp_76
     ADC #$00
     STA ptr_hi
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     AND #$01
     BEQ B5_8607
     LDA ent_y_lo,x
@@ -797,7 +797,7 @@ B5_8607:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     AND #$FC
     LDY #$00
     STY ptr_hi
@@ -855,7 +855,7 @@ B5_8671:
     ADC #$00
     STA ptr_hi
 B5_8692:
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     STA zp_53
     AND #$03
     BNE B5_869E
@@ -942,7 +942,7 @@ B5_8719:
     STA zp_77
     LDA ptr_hi
     STA zp_78
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     AND #$01
     BNE B5_8793
     LDA ent_y_lo,x
@@ -958,14 +958,14 @@ B5_8750:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     AND #$01
     BEQ B5_874F
     INC ptr_lo
     BNE B5_876A
     INC ptr_hi
 B5_876A:
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     STA zp_53
     AND #$03
     CMP #$02
@@ -1051,7 +1051,7 @@ B5_87F1:
     STA zp_77
     LDA ptr_hi
     STA zp_78
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     AND #$01
     BNE B5_8872
     LDA ent_y_lo,x
@@ -1067,7 +1067,7 @@ B5_8828:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     AND #$01
     BEQ B5_8827
     LDA ptr_lo
@@ -1077,7 +1077,7 @@ B5_8828:
     LDA ptr_hi
     SBC #$00
     STA ptr_hi
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     STA zp_53
     AND #$03
     CMP #$02
@@ -1149,7 +1149,7 @@ B5_88AA:
     BNE B5_8903
     LDA zp_7C
     BNE B5_88D8
-    JMP F_F492
+    JMP HurtPlayer
 B5_88D8:
     LDA zp_63
     CMP #$02
@@ -1265,7 +1265,7 @@ B5_8993:
     ADC #$0F
     CMP zp_56
     BCC B5_8982
-    JMP F_F492
+    JMP HurtPlayer
 B5_89BB:
     LDA ent_flags,x
     AND #$04
@@ -1303,7 +1303,7 @@ B5_89E3:
     ADC #$16
     CMP zp_56
     BCC B5_8A05
-    JMP F_F492
+    JMP HurtPlayer
 B5_8A05:
     RTS
 Ent_CheckPlayerTouch:
@@ -1326,7 +1326,7 @@ Ent_CheckPlayerTouch:
     BNE B5_8A30
     LDA zp_7C
     BNE B5_8A31
-    JMP F_F492
+    JMP HurtPlayer
 B5_8A30:
     RTS
 B5_8A31:
@@ -1406,7 +1406,7 @@ B5_8A9F:
     LDA ent_y_hi,x
     STA zp_56
     JSR MapPtrFromPos
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     AND #$01
     BEQ B5_8AF6
     LDA ent_y_lo,x
@@ -2092,7 +2092,7 @@ B5_90BF:
     LDA ent_dy,x
     AND #$07
     TAX
-    LDA F_C53C,x
+    LDA BitMask,x
     ORA onetime_flags,y
     STA onetime_flags,y
     LDX zp_42
@@ -2799,7 +2799,7 @@ B5_985B:
     STA ptr_lo
     LDA zp_B3
     STA ptr_hi
-    JSR F_E51C
+    JSR GetTilePropsAtPosY
     AND #$03
     CMP #$03
     BNE B5_9877
@@ -4601,7 +4601,7 @@ B5_A98D:
     ADC #$22
     CMP zp_56
     BCC B5_A975
-    JMP F_F492
+    JMP HurtPlayer
 B5_A99A:
     LDA ent_flags,x
     AND #$04
@@ -5210,7 +5210,7 @@ Ent5E_Update:
 B5_AEEF:
     LDA #$00
     STA zp_53
-    JSR F_F492
+    JSR HurtPlayer
     DEC zp_53
     BNE B5_AF0A
     LDA #$5F

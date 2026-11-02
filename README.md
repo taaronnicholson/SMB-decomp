@@ -68,7 +68,10 @@ from the table start, 0 = none), then per-row lists of (column, flag index) pair
 tiles; `GetCollectibleBit` finds the flag index for a map cell and the game keeps collected state in `collected_flags`
 (`$0100`, per placement) and `collected_by_kind` (`$9D`, per tile kind), so picked-up items stay gone (`ApplyCollectedFlag`).
 
-`tile_props` (`$03A4`, 120 bytes, loaded per tileset) holds tile flags; bit 0 means solid.
+`tile_props` (`$03A4`, 120 bytes, loaded per tileset, indexed by tile id) is a property byte: **bits 0-1 = class** (0 passable,
+1 solid, 2 sloped ground, 3 hazard: `HurtPlayer` is called when the player touches it) and **bits 2-7 = height profile index**
+into `TileHeightProfiles` (fixed bank `$C33C`, 32 profiles × 16 bytes: the ground height of each pixel column of the tile,
+`$FF` = no surface; `ProfilePtrFromProps` computes the address). Examples: value 5 = solid with profile 1 (flat), 26/30/34/38… = slopes.
 
 **Tileset records** (bank 0, 8 bytes at `$8C9B + 8*t`, `t` = header byte 11, bank of the compressed blocks in `B0_8C95[t]`):
 tile-properties block (LZ → RAM `$03A4`), tile-graphics block (LZ → PPU `$1530`), the metatile planes, and an attribute plane.

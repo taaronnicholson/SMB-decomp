@@ -4128,8 +4128,8 @@ B6_B876:
     PHA
     LDA ptr_hi
     PHA
-    JSR F_E514
-    JSR F_EEA6
+    JSR GetTilePropsAtPos
+    JSR ProfilePtrFromProps
     LDA player_x_lo
     CLC
     ADC #$08
@@ -4180,8 +4180,8 @@ B6_B8DF:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_E514
-    JSR F_EEA6
+    JSR GetTilePropsAtPos
+    JSR ProfilePtrFromProps
     LDA player_x_lo
     CLC
     ADC #$08
@@ -4254,7 +4254,7 @@ B6_B948:
     STA zp_56
     PLA
     STA zp_55
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE B6_B998
     LDA player_x_lo
@@ -4265,7 +4265,7 @@ B6_B948:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BEQ B6_BA04
 B6_B998:
@@ -4286,11 +4286,11 @@ B6_B998:
     STA ram_0720
     JMP B6_BA04
 B6_B9C0:
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$03
     CMP #$03
     BNE B6_B9CC
-    JSR F_F492
+    JSR HurtPlayer
 B6_B9CC:
     CMP #$0F
     BNE B6_B9D1
@@ -4371,7 +4371,7 @@ B6_BA39:
     LDA player_y_hi
     STA zp_56
     JSR MapPtrFromPos
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE B6_BA77
     LDA player_y_lo
@@ -4387,7 +4387,7 @@ B6_BA63:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BEQ B6_BA62
 B6_BA77:
@@ -4459,7 +4459,7 @@ B6_BACE:
     LDA player_y_hi
     STA zp_56
     JSR MapPtrFromPos
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BNE B6_BB0C
     LDA player_y_lo
@@ -4475,7 +4475,7 @@ B6_BAF8:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_E514
+    JSR GetTilePropsAtPos
     AND #$01
     BEQ B6_BAF7
 B6_BB0C:
