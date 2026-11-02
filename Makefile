@@ -13,8 +13,11 @@ build/main.o: $(SRCS)
 $(TARGET): build/main.o nes.cfg
 	$(LD65) -C nes.cfg -o $@ build/main.o
 
+SHA1 = c1bc357fce0aee0973e8d1f7aac75a68d52bea02
+
 verify: $(TARGET)
-	@cmp $(TARGET) rom/game.nes && echo "OK: build matches rom/game.nes" && sha1sum $(TARGET)
+	@echo "$(SHA1)  $(TARGET)" | sha1sum -c -
+	@if [ -f rom/game.nes ]; then cmp $(TARGET) rom/game.nes && echo "OK: identical to rom/game.nes"; fi
 
 regen:
 	python3 -I tools/gen_sound_hints.py
