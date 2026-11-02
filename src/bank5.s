@@ -5086,15 +5086,15 @@ B5_AD68:
     JSR GetMapTile
     CMP #$CE
     BNE B5_AD87
-    JSR F_EFAB
+    JSR ToggleSwitch1
 B5_AD87:
     CMP #$CF
     BNE B5_AD8E
-    JSR F_EF5D
+    JSR ToggleSwitch2
 B5_AD8E:
     CMP #$D0
     BNE B5_AD95
-    JSR F_EF81
+    JSR ToggleSwitch3
 B5_AD95:
     LDA #$04
     STA tmp_a
@@ -5928,15 +5928,15 @@ Ent85_Update:
     JSR GetMapTile
     CMP #$CE
     BNE B5_B52C
-    JSR F_EFAB
+    JSR ToggleSwitch1
 B5_B52C:
     CMP #$CF
     BNE B5_B533
-    JSR F_EF5D
+    JSR ToggleSwitch2
 B5_B533:
     CMP #$D0
     BNE B5_B53A
-    JSR F_EF81
+    JSR ToggleSwitch3
 B5_B53A:
     LDA #$02
     STA ent_param,x

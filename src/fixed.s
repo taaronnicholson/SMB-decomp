@@ -176,7 +176,7 @@ F_C1D0:
     .res 10, $00
     .byte $02,$02,$01,$01,$02,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$02
     .byte $02,$01,$01,$00,$00
-F_C1EF:
+TileKindTable:
     .byte $00
 F_C1F0:
     .byte $34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35
@@ -1985,23 +1985,23 @@ F_D237:
     JSR B2_A606
     JSR B2_A5DA
     JSR B2_A5F0
-    LDA powerup_1
+    LDA switch_1
     BEQ F_D265
     JSR B2_A673
     JSR B2_A7EF
-    JSR F_EFB6
+    JSR ApplySwitch1
 F_D265:
-    LDA powerup_2
+    LDA switch_2
     BEQ F_D272
     JSR B2_A647
     JSR B2_AA65
-    JSR F_EF68
+    JSR ApplySwitch2
 F_D272:
-    LDA powerup_3
+    LDA switch_3
     BEQ F_D27F
     JSR B2_A65D
     JSR B2_ACD7
-    JSR F_EF8C
+    JSR ApplySwitch3
 F_D27F:
     JMP SetScroll
 F_D282:
@@ -3539,7 +3539,7 @@ F_DD4B:
     STA riding_flag
     LDA #$02
     STA tmp_a
-    LDA zp_57
+    LDA touch_kind
     SEC
     SBC #$01
     BEQ F_DD72
@@ -3552,7 +3552,7 @@ F_DD72:
     LDA zp_66
     STA zp_7F
     LDA tmp_a
-    STA zp_57
+    STA touch_kind
     LDA #$13
     STA zp_8F
     LDA #$03
@@ -5016,20 +5016,20 @@ F_E7F9:
 F_E80B:
     CMP #$CE
     BNE F_E812
-    JSR F_EFAB
+    JSR ToggleSwitch1
 F_E812:
     CMP #$CF
     BNE F_E819
-    JSR F_EF5D
+    JSR ToggleSwitch2
 F_E819:
     CMP #$D0
     BNE F_E820
-    JSR F_EF81
+    JSR ToggleSwitch3
 F_E820:
     TAX
     LDA #$02
     STA tmp_a
-    LDA F_C1EF,x
+    LDA TileKindTable,x
     CMP #$01
     BEQ F_E837
     CMP #$04
@@ -5070,7 +5070,7 @@ F_E858:
     STA zp_7D
     STA zp_8C
     LDA zp_77
-    STA zp_57
+    STA touch_kind
     LDA #$27
     JSR PlaySfxSq1
     RTS
@@ -6047,14 +6047,14 @@ F_EF3D:
     STA ptr_hi
     LDY #$00
     RTS
-F_EF5D:
-    LDA powerup_2
+ToggleSwitch2:
+    LDA switch_2
     EOR #$01
-    STA powerup_2
+    STA switch_2
     LDA #$16
     JSR PlaySfxSq2
-F_EF68:
-    LDA powerup_2
+ApplySwitch2:
+    LDA switch_2
     ASL a
     TAY
     CLC
@@ -6066,14 +6066,14 @@ F_EF68:
     LDA F_EFCF,y
     STA ram_046A
     JMP F_EFA2
-F_EF81:
-    LDA powerup_3
+ToggleSwitch3:
+    LDA switch_3
     EOR #$01
-    STA powerup_3
+    STA switch_3
     LDA #$16
     JSR PlaySfxSq2
-F_EF8C:
-    LDA powerup_3
+ApplySwitch3:
+    LDA switch_3
     ASL a
     TAY
     CLC
@@ -6091,14 +6091,14 @@ F_EFA2:
     STA zp_DA
 F_EFAA:
     RTS
-F_EFAB:
-    LDA powerup_1
+ToggleSwitch1:
+    LDA switch_1
     EOR #$01
-    STA powerup_1
+    STA switch_1
     LDA #$16
     JSR PlaySfxSq2
-F_EFB6:
-    LDA powerup_1
+ApplySwitch1:
+    LDA switch_1
     ASL a
     TAY
     CLC
@@ -6653,7 +6653,7 @@ F_F3CC:
     LDA F_C331,y
     JSR F_F28D
 F_F3DE:
-    LDA zp_57
+    LDA touch_kind
     STA zp_5A
     LDA zp_58
     STA zp_5B
@@ -6670,7 +6670,7 @@ F_F3DE:
     CMP #$B4
     BCS F_F40E
     LDA #$00
-    STA zp_57
+    STA touch_kind
     LDA tmp_c
     STA zp_58
     LDA tmp_d
@@ -6678,8 +6678,8 @@ F_F3DE:
     JMP F_F43E
 F_F40E:
     TAY
-    LDA F_C1EF,y
-    STA zp_57
+    LDA TileKindTable,y
+    STA touch_kind
     CMP #$03
     BNE F_F41E
     JSR PlaySfxNoise
@@ -6690,7 +6690,7 @@ F_F41E:
     LDA tmp_d
     STA zp_59
 F_F426:
-    LDY zp_57
+    LDY touch_kind
     BEQ F_F43E
     LDA zp_58
     STA tmp_a

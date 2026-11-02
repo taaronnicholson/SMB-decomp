@@ -3441,15 +3441,15 @@ B6_A33F:
     PHA
     CMP #$CE
     BNE B6_A367
-    JSR F_EFAB
+    JSR ToggleSwitch1
 B6_A367:
     CMP #$CF
     BNE B6_A36E
-    JSR F_EF5D
+    JSR ToggleSwitch2
 B6_A36E:
     CMP #$D0
     BNE B6_A375
-    JSR F_EF81
+    JSR ToggleSwitch3
 B6_A375:
     CMP #$DA
     BNE B6_A37C

@@ -297,11 +297,12 @@ ram 00B6 riding_slot             ; entity slot the player is standing on (platfo
 ram 0079 riding_flag
 name 5 AAB2 Ent_BecomeOrbiter    ; A = new type: stores the entity's position/16 as the orbit centre (ram_06C0/06F0), used by $4C and $51
 
-; ---- power-ups (inferred: the stage loader loads extra tiles when set; B fires the projectile only if $DF is non-zero) ----
-ram 00DC powerup_1
-ram 00DD powerup_2
-ram 00DE powerup_3
-ram 00DF powerup_shot            ; must be non-zero for the B button to fire the player projectile (shot_* arrays)
+; ---- toggle switches and the weapon power-up ----
+ram 00DC switch_1                ; toggled by the falling hazard landing on tile $CE (ToggleSwitch1); the stage loader loads extra tiles when set
+
+ram 00DD switch_2                ; tile $CF
+ram 00DE switch_3                ; tile $D0
+ram 00DF powerup_shot            ; set by touching a type $0D pickup; must be non-zero for the B button to fire the player projectile (shot_* arrays)
 
 ; ---- switch tiles pecked by the player ----
 name f F770 PeckSwitchPhase      ; tile $D8: sfx $16, steps switch_phase 0..4 (direction by facing); the track movers ($50) read it
@@ -320,3 +321,13 @@ ram 00BA ride_balloon_slot       ; entity slot of the balloon carrying the playe
 ram 0088 shot_cooldown
 name 5 89BB Ent_HurtOnTouchKnockout ; small box overlap, then F_F4BA: knocked-out death ($1A)
 name f F4BA HurtPlayerKnockout
+name f EFAB ToggleSwitch1        ; flips switch_1 (sfx $16 on pulse 2), then ApplySwitch1
+name f EF5D ToggleSwitch2
+name f EF81 ToggleSwitch3
+name f EFB6 ApplySwitch1         ; updates the switch's tile frame / graphics from its state
+name f EF68 ApplySwitch2
+name f EF8C ApplySwitch3
+
+; ---- tile kinds under the player ----
+name f C1EF TileKindTable         ; indexed by tile id (>= $B4): 1 = spring ($D2-$D5), 3 = collectible ($DB), 4 = $CD
+ram 0057 touch_kind               ; kind of the special tile at the player (set by F_F3B5), also reused as the bounce strength

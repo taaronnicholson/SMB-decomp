@@ -691,11 +691,11 @@ B1_853A:
 B1_8541:
     CMP #$CE
     BNE B1_8548
-    JSR F_EFAB
+    JSR ToggleSwitch1
 B1_8548:
     CMP #$CF
     BNE B1_854F
-    JSR F_EF5D
+    JSR ToggleSwitch2
 B1_854F:
     CMP #$D1
     BNE B1_8568

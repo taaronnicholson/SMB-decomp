@@ -43,6 +43,12 @@ which fires: at a marked step of its animation (`$9ABC`, `$FF`) it takes a free 
 projectile 12 px above itself, offset by facing, which plays an appearance table and then becomes the type held in its
 `ent_radius` (`$24`).
 
+## Weapon pickup and toggle switches
+- `$0D` is the **weapon pickup**: on touch it sets `powerup_shot`, plays the collect animation and sfx `$19`, and the player can then fire with B. It rests as `$0D`; `$0B`/`$0C` are the item
+  popping out (moves left 1 px per tick along the arc table `$93C6`: `$7F` ends in `$0D`, `$80` switches `$0B` <-> `$0C`).
+- The three **toggle switches** (`switch_1/2/3` = `$DC`/`$DD`/`$DE`) are flipped (`EOR #1`, sfx `$16`) when a falling hazard (`$54`) lands on tile `$CE`, `$CF` or `$D0`
+  (`ToggleSwitch1/2/3`); `ApplySwitchN` updates the matching tile frame, and the stage loader loads extra tiles when a switch is set.
+
 ## Follow-on states and projectiles
 | Types | Behaviour |
 |-------|-----------|

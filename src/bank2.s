@@ -3113,9 +3113,9 @@ ResetGameState:
     STA shot_state
     STA shot_state_1
     STA powerup_shot
-    STA powerup_1
-    STA powerup_2
-    STA powerup_3
+    STA switch_1
+    STA switch_2
+    STA switch_3
     STA ram_01B3
     STA ram_01B1
     LDX #$07
