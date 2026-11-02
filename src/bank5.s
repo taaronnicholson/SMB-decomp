@@ -5031,7 +5031,7 @@ Ent50_Update:
     LDA ent_x_lo,x
     AND #$0F
     BNE B5_AD17
-    LDY ram_0730
+    LDY switch_phase
     LDA B5_AD1A,y
     STA ent_angle,x
 B5_AD17:
@@ -5839,7 +5839,7 @@ Ent83_Update:
     LDA #$00
     STA tmp_c
     JSR Ent_TickRadius
-    LDA ram_0731
+    LDA switch_flag
     BEQ B5_B486
     LDA #$02
     STA ent_param,x
@@ -5858,7 +5858,7 @@ B5_B486:
     JMP B5_B4A2
 Ent84_Update:
     JSR B5_88AA
-    LDA ram_0731
+    LDA switch_flag
     BNE B5_B4A8
 B5_B4A2:
     LDA #$85

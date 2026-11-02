@@ -7137,41 +7137,41 @@ F_F751:
     PLA
     STA tmp_c
     RTS
-F_F770:
+PeckSwitchPhase:
     PHA
     LDA #$16
     JSR PlaySfxSq1
     LDA zp_66
     BEQ F_F793
-    INC ram_0730
-    LDA ram_0730
+    INC switch_phase
+    LDA switch_phase
     CMP #$05
     BNE F_F789
     LDA #$00
 F_F786:
-    STA ram_0730
+    STA switch_phase
 F_F789:
-    LDA ram_0730
+    LDA switch_phase
     CLC
     ADC #$17
     STA zp_DA
     PLA
     RTS
 F_F793:
-    DEC ram_0730
+    DEC switch_phase
     BPL F_F789
     LDA #$04
     JMP F_F786
-F_F79D:
+PeckSwitchToggle:
     PHA
-    LDA ram_0731
+    LDA switch_flag
     AND #$01
     CLC
     ADC #$1B
     JSR PlaySfxSq2
-    LDA ram_0731
+    LDA switch_flag
     EOR #$01
-    STA ram_0731
+    STA switch_flag
     CLC
     ADC #$1E
     STA zp_DA

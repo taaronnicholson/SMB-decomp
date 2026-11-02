@@ -3079,8 +3079,8 @@ ResetLevelState:
     STA focus_x_hi
     STA focus_y_lo
     STA focus_y_hi
-    STA ram_0731
-    STA ram_0730
+    STA switch_flag
+    STA switch_phase
     LDX #$1F
 B2_B844:
     STA collected_flags,x

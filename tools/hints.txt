@@ -302,3 +302,9 @@ ram 00DC powerup_1
 ram 00DD powerup_2
 ram 00DE powerup_3
 ram 00DF powerup_shot            ; must be non-zero for the B button to fire the player projectile (shot_* arrays)
+
+; ---- switch tiles pecked by the player ----
+name f F770 PeckSwitchPhase      ; tile $D8: sfx $16, steps switch_phase 0..4 (direction by facing); the track movers ($50) read it
+name f F79D PeckSwitchToggle     ; tile $DA: toggles switch_flag, sfx $1B/$1C; the gates ($83-$85) follow it
+ram 0730 switch_phase            ; 0-4, cycled by pecking tile $D8; selects the direction table entry for type $50
+ram 0731 switch_flag             ; 0/1, toggled by pecking tile $DA; gates $83/$84/$85

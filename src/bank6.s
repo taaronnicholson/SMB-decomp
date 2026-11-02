@@ -3380,11 +3380,11 @@ B6_A2DF:
     PHA
     CMP #$DA
     BNE B6_A2F5
-    JSR F_F79D
+    JSR PeckSwitchToggle
 B6_A2F5:
     CMP #$D8
     BNE B6_A2FC
-    JSR F_F770
+    JSR PeckSwitchPhase
 B6_A2FC:
     PLA
     CMP #$D1
@@ -3453,11 +3453,11 @@ B6_A36E:
 B6_A375:
     CMP #$DA
     BNE B6_A37C
-    JSR F_F79D
+    JSR PeckSwitchToggle
 B6_A37C:
     CMP #$D8
     BNE B6_A383
-    JSR F_F770
+    JSR PeckSwitchPhase
 B6_A383:
     PLA
     CMP #$D1

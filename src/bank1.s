@@ -512,7 +512,7 @@ B1_83FB:
     JSR GetMapTile
     CMP #$DA
     BNE B1_8416
-    JSR F_F79D
+    JSR PeckSwitchToggle
     PLA
     PLA
     PLA
@@ -683,11 +683,11 @@ B1_8528:
     JSR GetMapTile
     CMP #$DA
     BNE B1_853A
-    JSR F_F79D
+    JSR PeckSwitchToggle
 B1_853A:
     CMP #$D8
     BNE B1_8541
-    JSR F_F770
+    JSR PeckSwitchPhase
 B1_8541:
     CMP #$CE
     BNE B1_8548

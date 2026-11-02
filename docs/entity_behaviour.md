@@ -43,5 +43,18 @@ which fires: at a marked step of its animation (`$9ABC`, `$FF`) it takes a free 
 projectile 12 px above itself, offset by facing, which plays an appearance table and then becomes the type held in its
 `ent_radius` (`$24`).
 
+## Follow-on states and projectiles
+| Types | Behaviour |
+|-------|-----------|
+| `$22` → `$24` → `$23` → 0 | the shooter's projectile: `$22` plays an appearance table then becomes the type stored in its `ent_radius` (`$24`); `$24` rises 1 px per tick (frames `$26`/`$27` alternate) for `ent_param2` = `$78` ticks or until the top of the map and hurts on touch; `$23` plays a 7-step fade and removes the entity |
+| `$38` → `$39` → `$3A` | trap: `$39` plays an animation table (`$A1FE`) while hurting on touch, then becomes `$3A` |
+| `$53` → `$54` → `$55` | falling hazard: `$54` falls along a velocity table (`$ADFA`, up to 25 steps); on landing it reads the tile (`$CE`/`$CF`/`$D0` call `F_EFAB`/`F_EF5D`/`F_EF81`), settles, plays sfx 0 on pulse 2 and becomes `$55` |
+| `$66` ↔ `$67` | periodic emitter: `$66` counts a timer, `$67` spawns effects (templates `$B0DB`, `$B0E6` by facing) once and returns to `$66` with a random timer |
+| `$83` → `$84` → `$85` | gate: follows `switch_flag` (`$0731`), which pecking tile `$DA` toggles |
+| `$31` | fuse and explode: sparks every `$40` ticks (template `$9D6F`); when the player enters its trigger box it plays sfx `$43` and runs a countdown table (`$9D9B`), then collect-animation, noise sfx `$05` and an explosion of effects (`$9DD4`) |
+
+**Switch tiles** (pecked by the player in `PlayerState05`): `$D8` steps `switch_phase` (0-4, backwards if facing left) and `$DA` toggles `switch_flag`;
+the track movers (`$50`) pick their direction from `switch_phase` and the gates from `switch_flag`.
+
 ## Open questions
-Types `$22`/`$24` (projectile motion), `$23`, `$31`, `$5D`, the target states `$39`, `$54`, `$67`, `$84`, and all types not used by the six stages' door-reachable areas.
+Types `$3A`, `$55`, `$85`, `$5D` and every type not used by the six stages' door-reachable areas.
