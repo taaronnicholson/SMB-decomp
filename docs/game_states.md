@@ -10,3 +10,21 @@ Verified in the emulator (`[v]`):
 Read from the code: `$12` is the game-over state set after the "YOUR QUEST IS OVER" text; `$01` starts a sequence (it checks `powerup_shot`) and `$02`-`$06`, `$0C`
 are intro/transition sequences that were not triggered in the runs; several states (`$06`/`$07`/`$08`) share handlers or jump to bank 6 through `FarCall`.
 `camera_mode` (`$01A6`) is set by these states (`GameState0C` sets 3, `GameState09` sets 1).
+
+## Initial `game_state` per area (area header byte 10)
+Most areas start in `$00`. The special areas start in a sequence state:
+
+| Area | Stage(s) | Initial state | What the handler does (read from the code; none of these was triggered in the emulator) |
+|------|----------|---------------|------------------------------------------------------------------------------------------|
+| 2 | 0 | `$0F` | sets facing/timers and `collected_flags`, then waits until the camera has scrolled to `focus_x` = `$C0` and moves on to `$10` |
+| 4 | all (balloon ride target) | `$08` | the bonus ascent sequence (verified above) |
+| 5 | 0-4 | `$01` | start of a sequence that checks `powerup_shot` and then switches to `$03`/`$04`/`$05` |
+| 6 | 5 | `$0E` | calls bank 3 `$BF05` through `FarCall` |
+| 10 | 3 | `$1A` | calls bank 6 `$BD5E` through `FarCall` |
+| 14 | 3 | `$19` | sets bit 3 of `$0101` (a persistent flag) and returns to `$00` |
+| 20 | 1 | `$17` | animates frame `$1C`/`$1D` (blinks with `zp_48`) |
+| 22 | 4 | `$1B` | calls bank 6 `$BD99` through `FarCall` |
+| 23 | 4 | `$18` | animates frame `$20`/`$21` like `$17` |
+
+The set-up states `$01`-`$07` and `$0C` write their own timers (`ram_0735`-`ram_073E`) and `camera_mode`; `GameState06` falls into `GameState0C`
+(`camera_mode` 3, then a bank 4 routine at `$B515`).
