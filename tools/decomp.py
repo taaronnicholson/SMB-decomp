@@ -22,6 +22,9 @@ def bn(t): return FIXED if t == 'f' else int(t)
 # ---- hints ----------------------------------------------------------------
 entries, words_tab, lohi_tab, names, datas = [], [], [], {}, []
 ramnames = {}
+blob_tab = []
+blob_bytes = set()
+blob_start = {}
 text_tab = []
 refexpr = {}
 dlohi_tab = []
@@ -56,10 +59,16 @@ for ln in _hint_lines:
         refexpr[int(t[1], 16)] = (int(t[2]), int(t[3], 16), int(t[4]))
     elif t[0] == 'text':    # text <bank> <addr> <len> [rev] : ASCII string (rev = stored reversed)
         text_tab.append((bn(t[1]), int(t[2], 16), int(t[3]), len(t) > 4 and t[4] == 'rev'))
+    elif t[0] == 'blob':    # blob <bank> <addr> <len> <name> [comment...] : labelled data block, never code
+        blob_tab.append((bn(t[1]), int(t[2], 16), int(t[3]), t[4], ' '.join(t[5:])))
     elif t[0] == 'ram':   # ram <addr> <name>
         ramnames[int(t[1], 16)] = t[2]
     elif t[0] == 'name':  # name <bank|f> <addr> <label>
         names[(bn(t[1]), int(t[2], 16))] = t[3]
+
+for _b, _a, _n, _nm, _cm in blob_tab:
+    names[(_b, _a)] = _nm; blob_start[(_b, _a)] = f'{_nm}: {_cm}' if _cm else _nm
+    for _k in range(_n): blob_bytes.add((_b, _a + _k))
 
 # ---- tracing ---------------------------------------------------------------
 instr = {}                          # (p, pc) -> (opcode, len)
@@ -150,7 +159,7 @@ def spec_try(p, start, cb):
             if o not in OPS or o == 0x00: return None
             mn, m = OPS[o]; l = LEN[m]
             if pc + l > base + 0x4000: return None
-            if any((p, pc + k) in code_bytes or (p, pc + k) in spec_bytes for k in range(l)): return None
+            if any((p, pc + k) in code_bytes or (p, pc + k) in spec_bytes or (p, pc + k) in blob_bytes for k in range(l)): return None
             val = int.from_bytes(bytes(byte(p, pc + 1 + k) for k in range(l - 1)), 'little') if l > 1 else 0
             if mn in ('STA', 'STX', 'STY') and m == 'abs' and val >= 0x8000: return None
             got[pc] = (o, l)
@@ -381,6 +390,7 @@ def emit_bank(p):
         if (p, a) in instr: text[a] = fmt_instr(p, a)
     out = []; a = base
     while a < base + 0x4000:
+        if (p, a) in blob_start: out.append(f'; {blob_start[(p, a)]}')
         lab = [labels[(p, a)]] if (p, a) in labels else []
         for x in lab: out.append(f'{x}:'); emitted.add((p, a))
         if a in text:
@@ -440,6 +450,7 @@ def emit_bank(p):
 
 os.makedirs(os.path.join(ROOT, 'src'), exist_ok=True)
 for i in range(3): want(FIXED, byte(FIXED, 0x3FFA + 2 * i) | byte(FIXED, 0x3FFB + 2 * i) << 8)
+for (_b, _a) in blob_start: want(_b, _a)
 # two rounds so labels created by later banks (cross refs) appear in earlier outputs
 emitted = set()
 for _ in range(2):          # let cross-bank references create their labels

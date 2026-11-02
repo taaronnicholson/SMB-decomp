@@ -1,7 +1,8 @@
 # NES ROM reverse engineering (ca65 project)
 
 Disassembly of a 128 KB NES game (mapper 2 / UxROM, 8 × 16 KB PRG banks, CHR-RAM).
-**This is not Super Mario Bros.** The on-screen text identifies a Mindscape-published, Nintendo-licensed
+**This is not Super Mario Bros.** It is *Alfred Chicken* (Twilight, © 1993, published by Mindscape, licensed by
+Nintendo) — the title screen renders it when run in `tools/emu.py`. The on-screen text identifies a Mindscape-published, Nintendo-licensed
 title with an egg/balloon theme (credits: "BILLY EGG AND BROS", "MEKA MONSTER INC", "PETE TATTERSALL",
 "MUSIC AND SFX BY JAMES THORNTON III"; copyright line "… 1993"). The repository name is misleading.
 The code is back-translated
@@ -99,6 +100,13 @@ fixed bank through `PPUCopyLo/Hi` (`PPUCopy1`…`PPUCopy32`).
 Text appears as ASCII strings (44 found by `tools/gen_text_hints.py`, rendered as `.byte "…"`).
 Bank 4's title/credits strings are stored **reversed** (a trailing comment shows the readable form); bank 1's
 messages are forward and printed with tile = char + `$94`. `PaletteFadeStep` (bank 0) fades the palette.
+
+## Emulator and graphics tooling
+`tools/emu.py` is a small (not cycle-accurate) 6502+PPU emulator used to inspect graphics:
+`python3 -I tools/emu.py <frames> <out> [--press=START@n,...]` writes `<out>.screen.png` and `<out>.chr.png`.
+`tools/chrtrace.py` reports which code writes CHR-RAM; `tools/decomptrace.py` / `tools/gfx_scan.py` list the
+calls to the game's LZ-style decompressor (`F_FDEF`, source in `ptr_lo/hi`, destination in `$55/$56`, carry set = RAM
+target, clear = VRAM). Rendered images are not committed.
 
 ## Shared helpers
 - `SineTable` (bank 0 `$BE8A`): 256 signed entries, amplitude ±64, index = angle (256 = full turn).
