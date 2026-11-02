@@ -34,7 +34,7 @@ back into buildable ca65 assembly. `make verify` rebuilds the ROM and checks tha
 | 2 | Nametable/PPU drawing (≈800 `PPUDATA` writes), `ResetGameState`, `ResetLevelState` |
 | 3 | Mostly data (tile/pattern and map-like tables) with a little code |
 | 4 | Game-state machine: `DispatchGameState` jumps through a 16-entry table indexed by `game_state` (`$072C`) |
-| 5 | Entity movement code: per-entity arrays indexed by X (`ent_x_lo/hi`, `ent_y_lo/hi`, `ent_angle`, `ent_radius`, `ent_dx/dy` …, 48 slots, stride `$30`); `SetEntityPolarPos` places an entity at a polar offset from a centre point |
+| 5 | Entity movement code: per-entity arrays indexed by X (`ent_y_lo/hi`, `ent_x_lo/hi`, `ent_angle`, `ent_radius`, `ent_dx/dy` …, 48 slots, stride `$30`); `SetEntityPolarPos` places an entity at a polar offset from a centre point |
 | 6 | **Sound engine** – owns almost all APU writes; `$8000` is a jump-table API, `Sound_Update` (`$8003`) runs every frame |
 | 7 | Fixed: vectors, `Reset`, `NMI`, bank switching/`FarCall`, main loop (`F_C700`–`F_C6FD`) |
 
@@ -67,7 +67,7 @@ data starts at `base + 2*width` (area 23's base is `$7F80`, just below its bank)
 from the table start, 0 = none), then per-row lists of (column, flag index) pairs. Tile ids `$80`-`$BB` are collectible
 tiles; `GetCollectibleBit` finds the flag index for a map cell and the game keeps collected state in `collected_flags`
 (`$0100`, per placement) and `collected_by_kind` (`$9D`, per tile kind), so picked-up items stay gone (`ApplyCollectedFlag`).
-Enemy/object placement is not decoded yet.
+
 `tile_props` (`$03A4`, 120 bytes, loaded per tileset) holds tile flags; bit 0 means solid.
 
 **Tileset records** (bank 0, 8 bytes at `$8C9B + 8*t`, `t` = header byte 11, bank of the compressed blocks in `B0_8C95[t]`):
@@ -77,6 +77,16 @@ four 8×8 tile numbers, drawn by the code at `F_D37F`. The background pattern ta
 `$88A7` (tiles 0-82), then the tileset block from tile `$53`, and the font at `$C4` (ASCII + `$94`).
 `tools/render_maps.py` draws every area to `build/maps/area_NN.png` (placeholder colours, git-ignored).
 The area header's song number is played by `PlaySong` when the area loads.
+
+## Entity spawn lists (bank 1 `$9F25`)
+`AreaSpawnPtrs` (24 words, indexed by `current_area`) point to a spawn list per area: setup-action bytes ended by `$FF`,
+then 10-byte entity records ended by `$FF`: `type, Y (16-bit), X (16-bit), flags, 4 parameters`. They are copied into
+the entity arrays (`ent_type`, `ent_y_lo/hi`, `ent_x_lo/hi`, `ent_flags`, `ent_param`, `ent_angle`, `ent_radius`,
+`ent_param2`). Y is the long axis for tall areas: coordinates are (Y, X) throughout, like the stage-record spawn points
+(an earlier version of the entity names had X and Y swapped). Area 0 has 9 entities (types `$2E`, `$51`, `$4E`×7).
+Some pointers sit right before code in bank 1, so only the parsed span is claimed as data. A second per-area table
+(`zp_B4`, after the entity list) also exists; it is not decoded. The credits scroller (`CreditsStep`, text in bank 5, walked
+by `credits_ptr`) is unrelated to enemies.
 
 ## Sound engine (bank 6)
 `$8000` is a jump table: `Sound_PlaySong` (A = song 0-8), `Sound_Update` (`$8003`, once per frame),

@@ -1034,13 +1034,13 @@ B4_AE56:
     BEQ B4_AE8F
     JSR F_FA3D
     LDA #$D0
-    STA ent_x_lo,y
-    LDA #$20
     STA ent_y_lo,y
+    LDA #$20
+    STA ent_x_lo,y
     LDA #$00
-    STA ent_x_hi,y
-    LDA #$01
     STA ent_y_hi,y
+    LDA #$01
+    STA ent_x_hi,y
     TYA
     TAX
     LDA #$08
@@ -1153,19 +1153,19 @@ B4_AF76:
 B4_AF7B:
     JSR F_FA3D
     LDA #$0B
-    STA ram_0480,y
+    STA ent_type,y
     LDA #$9C
-    STA ent_x_lo,y
-    LDA #$00
-    STA ent_x_hi,y
-    LDA #$76
     STA ent_y_lo,y
-    LDA #$01
+    LDA #$00
     STA ent_y_hi,y
+    LDA #$76
+    STA ent_x_lo,y
+    LDA #$01
+    STA ent_x_hi,y
     LDA #$20
     STA ent_flags,y
     LDA #$00
-    STA ram_05A0,y
+    STA ent_param,y
     LDA #$00
     STA ent_angle,y
     STA ent_radius,y
@@ -1574,7 +1574,7 @@ B4_B354:
     BNE B4_B3A9
     LDY #$08
 B4_B35E:
-    LDA ram_0480,y
+    LDA ent_type,y
     BEQ B4_B36B
     INY
     CPY #$20
@@ -1582,14 +1582,14 @@ B4_B35E:
     JMP B4_B3A7
 B4_B36B:
     LDA #$35
-    STA ram_0480,y
+    STA ent_type,y
     LDA zp_1D
     SEC
     SBC #$14
-    STA ent_x_lo,y
+    STA ent_y_lo,y
     LDA zp_1E
     SBC #$00
-    STA ent_x_hi,y
+    STA ent_y_hi,y
 B4_B37F:
     LDA #$06
     JSR B4_B40E
@@ -1602,13 +1602,13 @@ B4_B37F:
     BCS B4_B37F
     CMP #$08
     BCC B4_B37F
-    STA ent_y_lo,y
+    STA ent_x_lo,y
     LDA #$00
-    STA ent_y_hi,y
+    STA ent_x_hi,y
     LDA #$38
     STA ent_flags,y
     LDA #$00
-    STA ram_05A0,y
+    STA ent_param,y
     INC ram_0745
 B4_B3A7:
     LDA #$0C
@@ -1621,7 +1621,7 @@ B4_B3AC:
     BNE B4_B40A
     LDY #$08
 B4_B3B6:
-    LDA ram_0480,y
+    LDA ent_type,y
     BEQ B4_B3C3
     INY
     CPY #$20
@@ -1629,28 +1629,28 @@ B4_B3B6:
     JMP B4_B408
 B4_B3C3:
     LDA #$36
-    STA ram_0480,y
+    STA ent_type,y
     LDA zp_1D
     SEC
     SBC #$10
-    STA ent_x_lo,y
+    STA ent_y_lo,y
     LDA zp_1E
     SBC #$00
-    STA ent_x_hi,y
+    STA ent_y_hi,y
     LDA #$04
     JSR B4_B40E
     ASL a
     ASL a
     CLC
     ADC #$08
-    STA ent_y_lo,y
+    STA ent_x_lo,y
     LDA #$00
     ADC #$00
-    STA ent_y_hi,y
+    STA ent_x_hi,y
     LDA #$00
     STA ent_flags,y
     LDA #$02
-    STA ram_05A0,y
+    STA ent_param,y
     LDA #$01
     STA ent_angle,y
     INC ram_072E
@@ -1758,9 +1758,9 @@ B4_B4CE:
     INX
     STX zp_D1
     LDA #$00
-    STA zp_C2
+    STA credits_ptr_lo
     LDA #$02
-    STA zp_C3
+    STA credits_ptr_hi
     RTS
 B4_B4E4:
     LDY #$04
@@ -1838,9 +1838,9 @@ B4_B579:
     LDA $B7B3,y
     STA zp_D0
     LDA B4_B7B4,y
-    STA zp_C2
+    STA credits_ptr_lo
     LDA B4_B7B5,y
-    STA zp_C3
+    STA credits_ptr_hi
     LDA B4_B7B6,y
     STA ram_01B4
     LDA B4_B7B7,y
@@ -1888,35 +1888,35 @@ B4_B5EC:
     PHA
     LDY #$09
 B4_B5EF:
-    LDA ram_0480,y
+    LDA ent_type,y
     BEQ B4_B5F7
     INY
     BNE B4_B5EF
 B4_B5F7:
     LDA #$3A
-    STA ram_0480,y
+    STA ent_type,y
     LDA #$94
-    STA ent_x_lo,y
+    STA ent_y_lo,y
     LDA #$04
-    STA ent_x_hi,y
+    STA ent_y_hi,y
     TYA
     TAX
     LDY #$00
     LDA (zp_55),y
-    STA ent_y_lo,x
+    STA ent_x_lo,x
     TYA
-    STA ent_y_hi,x
+    STA ent_x_hi,x
     LDA #$A8
     STA ent_flags,x
     TYA
-    STA ram_05A0,x
+    STA ent_param,x
     STA ent_angle,x
     INY
     LDA (zp_55),y
     STA ent_radius,x
     INY
     LDA (zp_55),y
-    STA ram_0630,x
+    STA ent_param2,x
     INY
     TYA
     CLC
@@ -1993,13 +1993,13 @@ B4_B6B6:
     JSR F_CE61
     JSR F_FA3D
     LDA player_x_lo
-    STA ent_y_lo,y
-    LDA player_x_hi
-    STA ent_y_hi,y
-    LDA player_y_lo
     STA ent_x_lo,y
-    LDA player_y_hi
+    LDA player_x_hi
     STA ent_x_hi,y
+    LDA player_y_lo
+    STA ent_y_lo,y
+    LDA player_y_hi
+    STA ent_y_hi,y
     STY zp_42
     LDA #$EF
     LDY #$B6
@@ -2357,9 +2357,9 @@ B4_BB4F:
     PLA
     JMP B4_BAE7
 B4_BB60:
-    LDA zp_C2
+    LDA credits_ptr_lo
     STA zp_55
-    LDA zp_C3
+    LDA credits_ptr_hi
     STA zp_56
     LDA ram_01BC
     SEC
@@ -2392,14 +2392,14 @@ B4_BB9A:
 B4_BB9D:
     RTS
 B4_BB9E:
-    LDA zp_C2
+    LDA credits_ptr_lo
     CLC
     ADC #$10
-    STA zp_C2
+    STA credits_ptr_lo
     STA zp_55
-    LDA zp_C3
+    LDA credits_ptr_hi
     ADC #$00
-    STA zp_C3
+    STA credits_ptr_hi
     STA zp_56
     LDY #$00
     LDA (zp_55),y

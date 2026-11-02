@@ -58,14 +58,14 @@ name f C919 SwitchBankKeepX    ; like SwitchBank but preserves X
 name f FCDC ScaledMultiply     ; radius x sin/cos helper used by polar movement
 name 5 8000 SetEntityPolarPos  ; X=entity: pos = centre(zp_55/56) +- radius*cos/sin(angle)
 name 5 809E EntityDeltaFromCentre
-ram 04B0 ent_x_lo
-ram 04E0 ent_x_hi
-ram 0510 ent_y_lo
-ram 0540 ent_y_hi
+ram 04B0 ent_y_lo
+ram 04E0 ent_y_hi
+ram 0510 ent_x_lo
+ram 0540 ent_x_hi
 ram 05D0 ent_angle
 ram 0600 ent_radius
-ram 0660 ent_dx
-ram 0690 ent_dy
+ram 0660 ent_dy
+ram 0690 ent_dx
 ram 0570 ent_flags            ; bit tests (e.g. AND #$04) seen in bank 5 movement code
 
 ; ---- stage records (bank 0): 6 records, pointer table at $8263 ----
@@ -139,3 +139,11 @@ name f F679 ApplyCollectedFlag  ; GetMapTile helper: returns 0 instead of the ti
 name f DBB7 FilterCollectedTile ; tile ids $80-$BB: hide if that kind's bit in collected_by_kind is set
 ram 009D collected_by_kind      ; 8-byte bitmap, one bit per collectible tile kind ($80 + n)
 ram 0100 collected_flags        ; bitmap, one bit per collectible placement (flag index from the collectible table)
+ram 0480 ent_type                ; spawn record byte 0 (entity kind)
+ram 05A0 ent_param               ; spawn record byte 6
+ram 0630 ent_param2              ; spawn record byte 9
+
+; ---- credits scroller (bank 5 holds the credits text; $C2/$C3 walk it) ----
+name f CF1E CreditsStep         ; prints the next credits line (tile = char + $94), $FE = end
+ram 00C2 credits_ptr_lo
+ram 00C3 credits_ptr_hi

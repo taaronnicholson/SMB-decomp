@@ -599,7 +599,7 @@ IRQ:
 F_C84B:
     LDA fade_dir
     BNE F_C852
-    JSR F_CF1E
+    JSR CreditsStep
 F_C852:
     LDA frame_counter
     AND #$01
@@ -856,11 +856,11 @@ F_CA00:
     LDX #$07
 F_CA09:
     LDA #$00
-    STA ram_0480,x
-    STA ent_x_lo,x
-    STA ent_x_hi,x
+    STA ent_type,x
     STA ent_y_lo,x
     STA ent_y_hi,x
+    STA ent_x_lo,x
+    STA ent_x_hi,x
     LDA #$FF
     STA ent_angle,x
     DEX
@@ -938,19 +938,19 @@ F_CA7A:
     LDX zp_77
     INC zp_77
     LDA #$62
-    STA ram_0480,x
+    STA ent_type,x
     LDA zp_53
-    STA ent_x_lo,x
-    LDA zp_54
-    STA ent_x_hi,x
-    LDA zp_55
     STA ent_y_lo,x
-    LDA zp_56
+    LDA zp_54
     STA ent_y_hi,x
+    LDA zp_55
+    STA ent_x_lo,x
+    LDA zp_56
+    STA ent_x_hi,x
     LDA #$00
     STA ent_flags,x
     LDA zp_73
-    STA ram_05A0,x
+    STA ent_param,x
     LDA #$00
     STA ent_angle,x
     PLA
@@ -976,9 +976,9 @@ F_CAD9:
     LDA current_area
     ASL a
     TAY
-    LDA B1_9F25,y
+    LDA AreaSpawnPtrs,y
     STA ptr_lo
-    LDA B1_9F26,y
+    LDA AreaSpawnPtrs+1,y
     STA ptr_hi
     LDA #$A8
     STA zp_DB
@@ -1011,19 +1011,19 @@ F_CB1E:
     INY
     CMP #$FF
     BEQ F_CB81
-    STA ram_0480,x
-    LDA (ptr_lo),y
-    INY
-    STA ent_x_lo,x
-    LDA (ptr_lo),y
-    INY
-    STA ent_x_hi,x
+    STA ent_type,x
     LDA (ptr_lo),y
     INY
     STA ent_y_lo,x
     LDA (ptr_lo),y
     INY
     STA ent_y_hi,x
+    LDA (ptr_lo),y
+    INY
+    STA ent_x_lo,x
+    LDA (ptr_lo),y
+    INY
+    STA ent_x_hi,x
     LDA (ptr_lo),y
     STA ent_flags,x
     LDA ptr_lo
@@ -1039,7 +1039,7 @@ F_CB1E:
     INY
     LDA (ptr_lo),y
     INY
-    STA ram_05A0,x
+    STA ent_param,x
     LDA (ptr_lo),y
     INY
     STA ent_angle,x
@@ -1048,7 +1048,7 @@ F_CB1E:
     STA ent_radius,x
     LDA (ptr_lo),y
     INY
-    STA ram_0630,x
+    STA ent_param2,x
     TYA
     CLC
     ADC ptr_lo
@@ -1130,13 +1130,7 @@ F_CBF2:
     LDX zp_42
     LDY #$01
     LDA (ptr_lo),y
-    STA ram_0480,x
-    INY
-    LDA (ptr_lo),y
-    STA ent_x_lo,x
-    INY
-    LDA (ptr_lo),y
-    STA ent_x_hi,x
+    STA ent_type,x
     INY
     LDA (ptr_lo),y
     STA ent_y_lo,x
@@ -1144,8 +1138,14 @@ F_CBF2:
     LDA (ptr_lo),y
     STA ent_y_hi,x
     INY
+    LDA (ptr_lo),y
+    STA ent_x_lo,x
+    INY
+    LDA (ptr_lo),y
+    STA ent_x_hi,x
+    INY
     LDA zp_53
-    STA ent_dx,x
+    STA ent_dy,x
     LDA ptr_lo
     PHA
     LDA ptr_hi
@@ -1159,13 +1159,13 @@ F_CBF2:
     PLA
     STA ptr_lo
     LDA (ptr_lo),y
-    STA ram_05A0,x
+    STA ent_param,x
     INY
     LDA #$00
     STA ent_angle,x
     STA ent_radius,x
     LDA #$01
-    STA ram_0630,x
+    STA ent_param2,x
     INX
     TYA
     CLC
@@ -1259,10 +1259,10 @@ F_CCD6:
     LDA current_area
     CMP ent_angle,x
     BNE F_CCFC
-    LDA ent_dx,x
+    LDA ent_dy,x
     CMP zp_53
     BNE F_CCFC
-    LDA ent_dy,x
+    LDA ent_dx,x
     CMP zp_54
     BNE F_CCFC
     LDA ram_06C0,x
@@ -1282,22 +1282,22 @@ F_CD03:
     CMP #$FF
     BNE F_CD3F
     LDA #$01
-    STA ram_0480,x
+    STA ent_type,x
     LDA zp_53
-    STA ent_x_lo,x
-    STA ent_dx,x
-    LDA zp_54
-    STA ent_x_hi,x
-    STA ent_dy,x
-    LDA zp_55
     STA ent_y_lo,x
+    STA ent_dy,x
+    LDA zp_54
+    STA ent_y_hi,x
+    STA ent_dx,x
+    LDA zp_55
+    STA ent_x_lo,x
     STA ram_06C0,x
     LDA zp_56
-    STA ent_y_hi,x
+    STA ent_x_hi,x
     STA ram_06F0,x
     LDA #$00
     STA ent_flags,x
-    STA ram_05A0,x
+    STA ent_param,x
     LDA current_area
     STA ent_angle,x
     JMP F_CD44
@@ -1560,11 +1560,11 @@ F_CF06:
     DEC ram_01BA
 F_CF1D:
     RTS
-F_CF1E:
+CreditsStep:
     LDA #$05
     JSR SwitchBank
     LDY #$00
-    LDA (zp_C2),y
+    LDA (credits_ptr_lo),y
     CMP #$FE
     BNE F_CF3A
     LDA frame_counter
@@ -1616,7 +1616,7 @@ F_CF7D:
     LDA PPUSTATUS
     LDX zp_AD
     LDY #$00
-    LDA (zp_C2),y
+    LDA (credits_ptr_lo),y
     CMP #$FF
     BEQ F_CFB4
     CLC
@@ -1629,7 +1629,7 @@ F_CF7D:
     STA PPUADDR
     INY
 F_CFA0:
-    LDA (zp_C2),y
+    LDA (credits_ptr_lo),y
     BEQ F_CFB4
     INY
     CMP #$20
@@ -1644,11 +1644,11 @@ F_CFB4:
     INY
     TYA
     CLC
-    ADC zp_C2
-    STA zp_C2
-    LDA zp_C3
+    ADC credits_ptr_lo
+    STA credits_ptr_lo
+    LDA credits_ptr_hi
     ADC #$00
-    STA zp_C3
+    STA credits_ptr_hi
     INX
     TXA
     AND #$3F
@@ -3740,24 +3740,24 @@ F_DE75:
     LDA ram_01AF
     SEC
     SBC #$0C
-    STA ent_x_lo,y
+    STA ent_y_lo,y
     LDA ram_01B0
     SBC #$00
-    STA ent_x_hi,y
-    LDA player_x_lo
-    STA ent_y_lo,y
-    LDA player_x_hi
     STA ent_y_hi,y
+    LDA player_x_lo
+    STA ent_x_lo,y
+    LDA player_x_hi
+    STA ent_x_hi,y
     LDA #$61
-    STA ram_0480,y
+    STA ent_type,y
     LDA #$2A
-    STA ram_05A0,y
+    STA ent_param,y
     LDA #$04
     STA ent_angle,y
     LDA #$00
     STA ent_radius,y
     STA ent_flags,y
-    STA ram_0630,y
+    STA ent_param2,y
     PLA
     JMP SwitchBank
 F_DEB9:
@@ -4059,16 +4059,16 @@ F_E0D4:
     JMP F_E313
 F_E0DE:
     LDX zp_B6
-    LDA ram_0480,x
+    LDA ent_type,x
     BNE F_E0E8
     JMP F_E505
 F_E0E8:
-    LDA ent_dx,x
+    LDA ent_dy,x
     STA zp_55
     LDA #$00
 F_E0EF:
     STA zp_54
-    STA ent_dx,x
+    STA ent_dy,x
     BIT zp_55
     BPL F_E0FA
 F_E0F8:
@@ -4082,11 +4082,11 @@ F_E0FF:
     LDA player_y_hi
     ADC zp_54
     STA player_y_hi
-    LDA ent_dy,x
+    LDA ent_dx,x
     STA zp_73
     LDA #$00
     STA zp_56
-    STA ent_dy,x
+    STA ent_dx,x
     BIT zp_73
     BPL F_E119
     DEC zp_56
@@ -4353,10 +4353,10 @@ F_E2EB:
     LDA zp_55
 F_E2FC:
     SEC
-    SBC ent_y_lo,x
+    SBC ent_x_lo,x
     STA zp_55
     LDA zp_56
-    SBC ent_y_hi,x
+    SBC ent_x_hi,x
     BCC F_E310
     LDA zp_55
     CMP #$12
@@ -5286,7 +5286,7 @@ F_E97F:
     ORA zp_38
     SBC #$02
     STA zp_53
-    LDA ent_y_hi,y
+    LDA ent_x_hi,y
     SBC #$00
     STA zp_54
     LDA player_x_lo
@@ -5359,11 +5359,11 @@ F_EA42:
     LDA #$00
     STA zp_54
 F_EA72:
-    LDA ent_y_lo,y
+    LDA ent_x_lo,y
     CLC
     ADC zp_53
     STA player_x_lo
-    LDA ent_y_hi,y
+    LDA ent_x_hi,y
     ADC zp_54
     STA player_x_hi
 F_EA81:
@@ -7141,11 +7141,11 @@ F_F7B8:
     JSR SwitchBank
     LDX #$2F
 F_F7C7:
-    LDY ram_0480,x
+    LDY ent_type,x
     LDA $A21E,y
     BEQ F_F7E1
     LDA #$5D
-    STA ram_0480,x
+    STA ent_type,x
     LDA ent_flags,x
     EOR #$01
     STA ent_flags,x
@@ -7158,13 +7158,13 @@ F_F7E1:
     JSR SwitchBank
     JSR F_FA3D
     LDA player_y_lo
-    STA ent_x_lo,y
-    LDA player_y_hi
-    STA ent_x_hi,y
-    LDA player_x_lo
     STA ent_y_lo,y
-    LDA player_x_hi
+    LDA player_y_hi
     STA ent_y_hi,y
+    LDA player_x_lo
+    STA ent_x_lo,y
+    LDA player_x_hi
+    STA ent_x_hi,y
 F_F800:
     STY zp_42
     LDA #$4D
@@ -7248,13 +7248,13 @@ F_F885:
     TYA
     TAX
     LDA player_x_lo
-    STA ent_y_lo,x
-    LDA player_x_hi
-    STA ent_y_hi,x
-    LDA player_y_lo
     STA ent_x_lo,x
-    LDA player_y_hi
+    LDA player_x_hi
     STA ent_x_hi,x
+    LDA player_y_lo
+    STA ent_y_lo,x
+    LDA player_y_hi
+    STA ent_y_hi,x
     JSR F_F9B6
     PLA
     TAX
@@ -7374,31 +7374,31 @@ F_F9B6:
 F_F9F9:
     JSR F_FA3D
     LDA #$04
-    STA ram_0480,y
-    LDA ent_x_lo,x
-    STA ent_x_lo,y
-    LDA ent_x_hi,x
-    STA ent_x_hi,y
+    STA ent_type,y
     LDA ent_y_lo,x
     STA ent_y_lo,y
     LDA ent_y_hi,x
     STA ent_y_hi,y
+    LDA ent_x_lo,x
+    STA ent_x_lo,y
+    LDA ent_x_hi,x
+    STA ent_x_hi,y
     LDA #$00
     STA ent_flags,y
     LDA zp_53
     CLC
     ADC #$03
-    STA ram_05A0,y
+    STA ent_param,y
     LDA #$00
     STA ent_angle,y
     STA ent_radius,y
-    STA ram_0630,y
+    STA ent_param2,y
     RTS
     .byte $37,$00,$00,$00,$00,$00,$29,$00,$00,$00,$FF
 F_FA3D:
     LDY #$2F
 F_FA3F:
-    LDA ram_0480,y
+    LDA ent_type,y
     BEQ F_FA4F
     CMP #$A0
     BEQ F_FA4F
@@ -7432,7 +7432,7 @@ F_FA6B:
     STA zp_B8
     LDX zp_B7
 F_FA7A:
-    LDA ram_0480,x
+    LDA ent_type,x
     BEQ F_FA8F
     CPX #$08
     BCS F_FA8A
@@ -7481,7 +7481,7 @@ F_FAC7:
     STA zp_B8
     LDX zp_B7
 F_FACB:
-    LDA ram_0480,x
+    LDA ent_type,x
     BEQ F_FAE0
     CPX #$08
     BCS F_FADB
@@ -7517,7 +7517,7 @@ F_FB00:
     LDA ent_flags,x
     AND #$04
     BNE F_FB52
-    LDA ram_0480,x
+    LDA ent_type,x
     BEQ F_FB72
 F_FB0C:
     LDY #$00
@@ -7542,11 +7542,11 @@ F_FB0C:
     STA zp_55
     LDA ram_0140,x
     STA zp_56
-    LDA ent_y_lo,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_1B
     STA zp_54
-    LDA ent_y_hi,x
+    LDA ent_x_hi,x
     SBC zp_1C
     BCS F_FB4D
     LDA #$F8
@@ -7561,12 +7561,12 @@ F_FB52:
     BCC F_FB5D
 F_FB56:
     LDA #$00
-    STA ram_0480,x
+    STA ent_type,x
     BEQ F_FB72
 F_FB5D:
     CPX #$08
     BCS F_FB72
-    LDA ram_0480,x
+    LDA ent_type,x
     CMP #$02
     BNE F_FB72
     LDA zp_63
@@ -7590,7 +7590,7 @@ F_FB86:
     LDA ent_flags,x
     AND #$04
     BEQ F_FBBD
-    LDA ram_0480,x
+    LDA ent_type,x
     BEQ F_FBBD
     LDY #$00
     STY ptr_hi
@@ -7635,7 +7635,7 @@ F_FBD6:
     LDA ent_flags,x
     AND #$04
     BEQ F_FC0D
-    LDA ram_0480,x
+    LDA ent_type,x
     BEQ F_FC0D
     LDY #$00
     STY ptr_hi

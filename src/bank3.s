@@ -1058,23 +1058,23 @@ B3_BD7F:
     TYA
     TAX
     LDA player_x_lo
-    STA ent_y_lo,x
-    LDA player_x_hi
-    STA ent_y_hi,x
-    LDA player_y_lo
     STA ent_x_lo,x
-    LDA player_y_hi
+    LDA player_x_hi
     STA ent_x_hi,x
+    LDA player_y_lo
+    STA ent_y_lo,x
+    LDA player_y_hi
+    STA ent_y_hi,x
     LDA #$02
     STA zp_53
     JSR F_F876
-    LDA ent_y_lo,x
-    STA player_x_lo
-    LDA ent_y_hi,x
-    STA player_x_hi
     LDA ent_x_lo,x
-    STA player_y_lo
+    STA player_x_lo
     LDA ent_x_hi,x
+    STA player_x_hi
+    LDA ent_y_lo,x
+    STA player_y_lo
+    LDA ent_y_hi,x
     STA player_y_hi
     LDA ent_angle,x
     BMI B3_BDDB

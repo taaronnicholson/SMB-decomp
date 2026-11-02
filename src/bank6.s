@@ -4822,24 +4822,24 @@ B6_BD3D:
 B6_BD65:
     JSR F_FA3D
     LDA #$81
-    STA ram_0480,y
+    STA ent_type,y
     LDA #$F8
-    STA ent_x_lo,y
-    LDA #$02
-    STA ent_x_hi,y
-    LDA #$80
     STA ent_y_lo,y
-    LDA #$00
+    LDA #$02
     STA ent_y_hi,y
+    LDA #$80
+    STA ent_x_lo,y
+    LDA #$00
+    STA ent_x_hi,y
     LDA #$E8
     STA ent_flags,y
     LDA #$03
-    STA ram_05A0,y
+    STA ent_param,y
     LDA #$00
     STA ent_angle,y
     STA ent_radius,y
     LDA #$06
-    STA ram_0630,y
+    STA ent_param2,y
     RTS
     LDA zp_B1
     AND #$7E
@@ -4848,19 +4848,19 @@ B6_BD65:
 B6_BDA0:
     JSR F_FA3D
     LDA #$9B
-    STA ram_0480,y
+    STA ent_type,y
     LDA #$5C
-    STA ent_x_lo,y
-    LDA #$01
-    STA ent_x_hi,y
-    LDA #$6C
     STA ent_y_lo,y
-    LDA #$00
+    LDA #$01
     STA ent_y_hi,y
+    LDA #$6C
+    STA ent_x_lo,y
+    LDA #$00
+    STA ent_x_hi,y
     LDA #$00
     STA ent_flags,y
     LDA #$1E
-    STA ram_05A0,y
+    STA ent_param,y
     RTS
     LDA ppumask_shadow
     ORA #$06
