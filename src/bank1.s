@@ -1016,9 +1016,9 @@ B1_8786:
     .byte $00,$04,$00,$12,$00,$13,$00,$03,$C0,$04,$C0,$12,$C0,$13,$C0
 B1_8795:
     LDY zp_C7
-    JSR F_CEA6
+    JSR SinLookup
     STA zp_53
-    JSR F_CEBA
+    JSR CosLookup
     STA zp_54
     STA ptr_hi
     BPL B1_87AE
@@ -1030,7 +1030,7 @@ B1_8795:
 B1_87AE:
     LDA zp_CC
     STA zp_55
-    JSR F_FCDC
+    JSR ScaledMultiply
     INC ptr_hi
     LDA zp_54
     BPL B1_87CB
@@ -1069,7 +1069,7 @@ B1_87D8:
 B1_87F4:
     LDA zp_CC
     STA zp_55
-    JSR F_FCDC
+    JSR ScaledMultiply
     INC ptr_hi
     LDA zp_53
     BPL B1_880F
@@ -1295,24 +1295,24 @@ B1_8982:
     .byte $2F,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$2F
     .byte $22,$0A,$2E,$22,$0A,$2D,$22,$0F,$25,$00,$07,$24,$FF
 B1_8A52:
-    LDA ram_0570,x
+    LDA ent_flags,x
     ORA #$04
-    STA ram_0570,x
+    STA ent_flags,x
     RTS
 B1_8A5B:
     STX zp_42
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_6A
     STA zp_53
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     SBC zp_6B
     BNE B1_8A52
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC zp_68
     STA zp_55
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     SBC zp_69
     STA zp_56
     LDA zp_55
@@ -1326,9 +1326,9 @@ B1_8A5B:
     LDA zp_56
     SBC #$00
     STA zp_56
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$FB
-    STA ram_0570,x
+    STA ent_flags,x
     LSR a
     BCC B1_8A9F
     JMP B1_8C00

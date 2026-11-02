@@ -3,7 +3,7 @@
 
 .segment "BANK5"
 
-B5_8000:
+SetEntityPolarPos:
     LDA zp_55
     PHA
     LDA zp_56
@@ -12,10 +12,10 @@ B5_8000:
     PHA
     LDA zp_54
     PHA
-    LDY ram_05D0,x
-    JSR F_CEA6
+    LDY ent_angle,x
+    JSR SinLookup
     STA zp_53
-    JSR F_CEBA
+    JSR CosLookup
     STA zp_54
     STA ptr_hi
     BPL B5_8026
@@ -25,9 +25,9 @@ B5_8000:
     ADC #$01
     STA ptr_hi
 B5_8026:
-    LDA ram_0600,x
+    LDA ent_radius,x
     STA zp_55
-    JSR F_FCDC
+    JSR ScaledMultiply
     INC ptr_hi
     PLA
     STA zp_56
@@ -38,19 +38,19 @@ B5_8026:
     LDA zp_55
     SEC
     SBC ptr_hi
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA zp_56
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     JMP B5_805B
 B5_804C:
     LDA zp_55
     CLC
     ADC ptr_hi
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA zp_56
     ADC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
 B5_805B:
     LDA zp_53
     STA ptr_hi
@@ -61,9 +61,9 @@ B5_805B:
     ADC #$01
     STA ptr_hi
 B5_806A:
-    LDA ram_0600,x
+    LDA ent_radius,x
     STA zp_55
-    JSR F_FCDC
+    JSR ScaledMultiply
     INC ptr_hi
     PLA
     STA zp_56
@@ -74,33 +74,33 @@ B5_806A:
     LDA zp_55
     SEC
     SBC ptr_hi
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA zp_56
     SBC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     RTS
 B5_808E:
     LDA zp_55
     CLC
     ADC ptr_hi
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA zp_56
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     RTS
-B5_809E:
+EntityDeltaFromCentre:
     PLA
     STA zp_56
     PLA
     STA zp_55
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_55
-    STA ram_0660,x
-    LDA ram_0510,x
+    STA ent_dx,x
+    LDA ent_y_lo,x
     SEC
     SBC zp_56
-    STA ram_0690,x
+    STA ent_dy,x
     RTS
 B5_80B7:
     .byte $01,$00,$01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00
@@ -111,7 +111,7 @@ B5_80D3:
 B5_80D7:
     RTS
 B5_80D8:
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_80D7
     LDY zp_63
@@ -135,15 +135,15 @@ B5_80D8:
     BCC B5_80D7
     STX zp_B6
     LDA #$00
-    STA ram_0660,x
-    STA ram_0690,x
+    STA ent_dx,x
+    STA ent_dy,x
     LDA #$01
     STA zp_79
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$10
     STA zp_60
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     SBC #$00
     STA zp_61
 B5_8121:
@@ -159,7 +159,7 @@ B5_8121:
     .byte $A5
     EOR zp_38,x
     SBC #$01
-    STA ram_05D0,x
+    STA ent_angle,x
 B5_8148:
     RTS
     LDA #$7E
@@ -167,10 +167,10 @@ B5_8148:
     LDA #$81
     STA zp_54
 B5_8151:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     TAY
     LDA (zp_53),y
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
     LDA #$83
     STA zp_53
@@ -188,7 +188,7 @@ B5_8151:
     AND #$03
     CLC
     ADC #$01
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
     .byte $00,$03,$04,$02,$01,$00,$04,$03,$01,$02,$00,$02,$01,$04,$03
 B5_818D:
@@ -216,7 +216,7 @@ B5_81A4:
     STA ram_0630,x
     LDA #$01
     STA zp_53
-    LDA ram_05D0,x
+    LDA ent_angle,x
     ASL a
     TAY
     LDA B5_81CB,y
@@ -231,30 +231,30 @@ B5_81CB:
     .word B5_8315
     .word B5_8392
 B5_81D5:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     STA zp_55
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     STA zp_56
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC zp_53
-    STA ram_0510,x
+    STA ent_y_lo,x
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     SBC #$00
     BCS B5_81F8
     LDA #$00
-    STA ram_0510,x
+    STA ent_y_lo,x
     STA ptr_lo
 B5_81F8:
-    STA ram_0540,x
+    STA ent_y_hi,x
     STA ptr_hi
     JSR F_EF24
     LDA ptr_lo
     PHA
     LDA ptr_hi
     PHA
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     AND #$0F
     BNE B5_822A
     JSR F_FC3F
@@ -294,26 +294,26 @@ B5_823E:
     BNE B5_824E
     JMP B5_82F2
 B5_824E:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     AND #$F0
     CLC
     ADC #$10
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
 B5_8261:
     RTS
 B5_8262:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     STA zp_55
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     STA zp_56
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC zp_53
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     ADC #$00
     STA ptr_hi
     LDA zp_34
@@ -340,15 +340,15 @@ B5_8262:
     STA ptr_hi
 B5_82A4:
     LDA ptr_lo
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA ptr_hi
-    STA ram_0540,x
+    STA ent_y_hi,x
     JSR F_EF24
     LDA ptr_lo
     PHA
     LDA ptr_hi
     PHA
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     AND #$0F
     BNE B5_82CB
     JSR F_FC3F
@@ -392,35 +392,35 @@ B5_82F2:
     LDA #$05
     JMP F_CE8F
 B5_830C:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     AND #$F0
-    STA ram_0510,x
+    STA ent_y_lo,x
     RTS
 B5_8315:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_53
-    STA ram_04B0,x
+    STA ent_x_lo,x
     STA zp_55
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     SBC #$00
     BCS B5_832E
     LDA #$00
-    STA ram_04B0,x
+    STA ent_x_lo,x
     STA zp_55
 B5_832E:
     STA zp_56
-    STA ram_04E0,x
-    LDA ram_0510,x
+    STA ent_x_hi,x
+    LDA ent_y_lo,x
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     STA ptr_hi
     JSR F_EF24
     LDA ptr_lo
     PHA
     LDA ptr_hi
     PHA
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     BNE B5_835A
     JSR F_FC3F
@@ -450,21 +450,21 @@ B5_836E:
     BNE B5_837E
     JMP B5_82F2
 B5_837E:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$F0
     CLC
     ADC #$10
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     RTS
 B5_8392:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC zp_53
     STA zp_55
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     ADC #$00
     STA zp_56
     LDA zp_36
@@ -490,19 +490,19 @@ B5_8392:
     STA zp_56
 B5_83C9:
     LDA zp_55
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA zp_56
-    STA ram_04E0,x
-    LDA ram_0510,x
+    STA ent_x_hi,x
+    LDA ent_y_lo,x
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     STA ptr_hi
     JSR F_EF24
     LDA ptr_lo
     PHA
     LDA ptr_hi
     PHA
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     BNE B5_83FA
     JSR F_FC3F
@@ -539,30 +539,30 @@ B5_841B:
     BNE B5_842B
     JMP B5_82F2
 B5_842B:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$F0
-    STA ram_04B0,x
+    STA ent_x_lo,x
     RTS
 B5_8434:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     AND #$7F
-    STA ram_05D0,x
-    LDA ram_04B0,x
+    STA ent_angle,x
+    LDA ent_x_lo,x
     CLC
     ADC zp_53
     STA zp_55
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC #$00
     STA zp_56
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA zp_53
     STA zp_75
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$08
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -587,7 +587,7 @@ B5_8434:
     LDA #$C3
     ADC ptr_hi
     STA ptr_hi
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$08
     AND #$0F
@@ -596,7 +596,7 @@ B5_8434:
     STA zp_53
     CMP #$FF
     BEQ B5_84DC
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     CLC
     ADC #$10
@@ -609,23 +609,23 @@ B5_8434:
     ADC #$04
     CMP zp_54
     BCC B5_84DC
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$F0
     CLC
     ADC zp_53
     SEC
     SBC #$10
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     PLA
     STA ptr_hi
     PLA
     STA ptr_lo
-    LDA ram_05D0,x
+    LDA ent_angle,x
     ORA #$80
-    STA ram_05D0,x
+    STA ent_angle,x
 B5_84DB:
     RTS
 B5_84DC:
@@ -655,7 +655,7 @@ B5_84DC:
     LDA ptr_hi
     ADC #$C3
     STA ptr_hi
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$08
     AND #$0F
@@ -664,7 +664,7 @@ B5_84DC:
     STA zp_53
     CMP #$FF
     BEQ B5_84DB
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     SEC
     SBC zp_53
@@ -675,26 +675,26 @@ B5_84DC:
     ADC #$04
     CMP zp_54
     BCC B5_84DB
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$F0
     CLC
     ADC zp_53
-    STA ram_04B0,x
+    STA ent_x_lo,x
 B5_853D:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     ORA #$80
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
 B5_8546:
     .byte $BD,$D0,$05,$29,$7F,$9D,$D0,$05,$BD,$B0,$04,$85
     EOR zp_BD,x
     CPX #$04
     STA zp_56
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$08
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -707,14 +707,14 @@ B5_8546:
     BEQ B5_85E3
     CMP #$02
     BEQ B5_8591
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$F0
     SEC
     SBC #$10
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     RTS
 B5_8591:
     LDA ram_03A4,y
@@ -730,7 +730,7 @@ B5_8591:
     LDA ptr_hi
     ADC #$C3
     STA ptr_hi
-    LDA ram_0510,x
+    LDA ent_y_lo,x
 B5_85AD:
     CLC
     ADC #$08
@@ -740,7 +740,7 @@ B5_85AD:
     STA zp_53
     CMP #$FF
     BEQ B5_85E3
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     CLC
     ADC #$10
@@ -749,19 +749,19 @@ B5_85AD:
     BCC B5_85E3
     CMP #$04
     BCS B5_85E3
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$F0
     CLC
     ADC zp_53
     SEC
     SBC #$10
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     RTS
 B5_85E3:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     BEQ B5_8607
     LDA zp_75
@@ -774,23 +774,23 @@ B5_85E3:
     JSR F_E51C
     AND #$01
     BEQ B5_8607
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$F0
-    STA ram_04B0,x
+    STA ent_x_lo,x
     RTS
 B5_8607:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC #$10
     STA zp_55
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     ADC #$00
     STA zp_56
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$08
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     ADC #$00
     STA ptr_hi
     JSR F_EF24
@@ -807,7 +807,7 @@ B5_8607:
     LDA ptr_hi
     ADC #$C3
     STA ptr_hi
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$08
     AND #$0F
@@ -816,7 +816,7 @@ B5_8607:
     STA zp_53
     CMP #$FF
     BEQ B5_8671
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     SEC
     SBC zp_53
@@ -827,11 +827,11 @@ B5_8607:
 B5_8661:
     CMP #$04
     BCS B5_8671
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$F0
     CLC
     ADC zp_53
-    STA ram_04B0,x
+    STA ent_x_lo,x
     RTS
 B5_8671:
     LDA zp_75
@@ -841,7 +841,7 @@ B5_8671:
     LDA zp_76
     ADC #$00
     STA ptr_hi
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     BEQ B5_8692
     LDA ptr_lo
@@ -871,7 +871,7 @@ B5_869E:
     LDA ptr_hi
     ADC #$C3
     STA ptr_hi
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$08
     AND #$0F
@@ -880,7 +880,7 @@ B5_869E:
     CLC
     ADC #$10
     STA zp_53
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     SEC
     SBC zp_53
@@ -892,47 +892,47 @@ B5_86D4:
     BCC B5_86DB
     JMP B5_853D
 B5_86DB:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$F0
     CLC
     ADC zp_53
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     RTS
 B5_86EF:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     AND #$7F
-    STA ram_05D0,x
-    LDA ram_0510,x
+    STA ent_angle,x
+    LDA ent_y_lo,x
     SEC
     SBC zp_53
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     SBC #$00
     STA ptr_hi
     BCS B5_8719
     LDA #$00
-    STA ram_0510,x
-    STA ram_0540,x
-    LDA ram_05D0,x
+    STA ent_y_lo,x
+    STA ent_y_hi,x
+    LDA ent_angle,x
     ORA #$80
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
 B5_8719:
     LDA ptr_lo
-    STA ram_0510,x
+    STA ent_y_lo,x
     CLC
     ADC #$07
     STA ptr_lo
     LDA ptr_hi
-    STA ram_0540,x
+    STA ent_y_hi,x
     ADC #$00
     STA ptr_hi
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     STA zp_55
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     STA zp_56
     JSR F_EF24
     LDA ptr_lo
@@ -942,7 +942,7 @@ B5_8719:
     JSR F_E51C
     AND #$01
     BNE B5_8793
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     BNE B5_8750
 B5_874F:
@@ -984,24 +984,24 @@ B5_876A:
     CMP (ptr_lo),y
     BCS B5_874F
 B5_8793:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     AND #$F0
     CLC
     ADC #$09
-    STA ram_0510,x
-    LDA ram_05D0,x
+    STA ent_y_lo,x
+    LDA ent_angle,x
     ORA #$80
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
 B5_87A7:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     AND #$7F
-    STA ram_05D0,x
-    LDA ram_0510,x
+    STA ent_angle,x
+    LDA ent_y_lo,x
     CLC
     ADC zp_53
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     ADC #$00
     STA ptr_hi
     LDA zp_34
@@ -1020,28 +1020,28 @@ B5_87A7:
     LDA zp_53
     ADC #$01
     STA zp_53
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA zp_54
     ADC #$00
     STA zp_54
-    STA ram_0540,x
-    LDA ram_05D0,x
+    STA ent_y_hi,x
+    LDA ent_angle,x
     ORA #$80
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
 B5_87F1:
     LDA ptr_lo
-    STA ram_0510,x
+    STA ent_y_lo,x
     CLC
     ADC #$09
     STA ptr_lo
     LDA ptr_hi
-    STA ram_0540,x
+    STA ent_y_hi,x
     ADC #$00
     STA ptr_hi
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     STA zp_55
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     STA zp_56
     JSR F_EF24
     LDA ptr_lo
@@ -1051,7 +1051,7 @@ B5_87F1:
     JSR F_E51C
     AND #$01
     BNE B5_8872
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     BNE B5_8828
 B5_8827:
@@ -1096,14 +1096,14 @@ B5_8828:
     CMP (ptr_lo),y
     BCS B5_8827
 B5_8872:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     AND #$F0
     CLC
     ADC #$07
-    STA ram_0510,x
-    LDA ram_05D0,x
+    STA ent_y_lo,x
+    LDA ent_angle,x
     ORA #$80
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
 B5_8886:
     LDA zp_53
@@ -1113,8 +1113,8 @@ B5_888B:
     LDA #$07
     STA ram_0480,x
     LDA #$00
-    STA ram_0600,x
-    STA ram_0570,x
+    STA ent_radius,x
+    STA ent_flags,x
     LDA #$1E
     STA ram_05A0,x
     LDA #$0D
@@ -1127,7 +1127,7 @@ B5_888B:
 B5_88AA:
     LDA #$00
     STA zp_53
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_8903
     LDA zp_19
@@ -1175,7 +1175,7 @@ B5_8903:
 B5_8904:
     LDA #$00
     STA zp_53
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_8903
     LDY zp_E1
@@ -1243,7 +1243,7 @@ B5_8982:
 B5_8983:
     .byte $00,$00,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$02
 B5_8993:
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_8982
     LDA zp_19
@@ -1263,7 +1263,7 @@ B5_8993:
     CMP zp_56
     BCC B5_8982
     JMP F_F492
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_8982
     LDA zp_19
@@ -1284,7 +1284,7 @@ B5_8993:
     BCC B5_8982
     JMP F_F4BA
 B5_89E3:
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_8A05
     LDA zp_19
@@ -1315,8 +1315,8 @@ B5_8A55:
     LDA #$07
     STA ram_0480,x
     LDA #$00
-    STA ram_0600,x
-    STA ram_0570,x
+    STA ent_radius,x
+    STA ent_flags,x
     STA zp_85
     STA zp_7C
     STA zp_7D
@@ -1343,42 +1343,42 @@ B5_8A91:
     STA zp_7B
     JMP B5_8A55
 B5_8A9F:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_53
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
-    LDA ram_05D0,x
+    STA ent_x_hi,x
+    LDA ent_angle,x
     AND #$7F
-    STA ram_05D0,x
-    LDA ram_0510,x
+    STA ent_angle,x
+    LDA ent_y_lo,x
     CLC
     ADC #$08
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     ADC #$00
     STA ptr_hi
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     STA zp_55
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     STA zp_56
     JSR F_EF24
     JSR F_E51C
     AND #$01
     BEQ B5_8AF6
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$F0
     CLC
     ADC #$10
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC #$00
-    STA ram_04E0,x
-    LDA ram_05D0,x
+    STA ent_x_hi,x
+    LDA ent_angle,x
     ORA #$80
-    STA ram_05D0,x
+    STA ent_angle,x
 B5_8AF6:
     RTS
     .byte $B3,$8C,$58,$8D,$9A,$8E,$C4,$8E,$17,$8F,$AB,$8F,$47,$90,$73,$90
@@ -1440,7 +1440,7 @@ B5_8AF6:
     .byte $02,$E9,$12,$9D,$00
     ASL zp_A5
     LDY ram_0729,x
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
     .byte $A5,$AB,$DD,$D0,$05,$F0,$01,$60,$A5,$B1,$4A,$4A,$4A,$4A,$29,$01
     .byte $9D,$A0,$05,$A5,$19,$C5,$55,$B0,$EE,$69,$1A,$C5,$55,$90,$E8,$A5
@@ -1452,7 +1452,7 @@ B5_8AF6:
     STA zp_99
     LDA #$00
     STA ram_05A0,x
-    STA ram_0600,x
+    STA ent_radius,x
     LDA #$02
     STA ram_0480,x
     DEC zp_A8
@@ -1504,41 +1504,41 @@ B5_8E48:
     JSR F_FA3D
     LDA #$05
     STA ram_0480,y
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC #$0C
-    STA ram_04B0,y
-    LDA ram_04E0,x
+    STA ent_x_lo,y
+    LDA ent_x_hi,x
     ADC #$00
-    STA ram_04E0,y
+    STA ent_x_hi,y
     LDA zp_BB
     AND #$0F
     STA zp_53
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC #$04
     STA zp_55
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     SBC #$00
     STA zp_56
     LDA zp_55
     CLC
     ADC zp_53
-    STA ram_0510,y
+    STA ent_y_lo,y
     LDA zp_56
     ADC #$00
-    STA ram_0540,y
+    STA ent_y_hi,y
     LDA #$00
-    STA ram_0570,y
+    STA ent_flags,y
     LDA #$02
     STA ram_05A0,y
     LDA #$00
-    STA ram_05D0,y
+    STA ent_angle,y
     LDA zp_53
-    STA ram_0600,y
+    STA ent_radius,y
     RTS
-    LDY ram_05D0,x
-    INC ram_05D0,x
+    LDY ent_angle,x
+    INC ent_angle,x
     LDA B5_8EAD,y
     BNE B5_8EA9
     STA ram_0480,x
@@ -1557,20 +1557,20 @@ B5_8EAD:
     .byte $FF,$FE,$D0,$05,$BD,$D0,$05,$29,$01,$D0
     ORA (zp_60,x)
     STA zp_53
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC zp_53
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
 B5_8F35:
     LDA #$63
     STA zp_53
     LDA #$8F
     STA zp_54
 B5_8F3D:
-    LDA ram_0600,x
+    LDA ent_radius,x
     TAY
     CLC
     ADC #$01
@@ -1578,18 +1578,18 @@ B5_8F3D:
     BNE B5_8F4A
     LDA #$00
 B5_8F4A:
-    STA ram_0600,x
+    STA ent_radius,x
     TYA
     ASL a
     TAY
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC (zp_53),y
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     INY
     ADC (zp_53),y
-    STA ram_0540,x
+    STA ent_y_hi,x
     RTS
     .byte $00,$00,$00,$00,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$01,$00
     .byte $00,$00,$01,$00,$00,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00,$00
@@ -1604,11 +1604,11 @@ B5_8F4A:
     .byte $60,$BD,$B0,$04
     CLC
     ADC zp_53
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC B5_901B,y
-    STA ram_04E0,x
-    INC ram_0600,x
+    STA ent_x_hi,x
+    INC ent_radius,x
     RTS
     .byte $FE
 B5_901B:
@@ -1651,27 +1651,27 @@ B5_91C1:
     LDA #$07
     STA ram_0480,x
     LDA #$00
-    STA ram_0600,x
-    STA ram_0570,x
+    STA ent_radius,x
+    STA ent_flags,x
     LDA #$1E
     STA ram_05A0,x
     LDA #$FF
     STA ram_0630,x
     RTS
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
-    LDA ram_0510,x
+    STA ent_x_hi,x
+    LDA ent_y_lo,x
     CLC
     ADC zp_53
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     ADC B5_923B,y
-    STA ram_0540,x
+    STA ent_y_hi,x
     RTS
     .byte $00,$01,$01,$01,$01,$01,$01,$01,$00,$01,$00,$01,$00,$01,$00,$01
     .byte $00,$01,$00,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00,$00,$01,$00
@@ -1721,16 +1721,16 @@ B5_923B:
     .byte $01,$9D,$A0,$05,$BD,$30,$06,$38,$E9,$01,$D0,$44,$20,$3D,$FA
     LDA #$0F
     STA ram_0480,y
-    LDA ram_04B0,x
-    STA ram_04B0,y
-    LDA ram_04E0,x
-    STA ram_04E0,y
-    LDA ram_0510,x
-    STA ram_0510,y
-    LDA ram_0540,x
-    STA ram_0540,y
+    LDA ent_x_lo,x
+    STA ent_x_lo,y
+    LDA ent_x_hi,x
+    STA ent_x_hi,y
+    LDA ent_y_lo,x
+    STA ent_y_lo,y
+    LDA ent_y_hi,x
+    STA ent_y_hi,y
     LDA #$28
-    STA ram_0570,y
+    STA ent_flags,y
     LDA zp_BC
     STA zp_53
     AND #$03
@@ -1738,29 +1738,29 @@ B5_923B:
     ADC #$02
     STA ram_05A0,y
     LDA #$4B
-    STA ram_05D0,y
+    STA ent_angle,y
     LDA zp_53
     AND #$0F
-    STA ram_0600,y
+    STA ent_radius,y
     LDA zp_BB
     AND #$07
     CLC
     ADC #$26
     STA ram_0630,x
-    LDA ram_0600,x
+    LDA ent_radius,x
     CLC
     ADC #$01
     AND #$0F
-    STA ram_0600,x
+    STA ent_radius,x
     ASL a
     TAY
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC B5_950E,y
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC B5_950F,y
-    STA ram_04E0,x
+    STA ent_x_hi,x
     RTS
 B5_950E:
     .byte $FE
@@ -1810,16 +1810,16 @@ B5_950F:
     .byte $20,$04,$89,$20,$86,$88,$20,$06,$8A,$20,$25,$AC,$F0,$11
 B5_977B:
     LDA ram_0480,x
-    STA ram_0660,x
+    STA ent_dx,x
     LDA #$1B
     STA ram_0480,x
     LDA #$00
     STA ram_0630,x
     RTS
-    LDA ram_0600,x
+    LDA ent_radius,x
     SEC
     SBC #$01
-    STA ram_0600,x
+    STA ent_radius,x
     AND #$0F
     TAY
     LDA B5_979F,y
@@ -1880,19 +1880,19 @@ B5_993C:
     STA ram_0630,x
     LDA B5_98C1,y
     BNE B5_994B
-    LDA ram_0660,x
+    LDA ent_dx,x
     STA ram_0480,x
     RTS
 B5_994B:
     STA ram_05A0,x
     JSR B5_8A06
     JSR B5_8546
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BPL B5_9963
     LDA #$1B
     STA ram_0480,x
     LDA #$09
-    STA ram_05D0,x
+    STA ent_angle,x
 B5_9963:
     RTS
 B5_9964:
@@ -1903,21 +1903,21 @@ B5_9964:
     BEQ B5_9975
     JMP B5_977B
 B5_9975:
-    LDA ram_0600,x
+    LDA ent_radius,x
     SEC
     SBC #$01
     BNE B5_9993
     LDA ram_0480,x
-    STA ram_0660,x
+    STA ent_dx,x
     LDA #$9D
     STA ram_0480,x
     LDA #$28
-    STA ram_0600,x
+    STA ent_radius,x
     LDA #$10
     STA ram_0630,x
     RTS
 B5_9993:
-    STA ram_0600,x
+    STA ent_radius,x
     AND #$0F
     TAY
     LDA B5_979F,y
@@ -1931,17 +1931,17 @@ B5_99A0:
     BEQ B5_99B1
     JMP B5_977B
 B5_99B1:
-    LDA ram_0600,x
+    LDA ent_radius,x
     SEC
     SBC #$01
     BNE B5_99C4
     LDA #$9C
     STA ram_0480,x
     LDA #$19
-    STA ram_0600,x
+    STA ent_radius,x
     RTS
 B5_99C4:
-    STA ram_0600,x
+    STA ent_radius,x
     AND #$0F
     TAY
     LDA B5_99D1,y
@@ -1955,51 +1955,51 @@ B5_99D1:
     .byte $9D,$00,$06,$60,$20,$04,$89,$20,$86,$88,$BD,$30,$06,$A8,$FE,$30
     .byte $06,$B9,$BC,$9A,$C9,$FF
     BNE B5_9A81
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_9A81
     JSR F_FA3D
     LDA #$22
     STA ram_0480,y
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$0C
-    STA ram_04B0,y
-    LDA ram_04E0,x
+    STA ent_x_lo,y
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,y
+    STA ent_x_hi,y
     LDA #$07
     STA zp_53
     LDA #$00
     STA zp_54
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$02
     BEQ B5_9A56
     LDA #$01
     STA zp_53
 B5_9A56:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC zp_53
-    STA ram_0510,y
-    LDA ram_0540,x
+    STA ent_y_lo,y
+    LDA ent_y_hi,x
     ADC zp_54
-    STA ram_0540,y
+    STA ent_y_hi,y
     LDA #$00
-    STA ram_0570,y
+    STA ent_flags,y
     LDA #$24
     STA ram_05A0,y
     LDA #$00
-    STA ram_05D0,y
+    STA ent_angle,y
     LDA #$24
-    STA ram_0600,y
+    STA ent_radius,y
     LDA #$78
     STA ram_0630,y
     RTS
 B5_9A81:
     CMP #$00
     BNE B5_9AA3
-    DEC ram_0600,x
+    DEC ent_radius,x
     BEQ B5_9A90
     LDA #$00
     STA ram_0630,x
@@ -2009,7 +2009,7 @@ B5_9A90:
     STA ram_0480,x
     LDA zp_BC
     ORA #$80
-    STA ram_0600,x
+    STA ent_radius,x
     LDA zp_BB
     EOR zp_BC
     STA zp_BC
@@ -2019,7 +2019,7 @@ B5_9AA3:
     STA ram_05A0,x
     JSR B5_8A06
     JSR B5_8546
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BPL B5_9AA2
     LDA #$1B
     STA ram_0480,x
@@ -2035,19 +2035,19 @@ B5_9AA3:
     ORA ram_0D0D
     ORA B5_BC00
     .byte $D0,$05   ; BNE $9ADB (target not an instruction start)
-    INC ram_05D0,x
+    INC ent_angle,x
 B5_9AD9:
     LDA B5_9AF7,y
     BNE B5_9AE5
-    LDA ram_0600,x
+    LDA ent_radius,x
     STA ram_0480,x
     RTS
 B5_9AE5:
     STA ram_05A0,x
     RTS
 B5_9AE9:
-    LDY ram_05D0,x
-    DEC ram_05D0,x
+    LDY ent_angle,x
+    DEC ent_angle,x
     BNE B5_9AD9
     LDA #$00
     STA ram_0480,x
@@ -2066,20 +2066,20 @@ B5_9B09:
     LDA #$23
     STA ram_0480,x
     LDA #$07
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
 B5_9B14:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     BCS B5_9B32
     LDA #$00
-    STA ram_04B0,x
-    STA ram_04E0,x
+    STA ent_x_lo,x
+    STA ent_x_hi,x
     JMP B5_9B09
 B5_9B32:
     LDA zp_B1
@@ -2094,31 +2094,31 @@ B5_9B3E:
     DEC ram_0630,x
     BEQ B5_9B09
 B5_9B46:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     SBC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     BCS B5_9B32
     LDA #$00
-    STA ram_0510,x
-    STA ram_0540,x
+    STA ent_y_lo,x
+    STA ent_y_hi,x
     JMP B5_9B09
 B5_9B64:
     JSR B5_8993
     DEC ram_0630,x
     BEQ B5_9B09
 B5_9B6C:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$01
-    STA ram_0510,x
+    STA ent_y_lo,x
     STA ptr_lo
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     STA ptr_hi
     LDA zp_34
     SEC
@@ -2136,10 +2136,10 @@ B5_9B6C:
     LDA zp_53
     CLC
     ADC #$01
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA zp_54
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     JMP B5_9B09
 B5_9BAB:
     JSR B5_8993
@@ -2147,19 +2147,19 @@ B5_9BAB:
     BNE B5_9BB6
     JMP B5_9B09
 B5_9BB6:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     BCC B5_9BCC
     JMP B5_9B46
 B5_9BCC:
     LDA #$00
-    STA ram_04B0,x
-    STA ram_04E0,x
+    STA ent_x_lo,x
+    STA ent_x_hi,x
     JMP B5_9B09
 B5_9BD7:
     JSR B5_8993
@@ -2167,24 +2167,24 @@ B5_9BD7:
     BNE B5_9BE2
     JMP B5_9B09
 B5_9BE2:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     BCC B5_9BF8
     JMP B5_9B6C
 B5_9BF8:
     LDA #$00
-    STA ram_04B0,x
-    STA ram_04E0,x
+    STA ent_x_lo,x
+    STA ent_x_hi,x
     JMP B5_9B09
 B5_9C03:
-    LDA ram_0600,x
+    LDA ent_radius,x
     BEQ B5_9C0C
-    DEC ram_0600,x
+    DEC ent_radius,x
     RTS
 B5_9C0C:
     INC ram_0630,x
@@ -2199,7 +2199,7 @@ B5_9C0C:
     AND #$3F
     CLC
     ADC #$20
-    STA ram_0600,x
+    STA ent_radius,x
     RTS
 B5_9C29:
     CLC
@@ -2225,17 +2225,17 @@ B5_9CA2:
     LDA #$02
     STA zp_53
     JSR B5_8434
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_9D0E
     RTS
 B5_9D0E:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC #$04
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     SBC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     JMP B5_91C1
     .byte $BD,$00,$06,$D0,$53,$BD
     BVS B5_9D2F
@@ -2338,29 +2338,29 @@ B5_9D7A:
     .byte $30,$06,$60
     LDA ram_0630,x
     BEQ B5_A04E
-    LDY ram_0600,x
+    LDY ent_radius,x
     LDA B5_A096,y
     STA zp_53
     CMP #$80
     BEQ B5_A05A
 B5_A02F:
-    INC ram_0600,x
+    INC ent_radius,x
     LDA #$00
     STA zp_56
     LDA zp_53
     BPL B5_A03C
     DEC zp_56
 B5_A03C:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC zp_53
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC zp_56
-    STA ram_04E0,x
+    STA ent_x_hi,x
     RTS
 B5_A04E:
-    LDY ram_0600,x
+    LDY ent_radius,x
     LDA B5_A071,y
     STA zp_53
     CMP #$80
@@ -2369,12 +2369,12 @@ B5_A05A:
     LDA #$02
     STA zp_53
     JSR B5_8434
-    LDA ram_05D0,x
+    LDA ent_angle,x
     AND #$80
     BEQ B5_A070
     STA ram_0630,x
     LDA #$00
-    STA ram_0600,x
+    STA ent_radius,x
 B5_A070:
     RTS
 B5_A071:
@@ -2396,13 +2396,13 @@ B5_A096:
     STA ram_0480,x
 B5_A0F7:
     RTS
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_A138
     JSR B5_8904
     JSR B5_8886
     JSR B5_89E3
-    LDA ram_05D0,x
+    LDA ent_angle,x
     ASL a
     TAY
     LDA B5_A1FE,y
@@ -2412,16 +2412,16 @@ B5_A0F7:
     RTS
 B5_A118:
     STA ram_05A0,x
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC B5_A1FF,y
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
-    INC ram_05D0,x
+    STA ent_x_hi,x
+    INC ent_angle,x
     RTS
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BEQ B5_A158
 B5_A138:
@@ -2432,10 +2432,10 @@ B5_A138:
     LDA zp_1E
     ADC #$01
     STA zp_54
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_53
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     SBC zp_54
     BCC B5_A158
     LDA #$00
@@ -2461,13 +2461,13 @@ B5_A161:
     STA zp_56
     PLA
     STA zp_55
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BPL B5_A18A
     LDA #$05
     JSR F_CE8F
     JMP B5_91C1
 B5_A18A:
-    LDA ram_0600,x
+    LDA ent_radius,x
     CMP #$FF
     BEQ B5_A1E0
     CMP #$FE
@@ -2479,10 +2479,10 @@ B5_A18A:
     LDA zp_61
     SBC #$00
     STA ptr_hi
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC ptr_lo
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     SBC ptr_hi
     BCC B5_A1E0
     LDA ptr_lo
@@ -2492,15 +2492,15 @@ B5_A18A:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC ptr_lo
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     SBC ptr_hi
     BCS B5_A1E0
     JMP B5_A1D1
 B5_A1CC:
-    DEC ram_0600,x
+    DEC ent_radius,x
     BNE B5_A1E0
 B5_A1D1:
     JSR B5_91C1
@@ -2540,9 +2540,9 @@ B5_A1FF:
     .byte $00,$9D,$E0,$04,$BD,$D0,$05
 B5_A316:
     LDA ram_0518
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA ram_0548
-    STA ram_0540,x
+    STA ent_y_hi,x
 B5_A322:
     RTS
     JSR B5_A96E
@@ -2559,13 +2559,13 @@ B5_A336:
     ADC zp_55
     STA ram_0630,x
     TAY
-    JSR F_CEA6
+    JSR SinLookup
     CLC
     ADC #$40
     STA zp_55
     LDA #$05
     STA ptr_hi
-    JSR F_FCDC
+    JSR ScaledMultiply
     LSR ptr_hi
     ROR ptr_lo
     LSR ptr_hi
@@ -2575,85 +2575,85 @@ B5_A336:
     LDA #$99
     CLC
     ADC zp_55
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA #$03
     ADC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA zp_B1
     LSR a
     BCS B5_A322
-    LDA ram_0600,x
+    LDA ent_radius,x
     TAY
     CLC
     ADC #$01
     CMP #$19
     BEQ B5_A37C
-    STA ram_0600,x
+    STA ent_radius,x
 B5_A37C:
     LDA B5_ADFA,y
     STA zp_55
     LDA zp_5E
     SEC
-    SBC ram_0510,x
+    SBC ent_y_lo,x
     STA zp_53
     LDA zp_5F
-    SBC ram_0540,x
+    SBC ent_y_hi,x
     BCS B5_A3C4
-    LDA ram_05D0,x
+    LDA ent_angle,x
     SEC
     SBC #$01
     BEQ B5_A3A3
     LDA #$00
-    STA ram_0600,x
+    STA ent_radius,x
     LDA #$01
-    STA ram_05D0,x
+    STA ent_angle,x
 B5_A3A2:
     RTS
 B5_A3A3:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC zp_55
     STA zp_55
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     SBC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     BNE B5_A3A2
     LDA zp_55
     CMP #$12
     BCS B5_A3A2
     LDA #$12
-    STA ram_0510,x
+    STA ent_y_lo,x
     RTS
 B5_A3C4:
     LDA zp_53
     BNE B5_A3CC
-    STA ram_0600,x
+    STA ent_radius,x
     RTS
 B5_A3CC:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BEQ B5_A3DA
     LDA #$00
-    STA ram_0600,x
-    STA ram_05D0,x
+    STA ent_radius,x
+    STA ent_angle,x
     RTS
 B5_A3DA:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC zp_55
     STA zp_55
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     BNE B5_A3A2
     LDA zp_55
     CMP #$E0
     BCC B5_A3A2
     LDA #$E0
-    STA ram_0510,x
+    STA ent_y_lo,x
     RTS
-    DEC ram_05D0,x
+    DEC ent_angle,x
     BNE B5_A406
     LDA #$00
     STA ram_0480,x
@@ -2662,17 +2662,17 @@ B5_A406:
     LDA zp_60
     SEC
     SBC #$18
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA zp_61
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA zp_5E
     CLC
     ADC #$04
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA zp_5F
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     RTS
 B5_A425:
     LDA #$FF
@@ -2685,7 +2685,7 @@ B5_A425:
     STA zp_56
     JSR B5_A6F2
     LDA #$50
-    STA ram_05D0,x
+    STA ent_angle,x
     LDA #$43
     STA ram_0480,x
 B5_A442:
@@ -2693,7 +2693,7 @@ B5_A442:
     LDA ram_0630,x
     CMP #$10
     BNE B5_A451
-    DEC ram_05D0,x
+    DEC ent_angle,x
     BEQ B5_A452
 B5_A451:
     RTS
@@ -2707,15 +2707,15 @@ B5_A452:
     STA ram_05D9
     STA ram_0639
     LDA #$00
-    STA ram_0600,x
+    STA ent_radius,x
     LDA #$50
-    STA ram_05D0,x
+    STA ent_angle,x
     LDA #$11
     STA ram_05A0,x
     LDA #$08
     JMP F_CE8F
 B5_A479:
-    DEC ram_05D0,x
+    DEC ent_angle,x
     BNE B5_A451
     LDA ram_01B6
     STA ram_0480,x
@@ -2726,10 +2726,10 @@ B5_A485:
     LDA #$A4
     STA zp_54
 B5_A48D:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     CLC
     ADC #$01
-    STA ram_05D0,x
+    STA ent_angle,x
     LSR a
     TAY
     LDA (zp_53),y
@@ -2792,7 +2792,7 @@ B5_A5FD:
     LDA ram_0735
     CMP #$08
     BEQ B5_A610
-    DEC ram_05D0,x
+    DEC ent_angle,x
     BNE B5_A615
 B5_A610:
     LDA #$00
@@ -2800,24 +2800,24 @@ B5_A610:
 B5_A615:
     RTS
 B5_A616:
-    STA ram_05D0,x
+    STA ent_angle,x
     LDA #$05
     STA ram_05A0,x
     JMP B5_A316
 B5_A621:
     LDA #$10
     STA ram_05A0,x
-    LDA ram_05D0,x
+    LDA ent_angle,x
     SEC
     SBC #$01
     BNE B5_A616
-    LDA ram_0600,x
+    LDA ent_radius,x
     TAY
     CLC
     ADC #$01
     CMP #$27
     BEQ B5_A63C
-    STA ram_0600,x
+    STA ent_radius,x
 B5_A63C:
     CMP #$12
     BCC B5_A64F
@@ -2831,15 +2831,15 @@ B5_A649:
     ADC #$05
     STA ram_05A0,x
 B5_A64F:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC B5_ADFA,y
     STA zp_53
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
     STA zp_54
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA ram_01B1
     CMP #$03
     BNE B5_A688
@@ -2882,11 +2882,11 @@ B5_A6A6:
     .byte $03,$4C,$09,$9B,$BD,$B0,$04,$18,$69,$01,$9D,$B0,$04,$BD,$E0,$04
     .byte $69,$00,$9D,$E0,$04,$4C,$32,$9B
 B5_A6F2:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_53
     STA zp_53
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     SBC zp_54
     LDA #$00
     STA zp_54
@@ -2899,11 +2899,11 @@ B5_A6F2:
     ADC #$01
     STA zp_53
 B5_A713:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC zp_55
     STA zp_55
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     SBC zp_56
     BCS B5_A730
     LDA zp_54
@@ -2922,9 +2922,9 @@ B5_A730:
     STA ram_0630,x
     LDA zp_53
     ADC #$00
-    STA ram_0660,x
+    STA ent_dx,x
     LDA zp_53
-    STA ram_0690,x
+    STA ent_dy,x
     STA ram_06F0,x
     LDA zp_55
     CLC
@@ -2937,11 +2937,11 @@ B5_A755:
     LDA zp_55
     CLC
     ADC #$01
-    STA ram_0660,x
+    STA ent_dx,x
     LDA zp_53
     CLC
     ADC #$01
-    STA ram_0690,x
+    STA ent_dy,x
     LDA zp_55
     STA ram_06C0,x
     STA ram_06F0,x
@@ -2968,210 +2968,210 @@ B5_A795:
     STA ram_0630,x
     RTS
 B5_A79B:
-    DEC ram_0660,x
+    DEC ent_dx,x
     BEQ B5_A795
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     SBC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     LDA ram_06F0,x
     SEC
-    SBC ram_0690,x
+    SBC ent_dy,x
     STA ram_06F0,x
     BCS B5_A7D4
     ADC ram_06C0,x
     STA ram_06F0,x
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
 B5_A7D4:
     RTS
 B5_A7D5:
-    DEC ram_0660,x
+    DEC ent_dx,x
     BEQ B5_A795
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA ram_06F0,x
     SEC
     SBC ram_06C0,x
     STA ram_06F0,x
     BCS B5_A7D4
-    ADC ram_0690,x
+    ADC ent_dy,x
     STA ram_06F0,x
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     SBC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     RTS
 B5_A80F:
-    DEC ram_0660,x
+    DEC ent_dx,x
     BEQ B5_A795
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     LDA ram_06F0,x
     SEC
-    SBC ram_0690,x
+    SBC ent_dy,x
     STA ram_06F0,x
     BCS B5_A848
     ADC ram_06C0,x
     STA ram_06F0,x
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
 B5_A848:
     RTS
 B5_A849:
-    DEC ram_0660,x
+    DEC ent_dx,x
     BEQ B5_A8BD
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA ram_06F0,x
     SEC
     SBC ram_06C0,x
     STA ram_06F0,x
     BCS B5_A848
-    ADC ram_0690,x
+    ADC ent_dy,x
     STA ram_06F0,x
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     RTS
 B5_A883:
-    DEC ram_0660,x
+    DEC ent_dx,x
     BEQ B5_A8BD
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     SBC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     LDA ram_06F0,x
     SEC
-    SBC ram_0690,x
+    SBC ent_dy,x
     STA ram_06F0,x
     BCS B5_A8BC
     ADC ram_06C0,x
     STA ram_06F0,x
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
 B5_A8BC:
     RTS
 B5_A8BD:
     JMP B5_A795
 B5_A8C0:
-    DEC ram_0660,x
+    DEC ent_dx,x
     BEQ B5_A8BD
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA ram_06F0,x
     SEC
     SBC ram_06C0,x
     STA ram_06F0,x
     BCS B5_A8BC
-    ADC ram_0690,x
+    ADC ent_dy,x
     STA ram_06F0,x
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     SBC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     RTS
 B5_A8FA:
-    DEC ram_0660,x
+    DEC ent_dx,x
     BEQ B5_A8BD
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     LDA ram_06F0,x
     SEC
-    SBC ram_0690,x
+    SBC ent_dy,x
     STA ram_06F0,x
     BCS B5_A933
     ADC ram_06C0,x
     STA ram_06F0,x
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
 B5_A933:
     RTS
 B5_A934:
-    DEC ram_0660,x
+    DEC ent_dx,x
     BEQ B5_A8BD
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA ram_06F0,x
     SEC
     SBC ram_06C0,x
     STA ram_06F0,x
     BCS B5_A933
-    ADC ram_0690,x
+    ADC ent_dy,x
     STA ram_06F0,x
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     RTS
 B5_A96E:
     .byte $BD
@@ -3201,7 +3201,7 @@ B5_A98D:
     BCC B5_A975
     JMP F_F492
 B5_A99A:
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_A975
     LDY zp_E1
@@ -3278,9 +3278,9 @@ B5_AA1F:
     STA ram_01B8
     RTS
     JSR B5_80D3
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     STA zp_55
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     STA zp_56
     LDA zp_55
     PHA
@@ -3299,38 +3299,38 @@ B5_AA3D:
     LSR a
     BCC B5_AA4E
 B5_AA4B:
-    JMP B5_809E
+    JMP EntityDeltaFromCentre
 B5_AA4E:
-    LDA ram_0600,x
+    LDA ent_radius,x
     CMP #$FF
     BEQ B5_AA4B
     LDA #$00
     STA zp_53
     JSR B5_8434
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_AA4B
-    INC ram_0600,x
-    LDA ram_04B0,x
+    INC ent_radius,x
+    LDA ent_x_lo,x
     CLC
     ADC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC #$00
-    STA ram_04E0,x
-    JMP B5_809E
+    STA ent_x_hi,x
+    JMP EntityDeltaFromCentre
 B5_AA78:
-    LDA ram_0600,x
+    LDA ent_radius,x
     BEQ B5_AA94
     SEC
     SBC #$01
-    STA ram_0600,x
-    LDA ram_04B0,x
+    STA ent_radius,x
+    LDA ent_x_lo,x
     SEC
     SBC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
 B5_AA94:
     LDA ram_0630,x
     TAY
@@ -3344,12 +3344,12 @@ B5_AAA7:
     CLC
     ADC #$07
     STA ram_05A0,x
-    JMP B5_809E
+    JMP EntityDeltaFromCentre
     LDA #$4D
     STA ram_0480,x
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     STA zp_53
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     LSR zp_53
     ROR a
     LSR zp_53
@@ -3359,9 +3359,9 @@ B5_AAA7:
     LSR zp_53
     ROR a
     STA ram_06C0,x
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     STA zp_53
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     LSR zp_53
     ROR a
     LSR zp_53
@@ -3373,24 +3373,24 @@ B5_AAA7:
     STA ram_06F0,x
     RTS
     JSR B5_80D3
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     STA zp_55
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     STA zp_56
     LDA zp_55
     PHA
     LDA zp_56
     PHA
-    LDA ram_05D0,x
+    LDA ent_angle,x
     CLC
     ADC ram_0630,x
-    STA ram_05D0,x
+    STA ent_angle,x
     AND #$0C
     LSR a
     LSR a
     STA ram_05A0,x
     JSR B5_AB0E
-    JMP B5_809E
+    JMP EntityDeltaFromCentre
 B5_AB0E:
     LDA ram_06C0,x
     ASL a
@@ -3416,42 +3416,42 @@ B5_AB0E:
     LSR a
     LSR a
     STA zp_56
-    JMP B5_8000
+    JMP SetEntityPolarPos
     JSR B5_8904
     JSR B5_8886
     JSR B5_8A06
     JSR B5_AC25
     BEQ B5_AB77
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$02
     BNE B5_AB5E
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     CLC
     ADC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     JMP B5_AB6F
 B5_AB5E:
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC #$01
-    STA ram_0510,x
-    LDA ram_0540,x
+    STA ent_y_lo,x
+    LDA ent_y_hi,x
     SBC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
 B5_AB6F:
-    LDA ram_0570,x
+    LDA ent_flags,x
     EOR #$02
-    STA ram_0570,x
+    STA ent_flags,x
 B5_AB77:
-    DEC ram_0600,x
+    DEC ent_radius,x
     BNE B5_AB8E
     LDA zp_BB
     BMI B5_AB88
     ORA #$80
-    STA ram_0600,x
+    STA ent_radius,x
     JMP B5_AB8E
 B5_AB88:
     LDA #$4F
@@ -3492,7 +3492,7 @@ B5_ABBB:
     .byte $05,$05,$05,$04,$04,$04,$05,$05,$05,$04,$04,$04,$05,$05,$05,$05
     .byte $05,$05,$05,$00
 B5_AC25:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     STA zp_53
     AND #$07
     BEQ B5_AC3F
@@ -3502,7 +3502,7 @@ B5_AC25:
     LDA zp_53
     AND #$F8
     ORA zp_54
-    STA ram_05D0,x
+    STA ent_angle,x
     JMP B5_ACE3
 B5_AC3F:
     LDA zp_53
@@ -3514,14 +3514,14 @@ B5_AC3F:
     LDA zp_53
     AND #$F8
     ORA zp_54
-    STA ram_05D0,x
+    STA ent_angle,x
     LDA #$01
     STA zp_53
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$02
     BEQ B5_ACA5
     JSR B5_87A7
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_AC9A
     LDA zp_77
     STA ptr_lo
@@ -3533,7 +3533,7 @@ B5_AC3F:
     BEQ B5_AC9A
     CMP #$04
     BEQ B5_AC9A
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     BEQ B5_ACE3
     LDA ptr_lo
@@ -3550,13 +3550,13 @@ B5_AC3F:
     CMP #$04
     BNE B5_ACE3
 B5_AC9A:
-    LDA ram_0570,x
+    LDA ent_flags,x
     EOR #$02
-    STA ram_0570,x
+    STA ent_flags,x
     JMP B5_ACE3
 B5_ACA5:
     JSR B5_86EF
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_AC9A
     LDA zp_77
     STA ptr_lo
@@ -3568,7 +3568,7 @@ B5_ACA5:
     BEQ B5_AC9A
     CMP #$06
     BEQ B5_AC9A
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     BEQ B5_ACE3
     LDA ptr_lo
@@ -3586,7 +3586,7 @@ B5_ACA5:
     BEQ B5_AC9A
 B5_ACE3:
     JSR B5_8546
-    LDA ram_05D0,x
+    LDA ent_angle,x
     AND #$80
     RTS
     JSR B5_8904
@@ -3600,15 +3600,15 @@ B5_ACE3:
     CLC
     ADC #$01
     STA ram_05A0,x
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     AND #$0F
     BNE B5_AD17
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     AND #$0F
     BNE B5_AD17
     LDY ram_0730
     LDA B5_AD1A,y
-    STA ram_05D0,x
+    STA ent_angle,x
 B5_AD17:
     JMP B5_818D
 B5_AD1A:
@@ -3634,19 +3634,19 @@ B5_ADFA:
     .byte $01,$01,$02,$01,$02,$01,$02,$20,$04,$89,$20,$E3,$89,$BD,$00,$06
     .byte $FE,$00,$06,$0A,$A8,$B9,$AB,$AD,$85,$53,$C9,$80,$D0,$06,$A9,$53
     .byte $9D,$80,$04,$60
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC zp_53
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC B5_ADAC,y
-    STA ram_04E0,x
+    STA ent_x_hi,x
     RTS
     JSR B5_8904
     JSR B5_89E3
     JMP B5_818D
-    LDY ram_05D0,x
-    INC ram_05D0,x
+    LDY ent_angle,x
+    INC ent_angle,x
     LDA B5_AE8E,y
     STA zp_53
     CMP #$80
@@ -3662,13 +3662,13 @@ B5_AE72:
     BPL B5_AE7C
     DEC zp_56
 B5_AE7C:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC zp_53
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC zp_56
-    STA ram_04E0,x
+    STA ent_x_hi,x
     RTS
 B5_AE8E:
     .byte $FE,$FE,$FE,$FF,$FE,$FF,$00,$FF,$00,$00,$00,$01,$00,$01,$01,$02
@@ -3687,7 +3687,7 @@ B5_AE8E:
     TAY
     LDA B5_AFBF,y
     STA ram_05A0,x
-    LDA ram_0600,x
+    LDA ent_radius,x
     AND #$0F
     BEQ B5_AF3A
 B5_AF39:
@@ -3702,7 +3702,7 @@ B5_AF3A:
     STA ptr_lo
     LDA #$AF
     STA ptr_hi
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$02
     BEQ B5_AF5B
     LDA #$EF
@@ -3714,15 +3714,15 @@ B5_AF5B:
 B5_AF5E:
     JSR B5_8904
     JSR B5_8886
-    INC ram_0600,x
-    LDA ram_0600,x
+    INC ent_radius,x
+    LDA ent_radius,x
     SEC
     SBC #$50
     BCC B5_AF39
     TAY
     LDA B5_AFA9,y
     BNE B5_AF7E
-    STA ram_0600,x
+    STA ent_radius,x
     LDA #$5E
     STA ram_0480,x
     RTS
@@ -3733,16 +3733,16 @@ B5_AF82:
     LDA zp_B1
     AND #$01
     STA zp_53
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_53
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
-    LDA ram_05D0,x
+    STA ent_x_hi,x
+    LDA ent_angle,x
     TAY
-    INC ram_05D0,x
+    INC ent_angle,x
     LDA B5_AFDF,y
     BNE B5_AF7E
     STA ram_0480,x
@@ -3758,10 +3758,10 @@ B5_AFDF:
     .byte $05,$05,$05,$05,$05,$05,$00,$60,$00,$00,$FB,$FF,$B0,$04,$00,$00
     .byte $00,$FF,$60,$00,$00,$0D,$00,$B0,$04,$00,$00,$00,$FF
 B5_B005:
-    DEC ram_05D0,x
+    DEC ent_angle,x
     BNE B5_B022
     LDA #$04
-    STA ram_05D0,x
+    STA ent_angle,x
     LDA ram_05A0,x
     CLC
     ADC #$01
@@ -3778,21 +3778,21 @@ B5_B023:
     LDA zp_B1
     LSR a
     BCS B5_B049
-    LDA ram_05D0,x
+    LDA ent_angle,x
     TAY
     ADC #$01
     AND #$0F
-    STA ram_05D0,x
+    STA ent_angle,x
     TYA
     ASL a
     TAY
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC B5_B04A,y
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC B5_B04B,y
-    STA ram_04E0,x
+    STA ent_x_hi,x
 B5_B049:
     RTS
 B5_B04A:
@@ -3807,22 +3807,22 @@ B5_B08C:
     RTS
     JSR B5_88AA
     JSR B5_8904
-    LDA ram_0600,x
+    LDA ent_radius,x
     CMP #$0F
     BNE B5_B0C6
     SEC
     SBC #$01
-    STA ram_0600,x
+    STA ent_radius,x
     LDA #$DB
     STA ptr_lo
     LDA #$B0
     STA ptr_hi
     LDA #$02
     STA ram_05A0,x
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$02
     BEQ B5_B0C3
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_B08C
     LDA #$E6
@@ -3834,13 +3834,13 @@ B5_B0C3:
 B5_B0C6:
     SEC
     SBC #$01
-    STA ram_0600,x
+    STA ent_radius,x
     BNE B5_B08C
     LDA #$66
     STA ram_0480,x
     LDA zp_BC
     ORA #$80
-    STA ram_0600,x
+    STA ent_radius,x
     RTS
     .byte $68,$00,$00,$F2,$FF,$D8,$03,$00,$00,$00,$FF,$69,$00,$00,$0E,$00
     .byte $DA,$03,$00,$00,$00,$FF,$20,$AA,$88,$A5,$B1,$4A,$4A,$4A,$29,$01
@@ -3862,7 +3862,7 @@ B5_B147:
     BEQ B5_B147
     CMP #$06
     BEQ B5_B147
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     AND #$0F
     BEQ B5_B181
     LDA ptr_lo
@@ -3882,7 +3882,7 @@ B5_B181:
     STA zp_56
     PLA
     STA zp_55
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_B1CB
     JSR B5_88AA
@@ -3899,16 +3899,16 @@ B5_B181:
     ADC #$16
     CMP zp_56
     BCC B5_B1CB
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE B5_B1CB
     LDA #$00
-    STA ram_05D0,x
+    STA ent_angle,x
     LDA zp_53
     LSR a
     CLC
     ADC #$05
-    STA ram_0600,x
+    STA ent_radius,x
     LDA #$76
     STA ram_0480,x
     LDA #$43
@@ -3935,7 +3935,7 @@ B5_B1EC:
     LDA #$01
     STA zp_53
     JSR B5_87A7
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BPL B5_B200
 B5_B1F8:
     LDA #$74
@@ -3952,7 +3952,7 @@ B5_B200:
     BEQ B5_B1F8
     CMP #$04
     BEQ B5_B1F8
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     AND #$0F
     BEQ B5_B236
     LDA ptr_lo
@@ -3974,7 +3974,7 @@ B5_B239:
     .byte $00,$01,$02,$01,$20,$E3,$89,$20
     TAX
     DEY
-    LDA ram_05D0,x
+    LDA ent_angle,x
     AND #$78
     LSR a
     LSR a
@@ -3985,7 +3985,7 @@ B5_B239:
     BNE B5_B26E
     LDA #$02
     STA zp_53
-    DEC ram_0600,x
+    DEC ent_radius,x
     BEQ B5_B25F
     JMP B5_8434
 B5_B25F:
@@ -3997,7 +3997,7 @@ B5_B25F:
     JMP F_F917
 B5_B26E:
     STA ram_05A0,x
-    INC ram_05D0,x
+    INC ent_angle,x
     RTS
 B5_B275:
     .byte $0D,$0C,$0B,$0A,$08,$09,$FF,$77,$04,$00,$04,$00,$00,$26,$00,$00
@@ -4018,14 +4018,14 @@ B5_B2F1:
     STA ram_0630,x
     RTS
 B5_B303:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     AND #$0F
     STA ram_0630,x
     LDA #$23
     STA zp_53
     LDA #$B3
     STA zp_54
-    LDA ram_0600,x
+    LDA ent_radius,x
 B5_B316:
     TAY
     LDA (zp_53),y
@@ -4043,68 +4043,68 @@ B5_B32B:
     STA zp_53
     JSR B5_8A9F
     JSR B5_B3BB
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_B391
     LDA #$02
     STA zp_53
     JSR B5_86EF
     JSR B5_B3E7
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_B36D
 B5_B349:
     LDA #$00
-    STA ram_0600,x
+    STA ent_radius,x
     RTS
 B5_B34F:
     LDA #$02
     STA zp_53
     JSR B5_8A9F
     JSR B5_B3BB
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_B3B5
     LDA #$02
     STA zp_53
     JSR B5_87A7
     JSR B5_B414
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_B349
 B5_B36D:
     LDA #$02
-    STA ram_0600,x
+    STA ent_radius,x
     RTS
 B5_B373:
     LDA #$02
     STA zp_53
     JSR B5_8434
     JSR B5_B440
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_B349
     LDA #$02
     STA zp_53
     JSR B5_86EF
     JSR B5_B3E7
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_B3B5
 B5_B391:
     LDA #$04
-    STA ram_0600,x
+    STA ent_radius,x
     RTS
 B5_B397:
     LDA #$02
     STA zp_53
     JSR B5_8434
     JSR B5_B440
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_B36D
     LDA #$02
     STA zp_53
     JSR B5_87A7
     JSR B5_B414
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_B391
 B5_B3B5:
     LDA #$06
-    STA ram_0600,x
+    STA ent_radius,x
 B5_B3BA:
     RTS
 B5_B3BB:
@@ -4115,42 +4115,42 @@ B5_B3BB:
     LDA zp_1E
     ADC #$00
     STA zp_54
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_53
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     SBC zp_54
     BCS B5_B3BA
     LDA zp_53
     CLC
     ADC #$01
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA zp_54
     ADC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     JMP B5_B40B
 B5_B3E7:
     LDA zp_1B
     STA zp_53
     LDA zp_1C
     STA zp_54
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC zp_53
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     SBC zp_54
     BCS B5_B413
     LDA zp_53
     CLC
     ADC #$01
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA zp_54
     ADC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
 B5_B40B:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     ORA #$80
-    STA ram_05D0,x
+    STA ent_angle,x
 B5_B413:
     RTS
 B5_B414:
@@ -4161,19 +4161,19 @@ B5_B414:
     LDA zp_1C
     ADC #$00
     STA zp_54
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC zp_53
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     SBC zp_54
     BCC B5_B413
     LDA zp_53
     SEC
     SBC #$01
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA zp_54
     SBC #$00
-    STA ram_0540,x
+    STA ent_y_hi,x
     JMP B5_B40B
 B5_B440:
     LDA zp_1D
@@ -4183,19 +4183,19 @@ B5_B440:
     LDA zp_1E
     ADC #$00
     STA zp_54
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_53
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     SBC zp_54
     BCC B5_B413
     LDA zp_53
     SEC
     SBC #$01
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA zp_54
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     JMP B5_B40B
 B5_B46C:
     JSR B5_88AA
@@ -4214,7 +4214,7 @@ B5_B486:
     LDA #$02
     STA zp_53
     JSR B5_8434
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B5_B485
     LDA #$02
     STA ram_05A0,x
@@ -4244,11 +4244,11 @@ B5_B4A8:
     STA zp_56
     LDA #$01
     STA zp_53
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC zp_55
     STA zp_55
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     SBC zp_56
     BCS B5_B4D8
     JMP B5_8434
@@ -4262,11 +4262,11 @@ B5_B4D8:
     STA zp_56
     LDA #$01
     STA zp_53
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC zp_55
     STA zp_55
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     SBC zp_56
     BCS B5_B4FD
     JMP B5_87A7
@@ -4282,7 +4282,7 @@ B5_B504:
     LDA zp_55
     STA zp_53
     JSR B5_8434
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BPL B5_B549
     LDA zp_B2
     STA ptr_lo
@@ -4306,12 +4306,12 @@ B5_B53A:
     LDA #$86
     STA ram_0480,x
     LDA #$00
-    STA ram_0600,x
+    STA ent_radius,x
 B5_B549:
     RTS
 B5_B54A:
     JSR B5_88AA
-    LDY ram_0600,x
+    LDY ent_radius,x
     LDA B5_B591,y
     CMP #$81
     BNE B5_B567
@@ -4320,7 +4320,7 @@ B5_B54A:
     LDA #$00
     STA ram_05A0,x
     LDA #$01
-    STA ram_0600,x
+    STA ent_radius,x
     RTS
 B5_B567:
     STA zp_53
@@ -4329,12 +4329,12 @@ B5_B567:
     LDA #$02
     STA zp_53
     JSR B5_8434
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BPL B5_B549
-    INC ram_0600,x
+    INC ent_radius,x
     RTS
 B5_B57D:
-    INC ram_0600,x
+    INC ent_radius,x
     LDA zp_53
     BMI B5_B587
     JMP B5_8434
@@ -4381,8 +4381,8 @@ B5_B62A:
     LDA #$13
     STA ram_0630,x
     LDA #$00
-    STA ram_0600,x
-    LDA ram_05D0,x
+    STA ent_radius,x
+    LDA ent_angle,x
     STA zp_53
     LDA zp_BC
     AND #$1C
@@ -4392,7 +4392,7 @@ B5_B62A:
     ADC #$04
     AND #$1C
 B5_B652:
-    STA ram_05D0,x
+    STA ent_angle,x
     TAY
     LDA #$8F
     STA ram_048A
@@ -4433,8 +4433,8 @@ B5_B6A2:
 B5_B6AC:
     RTS
 B5_B6AD:
-    INC ram_05D0,x
-    LDA ram_05D0,x
+    INC ent_angle,x
+    LDA ent_angle,x
     LSR a
     TAY
     LDA B5_A4B4,y
@@ -4459,18 +4459,18 @@ B5_B6CB:
     LDA #$00
     STA zp_7B
     LDA #$32
-    STA ram_0600,x
+    STA ent_radius,x
     LDA #$0A
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
 B5_B6ED:
     JSR B5_A96E
     JSR B5_A99A
-    LDA ram_05D0,x
+    LDA ent_angle,x
     SEC
     SBC #$01
     BEQ B5_B701
-    STA ram_05D0,x
+    STA ent_angle,x
     JMP B5_B71C
 B5_B701:
     DEC zp_53
@@ -4483,14 +4483,14 @@ B5_B701:
     LDA #$8C
     STA ram_0480,x
     LDA #$00
-    STA ram_05D0,x
+    STA ent_angle,x
     RTS
 B5_B71C:
-    LDA ram_0600,x
+    LDA ent_radius,x
     SEC
     SBC #$01
     BEQ B5_B728
-    STA ram_0600,x
+    STA ent_radius,x
 B5_B727:
     RTS
 B5_B728:
@@ -4518,8 +4518,8 @@ B5_B74A:
     BNE B5_B758
     JMP B5_B783
 B5_B758:
-    INC ram_05D0,x
-    LDA ram_05D0,x
+    INC ent_angle,x
+    LDA ent_angle,x
     LSR a
     TAY
     LDA B5_B7ED,y
@@ -4530,9 +4530,9 @@ B5_B769:
     LDA #$8B
     STA ram_0480,x
     LDA #$14
-    STA ram_0600,x
+    STA ent_radius,x
     ASL a
-    STA ram_05D0,x
+    STA ent_angle,x
     LDA #$0A
     JSR F_CE8F
     LDA #$FB
@@ -4552,7 +4552,7 @@ B5_B783:
     STA zp_54
     JSR B5_A6F2
     LDA #$1E
-    STA ram_05D0,x
+    STA ent_angle,x
     LDA #$8D
     STA ram_0480,x
 B5_B7A6:
@@ -4562,7 +4562,7 @@ B5_B7A7:
     LDA ram_0630,x
     CMP #$10
     BNE B5_B7A6
-    DEC ram_05D0,x
+    DEC ent_angle,x
     BNE B5_B7A6
     LDA #$8E
     STA ram_0480,x
@@ -4574,8 +4574,8 @@ B5_B7BC:
     STA zp_54
     JMP B5_A48D
 B5_B7C7:
-    INC ram_05D0,x
-    LDA ram_05D0,x
+    INC ent_angle,x
+    LDA ent_angle,x
     LSR a
     TAY
     LDA #$00
@@ -4592,7 +4592,7 @@ B5_B7DC:
     STA zp_55
 B5_B7E7:
     LDA zp_55
-    STA ram_0570,x
+    STA ent_flags,x
     RTS
 B5_B7ED:
     .byte $0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$00,$22,$F4
@@ -4609,10 +4609,10 @@ B5_B84D:
     .byte $05,$18,$69,$32,$99,$10,$05,$BD,$40,$05,$69,$00,$99,$40,$05,$A9
     .byte $78,$99,$70,$05,$A9,$00,$99
     LDY #$05
-    STA ram_05D0,y
+    STA ent_angle,y
     STA ram_0630,y
     LDA #$96
-    STA ram_0600,y
+    STA ent_radius,y
     RTS
     JSR B5_8904
     JSR B5_89E3
@@ -4622,7 +4622,7 @@ B5_B84D:
 B5_B8B9:
     CMP #$1E
     BCS B5_B8C0
-    INC ram_05D0,x
+    INC ent_angle,x
 B5_B8C0:
     LDA ram_04B8
     SEC
@@ -4635,17 +4635,17 @@ B5_B8C0:
     STA zp_55
     LDA ram_0548
     STA zp_56
-    INC ram_05D0,x
-    JMP B5_8000
+    INC ent_angle,x
+    JMP SetEntityPolarPos
     JSR B5_8904
     JSR B5_8886
     JSR B5_8A06
     JSR B5_8546
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BPL B5_B8F3
     JMP B5_977B
 B5_B8F3:
-    DEC ram_0600,x
+    DEC ent_radius,x
     BNE B5_B8FD
     LDA #$1D
     STA ram_0480,x
@@ -4658,15 +4658,15 @@ B5_B8FD:
 B5_B908:
     JMP B5_91C1
 B5_B90B:
-    LDY ram_0600,x
-    INC ram_0600,x
+    LDY ent_radius,x
+    INC ent_radius,x
     LDA #$00
     STA zp_56
     LDA B5_B93C,y
     CMP #$80
     BNE B5_B922
     LDA #$00
-    STA ram_0600,x
+    STA ent_radius,x
     RTS
 B5_B922:
     STA zp_53
@@ -4674,13 +4674,13 @@ B5_B922:
     BPL B5_B92A
     DEC zp_56
 B5_B92A:
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     CLC
     ADC zp_53
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     ADC zp_56
-    STA ram_04E0,x
+    STA ent_x_hi,x
     RTS
 B5_B93C:
     .byte $00,$00,$01,$00,$00,$00,$01,$00,$00,$01,$00,$01,$01,$01,$00,$01
@@ -4704,7 +4704,7 @@ B5_B996:
     ORA #$F0
     STA ram_0630,x
     LDA #$02
-    STA ram_05D0,x
+    STA ent_angle,x
     JMP B5_BA00
 B5_B9B2:
     SEC
@@ -4719,7 +4719,7 @@ B5_B9C0:
     DEC ram_0630,x
     BNE B5_BA00
     LDA #$04
-    STA ram_05D0,x
+    STA ent_angle,x
     STA ram_0630,x
     JMP B5_BA00
 B5_B9D0:
@@ -4753,16 +4753,16 @@ B5_BA00:
     LDA zp_B1
     LSR a
     BCS B5_BA19
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     SEC
     SBC #$01
-    STA ram_04B0,x
-    LDA ram_04E0,x
+    STA ent_x_lo,x
+    LDA ent_x_hi,x
     SBC #$00
-    STA ram_04E0,x
+    STA ent_x_hi,x
     JSR B5_8F35
 B5_BA19:
-    JMP B5_809E
+    JMP EntityDeltaFromCentre
     JSR B5_91C1
     LDA #$26
     LDY #$BA

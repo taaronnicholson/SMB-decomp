@@ -1058,25 +1058,25 @@ B3_BD7F:
     TYA
     TAX
     LDA zp_5E
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA zp_5F
-    STA ram_0540,x
+    STA ent_y_hi,x
     LDA zp_60
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA zp_61
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA #$02
     STA zp_53
     JSR F_F876
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     STA zp_5E
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     STA zp_5F
-    LDA ram_04B0,x
+    LDA ent_x_lo,x
     STA zp_60
-    LDA ram_04E0,x
+    LDA ent_x_hi,x
     STA zp_61
-    LDA ram_05D0,x
+    LDA ent_angle,x
     BMI B3_BDDB
     RTS
 B3_BDDB:

@@ -1023,13 +1023,13 @@ B4_AE56:
     BEQ B4_AE8F
     JSR F_FA3D
     LDA #$D0
-    STA ram_04B0,y
+    STA ent_x_lo,y
     LDA #$20
-    STA ram_0510,y
+    STA ent_y_lo,y
     LDA #$00
-    STA ram_04E0,y
+    STA ent_x_hi,y
     LDA #$01
-    STA ram_0540,y
+    STA ent_y_hi,y
     TYA
     TAX
     LDA #$08
@@ -1144,20 +1144,20 @@ B4_AF7B:
     LDA #$0B
     STA ram_0480,y
     LDA #$9C
-    STA ram_04B0,y
+    STA ent_x_lo,y
     LDA #$00
-    STA ram_04E0,y
+    STA ent_x_hi,y
     LDA #$76
-    STA ram_0510,y
+    STA ent_y_lo,y
     LDA #$01
-    STA ram_0540,y
+    STA ent_y_hi,y
     LDA #$20
-    STA ram_0570,y
+    STA ent_flags,y
     LDA #$00
     STA ram_05A0,y
     LDA #$00
-    STA ram_05D0,y
-    STA ram_0600,y
+    STA ent_angle,y
+    STA ent_radius,y
     LDA #$03
     STA game_state
     LDA #$4A
@@ -1572,10 +1572,10 @@ B4_B36B:
     LDA zp_1D
     SEC
     SBC #$14
-    STA ram_04B0,y
+    STA ent_x_lo,y
     LDA zp_1E
     SBC #$00
-    STA ram_04E0,y
+    STA ent_x_hi,y
 B4_B37F:
     LDA #$06
     JSR B4_B40E
@@ -1588,11 +1588,11 @@ B4_B37F:
     BCS B4_B37F
     CMP #$08
     BCC B4_B37F
-    STA ram_0510,y
+    STA ent_y_lo,y
     LDA #$00
-    STA ram_0540,y
+    STA ent_y_hi,y
     LDA #$38
-    STA ram_0570,y
+    STA ent_flags,y
     LDA #$00
     STA ram_05A0,y
     INC ram_0745
@@ -1619,32 +1619,32 @@ B4_B3C3:
     LDA zp_1D
     SEC
     SBC #$10
-    STA ram_04B0,y
+    STA ent_x_lo,y
     LDA zp_1E
     SBC #$00
-    STA ram_04E0,y
+    STA ent_x_hi,y
     LDA #$04
     JSR B4_B40E
     ASL a
     ASL a
     CLC
     ADC #$08
-    STA ram_0510,y
+    STA ent_y_lo,y
     LDA #$00
     ADC #$00
-    STA ram_0540,y
+    STA ent_y_hi,y
     LDA #$00
-    STA ram_0570,y
+    STA ent_flags,y
     LDA #$02
     STA ram_05A0,y
     LDA #$01
-    STA ram_05D0,y
+    STA ent_angle,y
     INC ram_072E
     LDA ram_072E
     AND #$01
     CLC
     ADC #$01
-    STA ram_0600,y
+    STA ent_radius,y
 B4_B408:
     LDA #$06
 B4_B40A:
@@ -1660,7 +1660,7 @@ B4_B40E:
     STA ptr_hi
     LDA #$07
     STA zp_55
-    JSR F_FCDC
+    JSR ScaledMultiply
     LDA ptr_lo
     CLC
     ADC #$09
@@ -1880,24 +1880,24 @@ B4_B5F7:
     LDA #$3A
     STA ram_0480,y
     LDA #$94
-    STA ram_04B0,y
+    STA ent_x_lo,y
     LDA #$04
-    STA ram_04E0,y
+    STA ent_x_hi,y
     TYA
     TAX
     LDY #$00
     LDA (zp_55),y
-    STA ram_0510,x
+    STA ent_y_lo,x
     TYA
-    STA ram_0540,x
+    STA ent_y_hi,x
     LDA #$A8
-    STA ram_0570,x
+    STA ent_flags,x
     TYA
     STA ram_05A0,x
-    STA ram_05D0,x
+    STA ent_angle,x
     INY
     LDA (zp_55),y
-    STA ram_0600,x
+    STA ent_radius,x
     INY
     LDA (zp_55),y
     STA ram_0630,x
@@ -1977,13 +1977,13 @@ B4_B6B6:
     JSR F_CE61
     JSR F_FA3D
     LDA zp_5E
-    STA ram_0510,y
+    STA ent_y_lo,y
     LDA zp_5F
-    STA ram_0540,y
+    STA ent_y_hi,y
     LDA zp_60
-    STA ram_04B0,y
+    STA ent_x_lo,y
     LDA zp_61
-    STA ram_04E0,y
+    STA ent_x_hi,y
     STY zp_42
     LDA #$EF
     LDY #$B6
@@ -2715,9 +2715,9 @@ B4_BF0B:
     CLC
     ADC zp_53
     TAY
-    JSR F_CEA6
+    JSR SinLookup
     STA zp_53
-    JSR F_CEBA
+    JSR CosLookup
     STA zp_54
     STA ptr_hi
     BPL B4_BF41
@@ -2729,7 +2729,7 @@ B4_BF41:
     LDA ram_038B
     STA zp_55
     ASL ptr_hi
-    JSR F_FCDC
+    JSR ScaledMultiply
     INC ptr_hi
     LDX zp_73
     LDA zp_75
@@ -2761,7 +2761,7 @@ B4_BF79:
     LDA ram_038B
     STA zp_55
     ASL ptr_hi
-    JSR F_FCDC
+    JSR ScaledMultiply
     INC ptr_hi
     LDX zp_73
     LDA zp_76

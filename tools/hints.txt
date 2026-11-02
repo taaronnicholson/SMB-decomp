@@ -48,3 +48,22 @@ ram 0051 ptr_lo                  ; scratch pointer used with (ptr_lo),y
 ram 0052 ptr_hi
 ram 0093 stage_index             ; index into the stage record pointer table (bank 0 $8263)
 ram 072C game_state            ; index for DispatchGameState table
+
+; ---- bank 5 = entity movement; bank 0 holds a sine table ----
+refbank BE8A 0
+name 0 BE8A SineTable          ; 256 signed entries, amplitude +-64, index = angle (256 = full turn)
+name f CEA6 SinLookup          ; Y = angle -> A = sin (via bank 0 table)
+name f CEBA CosLookup          ; Y = angle -> A = cos (= table[angle+$40])
+name f C919 SwitchBankKeepX    ; like SwitchBank but preserves X
+name f FCDC ScaledMultiply     ; radius x sin/cos helper used by polar movement
+name 5 8000 SetEntityPolarPos  ; X=entity: pos = centre(zp_55/56) +- radius*cos/sin(angle)
+name 5 809E EntityDeltaFromCentre
+ram 04B0 ent_x_lo
+ram 04E0 ent_x_hi
+ram 0510 ent_y_lo
+ram 0540 ent_y_hi
+ram 05D0 ent_angle
+ram 0600 ent_radius
+ram 0660 ent_dx
+ram 0690 ent_dy
+ram 0570 ent_flags            ; bit tests (e.g. AND #$04) seen in bank 5 movement code

@@ -3325,20 +3325,20 @@ B6_BD65:
     LDA #$81
     STA ram_0480,y
     LDA #$F8
-    STA ram_04B0,y
+    STA ent_x_lo,y
     LDA #$02
-    STA ram_04E0,y
+    STA ent_x_hi,y
     LDA #$80
-    STA ram_0510,y
+    STA ent_y_lo,y
     LDA #$00
-    STA ram_0540,y
+    STA ent_y_hi,y
     LDA #$E8
-    STA ram_0570,y
+    STA ent_flags,y
     LDA #$03
     STA ram_05A0,y
     LDA #$00
-    STA ram_05D0,y
-    STA ram_0600,y
+    STA ent_angle,y
+    STA ent_radius,y
     LDA #$06
     STA ram_0630,y
     RTS
@@ -3351,15 +3351,15 @@ B6_BDA0:
     LDA #$9B
     STA ram_0480,y
     LDA #$5C
-    STA ram_04B0,y
+    STA ent_x_lo,y
     LDA #$01
-    STA ram_04E0,y
+    STA ent_x_hi,y
     LDA #$6C
-    STA ram_0510,y
+    STA ent_y_lo,y
     LDA #$00
-    STA ram_0540,y
+    STA ent_y_hi,y
     LDA #$00
-    STA ram_0570,y
+    STA ent_flags,y
     LDA #$1E
     STA ram_05A0,y
     RTS

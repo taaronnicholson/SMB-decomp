@@ -22,6 +22,7 @@ def bn(t): return FIXED if t == 'f' else int(t)
 # ---- hints ----------------------------------------------------------------
 entries, words_tab, lohi_tab, names, datas = [], [], [], {}, []
 ramnames = {}
+refbank = {}
 dwords_tab = []
 for ln in open(os.path.join(HERE, 'hints.txt')):
     t = ln.split(';')[0].split()
@@ -36,6 +37,8 @@ for ln in open(os.path.join(HERE, 'hints.txt')):
                          int(t[5]) if len(t) > 5 and t[5] != '-' else None, int(t[6]) if len(t) > 6 else 0))
     elif t[0] == 'dwords':  # dwords <bank> <addr> <n>  : n pointers to DATA in the same bank
         dwords_tab.append((bn(t[1]), int(t[2], 16), int(t[3])))
+    elif t[0] == 'refbank':  # refbank <addr> <bank> : fixed-code operands equal to addr refer to this bank
+        refbank[int(t[1], 16)] = int(t[2])
     elif t[0] == 'ram':   # ram <addr> <name>
         ramnames[int(t[1], 16)] = t[2]
     elif t[0] == 'name':  # name <bank|f> <addr> <label>
@@ -213,6 +216,7 @@ def res_bank(a, p, pc):
     """physical bank an absolute address a refers to, from the instruction at (p,pc)"""
     if a >= 0xC000: return FIXED
     if a < 0x8000: return None
+    if p == FIXED and a in refbank: return refbank[a]
     if p != FIXED: return p
     c = ctx[(p, pc)]
     return next(iter(c)) if len(c) == 1 and None not in c else None

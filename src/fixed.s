@@ -669,7 +669,7 @@ F_C916:
     RTS
 SwitchBankFromAC:
     .byte $A5,$AC
-F_C919:
+SwitchBankKeepX:
     STA cur_bank
     TXA
     PHA
@@ -823,12 +823,12 @@ F_CA00:
 F_CA09:
     LDA #$00
     STA ram_0480,x
-    STA ram_04B0,x
-    STA ram_04E0,x
-    STA ram_0510,x
-    STA ram_0540,x
+    STA ent_x_lo,x
+    STA ent_x_hi,x
+    STA ent_y_lo,x
+    STA ent_y_hi,x
     LDA #$FF
-    STA ram_05D0,x
+    STA ent_angle,x
     DEX
     BPL F_CA09
     LDY #$00
@@ -906,19 +906,19 @@ F_CA7A:
     LDA #$62
     STA ram_0480,x
     LDA zp_53
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA zp_54
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA zp_55
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA zp_56
-    STA ram_0540,x
+    STA ent_y_hi,x
     LDA #$00
-    STA ram_0570,x
+    STA ent_flags,x
     LDA zp_73
     STA ram_05A0,x
     LDA #$00
-    STA ram_05D0,x
+    STA ent_angle,x
     PLA
     STA ptr_hi
     PLA
@@ -980,18 +980,18 @@ F_CB1E:
     STA ram_0480,x
     LDA (ptr_lo),y
     INY
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA (ptr_lo),y
     INY
-    STA ram_04E0,x
+    STA ent_x_hi,x
     LDA (ptr_lo),y
     INY
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA (ptr_lo),y
     INY
-    STA ram_0540,x
+    STA ent_y_hi,x
     LDA (ptr_lo),y
-    STA ram_0570,x
+    STA ent_flags,x
     LDA ptr_lo
     PHA
     LDA ptr_hi
@@ -1008,10 +1008,10 @@ F_CB1E:
     STA ram_05A0,x
     LDA (ptr_lo),y
     INY
-    STA ram_05D0,x
+    STA ent_angle,x
     LDA (ptr_lo),y
     INY
-    STA ram_0600,x
+    STA ent_radius,x
     LDA (ptr_lo),y
     INY
     STA ram_0630,x
@@ -1099,25 +1099,25 @@ F_CBF2:
     STA ram_0480,x
     INY
     LDA (ptr_lo),y
-    STA ram_04B0,x
+    STA ent_x_lo,x
     INY
     LDA (ptr_lo),y
-    STA ram_04E0,x
+    STA ent_x_hi,x
     INY
     LDA (ptr_lo),y
-    STA ram_0510,x
+    STA ent_y_lo,x
     INY
     LDA (ptr_lo),y
-    STA ram_0540,x
+    STA ent_y_hi,x
     INY
     LDA zp_53
-    STA ram_0660,x
+    STA ent_dx,x
     LDA ptr_lo
     PHA
     LDA ptr_hi
     PHA
     LDA (ptr_lo),y
-    STA ram_0570,x
+    STA ent_flags,x
     INY
     JSR F_CC51
     PLA
@@ -1128,8 +1128,8 @@ F_CBF2:
     STA ram_05A0,x
     INY
     LDA #$00
-    STA ram_05D0,x
-    STA ram_0600,x
+    STA ent_angle,x
+    STA ent_radius,x
     LDA #$01
     STA ram_0630,x
     INX
@@ -1183,7 +1183,7 @@ F_CC6A:
     ADC #$00
     STA zp_56
     LDA #$06
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA zp_53
     ASL a
     ASL a
@@ -1203,7 +1203,7 @@ F_CC6A:
     JSR F_FDE9
 F_CCB7:
     LDA #$01
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY zp_42
     JMP F_C7D4
 F_CCC1:
@@ -1223,12 +1223,12 @@ F_CCD4:
     LDX #$00
 F_CCD6:
     LDA zp_AB
-    CMP ram_05D0,x
+    CMP ent_angle,x
     BNE F_CCFC
-    LDA ram_0660,x
+    LDA ent_dx,x
     CMP zp_53
     BNE F_CCFC
-    LDA ram_0690,x
+    LDA ent_dy,x
     CMP zp_54
     BNE F_CCFC
     LDA ram_06C0,x
@@ -1244,28 +1244,28 @@ F_CCFC:
     BNE F_CCD6
     LDX #$00
 F_CD03:
-    LDA ram_05D0,x
+    LDA ent_angle,x
     CMP #$FF
     BNE F_CD3F
     LDA #$01
     STA ram_0480,x
     LDA zp_53
-    STA ram_04B0,x
-    STA ram_0660,x
+    STA ent_x_lo,x
+    STA ent_dx,x
     LDA zp_54
-    STA ram_04E0,x
-    STA ram_0690,x
+    STA ent_x_hi,x
+    STA ent_dy,x
     LDA zp_55
-    STA ram_0510,x
+    STA ent_y_lo,x
     STA ram_06C0,x
     LDA zp_56
-    STA ram_0540,x
+    STA ent_y_hi,x
     STA ram_06F0,x
     LDA #$00
-    STA ram_0570,x
+    STA ent_flags,x
     STA ram_05A0,x
     LDA zp_AB
-    STA ram_05D0,x
+    STA ent_angle,x
     JMP F_CD44
 F_CD3F:
     INX
@@ -1358,7 +1358,7 @@ F_CDDD:
     JSR B0_B5FB
     LDX zp_1A
     LDA B0_8C95,x
-    JSR F_C919
+    JSR SwitchBankKeepX
     CLC
     JSR F_FDE9
     LDA ram_01B1
@@ -1400,13 +1400,13 @@ F_CE3B:
     TYA
     PHA
     LDA #$06
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA zp_08
     JSR B0_8000
     PLA
     TAY
     PLA
-    JMP F_C919
+    JMP SwitchBankKeepX
 F_CE52:
     LDA cur_bank
     PHA
@@ -1422,13 +1422,13 @@ F_CE61:
     TXA
     PHA
     LDA #$06
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA zp_08
     JSR $800C
     PLA
     TAX
     PLA
-    JMP F_C919
+    JMP SwitchBankKeepX
 F_CE78:
     .byte $85
     PHP
@@ -1437,13 +1437,13 @@ F_CE78:
     TXA
     PHA
     LDA #$06
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA zp_08
     JSR $800F
     PLA
     TAX
     PLA
-    JMP F_C919
+    JMP SwitchBankKeepX
 F_CE8F:
     STA zp_08
     LDA cur_bank
@@ -1451,41 +1451,41 @@ F_CE8F:
     TXA
     PHA
     LDA #$06
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA zp_08
     JSR $8012
     PLA
     TAX
     PLA
-    JMP F_C919
-F_CEA6:
+    JMP SwitchBankKeepX
+SinLookup:
     LDA cur_bank
     PHA
     LDA #$00
-    JSR F_C919
-    LDA $BE8A,y
+    JSR SwitchBankKeepX
+    LDA SineTable,y
     STA zp_08
     PLA
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA zp_08
     RTS
-F_CEBA:
+CosLookup:
     LDA cur_bank
     PHA
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     TYA
     CLC
     ADC #$40
     TAY
-    LDA $BE8A,y
+    LDA SineTable,y
     STA zp_08
     TYA
     SEC
     SBC #$40
     TAY
     PLA
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA zp_08
     RTS
 F_CED8:
@@ -1708,7 +1708,7 @@ F_D05C:
     STA zp_AB
     TAX
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA B0_83B9,x
     STA tmp_ptr_lo
     LDA B0_83D1,x
@@ -1840,7 +1840,7 @@ F_D139:
     LDA B0_8C9C,x
     STA ptr_hi
     LDA ram_01A5
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA #$A4
     STA zp_55
     LDA #$03
@@ -1848,7 +1848,7 @@ F_D139:
     SEC
     JSR F_FDE9
     LDA #$01
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY #$63
 F_D16B:
     LDA B0_8999,y
@@ -1883,7 +1883,7 @@ F_D16B:
     LDA tmp_ptr_hi
     STA ptr_hi
     LDA ram_01A5
-    JSR F_C919
+    JSR SwitchBankKeepX
     CLC
     JSR F_FDE9
     LDA #$00
@@ -2139,13 +2139,13 @@ F_D37F:
     LDX #$00
 F_D381:
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
     JSR F_DBB7
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_29),y
     STA PPUDATA
     LDA (zp_2B),y
@@ -2167,13 +2167,13 @@ F_D3A3:
     LDX #$00
 F_D3B7:
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
     JSR F_DBB7
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_2D),y
     STA PPUDATA
     LDA (zp_2F),y
@@ -2210,13 +2210,13 @@ F_D3FF:
     LDX #$00
 F_D40B:
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
     JSR F_DBB7
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_29),y
     STA PPUDATA
     LDA (zp_2B),y
@@ -2251,32 +2251,32 @@ F_D44C:
 F_D454:
     LDY #$00
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_21),y
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_27),y
     AND #$03
     STA tmp_ptr_lo
     LDY #$01
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_21),y
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_27),y
     AND #$0C
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
     LDY zp_23
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_21),y
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_27),y
     AND #$30
     ORA tmp_ptr_lo
@@ -2284,11 +2284,11 @@ F_D454:
     LDY zp_23
     INY
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_21),y
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_27),y
     AND #$C0
     ORA tmp_ptr_lo
@@ -2342,45 +2342,45 @@ F_D4FE:
     LDX #$08
 F_D500:
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_27),y
     AND #$03
     STA tmp_ptr_lo
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY #$01
     LDA (zp_21),y
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_27),y
     AND #$0C
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY zp_23
     LDA (zp_21),y
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_27),y
     AND #$30
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY zp_23
     INY
     LDA (zp_21),y
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_27),y
     AND #$C0
     ORA tmp_ptr_lo
@@ -2824,13 +2824,13 @@ F_D811:
     AND #$01
     BEQ F_D854
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY #$00
     LDA (zp_21),y
     JSR F_DBB7
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_40),y
     STA ram_0300,x
     DEX
@@ -2847,12 +2847,12 @@ F_D850:
 F_D854:
     LDY #$00
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_21),y
     JSR F_DBB7
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_3E),y
     STA ram_0300,x
     DEX
@@ -2899,12 +2899,12 @@ F_D898:
 F_D8B3:
     LDY #$00
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_21),y
     JSR F_DBB7
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_3E),y
     STA ram_0300,x
     DEX
@@ -2956,7 +2956,7 @@ F_D910:
 F_D916:
     LDY tmp_ptr_lo
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_21),y
     STA ram_0370,x
     LDY tmp_ptr_hi
@@ -2993,7 +2993,7 @@ F_D943:
     INY
     STY zp_44
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDX tmp_ptr_hi
     LDY ram_0370,x
     LDA (zp_27),y
@@ -3098,12 +3098,12 @@ F_DA03:
     BEQ F_DA43
     LDY #$00
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_21),y
     JSR F_DBB7
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_40),y
     STA ram_0300,x
     DEX
@@ -3116,12 +3116,12 @@ F_DA3F:
 F_DA43:
     LDY #$00
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_21),y
     JSR F_DBB7
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_3E),y
     STA ram_0300,x
     DEX
@@ -3171,12 +3171,12 @@ F_DA82:
 F_DAA6:
     LDY #$00
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_21),y
     JSR F_DBB7
     TAY
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA (zp_3E),y
     STA ram_0300,x
     DEX
@@ -3258,7 +3258,7 @@ F_DB2C:
     DEC zp_43
     LDY #$0F
     LDA zp_AC
-    JSR F_C919
+    JSR SwitchBankKeepX
 F_DB47:
     LDA (zp_21),y
     STA ram_0370,y
@@ -3282,7 +3282,7 @@ F_DB5E:
     AND #$0F
     TAX
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
 F_DB6F:
     LDY ram_0370,x
     LDA (zp_27),y
@@ -3706,23 +3706,23 @@ F_DE75:
     LDA ram_01AF
     SEC
     SBC #$0C
-    STA ram_04B0,y
+    STA ent_x_lo,y
     LDA ram_01B0
     SBC #$00
-    STA ram_04E0,y
+    STA ent_x_hi,y
     LDA zp_5E
-    STA ram_0510,y
+    STA ent_y_lo,y
     LDA zp_5F
-    STA ram_0540,y
+    STA ent_y_hi,y
     LDA #$61
     STA ram_0480,y
     LDA #$2A
     STA ram_05A0,y
     LDA #$04
-    STA ram_05D0,y
+    STA ent_angle,y
     LDA #$00
-    STA ram_0600,y
-    STA ram_0570,y
+    STA ent_radius,y
+    STA ent_flags,y
     STA ram_0630,y
     PLA
     JMP SwitchBank
@@ -4028,12 +4028,12 @@ F_E0DE:
     BNE F_E0E8
     JMP F_E505
 F_E0E8:
-    LDA ram_0660,x
+    LDA ent_dx,x
     STA zp_55
     LDA #$00
 F_E0EF:
     STA zp_54
-    STA ram_0660,x
+    STA ent_dx,x
     BIT zp_55
     BPL F_E0FA
 F_E0F8:
@@ -4047,11 +4047,11 @@ F_E0FF:
     LDA zp_61
     ADC zp_54
     STA zp_61
-    LDA ram_0690,x
+    LDA ent_dy,x
     STA zp_73
     LDA #$00
     STA zp_56
-    STA ram_0690,x
+    STA ent_dy,x
     BIT zp_73
     BPL F_E119
     DEC zp_56
@@ -4318,10 +4318,10 @@ F_E2EB:
     LDA zp_55
 F_E2FC:
     SEC
-    SBC ram_0510,x
+    SBC ent_y_lo,x
     STA zp_55
     LDA zp_56
-    SBC ram_0540,x
+    SBC ent_y_hi,x
     BCC F_E310
     LDA zp_55
     CMP #$12
@@ -5242,7 +5242,7 @@ F_E97F:
     ORA zp_38
     SBC #$02
     STA zp_53
-    LDA ram_0540,y
+    LDA ent_y_hi,y
     SBC #$00
     STA zp_54
     LDA zp_5E
@@ -5316,11 +5316,11 @@ F_EA42:
 F_EA70:
     STA zp_54
 F_EA72:
-    LDA ram_0510,y
+    LDA ent_y_lo,y
     CLC
     ADC zp_53
     STA zp_5E
-    LDA ram_0540,y
+    LDA ent_y_hi,y
     ADC zp_54
     STA zp_5F
 F_EA81:
@@ -6049,7 +6049,7 @@ F_F00F:
     ADC #$00
     STA ptr_hi
     LDA #$00
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY #$00
     LDA (ptr_lo),y
     STA zp_60
@@ -6492,7 +6492,7 @@ F_F36C:
     ADC #$0A
     STA zp_44
     PLA
-    JSR F_C919
+    JSR SwitchBankKeepX
     JMP F_F27E
 F_F379:
     LDA zp_09
@@ -7084,11 +7084,11 @@ F_F7C7:
     BEQ F_F7E1
     LDA #$5D
     STA ram_0480,x
-    LDA ram_0570,x
+    LDA ent_flags,x
     EOR #$01
-    STA ram_0570,x
+    STA ent_flags,x
     LDA #$00
-    STA ram_05D0,x
+    STA ent_angle,x
 F_F7E1:
     DEX
     BPL F_F7C7
@@ -7096,13 +7096,13 @@ F_F7E1:
     JSR SwitchBank
     JSR F_FA3D
     LDA zp_60
-    STA ram_04B0,y
+    STA ent_x_lo,y
     LDA zp_61
-    STA ram_04E0,y
+    STA ent_x_hi,y
     LDA zp_5E
-    STA ram_0510,y
+    STA ent_y_lo,y
     LDA zp_5F
-    STA ram_0540,y
+    STA ent_y_hi,y
 F_F800:
     STY zp_42
     LDA #$4D
@@ -7113,11 +7113,11 @@ F_F800:
 F_F80D:
     .byte $A5,$0C,$48
     LDA #$03
-    JSR F_C919
+    JSR SwitchBankKeepX
     JSR $BE91
 F_F818:
     PLA
-    JMP F_C919
+    JMP SwitchBankKeepX
 F_F81C:
     .byte $86,$D3,$20
     ROL zp_FC
@@ -7128,11 +7128,11 @@ F_F81C:
     LDA cur_bank
     PHA
     LDA #$03
-    JSR F_C919
+    JSR SwitchBankKeepX
     JSR F_FC26
     JSR $BE9D
     PLA
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDX zp_D3
     JMP $8405
 F_F840:
@@ -7142,7 +7142,7 @@ F_F843:
     LDA cur_bank
     PHA
     LDA #$03
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDA #$89
     STA ptr_lo
     LDA #$8A
@@ -7151,7 +7151,7 @@ F_F843:
     STA zp_53
     JSR $BEA9
     PLA
-    JMP F_C919
+    JMP SwitchBankKeepX
 F_F85E:
     LDA #$06
     JSR SwitchBank
@@ -7169,33 +7169,33 @@ F_F876:
 F_F878:
     PHA
     LDA #$05
-    JSR F_C919
+    JSR SwitchBankKeepX
     JSR $8434
     PLA
-    JMP F_C919
+    JMP SwitchBankKeepX
 F_F885:
     LDA cur_bank
     PHA
     LDA #$05
-    JSR F_C919
+    JSR SwitchBankKeepX
     TXA
     PHA
     JSR F_FA3D
     TYA
     TAX
     LDA zp_5E
-    STA ram_0510,x
+    STA ent_y_lo,x
     LDA zp_5F
-    STA ram_0540,x
+    STA ent_y_hi,x
     LDA zp_60
-    STA ram_04B0,x
+    STA ent_x_lo,x
     LDA zp_61
-    STA ram_04E0,x
+    STA ent_x_hi,x
     JSR F_F9B6
     PLA
     TAX
     PLA
-    JMP F_C919
+    JMP SwitchBankKeepX
     LDA ram_01AE
     CLC
     ADC zp_55
@@ -7311,23 +7311,23 @@ F_F9F9:
     JSR F_FA3D
     LDA #$04
     STA ram_0480,y
-    LDA ram_04B0,x
-    STA ram_04B0,y
-    LDA ram_04E0,x
-    STA ram_04E0,y
-    LDA ram_0510,x
-    STA ram_0510,y
-    LDA ram_0540,x
-    STA ram_0540,y
+    LDA ent_x_lo,x
+    STA ent_x_lo,y
+    LDA ent_x_hi,x
+    STA ent_x_hi,y
+    LDA ent_y_lo,x
+    STA ent_y_lo,y
+    LDA ent_y_hi,x
+    STA ent_y_hi,y
     LDA #$00
-    STA ram_0570,y
+    STA ent_flags,y
     LDA zp_53
     CLC
     ADC #$03
     STA ram_05A0,y
     LDA #$00
-    STA ram_05D0,y
-    STA ram_0600,y
+    STA ent_angle,y
+    STA ent_radius,y
     STA ram_0630,y
     RTS
     .byte $37,$00,$00,$00,$00,$00,$29,$00,$00,$00,$FF
@@ -7373,7 +7373,7 @@ F_FA7A:
     CPX #$08
     BCS F_FA8A
     LDA zp_AB
-    CMP ram_05D0,x
+    CMP ent_angle,x
     BNE F_FA8F
 F_FA8A:
     JSR B1_8A5B
@@ -7422,7 +7422,7 @@ F_FACB:
     CPX #$08
     BCS F_FADB
     LDA zp_AB
-    CMP ram_05D0,x
+    CMP ent_angle,x
     BNE F_FAE0
 F_FADB:
     JSR B1_8A5B
@@ -7450,7 +7450,7 @@ F_FAF7:
     INC zp_B1
     LDX #$00
 F_FB00:
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BNE F_FB52
     LDA ram_0480,x
@@ -7478,11 +7478,11 @@ F_FB0C:
     STA zp_55
     LDA ram_0140,x
     STA zp_56
-    LDA ram_0510,x
+    LDA ent_y_lo,x
     SEC
     SBC zp_1B
     STA zp_54
-    LDA ram_0540,x
+    LDA ent_y_hi,x
     SBC zp_1C
     BCS F_FB4D
     LDA #$F8
@@ -7523,7 +7523,7 @@ F_FB72:
 F_FB84:
     LDX #$2F
 F_FB86:
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BEQ F_FBBD
     LDA ram_0480,x
@@ -7568,7 +7568,7 @@ F_FBCA:
 F_FBD4:
     LDX #$00
 F_FBD6:
-    LDA ram_0570,x
+    LDA ent_flags,x
     AND #$04
     BEQ F_FC0D
     LDA ram_0480,x
@@ -7668,7 +7668,7 @@ F_FC68:
     LDA cur_bank
     PHA
     LDA #$01
-    JSR F_C919
+    JSR SwitchBankKeepX
     LDY #$00
     LDA zp_B4
     CLC
@@ -7710,7 +7710,7 @@ F_FCC3:
 F_FCC6:
     STA tmp_ptr_lo
     PLA
-    JSR F_C919
+    JSR SwitchBankKeepX
     PLA
     STA ptr_hi
     PLA
@@ -7722,7 +7722,7 @@ F_FCC6:
     LDA tmp_ptr_lo
     ASL a
     RTS
-F_FCDC:
+ScaledMultiply:
     LDA zp_55
     STA tmp_ptr_lo
     LDA ptr_hi
