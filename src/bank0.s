@@ -69,23 +69,53 @@ PPUCopyHi:
     .byte >(PPUCopy30)
     .byte >(PPUCopy31)
     .byte >(PPUCopy32)
-B0_8040:
-    .byte $52,$62,$73,$84,$95,$A6,$B7,$C8,$E8
-B0_8049:
-    .res 9, $80
-B0_8052:
-    .byte $00,$0F,$16,$28,$00,$0F,$00,$20,$00,$0F,$1A,$2A,$00,$0F,$23,$33
-    .byte $07,$0F,$28,$38,$07,$0F,$00,$10,$07,$0F,$16,$30,$07,$0F,$1C,$3C
-    .byte $00,$02,$0F,$28,$38,$02,$0F,$1A,$2A,$02,$0F,$1C,$3C,$02,$0F,$06
-    .byte $26,$00,$02,$0F,$28,$38,$02,$0F,$1A,$3A,$02,$0F,$15,$35,$02,$0F
-    .byte $1C,$3C,$00,$01,$0F,$17,$27,$01,$0F,$00,$10,$01,$0F,$16,$26,$01
-    .byte $0F,$1C,$3C,$00,$07,$0F,$17,$28,$07,$0F,$1A,$3A,$07,$0F,$16,$30
-    .byte $07,$0F,$1C,$3C,$00,$03,$0F,$1A,$3A,$03,$0F,$00,$10,$03,$0F,$16
-    .byte $30,$03,$0F,$1C,$3C,$00,$02,$0F,$28,$38,$02,$0F,$1A,$2A,$02,$0F
-    .byte $1C,$3C,$02,$0F,$06,$26,$02,$0F,$16,$28,$02,$0F,$00,$20,$02,$0F
-    .byte $1A,$2A,$02,$0F,$1C,$3C,$17,$0F,$07,$28,$17,$0F,$10,$20,$17,$0F
-    .byte $16,$28,$17,$0F,$06,$26,$17,$0F,$1A,$2A,$17,$00,$00,$00,$17,$0F
-    .byte $20,$00,$17,$0F,$06,$00
+PaletteSetPtrLo:
+    .byte <(SpritePalettes)
+    .byte <(PaletteSet1)
+    .byte <(PaletteSet2)
+    .byte <(PaletteSet3)
+    .byte <(PaletteSet4)
+    .byte <(PaletteSet5)
+    .byte <(PaletteSet6)
+    .byte <(PaletteSet7)
+    .byte <(PaletteSet8)
+PaletteSetPtrHi:
+    .byte >(SpritePalettes)
+    .byte >(PaletteSet1)
+    .byte >(PaletteSet2)
+    .byte >(PaletteSet3)
+    .byte >(PaletteSet4)
+    .byte >(PaletteSet5)
+    .byte >(PaletteSet6)
+    .byte >(PaletteSet7)
+    .byte >(PaletteSet8)
+; SpritePalettes: NES palette bytes (sprite palettes, backdrop placeholder 00)
+SpritePalettes:
+    .byte $00, $0F, $16, $28, $00, $0F, $00, $20, $00, $0F, $1A, $2A, $00, $0F, $23, $33
+; PaletteSet1: NES palette bytes (background palettes)
+PaletteSet1:
+    .byte $07, $0F, $28, $38, $07, $0F, $00, $10, $07, $0F, $16, $30, $07, $0F, $1C, $3C, $00
+; PaletteSet2: NES palette bytes (background palettes)
+PaletteSet2:
+    .byte $02, $0F, $28, $38, $02, $0F, $1A, $2A, $02, $0F, $1C, $3C, $02, $0F, $06, $26, $00
+; PaletteSet3: NES palette bytes (background palettes)
+PaletteSet3:
+    .byte $02, $0F, $28, $38, $02, $0F, $1A, $3A, $02, $0F, $15, $35, $02, $0F, $1C, $3C, $00
+; PaletteSet4: NES palette bytes (background palettes)
+PaletteSet4:
+    .byte $01, $0F, $17, $27, $01, $0F, $00, $10, $01, $0F, $16, $26, $01, $0F, $1C, $3C, $00
+; PaletteSet5: NES palette bytes (background palettes)
+PaletteSet5:
+    .byte $07, $0F, $17, $28, $07, $0F, $1A, $3A, $07, $0F, $16, $30, $07, $0F, $1C, $3C, $00
+; PaletteSet6: NES palette bytes (background palettes)
+PaletteSet6:
+    .byte $03, $0F, $1A, $3A, $03, $0F, $00, $10, $03, $0F, $16, $30, $03, $0F, $1C, $3C, $00
+; PaletteSet7: NES palette bytes (background palettes)
+PaletteSet7:
+    .byte $02, $0F, $28, $38, $02, $0F, $1A, $2A, $02, $0F, $1C, $3C, $02, $0F, $06, $26, $02, $0F, $16, $28, $02, $0F, $00, $20, $02, $0F, $1A, $2A, $02, $0F, $1C, $3C
+; PaletteSet8: NES palette bytes (background palettes)
+PaletteSet8:
+    .byte $17, $0F, $07, $28, $17, $0F, $10, $20, $17, $0F, $16, $28, $17, $0F, $06, $26, $17, $0F, $1A, $2A, $17, $00, $00, $00, $17, $0F, $20, $00, $17, $0F, $06, $00
 PaletteFadeStep:
     LDA fade_dir
     BNE B0_810F
@@ -111,9 +141,9 @@ B0_811E:
 B0_812D:
     STA fade_step
     LDY palette_set
-    LDA B0_8040,y
+    LDA PaletteSetPtrLo,y
     STA jump_ptr_lo
-    LDA B0_8049,y
+    LDA PaletteSetPtrHi,y
     STA jump_ptr_hi
     LDA PPUSTATUS
     LDA ppuctrl_shadow
@@ -165,7 +195,7 @@ B0_8196:
     LDA zp_08
     STA PPUDATA
     INY
-    LDA B0_8052,y
+    LDA SpritePalettes,y
     SEC
     SBC B0_81D7,x
     BCS B0_81A7
@@ -173,7 +203,7 @@ B0_8196:
 B0_81A7:
     STA PPUDATA
     INY
-    LDA B0_8052,y
+    LDA SpritePalettes,y
     SEC
     SBC B0_81D7,x
     BCS B0_81B6
@@ -181,7 +211,7 @@ B0_81A7:
 B0_81B6:
     STA PPUDATA
     INY
-    LDA B0_8052,y
+    LDA SpritePalettes,y
     SEC
     SBC B0_81D7,x
     BCS B0_81C5

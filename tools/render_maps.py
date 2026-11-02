@@ -5,12 +5,13 @@ Tileset record (bank 0, 8 bytes at $8C9B + 8*t, t = last byte of the area header
   +0 tile-properties block (LZ, to RAM $03A4)   +2 tile-graphics block (LZ, to PPU $1530)
   +4 metatile planes: TL, TR, BL, BR, 240 bytes each   +6 attribute (palette) plane, 240 bytes
 Bank of the two LZ blocks: B0_8C95[t].  Shared background tiles: LZ block bank0:$88A7 -> PPU $1000.
-Background pattern table is at $1000. Colours are placeholders (one tint per attribute value).
+Background pattern table is at $1000. Background colours come from the area's palette set (header byte 5).
 """
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import lzdec
 from PIL import Image, ImageDraw
+from emu import PALETTE
 ROOT = os.path.dirname(HERE)
 rom = open(os.path.join(ROOT, 'rom/game.nes'), 'rb').read()
 PRG = [rom[16 + i * 16384:16 + (i + 1) * 16384] for i in range(rom[4])]
@@ -33,11 +34,15 @@ def tileset(t):
     pl = [b0[planes - 0x8000 + k * 240:planes - 0x8000 + (k + 1) * 240] for k in range(4)]
     at = b0[attr - 0x8000:attr - 0x8000 + 240]
     return chr_, pl, at
-def tile_img(chr_, n, attr):
+def bg_palette(set_no):
+    """16 NES colour indices (4 palettes x 4) of palette set `set_no` (bank 0 tables $8040/$8049)."""
+    p = b0[0x8040 - 0x8000 + set_no] | b0[0x8049 - 0x8000 + set_no] << 8
+    return b0[p - 0x8000:p - 0x8000 + 16]
+def tile_img(chr_, n, attr, pal):
     im = Image.new('RGB', (8, 8))
     for y in range(8):
         lo, hi = chr_[n * 16 + y], chr_[n * 16 + y + 8]
-        for x in range(8): im.putpixel((x, y), shade(attr, ((lo >> (7 - x)) & 1) | ((hi >> (7 - x)) & 1) << 1))
+        for x in range(8): im.putpixel((x, y), PALETTE[pal[(attr & 3) * 4 + (((lo >> (7 - x)) & 1) | ((hi >> (7 - x)) & 1) << 1)] & 63])
     return im
 def spawns(area):
     """Entity spawn records for an area from bank 1 ($9F25 pointer table): [(type, y, x, flags, params)]"""
@@ -62,6 +67,7 @@ if __name__ == '__main__':
         h = b0[LO - 0x8000 + i] | b0[HI - 0x8000 + i] << 8; bank = b0[BANK - 0x8000 + i]
         hdr = b0[h - 0x8000:h - 0x8000 + 12]; base = hdr[1] | hdr[2] << 8; width = 8 << hdr[3]; rows = hdr[4]; t = hdr[11]
         if t not in cache: cache[t] = tileset(t)
+        pal = bg_palette(hdr[5])
         chr_, pl, at = cache[t]; tiles = {}
         img = Image.new('RGB', (width * 16, (rows - 2) * 16))
         for r in range(2, rows):
@@ -70,7 +76,7 @@ if __name__ == '__main__':
                 m = PRG[bank][a] if 0 <= a < 0x4000 else 0
                 for k, (dx, dy) in enumerate(((0, 0), (8, 0), (0, 8), (8, 8))):
                     key = (pl[k][m] if m < 240 else 0, at[m] if m < 240 else 0)
-                    if key not in tiles: tiles[key] = tile_img(chr_, key[0], key[1])
+                    if key not in tiles: tiles[key] = tile_img(chr_, key[0], key[1], pal)
                     img.paste(tiles[key], (c * 16 + dx, (r - 2) * 16 + dy))
         img.save(os.path.join(out, f'area_{i:02d}.png'))
         ov = img.copy(); overlay(ov, i); ov.save(os.path.join(out, f'area_{i:02d}_spawns.png')); print(f'area {i:2d}: tileset {t}, {width}x{rows - 2} tiles -> area_{i:02d}.png')

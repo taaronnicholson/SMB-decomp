@@ -75,7 +75,7 @@ tile-properties block (LZ → RAM `$03A4`), tile-graphics block (LZ → PPU `$15
 Each map byte is a 16×16 metatile: four 240-entry planes (top-left, top-right, bottom-left, bottom-right) in bank 0 give its
 four 8×8 tile numbers, drawn by the code at `F_D37F`. The background pattern table is `$1000`: the shared block at
 `$88A7` (tiles 0-82), then the tileset block from tile `$53`, and the font at `$C4` (ASCII + `$94`).
-`tools/render_maps.py` draws every area to `build/maps/area_NN.png` (placeholder colours, git-ignored).
+`tools/render_maps.py` draws every area to `build/maps/area_NN.png` in the area's real background colours (git-ignored).
 The area header's song number is played by `PlaySong` when the area loads.
 
 ## Entity spawn lists (bank 1 `$9F25`)
@@ -146,6 +146,12 @@ target, clear = VRAM). Rendered images are not committed.
 `tools/gfx_scan.py` (slow, ~2.5 min) walks every stage and caches the result in `tools/gfx_blocks.json`;
 `tools/gen_gfx_hints.py` turns it into labelled `Gfx_B<bank>_<addr>` blobs (26 LZ-compressed blocks: shared title/font
 graphics in banks 0/1, per-stage background tile sets and `tile_props` tables in bank 4, sprite tile sets in bank 6).
+
+## Palettes (bank 0 `$8040`/`$8049`)
+`PaletteSetPtrLo/Hi` point to 9 palette sets. A set is 16 NES colour bytes (4 palettes × 4 colours, byte 0 of each is the
+backdrop colour). `SpritePalettes` (set 0, `$8052`) is shared by all stages; `PaletteSet1`-`7` are background palettes selected
+by area header byte 5 (`palette_set`), and `PaletteFadeStep` fades them in and out. Verified against the emulator's PPU palette at
+stage 0 (background `07 0F 28 38 …`, sprites `07 0F 16 28 …`). Colour index → RGB uses the standard NES palette.
 
 ## Compression
 `tools/lzdec.py` is a Python port of the game's decompressor, validated against the emulator (all calls match, bytes
