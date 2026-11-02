@@ -264,6 +264,12 @@ output position as scratch and reads them back for 16-bit address arithmetic.
   `SinLookup`/`CosLookup` read it from fixed code (cos = index + `$40`); `ScaledMultiply` scales by a radius.
 - `SwitchBankKeepX` (`$C919`) is `SwitchBank` that preserves X.
 
+## Further notes (docs/)
+- `entity_behaviour.md` – hand-written behaviour of the entity families and state machines (stages 0-5), switch tiles, projectiles.
+- `entity_handlers.md` – generated per-handler summary of all 120 entity handlers.
+- `player_notes.md` – controls, player states and the verified sequences (jump, peck, death/respawn, balloon ride, bonus ascent, tally); `player_states.md` is the generated table.
+- `game_states.md` – the 28-entry game-state machine (level-complete flow verified).
+
 ## Status
 `make verify` rebuilds the ROM byte-for-byte. Of the 128 KB of PRG, about 36% is code (traced from the vectors, far calls,
 pointer tables and a conservative speculative decode) and about 53% more is classified data with labels, structure or comments
