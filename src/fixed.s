@@ -1965,9 +1965,9 @@ F_D1DA:
     LDA #$80
     STA PPUADDR
     LDX stage_index
-    LDA B3_82EB,x
+    LDA StageTileSetPtrLo,x
     STA ptr_lo
-    LDA B3_82F1,x
+    LDA StageTileSetPtrHi,x
     STA ptr_hi
     LDY #$00
 F_D237:

@@ -193,3 +193,13 @@ name f CE8F PlaySfxNoise          ; A = sfx id (bank-safe wrapper for Sound_Play
 
 ; ---- bank 2: pixel/bitmap tables for the unrolled CHR upload routines ----
 blob 2 8000 7680 PixelTables 32 tables of 240 bytes; the unrolled upload routines at $9E00+ write 16 zero bytes then one byte from each of 16 tables (same index X) to a CHR tile
+
+; ---- bank 3: per-stage raw tile sets (4 tiles = 64 bytes each, copied to PPU $1080 at area load; stage 5 reuses stage 1's) ----
+name 3 82EB StageTileSetPtrLo
+name 3 82F1 StageTileSetPtrHi
+dlohi 3 82EB 82F1 6
+blob 3 82F7 64 StageTileSet0 raw tiles for stage 0 (PPU $1080)
+blob 3 8337 64 StageTileSet2 raw tiles for stage 2
+blob 3 8377 64 StageTileSet1 raw tiles for stages 1 and 5
+blob 3 83B7 64 StageTileSet3 raw tiles for stage 3
+blob 3 83F7 64 StageTileSet4 raw tiles for stage 4
