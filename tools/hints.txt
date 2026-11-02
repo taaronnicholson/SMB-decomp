@@ -147,3 +147,8 @@ ram 0630 ent_param2              ; spawn record byte 9
 name f CF1E CreditsStep         ; prints the next credits line (tile = char + $94), $FE = end
 ram 00C2 credits_ptr_lo
 ram 00C3 credits_ptr_hi
+
+; ---- entity drawing (bank 1) ----
+name 1 8A5B DrawEntity          ; X = slot: builds OAM sprites from the entity's animation group/frame
+name 1 8A52 MarkEntityOffscreen ; sets ent_flags bit 2 when the entity is outside the screen window
+ram 0120 anim_tile_base         ; per animation group: first CHR tile number of its sprite sheet (loaded per stage)

@@ -883,11 +883,11 @@ F_CA35:
     BPL F_CA35
     LDX #$1F
 F_CA3D:
-    STA ram_0120,x
+    STA anim_tile_base,x
     DEX
     BPL F_CA3D
     LDA #$2A
-    STA ram_0120
+    STA anim_tile_base
     LDA #$08
     STA zp_77
     LDA map_bank
@@ -1184,7 +1184,7 @@ F_CC51:
     BEQ F_CC62
     STA zp_53
     TAY
-    LDA ram_0120,y
+    LDA anim_tile_base,y
     BEQ F_CC6A
 F_CC62:
     LDY zp_42
@@ -1197,7 +1197,7 @@ F_CC6A:
     LDA #$00
     SEC
     SBC zp_DB
-    STA ram_0120,y
+    STA anim_tile_base,y
     STA ptr_lo
     LDA #$00
     ASL ptr_lo
@@ -7440,7 +7440,7 @@ F_FA7A:
     CMP ent_angle,x
     BNE F_FA8F
 F_FA8A:
-    JSR B1_8A5B
+    JSR DrawEntity
     LDX zp_42
 F_FA8F:
     INX
@@ -7489,7 +7489,7 @@ F_FACB:
     CMP ent_angle,x
     BNE F_FAE0
 F_FADB:
-    JSR B1_8A5B
+    JSR DrawEntity
     LDX zp_42
 F_FAE0:
     DEX

@@ -24,6 +24,7 @@ regen:
 	python3 -I tools/gen_area_hints.py
 	python3 -I tools/gen_palette_hints.py
 	python3 -I tools/gen_spawn_hints.py
+	python3 -I tools/gen_anim_hints.py
 	python3 -I tools/decomp.py
 
 clean:

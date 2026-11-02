@@ -88,9 +88,21 @@ Some pointers sit right before code in bank 1, so only the parsed span is claime
 its type. Observed in the emulator at the start of stage 0 (area 0): slots 0-2 hold type `01` (X = `$30`, `$30`, `$80`;
 slots 0-1 are not in the spawn list, so they are created elsewhere), slot 8 type `2E`, slot 9 type `51` (it changes to `52`
 at runtime), slots 10-16 seven type `4E`, and slot 17 type `08`, which comes from a second per-area record list after the
-main one (`01 08 E0 00 50 00 10 00`). What each type *is* (which creature or object) is not yet identified. A second
+main one (`01 08 E0 00 50 00 10 00`). What the types do (behaviour) is not yet decoded; their appearance is described under *Entity sprites*. A second
 per-area table (`zp_B4`, after the entity list) also exists and is not decoded. The credits scroller (`CreditsStep`, text in bank 5, walked
 by `credits_ptr`) is unrelated to enemies.
+
+## Entity sprites
+`DrawEntity` (bank 1 `$8A5B`) picks an entity's sprite from its **flags**, not its type: `ent_flags` bit 2 = off-screen,
+bits 0/1 = alternate draw modes, and `(flags >> 3) & $1F` = **animation group**. `AnimGroupPtrs` (`$8D7D`, 31 words)
+points to a table of frame offsets per group (`AnimGroupN`, relative to each word's own address); `ent_param` is the frame
+number. A frame is a count byte followed by 6-byte sprites `dx(16) dy(16) tile attr`; the tile number is added to
+`anim_tile_base[group]` (`$0120`, set per stage) and the sprite uses the sprite palettes with the OAM attribute bits.
+`tools/render_sprites.py <stage>` draws all groups from the emulator's CHR and palettes into `build/sprites/`.
+Observed in stage 0 (spawn flags → group): type `01` (flags `04`) → group 0 (green dome balloon with a stalk, a star, and
+the score popups 10/20/30/50/100/200/300/500/1000); `08` (`14`) → group 2 (green worm); `4E` (`70`-`76`) → group 14 (red
+creature with a propeller, 6 frames); `51` (`78`) → group 15 (white and black creature); `2E` (`B8`) → group 23 (green butterfly).
+Which groups exist, and their tile bases, differ per stage.
 
 ## Sound engine (bank 6)
 `$8000` is a jump table: `Sound_PlaySong` (A = song 0-8), `Sound_Update` (`$8003`, once per frame),
