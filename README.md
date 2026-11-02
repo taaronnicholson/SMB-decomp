@@ -84,8 +84,12 @@ then 10-byte entity records ended by `$FF`: `type, Y (16-bit), X (16-bit), flags
 the entity arrays (`ent_type`, `ent_y_lo/hi`, `ent_x_lo/hi`, `ent_flags`, `ent_param`, `ent_angle`, `ent_radius`,
 `ent_param2`). Y is the long axis for tall areas: coordinates are (Y, X) throughout, like the stage-record spawn points
 (an earlier version of the entity names had X and Y swapped). Area 0 has 9 entities (types `$2E`, `$51`, `$4E`×7).
-Some pointers sit right before code in bank 1, so only the parsed span is claimed as data. A second per-area table
-(`zp_B4`, after the entity list) also exists; it is not decoded. The credits scroller (`CreditsStep`, text in bank 5, walked
+Some pointers sit right before code in bank 1, so only the parsed span is claimed as data. `tools/render_maps.py` also writes `build/maps/area_NN_spawns.png` with each record drawn at (X, Y-32) and labelled with
+its type. Observed in the emulator at the start of stage 0 (area 0): slots 0-2 hold type `01` (X = `$30`, `$30`, `$80`;
+slots 0-1 are not in the spawn list, so they are created elsewhere), slot 8 type `2E`, slot 9 type `51` (it changes to `52`
+at runtime), slots 10-16 seven type `4E`, and slot 17 type `08`, which comes from a second per-area record list after the
+main one (`01 08 E0 00 50 00 10 00`). What each type *is* (which creature or object) is not yet identified. A second
+per-area table (`zp_B4`, after the entity list) also exists and is not decoded. The credits scroller (`CreditsStep`, text in bank 5, walked
 by `credits_ptr`) is unrelated to enemies.
 
 ## Sound engine (bank 6)

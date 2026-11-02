@@ -10,7 +10,7 @@ Background pattern table is at $1000. Colours are placeholders (one tint per att
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 import lzdec
-from PIL import Image
+from PIL import Image, ImageDraw
 ROOT = os.path.dirname(HERE)
 rom = open(os.path.join(ROOT, 'rom/game.nes'), 'rb').read()
 PRG = [rom[16 + i * 16384:16 + (i + 1) * 16384] for i in range(rom[4])]
@@ -39,6 +39,23 @@ def tile_img(chr_, n, attr):
         lo, hi = chr_[n * 16 + y], chr_[n * 16 + y + 8]
         for x in range(8): im.putpixel((x, y), shade(attr, ((lo >> (7 - x)) & 1) | ((hi >> (7 - x)) & 1) << 1))
     return im
+def spawns(area):
+    """Entity spawn records for an area from bank 1 ($9F25 pointer table): [(type, y, x, flags, params)]"""
+    b1 = PRG[1]
+    def by(a): return b1[a - 0x8000]
+    p = by(0x9F25 + 2 * area) | by(0x9F26 + 2 * area) << 8
+    while by(p) != 0xFF: p += 1
+    p += 1; out = []
+    while by(p) != 0xFF and len(out) < 60:
+        out.append((by(p), by(p + 1) | by(p + 2) << 8, by(p + 3) | by(p + 4) << 8, by(p + 5), tuple(by(p + 6 + k) for k in range(4)))); p += 10
+    return out
+def overlay(img, area):
+    d = ImageDraw.Draw(img)
+    for typ, y, x, fl, pr in spawns(area):
+        px, py = x, y - 32                       # first two map rows are not stored
+        d.rectangle((px - 5, py - 5, px + 5, py + 5), outline=(255, 40, 40))
+        d.text((px + 7, py - 5), f'{typ:02X}', fill=(255, 255, 0))
+
 if __name__ == '__main__':
     out = os.path.join(ROOT, 'build/maps'); os.makedirs(out, exist_ok=True); cache = {}
     for i in range(N):
@@ -55,4 +72,5 @@ if __name__ == '__main__':
                     key = (pl[k][m] if m < 240 else 0, at[m] if m < 240 else 0)
                     if key not in tiles: tiles[key] = tile_img(chr_, key[0], key[1])
                     img.paste(tiles[key], (c * 16 + dx, (r - 2) * 16 + dy))
-        img.save(os.path.join(out, f'area_{i:02d}.png')); print(f'area {i:2d}: tileset {t}, {width}x{rows - 2} tiles -> area_{i:02d}.png')
+        img.save(os.path.join(out, f'area_{i:02d}.png'))
+        ov = img.copy(); overlay(ov, i); ov.save(os.path.join(out, f'area_{i:02d}_spawns.png')); print(f'area {i:2d}: tileset {t}, {width}x{rows - 2} tiles -> area_{i:02d}.png')
