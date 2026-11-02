@@ -3113,10 +3113,10 @@ ResetGameState:
     STA zp_A5
     STA shot_state
     STA shot_state_1
-    STA zp_DF
-    STA zp_DC
-    STA zp_DD
-    STA zp_DE
+    STA powerup_shot
+    STA powerup_1
+    STA powerup_2
+    STA powerup_3
     STA ram_01B3
     STA ram_01B1
     LDX #$07

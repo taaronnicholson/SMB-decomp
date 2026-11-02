@@ -296,3 +296,9 @@ name 5 818D Ent_TickParam2       ; counts the low nibble of ent_param2 down
 ram 00B6 riding_slot             ; entity slot the player is standing on (platform carrying the player)
 ram 0079 riding_flag
 name 5 AAB2 Ent_BecomeOrbiter    ; A = new type: stores the entity's position/16 as the orbit centre (ram_06C0/06F0), used by $4C and $51
+
+; ---- power-ups (inferred: the stage loader loads extra tiles when set; B fires the projectile only if $DF is non-zero) ----
+ram 00DC powerup_1
+ram 00DD powerup_2
+ram 00DE powerup_3
+ram 00DF powerup_shot            ; must be non-zero for the B button to fire the player projectile (shot_* arrays)

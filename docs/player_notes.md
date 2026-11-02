@@ -1,18 +1,21 @@
-# Player notes (hand-written, verified against the code)
+# Player notes (hand-written; items marked [verified] were checked by driving the emulator)
 
-**Controls** (`buttons` bits: A `$01`, B `$02`, Select `$04`, Start `$08`, Right `$10`, Left `$20`, Up `$40`, Down `$80`):
-- **A** starts a jump on the ground; holding it while airborne affects the jump (state `$02` tests it).
-- **B** fires the player's attack projectile: it needs a free `shot_*` slot (`shot_state` = 0), sets the state to 1 or 6 and a cooldown in
-  `zp_88`; there are two slots, drawn into OAM entries 19-20 by bank 1 `$802C`.
-- **Down** alone (`buttons & $B1 == $80`) on the ground switches `PlayerState00` to state `$05`.
+**Controls** (`buttons` bits: A `$01`, B `$02`, Select `$04`, Start `$08`, Right `$10`, Left `$20`, Up `$40`, Down `$80`; the emulator tool
+uses read order instead: A, B, Select, Start, Up, Down, Left, Right = bits 0-7):
+- **A** jumps from the ground [verified: `$00` -> `$01` rising for about 36 frames (Y `$44D` -> `$40C`), then `$02` falling, `$04` landing, back to `$00`].
+- **Down** (alone) is the **peck**: `PlayerState00` switches to `$05` when `buttons & $B1 == $80` [verified: `$05` -> `$06` -> `$07`, back to `$00`
+  on release]. `$05` looks at the tile in front of the beak (position depends on facing `zp_66`): tiles `$DA`/`$D8` call `F_F79D`/`F_F770`
+  (they advance the global phase `ram_0730`), `$D1` plays noise sfx `$39` and breaks/changes it, a solid tile (`tile_props` bit 0) goes to
+  `$07` (hit) with noise sfx `$0B`, anything else to `$06` (swing).
+- **B** fires the player projectile (`shot_*` arrays, 2 slots, OAM entries 19-20) only when the power-up flag `powerup_shot` (`$DF`) is non-zero, there is
+  a free slot and the cooldown `zp_88` is 0 [from the code; B did nothing in the emulator without the power-up].
 - **Start** (fresh press, only when the fade has finished) is handled by `CheckPause`.
 
-**States** (`player_state`, `$63`; dispatch table `PlayerStateHandlers`, bank 2 `$B5AA`, 32 entries, 31 distinct handlers; see
-`player_states.md` for the generated table): `$00` normal ground movement (`PlayerState00`, ~340 lines), `$02` airborne (jump/fall,
-~470 lines; plays sfx `$0B`/`$1B` on pulse 1 and `$27` on noise), `$05` crouch (from Down), `$09` start-of-life/idle (set by the reset code),
-`$0D` in water (entered when below `water_level`, splash sfx `$22`, leaves with Up), `$16` level complete (set when `balloons_left` reaches
-0) and `$10`/`$11`, `$1C`-`$1F` longer sequences (death/ending/transition candidates, not verified).
-States whose handlers are 4 lines long are stubs that set a timer and return; their effect is applied by shared code elsewhere.
+**States** (`player_state`, `$63`; dispatch table `PlayerStateHandlers`, bank 2 `$B5AA`, 32 entries, 31 distinct handlers; `player_states.md` is the
+generated table): `$00` ground, `$01` rising (jump), `$02` falling [verified], `$04` landing [verified], `$05`-`$07` peck sequence [verified; `$05`,
+`$06`, `$07` are trampolines into bank 6 `$A2BE`, `$A32E`, `$A3D6`], `$0D` in water (entered below `water_level`, splash sfx `$22`, Up leaves it),
+`$16` level complete (set when `balloons_left` reaches 0), `$09` set by the reset code (idle/start of life). `$10`/`$11` and `$1C`-`$1F` are longer
+sequences whose meaning is unverified.
 
 **Hurt:** `HurtPlayer` is called by hazards (tile class 3), by entity touch handlers (`Ent_HurtOnTouch`) and by some states.
-**Vulnerable enemies** (`$5E`) die when the player touches them in state `$02` with `zp_7C` set (the descending attack).
+**Vulnerable enemies** (`$5E`) die when the player touches them in state `$02` with `zp_7C` set.

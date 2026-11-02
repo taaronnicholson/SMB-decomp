@@ -2301,7 +2301,7 @@ B5_9351:
     CMP tmp_d
     BCC B5_9343
     LDA #$01
-    STA zp_DF
+    STA powerup_shot
     JSR Ent_StartCollectAnim
     LDA #$19
     JSR PlaySfxSq2

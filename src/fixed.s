@@ -1985,19 +1985,19 @@ F_D237:
     JSR B2_A606
     JSR B2_A5DA
     JSR B2_A5F0
-    LDA zp_DC
+    LDA powerup_1
     BEQ F_D265
     JSR B2_A673
     JSR B2_A7EF
     JSR F_EFB6
 F_D265:
-    LDA zp_DD
+    LDA powerup_2
     BEQ F_D272
     JSR B2_A647
     JSR B2_AA65
     JSR F_EF68
 F_D272:
-    LDA zp_DE
+    LDA powerup_3
     BEQ F_D27F
     JSR B2_A65D
     JSR B2_ACD7
@@ -3593,7 +3593,7 @@ F_DDB8:
     ADC #$C8
     STA zp_F7
 F_DDC1:
-    LDA zp_DF
+    LDA powerup_shot
     BEQ F_DD9B
     LDA zp_88
     BNE F_DD9B
@@ -6048,13 +6048,13 @@ F_EF3D:
     LDY #$00
     RTS
 F_EF5D:
-    LDA zp_DD
+    LDA powerup_2
     EOR #$01
-    STA zp_DD
+    STA powerup_2
     LDA #$16
     JSR PlaySfxSq2
 F_EF68:
-    LDA zp_DD
+    LDA powerup_2
     ASL a
     TAY
     CLC
@@ -6067,13 +6067,13 @@ F_EF68:
     STA ram_046A
     JMP F_EFA2
 F_EF81:
-    LDA zp_DE
+    LDA powerup_3
     EOR #$01
-    STA zp_DE
+    STA powerup_3
     LDA #$16
     JSR PlaySfxSq2
 F_EF8C:
-    LDA zp_DE
+    LDA powerup_3
     ASL a
     TAY
     CLC
@@ -6092,13 +6092,13 @@ F_EFA2:
 F_EFAA:
     RTS
 F_EFAB:
-    LDA zp_DC
+    LDA powerup_1
     EOR #$01
-    STA zp_DC
+    STA powerup_1
     LDA #$16
     JSR PlaySfxSq2
 F_EFB6:
-    LDA zp_DC
+    LDA powerup_1
     ASL a
     TAY
     CLC

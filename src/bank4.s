@@ -926,7 +926,7 @@ B4_ADE1:
     STA game_state
     RTS
 B4_AE39:
-    LDA zp_DF
+    LDA powerup_shot
     BEQ B4_AE4C
     LDA #$03
     STA game_state
