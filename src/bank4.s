@@ -1082,7 +1082,7 @@ B4_AF7B:
     LDA #$03
     STA game_state
     LDA #$4A
-    JMP F_CE8F
+    JMP PlaySfxNoise
     .byte $21,$22,$87,$40,$44,$45,$52,$46,$4C,$41,$FF,$21,$62,$89,$4C,$4C
     .byte $49,$57,$20,$53,$49,$48,$54,$FF,$21,$82,$89
     .byte ":UOY PLEH"   ; reads: "HELP YOU:"
@@ -1219,7 +1219,7 @@ B4_B0D8:
     JSR F_F885
 B4_B0F1:
     LDA #$28
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$1F
     STA zp_55
     LDA #$B3
@@ -1273,7 +1273,7 @@ B4_B14D:
     LDA #$19
     STA zp_D1
     LDA #$28
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$27
     STA zp_55
     LDA #$B3
@@ -1342,7 +1342,7 @@ B4_B1D9:
     LDA #$5A
     STA zp_D1
     LDA #$28
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$0A
     STA zp_54
     LDA #$27
@@ -1433,7 +1433,7 @@ B4_B278:
     LDA #$10
     STA ram_0620
     LDA #$36
-    JMP F_CE8F
+    JMP PlaySfxNoise
 B4_B2BB:
     STA zp_47
     RTS

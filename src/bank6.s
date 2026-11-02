@@ -3353,7 +3353,7 @@ B6_A03B:
     .byte $20,$26,$FC,$48,$C9,$DA,$D0,$03,$20,$9D,$F7,$C9,$D8,$D0,$03,$20
     .byte $70,$F7,$68,$C9,$D1,$D0,$0A
     LDA #$39
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$24
     JMP B6_A38F
     TAX
@@ -3365,7 +3365,7 @@ B6_A03B:
     LDA #$07
     STA player_state
     LDA #$0B
-    JSR F_CE8F
+    JSR PlaySfxNoise
     JMP F_E0D4
 B6_A323:
     LDA #$24
@@ -3424,7 +3424,7 @@ B6_A383:
     CMP #$D1
     BNE B6_A3AF
     LDA #$39
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$17
 B6_A38F:
     STA zp_65
@@ -3448,7 +3448,7 @@ B6_A3AF:
     AND #$01
     BEQ B6_A3C0
     LDA #$0B
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDX #$16
 B6_A3C0:
     STX zp_65
@@ -3483,7 +3483,7 @@ B6_A3E1:
     CMP #$FD
     BNE B6_A403
     LDA #$08
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$4A
 B6_A403:
     CMP #$FE
@@ -4276,7 +4276,7 @@ B6_B998:
     BNE B6_B9C0
     JSR F_F6B0
     LDA #$39
-    JSR F_CE8F
+    JSR PlaySfxNoise
     JSR F_F192
     LDA ptr_lo
     STA ram_0721

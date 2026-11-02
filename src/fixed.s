@@ -1467,7 +1467,7 @@ PlaySfxSq2:
     TAX
     PLA
     JMP SwitchBankKeepX
-F_CE8F:
+PlaySfxNoise:
     STA zp_08
     LDA cur_bank
     PHA
@@ -3456,7 +3456,7 @@ F_DCA1:
     JSR F_DE75
 F_DCC8:
     LDA #$22
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$0D
     STA player_state
     LDA zp_7C
@@ -3473,7 +3473,7 @@ F_DCE0:
     LDA #$00
     STA player_state
     LDA #$22
-    JSR F_CE8F
+    JSR PlaySfxNoise
     JMP F_DCF8
 F_DCF2:
     LDA zp_7C
@@ -4818,7 +4818,7 @@ F_E69A:
     BNE F_E6C5
     JSR F_F6B0
     LDA #$39
-    JSR F_CE8F
+    JSR PlaySfxNoise
     JSR F_F192
     LDA ptr_lo
     STA ram_0721
@@ -6563,7 +6563,7 @@ F_F40E:
     STA zp_57
     CMP #$03
     BNE F_F41E
-    JSR F_CE8F
+    JSR PlaySfxNoise
     JSR F_F6B0
 F_F41E:
     LDA zp_55
@@ -6644,7 +6644,7 @@ F_F497:
     STA zp_53
     BEQ F_F496
     LDA #$06
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$0F
 F_F4AD:
     STA player_state
@@ -6665,7 +6665,7 @@ F_F4BA:
     LDA F_F4D5,y
     BEQ F_F4B9
     LDA #$09
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$1A
     JMP F_F4AD
 F_F4D5:
@@ -7042,7 +7042,7 @@ F_F7B8:
     LDA cur_bank
     PHA
     LDA #$04
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$06
     JSR SwitchBank
     LDX #$2F

@@ -391,7 +391,7 @@ B5_82F2:
     STA ram_0720
     JSR F_F6B0
     LDA #$05
-    JMP F_CE8F
+    JMP PlaySfxNoise
 B5_830C:
     LDA ent_x_lo,x
     AND #$F0
@@ -1123,7 +1123,7 @@ B5_888B:
     LDA #$0D
     STA ent_param2,x
     LDA #$03
-    JSR F_CE8F
+    JSR PlaySfxNoise
     PLA
     PLA
     RTS
@@ -1333,7 +1333,7 @@ B5_8A31:
     PLA
     PLA
     LDA #$03
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA player_state
     CMP #$02
     BEQ B5_8A5C
@@ -1701,7 +1701,7 @@ B5_8CBB:
     STA ent_param2,x
     STX zp_BA
     LDA #$09
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$B8
     STA zp_55
     LDA #$0B
@@ -1709,7 +1709,7 @@ B5_8CBB:
     JMP F_F8E2
 B5_8D33:
     LDA #$42
-    JSR F_CE8F
+    JSR PlaySfxNoise
     JSR B5_8A55
     LDA balloons_popped
     INC balloons_popped
@@ -2653,7 +2653,7 @@ B5_96AC:
     LDA #$01
     STA ent_angle,x
     LDA #$00
-    JMP F_CE8F
+    JMP PlaySfxNoise
     INC ent_radius,x
     LDA ent_radius,x
     LSR a
@@ -3376,7 +3376,7 @@ B5_9D7A:
 B5_9D8C:
     JSR B5_91C1
     LDA #$05
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$D4
     LDY #$9D
     JMP F_F917
@@ -3719,7 +3719,7 @@ B5_A161:
     LDA ent_angle,x
     BPL B5_A18A
     LDA #$05
-    JSR F_CE8F
+    JSR PlaySfxNoise
     JMP B5_91C1
 B5_A18A:
     LDA ent_radius,x
@@ -3760,7 +3760,7 @@ B5_A1CC:
 B5_A1D1:
     JSR B5_91C1
     LDA #$05
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$E9
     LDY #$A1
     JMP F_F917
@@ -3839,7 +3839,7 @@ B5_A295:
     STA zp_53
     JSR B5_AA15
     LDA #$38
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$1E
     STA ent_angle,x
 B5_A2B1:
@@ -4072,7 +4072,7 @@ B5_A452:
     LDA #$11
     STA ent_param,x
     LDA #$08
-    JMP F_CE8F
+    JMP PlaySfxNoise
 Ent45_Update:
     DEC ent_angle,x
     BNE B5_A451
@@ -4098,7 +4098,7 @@ B5_A48D:
 B5_A4A0:
     STA ent_type,x
     LDA #$04
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$41
     JSR PlaySfxSq1
     LDA #$D7
@@ -4243,7 +4243,7 @@ B5_A64F:
     LDA #$00
     STA ent_type,x
     LDA #$06
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$AA
     LDY #$A6
     JMP F_F917
@@ -5601,7 +5601,7 @@ Ent76_Update:
 B5_B25F:
     JSR B5_91C1
     LDA #$05
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$7C
     LDY #$B2
     JMP F_F917
@@ -6184,7 +6184,7 @@ B5_B769:
     ASL a
     STA ent_angle,x
     LDA #$0A
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$FB
     LDY #$B7
     JMP F_F917
@@ -6453,7 +6453,7 @@ B5_BAC5:
     CMP #$FF
     BNE B5_BAE9
     LDA #$22
-    JSR F_CE8F
+    JSR PlaySfxNoise
     LDA #$DE
     LDY #$BA
     JMP F_F917
@@ -6590,7 +6590,7 @@ B5_BBDF:
     LDA #$1E
     STA player_state
     LDA #$34
-    JSR F_CE8F
+    JSR PlaySfxNoise
     JSR B5_91C1
     LDA #$F6
     LDY #$BB

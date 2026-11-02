@@ -571,7 +571,7 @@ B1_8440:
     STA zp_E1,x
     STA zp_F5,x
     LDA #$2E
-    JSR F_CE8F
+    JSR PlaySfxNoise
 B1_846C:
     RTS
 B1_846D:
@@ -793,7 +793,7 @@ B1_85FA:
     LDA zp_53
     STA zp_E1,x
     LDA #$0A
-    JSR F_CE8F
+    JSR PlaySfxNoise
     RTS
 B1_8604:
     JSR B1_81DA
@@ -997,7 +997,7 @@ B1_875F:
 B1_876A:
     JSR F_F6B0
     LDA #$39
-    JSR F_CE8F
+    JSR PlaySfxNoise
     JSR F_F192
     LDA ptr_lo
     STA ram_0721
