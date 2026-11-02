@@ -51,6 +51,34 @@ applies the `ppuctrl_shadow`/`ppumask_shadow` values and calls one of 6 state ha
 Records 0–3 have 11 entries, record 4 has 3, record 5 has none. The meaning of the destination
 codes below `$E0` (which area/room an entry leads to) is not yet confirmed.
 
+## Sound engine (bank 6)
+`$8000` is a jump table: `Sound_PlaySong` (A = song 0-8), `Sound_Update` (`$8003`, once per frame),
+`Sound_Silence` (`$8006`), `Sound_Resume` (`$8009`), plus three more entry points.
+Per-channel state lives in four 19-byte blocks from `$0759` (`snd_sq1_*`, `snd_sq2_*`, `snd_tri_*`, `snd_noi_*`);
+`$074B-$074D` mark sound effects that temporarily own a channel.
+
+**Song table** (`SongTable`, 9 bytes per song): tempo, then pattern-list pointers for pulse 1, pulse 2,
+triangle, noise. A **pattern list** is a list of pattern pointers ended by `$0000` (which loops back to the start).
+A **pattern** is a byte stream:
+
+| Byte | Meaning |
+|------|---------|
+| `$00-$5F` | note (index into `PeriodTable`, 79 NES timer periods; noise uses the low nibble); plays for the current length |
+| `$60-$7F` | set note length to (byte-`$5F`) ticks |
+| `$F4 n` | set tempo | 
+| `$F5 lo hi` | switch to another pattern list |
+| `$F6 n` | volume envelope n (tables `$930D`/`$9322`) |
+| `$F7 n` | pitch modulation table n (`$93CB`/`$93D4`) |
+| `$F8` / `$F9` | key off / hold (re-trigger envelope without a new note) |
+| `$FA n` | duty/volume high bits | 
+| `$FB n` / `$FC n` | song / channel transpose |
+| `$FD n` | pulse sweep register |
+| `$FE` | end of song |
+| `$FF` | next pattern from the list |
+
+`tools/gen_sound_hints.py` walks the song table and emits `tools/hints_sound.txt`
+(lists, 72 streams, and the `snd_*` RAM names); `make regen` runs it.
+
 ## Shared helpers
 - `SineTable` (bank 0 `$BE8A`): 256 signed entries, amplitude ±64, index = angle (256 = full turn).
   `SinLookup`/`CosLookup` read it from fixed code (cos = index + `$40`); `ScaledMultiply` scales by a radius.

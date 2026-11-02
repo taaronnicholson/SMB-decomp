@@ -2987,7 +2987,8 @@ B2_B5AB:
     .word F_E96D
     .word F_EABC
     .word F_EABC
-    .byte $8D,$EA,$C1,$EA,$05,$E5,$F1,$F4,$1C,$F5
+    .word F_EA8D
+    .byte $C1,$EA,$05,$E5,$F1,$F4,$1C,$F5
     .word F_F641
     .word F_F649
     .word F_F651

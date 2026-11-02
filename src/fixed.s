@@ -148,8 +148,10 @@ F_C1D0:
     .byte $02,$02,$01,$01,$02,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$02
     .byte $02,$01,$01,$00,$00
 F_C1EF:
-    .byte $00,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34
-    .byte $35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$36,$35,$36,$35,$34
+    .byte $00
+F_C1F0:
+    .byte $34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35
+    .byte $34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$36,$35,$36,$35,$34
 F_C20F:
     .byte $00
 F_C210:
@@ -4012,6 +4014,7 @@ F_E0C6:
     .byte $A9,$00
     STA zp_70
     STA zp_71
+F_E0CC:
     STA zp_72
 F_E0CE:
     STA zp_6F
@@ -5234,11 +5237,20 @@ F_E97F:
     RTS
     .byte $A9,$02,$85,$7A,$A9,$00,$85,$7B,$A4,$B9,$F0,$28,$C8,$84,$B9,$C0
     .byte $30,$D0,$34,$A9,$CD,$85,$60,$A9,$03,$85,$61,$A9,$78,$85,$5E,$A9
-    .byte $00,$85,$5F,$A9,$04,$85,$9C,$A9,$0C,$85,$92,$A9,$00,$85,$E1,$85
-    .byte $E2,$4C,$43,$F0,$A5,$61,$D0,$10,$A5,$60,$C9,$10,$B0,$0A,$A0,$00
-    .byte $84,$60,$84,$61,$C8,$84,$B9,$60,$A4,$BA,$B9,$B0,$04,$18,$69,$0F
-    .byte $85,$53,$B9,$E0,$04,$69,$00,$85,$54,$A5,$60,$38,$E5,$53,$A5,$61
-    .byte $E5,$54,$B0,$70,$B9,$10
+    .byte $00
+    STA player_y_hi
+    LDA #$04
+    STA zp_9C
+    LDA #$0C
+    STA zp_92
+    LDA #$00
+    STA zp_E1
+    STA zp_E2
+    JMP F_F043
+    .byte $A5,$61,$D0,$10,$A5,$60,$C9,$10,$B0,$0A,$A0,$00,$84,$60,$84,$61
+    .byte $C8,$84,$B9,$60,$A4,$BA,$B9,$B0,$04,$18,$69,$0F,$85,$53,$B9,$E0
+    .byte $04,$69,$00,$85,$54,$A5,$60,$38,$E5,$53,$A5,$61,$E5,$54,$B0,$70
+    .byte $B9,$10
     ORA zp_38
     SBC #$02
     STA zp_53
@@ -5313,7 +5325,6 @@ F_EA42:
     LDA #$05
     STA zp_53
     LDA #$00
-F_EA70:
     STA zp_54
 F_EA72:
     LDA ent_y_lo,y
@@ -5332,15 +5343,33 @@ F_EA81:
     ADC #$07
     STA zp_65
     RTS
-    .byte $A9,$01,$85,$64,$20,$25,$EB,$A5,$E0,$F0,$07,$C6,$E0,$A9,$37,$85
-    .byte $65,$60,$A5,$BD,$38,$E9,$01,$D0,$13,$E6,$BE,$A5,$BE,$4A,$A8,$B9
-    BEQ F_EA70
+F_EA8D:
+    LDA #$01
+    STA zp_64
+    JSR F_EB25
+    LDA zp_E0
+    BEQ F_EA9F
+    DEC zp_E0
+    LDA #$37
+    STA zp_65
+    RTS
+F_EA9F:
+    LDA zp_BD
+    SEC
+    SBC #$01
+    BNE F_EAB9
+    INC zp_BE
+    LDA zp_BE
+    LSR a
+    TAY
+    LDA F_C1F0,y
     BNE F_EAB5
     STA zp_BE
     LDA #$35
 F_EAB5:
     STA zp_65
     LDA #$03
+F_EAB9:
     STA zp_BD
     RTS
 F_EABC:
@@ -6053,6 +6082,7 @@ F_F00F:
     LDY #$00
     LDA (ptr_lo),y
     STA player_x_lo
+F_F020:
     INY
     LDA (ptr_lo),y
     STA player_x_hi
@@ -6075,6 +6105,7 @@ F_F03E:
 F_F040:
     STA zp_92
     INY
+F_F043:
     JSR F_CE52
     LDA #$01
     STA nmi_state
@@ -7111,7 +7142,9 @@ F_F800:
     PLA
     JMP SwitchBank
 F_F80D:
-    .byte $A5,$0C,$48
+    LDA cur_bank
+F_F80F:
+    PHA
     LDA #$03
     JSR SwitchBankKeepX
     JSR $BE91
@@ -7594,6 +7627,7 @@ F_FBD6:
     LDA #$00
     STA zp_55
     STA zp_56
+F_FC08:
     STX zp_42
     JMP (ptr_lo)
 F_FC0D:
@@ -7837,6 +7871,7 @@ F_FD70:
 F_FD7D:
     STA PPUADDR
     STY PPUADDR
+F_FD83:
     RTS
 F_FD84:
     BIT ram_0397

@@ -3,14 +3,21 @@
 
 .segment "BANK6"
 
-    .byte $4C,$15,$80
+    JMP Sound_PlaySong
 Sound_Update:
     JMP B6_8115
 B6_8006:
-    JMP B6_80EA
+    JMP Sound_Silence
 B6_8009:
-    JMP B6_80DC
-    .byte $4C,$80,$89,$4C,$EC,$89,$4C,$6F,$8A,$A8,$20,$EA,$80,$A9,$00,$18
+    JMP Sound_Resume
+    JMP B6_8980
+    JMP B6_89EC
+    JMP B6_8A6F
+Sound_PlaySong:
+    TAY
+    JSR Sound_Silence
+    LDA #$00
+    CLC
 B6_801C:
     DEY
     BMI B6_8023
@@ -21,97 +28,97 @@ B6_8023:
     LDA #$00
     LDY #$12
 B6_8028:
-    STA ram_0759,y
-    STA ram_076C,y
-    STA ram_077F,y
-    STA ram_0792,y
+    STA snd_sq1_stream_lo,y
+    STA snd_sq2_stream_lo,y
+    STA snd_tri_stream_lo,y
+    STA snd_noi_stream_lo,y
     DEY
     BPL B6_8028
     TAY
-    LDA B6_9427,x
-    STA ram_074E
-    STA ram_074F
-    LDA B6_9428,x
-    STA ram_075B
+    LDA SongTable,x
+    STA snd_tempo
+    STA snd_tempo_base
+    LDA $9428,x
+    STA snd_sq1_list_lo
     STA zp_FE
-    LDA B6_9429,x
-    STA ram_075C
+    LDA $9429,x
+    STA snd_sq1_list_hi
     STA zp_FF
     LDA (zp_FE),y
-    STA ram_0759
+    STA snd_sq1_stream_lo
     INY
     LDA (zp_FE),y
-    STA ram_075A
-    LDA B6_942A,x
-    STA ram_076E
+    STA snd_sq1_stream_hi
+    LDA $942A,x
+    STA snd_sq2_list_lo
     STA zp_FE
-    LDA B6_942B,x
-    STA ram_076F
-    STA zp_FF
-    DEY
-    LDA (zp_FE),y
-    STA ram_076C
-    INY
-    LDA (zp_FE),y
-    STA ram_076D
-    LDA B6_942C,x
-    STA ram_0781
-    STA zp_FE
-    LDA B6_942D,x
-    STA ram_0782
+    LDA $942B,x
+    STA snd_sq2_list_hi
     STA zp_FF
     DEY
     LDA (zp_FE),y
-    STA ram_077F
+    STA snd_sq2_stream_lo
     INY
     LDA (zp_FE),y
-    STA ram_0780
-    LDA B6_942E,x
-    STA ram_0794
+    STA snd_sq2_stream_hi
+    LDA $942C,x
+    STA snd_tri_list_lo
     STA zp_FE
-    LDA B6_942F,x
-    STA ram_0795
+    LDA $942D,x
+    STA snd_tri_list_hi
     STA zp_FF
     DEY
     LDA (zp_FE),y
-    STA ram_0792
+    STA snd_tri_stream_lo
     INY
     LDA (zp_FE),y
-    STA ram_0793
-    STY ram_0761
-    STY ram_0774
-    STY ram_0787
-    STY ram_079A
+    STA snd_tri_stream_hi
+    LDA $942E,x
+    STA snd_noi_list_lo
+    STA zp_FE
+    LDA $942F,x
+    STA snd_noi_list_hi
+    STA zp_FF
+    DEY
+    LDA (zp_FE),y
+    STA snd_noi_stream_lo
     INY
-    STY ram_075D
-    STY ram_0770
-    STY ram_0783
-    STY ram_0796
+    LDA (zp_FE),y
+    STA snd_noi_stream_hi
+    STY snd_sq1_len_count
+    STY snd_sq2_len_count
+    STY snd_tri_len_count
+    STY snd_noi_len_count
+    INY
+    STY snd_sq1_listpos_lo
+    STY snd_sq2_listpos_lo
+    STY snd_tri_listpos_lo
+    STY snd_noi_listpos_lo
     LDX #$00
     STX ram_0755
-    STX ram_0757
+    STX snd_song_transpose
     DEX
-    STX ram_0756
-    STX ram_0758
-    INC ram_074A
+    STX snd_tempo_acc
+    STX snd_song_ended
+    INC snd_playing
     RTS
-B6_80DC:
-    LDA ram_0758
+Sound_Resume:
+    LDA snd_song_ended
     BEQ B6_80E9
-    LDA ram_074A
+    LDA snd_playing
     BNE B6_80E9
-    INC ram_074A
+    INC snd_playing
 B6_80E9:
     RTS
-B6_80EA:
+Sound_Silence:
     LDA #$00
-    STA ram_074A
-    STA ram_074B
-    STA ram_074C
-    STA ram_074D
+    STA snd_playing
+    STA snd_sfx_sq1
+    STA snd_sfx_sq2
+    STA snd_sfx_noise
     TAX
 B6_80F9:
-    STA ram_07A5,x
+    STA snd_out_sq1_vol,x
     INX
     CPX #$10
     BNE B6_80F9
@@ -136,67 +143,67 @@ B6_8115:
 B6_812C:
     JSR B6_817B
     JSR B6_8AD7
-    LDA ram_074A
+    LDA snd_playing
     BEQ B6_817A
-    LDA ram_074B
+    LDA snd_sfx_sq1
     BNE B6_814D
-    LDA ram_07A5
+    LDA snd_out_sq1_vol
     STA SQ1_VOL
-    LDA ram_0763
+    LDA snd_sq1_sweep
     BNE B6_814D
-    LDA ram_07A7
+    LDA snd_out_sq1_lo
     STA SQ1_LO
 B6_814D:
-    LDA ram_074C
+    LDA snd_sfx_sq2
     BNE B6_8163
-    LDA ram_07A9
+    LDA snd_out_sq2_vol
     STA SQ2_VOL
-    LDA ram_0776
+    LDA snd_sq2_sweep
     BNE B6_8163
-    LDA ram_07AB
+    LDA snd_out_sq2_lo
     STA SQ2_LO
 B6_8163:
-    LDA ram_07AF
+    LDA snd_out_tri_lo
     STA TRI_LO
-    LDA ram_074D
+    LDA snd_sfx_noise
     BNE B6_817A
-    LDA ram_07B1
+    LDA snd_out_noi_vol
     STA NOISE_VOL
-    LDA ram_07B3
+    LDA snd_out_noi_lo
     STA NOISE_LO
 B6_817A:
     RTS
 B6_817B:
-    LDA ram_074A
+    LDA snd_playing
     BNE B6_8181
     RTS
 B6_8181:
-    LDA ram_074E
+    LDA snd_tempo
     CLC
-    ADC ram_0756
-    STA ram_0756
+    ADC snd_tempo_acc
+    STA snd_tempo_acc
     BCC B6_8199
-    JSR B6_81A5
-    JSR B6_83A0
-    JSR B6_859B
-    JSR B6_8733
+    JSR Snd_Sq1_Step
+    JSR Snd_Sq2_Step
+    JSR Snd_Tri_Step
+    JSR Snd_Noise_Step
 B6_8199:
-    JSR B6_8342
-    JSR B6_853D
-    JSR B6_86FC
-    JMP B6_886B
-B6_81A5:
-    DEC ram_0761
+    JSR Snd_Sq1_Effects
+    JSR Snd_Sq2_Effects
+    JSR Snd_Tri_Effects
+    JMP Snd_Noise_Effects
+Snd_Sq1_Step:
+    DEC snd_sq1_len_count
     BEQ B6_81AB
     RTS
 B6_81AB:
-    LDA ram_0759
+    LDA snd_sq1_stream_lo
     STA zp_FE
-    LDA ram_075A
+    LDA snd_sq1_stream_hi
     STA zp_FF
     LDA #$00
-    STA ram_0763
-    STA ram_076B
+    STA snd_sq1_sweep
+    STA snd_sq1_env_active
 B6_81BD:
     LDY #$00
     LDA (zp_FE),y
@@ -210,72 +217,72 @@ B6_81C8:
     CMP #$60
     BCC B6_81D7
     ADC #$A0
-    STA ram_0760
+    STA snd_sq1_next_len
     JMP B6_81BD
 B6_81D7:
     CLC
-    ADC ram_0757
+    ADC snd_song_transpose
     CLC
-    ADC ram_075F
+    ADC snd_sq1_transpose
     ASL a
     TAY
-    LDA B6_88E2,y
-    STA ram_0766
-    STA ram_07A7
-    LDA B6_88E3,y
-    STA ram_07A8
-    LDX ram_074B
+    LDA PeriodTable,y
+    STA snd_sq1_period_lo
+    STA snd_out_sq1_lo
+    LDA $88E3,y
+    STA snd_out_sq1_hi
+    LDX snd_sfx_sq1
     BNE B6_8204
-    LDX ram_0763
+    LDX snd_sq1_sweep
     STX SQ1_SWEEP
-    LDX ram_07A7
+    LDX snd_out_sq1_lo
     STX SQ1_LO
     STA SQ1_HI
 B6_8204:
     LDA #$01
-    STA ram_0767
-    LDA ram_0768
-    STA ram_0769
+    STA snd_sq1_env_pos
+    LDA snd_sq1_env_speed
+    STA snd_sq1_env_count
 B6_820F:
     LDA #$FF
-    STA ram_076B
+    STA snd_sq1_env_active
 B6_8214:
     LDA zp_FE
-    STA ram_0759
+    STA snd_sq1_stream_lo
     LDA zp_FF
-    STA ram_075A
-    LDA ram_0760
-    STA ram_0761
+    STA snd_sq1_stream_hi
+    LDA snd_sq1_next_len
+    STA snd_sq1_len_count
     RTS
 B6_8225:
     LDY #$00
     CMP #$FF
     BNE B6_8273
-    LDA ram_075D
+    LDA snd_sq1_listpos_lo
     CLC
-    ADC ram_075B
+    ADC snd_sq1_list_lo
     STA zp_FE
-    LDA ram_075E
-    ADC ram_075C
+    LDA snd_sq1_listpos_hi
+    ADC snd_sq1_list_hi
     STA zp_FF
-    LDA ram_075D
+    LDA snd_sq1_listpos_lo
     ADC #$02
-    STA ram_075D
+    STA snd_sq1_listpos_lo
     TYA
-    ADC ram_075E
-    STA ram_075E
+    ADC snd_sq1_listpos_hi
+    STA snd_sq1_listpos_hi
     LDA (zp_FE),y
     INY
     ORA (zp_FE),y
     BNE B6_8266
-    LDA ram_075B
+    LDA snd_sq1_list_lo
     STA zp_FE
-    LDA ram_075C
+    LDA snd_sq1_list_hi
     STA zp_FF
     LDA #$02
-    STA ram_075D
+    STA snd_sq1_listpos_lo
     LDA #$00
-    STA ram_075E
+    STA snd_sq1_listpos_hi
 B6_8266:
     LDA (zp_FE),y
     TAX
@@ -292,7 +299,7 @@ B6_8273:
     BNE B6_827F
     INC zp_FF
 B6_827F:
-    STA ram_076A
+    STA snd_sq1_env_idx
     JMP B6_81BD
 B6_8285:
     CMP #$F7
@@ -302,14 +309,14 @@ B6_8285:
     BNE B6_8291
     INC zp_FF
 B6_8291:
-    STA ram_0765
-    STY ram_0764
+    STA snd_sq1_pitchmod_idx
+    STY snd_sq1_pitchmod_pos
     JMP B6_81BD
 B6_829A:
     CMP #$FA
     BNE B6_82AC
     LDA (zp_FE),y
-    STA ram_0762
+    STA snd_sq1_duty
     INC zp_FE
     BNE B6_82A9
     INC zp_FF
@@ -319,7 +326,7 @@ B6_82AC:
     CMP #$F8
     BNE B6_82B8
     LDA #$30
-    STA ram_07A5
+    STA snd_out_sq1_vol
     JMP B6_8214
 B6_82B8:
     CMP #$F9
@@ -333,7 +340,7 @@ B6_82BF:
     BNE B6_82CB
     INC zp_FF
 B6_82CB:
-    STA ram_0763
+    STA snd_sq1_sweep
     JMP B6_81BD
 B6_82D1:
     CMP #$FB
@@ -343,7 +350,7 @@ B6_82D1:
     BNE B6_82DD
     INC zp_FF
 B6_82DD:
-    STA ram_0757
+    STA snd_song_transpose
     JMP B6_81BD
 B6_82E3:
     CMP #$FC
@@ -353,23 +360,23 @@ B6_82E3:
     BNE B6_82EF
     INC zp_FF
 B6_82EF:
-    STA ram_075F
+    STA snd_sq1_transpose
     JMP B6_81BD
 B6_82F5:
     CMP #$F5
     BNE B6_831F
     LDA (zp_FE),y
     TAX
-    STA ram_075B
+    STA snd_sq1_list_lo
     INY
     LDA (zp_FE),y
     STX zp_FE
     STA zp_FF
-    STA ram_075C
+    STA snd_sq1_list_hi
     LDA #$02
-    STA ram_075D
+    STA snd_sq1_listpos_lo
     DEY
-    STY ram_075E
+    STY snd_sq1_listpos_hi
     LDA (zp_FE),y
     TAX
     INY
@@ -385,72 +392,72 @@ B6_831F:
     BNE B6_832B
     INC zp_FF
 B6_832B:
-    STA ram_074E
-    STA ram_074F
+    STA snd_tempo
+    STA snd_tempo_base
     JMP B6_81BD
 B6_8334:
     CMP #$FE
     BNE B6_8340
-    STY ram_0758
+    STY snd_song_ended
     PLA
     PLA
     JMP B6_8006
 B6_8340:
     BEQ B6_8340
-B6_8342:
-    LDA ram_076B
+Snd_Sq1_Effects:
+    LDA snd_sq1_env_active
     BEQ B6_8378
-    LDX ram_076A
+    LDX snd_sq1_env_idx
     LDA B6_930D,x
     STA zp_FE
     LDA B6_9322,x
     STA zp_FF
     LDY #$00
     LDA (zp_FE),y
-    STA ram_0768
-    LDY ram_0767
+    STA snd_sq1_env_speed
+    LDY snd_sq1_env_pos
     LDA (zp_FE),y
     BMI B6_8370
-    DEC ram_0769
+    DEC snd_sq1_env_count
     BPL B6_8370
-    LDX ram_0768
-    STX ram_0769
-    INC ram_0767
+    LDX snd_sq1_env_speed
+    STX snd_sq1_env_count
+    INC snd_sq1_env_pos
 B6_8370:
     AND #$0F
-    ORA ram_0762
-    STA ram_07A5
+    ORA snd_sq1_duty
+    STA snd_out_sq1_vol
 B6_8378:
-    LDX ram_0765
+    LDX snd_sq1_pitchmod_idx
     LDA B6_93CB,x
     STA zp_FE
     LDA B6_93D4,x
     STA zp_FF
-    LDY ram_0764
+    LDY snd_sq1_pitchmod_pos
     LDA (zp_FE),y
     CMP #$80
     BNE B6_8395
     LDY #$00
-    STY ram_0764
+    STY snd_sq1_pitchmod_pos
     LDA (zp_FE),y
 B6_8395:
-    INC ram_0764
+    INC snd_sq1_pitchmod_pos
     CLC
-    ADC ram_0766
-    STA ram_07A7
+    ADC snd_sq1_period_lo
+    STA snd_out_sq1_lo
     RTS
-B6_83A0:
-    DEC ram_0774
+Snd_Sq2_Step:
+    DEC snd_sq2_len_count
     BEQ B6_83A6
     RTS
 B6_83A6:
-    LDA ram_076C
+    LDA snd_sq2_stream_lo
     STA zp_FE
-    LDA ram_076D
+    LDA snd_sq2_stream_hi
     STA zp_FF
     LDA #$00
-    STA ram_0776
-    STA ram_077E
+    STA snd_sq2_sweep
+    STA snd_sq2_env_active
 B6_83B8:
     LDY #$00
     LDA (zp_FE),y
@@ -464,72 +471,72 @@ B6_83C3:
     CMP #$60
     BCC B6_83D2
     ADC #$A0
-    STA ram_0773
+    STA snd_sq2_next_len
     JMP B6_83B8
 B6_83D2:
     CLC
-    ADC ram_0757
+    ADC snd_song_transpose
     CLC
-    ADC ram_0772
+    ADC snd_sq2_transpose
     ASL a
     TAY
-    LDA B6_88E2,y
-    STA ram_0779
-    STA ram_07AB
-    LDA B6_88E3,y
+    LDA PeriodTable,y
+    STA snd_sq2_period_lo
+    STA snd_out_sq2_lo
+    LDA $88E3,y
     STA ram_07AC
-    LDX ram_074C
+    LDX snd_sfx_sq2
     BNE B6_83FF
-    LDX ram_0776
+    LDX snd_sq2_sweep
     STX SQ2_SWEEP
-    LDX ram_07AB
+    LDX snd_out_sq2_lo
     STX SQ2_LO
     STA SQ2_HI
 B6_83FF:
     LDA #$01
-    STA ram_077A
-    LDA ram_077B
-    STA ram_077C
+    STA snd_sq2_env_pos
+    LDA snd_sq2_env_speed
+    STA snd_sq2_env_count
 B6_840A:
     LDA #$FF
-    STA ram_077E
+    STA snd_sq2_env_active
 B6_840F:
     LDA zp_FE
-    STA ram_076C
+    STA snd_sq2_stream_lo
     LDA zp_FF
-    STA ram_076D
-    LDA ram_0773
-    STA ram_0774
+    STA snd_sq2_stream_hi
+    LDA snd_sq2_next_len
+    STA snd_sq2_len_count
     RTS
 B6_8420:
     LDY #$00
     CMP #$FF
     BNE B6_846E
-    LDA ram_0770
+    LDA snd_sq2_listpos_lo
     CLC
-    ADC ram_076E
+    ADC snd_sq2_list_lo
     STA zp_FE
-    LDA ram_0771
-    ADC ram_076F
+    LDA snd_sq2_listpos_hi
+    ADC snd_sq2_list_hi
     STA zp_FF
-    LDA ram_0770
+    LDA snd_sq2_listpos_lo
     ADC #$02
-    STA ram_0770
+    STA snd_sq2_listpos_lo
     TYA
-    ADC ram_0771
-    STA ram_0771
+    ADC snd_sq2_listpos_hi
+    STA snd_sq2_listpos_hi
     LDA (zp_FE),y
     INY
     ORA (zp_FE),y
     BNE B6_8461
-    LDA ram_076E
+    LDA snd_sq2_list_lo
     STA zp_FE
-    LDA ram_076F
+    LDA snd_sq2_list_hi
     STA zp_FF
     LDA #$02
-    STA ram_0770
+    STA snd_sq2_listpos_lo
     LDA #$00
-    STA ram_0771
+    STA snd_sq2_listpos_hi
 B6_8461:
     LDA (zp_FE),y
     TAX
@@ -546,7 +553,7 @@ B6_846E:
     BNE B6_847A
     INC zp_FF
 B6_847A:
-    STA ram_077D
+    STA snd_sq2_env_idx
     JMP B6_83B8
 B6_8480:
     CMP #$F7
@@ -556,14 +563,14 @@ B6_8480:
     BNE B6_848C
     INC zp_FF
 B6_848C:
-    STA ram_0778
-    STY ram_0777
+    STA snd_sq2_pitchmod_idx
+    STY snd_sq2_pitchmod_pos
     JMP B6_83B8
 B6_8495:
     CMP #$FA
     BNE B6_84A7
     LDA (zp_FE),y
-    STA ram_0775
+    STA snd_sq2_duty
     INC zp_FE
     BNE B6_84A4
     INC zp_FF
@@ -573,7 +580,7 @@ B6_84A7:
     CMP #$F8
     BNE B6_84B3
     LDA #$30
-    STA ram_07A9
+    STA snd_out_sq2_vol
     JMP B6_840F
 B6_84B3:
     CMP #$F9
@@ -587,7 +594,7 @@ B6_84BA:
     BNE B6_84C6
     INC zp_FF
 B6_84C6:
-    STA ram_0776
+    STA snd_sq2_sweep
     JMP B6_83B8
 B6_84CC:
     CMP #$FB
@@ -597,7 +604,7 @@ B6_84CC:
     BNE B6_84D8
     INC zp_FF
 B6_84D8:
-    STA ram_0757
+    STA snd_song_transpose
     JMP B6_83B8
 B6_84DE:
     CMP #$FC
@@ -607,23 +614,23 @@ B6_84DE:
     BNE B6_84EA
     INC zp_FF
 B6_84EA:
-    STA ram_0772
+    STA snd_sq2_transpose
     JMP B6_83B8
 B6_84F0:
     CMP #$F5
     BNE B6_851A
     LDA (zp_FE),y
     TAX
-    STA ram_076E
+    STA snd_sq2_list_lo
     INY
     LDA (zp_FE),y
     STX zp_FE
     STA zp_FF
-    STA ram_076F
+    STA snd_sq2_list_hi
     LDA #$02
-    STA ram_0770
+    STA snd_sq2_listpos_lo
     DEY
-    STY ram_0771
+    STY snd_sq2_listpos_hi
     LDA (zp_FE),y
     TAX
     INY
@@ -639,68 +646,68 @@ B6_851A:
     BNE B6_8526
     INC zp_FF
 B6_8526:
-    STA ram_074E
-    STA ram_074F
+    STA snd_tempo
+    STA snd_tempo_base
     JMP B6_83B8
 B6_852F:
     CMP #$FE
     BNE B6_853B
-    STY ram_0758
+    STY snd_song_ended
     PLA
     PLA
     JMP B6_8006
 B6_853B:
     BEQ B6_853B
-B6_853D:
-    LDA ram_077E
+Snd_Sq2_Effects:
+    LDA snd_sq2_env_active
     BEQ B6_8573
-    LDX ram_077D
+    LDX snd_sq2_env_idx
     LDA B6_930D,x
     STA zp_FE
     LDA B6_9322,x
     STA zp_FF
     LDY #$00
     LDA (zp_FE),y
-    STA ram_077B
-    LDY ram_077A
+    STA snd_sq2_env_speed
+    LDY snd_sq2_env_pos
     LDA (zp_FE),y
     BMI B6_856B
-    DEC ram_077C
+    DEC snd_sq2_env_count
     BPL B6_856B
-    LDX ram_077B
-    STX ram_077C
-    INC ram_077A
+    LDX snd_sq2_env_speed
+    STX snd_sq2_env_count
+    INC snd_sq2_env_pos
 B6_856B:
     AND #$0F
-    ORA ram_0775
-    STA ram_07A9
+    ORA snd_sq2_duty
+    STA snd_out_sq2_vol
 B6_8573:
-    LDX ram_0778
+    LDX snd_sq2_pitchmod_idx
     LDA B6_93CB,x
     STA zp_FE
     LDA B6_93D4,x
     STA zp_FF
-    LDY ram_0777
+    LDY snd_sq2_pitchmod_pos
     LDA (zp_FE),y
     CMP #$80
     BNE B6_8590
     LDY #$00
-    STY ram_0777
+    STY snd_sq2_pitchmod_pos
     LDA (zp_FE),y
 B6_8590:
-    INC ram_0777
+    INC snd_sq2_pitchmod_pos
     CLC
-    ADC ram_0779
-    STA ram_07AB
+    ADC snd_sq2_period_lo
+    STA snd_out_sq2_lo
     RTS
-B6_859B:
-    DEC ram_0787
+Snd_Tri_Step:
+    DEC snd_tri_len_count
     BEQ B6_85A1
     RTS
 B6_85A1:
-    LDA ram_077F
+    LDA snd_tri_stream_lo
     STA zp_FE
-    LDA ram_0780
+    LDA snd_tri_stream_hi
     STA zp_FF
 B6_85AB:
     LDY #$00
@@ -715,64 +722,64 @@ B6_85B6:
     CMP #$60
     BCC B6_85C5
     ADC #$A0
-    STA ram_0786
+    STA snd_tri_next_len
     JMP B6_85AB
 B6_85C5:
     CLC
-    ADC ram_0757
+    ADC snd_song_transpose
     CLC
-    ADC ram_0785
+    ADC snd_tri_transpose
     ASL a
     TAY
-    LDA B6_88E2,y
-    STA ram_078C
-    STA ram_07AF
-    LDA B6_88E3,y
-    LDX ram_07AF
+    LDA PeriodTable,y
+    STA snd_tri_period_lo
+    STA snd_out_tri_lo
+    LDA $88E3,y
+    LDX snd_out_tri_lo
     STX TRI_LO
     STA TRI_HI
     STA ram_07B0
-    LDA ram_0790
-    STA ram_078D
+    LDA snd_tri_env_idx
+    STA snd_tri_env_pos
     LDA #$81
     STA TRI_LINEAR
 B6_85F2:
     LDA zp_FE
-    STA ram_077F
+    STA snd_tri_stream_lo
     LDA zp_FF
-    STA ram_0780
-    LDA ram_0786
-    STA ram_0787
+    STA snd_tri_stream_hi
+    LDA snd_tri_next_len
+    STA snd_tri_len_count
     RTS
 B6_8603:
     LDY #$00
     CMP #$FF
     BNE B6_8651
-    LDA ram_0783
+    LDA snd_tri_listpos_lo
     CLC
-    ADC ram_0781
+    ADC snd_tri_list_lo
     STA zp_FE
-    LDA ram_0784
-    ADC ram_0782
+    LDA snd_tri_listpos_hi
+    ADC snd_tri_list_hi
     STA zp_FF
-    LDA ram_0783
+    LDA snd_tri_listpos_lo
     ADC #$02
-    STA ram_0783
+    STA snd_tri_listpos_lo
     TYA
-    ADC ram_0784
-    STA ram_0784
+    ADC snd_tri_listpos_hi
+    STA snd_tri_listpos_hi
     LDA (zp_FE),y
     INY
     ORA (zp_FE),y
     BNE B6_8644
-    LDA ram_0781
+    LDA snd_tri_list_lo
     STA zp_FE
-    LDA ram_0782
+    LDA snd_tri_list_hi
     STA zp_FF
     LDA #$02
-    STA ram_0783
+    STA snd_tri_listpos_lo
     LDA #$00
-    STA ram_0784
+    STA snd_tri_listpos_hi
 B6_8644:
     LDA (zp_FE),y
     TAX
@@ -789,7 +796,7 @@ B6_8651:
     BNE B6_865D
     INC zp_FF
 B6_865D:
-    STA ram_0790
+    STA snd_tri_env_idx
     JMP B6_85AB
 B6_8663:
     CMP #$F7
@@ -799,14 +806,14 @@ B6_8663:
     BNE B6_866F
     INC zp_FF
 B6_866F:
-    STA ram_078B
-    STY ram_078A
+    STA snd_tri_pitchmod_idx
+    STY snd_tri_pitchmod_pos
     JMP B6_85AB
 B6_8678:
     CMP #$F8
     BNE B6_8684
     LDA #$01
-    STA ram_078D
+    STA snd_tri_env_pos
     JMP B6_85F2
 B6_8684:
     CMP #$F9
@@ -820,7 +827,7 @@ B6_868B:
     BNE B6_8697
     INC zp_FF
 B6_8697:
-    STA ram_0757
+    STA snd_song_transpose
     JMP B6_85AB
 B6_869D:
     CMP #$FC
@@ -830,23 +837,23 @@ B6_869D:
     BNE B6_86A9
     INC zp_FF
 B6_86A9:
-    STA ram_0785
+    STA snd_tri_transpose
     JMP B6_85AB
 B6_86AF:
     CMP #$F5
     BNE B6_86D9
     LDA (zp_FE),y
     TAX
-    STA ram_0781
+    STA snd_tri_list_lo
     INY
     LDA (zp_FE),y
     STX zp_FE
     STA zp_FF
-    STA ram_0782
+    STA snd_tri_list_hi
     LDA #$02
-    STA ram_0783
+    STA snd_tri_listpos_lo
     DEY
-    STY ram_0784
+    STY snd_tri_listpos_hi
     LDA (zp_FE),y
     TAX
     INY
@@ -862,54 +869,54 @@ B6_86D9:
     BNE B6_86E5
     INC zp_FF
 B6_86E5:
-    STA ram_074E
-    STA ram_074F
+    STA snd_tempo
+    STA snd_tempo_base
     JMP B6_85AB
 B6_86EE:
     CMP #$FE
     BNE B6_86FA
-    STY ram_0758
+    STY snd_song_ended
     PLA
     PLA
     JMP B6_8006
 B6_86FA:
     BEQ B6_86FA
-B6_86FC:
-    LDA ram_078D
+Snd_Tri_Effects:
+    LDA snd_tri_env_pos
     BEQ B6_870B
-    DEC ram_078D
+    DEC snd_tri_env_pos
     BNE B6_870B
     LDA #$00
     STA TRI_LINEAR
 B6_870B:
-    LDX ram_078B
+    LDX snd_tri_pitchmod_idx
     LDA B6_93CB,x
     STA zp_FE
     LDA B6_93D4,x
     STA zp_FF
-    LDY ram_078A
+    LDY snd_tri_pitchmod_pos
     LDA (zp_FE),y
     CMP #$80
     BNE B6_8728
     LDY #$00
-    STY ram_078A
+    STY snd_tri_pitchmod_pos
     LDA (zp_FE),y
 B6_8728:
-    INC ram_078A
+    INC snd_tri_pitchmod_pos
     CLC
-    ADC ram_078C
-    STA ram_07AF
+    ADC snd_tri_period_lo
+    STA snd_out_tri_lo
     RTS
-B6_8733:
-    DEC ram_079A
+Snd_Noise_Step:
+    DEC snd_noi_len_count
     BEQ B6_8739
     RTS
 B6_8739:
-    LDA ram_0792
+    LDA snd_noi_stream_lo
     STA zp_FE
-    LDA ram_0793
+    LDA snd_noi_stream_hi
     STA zp_FF
-    STA ram_07A4
+    STA snd_noi_env_active
 B6_8746:
     LDY #$00
     LDA (zp_FE),y
@@ -923,61 +930,61 @@ B6_8751:
     CMP #$60
     BCC B6_8760
     ADC #$A0
-    STA ram_0799
+    STA snd_noi_next_len
     JMP B6_8746
 B6_8760:
     AND #$0F
-    STA ram_079F
-    STA ram_07B3
+    STA snd_noi_period_lo
+    STA snd_out_noi_lo
     LDY #$00
-    LDX ram_074D
+    LDX snd_sfx_noise
     BNE B6_8775
     STA NOISE_LO
     STY NOISE_HI
 B6_8775:
     LDA #$01
-    STA ram_07A0
-    LDA ram_07A1
-    STA ram_07A2
+    STA snd_noi_env_pos
+    LDA snd_noi_env_speed
+    STA snd_noi_env_count
 B6_8780:
     LDA #$FF
-    STA ram_07A4
+    STA snd_noi_env_active
     LDA zp_FE
-    STA ram_0792
+    STA snd_noi_stream_lo
     LDA zp_FF
-    STA ram_0793
-    LDA ram_0799
-    STA ram_079A
+    STA snd_noi_stream_hi
+    LDA snd_noi_next_len
+    STA snd_noi_len_count
     RTS
 B6_8796:
     LDY #$00
     CMP #$FF
     BNE B6_87E4
-    LDA ram_0796
+    LDA snd_noi_listpos_lo
     CLC
-    ADC ram_0794
+    ADC snd_noi_list_lo
     STA zp_FE
-    LDA ram_0797
-    ADC ram_0795
+    LDA snd_noi_listpos_hi
+    ADC snd_noi_list_hi
     STA zp_FF
-    LDA ram_0796
+    LDA snd_noi_listpos_lo
     ADC #$02
-    STA ram_0796
+    STA snd_noi_listpos_lo
     TYA
-    ADC ram_0797
-    STA ram_0797
+    ADC snd_noi_listpos_hi
+    STA snd_noi_listpos_hi
     LDA (zp_FE),y
     INY
     ORA (zp_FE),y
     BNE B6_87D7
-    LDA ram_0794
+    LDA snd_noi_list_lo
     STA zp_FE
-    LDA ram_0795
+    LDA snd_noi_list_hi
     STA zp_FF
     LDA #$02
-    STA ram_0796
+    STA snd_noi_listpos_lo
     LDA #$00
-    STA ram_0797
+    STA snd_noi_listpos_hi
 B6_87D7:
     LDA (zp_FE),y
     TAX
@@ -994,7 +1001,7 @@ B6_87E4:
     BNE B6_87F0
     INC zp_FF
 B6_87F0:
-    STA ram_07A3
+    STA snd_noi_env_idx
     JMP B6_8746
 B6_87F6:
     CMP #$F7
@@ -1004,14 +1011,14 @@ B6_87F6:
     BNE B6_8802
     INC zp_FF
 B6_8802:
-    STA ram_079E
-    STY ram_079D
+    STA snd_noi_pitchmod_idx
+    STY snd_noi_pitchmod_pos
     JMP B6_8746
 B6_880B:
     CMP #$F8
     BNE B6_8817
     LDA #$30
-    STA ram_07B1
+    STA snd_out_noi_vol
     JMP B6_8780
 B6_8817:
     CMP #$F9
@@ -1022,16 +1029,16 @@ B6_881E:
     BNE B6_8848
     LDA (zp_FE),y
     TAX
-    STA ram_0794
+    STA snd_noi_list_lo
     INY
     LDA (zp_FE),y
     STX zp_FE
     STA zp_FF
-    STA ram_0795
+    STA snd_noi_list_hi
     LDA #$02
-    STA ram_0796
+    STA snd_noi_listpos_lo
     DEY
-    STY ram_0797
+    STY snd_noi_listpos_hi
     LDA (zp_FE),y
     TAX
     INY
@@ -1047,92 +1054,255 @@ B6_8848:
     BNE B6_8854
     INC zp_FF
 B6_8854:
-    STA ram_074E
-    STA ram_074F
+    STA snd_tempo
+    STA snd_tempo_base
     JMP B6_8746
 B6_885D:
     CMP #$FE
     BNE B6_8869
-    STY ram_0758
+    STY snd_song_ended
     PLA
     PLA
     JMP B6_8006
 B6_8869:
     BEQ B6_8869
-B6_886B:
-    LDA ram_07A4
+Snd_Noise_Effects:
+    LDA snd_noi_env_active
     BEQ B6_88A0
-    LDX ram_07A3
+    LDX snd_noi_env_idx
     LDA B6_930D,x
     STA zp_FE
     LDA B6_9322,x
     STA zp_FF
     LDY #$00
     LDA (zp_FE),y
-    STA ram_07A1
-    LDY ram_07A0
+    STA snd_noi_env_speed
+    LDY snd_noi_env_pos
     LDA (zp_FE),y
     BMI B6_8899
-    DEC ram_07A2
+    DEC snd_noi_env_count
     BPL B6_8899
-    LDX ram_07A1
-    STX ram_07A2
-    INC ram_07A0
+    LDX snd_noi_env_speed
+    STX snd_noi_env_count
+    INC snd_noi_env_pos
 B6_8899:
     AND #$0F
     ORA #$30
-    STA ram_07B1
+    STA snd_out_noi_vol
 B6_88A0:
-    LDX ram_079E
+    LDX snd_noi_pitchmod_idx
     LDA B6_93CB,x
     STA zp_FE
     LDA B6_93D4,x
     STA zp_FF
-    LDY ram_079D
+    LDY snd_noi_pitchmod_pos
     LDA (zp_FE),y
     CMP #$80
     BNE B6_88BD
     LDY #$00
-    STY ram_079D
+    STY snd_noi_pitchmod_pos
     LDA (zp_FE),y
 B6_88BD:
-    INC ram_079D
+    INC snd_noi_pitchmod_pos
     CLC
-    ADC ram_079F
+    ADC snd_noi_period_lo
     AND #$0F
-    STA ram_07B3
+    STA snd_out_noi_lo
     RTS
     .byte $1A,$03,$EC,$02,$C2,$02,$9A,$02,$75,$02,$52,$02,$30,$02,$11,$02
     .byte $E7,$03,$AF,$03,$7A,$03,$48,$03
-B6_88E2:
-    .byte $1A
-B6_88E3:
-    .byte $03,$EC,$02,$C2,$02,$9A,$02,$75,$02,$52,$02,$30,$02,$11,$02,$E7
-    .byte $03,$AF,$03,$7A,$03,$48,$03,$1A,$03,$EC,$02,$C2,$02,$9A,$02,$75
-    .byte $02,$52,$02,$30,$02,$11,$02,$F3,$01,$D7,$01,$BD,$01,$A4,$01,$8D
-    .byte $01,$76,$01,$61,$01,$4D,$01,$3B,$01,$29,$01,$18,$01,$08,$01,$F9
-    .byte $00,$EB,$00,$DE,$00,$D1,$00,$C5,$00,$BB,$00,$B0,$00,$A6,$00,$9D
-    .byte $00,$94,$00,$8B,$00,$84,$00,$7C,$00,$75,$00,$6F,$00,$68,$00,$62
-    .byte $00,$5D,$00,$57,$00,$52,$00,$4E,$00,$49,$00,$45,$00,$41,$00,$3E
-    .byte $00,$3A,$00,$37,$00,$34,$00,$31,$00,$2E,$00,$2B,$00,$29,$00,$26
-    .byte $00,$24,$00,$22,$00,$20,$00,$1E,$00,$1C,$00,$1B,$00,$19,$00,$18
-    .byte $00,$16,$00,$15,$00,$14,$00,$13,$00,$12,$00,$11,$00,$0A,$A8,$A9
-    .byte $00,$8D,$4B,$07,$B9,$BD,$8D,$85,$FE,$B9,$BE,$8D,$85,$FF,$A0,$0D
-    .byte $B1,$FE,$99,$B5,$07,$88,$10,$F8,$AD,$C0,$07,$8D,$C8,$07,$AD,$C2
-    .byte $07,$8D,$C6,$07,$AD,$B6,$07,$8D,$C5,$07,$AD,$BF,$07,$0A,$A8,$B9
-    .byte $6D,$92,$8D,$F3,$07,$85,$FE,$B9,$6E,$92,$8D,$F4,$07,$85,$FF,$A0
-    .byte $00,$8C,$C7,$07,$B1,$FE,$0D,$BB,$07,$8D,$00,$40,$A9,$00,$8D,$01
-    .byte $40,$AD,$B7,$07,$8D,$C3,$07,$8D,$02,$40,$AD,$B8,$07,$8D,$C4,$07
-    .byte $29,$03,$8D,$03,$40,$CE,$4B,$07,$60,$8D,$DD,$07,$0A,$A8,$A9,$00
-    .byte $8D,$4C,$07,$B9,$BD,$8D,$85,$FE,$B9,$BE,$8D,$85,$FF,$A0,$0D,$B1
-    .byte $FE,$99,$C9,$07,$88,$10,$F8,$AD,$DD,$07,$C9,$10,$D0,$0D,$A9,$04
-    .byte $8D,$DE,$07,$0D,$CF,$07,$8D,$04,$40,$D0,$34,$AD,$D4,$07,$8D,$DC
-    .byte $07,$AD,$D6,$07,$8D,$DA,$07,$AD,$CA,$07,$8D,$D9,$07,$AD,$D3,$07
-    .byte $0A,$A8,$B9,$6D,$92,$8D,$F5,$07,$85,$FE,$B9,$6E,$92,$8D,$F6,$07
-    .byte $85,$FF,$A0,$00,$8C,$DB,$07,$B1,$FE,$0D,$CF,$07,$8D,$04,$40,$A9
-    .byte $00,$8D,$05,$40,$AD,$CB,$07,$8D,$D7,$07,$8D,$06,$40,$AD,$CC,$07
-    .byte $8D,$D8,$07,$29,$03,$8D,$07,$40,$CE,$4C,$07,$60,$0A,$A8,$A9,$00
-    .byte $8D,$4D,$07,$B9,$BD,$8D,$85,$FE,$B9,$BE,$8D,$85,$FF
+PeriodTable:
+    .word $031A
+    .word $02EC
+    .word $02C2
+    .word $029A
+    .word $0275
+    .word $0252
+    .word $0230
+    .word $0211
+    .word $03E7
+    .word $03AF
+    .word $037A
+    .word $0348
+    .word $031A
+    .word $02EC
+    .word $02C2
+    .word $029A
+    .word $0275
+    .word $0252
+    .word $0230
+    .word $0211
+    .word $01F3
+    .word $01D7
+    .word $01BD
+    .word $01A4
+    .word $018D
+    .word $0176
+    .word $0161
+    .word $014D
+    .word $013B
+    .word $0129
+    .word $0118
+    .word $0108
+    .word $00F9
+    .word $00EB
+    .word $00DE
+    .word $00D1
+    .word $00C5
+    .word $00BB
+    .word $00B0
+    .word $00A6
+    .word $009D
+    .word $0094
+    .word $008B
+    .word $0084
+    .word $007C
+    .word $0075
+    .word $006F
+    .word $0068
+    .word $0062
+    .word $005D
+    .word $0057
+    .word $0052
+    .word $004E
+    .word $0049
+    .word $0045
+    .word $0041
+    .word $003E
+    .word $003A
+    .word $0037
+    .word $0034
+    .word $0031
+    .word $002E
+    .word $002B
+    .word $0029
+    .word $0026
+    .word $0024
+    .word $0022
+    .word $0020
+    .word $001E
+    .word $001C
+    .word $001B
+    .word $0019
+    .word $0018
+    .word $0016
+    .word $0015
+    .word $0014
+    .word $0013
+    .word $0012
+    .word $0011
+B6_8980:
+    ASL a
+    TAY
+    LDA #$00
+    STA snd_sfx_sq1
+    LDA B6_8DBD,y
+    STA zp_FE
+    LDA B6_8DBE,y
+    STA zp_FF
+    LDY #$0D
+B6_8993:
+    LDA (zp_FE),y
+    STA ram_07B5,y
+    DEY
+    BPL B6_8993
+    LDA ram_07C0
+    STA ram_07C8
+    LDA ram_07C2
+    STA ram_07C6
+    LDA ram_07B6
+    STA ram_07C5
+    LDA ram_07BF
+    ASL a
+    TAY
+    LDA B6_926D,y
+    STA ram_07F3
+    STA zp_FE
+    LDA B6_926E,y
+    STA ram_07F4
+    STA zp_FF
+    LDY #$00
+    STY ram_07C7
+    LDA (zp_FE),y
+    ORA ram_07BB
+    STA SQ1_VOL
+    LDA #$00
+    STA SQ1_SWEEP
+    LDA ram_07B7
+    STA ram_07C3
+    STA SQ1_LO
+    LDA ram_07B8
+    STA ram_07C4
+    AND #$03
+    STA SQ1_HI
+    DEC snd_sfx_sq1
+    RTS
+B6_89EC:
+    STA ram_07DD
+    ASL a
+    TAY
+    LDA #$00
+    STA snd_sfx_sq2
+    LDA B6_8DBD,y
+    STA zp_FE
+    LDA B6_8DBE,y
+    STA zp_FF
+    LDY #$0D
+B6_8A02:
+    LDA (zp_FE),y
+    STA ram_07C9,y
+    DEY
+    BPL B6_8A02
+    LDA ram_07DD
+    CMP #$10
+    BNE B6_8A1E
+    LDA #$04
+    STA ram_07DE
+    ORA ram_07CF
+    STA SQ2_VOL
+    BNE B6_8A52
+B6_8A1E:
+    LDA ram_07D4
+    STA ram_07DC
+    LDA ram_07D6
+    STA ram_07DA
+    LDA ram_07CA
+    STA ram_07D9
+    LDA ram_07D3
+    ASL a
+    TAY
+    LDA B6_926D,y
+    STA ram_07F5
+    STA zp_FE
+    LDA B6_926E,y
+    STA ram_07F6
+    STA zp_FF
+    LDY #$00
+    STY ram_07DB
+    LDA (zp_FE),y
+    ORA ram_07CF
+    STA SQ2_VOL
+B6_8A52:
+    LDA #$00
+    STA SQ2_SWEEP
+    LDA ram_07CB
+    STA ram_07D7
+    STA SQ2_LO
+    LDA ram_07CC
+    STA ram_07D8
+    AND #$03
+    STA SQ2_HI
+    DEC snd_sfx_sq2
+    RTS
+B6_8A6F:
+    ASL a
+    TAY
+    LDA #$00
+    STA snd_sfx_noise
+    LDA B6_8DBD,y
+    STA zp_FE
+    LDA B6_8DBE,y
+    STA zp_FF
     LDY #$0D
 B6_8A82:
     LDA (zp_FE),y
@@ -1167,7 +1337,7 @@ B6_8A82:
     STA NOISE_LO
     LDA #$00
     STA NOISE_HI
-    DEC ram_074D
+    DEC snd_sfx_noise
     RTS
 B6_8AD7:
     JSR B6_8DA7
@@ -1175,7 +1345,7 @@ B6_8AD7:
     JSR B6_8BDB
     JMP B6_8CE5
 B6_8AE3:
-    LDA ram_074B
+    LDA snd_sfx_sq1
     BNE B6_8AE9
     RTS
 B6_8AE9:
@@ -1183,20 +1353,20 @@ B6_8AE9:
     BNE B6_8B17
     LDX ram_07C1
     BNE B6_8B17
-    LDA ram_074A
+    LDA snd_playing
     BEQ B6_8B0E
-    LDA ram_07A5
+    LDA snd_out_sq1_vol
     STA SQ1_VOL
-    LDA ram_07A7
+    LDA snd_out_sq1_lo
     STA SQ1_LO
-    LDA ram_07A8
+    LDA snd_out_sq1_hi
     STA SQ1_HI
-    STX ram_074B
+    STX snd_sfx_sq1
     RTS
 B6_8B0E:
     LDA #$30
     STA SQ1_VOL
-    STX ram_074B
+    STX snd_sfx_sq1
     RTS
 B6_8B17:
     DEC ram_07B5
@@ -1286,7 +1456,7 @@ B6_8BBA:
 B6_8BDA:
     RTS
 B6_8BDB:
-    LDA ram_074C
+    LDA snd_sfx_sq2
     BNE B6_8BE1
     RTS
 B6_8BE1:
@@ -1294,20 +1464,20 @@ B6_8BE1:
     BNE B6_8C0F
     LDX ram_07D5
     BNE B6_8C0F
-    LDA ram_074A
+    LDA snd_playing
     BEQ B6_8C06
-    LDA ram_07A9
+    LDA snd_out_sq2_vol
     STA SQ2_VOL
-    LDA ram_07AB
+    LDA snd_out_sq2_lo
     STA SQ2_LO
     LDA ram_07AC
     STA SQ2_HI
-    STX ram_074C
+    STX snd_sfx_sq2
     RTS
 B6_8C06:
     LDA #$30
     STA SQ2_VOL
-    STX ram_074C
+    STX snd_sfx_sq2
     RTS
 B6_8C0F:
     DEC ram_07C9
@@ -1405,7 +1575,7 @@ B6_8CC4:
 B6_8CE4:
     RTS
 B6_8CE5:
-    LDA ram_074D
+    LDA snd_sfx_noise
     BNE B6_8CEB
     RTS
 B6_8CEB:
@@ -1413,18 +1583,18 @@ B6_8CEB:
     BNE B6_8D13
     LDX ram_07EB
     BNE B6_8D13
-    LDA ram_074A
+    LDA snd_playing
     BEQ B6_8D0A
-    LDA ram_07B1
+    LDA snd_out_noi_vol
     STA NOISE_VOL
-    LDA ram_07B3
+    LDA snd_out_noi_lo
     STA NOISE_LO
-    STX ram_074D
+    STX snd_sfx_noise
     RTS
 B6_8D0A:
     LDA #$30
     STA NOISE_VOL
-    STX ram_074D
+    STX snd_sfx_noise
     RTS
 B6_8D13:
     DEC ram_07DF
@@ -1506,81 +1676,84 @@ B6_8DA7:
     ROL ram_0752
     ROL ram_0751
     RTS
-    .byte $53,$8E,$61,$8E,$6F,$8E,$7D,$8E,$8B,$8E,$99,$8E,$A7,$8E,$B5,$8E
-    .byte $C3,$8E,$D1,$8E,$DF,$8E,$ED,$8E,$FB,$8E,$09,$8F,$17,$8F,$25,$8F
-    .byte $33,$8F,$41,$8F,$4F,$8F,$5D,$8F,$6B,$8F,$79,$8F,$87,$8F,$95,$8F
-    .byte $A3,$8F,$B1,$8F,$BF,$8F,$CD,$8F,$DB,$8F,$E9,$8F,$F7,$8F,$05,$90
-    .byte $13,$90,$21,$90,$2F,$90,$3D,$90,$4B,$90,$59,$90,$67,$90,$75,$90
-    .byte $83,$90,$91,$90,$9F,$90,$AD,$90,$BB,$90,$C9,$90,$D7,$90,$E5,$90
-    .byte $F3,$90,$01,$91,$0F,$91,$1D,$91,$2B,$91,$39,$91,$47,$91,$55,$91
-    .byte $63,$91,$71,$91,$7F,$91,$8D,$91,$9B,$91,$A9,$91,$B7,$91,$C5,$91
-    .byte $D3,$91,$E1,$91,$EF,$91,$FD,$91,$0B,$92,$19,$92,$27,$92,$35,$92
-    .byte $43,$92,$51,$92,$5F,$92,$19,$05,$20,$03,$40,$00,$B0,$00,$01,$FF
-    .byte $00,$03,$00,$00,$FF,$FF,$C0,$01,$02,$00,$30,$00,$FF,$00,$01,$08
-    .byte $00,$00,$FF,$FF,$10,$00,$01,$00,$B0,$00,$FF,$00,$01,$08,$00,$00
-    .byte $19,$03,$8C,$00,$01,$00,$30,$00,$FF,$63,$00,$03,$00,$00,$32,$03
-    .byte $8A,$00,$01,$00,$30,$00,$FF,$63,$00,$06,$00,$00,$19,$03,$88,$00
-    .byte $06,$00,$30,$FF,$FF,$63,$00,$03,$00,$00,$32,$03,$88,$00,$06,$00
-    .byte $30,$FF,$FF,$63,$00,$06,$00,$00,$08,$63,$F0,$03,$10,$00,$B0,$00
-    .byte $01,$63,$09,$02,$00,$00,$64,$32,$0F,$00,$01,$00,$30,$00,$01,$00
-    .byte $00,$0C,$00,$06,$32,$28,$0D,$00,$01,$00,$30,$00,$01,$00,$00,$07
-    .byte $00,$04,$06,$06,$08,$00,$01,$00,$30,$00,$FF,$00,$08,$01,$00,$00
-    .byte $02,$63,$06,$00,$00,$00,$30,$00,$00,$00,$0A,$01,$00,$00,$0F,$03
-    .byte $F6,$00,$7E,$00,$30,$00,$FF,$63,$08,$02,$00,$00,$14,$02,$BC,$00
-    .byte $01,$00,$B0,$00,$FF,$63,$01,$01,$00,$00,$14,$02,$CA,$00,$01,$00
-    .byte $B0,$00,$FF,$63,$01,$01,$00,$00,$0D,$07,$20,$00,$01,$00,$70,$00
-    .byte $FF,$63,$08,$02,$00,$00,$03,$00,$0B,$00,$00,$00,$30,$00,$00,$00
-    .byte $0F,$01,$00,$00,$0E,$05,$50,$02,$30,$00,$30,$00,$FF,$63,$00,$03
-    .byte $00,$00,$18,$04,$60,$02,$20,$00,$70,$00,$FF,$63,$00,$04,$00,$00
-    .byte $19,$02,$64,$00,$18,$00,$B0,$00,$01,$63,$01,$01,$00,$02,$05,$04
-    .byte $FF,$03,$80,$00,$30,$00,$01,$63,$01,$01,$00,$02,$FF,$04,$FF,$03
-    .byte $50,$00,$30,$00,$01,$63,$02,$01,$FF,$02,$0F,$0A,$10,$01,$10,$00
-    .byte $B0,$00,$01,$63,$08,$02,$00,$00,$0F,$06,$6A,$00,$10,$00,$70,$00
-    .byte $01,$63,$08,$02,$00,$02,$0F,$09,$A0,$00,$1A,$00,$70,$00,$01,$00
-    .byte $08,$02,$00,$03,$2D,$0E,$00,$01,$40,$00,$B0,$00,$01,$01,$00,$05
-    .byte $00,$05,$5A,$14,$20,$00,$10,$00,$B0,$00,$FF,$63,$00,$0A,$00,$04
-    .byte $2D,$0F,$C0,$01,$0D,$00,$70,$00,$01,$01,$08,$08,$00,$00,$2D,$0F
-    .byte $C0,$01,$22,$00,$30,$00,$FF,$01,$08,$09,$00,$00,$63,$0A,$22,$00
-    .byte $01,$00,$B0,$00,$01,$FF,$01,$02,$00,$00,$19,$04,$42,$01,$08,$00
-    .byte $30,$00,$01,$63,$00,$03,$00,$02,$0E,$03,$42,$03,$29,$01,$70,$00
-    .byte $01,$FF,$08,$03,$00,$00,$14,$09,$00,$02,$80,$00,$B0,$00,$01,$00
-    .byte $08,$02,$00,$03,$14,$0C,$80,$00,$80,$00,$70,$00,$FF,$00,$08,$02
-    .byte $00,$04,$1E,$05,$40,$03,$28,$00,$B0,$00,$01,$FF,$00,$04,$00,$00
-    .byte $19,$14,$06,$00,$01,$00,$B0,$00,$FF,$00,$00,$03,$00,$02,$0C,$04
-    .byte $A6,$00,$01,$00,$30,$00,$FF,$63,$0E,$01,$00,$00,$08,$63,$A7,$01
-    .byte $00,$00,$30,$00,$00,$00,$01,$01,$00,$00,$14,$02,$A1,$01,$02,$00
-    .byte $30,$00,$FF,$63,$0E,$02,$00,$00,$19,$63,$FF,$03,$14,$00,$30,$00
-    .byte $01,$63,$00,$02,$00,$00,$19,$04,$BC,$00,$02,$00,$B0,$00,$01,$63
-    .byte $08,$03,$00,$00,$09,$04,$20,$00,$08,$00,$B0,$00,$01,$63,$08,$01
-    .byte $00,$02,$09,$09,$10,$00,$01,$00,$70,$00,$FF,$63,$0C,$02,$00,$00
-    .byte $09,$09,$14,$00,$01,$00,$70,$00,$FF,$63,$0C,$02,$00,$00,$09,$09
-    .byte $18,$00,$01,$00,$70,$00,$FF,$63,$0C,$02,$00,$00,$09,$09,$20,$00
-    .byte $01,$00,$70,$00,$FF,$63,$0C,$02,$00,$00,$12,$05,$0C,$00,$01,$00
-    .byte $30,$00,$FF,$00,$08,$02,$00,$03,$12,$02,$0C,$00,$01,$00,$30,$FF
-    .byte $FF,$63,$08,$02,$00,$03,$09,$09,$24,$00,$01,$00,$70,$00,$01,$63
-    .byte $08,$01,$00,$00,$0C,$07,$20,$00,$01,$00,$70,$00,$FF,$63,$00,$02
-    .byte $00,$00,$0C,$63,$40,$00,$01,$00,$70,$00,$01,$63,$01,$01,$00,$00
-    .byte $16,$63,$20,$00,$01,$00,$70,$00,$FF,$63,$01,$01,$00,$00,$23,$0F
-    .byte $FF,$03,$18,$00,$30,$00,$01,$00,$00,$04,$00,$00,$2D,$14,$A0,$01
-    .byte $68,$00,$30,$00,$01,$01,$08,$08,$00,$07,$3B,$14,$20,$00,$10,$00
-    .byte $B0,$00,$FF,$63,$08,$06,$00,$04,$0C,$05,$2C,$01,$02,$00,$30,$00
-    .byte $FF,$63,$01,$01,$00,$03,$14,$11,$40,$01,$18,$00,$30,$00,$01,$01
-    .byte $08,$04,$00,$03,$09,$02,$6C,$00,$01,$00,$B0,$00,$FF,$63,$00,$02
-    .byte $00,$00,$19,$09,$08,$01,$01,$00,$30,$00,$FF,$63,$00,$03,$00,$00
-    .byte $05,$02,$6C,$00,$01,$00,$B0,$00,$FF,$63,$0C,$01,$00,$00,$0F,$02
-    .byte $55,$00,$14,$00,$B0,$00,$FF,$63,$00,$02,$00,$00,$13,$03,$6C,$00
-    .byte $21,$00,$B0,$00,$FF,$63,$00,$03,$00,$00,$0F,$02,$4F,$00,$29,$00
-    .byte $B0,$FF,$01,$FF,$00,$02,$00,$00,$09,$02,$54,$00,$14,$00,$B0,$00
-    .byte $FF,$63,$0C,$01,$00,$00,$19,$04,$46,$01,$02,$00,$30,$00,$FF,$63
-    .byte $08,$03,$00,$00,$19,$63,$38,$00,$02,$00,$B0,$00,$FF,$63,$01,$01
-    .byte $00,$00,$18,$63,$00,$01,$04,$00,$B0,$00,$01,$63,$01,$01,$00,$00
-    .byte $09,$63,$80,$03,$38,$00,$B0,$00,$01,$00,$01,$01,$00,$00,$0F,$02
-    .byte $6C,$00,$01,$00,$B0,$00,$01,$63,$00,$02,$00,$00,$19,$04,$A2,$01
-    .byte $02,$00,$30,$00,$FF,$63,$0E,$03,$00,$00,$FF,$04,$FF,$03,$08,$00
-    .byte $70,$00,$01,$63,$07,$01,$FF,$00,$06,$03,$2C,$01,$02,$00,$30,$00
-    .byte $01,$63,$01,$01,$00,$03,$1E,$12,$C0,$00,$10,$00,$B0,$00,$01,$00
-    .byte $08,$04,$00,$06,$08,$04,$24,$01,$02,$00,$30,$00,$FF,$63,$01,$01
-    .byte $00,$02,$01,$00,$00,$00,$00,$00,$30,$00,$00,$00,$0D,$00,$00,$00
+B6_8DBD:
+    .byte $53
+B6_8DBE:
+    .byte $8E,$61,$8E,$6F,$8E,$7D,$8E,$8B,$8E,$99,$8E,$A7,$8E,$B5,$8E,$C3
+    .byte $8E,$D1,$8E,$DF,$8E,$ED,$8E,$FB,$8E,$09,$8F,$17,$8F,$25,$8F,$33
+    .byte $8F,$41,$8F,$4F,$8F,$5D,$8F,$6B,$8F,$79,$8F,$87,$8F,$95,$8F,$A3
+    .byte $8F,$B1,$8F,$BF,$8F,$CD,$8F,$DB,$8F,$E9,$8F,$F7,$8F,$05,$90,$13
+    .byte $90,$21,$90,$2F,$90,$3D,$90,$4B,$90,$59,$90,$67,$90,$75,$90,$83
+    .byte $90,$91,$90,$9F,$90,$AD,$90,$BB,$90,$C9,$90,$D7,$90,$E5,$90,$F3
+    .byte $90,$01,$91,$0F,$91,$1D,$91,$2B,$91,$39,$91,$47,$91,$55,$91,$63
+    .byte $91,$71,$91,$7F,$91,$8D,$91,$9B,$91,$A9,$91,$B7,$91,$C5,$91,$D3
+    .byte $91,$E1,$91,$EF,$91,$FD,$91,$0B,$92,$19,$92,$27,$92,$35,$92,$43
+    .byte $92,$51,$92,$5F,$92,$19,$05,$20,$03,$40,$00,$B0,$00,$01,$FF,$00
+    .byte $03,$00,$00,$FF,$FF,$C0,$01,$02,$00,$30,$00,$FF,$00,$01,$08,$00
+    .byte $00,$FF,$FF,$10,$00,$01,$00,$B0,$00,$FF,$00,$01,$08,$00,$00,$19
+    .byte $03,$8C,$00,$01,$00,$30,$00,$FF,$63,$00,$03,$00,$00,$32,$03,$8A
+    .byte $00,$01,$00,$30,$00,$FF,$63,$00,$06,$00,$00,$19,$03,$88,$00,$06
+    .byte $00,$30,$FF,$FF,$63,$00,$03,$00,$00,$32,$03,$88,$00,$06,$00,$30
+    .byte $FF,$FF,$63,$00,$06,$00,$00,$08,$63,$F0,$03,$10,$00,$B0,$00,$01
+    .byte $63,$09,$02,$00,$00,$64,$32,$0F,$00,$01,$00,$30,$00,$01,$00,$00
+    .byte $0C,$00,$06,$32,$28,$0D,$00,$01,$00,$30,$00,$01,$00,$00,$07,$00
+    .byte $04,$06,$06,$08,$00,$01,$00,$30,$00,$FF,$00,$08,$01,$00,$00,$02
+    .byte $63,$06,$00,$00,$00,$30,$00,$00,$00,$0A,$01,$00,$00,$0F,$03,$F6
+    .byte $00,$7E,$00,$30,$00,$FF,$63,$08,$02,$00,$00,$14,$02,$BC,$00,$01
+    .byte $00,$B0,$00,$FF,$63,$01,$01,$00,$00,$14,$02,$CA,$00,$01,$00,$B0
+    .byte $00,$FF,$63,$01,$01,$00,$00,$0D,$07,$20,$00,$01,$00,$70,$00,$FF
+    .byte $63,$08,$02,$00,$00,$03,$00,$0B,$00,$00,$00,$30,$00,$00,$00,$0F
+    .byte $01,$00,$00,$0E,$05,$50,$02,$30,$00,$30,$00,$FF,$63,$00,$03,$00
+    .byte $00,$18,$04,$60,$02,$20,$00,$70,$00,$FF,$63,$00,$04,$00,$00,$19
+    .byte $02,$64,$00,$18,$00,$B0,$00,$01,$63,$01,$01,$00,$02,$05,$04,$FF
+    .byte $03,$80,$00,$30,$00,$01,$63,$01,$01,$00,$02,$FF,$04,$FF,$03,$50
+    .byte $00,$30,$00,$01,$63,$02,$01,$FF,$02,$0F,$0A,$10,$01,$10,$00,$B0
+    .byte $00,$01,$63,$08,$02,$00,$00,$0F,$06,$6A,$00,$10,$00,$70,$00,$01
+    .byte $63,$08,$02,$00,$02,$0F,$09,$A0,$00,$1A,$00,$70,$00,$01,$00,$08
+    .byte $02,$00,$03,$2D,$0E,$00,$01,$40,$00,$B0,$00,$01,$01,$00,$05,$00
+    .byte $05,$5A,$14,$20,$00,$10,$00,$B0,$00,$FF,$63,$00,$0A,$00,$04,$2D
+    .byte $0F,$C0,$01,$0D,$00,$70,$00,$01,$01,$08,$08,$00,$00,$2D,$0F,$C0
+    .byte $01,$22,$00,$30,$00,$FF,$01,$08,$09,$00,$00,$63,$0A,$22,$00,$01
+    .byte $00,$B0,$00,$01,$FF,$01,$02,$00,$00,$19,$04,$42,$01,$08,$00,$30
+    .byte $00,$01,$63,$00,$03,$00,$02,$0E,$03,$42,$03,$29,$01,$70,$00,$01
+    .byte $FF,$08,$03,$00,$00,$14,$09,$00,$02,$80,$00,$B0,$00,$01,$00,$08
+    .byte $02,$00,$03,$14,$0C,$80,$00,$80,$00,$70,$00,$FF,$00,$08,$02,$00
+    .byte $04,$1E,$05,$40,$03,$28,$00,$B0,$00,$01,$FF,$00,$04,$00,$00,$19
+    .byte $14,$06,$00,$01,$00,$B0,$00,$FF,$00,$00,$03,$00,$02,$0C,$04,$A6
+    .byte $00,$01,$00,$30,$00,$FF,$63,$0E,$01,$00,$00,$08,$63,$A7,$01,$00
+    .byte $00,$30,$00,$00,$00,$01,$01,$00,$00,$14,$02,$A1,$01,$02,$00,$30
+    .byte $00,$FF,$63,$0E,$02,$00,$00,$19,$63,$FF,$03,$14,$00,$30,$00,$01
+    .byte $63,$00,$02,$00,$00,$19,$04,$BC,$00,$02,$00,$B0,$00,$01,$63,$08
+    .byte $03,$00,$00,$09,$04,$20,$00,$08,$00,$B0,$00,$01,$63,$08,$01,$00
+    .byte $02,$09,$09,$10,$00,$01,$00,$70,$00,$FF,$63,$0C,$02,$00,$00,$09
+    .byte $09,$14,$00,$01,$00,$70,$00,$FF,$63,$0C,$02,$00,$00,$09,$09,$18
+    .byte $00,$01,$00,$70,$00,$FF,$63,$0C,$02,$00,$00,$09,$09,$20,$00,$01
+    .byte $00,$70,$00,$FF,$63,$0C,$02,$00,$00,$12,$05,$0C,$00,$01,$00,$30
+    .byte $00,$FF,$00,$08,$02,$00,$03,$12,$02,$0C,$00,$01,$00,$30,$FF,$FF
+    .byte $63,$08,$02,$00,$03,$09,$09,$24,$00,$01,$00,$70,$00,$01,$63,$08
+    .byte $01,$00,$00,$0C,$07,$20,$00,$01,$00,$70,$00,$FF,$63,$00,$02,$00
+    .byte $00,$0C,$63,$40,$00,$01,$00,$70,$00,$01,$63,$01,$01,$00,$00,$16
+    .byte $63,$20,$00,$01,$00,$70,$00,$FF,$63,$01,$01,$00,$00,$23,$0F,$FF
+    .byte $03,$18,$00,$30,$00,$01,$00,$00,$04,$00,$00,$2D,$14,$A0,$01,$68
+    .byte $00,$30,$00,$01,$01,$08,$08,$00,$07,$3B,$14,$20,$00,$10,$00,$B0
+    .byte $00,$FF,$63,$08,$06,$00,$04,$0C,$05,$2C,$01,$02,$00,$30,$00,$FF
+    .byte $63,$01,$01,$00,$03,$14,$11,$40,$01,$18,$00,$30,$00,$01,$01,$08
+    .byte $04,$00,$03,$09,$02,$6C,$00,$01,$00,$B0,$00,$FF,$63,$00,$02,$00
+    .byte $00,$19,$09,$08,$01,$01,$00,$30,$00,$FF,$63,$00,$03,$00,$00,$05
+    .byte $02,$6C,$00,$01,$00,$B0,$00,$FF,$63,$0C,$01,$00,$00,$0F,$02,$55
+    .byte $00,$14,$00,$B0,$00,$FF,$63,$00,$02,$00,$00,$13,$03,$6C,$00,$21
+    .byte $00,$B0,$00,$FF,$63,$00,$03,$00,$00,$0F,$02,$4F,$00,$29,$00,$B0
+    .byte $FF,$01,$FF,$00,$02,$00,$00,$09,$02,$54,$00,$14,$00,$B0,$00,$FF
+    .byte $63,$0C,$01,$00,$00,$19,$04,$46,$01,$02,$00,$30,$00,$FF,$63,$08
+    .byte $03,$00,$00,$19,$63,$38,$00,$02,$00,$B0,$00,$FF,$63,$01,$01,$00
+    .byte $00,$18,$63,$00,$01,$04,$00,$B0,$00,$01,$63,$01,$01,$00,$00,$09
+    .byte $63,$80,$03,$38,$00,$B0,$00,$01,$00,$01,$01,$00,$00,$0F,$02,$6C
+    .byte $00,$01,$00,$B0,$00,$01,$63,$00,$02,$00,$00,$19,$04,$A2,$01,$02
+    .byte $00,$30,$00,$FF,$63,$0E,$03,$00,$00,$FF,$04,$FF,$03,$08,$00,$70
+    .byte $00,$01,$63,$07,$01,$FF,$00,$06,$03,$2C,$01,$02,$00,$30,$00,$01
+    .byte $63,$01,$01,$00,$03,$1E,$12,$C0,$00,$10,$00,$B0,$00,$01,$00,$08
+    .byte $04,$00,$06,$08,$04,$24,$01,$02,$00,$30,$00,$FF,$63,$01,$01,$00
+    .byte $02,$01,$00,$00,$00,$00,$00,$30,$00,$00,$00,$0D,$00,$00,$00
 B6_926D:
     .byte $8D
 B6_926E:
@@ -1618,221 +1791,1230 @@ B6_93D4:
     .byte $08,$10,$08,$00,$F8,$F0,$F8,$80,$00,$10,$20,$10,$00,$F0,$E0,$F0
     .byte $80,$00,$20,$40,$20,$00,$E0,$C0,$E0,$80,$00,$3F,$7E,$3F,$00,$C1
     .byte $82,$C1,$80
-B6_9427:
+SongTable:
     .byte $32
-B6_9428:
-    .byte $A8
-B6_9429:
-    .byte $94
-B6_942A:
-    .byte $7C
-B6_942B:
-    .byte $94
-B6_942C:
-    .byte $92
-B6_942D:
-    .byte $94
-B6_942E:
-    .byte $C2
-B6_942F:
-    .byte $94,$32,$68,$96,$76,$96,$6C,$96,$7A,$96,$2C,$43,$97,$51,$97,$47
-    .byte $97,$7A,$96,$26,$C1,$97,$C9,$97,$C5,$97,$F3,$97,$31,$F9,$98,$07
-    .byte $99,$FD,$98,$45,$99,$27,$70,$9B,$68,$9B,$6C,$9B,$80,$9B,$4A,$44
-    .byte $9C,$3C,$9C,$40,$9C,$48,$9C,$4C,$B2,$9D,$BC,$9D,$B8,$9D,$C6,$9D
-    .byte $2E,$EE,$9E,$F6,$9E,$F2,$9E,$FE,$9E,$3E,$A0,$00,$00,$1B,$95,$2A
-    .byte $95,$84,$95,$2A,$95,$98,$95,$B4,$95,$2A,$95,$84,$95,$2A,$95,$98
-    .byte $95,$00,$00,$C8,$94,$D5,$94,$FA,$94,$D5,$94,$07,$95,$11,$95,$D5
-    .byte $94,$FA,$94,$D5,$94,$07,$95,$00,$00,$C0,$95,$CF,$95,$20,$96,$CF
-    .byte $95,$33,$96,$4D,$96,$35,$A0,$CF,$95,$20,$96,$CF,$95,$33,$96,$32
-    .byte $A0,$00,$00,$57,$96,$61,$96,$00,$00,$F6,$10,$F7,$04,$FC,$0C,$63
-    .byte $00,$02,$00,$F5,$94,$94,$63,$05,$00,$05,$00,$00,$07,$61,$07,$06
-    .byte $05,$04,$63,$00,$07,$00,$08,$07,$00,$61,$00,$02,$03,$04,$63,$05
-    .byte $00,$05,$00,$00,$07,$61,$07,$06,$05,$04,$FF,$63,$00,$04,$00,$02
-    .byte $00,$00,$61,$00,$02,$03,$04,$FF,$63,$00,$04,$00,$07,$05,$00,$05
-    .byte $09,$FF,$F6,$40,$67,$00,$02,$04,$00,$F6,$10,$FF,$F6,$02,$FA,$30
-    .byte $F7,$02,$63,$1C,$1D,$F6,$03,$1F,$F5,$7E,$94,$F7,$02,$60,$F8,$F6
-    .byte $00,$FA,$F0,$61,$1D,$1C,$1D,$18,$F9,$16,$15,$F9,$62,$13,$61,$F6
-    .byte $04,$FA,$30,$20,$2C,$20,$2C,$20,$2C,$60,$F9,$F6,$01,$FA,$F0,$61
-    .byte $1C,$1A,$18,$1C,$F9,$1A,$18,$F9,$62,$1C,$63,$F6,$05,$FA,$30,$2F
-    .byte $30,$31,$60,$F8,$F6,$00,$FA,$F0,$61,$21,$1D,$1C,$1D,$F9,$16,$15
-    .byte $F9,$62,$13,$61,$F6,$04,$FA,$30,$20,$2C,$20,$2C,$20,$2C,$60,$F9
-    .byte $F6,$01,$FA,$F0,$FF,$61,$1C,$1A,$18,$1C,$F9,$1A,$17,$F9,$62,$18
-    .byte $63,$F6,$05,$FA,$30,$2E,$2D,$2B,$FF,$61,$1C,$1A,$18,$1C,$F9,$1B
-    .byte $1C,$F9,$62,$1D,$F7,$00,$60,$18,$1A,$1B,$1C,$F6,$00,$1D,$F8,$60
-    .byte $1D,$1D,$63,$1D,$FF,$F7,$03,$FA,$30,$F6,$0E,$67,$13,$16,$18,$1C
-    .byte $FF,$F6,$01,$FA,$30,$F7,$02,$63,$18,$1A,$F6,$02,$1C,$F5,$AA,$94
-    .byte $F7,$03,$F6,$00,$FA,$F0,$61,$1D,$1C,$1D,$18,$F9,$16,$15,$F9,$63
-    .byte $13,$F6,$04,$FA,$30,$61,$1F,$2B,$1F,$2B,$1F,$2B,$F6,$01,$FA,$F0
-    .byte $61,$1C,$1A,$18,$1C,$F9,$1A,$18,$F9,$63,$1C,$F6,$05,$FA,$30,$2E
-    .byte $2F,$30,$F6,$00,$FA,$F0,$61,$21,$1D,$1C,$1D,$F9,$16,$15,$F9,$63
-    .byte $13,$F6,$04,$FA,$30,$61,$1F,$2B,$1F,$2B,$1F,$2B,$F6,$01,$FA,$F0
-    .byte $FF,$61,$1C,$1A,$18,$1C,$F9,$1A,$17,$F9,$63,$18,$F6,$05,$FA,$30
-    .byte $30,$30,$30,$FF,$61,$1C,$1A,$18,$1C,$F9,$1B,$1C,$F9,$63,$1D,$60
-    .byte $18,$1A,$1B,$1C,$F6,$00,$1D,$F8,$60,$1D,$1D,$63,$1D,$FF,$FA,$30
-    .byte $F6,$0E,$67,$18,$1A,$1C,$1F,$FF,$63,$F6,$04,$06,$06,$06,$61,$F5
-    .byte $C4,$94,$F6,$10,$0D,$F6,$12,$08,$FF,$7E,$96,$00,$00,$A0,$96,$A0
-    .byte $96,$A0,$96,$E5,$96,$00,$00,$E8,$96,$00,$00,$0A,$97,$00,$00,$F7
-    .byte $02,$FA,$30,$F6,$04,$60,$09,$11,$15,$0C,$11,$15,$09,$11,$15,$0C
-    .byte $11,$15,$0C,$15,$18,$11,$15,$18,$0C,$15,$18,$11,$15,$18,$61,$1D
-    .byte $FE,$F7,$03,$FC,$0C,$F6,$0A,$61,$05,$F6,$05,$60,$05,$F6,$0A,$61
-    .byte $05,$F6,$05,$60,$05,$F6,$0A,$61,$05,$F6,$05,$60,$05,$F6,$0A,$61
-    .byte $05,$F6,$05,$60,$05,$F6,$0A,$61,$05,$F6,$05,$60,$05,$F6,$0A,$61
-    .byte $00,$F6,$05,$60,$00,$F6,$0A,$61,$09,$F6,$05,$60,$09,$F6,$0A,$61
-    .byte $0C,$F6,$05,$60,$0C,$FF,$62,$11,$FE,$F7,$02,$FA,$30,$F6,$04,$60
-    .byte $0C,$15,$18,$11,$15,$1D,$0C,$15,$18,$11,$15,$1D,$11,$18,$1D,$15
-    .byte $18,$21,$11,$18,$1D,$15,$18,$20,$61,$21,$FE,$61,$F6,$11,$0D,$60
-    .byte $F6,$12,$02,$61,$F6,$10,$06,$60,$F6,$12,$02,$61,$F6,$11,$0D,$60
-    .byte $F6,$12,$02,$61,$F6,$10,$06,$60,$F6,$12,$02,$61,$F6,$11,$0D,$60
-    .byte $F6,$12,$02,$61,$F6,$10,$06,$60,$F6,$11,$02,$61,$F6,$11,$0D,$63
-    .byte $F6,$10,$06,$FF,$9D,$97,$00,$00,$55,$97,$55,$97,$55,$97,$9A,$97
-    .byte $00,$00,$9F,$97,$00,$00,$F7,$03,$FC,$0C,$F6,$0A,$61,$04,$F6,$05
-    .byte $60,$04,$F6,$0A,$61,$04,$F6,$05,$60,$04,$F6,$0A,$61,$04,$F6,$05
-    .byte $60,$04,$F6,$0A,$61,$04,$F6,$05,$60,$04,$F6,$0A,$61,$04,$F6,$05
-    .byte $60,$04,$F6,$0A,$61,$03,$F6,$05,$60,$03,$F6,$0A,$61,$02,$F6,$05
-    .byte $60,$02,$F6,$0A,$61,$00,$F6,$05,$60,$00,$FF,$62,$05,$FE,$60,$F8
-    .byte $F7,$03,$FA,$30,$F6,$04,$60,$16,$13,$10,$16,$13,$10,$16,$13,$10
-    .byte $16,$13,$10,$13,$10,$0C,$10,$0C,$0A,$0C,$0A,$07,$0A,$07,$04,$61
-    .byte $09,$FE,$F7,$97,$00,$00,$FC,$97,$00,$00,$39,$98,$3F,$98,$A7,$98
-    .byte $AD,$98,$35,$A0,$A7,$98,$AD,$98,$38,$A0,$76,$98,$78,$98,$A7,$98
-    .byte $AD,$98,$32,$A0,$76,$98,$35,$A0,$78,$98,$38,$A0,$39,$98,$3F,$98
-    .byte $32,$A0,$00,$00,$F1,$98,$00,$00,$60,$F8,$F5,$C9,$97,$F6,$10,$F7
-    .byte $03,$FC,$0C,$63,$05,$00,$05,$00,$00,$07,$61,$00,$02,$04,$05,$63
-    .byte $07,$00,$07,$00,$05,$00,$05,$61,$0B,$0C,$63,$05,$00,$05,$00,$00
-    .byte $07,$60,$00,$0C,$02,$0E,$04,$10,$05,$11,$63,$07,$00,$07,$00,$05
-    .byte $00,$05,$60,$F7,$02,$0B,$17,$0C,$18,$FF,$F6,$0B,$FA,$F0,$F7,$02
-    .byte $61,$1D,$63,$21,$60,$20,$21,$61,$1D,$63,$21,$60,$20,$21,$61,$1C
-    .byte $63,$1F,$60,$1E,$1F,$61,$18,$1F,$1C,$1A,$61,$18,$63,$1C,$60,$1B
-    .byte $1C,$61,$18,$63,$1F,$60,$1E,$1F,$61,$1D,$63,$21,$60,$20,$21,$61
-    .byte $1D,$21,$20,$21,$FA,$30,$FF,$FA,$F0,$F6,$05,$F7,$04,$61,$F8,$63
-    .byte $0C,$0C,$09,$11,$0C,$0C,$07,$10,$0C,$0C,$13,$10,$0C,$0C,$15,$11
-    .byte $F6,$09,$F7,$03,$18,$18,$15,$1D,$18,$18,$13,$1C,$18,$18,$1F,$1C
-    .byte $18,$18,$15,$61,$11,$FA,$30,$FF,$F6,$0B,$FA,$B0,$F7,$03,$60,$11
-    .byte $1D,$61,$15,$21,$60,$20,$21,$11,$1D,$61,$15,$21,$60,$20,$21,$10
-    .byte $1C,$61,$13,$1F,$60,$1E,$1F,$0C,$18,$13,$1F,$10,$1C,$0E,$1A,$0C
-    .byte $18,$61,$10,$1C,$60,$1B,$1C,$0C,$18,$61,$13,$1F,$60,$1E,$1F,$11
-    .byte $1D,$61,$15,$21,$60,$20,$21,$11,$1D,$15,$21,$14,$20,$15,$21,$FA
-    .byte $30,$FF,$61,$F6,$12,$0D,$F6,$12,$08,$FF,$49,$99,$00,$00,$4E,$99
-    .byte $79,$99,$4E,$99,$86,$99,$00,$00,$90,$99,$E8,$99,$90,$99,$01,$9A
-    .byte $35,$A0,$1A,$9A,$9C,$9A,$1A,$9A,$BB,$9A,$DC,$9A,$32,$A0,$DC,$9A
-    .byte $38,$A0,$1A,$9A,$9C,$9A,$1A,$9A,$BB,$9A,$DC,$9A,$3B,$A0,$DC,$9A
-    .byte $38,$A0,$1A,$9A,$9C,$9A,$1A,$9A,$BB,$9A,$35,$A0,$DC,$9A,$38,$A0
-    .byte $DC,$9A,$32,$A0,$00,$00,$60,$9B,$00,$00,$60,$F8,$F5,$07,$99,$F6
-    .byte $10,$F7,$04,$FC,$0C,$63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05
-    .byte $04,$63,$00,$07,$00,$08,$07,$00,$61,$00,$02,$03,$04,$63,$05,$00
-    .byte $05,$00,$00,$07,$61,$07,$06,$05,$04,$FF,$63,$00,$04,$00,$02,$00
-    .byte $00,$61,$00,$02,$03,$04,$FF,$63,$00,$04,$00,$07,$05,$00,$05,$09
-    .byte $FF,$F7,$03,$FA,$F0,$F6,$09,$61,$1D,$1C,$1D,$18,$F9,$16,$15,$F9
-    .byte $63,$13,$F7,$02,$FA,$30,$F6,$0D,$61,$1F,$2B,$1F,$2B,$1F,$2B,$F6
-    .byte $09,$F7,$03,$FA,$F0,$1C,$1A,$18,$1C,$F9,$1A,$18,$F9,$63,$1C,$F6
-    .byte $0D,$F7,$02,$FA,$30,$22,$23,$24,$F6,$09,$F7,$03,$FA,$F0,$61,$21
-    .byte $1D,$1C,$1D,$F9,$16,$15,$F9,$63,$13,$F6,$0D,$F7,$02,$FA,$30,$61
-    .byte $1F,$2B,$1F,$2B,$1F,$2B,$FA,$F0,$FF,$F6,$09,$F7,$03,$61,$1C,$1A
-    .byte $18,$1C,$F9,$1A,$17,$F9,$63,$18,$F6,$0D,$F7,$02,$FA,$30,$30,$2F
-    .byte $2E,$FF,$F6,$09,$61,$1C,$1A,$18,$1C,$F9,$1B,$1C,$F9,$63,$1D,$60
-    .byte $18,$1A,$1B,$1C,$1D,$F8,$1D,$1D,$63,$1D,$FF,$F6,$0B,$FA,$B0,$F7
-    .byte $03,$60,$1D,$11,$1C,$10,$1D,$11,$18,$0C,$F9,$F9,$16,$0A,$15,$09
-    .byte $F9,$F9,$61,$13,$07,$F6,$0D,$F7,$02,$FA,$30,$60,$1F,$13,$2B,$13
-    .byte $1F,$13,$2B,$13,$1F,$13,$2B,$13,$FA,$B0,$F7,$03,$1C,$10,$1A,$0E
-    .byte $18,$0C,$1C,$10,$F9,$F9,$1A,$0E,$18,$0C,$F9,$F9,$61,$1C,$10,$F6
-    .byte $0D,$F7,$02,$FA,$30,$22,$16,$23,$17,$24,$18,$F7,$04,$FA,$B0,$F7
-    .byte $03,$60,$21,$15,$1D,$11,$1C,$10,$1D,$11,$F9,$F9,$16,$0A,$15,$09
-    .byte $F9,$F9,$61,$13,$07,$F6,$0D,$F7,$02,$FA,$30,$60,$1F,$13,$2B,$13
-    .byte $1F,$13,$2B,$13,$1F,$13,$2B,$13,$FA,$B0,$F7,$03,$FF,$60,$1C,$10
-    .byte $1A,$0E,$18,$0C,$1C,$10,$F9,$F9,$1A,$0E,$17,$0B,$F9,$F9,$61,$18
-    .byte $0C,$F7,$02,$FA,$30,$30,$24,$2F,$23,$2E,$22,$FF,$60,$1C,$10,$1A
-    .byte $0E,$18,$0C,$1C,$10,$F9,$F9,$1B,$0F,$1C,$10,$F9,$F9,$61,$1D,$11
-    .byte $60,$18,$16,$15,$13,$11,$F8,$11,$11,$61,$11,$05,$FF,$F6,$09,$FA
-    .byte $30,$F7,$03,$61,$11,$13,$15,$16,$F9,$15,$11,$F9,$63,$13,$F6,$0D
-    .byte $61,$1F,$2B,$1F,$2B,$1F,$2B,$F6,$09,$18,$1A,$1C,$1D,$F9,$1C,$16
-    .byte $F9,$18,$1C,$1D,$1F,$F9,$1C,$18,$F9,$F6,$09,$FA,$B0,$F7,$02,$FC
-    .byte $0C,$60,$11,$05,$13,$07,$15,$09,$16,$0A,$F9,$F9,$15,$09,$11,$05
-    .byte $F9,$F9,$61,$13,$07,$FC,$00,$F6,$0D,$FA,$30,$F7,$02,$60,$1F,$13
-    .byte $2B,$13,$1F,$13,$2B,$13,$1F,$13,$2B,$13,$F6,$09,$F7,$03,$FA,$F0
-    .byte $18,$0C,$1A,$0E,$1C,$10,$1D,$11,$F9,$F9,$1C,$10,$16,$0A,$F9,$F9
-    .byte $18,$0C,$1C,$10,$1D,$11,$1F,$13,$F9,$F9,$1C,$10,$18,$0C,$F9,$F9
-    .byte $FF,$61,$F6,$12,$0D,$F6,$12,$08,$FF,$84,$9B,$00,$00,$AC,$9B,$00
-    .byte $00,$E3,$9B,$E3,$9B,$30,$9C,$35,$A0,$E3,$9B,$E3,$9B,$32,$A0,$00
-    .byte $00,$34,$9C,$00,$00,$F6,$08,$FA,$30,$F7,$02,$60,$14,$18,$1B,$18
-    .byte $14,$18,$1B,$27,$13,$16,$1B,$16,$13,$16,$1B,$27,$13,$16,$1B,$16
-    .byte $13,$16,$1B,$27,$14,$18,$1B,$18,$14,$18,$1B,$27,$FF,$F6,$10,$F7
-    .byte $03,$FC,$0C,$63,$08,$08,$F6,$08,$61,$0A,$0A,$F6,$10,$63,$0A,$63
-    .byte $03,$03,$F6,$08,$61,$08,$08,$F6,$10,$08,$03,$63,$08,$08,$F6,$08
-    .byte $61,$0A,$0A,$F6,$10,$63,$0A,$63,$0F,$0F,$F6,$08,$61,$0C,$0C,$F6
-    .byte $10,$0C,$0F,$FF,$F6,$09,$FA,$30,$F7,$02,$61,$14,$60,$14,$16,$61
-    .byte $18,$60,$16,$14,$61,$16,$60,$16,$14,$62,$13,$60,$0F,$61,$13,$60
-    .byte $13,$14,$61,$16,$60,$14,$13,$61,$14,$60,$14,$16,$63,$18,$61,$14
-    .byte $60,$14,$16,$61,$18,$60,$16,$14,$61,$16,$60,$16,$16,$63,$1B,$61
-    .byte $1F,$60,$1F,$20,$61,$22,$60,$20,$1F,$61,$20,$60,$20,$1B,$63,$18
-    .byte $FF,$7F,$F8,$F8,$FF,$61,$F6,$12,$0D,$F6,$12,$08,$FF,$95,$9C,$00
-    .byte $00,$4C,$9C,$00,$00,$9A,$9C,$00,$00,$8C,$9D,$00,$00,$F6,$0E,$FC
-    .byte $0C,$F7,$04,$65,$02,$02,$02,$02,$63,$04,$05,$65,$02,$02,$02,$02
-    .byte $63,$05,$04,$65,$02,$02,$02,$02,$63,$04,$05,$65,$02,$02,$02,$02
-    .byte $63,$05,$07,$F7,$05,$65,$02,$02,$02,$02,$63,$04,$05,$65,$02,$02
-    .byte $02,$02,$63,$05,$04,$65,$02,$02,$02,$02,$63,$04,$05,$65,$02,$02
-    .byte $02,$02,$63,$05,$07,$FF,$60,$F8,$F5,$44,$9C,$FA,$30,$F6,$05,$F7
-    .byte $05,$65,$0E,$0E,$0E,$0E,$63,$10,$11,$65,$0E,$0E,$0E,$0E,$63,$10
-    .byte $11,$65,$0E,$0E,$0E,$0E,$63,$10,$11,$65,$0E,$0E,$0E,$0E,$63,$10
-    .byte $11,$F7,$04,$65,$15,$15,$15,$15,$63,$17,$18,$65,$15,$15,$15,$15
-    .byte $63,$17,$18,$65,$15,$15,$15,$15,$63,$17,$18,$65,$15,$15,$15,$15
-    .byte $63,$17,$18,$FA,$70,$F7,$04,$F6,$03,$69,$1A,$F6,$07,$1A,$6B,$F6
-    .byte $0B,$1A,$F7,$02,$F6,$03,$69,$26,$F6,$07,$26,$6B,$F6,$0B,$26,$FA
-    .byte $30,$F7,$04,$F6,$03,$69,$1A,$F6,$07,$1A,$6B,$F6,$0B,$1A,$F7,$03
-    .byte $F6,$03,$69,$21,$F6,$07,$21,$6B,$F6,$0B,$21,$FA,$B0,$F6,$07,$F7
-    .byte $04,$77,$21,$F6,$0B,$F7,$08,$63,$23,$24,$F6,$07,$F7,$04,$77,$21
-    .byte $F6,$0B,$F7,$08,$63,$23,$24,$F6,$07,$F7,$04,$77,$21,$F6,$0B,$F7
-    .byte $08,$63,$23,$24,$F6,$07,$F7,$04,$77,$21,$F6,$0B,$F7,$08,$63,$23
-    .byte $24,$7F,$F8,$F8,$F8,$F8,$FA,$30,$F6,$07,$F7,$04,$77,$21,$F6,$0B
-    .byte $F7,$08,$63,$23,$24,$F6,$07,$F7,$04,$77,$21,$F6,$0B,$F7,$08,$63
-    .byte $23,$24,$F6,$07,$F7,$04,$77,$21,$F6,$0B,$F7,$08,$63,$23,$24,$F6
-    .byte $07,$F7,$04,$77,$21,$F6,$0B,$F7,$08,$63,$23,$24,$FF,$61,$F6,$10
-    .byte $0D,$F6,$12,$02,$02,$02,$F6,$10,$08,$F6,$12,$02,$02,$F6,$11,$0D
-    .byte $F6,$12,$02,$02,$F6,$10,$0D,$F6,$12,$02,$F6,$10,$08,$F6,$12,$02
-    .byte $02,$02,$FF,$56,$9E,$0D,$9E,$00,$00,$CA,$9D,$00,$00,$58,$9E,$A1
-    .byte $9E,$5E,$9E,$A1,$9E,$00,$00,$A4,$9E,$00,$00,$F7,$03,$FC,$0C,$F6
-    .byte $0C,$63,$03,$03,$0A,$61,$03,$63,$0A,$03,$61,$03,$0A,$03,$0A,$0F
-    .byte $63,$07,$07,$0E,$61,$07,$63,$0E,$07,$61,$07,$0E,$07,$0E,$0F,$63
-    .byte $08,$08,$0F,$61,$08,$63,$0F,$08,$61,$08,$0F,$08,$0F,$11,$63,$0A
-    .byte $0A,$0F,$61,$0A,$63,$0E,$0A,$61,$0A,$0E,$0A,$0E,$0A,$FF,$F6,$14
-    .byte $FC,$0C,$F7,$02,$6B,$16,$63,$13,$16,$67,$1A,$63,$16,$6B,$F9,$63
-    .byte $13,$16,$67,$13,$63,$13,$63,$F9,$6F,$0F,$67,$13,$63,$13,$63,$F9
-    .byte $6F,$11,$6B,$1A,$6B,$16,$63,$13,$16,$67,$1A,$63,$16,$6B,$F9,$63
-    .byte $13,$16,$67,$1B,$63,$20,$63,$F9,$6F,$0F,$67,$13,$63,$13,$63,$F9
-    .byte $6F,$11,$6B,$1A,$FC,$00,$FF,$60,$F8,$F6,$14,$FA,$30,$F7,$04,$6B
-    .byte $13,$63,$11,$13,$67,$16,$63,$13,$6B,$F9,$63,$11,$13,$67,$11,$63
-    .byte $0F,$63,$F9,$6F,$0C,$67,$0F,$63,$0F,$63,$F9,$6F,$0E,$6B,$16,$6B
-    .byte $13,$63,$11,$13,$67,$16,$63,$13,$6B,$F9,$63,$11,$13,$67,$11,$63
-    .byte $0F,$63,$F9,$6F,$0C,$67,$0F,$63,$13,$63,$F9,$6F,$11,$6A,$16,$F6
-    .byte $13,$FF,$60,$F8,$FF,$61,$F6,$11,$0D,$F6,$12,$02,$02,$02,$F6,$10
-    .byte $06,$F6,$12,$02,$02,$F6,$11,$0D,$F6,$12,$02,$02,$F6,$11,$0D,$F6
-    .byte $12,$02,$F6,$10,$06,$F6,$12,$02,$02,$02,$F6,$11,$0D,$F6,$12,$02
-    .byte $02,$02,$F6,$10,$06,$F6,$12,$02,$02,$F6,$11,$0D,$F6,$12,$02,$F6
-    .byte $11,$0D,$F6,$12,$02,$02,$F6,$10,$06,$F6,$12,$02,$02,$02,$FF,$02
-    .byte $9F,$00,$00,$3A,$9F,$00,$00,$BF,$9F,$BF,$9F,$F7,$9F,$00,$00,$21
-    .byte $A0,$00,$00,$F7,$02,$FA,$30,$F6,$09,$60,$0E,$13,$17,$0E,$13,$17
-    .byte $0E,$13,$17,$0E,$13,$17,$0E,$13,$16,$0E,$13,$16,$0E,$13,$16,$0E
-    .byte $13,$16,$0E,$11,$15,$0E,$11,$15,$0E,$11,$15,$0E,$11,$15,$0E,$12
-    .byte $15,$0E,$12,$15,$0E,$12,$15,$0E,$12,$15,$FF,$F7,$03,$FC,$0C
+    .word B6_94A8, B6_947C, B6_9492, B6_94C2
+    .byte $32
+    .word B6_9668, B6_9676, B6_966C, B6_967A
+    .byte $2C
+    .word B6_9743, B6_9751, B6_9747, B6_967A
+    .byte $26
+    .word B6_97C1, B6_97C9, B6_97C5, B6_97F3
+    .byte $31
+    .word B6_98F9, B6_9907, B6_98FD, B6_9945
+    .byte $27
+    .word B6_9B70, B6_9B68, B6_9B6C, B6_9B80
+    .byte $4A
+    .word B6_9C44, B6_9C3C, B6_9C40, B6_9C48
+    .byte $4C
+    .word B6_9DB2, B6_9DBC, B6_9DB8, B6_9DC6
+    .byte $2E
+    .word B6_9EEE, B6_9EF6, B6_9EF2, B6_9EFE
+    .byte $3E,$A0,$00,$00
+B6_947C:
+    .word B6_951B
+    .word B6_952A
+    .word B6_9584
+    .word B6_952A
+    .word B6_9598
+    .word B6_95B4
+    .word B6_952A
+    .word B6_9584
+    .word B6_952A
+    .word B6_9598
+    .word $0000
+B6_9492:
+    .word B6_94C8
+    .word B6_94D5
+    .word B6_94FA
+    .word B6_94D5
+    .word B6_9507
+    .word B6_9511
+    .word B6_94D5
+    .word B6_94FA
+    .word B6_94D5
+    .word B6_9507
+    .word $0000
+B6_94A8:
+    .word B6_95C0
+    .word B6_95CF
+    .word B6_9620
+    .word B6_95CF
+    .word B6_9633
+    .word B6_964D
+    .word B6_A035
+    .word B6_95CF
+    .word B6_9620
+    .word B6_95CF
+    .word B6_9633
+    .word B6_A032
+    .word $0000
+B6_94C2:
+    .word B6_9657
+    .word B6_9661
+    .word $0000
+B6_94C8:
+    .byte $F6,$10   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $FC,$0C   ; chan_transpose
+    .byte $63,$00,$02,$00
+    .byte $F5,$94,$94   ; new pattern list
+B6_94D5:
+    .byte $63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05,$04
+    .byte $63,$00,$07,$00,$08,$07,$00,$61,$00,$02,$03,$04
+    .byte $63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05,$04
+    .byte $FF   ; next pattern
+B6_94FA:
+    .byte $63,$00,$04,$00,$02,$00,$00,$61,$00,$02,$03,$04
+    .byte $FF   ; next pattern
+B6_9507:
+    .byte $63,$00,$04,$00,$07,$05,$00,$05,$09
+    .byte $FF   ; next pattern
+B6_9511:
+    .byte $F6,$40   ; envelope
+    .byte $67,$00,$02,$04,$00
+    .byte $F6,$10   ; envelope
+    .byte $FF   ; next pattern
+B6_951B:
+    .byte $F6,$02   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $F7,$02   ; pitch_mod
+    .byte $63,$1C,$1D
+    .byte $F6,$03   ; envelope
+    .byte $1F
+    .byte $F5,$7E,$94   ; new pattern list
+B6_952A:
+    .byte $F7,$02   ; pitch_mod
+    .byte $60
+    .byte $F8   ; key off
+    .byte $F6,$00   ; envelope
+    .byte $FA,$F0   ; duty
+    .byte $61,$1D,$1C,$1D,$18
+    .byte $F9   ; hold
+    .byte $16,$15
+    .byte $F9   ; hold
+    .byte $62,$13,$61
+    .byte $F6,$04   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $20,$2C,$20,$2C,$20,$2C,$60
+    .byte $F9   ; hold
+    .byte $F6,$01   ; envelope
+    .byte $FA,$F0   ; duty
+    .byte $61,$1C,$1A,$18,$1C
+    .byte $F9   ; hold
+    .byte $1A,$18
+    .byte $F9   ; hold
+    .byte $62,$1C,$63
+    .byte $F6,$05   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $2F,$30,$31,$60
+    .byte $F8   ; key off
+    .byte $F6,$00   ; envelope
+    .byte $FA,$F0   ; duty
+    .byte $61,$21,$1D,$1C,$1D
+    .byte $F9   ; hold
+    .byte $16,$15
+    .byte $F9   ; hold
+    .byte $62,$13,$61
+    .byte $F6,$04   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $20,$2C,$20,$2C,$20,$2C,$60
+    .byte $F9   ; hold
+    .byte $F6,$01   ; envelope
+    .byte $FA,$F0   ; duty
+    .byte $FF   ; next pattern
+B6_9584:
+    .byte $61,$1C,$1A,$18,$1C
+    .byte $F9   ; hold
+    .byte $1A,$17
+    .byte $F9   ; hold
+    .byte $62,$18,$63
+    .byte $F6,$05   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $2E,$2D,$2B
+    .byte $FF   ; next pattern
+B6_9598:
+    .byte $61,$1C,$1A,$18,$1C
+    .byte $F9   ; hold
+    .byte $1B,$1C
+    .byte $F9   ; hold
+    .byte $62,$1D
+    .byte $F7,$00   ; pitch_mod
+    .byte $60,$18,$1A,$1B,$1C
+    .byte $F6,$00   ; envelope
+    .byte $1D
+    .byte $F8   ; key off
+    .byte $60,$1D,$1D,$63,$1D
+    .byte $FF   ; next pattern
+B6_95B4:
+    .byte $F7,$03   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $F6,$0E   ; envelope
+    .byte $67,$13,$16,$18,$1C
+    .byte $FF   ; next pattern
+B6_95C0:
+    .byte $F6,$01   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $F7,$02   ; pitch_mod
+    .byte $63,$18,$1A
+    .byte $F6,$02   ; envelope
+    .byte $1C
+    .byte $F5,$AA,$94   ; new pattern list
+B6_95CF:
+    .byte $F7,$03   ; pitch_mod
+    .byte $F6,$00   ; envelope
+    .byte $FA,$F0   ; duty
+    .byte $61,$1D,$1C,$1D,$18
+    .byte $F9   ; hold
+    .byte $16,$15
+    .byte $F9   ; hold
+    .byte $63,$13
+    .byte $F6,$04   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $61,$1F,$2B,$1F,$2B,$1F,$2B
+    .byte $F6,$01   ; envelope
+    .byte $FA,$F0   ; duty
+    .byte $61,$1C,$1A,$18,$1C
+    .byte $F9   ; hold
+    .byte $1A,$18
+    .byte $F9   ; hold
+    .byte $63,$1C
+    .byte $F6,$05   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $2E,$2F,$30
+    .byte $F6,$00   ; envelope
+    .byte $FA,$F0   ; duty
+    .byte $61,$21,$1D,$1C,$1D
+    .byte $F9   ; hold
+    .byte $16,$15
+    .byte $F9   ; hold
+    .byte $63,$13
+    .byte $F6,$04   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $61,$1F,$2B,$1F,$2B,$1F,$2B
+    .byte $F6,$01   ; envelope
+    .byte $FA,$F0   ; duty
+    .byte $FF   ; next pattern
+B6_9620:
+    .byte $61,$1C,$1A,$18,$1C
+    .byte $F9   ; hold
+    .byte $1A,$17
+    .byte $F9   ; hold
+    .byte $63,$18
+    .byte $F6,$05   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $30,$30,$30
+    .byte $FF   ; next pattern
+B6_9633:
+    .byte $61,$1C,$1A,$18,$1C
+    .byte $F9   ; hold
+    .byte $1B,$1C
+    .byte $F9   ; hold
+    .byte $63,$1D,$60,$18,$1A,$1B,$1C
+    .byte $F6,$00   ; envelope
+    .byte $1D
+    .byte $F8   ; key off
+    .byte $60,$1D,$1D,$63,$1D
+    .byte $FF   ; next pattern
+B6_964D:
+    .byte $FA,$30   ; duty
+    .byte $F6,$0E   ; envelope
+    .byte $67,$18,$1A,$1C,$1F
+    .byte $FF   ; next pattern
+B6_9657:
+    .byte $63
+    .byte $F6,$04   ; envelope
+    .byte $06,$06,$06,$61
+    .byte $F5,$C4,$94   ; new pattern list
+B6_9661:
+    .byte $F6,$10   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $08
+    .byte $FF   ; next pattern
+B6_9668:
+    .word B6_967E
+    .word $0000
+B6_966C:
+    .word B6_96A0
+    .word B6_96A0
+    .word B6_96A0
+    .word B6_96E5
+    .word $0000
+B6_9676:
+    .word B6_96E8
+    .word $0000
+B6_967A:
+    .word B6_970A
+    .word $0000
+B6_967E:
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $F6,$04   ; envelope
+    .byte $60,$09,$11,$15,$0C,$11,$15,$09,$11,$15,$0C,$11
+    .byte $15,$0C,$15,$18,$11,$15,$18,$0C,$15,$18,$11,$15
+    .byte $18,$61,$1D
+    .byte $FE   ; end of song
+B6_96A0:
+    .byte $F7,$03   ; pitch_mod
+    .byte $FC,$0C   ; chan_transpose
+    .byte $F6,$0A   ; envelope
+    .byte $61,$05
+    .byte $F6,$05   ; envelope
+    .byte $60,$05
+    .byte $F6,$0A   ; envelope
+    .byte $61,$05
+    .byte $F6,$05   ; envelope
+    .byte $60,$05
+    .byte $F6,$0A   ; envelope
+    .byte $61,$05
+    .byte $F6,$05   ; envelope
+    .byte $60,$05
+    .byte $F6,$0A   ; envelope
+    .byte $61,$05
+    .byte $F6,$05   ; envelope
+    .byte $60,$05
+    .byte $F6,$0A   ; envelope
+    .byte $61,$05
+    .byte $F6,$05   ; envelope
+    .byte $60,$05
+    .byte $F6,$0A   ; envelope
+    .byte $61,$00
+    .byte $F6,$05   ; envelope
+    .byte $60,$00
+    .byte $F6,$0A   ; envelope
+    .byte $61,$09
+    .byte $F6,$05   ; envelope
+    .byte $60,$09
+    .byte $F6,$0A   ; envelope
+    .byte $61,$0C
+    .byte $F6,$05   ; envelope
+    .byte $60,$0C
+    .byte $FF   ; next pattern
+B6_96E5:
+    .byte $62,$11
+    .byte $FE   ; end of song
+B6_96E8:
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $F6,$04   ; envelope
+    .byte $60,$0C,$15,$18,$11,$15,$1D,$0C,$15,$18,$11,$15
+    .byte $1D,$11,$18,$1D,$15,$18,$21,$11,$18,$1D,$15,$18
+    .byte $20,$61,$21
+    .byte $FE   ; end of song
+B6_970A:
+    .byte $61
+    .byte $F6,$11   ; envelope
+    .byte $0D,$60
+    .byte $F6,$12   ; envelope
+    .byte $02,$61
+    .byte $F6,$10   ; envelope
+    .byte $06,$60
+    .byte $F6,$12   ; envelope
+    .byte $02,$61
+    .byte $F6,$11   ; envelope
+    .byte $0D,$60
+    .byte $F6,$12   ; envelope
+    .byte $02,$61
+    .byte $F6,$10   ; envelope
+    .byte $06,$60
+    .byte $F6,$12   ; envelope
+    .byte $02,$61
+    .byte $F6,$11   ; envelope
+    .byte $0D,$60
+    .byte $F6,$12   ; envelope
+    .byte $02,$61
+    .byte $F6,$10   ; envelope
+    .byte $06,$60
+    .byte $F6,$11   ; envelope
+    .byte $02,$61
+    .byte $F6,$11   ; envelope
+    .byte $0D,$63
+    .byte $F6,$10   ; envelope
+    .byte $06
+    .byte $FF   ; next pattern
+B6_9743:
+    .word B6_979D
+    .word $0000
+B6_9747:
+    .word B6_9755
+    .word B6_9755
+    .word B6_9755
+    .word B6_979A
+    .word $0000
+B6_9751:
+    .word B6_979F
+    .word $0000
+B6_9755:
+    .byte $F7,$03   ; pitch_mod
+    .byte $FC,$0C   ; chan_transpose
+    .byte $F6,$0A   ; envelope
+    .byte $61,$04
+    .byte $F6,$05   ; envelope
+    .byte $60,$04
+    .byte $F6,$0A   ; envelope
+    .byte $61,$04
+    .byte $F6,$05   ; envelope
+    .byte $60,$04
+    .byte $F6,$0A   ; envelope
+    .byte $61,$04
+    .byte $F6,$05   ; envelope
+    .byte $60,$04
+    .byte $F6,$0A   ; envelope
+    .byte $61,$04
+    .byte $F6,$05   ; envelope
+    .byte $60,$04
+    .byte $F6,$0A   ; envelope
+    .byte $61,$04
+    .byte $F6,$05   ; envelope
+    .byte $60,$04
+    .byte $F6,$0A   ; envelope
+    .byte $61,$03
+    .byte $F6,$05   ; envelope
+    .byte $60,$03
+    .byte $F6,$0A   ; envelope
+    .byte $61,$02
+    .byte $F6,$05   ; envelope
+    .byte $60,$02
+    .byte $F6,$0A   ; envelope
+    ADC (nmi_state,x)
+    INC tmp_ptr_hi,x
+    RTS
+    .byte $00
+    .byte $FF   ; next pattern
+B6_979A:
+    .byte $62,$05
+    .byte $FE   ; end of song
+B6_979D:
+    .byte $60
+    .byte $F8   ; key off
+B6_979F:
+    .byte $F7,$03   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $F6,$04   ; envelope
+    .byte $60,$16,$13,$10,$16,$13,$10,$16,$13,$10,$16,$13
+    .byte $10,$13,$10,$0C,$10,$0C,$0A,$0C,$0A,$07,$0A,$07
+    .byte $04,$61,$09
+    .byte $FE   ; end of song
+B6_97C1:
+    .word B6_97F7
+    .word $0000
+B6_97C5:
+    .word B6_97FC
+    .word $0000
+B6_97C9:
+    .word B6_9839
+    .word B6_983F
+    .word B6_98A7
+    .word B6_98AD
+    .word B6_A035
+    .word B6_98A7
+    .word B6_98AD
+    .word B6_A038
+    .word B6_9876
+    .word B6_9878
+    .word B6_98A7
+    .word B6_98AD
+    .word B6_A032
+    .word B6_9876
+    .word B6_A035
+    .word B6_9878
+    .word B6_A038
+    .word B6_9839
+    .word B6_983F
+    .word B6_A032
+    .word $0000
+B6_97F3:
+    .word B6_98F1
+    .word $0000
+B6_97F7:
+    .byte $60
+    .byte $F8   ; key off
+    .byte $F5,$C9,$97   ; new pattern list
+B6_97FC:
+    .byte $F6,$10   ; envelope
+    .byte $F7,$03   ; pitch_mod
+    .byte $FC,$0C   ; chan_transpose
+    .byte $63,$05,$00,$05,$00,$00,$07,$61,$00,$02,$04,$05
+    .byte $63,$07,$00,$07,$00,$05,$00,$05,$61,$0B,$0C,$63
+    .byte $05,$00,$05,$00,$00,$07,$60,$00,$0C,$02,$0E,$04
+    .byte $10,$05,$11,$63,$07,$00,$07,$00,$05,$00,$05,$60
+    .byte $F7,$02   ; pitch_mod
+    .byte $0B,$17,$0C,$18
+    .byte $FF   ; next pattern
+B6_9839:
+    .byte $F6,$0B   ; envelope
+    .byte $FA,$F0   ; duty
+    .byte $F7,$02   ; pitch_mod
+B6_983F:
+    .byte $61,$1D,$63,$21,$60,$20,$21,$61,$1D,$63,$21,$60
+    .byte $20,$21,$61,$1C,$63,$1F,$60,$1E,$1F,$61,$18,$1F
+    .byte $1C,$1A,$61,$18,$63,$1C,$60,$1B,$1C,$61,$18,$63
+    .byte $1F,$60,$1E,$1F,$61,$1D,$63,$21,$60,$20,$21,$61
+    .byte $1D,$21,$20,$21
+    .byte $FA,$30   ; duty
+    .byte $FF   ; next pattern
+B6_9876:
+    .byte $FA,$F0   ; duty
+B6_9878:
+    .byte $F6,$05   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $61
+    .byte $F8   ; key off
+    .byte $63,$0C,$0C,$09,$11,$0C,$0C,$07,$10,$0C,$0C,$13
+    .byte $10,$0C,$0C,$15,$11
+    .byte $F6,$09   ; envelope
+    .byte $F7,$03   ; pitch_mod
+    .byte $18,$18,$15,$1D,$18,$18,$13,$1C,$18,$18,$1F,$1C
+    .byte $18,$18,$15,$61,$11
+    .byte $FA,$30   ; duty
+    .byte $FF   ; next pattern
+B6_98A7:
+    .byte $F6,$0B   ; envelope
+    .byte $FA,$B0   ; duty
+    .byte $F7,$03   ; pitch_mod
+B6_98AD:
+    .byte $60,$11,$1D,$61,$15,$21,$60,$20,$21,$11,$1D,$61
+    .byte $15,$21,$60,$20,$21,$10,$1C,$61,$13,$1F,$60,$1E
+    .byte $1F,$0C,$18,$13,$1F,$10,$1C,$0E,$1A,$0C,$18,$61
+    .byte $10,$1C,$60,$1B,$1C,$0C,$18,$61,$13,$1F,$60,$1E
+    .byte $1F,$11,$1D,$61,$15,$21,$60,$20,$21,$11,$1D,$15
+    .byte $21,$14,$20,$15,$21
+    .byte $FA,$30   ; duty
+    .byte $FF   ; next pattern
+B6_98F1:
+    .byte $61
+    .byte $F6,$12   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $08
+    .byte $FF   ; next pattern
+B6_98F9:
+    .word B6_9949
+    .word $0000
+B6_98FD:
+    .word B6_994E
+    .word B6_9979
+    .word B6_994E
+    .word B6_9986
+    .word $0000
+B6_9907:
+    .word B6_9990
+    .word B6_99E8
+    .word B6_9990
+    .word B6_9A01
+    .word B6_A035
+    .word B6_9A1A
+    .word B6_9A9C
+    .word B6_9A1A
+    .word B6_9ABB
+    .word B6_9ADC
+    .word B6_A032
+    .word B6_9ADC
+    .word B6_A038
+    .word B6_9A1A
+    .word B6_9A9C
+    .word B6_9A1A
+    .word B6_9ABB
+    .word B6_9ADC
+    .word B6_A03B
+    .word B6_9ADC
+    .word B6_A038
+    .word B6_9A1A
+    .word B6_9A9C
+    .word B6_9A1A
+    .word B6_9ABB
+    .word B6_A035
+    .word B6_9ADC
+    .word B6_A038
+    .word B6_9ADC
+    .word B6_A032
+    .word $0000
+B6_9945:
+    .word B6_9B60
+    .word $0000
+B6_9949:
+    .byte $60
+    .byte $F8   ; key off
+    .byte $F5,$07,$99   ; new pattern list
+B6_994E:
+    .byte $F6,$10   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $FC,$0C   ; chan_transpose
+    .byte $63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05,$04
+    .byte $63,$00,$07,$00,$08,$07,$00,$61,$00,$02,$03,$04
+    .byte $63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05,$04
+    .byte $FF   ; next pattern
+B6_9979:
+    .byte $63,$00,$04,$00,$02,$00,$00,$61,$00,$02,$03,$04
+    .byte $FF   ; next pattern
+B6_9986:
+    .byte $63,$00,$04,$00,$07,$05,$00,$05,$09
+    .byte $FF   ; next pattern
+B6_9990:
+    .byte $F7,$03   ; pitch_mod
+    .byte $FA,$F0   ; duty
+    .byte $F6,$09   ; envelope
+    .byte $61,$1D,$1C,$1D,$18
+    .byte $F9   ; hold
+    .byte $16,$15
+    .byte $F9   ; hold
+    .byte $63,$13
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $F6,$0D   ; envelope
+    .byte $61,$1F,$2B,$1F,$2B,$1F,$2B
+    .byte $F6,$09   ; envelope
+    .byte $F7,$03   ; pitch_mod
+    .byte $FA,$F0   ; duty
+    .byte $1C,$1A,$18,$1C
+    .byte $F9   ; hold
+    .byte $1A,$18
+    .byte $F9   ; hold
+    .byte $63,$1C
+    .byte $F6,$0D   ; envelope
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $22,$23,$24
+    .byte $F6,$09   ; envelope
+    .byte $F7,$03   ; pitch_mod
+    .byte $FA,$F0   ; duty
+    .byte $61,$21,$1D,$1C,$1D
+    .byte $F9   ; hold
+    .byte $16,$15
+    .byte $F9   ; hold
+    .byte $63,$13
+    .byte $F6,$0D   ; envelope
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $61,$1F,$2B,$1F,$2B,$1F,$2B
+    .byte $FA,$F0   ; duty
+    .byte $FF   ; next pattern
+B6_99E8:
+    .byte $F6,$09   ; envelope
+    .byte $F7,$03   ; pitch_mod
+    .byte $61,$1C,$1A,$18,$1C
+    .byte $F9   ; hold
+    .byte $1A,$17
+    .byte $F9   ; hold
+    .byte $63,$18
+    .byte $F6,$0D   ; envelope
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $30,$2F,$2E
+    .byte $FF   ; next pattern
+B6_9A01:
+    .byte $F6,$09   ; envelope
+    .byte $61,$1C,$1A,$18,$1C
+    .byte $F9   ; hold
+    .byte $1B,$1C
+    .byte $F9   ; hold
+    .byte $63,$1D,$60,$18,$1A,$1B,$1C,$1D
+    .byte $F8   ; key off
+    .byte $1D,$1D,$63,$1D
+    .byte $FF   ; next pattern
+B6_9A1A:
+    .byte $F6,$0B   ; envelope
+    .byte $FA,$B0   ; duty
+    .byte $F7,$03   ; pitch_mod
+    .byte $60,$1D,$11,$1C,$10,$1D,$11,$18,$0C
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $16,$0A,$15,$09
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $61,$13,$07
+    .byte $F6,$0D   ; envelope
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $60,$1F,$13,$2B,$13,$1F,$13,$2B,$13,$1F,$13,$2B
+    .byte $13
+    .byte $FA,$B0   ; duty
+    .byte $F7,$03   ; pitch_mod
+    .byte $1C,$10,$1A,$0E,$18,$0C,$1C,$10
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $1A,$0E,$18,$0C
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $61,$1C,$10
+    .byte $F6,$0D   ; envelope
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $22,$16,$23,$17,$24,$18
+    .byte $F7,$04   ; pitch_mod
+    .byte $FA,$B0   ; duty
+    .byte $F7,$03   ; pitch_mod
+    .byte $60,$21,$15,$1D,$11,$1C,$10,$1D,$11
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $16,$0A,$15,$09
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $61,$13,$07
+    .byte $F6,$0D   ; envelope
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $60,$1F,$13,$2B,$13,$1F,$13,$2B,$13,$1F,$13,$2B
+    .byte $13
+    .byte $FA,$B0   ; duty
+    .byte $F7,$03   ; pitch_mod
+    .byte $FF   ; next pattern
+B6_9A9C:
+    .byte $60,$1C,$10,$1A,$0E,$18,$0C,$1C,$10
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $1A,$0E,$17,$0B
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $61,$18,$0C
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $30,$24,$2F,$23,$2E,$22
+    .byte $FF   ; next pattern
+B6_9ABB:
+    .byte $60,$1C,$10,$1A,$0E,$18,$0C,$1C,$10
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $1B,$0F,$1C,$10
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $61,$1D,$11,$60,$18,$16,$15,$13,$11
+    .byte $F8   ; key off
+    .byte $11,$11,$61,$11,$05
+    .byte $FF   ; next pattern
+B6_9ADC:
+    .byte $F6,$09   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $F7,$03   ; pitch_mod
+    .byte $61,$11,$13,$15,$16
+    .byte $F9   ; hold
+    .byte $15,$11
+    .byte $F9   ; hold
+    .byte $63,$13
+    .byte $F6,$0D   ; envelope
+    .byte $61,$1F,$2B,$1F,$2B,$1F,$2B
+    .byte $F6,$09   ; envelope
+    .byte $18,$1A,$1C,$1D
+    .byte $F9   ; hold
+    .byte $1C,$16
+    .byte $F9   ; hold
+    .byte $18,$1C,$1D,$1F
+    .byte $F9   ; hold
+    .byte $1C,$18
+    .byte $F9   ; hold
+    .byte $F6,$09   ; envelope
+    .byte $FA,$B0   ; duty
+    .byte $F7,$02   ; pitch_mod
+    .byte $FC,$0C   ; chan_transpose
+    .byte $60,$11,$05,$13,$07,$15,$09,$16,$0A
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $15,$09,$11,$05
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $61,$13,$07
+    .byte $FC,$00   ; chan_transpose
+    .byte $F6,$0D   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $F7,$02   ; pitch_mod
+    .byte $60,$1F,$13,$2B,$13,$1F,$13,$2B,$13,$1F,$13,$2B
+    .byte $13
+    .byte $F6,$09   ; envelope
+    .byte $F7,$03   ; pitch_mod
+    .byte $FA,$F0   ; duty
+    .byte $18,$0C,$1A,$0E,$1C,$10,$1D,$11
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $1C,$10,$16,$0A
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $18,$0C,$1C,$10,$1D,$11,$1F,$13
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $1C,$10,$18,$0C
+    .byte $F9   ; hold
+    .byte $F9   ; hold
+    .byte $FF   ; next pattern
+B6_9B60:
+    .byte $61
+    .byte $F6,$12   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $08
+    .byte $FF   ; next pattern
+B6_9B68:
+    .word B6_9B84
+    .word $0000
+B6_9B6C:
+    .word B6_9BAC
+    .word $0000
+B6_9B70:
+    .word B6_9BE3
+    .word B6_9BE3
+    .word B6_9C30
+    .word B6_A035
+    .word B6_9BE3
+    .word B6_9BE3
+    .word B6_A032
+    .word $0000
+B6_9B80:
+    .word B6_9C34
+    .word $0000
+B6_9B84:
+    .byte $F6,$08   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $F7,$02   ; pitch_mod
+    .byte $60,$14,$18,$1B,$18,$14,$18,$1B,$27,$13,$16,$1B
+    .byte $16,$13,$16,$1B,$27,$13,$16,$1B,$16,$13,$16,$1B
+    .byte $27,$14,$18,$1B,$18,$14,$18,$1B,$27
+    .byte $FF   ; next pattern
+B6_9BAC:
+    .byte $F6,$10   ; envelope
+    .byte $F7,$03   ; pitch_mod
+    .byte $FC,$0C   ; chan_transpose
+    .byte $63,$08,$08
+    .byte $F6,$08   ; envelope
+    .byte $61,$0A,$0A
+    .byte $F6,$10   ; envelope
+    .byte $63,$0A,$63,$03,$03
+    .byte $F6,$08   ; envelope
+    .byte $61,$08,$08
+    .byte $F6,$10   ; envelope
+    .byte $08,$03,$63,$08,$08
+    .byte $F6,$08   ; envelope
+    .byte $61,$0A,$0A
+    .byte $F6,$10   ; envelope
+    .byte $63,$0A,$63,$0F,$0F
+    .byte $F6,$08   ; envelope
+    .byte $61,$0C,$0C
+    .byte $F6,$10   ; envelope
+    .byte $0C,$0F
+    .byte $FF   ; next pattern
+B6_9BE3:
+    .byte $F6,$09   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $F7,$02   ; pitch_mod
+    .byte $61,$14,$60,$14,$16,$61,$18,$60,$16,$14,$61,$16
+    .byte $60,$16,$14,$62,$13,$60,$0F,$61,$13,$60,$13,$14
+    .byte $61,$16,$60,$14,$13,$61,$14,$60,$14,$16,$63,$18
+    .byte $61,$14,$60,$14,$16,$61,$18,$60,$16,$14,$61,$16
+    .byte $60,$16,$16,$63,$1B,$61,$1F,$60,$1F,$20,$61,$22
+    .byte $60,$20,$1F,$61,$20,$60,$20,$1B,$63,$18
+    .byte $FF   ; next pattern
+B6_9C30:
+    .byte $7F
+    .byte $F8   ; key off
+    .byte $F8   ; key off
+    .byte $FF   ; next pattern
+B6_9C34:
+    .byte $61
+    .byte $F6,$12   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $08
+    .byte $FF   ; next pattern
+B6_9C3C:
+    .word B6_9C95
+    .word $0000
+B6_9C40:
+    .word B6_9C4C
+    .word $0000
+B6_9C44:
+    .word B6_9C9A
+    .word $0000
+B6_9C48:
+    .word B6_9D8C
+    .word $0000
+B6_9C4C:
+    .byte $F6,$0E   ; envelope
+    .byte $FC,$0C   ; chan_transpose
+    .byte $F7,$04   ; pitch_mod
+    .byte $65,$02,$02,$02,$02,$63,$04,$05,$65,$02,$02,$02
+    .byte $02,$63,$05,$04,$65,$02,$02,$02,$02,$63,$04,$05
+    .byte $65,$02,$02,$02,$02,$63,$05,$07
+    .byte $F7,$05   ; pitch_mod
+    .byte $65,$02,$02,$02,$02,$63,$04,$05,$65,$02,$02,$02
+    .byte $02,$63,$05,$04,$65,$02,$02,$02,$02,$63,$04,$05
+    .byte $65,$02,$02,$02,$02,$63,$05,$07
+    .byte $FF   ; next pattern
+B6_9C95:
+    .byte $60
+    .byte $F8   ; key off
+    .byte $F5,$44,$9C   ; new pattern list
+B6_9C9A:
+    .byte $FA,$30   ; duty
+    .byte $F6,$05   ; envelope
+    .byte $F7,$05   ; pitch_mod
+    .byte $65,$0E,$0E,$0E,$0E,$63,$10,$11,$65,$0E,$0E,$0E
+    .byte $0E,$63,$10,$11,$65,$0E,$0E,$0E,$0E,$63,$10,$11
+    .byte $65,$0E,$0E,$0E,$0E,$63,$10,$11
+    .byte $F7,$04   ; pitch_mod
+    .byte $65,$15,$15,$15,$15,$63,$17,$18,$65,$15,$15,$15
+    .byte $15,$63,$17,$18,$65,$15,$15,$15,$15,$63,$17,$18
+    .byte $65,$15,$15,$15,$15,$63,$17,$18
+    .byte $FA,$70   ; duty
+    .byte $F7,$04   ; pitch_mod
+    .byte $F6,$03   ; envelope
+    .byte $69,$1A
+    .byte $F6,$07   ; envelope
+    .byte $1A,$6B
+    .byte $F6,$0B   ; envelope
+    .byte $1A
+    .byte $F7,$02   ; pitch_mod
+    .byte $F6,$03   ; envelope
+    .byte $69,$26
+    .byte $F6,$07   ; envelope
+    .byte $26,$6B
+    .byte $F6,$0B   ; envelope
+    .byte $26
+    .byte $FA,$30   ; duty
+    .byte $F7,$04   ; pitch_mod
+    .byte $F6,$03   ; envelope
+    .byte $69,$1A
+    .byte $F6,$07   ; envelope
+    .byte $1A,$6B
+    .byte $F6,$0B   ; envelope
+    .byte $1A
+    .byte $F7,$03   ; pitch_mod
+    .byte $F6,$03   ; envelope
+    .byte $69,$21
+    .byte $F6,$07   ; envelope
+    .byte $21,$6B
+    .byte $F6,$0B   ; envelope
+    .byte $21
+    .byte $FA,$B0   ; duty
+    .byte $F6,$07   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $77,$21
+    .byte $F6,$0B   ; envelope
+    .byte $F7,$08   ; pitch_mod
+    .byte $63,$23,$24
+    .byte $F6,$07   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $77,$21
+    .byte $F6,$0B   ; envelope
+    .byte $F7,$08   ; pitch_mod
+    .byte $63,$23,$24
+    .byte $F6,$07   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $77,$21
+    .byte $F6,$0B   ; envelope
+    .byte $F7,$08   ; pitch_mod
+    .byte $63,$23,$24
+    .byte $F6,$07   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $77,$21
+    .byte $F6,$0B   ; envelope
+    .byte $F7,$08   ; pitch_mod
+    .byte $63,$23,$24,$7F
+    .byte $F8   ; key off
+    .byte $F8   ; key off
+    .byte $F8   ; key off
+    .byte $F8   ; key off
+    .byte $FA,$30   ; duty
+    .byte $F6,$07   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $77,$21
+    .byte $F6,$0B   ; envelope
+    .byte $F7,$08   ; pitch_mod
+    .byte $63,$23,$24
+    .byte $F6,$07   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $77,$21
+    .byte $F6,$0B   ; envelope
+    .byte $F7,$08   ; pitch_mod
+    .byte $63,$23,$24
+    .byte $F6,$07   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $77,$21
+    .byte $F6,$0B   ; envelope
+    .byte $F7,$08   ; pitch_mod
+    .byte $63,$23,$24
+    .byte $F6,$07   ; envelope
+    .byte $F7,$04   ; pitch_mod
+    .byte $77,$21
+    .byte $F6,$0B   ; envelope
+    .byte $F7,$08   ; pitch_mod
+    .byte $63,$23,$24
+    .byte $FF   ; next pattern
+B6_9D8C:
+    .byte $61
+    .byte $F6,$10   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $02,$02,$02
+    .byte $F6,$10   ; envelope
+    .byte $08
+    .byte $F6,$12   ; envelope
+    .byte $02,$02
+    .byte $F6,$11   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $02,$02
+    .byte $F6,$10   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $02
+    .byte $F6,$10   ; envelope
+    .byte $08
+    .byte $F6,$12   ; envelope
+    .byte $02,$02,$02
+    .byte $FF   ; next pattern
+B6_9DB2:
+    .word B6_9E56
+    .word B6_9E0D
+    .word $0000
+B6_9DB8:
+    .word B6_9DCA
+    .word $0000
+B6_9DBC:
+    .word B6_9E58
+    .word B6_9EA1
+    .word B6_9E5E
+    .word B6_9EA1
+    .word $0000
+B6_9DC6:
+    .word B6_9EA4
+    .word $0000
+B6_9DCA:
+    .byte $F7,$03   ; pitch_mod
+    .byte $FC,$0C   ; chan_transpose
+    .byte $F6,$0C   ; envelope
+    .byte $63,$03,$03,$0A,$61,$03,$63,$0A,$03,$61,$03,$0A
+    .byte $03,$0A,$0F,$63,$07,$07,$0E,$61,$07,$63,$0E,$07
+    .byte $61,$07,$0E,$07,$0E,$0F,$63,$08,$08,$0F,$61,$08
+    .byte $63,$0F,$08,$61,$08,$0F,$08,$0F,$11,$63,$0A,$0A
+    .byte $0F,$61,$0A,$63,$0E,$0A,$61,$0A,$0E,$0A,$0E,$0A
+    .byte $FF   ; next pattern
+B6_9E0D:
+    .byte $F6,$14   ; envelope
+    .byte $FC,$0C   ; chan_transpose
+    .byte $F7,$02   ; pitch_mod
+    .byte $6B,$16,$63,$13,$16,$67,$1A,$63,$16,$6B
+    .byte $F9   ; hold
+    .byte $63,$13,$16,$67,$13,$63,$13,$63
+    .byte $F9   ; hold
+    .byte $6F,$0F,$67,$13,$63,$13,$63
+    .byte $F9   ; hold
+    .byte $6F,$11,$6B,$1A,$6B,$16,$63,$13,$16,$67,$1A,$63
+    .byte $16,$6B
+    .byte $F9   ; hold
+    .byte $63,$13,$16,$67,$1B,$63,$20,$63
+    .byte $F9   ; hold
+    .byte $6F,$0F,$67,$13,$63,$13,$63
+    .byte $F9   ; hold
+    .byte $6F,$11,$6B,$1A
+    .byte $FC,$00   ; chan_transpose
+    .byte $FF   ; next pattern
+B6_9E56:
+    .byte $60
+    .byte $F8   ; key off
+B6_9E58:
+    .byte $F6,$14   ; envelope
+    .byte $FA,$30   ; duty
+    .byte $F7,$04   ; pitch_mod
+B6_9E5E:
+    .byte $6B,$13,$63,$11,$13,$67,$16,$63,$13,$6B
+    .byte $F9   ; hold
+    .byte $63,$11,$13,$67,$11,$63,$0F,$63
+    .byte $F9   ; hold
+    .byte $6F,$0C,$67,$0F,$63,$0F,$63
+    .byte $F9   ; hold
+    .byte $6F,$0E,$6B,$16,$6B,$13,$63,$11,$13,$67,$16,$63
+    .byte $13,$6B
+    .byte $F9   ; hold
+    .byte $63,$11,$13,$67,$11,$63,$0F,$63
+    .byte $F9   ; hold
+    .byte $6F,$0C,$67,$0F,$63,$13,$63
+    .byte $F9   ; hold
+    .byte $6F,$11,$6A,$16
+    .byte $F6,$13   ; envelope
+    .byte $FF   ; next pattern
+B6_9EA1:
+    .byte $60
+    .byte $F8   ; key off
+    .byte $FF   ; next pattern
+B6_9EA4:
+    .byte $61
+    .byte $F6,$11   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $02,$02,$02
+    .byte $F6,$10   ; envelope
+    .byte $06
+    .byte $F6,$12   ; envelope
+    .byte $02,$02
+    .byte $F6,$11   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $02,$02
+    .byte $F6,$11   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $02
+    .byte $F6,$10   ; envelope
+    .byte $06
+    .byte $F6,$12   ; envelope
+    .byte $02,$02,$02
+    .byte $F6,$11   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $02,$02,$02
+    .byte $F6,$10   ; envelope
+    .byte $06
+    .byte $F6,$12   ; envelope
+    .byte $02,$02
+    .byte $F6,$11   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $02
+    .byte $F6,$11   ; envelope
+    .byte $0D
+    .byte $F6,$12   ; envelope
+    .byte $02,$02
+    .byte $F6,$10   ; envelope
+    .byte $06
+    .byte $F6,$12   ; envelope
+    .byte $02,$02,$02
+    .byte $FF   ; next pattern
+B6_9EEE:
+    .word B6_9F02
+    .word $0000
+B6_9EF2:
+    .word B6_9F3A
+    .word $0000
+B6_9EF6:
+    .word B6_9FBF
+    .word B6_9FBF
+    .word B6_9FF7
+    .word $0000
+B6_9EFE:
+    .word B6_A021
+    .word $0000
+B6_9F02:
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $F6,$09   ; envelope
+    .byte $60,$0E,$13,$17,$0E,$13,$17,$0E,$13,$17,$0E,$13
+    .byte $17,$0E,$13,$16,$0E,$13,$16,$0E,$13,$16,$0E,$13
+    .byte $16,$0E,$11,$15,$0E,$11,$15,$0E,$11,$15,$0E,$11
+    .byte $15,$0E,$12,$15,$0E,$12,$15,$0E,$12,$15,$0E,$12
+    .byte $15
+    .byte $FF   ; next pattern
+B6_9F3A:
+    .byte $F7,$03   ; pitch_mod
+    .byte $FC,$0C   ; chan_transpose
     INC zp_0A,x
     ADC (jump_ptr_hi,x)
     INC tmp_ptr_hi,x
     RTS
-    .byte $07,$F6,$0A,$61,$07,$F6,$05,$60,$07,$F6,$0A,$61,$07,$F6,$05,$60
-    .byte $07,$F6,$0A,$61,$13,$F6,$05,$60,$13,$F6,$0A,$61,$07,$F6,$05,$60
-    .byte $07,$F6,$0A,$61,$07,$F6,$05,$60,$07,$F6,$0A,$61,$07,$F6,$05,$60
-    .byte $07,$F6,$0A,$61,$13,$F6,$05,$60,$13,$F6,$0A,$61,$02,$F6,$05,$60
-    .byte $02,$F6,$0A,$61,$02,$F6,$05,$60,$02,$F6,$0A,$61,$02,$F6,$05,$60
-    .byte $02,$F6,$0A,$61,$0E,$F6,$05,$60,$0E,$F6,$0A,$61,$02,$F6,$05,$60
-    .byte $02,$F6,$0A,$61,$02,$F6,$05,$60,$02,$F6,$0A,$61,$02,$F6,$05,$60
-    .byte $02,$F6,$0A,$61,$0E,$F6,$05,$60,$0E,$FF,$F7,$02,$FA,$30,$F6,$09
-    .byte $60,$13,$17,$1A,$13,$17,$1A,$13,$17,$1A,$13,$17,$1A,$13,$16,$1A
-    .byte $13,$16,$1A,$13,$16,$1A,$13,$16,$1A,$11,$15,$1A,$11,$15,$1A,$11
-    .byte $15,$1A,$0E,$15,$1A,$12,$15,$1A,$12,$15,$1A,$12,$15,$1A,$12,$15
-    .byte $1A,$FF,$FA,$F0,$F6,$06,$F7,$02,$62,$13,$1A,$17,$1A,$13,$1A,$16
-    .byte $1A,$11,$18,$15,$18,$12,$18,$15,$18,$FA,$30,$13,$1A,$17,$1A,$13
-    .byte $1A,$16,$1A,$11,$1A,$15,$1A,$12,$1A,$15,$1A,$FF,$61,$F6,$11,$0D
-    .byte $60,$F6,$12,$02,$61,$F6,$10,$06,$60,$F6,$12,$02,$FF,$FB,$00,$FF
-    .byte $FB,$01,$FF,$FB,$02,$FF,$FB,$03,$FF,$7E,$F6,$00,$F8,$F5,$78,$94
-    .byte $45,$6E,$64,$4D,$75,$73,$46,$58,$00
+    .byte $07
+    .byte $F6,$0A   ; envelope
+    .byte $61,$07
+    .byte $F6,$05   ; envelope
+    .byte $60,$07
+    .byte $F6,$0A   ; envelope
+    .byte $61,$07
+    .byte $F6,$05   ; envelope
+    .byte $60,$07
+    .byte $F6,$0A   ; envelope
+    .byte $61,$13
+    .byte $F6,$05   ; envelope
+    .byte $60,$13
+    .byte $F6,$0A   ; envelope
+    .byte $61,$07
+    .byte $F6,$05   ; envelope
+    .byte $60,$07
+    .byte $F6,$0A   ; envelope
+    .byte $61,$07
+    .byte $F6,$05   ; envelope
+    .byte $60,$07
+    .byte $F6,$0A   ; envelope
+    .byte $61,$07
+    .byte $F6,$05   ; envelope
+    .byte $60,$07
+    .byte $F6,$0A   ; envelope
+    .byte $61,$13
+    .byte $F6,$05   ; envelope
+    .byte $60,$13
+    .byte $F6,$0A   ; envelope
+    .byte $61,$02
+    .byte $F6,$05   ; envelope
+    .byte $60,$02
+    .byte $F6,$0A   ; envelope
+    .byte $61,$02
+    .byte $F6,$05   ; envelope
+    .byte $60,$02
+    .byte $F6,$0A   ; envelope
+    .byte $61,$02
+    .byte $F6,$05   ; envelope
+    .byte $60,$02
+    .byte $F6,$0A   ; envelope
+    .byte $61,$0E
+    .byte $F6,$05   ; envelope
+    .byte $60,$0E
+    .byte $F6,$0A   ; envelope
+    .byte $61,$02
+    .byte $F6,$05   ; envelope
+    .byte $60,$02
+    .byte $F6,$0A   ; envelope
+    .byte $61,$02
+    .byte $F6,$05   ; envelope
+    .byte $60,$02
+    .byte $F6,$0A   ; envelope
+    .byte $61,$02
+    .byte $F6,$05   ; envelope
+    .byte $60,$02
+    .byte $F6,$0A   ; envelope
+    .byte $61,$0E
+    .byte $F6,$05   ; envelope
+    .byte $60,$0E
+    .byte $FF   ; next pattern
+B6_9FBF:
+    .byte $F7,$02   ; pitch_mod
+    .byte $FA,$30   ; duty
+    .byte $F6,$09   ; envelope
+    .byte $60,$13,$17,$1A,$13,$17,$1A,$13,$17,$1A,$13,$17
+    .byte $1A,$13,$16,$1A,$13,$16,$1A,$13,$16,$1A,$13,$16
+    .byte $1A,$11,$15,$1A,$11,$15,$1A,$11,$15,$1A,$0E,$15
+    .byte $1A,$12,$15,$1A,$12,$15,$1A,$12,$15,$1A,$12,$15
+    .byte $1A
+    .byte $FF   ; next pattern
+B6_9FF7:
+    .byte $FA,$F0   ; duty
+    .byte $F6,$06   ; envelope
+    .byte $F7,$02   ; pitch_mod
+    .byte $62,$13,$1A,$17,$1A,$13,$1A,$16,$1A,$11,$18,$15
+    .byte $18,$12,$18,$15,$18
+    .byte $FA,$30   ; duty
+    .byte $13,$1A,$17,$1A,$13,$1A,$16,$1A,$11,$1A,$15,$1A
+    .byte $12,$1A,$15,$1A
+    .byte $FF   ; next pattern
+B6_A021:
+    .byte $61
+    .byte $F6,$11   ; envelope
+    .byte $0D,$60
+    .byte $F6,$12   ; envelope
+    .byte $02,$61
+    .byte $F6,$10   ; envelope
+    .byte $06,$60
+    .byte $F6,$12   ; envelope
+    .byte $02
+    .byte $FF   ; next pattern
+B6_A032:
+    .byte $FB,$00   ; song_transpose
+    .byte $FF   ; next pattern
+B6_A035:
+    .byte $FB,$01   ; song_transpose
+    .byte $FF   ; next pattern
+B6_A038:
+    .byte $FB,$02   ; song_transpose
+    .byte $FF   ; next pattern
+B6_A03B:
+    .byte $FB,$03   ; song_transpose
+    .byte $FF   ; next pattern
+    .byte $7E,$F6,$00,$F8,$F5,$78,$94,$45,$6E,$64,$4D,$75,$73,$46,$58,$00
     .word F_D7D7
     .word F_D7D7
     .word F_D7D7
@@ -3458,7 +4640,7 @@ B6_BE79:
 B6_BE8C:
     DEC ram_038A
     JSR F_CEE1
-    LDA ram_074A
+    LDA snd_playing
     BNE B6_BE9B
     DEC zp_8C
     BEQ B6_BEA1
