@@ -173,6 +173,29 @@ if not os.environ.get('NOSPEC'):
                 if tp is None:                     # fixed code -> switched space, bank unknown: try all
                     for q in range(FIXED):
                         if (q, val) not in code_bytes: seeds.append((q, val, 6))
+        # pointer-table seeds: runs of >=4 words in data whose targets mostly decode as code
+        if not os.environ.get('NOTAB'):
+            for p in range(NB):
+                base = 0xC000 if p == FIXED else 0x8000
+                lo_, hi_ = (0xC000, 0x10000) if p == FIXED else (0x8000, 0xC000)
+                for adj in (0, 1):
+                    a = base
+                    while a < base + 0x4000 - 1:
+                        run = []; b = a
+                        while b < base + 0x4000 - 1 and (p, b) not in code_bytes and (p, b + 1) not in code_bytes:
+                            t = (byte(p, b) | byte(p, b + 1) << 8) + adj
+                            if lo_ <= t < hi_ or (p != FIXED and 0xC000 <= t < 0x10000): run.append(t); b += 2
+                            else: break
+                        if len(run) >= 4:
+                            ok = []
+                            for t in run:
+                                tp = FIXED if t >= 0xC000 else p
+                                if (tp, t) in code_bytes: ok.append((tp, t)); continue
+                                r = spec_try(tp, t, None if tp == FIXED else tp)
+                                if r and len(r[0]) >= 4: ok.append((tp, t))
+                            if len(ok) * 4 >= len(run) * 3:
+                                for tp, t in ok: seeds.append((tp, t))
+                        a = b if run else a + 1
         for sd in sorted(set(seeds)):
             p, a = sd[0], sd[1]; need = sd[2] if len(sd) > 2 else 3
             if (p, a) in code_bytes: continue
@@ -192,8 +215,9 @@ def res_bank(a, p, pc):
     return next(iter(c)) if len(c) == 1 and None not in c else None
 
 labels = {}   # (p,a) -> name
+badlabels = set()
 def want(p, a):
-    if p is None: return None
+    if p is None or (p, a) in badlabels: return None
     if (p, a) in code_bytes and (p, a) not in starts: return None   # mid-instruction
     labels.setdefault((p, a), names.get((p, a), (f'F_{a:04X}' if p == FIXED else f'B{p}_{a:04X}')))
     return labels[(p, a)]
@@ -223,7 +247,9 @@ def fmt_instr(p, pc):
     if m == 'imm': return f'{mn} #${val:02X}'
     if m == 'rel':
         t = pc + 2 + (val - 256 if val > 127 else val)
-        return f'{mn} {want(p, t) or "$%04X" % t}'
+        nm = want(p, t)
+        if not nm: return f'.byte ${o:02X},${val:02X}   ; {mn} $%04X (target not an instruction start)' % t
+        return f'{mn} {nm}'
     if m in ('zp', 'zpx', 'zpy', 'izx', 'izy'):
         s = ramnames.get(val, f'${val:02X}')
         return {'zp': f'{mn} {s}', 'zpx': f'{mn} {s},x', 'zpy': f'{mn} {s},y',
@@ -233,6 +259,23 @@ def fmt_instr(p, pc):
     if val < 0x100: s = f'a:{s}'
     return {'abs': f'{mn} {s}', 'abx': f'{mn} {s},x', 'aby': f'{mn} {s},y'}[m]
 
+# auto-detect tables of code pointers sitting in data: >=3 consecutive words that each
+# point at a known instruction start (same bank, or fixed bank)
+auto_tables = []
+for p in range(NB):
+    base = 0xC000 if p == FIXED else 0x8000
+    a = base
+    while a < base + 0x4000 - 1:
+        run = []
+        b = a
+        while b < base + 0x4000 - 1 and (p, b) not in code_bytes and (p, b + 1) not in code_bytes:
+            t = byte(p, b) | byte(p, b + 1) << 8
+            tp = FIXED if t >= 0xC000 else (p if p != FIXED else None)
+            if tp is not None and t >= 0x8000 and (tp, t) in starts: run.append((b, t, tp)); b += 2
+            else: break
+        if len(run) >= 3:
+            auto_tables.append((p, a, run)); a = b
+        else: a += 1
 # word tables of code pointers (from hints) get .word emission
 word_cells = {}   # (p, addr) -> label string for a word starting there
 for b, a, n, tb in words_tab:
@@ -242,6 +285,10 @@ for b, a, n, tb in words_tab:
         if t >= 0xC000: tbk = FIXED
         nm = want(tbk, t) if tbk is not None else None
         if nm: word_cells[(b, a + 2 * i)] = nm
+for p, a, run in auto_tables:
+    for b, t, tp in run:
+        nm = want(tp, t)
+        if nm: word_cells[(p, b)] = nm
 # lo/hi tables: emit as .byte <label / .byte >label
 lo_cells = {}
 for b, lo, hi, n, tb, adj in lohi_tab:
@@ -262,12 +309,12 @@ def emit_bank(p):
     out = []; a = base
     while a < base + 0x4000:
         lab = [labels[(p, a)]] if (p, a) in labels else []
-        for x in lab: out.append(f'{x}:')
+        for x in lab: out.append(f'{x}:'); emitted.add((p, a))
         if a in text:
             out.append('    ' + text[a]); a += instr[(p, a)][1]; continue
         if (p, a) in word_cells:
             if (p, a + 1) in labels:   # a label points at the high byte: split the word
-                out.append(f'    .byte <{word_cells[(p, a)]}'); out.append(f'{labels[(p, a + 1)]}:')
+                out.append(f'    .byte <{word_cells[(p, a)]}'); out.append(f'{labels[(p, a + 1)]}:'); emitted.add((p, a + 1))
                 out.append(f'    .byte >{word_cells[(p, a)]}')
             else: out.append(f'    .word {word_cells[(p, a)]}')
             a += 2; continue
@@ -285,8 +332,14 @@ def emit_bank(p):
 os.makedirs(os.path.join(ROOT, 'src'), exist_ok=True)
 for i in range(3): want(FIXED, byte(FIXED, 0x3FFA + 2 * i) | byte(FIXED, 0x3FFB + 2 * i) << 8)
 # two rounds so labels created by later banks (cross refs) appear in earlier outputs
-for _ in range(2):
+emitted = set()
+for _ in range(12):
+    emitted = set()
     banks = {p: emit_bank(p) for p in range(NB)}
+    missing = {k for k in labels if k not in emitted and k not in badlabels}
+    if not missing and _ >= 1: break
+    badlabels |= missing
+    for k in missing: labels.pop(k, None)
 for p in range(NB):
     name = 'fixed' if p == FIXED else f'bank{p}'
     seg = 'FIXED' if p == FIXED else f'BANK{p}'
@@ -303,6 +356,7 @@ with open(os.path.join(ROOT, 'src', 'hardware.inc'), 'w') as f:
     for a, n in sorted(ramnames.items()): f.write(f'{n} = ${a:04X}\n')
 
 ncode = len(code_bytes)
+print('auto pointer tables:', len(auto_tables), 'words:', sum(len(r) for _,_,r in auto_tables))
 print(f'speculative code bytes: {len(spec_bytes)}')
 print(f'code bytes: {ncode} of {NB*16384} ({100*ncode/(NB*16384):.1f}%)')
 for p in range(NB):

@@ -23,9 +23,9 @@ back into buildable ca65 assembly. `make verify` rebuilds the ROM and checks tha
 
 ## Status
 Code is found by (1) tracing from the vectors with bank-context and constant tracking,
-(2) far-call resolution, and (3) a conservative speculative decode (blocks are accepted only
+(2) far-call resolution, and (3) automatic detection of code-pointer tables (emitted as `.word label`), and (4) a conservative speculative decode (blocks are accepted only
 if every path decodes to a terminator with no illegal opcodes). Everything else is `.byte` data.
-~29% of PRG is classified as code (bank 7 ≈ 91%); banks 0, 3, 4 are mostly data
+~33% of PRG is classified as code (bank 7 ≈ 88%, bank 5 ≈ 52%); banks 0 and 3 are mostly data
 (levels/graphics/music, not yet split). Speculatively-found code may include a few false
 positives – harmless for the byte-exact build, but treat labels as provisional.
 Next steps: name more RAM/routines, split data tables (`words`/`lohi` hints), decode the

@@ -31,8 +31,11 @@ F_C0B3:
     LDA $0300,x
     BEQ F_C0F7
     STA PPUADDR
+F_C0C0:
     INX
+F_C0C1:
     LDA $0300,x
+F_C0C4:
     STA PPUADDR
     INX
     LDY $0300,x
@@ -48,6 +51,7 @@ F_C0DA:
     TYA
     AND #$7F
     TAY
+F_C0E0:
     LDA ppuctrl_shadow
     AND #$FB
     STA PPUCTRL
@@ -64,6 +68,7 @@ F_C0F7:
     STA $0300
     LDA ppuctrl_shadow
     AND #$FB
+F_C100:
     STA PPUCTRL
     STA ppuctrl_shadow
     JMP F_C7D4
@@ -73,8 +78,10 @@ F_C0F7:
     STA PPUDATA
     LDA $031D,x
     STA PPUDATA
+F_C11A:
     LDA $031C,x
     STA PPUDATA
+F_C120:
     LDA $031B,x
     STA PPUDATA
     LDA $031A,x
@@ -140,10 +147,8 @@ F_C1D0:
     .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$02,$02,$01,$01,$02,$01
     .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$02,$02,$01,$01,$00,$00
 F_C1EF:
-    .byte $00
-F_C1F0:
-    .byte $34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35
-    .byte $34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$36,$35,$36,$35,$34
+    .byte $00,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34
+    .byte $35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$36,$35,$36,$35,$34
 F_C20F:
     .byte $00
 F_C210:
@@ -171,65 +176,97 @@ F_C294:
     .byte $00,$19,$00,$1A,$00,$19,$01,$18,$01,$1B,$00,$1C,$00,$1B,$01,$00
     .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
     .byte $00,$00,$00,$00,$00,$00,$00,$00,$04,$00,$00,$00,$00,$01,$01,$01
-    .byte $01,$00,$00,$00,$00,$00,$03,$D3,$FE,$D2,$FE,$D3,$FE,$D2,$FE,$D3
-    .byte $D2,$FF,$D3,$FE,$D4,$D5,$D4,$D3,$D2,$FE,$D3,$FE,$D4,$FE,$D5,$FE
-    .byte $D4,$FE,$D3,$FE,$D2,$FE,$FE,$D3,$FE,$FE,$D4,$FE,$D3,$D2,$D3,$D2
-    .byte $FF,$C0,$FE,$FE,$FE,$C1,$FE,$FE,$FE,$C0,$FE,$FE,$C1,$FE,$C0,$C1
-    .byte $00,$FF,$D3,$FE,$D2,$FE,$D3,$C0,$FE,$FE,$C1,$FE,$CD,$FF,$D3,$FE
-    .byte $D4,$D5,$D4,$D3,$D2,$FE,$D3,$FE,$D4,$FE,$D5,$FE,$D4,$C0,$FE,$FE
-    .byte $C1,$FE
+    .byte $01,$00,$00,$00,$00,$00,$03,$D3,$FE,$D2,$FE,$D3,$FE
+    .word F_FED2
+    .word F_D2D3
+    .word F_D3FF
+    .word F_D4FE
+    .word F_D4D5
+    .word F_D2D3
+    .byte $FE,$D3
+    .word F_D4FE
+    .word F_D5FE
+    .word F_D4FE
+    .byte $FE,$D3,$FE,$D2,$FE,$FE,$D3,$FE,$FE,$D4,$FE,$D3,$D2,$D3,$D2,$FF
+    .byte $C0,$FE,$FE,$FE,$C1,$FE,$FE,$FE,$C0,$FE,$FE,$C1,$FE,$C0,$C1,$00
+    .byte $FF,$D3,$FE,$D2,$FE,$D3,$C0,$FE,$FE,$C1,$FE,$CD
+    .word F_D3FF
+    .word F_D4FE
+    .word F_D4D5
+    .word F_D2D3
+    .byte $FE,$D3
+    .word F_D4FE
+    .word F_D5FE
+    .word F_D4FE
+    .word F_FEC0
+    .byte $FE,$C1,$FE
 F_C326:
     .byte $CD
 F_C327:
     .byte $FF,$CB,$C2,$D6,$C2,$F5,$C2,$06,$C3,$12
 F_C331:
-    .byte $C3,$D2,$D2,$00,$CD
+    .byte $C3,$D2,$D2,$00
+    .byte <F_CDCD
 F_C336:
-    .byte $CD,$D3,$D3,$C0,$D3,$D3,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$0F,$0F,$0E,$0D,$0C,$0C,$0C,$0C,$0C,$0C
-    .byte $0C,$0C,$0D,$0E,$0F,$0F,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02
-    .byte $02,$02,$02,$02,$02,$02,$0E,$0D,$0B,$0A,$0A,$0A,$0A,$0A,$0A,$0A
-    .byte $0A,$0A,$0A,$0B,$0D,$0E,$0F,$0E,$0E,$0D,$0D,$0D,$0D,$0D,$0D,$0D
-    .byte $0D,$0D,$0D,$0E,$0E,$0F,$01,$02,$02,$03,$04,$06,$07,$08,$09,$09
-    .byte $0A,$0A,$0B,$0C,$0D,$0D,$00,$01,$01,$02,$04,$05,$05,$05,$05,$05
-    .byte $05,$04,$02,$01,$01,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$0F
-    .byte $0E,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0E,$0F,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$0F,$0F,$0E,$0E,$0D,$0D,$0C,$0C,$0B,$0B
-    .byte $0A,$0A,$09,$09,$08,$08,$07,$07,$06,$06,$05,$05,$04,$04,$03,$03
-    .byte $02,$02,$01,$01,$00,$00,$00,$00,$01,$01,$02,$02,$03,$03,$04,$04
-    .byte $05,$05,$06,$06,$07,$07,$08,$08,$09,$09,$0A,$0A,$0B,$0B,$0C,$0C
-    .byte $0D,$0D,$0E,$0E,$0F,$0F,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$03,$03
-    .byte $02,$02,$01,$01,$00,$00,$00,$00,$01,$01,$02,$02,$03,$03,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F
-    .byte $0F,$0F,$0F,$0F,$0F,$0F,$06,$04,$03,$02,$01,$01,$00,$00,$00,$00
-    .byte $01,$01,$02,$03,$04,$06,$0B,$0B,$0B,$0B,$0A,$0A,$09,$09,$09,$09
-    .byte $09,$0A,$0A,$0B,$0C,$0E,$0E,$0C,$0A,$08,$07,$06,$05,$04,$03,$03
-    .byte $02,$02,$01,$01,$01,$00,$00,$01,$01,$01,$02,$02,$03,$03,$04,$05
-    .byte $06,$07,$08,$0A,$0C,$0E,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$04,$02
-    .byte $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$02,$04,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$0F,$0D,$0C,$0B,$0B,$0A,$0A,$09,$09,$08
-    .byte $08,$07,$06,$05,$03,$01,$01,$03,$05,$06,$07,$08,$08,$09,$09,$0A
-    .byte $0A,$0B,$0B,$0C,$0D,$0F,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$0E,$0C
-    .byte $0A,$08,$06,$04,$02,$00,$0E,$0C,$0A,$08,$06,$04,$02,$00,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$00,$02,$04,$06,$08,$0A,$0C,$0E,$FF,$FF
-    .byte $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$02
-    .byte $04,$06,$08,$0A,$0C,$0E,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08
-    .byte $08,$08,$08,$08,$08,$08,$07,$06,$05,$05,$05,$05,$05,$05,$05,$05
-    .byte $05,$05,$05,$05,$06,$07,$0E,$0C,$0B,$0A,$09,$09,$08,$08,$08,$08
-    .byte $09,$09,$0A,$0B,$0C,$0E
+    .byte >F_CDCD
+    .word F_D3D3
+    .word F_D3C0
+    .byte $D3,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    .byte $FF,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    .byte $00,$0F,$0F,$0E,$0D,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0C,$0D,$0E,$0F
+    .byte $0F,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02,$02
+    .byte $02,$0E,$0D,$0B,$0A,$0A,$0A,$0A,$0A,$0A,$0A,$0A,$0A,$0A,$0B,$0D
+    .byte $0E,$0F,$0E,$0E,$0D,$0D,$0D,$0D,$0D,$0D,$0D,$0D,$0D,$0D,$0E,$0E
+    .byte $0F,$01,$02,$02,$03,$04,$06,$07,$08,$09,$09,$0A,$0A,$0B,$0C,$0D
+    .byte $0D,$00,$01,$01,$02,$04,$05,$05,$05,$05,$05,$05,$04,$02,$01,$01
+    .byte $00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$0F,$0E,$0C,$0C,$0C,$0C
+    .byte $0C,$0C,$0C,$0C,$0C,$0C,$0C,$0E,$0F,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    .byte $FF,$0F,$0F,$0E,$0E,$0D,$0D,$0C,$0C,$0B,$0B,$0A,$0A,$09,$09,$08
+    .byte $08,$07,$07,$06,$06,$05,$05,$04,$04,$03,$03,$02,$02,$01,$01,$00
+    .byte $00,$00,$00,$01,$01,$02,$02,$03,$03,$04,$04,$05,$05,$06,$06,$07
+    .byte $07,$08,$08,$09,$09,$0A,$0A,$0B,$0B,$0C,$0C,$0D,$0D,$0E,$0E,$0F
+    .byte $0F,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$03,$03,$02,$02,$01,$01,$00
+    .byte $00,$00,$00,$01,$01,$02,$02,$03,$03,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    .byte $FF,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F,$0F
+    .byte $0F,$06,$04,$03,$02,$01,$01,$00,$00,$00,$00,$01,$01,$02,$03,$04
+    .byte $06,$0B,$0B,$0B,$0B,$0A,$0A,$09,$09,$09,$09,$09,$0A,$0A,$0B,$0C
+    .byte $0E,$0E,$0C,$0A,$08,$07,$06,$05,$04,$03,$03,$02,$02,$01,$01,$01
+    .byte $00,$00,$01,$01,$01,$02,$02,$03,$03,$04,$05,$06,$07,$08,$0A,$0C
+    .byte $0E,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$04,$02,$01,$00,$00,$00,$00
+    .byte $00,$00,$00,$00,$00,$00,$01,$02,$04,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    .byte $FF,$0F,$0D,$0C,$0B,$0B,$0A,$0A,$09,$09,$08,$08,$07,$06,$05,$03
+    .byte $01,$01,$03,$05,$06,$07,$08,$08,$09,$09,$0A,$0A,$0B,$0B,$0C,$0D
+    .byte $0F,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$0E,$0C,$0A,$08,$06,$04,$02
+    .byte $00,$0E,$0C,$0A,$08,$06,$04,$02,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    .byte $FF,$00,$02,$04,$06,$08,$0A,$0C,$0E,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    .byte $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$02,$04,$06,$08,$0A,$0C
+    .byte $0E,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08,$08
+    .byte $08,$07,$06,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$05,$06
+    .byte $07,$0E,$0C,$0B,$0A,$09,$09,$08,$08,$08,$08,$09,$09,$0A,$0B,$0C
+    .byte $0E
 F_C53C:
-    .byte $01,$02,$04,$08,$10,$20,$40,$80
+    .byte $01
+F_C53D:
+    .byte $02,$04,$08,$10,$20,$40,$80
 F_C544:
     .byte $00,$FF,$04,$C0,$06,$FF,$08,$FF,$0A,$FF,$0C,$C1,$0E,$FF,$10,$FF
-    .byte $12,$FF,$14,$C0,$16,$FF,$18,$FF,$1A,$C1,$1C,$FF,$1E,$FF,$20,$C0
-    .byte $22,$FF,$24,$C1,$26,$FF,$28,$C0,$2A,$00,$00,$00,$2E,$C0,$30,$FF
-    .byte $32,$FF,$34,$C1,$36,$FF,$38,$FF,$3A,$FF,$2A,$00,$3E,$C1,$40,$FF
-    .byte $42,$C0,$44,$FF,$46,$FF,$48,$78,$00,$00,$4C,$C1,$4E,$FF,$50,$C0
-    .byte $52,$FF,$54,$FF,$56,$78,$00,$00,$5A,$C1,$5C,$FF,$5E,$C0,$60,$FF
-    .byte $62,$FF,$64,$D2,$00,$00,$68,$C1,$6A,$FF,$6C,$C0,$6E,$FF,$70,$FF
-    .byte $72,$CE,$00,$00,$76,$C1,$78,$FF,$7A,$C0,$7C,$FF,$7E,$FF,$80,$78
-    .byte $00,$00
+    .byte $12,$FF,$14,$C0
+    .word F_FF16
+    .word F_FF18
+    .word F_C11A
+    .byte $1C,$FF,$1E,$FF,$20,$C0,$22,$FF,$24,$C1,$26,$FF,$28,$C0,$2A,$00
+    .byte $00,$00,$2E,$C0,$30,$FF,$32,$FF,$34,$C1
+    .word F_FF36
+    .word F_FF38
+    .word F_FF3A
+    .byte $2A,$00,$3E,$C1,$40,$FF,$42,$C0,$44,$FF,$46,$FF,$48,$78,$00,$00
+    .byte $4C,$C1,$4E,$FF,$50,$C0,$52,$FF,$54,$FF,$56,$78,$00,$00,$5A,$C1
+    .byte $5C,$FF,$5E,$C0,$60,$FF,$62,$FF,$64,$D2,$00,$00,$68,$C1,$6A,$FF
+    .byte $6C,$C0
+    .word F_FF6E
+    .word F_FF70
+    .word F_CE72
+    .byte $00,$00,$76,$C1,$78,$FF,$7A,$C0,$7C,$FF,$7E,$FF,$80,$78,$00,$00
 Reset:
     SEI
     LDX #$00
@@ -253,7 +290,7 @@ F_C5E1:
     BNE F_C5E1
     LDA #$00
     JSR SwitchBank
-    JSR B0_8245
+    JSR $8245
     LDA #$30
     JSR SetPPUCtrl
     LDA #$00
@@ -276,7 +313,7 @@ F_C5E1:
     JSR B0_B8D2
     LDA #$04
     JSR SwitchBank
-    JSR B4_BE32
+    JSR $BE32
     LDA #$E8
     STA $0746
     LDA #$03
@@ -293,7 +330,7 @@ F_C647:
     JSR F_CE52
     LDA #$00
     JSR SwitchBank
-    JSR B0_B63F
+    JSR $B63F
     LDA #$00
     LDX #$02
     STX $01AE
@@ -311,15 +348,15 @@ F_C667:
 F_C66C:
     LDA #$02
     JSR SwitchBank
-    JSR B2_B868
+    JSR $B868
     LDA #$00
     JSR SwitchBank
     LDA $93
     ASL a
     TAX
-    LDA B0_8263,x
+    LDA $8263,x
     STA $51
-    LDA B0_8264,x
+    LDA $8264,x
     STA $52
     LDY #$00
     LDA ($51),y
@@ -339,6 +376,7 @@ F_C66C:
     STA $97
     INY
     LDA ($51),y
+F_C6A7:
     STA $98
     INY
     PHA
@@ -365,7 +403,7 @@ F_C6CC:
     JSR F_C956
     LDA #$02
     JSR SwitchBank
-    JSR B2_B7F4
+    JSR $B7F4
     JSR F_D2A1
     LDA ppumask_shadow
     AND #$F9
@@ -393,14 +431,14 @@ F_C700:
 F_C710:
     LDA #$01
     JSR SwitchBank
-    JSR B1_BD95
+    JSR $BD95
     LDA #$00
     JSR SwitchBank
     JSR B0_8205
     JSR F_CD53
     LDA #$04
     JSR SwitchBank
-    JSR B4_ADCF
+    JSR $ADCF
     JSR F_DC21
     JSR F_D00E
     JSR F_D5E4
@@ -408,14 +446,14 @@ F_C710:
     JSR F_F3B5
     LDA #$02
     JSR SwitchBank
-    JSR B2_B89D
+    JSR $B89D
     LDA #$01
     JSR SwitchBank
-    JSR B1_802C
+    JSR $802C
     LDA #$06
     JSR SwitchBank
-    JSR B6_A4E1
-    JSR B6_8003
+    JSR $A4E1
+    JSR $8003
     LDA #$00
     JSR SwitchBank
     JSR B0_BF8A
@@ -424,7 +462,7 @@ F_C710:
 F_C763:
     LDA #$01
     JSR SwitchBank
-    JSR B1_BD95
+    JSR $BD95
     LDA #$00
     JSR SwitchBank
     JSR B0_8205
@@ -437,11 +475,11 @@ F_C763:
     JSR F_F1DD
     LDA #$01
     JSR SwitchBank
-    JSR B1_802C
+    JSR $802C
     LDA #$06
     JSR SwitchBank
-    JSR B6_A4E1
-    JSR B6_8003
+    JSR $A4E1
+    JSR $8003
     JSR F_FABC
     JMP F_C6FD
 F_C7A1:
@@ -496,6 +534,7 @@ NMI:
     LDA #$02
     STA OAMDMA
     LDA ppumask_shadow
+F_C800:
     ORA #$18
     LDY $0D
     BNE F_C808
@@ -551,7 +590,7 @@ F_C852:
     BEQ F_C874
     LDA #$00
     JSR SwitchBank
-    JSR B0_8108
+    JSR $8108
     JMP F_C874
 F_C863:
     LDA #$00
@@ -559,22 +598,23 @@ F_C863:
     LDA frame_counter
     AND #$01
     BEQ F_C871
-    JSR B0_8108
+    JSR $8108
 F_C871:
     JSR F_C0A8
 F_C874:
     JSR F_C7A1
     LDA #$06
     JSR SwitchBank
-    JSR B6_BF02
+    JSR $BF02
     JMP F_C82F
 F_C882:
     LDA #$00
     JSR SwitchBank
-    JSR B0_8108
+F_C887:
+    JSR $8108
     LDA #$02
     JSR SwitchBank
-    JSR B2_B78F
+    JSR $B78F
     LDA #$00
     JSR SwitchBank
     JSR F_C0A8
@@ -583,7 +623,7 @@ F_C882:
 F_C89F:
     LDA #$02
     JSR SwitchBank
-    JSR B2_9E00
+    JSR $9E00
     LDA #$00
     JSR SwitchBank
     JSR F_C0A8
@@ -595,11 +635,12 @@ F_C8B4:
     PHA
     LDA #$00
     JSR SwitchBank
-    JSR B0_81DC
+    JSR $81DC
     PLA
     JSR SwitchBank
     LDA $08
     STA $08
+F_C8C9:
     JSR ClearOAMBuffer
     LDA PPUSTATUS
     LDA ppuctrl_shadow
@@ -610,6 +651,7 @@ F_C8B4:
     LDA #$28
 F_C8DD:
     STA PPUADDR
+F_C8E0:
     LDA #$00
     STA PPUADDR
     LDY #$04
@@ -626,6 +668,7 @@ F_C8EB:
 F_C8F8:
     STA PPUDATA
     DEX
+F_C8FC:
     BNE F_C8F8
     JMP F_C7D4
 SetPPUCtrl:
@@ -641,6 +684,7 @@ SwitchBank:
     TAX
     LDA F_C000,x
     STA F_C000,x
+F_C916:
     RTS
 SwitchBankFromAC:
     .byte $A5,$AC
@@ -655,6 +699,7 @@ F_C919:
     PLA
     TAX
     RTS
+F_C929:
     TYA
     PHA
     TXA
@@ -682,10 +727,13 @@ F_C93F:
     INX
     STA $0200,x
     INX
+F_C953:
     BNE F_C93F
+F_C955:
     RTS
 F_C956:
     JSR ClearOAMBuffer
+F_C959:
     LDY #$06
     LDX #$32
     LDA #$BF
@@ -693,6 +741,7 @@ F_C956:
     LDA $AB
     CMP #$04
     BNE F_C96F
+F_C968:
     LDY $93
     LDA F_C988,y
     BNE F_C98D
@@ -719,6 +768,7 @@ F_C988:
 F_C98D:
     LDY #$00
     LDX #$0E
+F_C991:
     LDA #$FF
 F_C993:
     STA $0200,y
@@ -773,6 +823,7 @@ F_C9D7:
     LDA $51
     PHA
     LDA $52
+F_C9E8:
     PHA
     LDA cur_bank
     PHA
@@ -780,12 +831,14 @@ F_C9D7:
     JSR SwitchBank
     LDA #$00
     STA $55
+F_C9F5:
     STA $56
     LDA #$D5
     STA $51
     LDA #$BA
     STA $52
     CLC
+F_CA00:
     JSR F_FDE9
     PLA
     JSR SwitchBank
@@ -892,6 +945,7 @@ F_CA7A:
     PLA
     STA $52
     PLA
+F_CACB:
     STA $51
     PLA
     STA $56
@@ -911,9 +965,9 @@ F_CAD9:
     LDA $AB
     ASL a
     TAY
-    LDA B1_9F25,y
+    LDA $9F25,y
     STA $51
-    LDA B1_9F26,y
+    LDA $9F26,y
     STA $52
     LDA #$A8
     STA $DB
@@ -945,6 +999,7 @@ F_CB1E:
     LDA ($51),y
     INY
     CMP #$FF
+F_CB25:
     BEQ F_CB81
     STA $0480,x
     LDA ($51),y
@@ -1002,6 +1057,7 @@ F_CB81:
     LDA $52
     ADC #$00
     STA $B5
+F_CB8F:
     STA $52
     LDA $51
     CLC
@@ -1085,6 +1141,7 @@ F_CBF2:
     PHA
     LDA $52
     PHA
+F_CC1F:
     LDA ($51),y
     STA $0570,x
     INY
@@ -1098,6 +1155,7 @@ F_CBF2:
     INY
     LDA #$00
     STA $05D0,x
+F_CC39:
     STA $0600,x
     LDA #$01
     STA $0630,x
@@ -1157,11 +1215,11 @@ F_CC6A:
     ASL a
     ASL a
     TAY
-    LDA B1_A722,y
+    LDA $A722,y
     STA $51
-    LDA B1_A723,y
+    LDA $A723,y
     STA $52
-    LDA B1_A724,y
+    LDA $A724,y
     STA $53
     BEQ F_CCB7
     LDA $DB
@@ -1184,9 +1242,11 @@ F_CCC1:
     PHA
     LDA $52
     PHA
+F_CCCD:
     LDA #$05
     STA $56
     JSR F_EEDF
+F_CCD4:
     LDX #$00
 F_CCD6:
     LDA $AB
@@ -1277,13 +1337,13 @@ F_CD74:
     STA $0F
     LDA #$00
     JSR SwitchBank
-    JSR B0_B577
+    JSR $B577
     LDA #$04
     JSR SwitchBank
-    JSR B4_BD91
+    JSR $BD91
     LDA #$02
     JSR SwitchBank
-    JSR B2_B64F
+    JSR $B64F
 F_CD9A:
     JSR F_C9AC
     LDA #$04
@@ -1306,7 +1366,9 @@ F_CDC2:
     JSR F_C9AC
     LDA #$04
     JSR SwitchBank
+F_CDCA:
     JSR B4_BEDF
+F_CDCD:
     LDA #$00
     JSR SwitchBank
     JSR B0_8205
@@ -1322,13 +1384,14 @@ F_CDDD:
     BNE F_CDDD
     LDA #$00
     JSR SwitchBank
-    JSR B0_B5FB
+    JSR $B5FB
     LDX $1A
-    LDA B0_8C95,x
+    LDA $8C95,x
     JSR F_C919
     CLC
     JSR F_FDE9
     LDA $01B1
+F_CE00:
     BEQ F_CE05
     JSR F_C98D
 F_CE05:
@@ -1336,7 +1399,7 @@ F_CE05:
     STA $0F
     LDA #$06
     JSR SwitchBank
-    JSR B6_8009
+    JSR $8009
     JSR F_C99E
     JSR F_C9AC
     INC $11
@@ -1344,6 +1407,7 @@ F_CE05:
 F_CE1B:
     LDA $11
     BNE F_CE1B
+F_CE1F:
     PLA
     STA nmi_state
     LDA $FD
@@ -1368,7 +1432,7 @@ F_CE3B:
     LDA #$06
     JSR F_C919
     LDA $08
-    JSR B0_8000
+    JSR $8000
     PLA
     TAY
     PLA
@@ -1391,12 +1455,14 @@ F_CE61:
     JSR F_C919
     LDA $08
     JSR $800C
+F_CE72:
     PLA
     TAX
     PLA
     JMP F_C919
 F_CE78:
-    STA $08
+    .byte $85
+    PHP
     LDA cur_bank
     PHA
     TXA
@@ -1552,6 +1618,7 @@ F_CF7D:
     BEQ F_CFB4
     CLC
     ADC F_C008,x
+F_CF92:
     PHA
     LDA F_C048,x
     ADC #$00
@@ -1624,7 +1691,9 @@ F_CFF7:
     DEC $0204,x
 F_D004:
     TXA
+F_D005:
     CLC
+F_D006:
     ADC #$08
     TAX
     CMP #$30
@@ -1634,6 +1703,7 @@ F_D00E:
     LDA $01A6
     ASL a
     TAY
+F_D013:
     LDA F_D046,y
     STA farcall_ptr_lo
     LDA F_D047,y
@@ -1663,26 +1733,31 @@ F_D00E:
 F_D046:
     .byte $16
 F_D047:
-    .byte $BB,$5F,$BC,$5D,$BD,$DA,$BC,$5F,$BC,$54,$D0,$45,$D0,$A9,$02,$20
-    .byte $0D,$C9,$4C,$18,$B6
+    .byte $BB,$5F,$BC,$5D,$BD,$DA,$BC,$5F,$BC,$54,$D0
+    EOR $D0
+    LDA #$02
+    JSR SwitchBank
+    JMP $B618
 F_D05C:
     STA $AB
     TAX
     LDA #$00
     JSR F_C919
-    LDA B0_83B9,x
+    LDA $83B9,x
     STA farcall_ptr_lo
-    LDA B0_83D1,x
+    LDA $83D1,x
     STA farcall_ptr_hi
-    LDA B0_83E9,x
+    LDA $83E9,x
     STA $AC
     LDY #$00
     STY $09
     STY $0A
+F_D079:
     STY $07FF
     STY $44
     STY $0300
     STY $47
+F_D083:
     STY $49
     STY $48
     DEY
@@ -1690,13 +1765,14 @@ F_D05C:
     JSR F_D282
     LDA #$02
     JSR SwitchBank
-    JSR B2_B4A7
+    JSR $B4A7
     LDA $AB
     CMP #$04
     BEQ F_D09F
-    JSR B2_AF27
+    JSR $AF27
 F_D09F:
     LDA #$00
+F_D0A1:
     JSR SwitchBank
     LDA #$2B
     STA $AA
@@ -1724,6 +1800,7 @@ F_D0C3:
     STA $24
     LDA #$00
     STA $38
+F_D0D1:
     STA $39
     STA $35
     STA $37
@@ -1732,6 +1809,7 @@ F_D0D9:
     LDA $38
     CLC
     ADC $23
+F_D0DE:
     STA $38
     LDA $39
     ADC #$00
@@ -1745,6 +1823,7 @@ F_D0D9:
     ROL $37
     ASL a
     ROL $37
+F_D0F4:
     ASL a
     ROL $37
     STA $36
@@ -1782,11 +1861,11 @@ F_D0D9:
     BNE F_D139
     LDA #$02
     JSR SwitchBank
-    JMP B2_A554
+    JMP $A554
 F_D139:
     STA $1A
     TAX
-    LDA B0_8C95,x
+    LDA $8C95,x
     STA $01A5
     TXA
     ASL a
@@ -1794,9 +1873,9 @@ F_D139:
     ASL a
     PHA
     TAX
-    LDA B0_8C9B,x
+    LDA $8C9B,x
     STA $51
-    LDA B0_8C9C,x
+    LDA $8C9C,x
     STA $52
     LDA $01A5
     JSR F_C919
@@ -1810,7 +1889,7 @@ F_D139:
     JSR F_C919
     LDY #$63
 F_D16B:
-    LDA B0_8999,y
+    LDA $8999,y
     STA $041C,y
     DEY
     BPL F_D16B
@@ -1827,6 +1906,7 @@ F_D16B:
     STA $55
     LDA #$10
     STA $56
+F_D18E:
     LDA #$A7
     STA $51
     LDA #$88
@@ -1851,6 +1931,7 @@ F_D16B:
     PHA
     BNE F_D1DA
     JSR B0_B563
+F_D1C0:
     LDA $AB
     CMP #$04
     BNE F_D1DA
@@ -1867,9 +1948,9 @@ F_D16B:
 F_D1DA:
     PLA
     TAX
-    LDA B0_8C9F,x
+    LDA $8C9F,x
     STA $29
-    LDA B0_8CA0,x
+    LDA $8CA0,x
     STA $2A
     LDA $29
     CLC
@@ -1884,7 +1965,9 @@ F_D1DA:
     STA $2D
     LDA $2C
     ADC #$00
+F_D1FE:
     STA $2E
+F_D200:
     LDA $2D
     CLC
     ADC #$F0
@@ -1892,9 +1975,9 @@ F_D1DA:
     LDA $2E
     ADC #$00
     STA $30
-    LDA B0_8CA1,x
+    LDA $8CA1,x
     STA $27
-    LDA B0_8CA2,x
+    LDA $8CA2,x
     STA $28
     LDA #$03
     JSR SwitchBank
@@ -1904,9 +1987,10 @@ F_D1DA:
     LDA #$80
     STA PPUADDR
     LDX $93
-    LDA B3_82EB,x
+    LDA $82EB,x
     STA $51
-    LDA B3_82F1,x
+F_D230:
+    LDA $82F1,x
     STA $52
     LDY #$00
 F_D237:
@@ -1917,29 +2001,29 @@ F_D237:
     BNE F_D237
     LDA #$02
     JSR SwitchBank
-    JSR B2_A554
+    JSR $A554
     LDA $AB
     CMP #$04
     BEQ F_D27F
-    JSR B2_A606
-    JSR B2_A5DA
-    JSR B2_A5F0
+    JSR $A606
+    JSR $A5DA
+    JSR $A5F0
     LDA $DC
     BEQ F_D265
-    JSR B2_A673
-    JSR B2_A7EF
+    JSR $A673
+    JSR $A7EF
     JSR F_EFB6
 F_D265:
     LDA $DD
     BEQ F_D272
-    JSR B2_A647
-    JSR B2_AA65
+    JSR $A647
+    JSR $AA65
     JSR F_EF68
 F_D272:
     LDA $DE
     BEQ F_D27F
-    JSR B2_A65D
-    JSR B2_ACD7
+    JSR $A65D
+    JSR $ACD7
     JSR F_EF8C
 F_D27F:
     JMP F_C7D4
@@ -1984,12 +2068,15 @@ F_D2C3:
     LDA $36
     SEC
     SBC #$F0
+F_D2C8:
     STA $53
     LDA $37
     SBC #$00
     STA $54
     LDA $1D
+F_D2D2:
     SEC
+F_D2D3:
     SBC $53
     LDA $1E
     SBC $54
@@ -2078,6 +2165,7 @@ F_D361:
     PHA
     LDA $22
     PHA
+F_D367:
     LDA PPUSTATUS
     LDA ppuctrl_shadow
     AND #$7B
@@ -2105,6 +2193,7 @@ F_D381:
     STA PPUDATA
     INC $21
     BNE F_D3A3
+F_D3A1:
     INC $22
 F_D3A3:
     INX
@@ -2123,14 +2212,17 @@ F_D3B7:
     JSR F_C919
     LDY #$00
     LDA ($21),y
+F_D3C0:
     JSR F_DBB7
     TAY
     LDA #$00
     JSR F_C919
     LDA ($2D),y
+F_D3CB:
     STA PPUDATA
     LDA ($2F),y
     STA PPUDATA
+F_D3D3:
     INC $21
     BNE F_D3D9
     INC $22
@@ -2200,6 +2292,7 @@ F_D44C:
     LDA $21
     PHA
     LDA $22
+F_D453:
     PHA
 F_D454:
     LDY #$00
@@ -2266,9 +2359,12 @@ F_D454:
     LDA $22
     ADC #$00
     STA $22
+F_D4D3:
     LDA $21
+F_D4D5:
     CLC
     ADC $23
+F_D4D8:
     STA $21
     LDA $22
     ADC #$00
@@ -2288,6 +2384,7 @@ F_D4E7:
     STA PPUADDR
     LDA #$C0
     STA PPUADDR
+F_D4FE:
     LDX #$08
 F_D500:
     LDA $AC
@@ -2398,6 +2495,7 @@ F_D500:
     STA $1E
     PLA
     STA $1D
+F_D5D3:
     PLA
     STA $1C
     PLA
@@ -2424,6 +2522,7 @@ F_D5F5:
     ADC $09
     STA $09
     LDA $3C
+F_D5FE:
     CLC
     ADC $3A
     STA $3C
@@ -2436,6 +2535,7 @@ F_D60A:
     LDA $0B
     LSR a
     LDA $0A
+F_D613:
     ROR a
     LSR a
     LSR a
@@ -2502,6 +2602,7 @@ F_D677:
     LDA $3A
     CLC
     ADC $09
+F_D67C:
     STA $09
     LDA $3C
     CLC
@@ -2556,7 +2657,9 @@ F_D6CE:
     SEC
     SBC $20
     STA $3B
+F_D6D5:
     BMI F_D6E5
+F_D6D7:
     BNE F_D6E8
     LDA $3D
     BMI F_D6E2
@@ -2595,6 +2698,7 @@ F_D708:
     AND #$07
     STA $3D
     LDA $0B
+F_D715:
     LSR a
     LDA $0A
     ROR a
@@ -2618,6 +2722,7 @@ F_D732:
     LSR a
     LSR a
     LSR a
+F_D737:
     TAX
     LDA $21
     PHA
@@ -2674,6 +2779,7 @@ F_D77B:
     LSR a
     LSR a
     TAY
+F_D78F:
     AND #$01
     BEQ F_D7A0
     LDA $21
@@ -2719,6 +2825,7 @@ F_D7C7:
     SEC
     ADC #$1E
     STA $43
+F_D7D7:
     STA farcall_ptr_lo
     LDA F_C048,y
     STA $0300,x
@@ -2747,6 +2854,7 @@ F_D801:
     LDA $2F
     STA $40
     LDA $30
+F_D80F:
     STA $41
 F_D811:
     LDA farcall_ptr_lo
@@ -2774,6 +2882,7 @@ F_D811:
     LDA #$00
     JSR F_C919
     LDA ($40),y
+F_D83F:
     STA $0300,x
     DEX
     LDA $21
@@ -2783,6 +2892,7 @@ F_D811:
     LDA $22
     ADC #$00
     STA $22
+F_D850:
     DEC farcall_ptr_lo
     BEQ F_D885
 F_D854:
@@ -2841,6 +2951,7 @@ F_D8B3:
     LDY #$00
     LDA $AC
     JSR F_C919
+F_D8BA:
     LDA ($21),y
     JSR F_DBB7
     TAY
@@ -2853,8 +2964,11 @@ F_D8B3:
     BEQ F_D8E6
     LDA ($40),y
     STA $0300,x
+F_D8D4:
     DEX
+F_D8D5:
     LDA $21
+F_D8D7:
     CLC
     ADC $23
     STA $21
@@ -2928,6 +3042,7 @@ F_D943:
     INY
     INY
     LDA #$01
+F_D95C:
     STA $0300,y
     INY
     STY $44
@@ -2992,6 +3107,7 @@ F_D9BD:
     STA $40
     LDA $2C
     STA $41
+F_D9D8:
     JMP F_D9EB
 F_D9DB:
     LDA $2D
@@ -3013,8 +3129,10 @@ F_D9EB:
     INX
     AND #$1F
     EOR #$FF
+F_DA00:
     SEC
     ADC #$20
+F_DA03:
     STA $43
     STA farcall_ptr_lo
     ORA #$80
@@ -3046,6 +3164,7 @@ F_D9EB:
     DEX
     INC $21
     BNE F_DA3F
+F_DA3D:
     INC $22
 F_DA3F:
     DEC farcall_ptr_lo
@@ -3132,6 +3251,7 @@ F_DAD2:
     LDX $44
     LDA #$00
     STA $0300,x
+F_DAD9:
     STA $0749
     PLA
     STA $22
@@ -3147,6 +3267,7 @@ F_DAE3:
     LDA $46
     AND #$02
     BEQ F_DAFE
+F_DAF1:
     LDA $21
     SEC
     SBC $23
@@ -3156,6 +3277,7 @@ F_DAE3:
     STA $22
 F_DAFE:
     LDY $44
+F_DB00:
     LDA $46
     AND #$FC
     ASL a
@@ -3207,6 +3329,7 @@ F_DB47:
     LDA $22
     ADC #$00
     STA $22
+F_DB5C:
     LDY #$0F
 F_DB5E:
     LDA ($21),y
@@ -3231,6 +3354,7 @@ F_DB6F:
     INX
     TXA
     AND #$0F
+F_DB87:
     TAX
     LDY $0370,x
     LDA ($27),y
@@ -3292,7 +3416,6 @@ F_DBF1:
     LDX $56
     LDA $54
     RTS
-F_DBF6:
     .byte $01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$00,$01,$00,$00
     .byte $00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$00
 F_DC11:
@@ -3366,7 +3489,7 @@ F_DC8C:
     LDA #$02
     JSR SwitchBank
     LDY $63
-    LDX B2_B56E,y
+    LDX $B56E,y
     BEQ F_DCF8
     DEX
     BEQ F_DCF2
@@ -3397,9 +3520,12 @@ F_DCC8:
     STA $63
     LDA $7C
     BEQ F_DCF8
+F_DCD5:
     LDA #$00
     STA $7C
+F_DCD9:
     LDA $7F
+F_DCDB:
     STA $66
     JMP F_DCF8
 F_DCE0:
@@ -3419,12 +3545,14 @@ F_DCF8:
     LDA #$00
     STA $16
     STA $17
+F_DCFE:
     LDA $63
+F_DD00:
     ASL a
     TAY
-    LDA B2_B5AA,y
+    LDA $B5AA,y
     STA $51
-    LDA B2_B5AB,y
+    LDA $B5AB,y
     STA $52
     JSR SwitchBankFromAC
     JMP ($0051)
@@ -3481,6 +3609,7 @@ F_DD4B:
     CMP #$03
     BNE F_DD8F
     LDX #$05
+F_DD70:
     STX $53
 F_DD72:
     STA $80
@@ -3515,6 +3644,7 @@ F_DDA5:
     BNE F_DDB0
     LDA #$04
     STA $E2
+F_DDAD:
     JMP F_DDB8
 F_DDB0:
     LDA $E1
@@ -3525,6 +3655,7 @@ F_DDB8:
     LDA $BB
     AND #$1F
     CLC
+F_DDBD:
     ADC #$C8
     STA $F7
 F_DDC1:
@@ -3558,10 +3689,12 @@ F_DDE8:
     CLC
     ADC $E2
     LDA F_DC11,x
+F_DDFA:
     BEQ F_DE09
 F_DDFC:
     LDA #$06
     STA $E2
+F_DE00:
     STA $88
     LSR a
     STA $E4
@@ -3581,8 +3714,10 @@ F_DE15:
     LDA $E1
     BNE F_DE2C
     LDA $E2
+F_DE21:
     CMP #$07
     BEQ F_DE09
+F_DE25:
     LDA #$07
     STA $E1
     JMP F_DD46
@@ -3636,6 +3771,7 @@ F_DE75:
     SEC
     SBC #$0C
     STA $04B0,y
+F_DE89:
     LDA $01B0
     SBC #$00
     STA $04E0,y
@@ -3663,9 +3799,10 @@ F_DEB9:
     BNE F_DECB
     LDA #$05
     STA $63
-    JMP F_E8F6
+    JMP $E8F6
 F_DECB:
     LDA $12
+F_DECD:
     AND #$20
     BNE F_DED4
     JMP F_DF66
@@ -3693,7 +3830,9 @@ F_DEE3:
 F_DEFB:
     LDA $51
     STA $5E
+F_DEFF:
     CLC
+F_DF00:
     ADC #$05
     STA $51
     LDA $52
@@ -3763,11 +3902,13 @@ F_DF7E:
     CLC
     ADC $64
     STA $51
+F_DF85:
     LDA $5F
     ADC #$00
     STA $52
     LDA $34
     SEC
+F_DF8E:
     SBC #$11
     STA $53
     LDA $35
@@ -3809,6 +3950,7 @@ F_DFB2:
     BEQ F_E02F
     LDA $51
     CLC
+F_DFDE:
     ADC $23
     STA $51
     LDA $52
@@ -3826,7 +3968,9 @@ F_DFB2:
     STA $52
     JSR F_E514
     STA $53
+F_E001:
     AND #$03
+F_E003:
     CMP #$02
     BNE F_E023
     LDA $53
@@ -3855,8 +3999,7 @@ F_E02F:
     JSR F_EEBB
     JMP F_E0C6
 F_E035:
-    LDA #$00
-    STA $63
+    .byte $A9,$00,$85,$63
     STA $6D
     LDA $7A
     ORA $7B
@@ -3866,9 +4009,11 @@ F_E035:
     LDA $70
     STA $55
     SEC
+F_E04A:
     SBC #$58
     STA $51
     LDA $71
+F_E050:
     STA $56
     SBC #$02
     BCC F_E09A
@@ -3876,6 +4021,7 @@ F_E035:
     ASL a
     CLC
     ADC $51
+F_E05C:
     TAY
     LDA $72
     BEQ F_E066
@@ -3890,11 +4036,13 @@ F_E066:
     ADC #$00
     STA $71
     LDA #$01
+F_E075:
     JSR SwitchBank
     LDA $89FD,y
     INY
     CMP #$FF
     BEQ F_E08F
+F_E080:
     STA $024D
     LDA $89FD,y
     INY
@@ -3928,18 +4076,21 @@ F_E0B4:
     LDA $6F
     LSR a
     TAX
+F_E0BA:
     LDA F_C270,x
+F_E0BD:
     CMP #$FF
     BNE F_E0AF
     LDA #$00
     JMP F_E0CE
 F_E0C6:
-    LDA #$00
+    .byte $A9,$00
     STA $70
     STA $71
     STA $72
 F_E0CE:
     STA $6F
+F_E0D0:
     LDA #$96
     STA $6E
 F_E0D4:
@@ -3956,15 +4107,19 @@ F_E0E8:
     LDA $0660,x
     STA $55
     LDA #$00
+F_E0EF:
     STA $54
     STA $0660,x
     BIT $55
     BPL F_E0FA
+F_E0F8:
     DEC $54
 F_E0FA:
     LDA $60
+F_E0FC:
     CLC
     ADC $55
+F_E0FF:
     STA $60
     LDA $61
     ADC $54
@@ -3998,6 +4153,7 @@ F_E119:
     ADC #$00
     STA $52
     JSR F_EF24
+F_E13F:
     JSR F_F80D
     PLA
     STA $56
@@ -4064,7 +4220,9 @@ F_E194:
     STA $52
     JSR F_EF24
     PLA
+F_E1B8:
     STA $56
+F_E1BA:
     PLA
     STA $55
     JSR F_E51C
@@ -4093,6 +4251,7 @@ F_E1E8:
     BEQ F_E17D
     LDA $60
     AND #$F0
+F_E1F0:
     STA $60
     LDA #$00
     STA $79
@@ -4103,6 +4262,7 @@ F_E1F7:
     ADC $73
     STA $5E
     LDA $5F
+F_E200:
     ADC $74
     STA $5F
     BIT $74
@@ -4120,6 +4280,7 @@ F_E20B:
     STA $55
     LDA $61
     STA $56
+F_E220:
     JSR F_EF24
     JSR F_E514
     AND #$01
@@ -4222,6 +4383,7 @@ F_E275:
 F_E2E2:
     LDA $5E
     AND #$F0
+F_E2E6:
     CLC
     ADC #$05
     STA $5E
@@ -4235,6 +4397,7 @@ F_E2EB:
     ADC #$00
     STA $56
     LDA $55
+F_E2FC:
     SEC
     SBC $0510,x
     STA $55
@@ -4255,6 +4418,7 @@ F_E313:
     LDA $5E
     CLC
     ADC #$08
+F_E320:
     STA $51
     LDA $5F
     ADC #$00
@@ -4320,6 +4484,7 @@ F_E359:
     SEC
     SBC #$10
     STA $60
+F_E39D:
     LDA $61
     SBC #$00
     STA $61
@@ -4357,10 +4522,12 @@ F_E3CF:
     STA $56
     LDA $5E
     CLC
+F_E3DF:
     ADC #$08
     STA $51
     LDA $5F
     ADC #$00
+F_E3E7:
     STA $52
     JSR F_EF24
     LDA $51
@@ -4368,6 +4535,7 @@ F_E3CF:
     LDA $52
     STA $76
     JSR F_E514
+F_E3F7:
     JSR F_EEA6
     LDA $5E
     CLC
@@ -4377,6 +4545,7 @@ F_E3CF:
     ADC $51
     STA $51
     LDA $52
+F_E408:
     ADC #$00
     STA $52
     LDA ($51),y
@@ -4437,6 +4606,7 @@ F_E451:
     LDA $5E
     CLC
     ADC #$08
+F_E477:
     AND #$0F
     CLC
     ADC $51
@@ -4502,6 +4672,7 @@ F_E4B4:
 F_E4E5:
     LDA $5E
     CLC
+F_E4E8:
     ADC #$06
     STA $51
     LDA $5F
@@ -4559,6 +4730,7 @@ F_E53D:
     LDA $60
     CLC
     ADC F_C27D,x
+F_E54A:
     STA $60
     LDA $61
     ADC #$00
@@ -4659,15 +4831,18 @@ F_E5F5:
     DEC $83
     BNE F_E604
     LDA #$00
+F_E5FB:
     STA $85
     LDA #$80
     STA $7C
     JMP F_E5B1
 F_E604:
     LDA $82
+F_E606:
     SEC
     SBC #$01
     BNE F_E63F
+F_E60B:
     INC $80
     LDA $80
     CMP #$10
@@ -4706,8 +4881,7 @@ F_E641:
     STA $64
     JMP F_E650
 F_E64C:
-    LDA #$09
-    STA $65
+    .byte $A9,$09,$85,$65
 F_E650:
     LDA $60
     CLC
@@ -4787,6 +4961,7 @@ F_E6DC:
     STA $66
     LDX #$00
     STX $84
+F_E6E8:
     STX $01A5
     DEX
     STX $86
@@ -4800,11 +4975,13 @@ F_E6DC:
     STA $01A4
     LDA #$01
     STA $01A5
+F_E706:
     LDA #$05
     STA $01A6
 F_E70B:
     LDA #$03
     STA $63
+F_E70F:
     LDA #$00
     BIT $7C
     BMI F_E718
@@ -4921,6 +5098,7 @@ F_E7B6:
     BEQ F_E7F9
     AND #$01
     STA $66
+F_E7DF:
     CLC
     ADC #$0A
     STA $63
@@ -4935,6 +5113,7 @@ F_E7B6:
     LDA #$10
     STA $8E
     PLA
+F_E7F7:
     PLA
     RTS
 F_E7F9:
@@ -5070,19 +5249,20 @@ F_E89E:
     LDA #$02
     JSR SwitchBank
     JMP $B517
-    LDA #$02
-    JSR SwitchBank
-    JMP $B53A
-F_E8F6:
-    LDA #$06
-    JSR SwitchBank
-    JMP $A2BE
-    LDA #$06
-    JSR SwitchBank
-    JMP $A32E
-    LDA #$06
-    JSR SwitchBank
-    JMP $A3D6
+    .byte $A9,$02,$20,$0D,$C9,$4C,$3A
+    LDA $A9,x
+    ASL $20
+    ORA $4CC9
+    LDX $A9A2,y
+    ASL $20
+F_E901:
+    ORA $4CC9
+F_E904:
+    ROL $A9A3
+    ASL $20
+    ORA $4CC9
+    DEC $A3,x
+F_E90E:
     DEC $8F
     LDX $8F
     STX $67
@@ -5122,6 +5302,7 @@ F_E943:
 F_E94E:
     LDA $80
     AND #$0E
+F_E952:
     TAY
     LDA F_C293,y
     STA $65
@@ -5134,6 +5315,7 @@ F_E965:
     LDA #$06
     JSR SwitchBank
     JMP $B842
+F_E96D:
     INC $80
     LDA $80
     AND #$1E
@@ -5147,62 +5329,14 @@ F_E965:
 F_E97F:
     STA $65
     RTS
-    LDA #$02
-    STA $7A
-    LDA #$00
-    STA $7B
-    LDY $B9
-    BEQ F_E9B6
-    INY
-    STY $B9
-    CPY #$30
-    BNE F_E9C9
-    LDA #$CD
-    STA $60
-    LDA #$03
-    STA $61
-    LDA #$78
-    STA $5E
-    LDA #$00
-    STA $5F
-    LDA #$04
-    STA $9C
-    LDA #$0C
-    STA $92
-    LDA #$00
-    STA $E1
-    STA $E2
-    JMP F_F043
-F_E9B6:
-    LDA $61
-    BNE F_E9CA
-    LDA $60
-    CMP #$10
-    BCS F_E9CA
-    LDY #$00
-    STY $60
-    STY $61
-    INY
-    STY $B9
-F_E9C9:
-    RTS
-F_E9CA:
-    LDY $BA
-    LDA $04B0,y
-    CLC
-    ADC #$0F
-    STA $53
-    LDA $04E0,y
-    ADC #$00
-    STA $54
-    LDA $60
-    SEC
-    SBC $53
-    LDA $61
-    SBC $54
-    BCS F_EA56
-    LDA $0510,y
-    SEC
+    .byte $A9,$02,$85,$7A,$A9,$00,$85,$7B,$A4,$B9,$F0,$28,$C8,$84,$B9,$C0
+    .byte $30,$D0,$34,$A9,$CD,$85,$60,$A9,$03,$85,$61,$A9,$78,$85,$5E,$A9
+    .byte $00,$85,$5F,$A9,$04,$85,$9C,$A9,$0C,$85,$92,$A9,$00,$85,$E1,$85
+    .byte $E2,$4C,$43,$F0,$A5,$61,$D0,$10,$A5,$60,$C9,$10,$B0,$0A,$A0,$00
+    .byte $84,$60,$84,$61,$C8,$84,$B9,$60,$A4,$BA,$B9,$B0,$04,$18,$69,$0F
+    .byte $85,$53,$B9,$E0,$04,$69,$00,$85,$54,$A5,$60,$38,$E5,$53,$A5,$61
+    .byte $E5,$54,$B0,$70,$B9,$10
+    ORA $38
     SBC #$02
     STA $53
     LDA $0540,y
@@ -5213,9 +5347,12 @@ F_E9CA:
     SBC $53
     LDA $5E
     SBC $54
+F_E9FE:
     BCC F_EA07
+F_EA00:
     LDA #$00
     STA $66
+F_EA04:
     JMP F_EA0B
 F_EA07:
     LDA #$01
@@ -5262,7 +5399,6 @@ F_EA42:
     SBC #$00
     STA $5F
     JMP F_EA81
-F_EA56:
     LDA $53
     STA $60
     LDA $54
@@ -5276,6 +5412,7 @@ F_EA56:
     LDA #$05
     STA $53
     LDA #$00
+F_EA70:
     STA $54
 F_EA72:
     LDA $0510,y
@@ -5294,65 +5431,27 @@ F_EA81:
     ADC #$07
     STA $65
     RTS
-    LDA #$01
-    STA $64
-    JSR F_EB25
-    LDA $E0
-    BEQ F_EA9F
-    DEC $E0
-    LDA #$37
-    STA $65
-    RTS
-F_EA9F:
-    LDA $BD
-    SEC
-    SBC #$01
-    BNE F_EAB9
-    INC $BE
-    LDA $BE
-    LSR a
-    TAY
-    LDA F_C1F0,y
+    .byte $A9,$01,$85,$64,$20,$25,$EB,$A5,$E0,$F0,$07,$C6,$E0,$A9,$37,$85
+    .byte $65,$60,$A5,$BD,$38,$E9,$01,$D0,$13,$E6,$BE,$A5,$BE,$4A,$A8,$B9
+    BEQ F_EA70
     BNE F_EAB5
     STA $BE
     LDA #$35
 F_EAB5:
     STA $65
     LDA #$03
-F_EAB9:
     STA $BD
     RTS
+F_EABC:
     LDA #$00
     STA $63
     RTS
-    LDA $90
-    EOR #$01
-    STA $90
-    STA $64
-    JSR F_EB25
-    LDA $12
-    AND #$40
-    BNE F_EAD5
-    JMP F_EB05
-F_EAD5:
-    LDA $01AF
-    CLC
-    ADC #$08
-    STA $51
-    LDA $01B0
-    ADC #$00
-    STA $52
-    LDA $60
-    SEC
-    SBC $51
-    LDA $61
-    SBC $52
-    BCS F_EB05
-    LDA #$22
-    JSR F_CE8F
-    LDA #$00
-    STA $7D
-    STA $86
+    .byte $A5,$90,$49,$01,$85,$90,$85,$64,$20,$25,$EB,$A5,$12,$29,$40,$D0
+    .byte $03,$4C,$05,$EB,$AD,$AF,$01,$18,$69,$08,$85,$51,$AD,$B0,$01,$69
+    .byte $00,$85,$52,$A5,$60,$38,$E5,$51,$A5,$61,$E5,$52,$B0,$16,$A9,$22
+    .byte $20,$8F,$CE,$A9,$00,$85
+    ADC $8685,x
+F_EAFA:
     STA $8F
     LDA #$01
     STA $63
@@ -5362,6 +5461,7 @@ F_EB05:
     LDA $BD
     SEC
     SBC #$01
+F_EB0A:
     BNE F_EB22
     INC $BE
     LDA $BE
@@ -5429,6 +5529,7 @@ F_EB57:
     JSR F_E514
     STA $53
     PLA
+F_EB82:
     STA $56
     PLA
     STA $55
@@ -5462,10 +5563,12 @@ F_EBB5:
     STA $60
     LDA $61
     ADC #$00
+F_EBC2:
     STA $61
     JMP F_EC73
 F_EBC7:
-    LDA $12
+    .byte $A5,$12
+F_EBC9:
     AND #$80
     BNE F_EBD0
     JMP F_EC73
@@ -5494,8 +5597,10 @@ F_EBD0:
     BCS F_EC0D
     LDA $53
     CLC
+F_EBFC:
     ADC #$01
     STA $60
+F_EC00:
     STA $53
     LDA $54
     ADC #$00
@@ -5522,6 +5627,7 @@ F_EC0D:
     STA $51
     LDA $5F
     ADC #$00
+F_EC2F:
     STA $52
     JSR F_EF24
     JSR F_F80D
@@ -5610,6 +5716,7 @@ F_ECD2:
     CLC
     ADC $51
     STA $51
+F_ECD9:
     LDA $52
     ADC #$00
     STA $52
@@ -5621,6 +5728,7 @@ F_ECD2:
 F_ECEC:
     INC $51
     BNE F_ECF2
+F_ECF0:
     INC $52
 F_ECF2:
     JSR F_E514
@@ -5642,51 +5750,14 @@ F_ED0B:
     STA $5E
     JMP F_EDE8
 F_ED17:
-    LDA $12
-    AND #$10
-    BNE F_ED20
-    JMP F_EDE8
-F_ED20:
-    LDA $66
-    BNE F_ED2B
-    LDA #$01
-    STA $66
-    JMP F_EDE8
-F_ED2B:
-    LDA $64
-    STA $53
-    LDA $5E
-    CLC
-    ADC $53
-    STA $51
-    LDA $5F
-    ADC #$00
-    STA $52
-    LDA $34
-    SEC
-    SBC #$11
-    STA $53
-    LDA $35
-    SBC #$00
-    STA $54
-    LDA $53
-    SEC
-    SBC $51
-    LDA $54
-    SBC $52
-    BCS F_ED68
-    LDA $53
-    CLC
-    ADC #$01
-    STA $53
-    STA $5E
-    LDA $54
-    ADC #$00
-    STA $54
-    STA $5F
-    JMP F_EDE8
-F_ED68:
-    LDA $51
+    .byte $A5,$12,$29,$10,$D0,$03,$4C,$E8,$ED,$A5,$66,$D0,$07,$A9,$01,$85
+    .byte $66,$4C,$E8,$ED,$A5,$64,$85,$53,$A5,$5E,$18,$65,$53,$85,$51,$A5
+    .byte $5F,$69,$00,$85,$52,$A5,$34,$38,$E9,$11,$85,$53,$A5,$35,$E9,$00
+    .byte $85,$54,$A5,$53,$38,$E5,$51,$A5,$54,$E5,$52,$B0,$14,$A5,$53,$18
+    .byte $69,$01,$85,$53,$85,$5E,$A5,$54,$69,$00,$85,$54,$85,$5F,$4C
+F_ED66:
+    INX
+    SBC $51A5
     STA $5E
     CLC
     ADC #$0B
@@ -5698,12 +5769,14 @@ F_ED68:
     LDA $60
     STA $55
     LDA $61
+F_ED7F:
     STA $56
     JSR F_EF24
     JSR F_F80D
     JSR F_E514
     AND #$01
     BNE F_EDDF
+F_ED8E:
     LDA $60
     AND #$0F
     BEQ F_EDE8
@@ -5713,6 +5786,7 @@ F_ED68:
     STA $51
     LDA $52
     ADC #$00
+F_ED9F:
     STA $52
     JSR F_F80D
     JSR F_E514
@@ -5730,6 +5804,7 @@ F_ED68:
     AND #$03
     CMP #$02
     BNE F_EDDF
+F_EDC3:
     LDA $53
     STY $52
     AND #$FC
@@ -5738,11 +5813,13 @@ F_ED68:
     ASL a
     ROL $52
     ADC #$4B
+F_EDD1:
     STA $51
     LDA $52
     ADC #$C3
     STA $52
     LDA #$04
+F_EDDB:
     CMP ($51),y
     BCS F_EDE8
 F_EDDF:
@@ -5764,7 +5841,9 @@ F_EDE8:
     ADC #$08
     STA $51
     LDA $5F
+F_EDFE:
     ADC #$00
+F_EE00:
     STA $52
     LDA $51
     PHA
@@ -5784,6 +5863,7 @@ F_EDE8:
     LDA $51
     PHA
     LDA $52
+F_EE24:
     PHA
     JSR F_E514
     JSR F_EEA6
@@ -5937,6 +6017,7 @@ F_EEFD:
     RTS
 F_EF24:
     LDA $52
+F_EF26:
     LSR a
     ROR $51
     LSR a
@@ -5946,6 +6027,7 @@ F_EF24:
     LSR a
     ROR $51
     STA $52
+F_EF34:
     LDA $55
     AND #$F0
     LSR $56
@@ -5975,6 +6057,7 @@ F_EF5D:
     EOR #$01
     STA $DD
     LDA #$16
+F_EF65:
     JSR F_CE78
 F_EF68:
     LDA $DD
@@ -5993,6 +6076,7 @@ F_EF81:
     LDA $DE
     EOR #$01
     STA $DE
+F_EF87:
     LDA #$16
     JSR F_CE78
 F_EF8C:
@@ -6036,9 +6120,8 @@ F_EFB6:
 F_EFCF:
     .byte $12,$00,$16,$05
 F_EFD3:
-    LDA ($51),y
-    SEC
-    SBC #$78
+    .byte $B1,$51,$38,$E9
+    SEI
     BCS F_EFDB
 F_EFDA:
     RTS
@@ -6054,24 +6137,32 @@ F_EFE9:
     STA $53
     LDA $12
     AND #$40
+F_EFEF:
     BEQ F_EFDA
     LDA $93
     CMP #$05
     BNE F_F002
     LDA #$00
+F_EFF9:
     STA $53
     LDA $0100
+F_EFFE:
     AND #$01
+F_F000:
     BEQ F_EFDA
 F_F002:
     LDA $53
     ASL a
+F_F005:
     STA $53
+F_F007:
     ASL a
+F_F008:
     ADC $53
     CLC
     ADC $9A
     STA $51
+F_F00F:
     LDA $9B
     ADC #$00
     STA $52
@@ -6099,9 +6190,9 @@ F_F002:
     JSR F_CE61
 F_F03E:
     LDA ($51),y
+F_F040:
     STA $92
     INY
-F_F043:
     JSR F_CE52
     LDA #$01
     STA nmi_state
@@ -6133,14 +6224,15 @@ F_F074:
     SEC
     SBC #$E0
     BCC F_F083
+F_F07E:
     STA $93
+F_F080:
     JMP F_C667
 F_F083:
     LDA $9C
     JMP F_C6CC
 F_F088:
-    LDX $63
-    LDA F_DBF6,x
+    .byte $A6,$63,$BD,$F6,$DB
     BNE F_F090
 F_F08F:
     RTS
@@ -6153,6 +6245,7 @@ F_F090:
     LDA $5E
     CLC
     ADC #$08
+F_F0A0:
     STA $51
     LDA $5F
     ADC #$00
@@ -6161,6 +6254,7 @@ F_F090:
     LDA $51
     PHA
     LDA $52
+F_F0B0:
     PHA
     JSR F_F0CD
     PLA
@@ -6189,12 +6283,15 @@ F_F0CD:
     BNE F_F0F7
     JSR F_F6B0
     LDA #$01
+F_F0E5:
     STA $A6
+F_F0E7:
     JMP F_F14F
 F_F0EA:
     LDA $51
     STA $77
     LDA $52
+F_F0F0:
     STA $78
     LDY #$00
     JSR F_FC26
@@ -6204,6 +6301,7 @@ F_F0F7:
     BCC F_F08F
     CMP #$3D
     BCS F_F08F
+F_F100:
     CMP #$3C
     BNE F_F118
     LDA #$0A
@@ -6313,22 +6411,27 @@ F_F1DD:
     LDA $44
     CMP #$40
     BCS F_F255
+F_F1E3:
     LDX $0720
     LDA F_C544,x
     STA $0720
     INX
     CMP #$00
     BEQ F_F205
+F_F1F1:
     LDA $0721
     STA $53
+F_F1F6:
     LDA $0722
     STA $54
     LDA F_C544,x
     CMP #$FF
+F_F200:
     BEQ F_F205
     JSR F_F28D
 F_F205:
     LDA $44
+F_F207:
     CMP #$40
     BCS F_F27D
     LDX $0723
@@ -6431,6 +6534,7 @@ F_F298:
 F_F2C8:
     LSR $54
     ROR a
+F_F2CB:
     DEX
     BNE F_F2C8
 F_F2CE:
@@ -6454,6 +6558,7 @@ F_F2CE:
     LDA $01A1
     AND #$1F
     ADC $53
+F_F2F6:
     CMP #$1E
     BCC F_F2FD
     LDY #$02
@@ -6525,6 +6630,7 @@ F_F379:
     AND #$FF
     STA $01A0
     LDA $0B
+F_F385:
     LSR a
     LDA $0A
     ROR a
@@ -6533,6 +6639,7 @@ F_F379:
     AND #$FF
     STA $01A1
     LDA $1E
+F_F392:
     STA $52
     LDA $1D
     LSR $52
@@ -6590,11 +6697,14 @@ F_F3DE:
     LDA ($55),y
     JSR F_F679
     CMP #$B4
+F_F3FD:
     BCS F_F40E
     LDA #$00
     STA $57
+F_F403:
     LDA $55
     STA $58
+F_F407:
     LDA $56
     STA $59
     JMP F_F43E
@@ -6627,6 +6737,7 @@ F_F43E:
     LDA $5A
     BEQ F_F45E
     ASL a
+F_F443:
     TAY
     LDA F_C326,y
     STA $51
@@ -6696,11 +6807,13 @@ F_F4AD:
     LDA $C0
 F_F4B9:
     RTS
+F_F4BA:
     LDA $C0
     BNE F_F4B9
     LDA $7A
     ORA $7B
     BNE F_F4B9
+F_F4C4:
     LDY $63
     LDA F_F4D5,y
     BEQ F_F4B9
@@ -6710,20 +6823,34 @@ F_F4B9:
     JMP F_F4AD
 F_F4D5:
     .byte $01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$E6,$BF,$A5,$BF
-    .byte $4A,$A8,$B9,$10,$F5,$D0,$0B,$A9,$10,$85,$63,$A9,$00,$85,$BF,$4C
-    .byte $1C,$F5
+    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    INC $BF
+    LDA $BF
+    LSR a
+    TAY
+    LDA F_F510,y
+    BNE F_F507
+    LDA #$10
+    STA $63
+F_F500:
+    LDA #$00
+    STA $BF
+F_F504:
+    JMP F_F51C
 F_F507:
     STA $65
     LDA #$00
     STA $67
     STA $C1
     RTS
-    .byte $46,$46,$47,$47,$48,$48,$48,$45,$45,$45,$45,$00,$A5,$BF,$C9,$63
-    .byte $F0,$03,$4C,$7A,$F5,$A5,$11,$F0,$01,$60
+F_F510:
+    .byte $46,$46,$47,$47,$48,$48,$48,$45,$45,$45,$45,$00
+F_F51C:
+    .byte $A5,$BF,$C9,$63,$F0,$03,$4C,$7A,$F5,$A5,$11,$F0,$01,$60
 F_F52A:
-    JSR F_C7CD
-    JSR F_C9A5
+    .byte $20
+    CMP $20C7
+    LDA $C9
     JSR F_CE52
     LDA $01AE
     BNE F_F548
@@ -6738,6 +6865,7 @@ F_F52A:
 F_F548:
     LDA #$01
     STA $55
+F_F54C:
     JSR F_F8C4
     LDA $94
     STA $60
@@ -6810,6 +6938,7 @@ F_F5BA:
     TAY
     LDA $FC
     LSR a
+F_F5D0:
     LSR a
     LSR a
     LSR a
@@ -6835,13 +6964,17 @@ F_F5E3:
     INX
     INX
     INX
+F_F5F7:
     LDA $8000,y
+F_F5FA:
     AND #$03
     ASL a
     ADC #$F9
     EOR farcall_ptr_hi
     STA $023C,x
+F_F604:
     INX
+F_F605:
     LDA $8000,y
     AND #$0C
     ASL a
@@ -6853,6 +6986,7 @@ F_F5E3:
     INX
     INY
     DEC farcall_ptr_lo
+F_F616:
     BNE F_F5DB
     LDX #$00
 F_F61A:
@@ -6880,24 +7014,31 @@ F_F631:
     STA $67
     STA $66
     RTS
+F_F641:
     LDA #$01
     JSR SwitchBank
     JMP $AF23
+F_F649:
     LDA #$01
     JSR SwitchBank
     JMP $AFAF
+F_F651:
     LDA #$01
     JSR SwitchBank
     JMP $AFD3
+F_F659:
     LDA #$01
     JSR SwitchBank
     JMP $AFF8
-    LDA #$01
-    JSR SwitchBank
-    JMP $B094
+    .byte $A9
+    ORA ($20,x)
+    ORA $4CC9
+    STY $B0,x
+F_F669:
     LDA #$01
     JSR SwitchBank
     JMP $B15B
+F_F671:
     LDA #$01
     JSR SwitchBank
     JMP $B241
@@ -6919,6 +7060,7 @@ F_F68F:
     CPY #$CE
     BCC F_F699
     LDA #$00
+F_F697:
     BEQ F_F68A
 F_F699:
     LDA F_F5E3,y
@@ -6951,10 +7093,12 @@ F_F6E0:
     LDA $56
     PHA
     LDA $51
+F_F6E8:
     PHA
     LDA $52
     PHA
     LDA $51
+F_F6EE:
     SEC
     SBC $25
     STA $55
@@ -6964,6 +7108,7 @@ F_F6E0:
     LDA $33
     STA $072F
     LSR $56
+F_F700:
     ROR $55
     LSR $56
     ROR $55
@@ -6990,7 +7135,9 @@ F_F70A:
     STA $55
     LDA cur_bank
     PHA
+F_F730:
     LDA #$00
+F_F732:
     JSR SwitchBank
     LDY $55
     LDA ($CD),y
@@ -7057,15 +7204,10 @@ F_F793:
     LDA #$04
     JMP F_F786
 F_F79D:
-    PHA
-    LDA $0731
-    AND #$01
-    CLC
-    ADC #$1B
-    JSR F_CE78
-    LDA $0731
-    EOR #$01
-    STA $0731
+    .byte $48,$AD,$31,$07,$29,$01,$18,$69,$1B,$20,$78,$CE,$AD,$31,$07,$49
+    .byte $01,$8D
+F_F7AF:
+    AND (jump_ptr_hi),y
     CLC
     ADC #$1E
     STA $DA
@@ -7097,6 +7239,7 @@ F_F7E1:
     JSR SwitchBank
     JSR F_FA3D
     LDA $60
+F_F7EE:
     STA $04B0,y
     LDA $61
     STA $04E0,y
@@ -7104,23 +7247,26 @@ F_F7E1:
     STA $0510,y
     LDA $5F
     STA $0540,y
+F_F800:
     STY $42
     LDA #$4D
+F_F804:
     LDY #$8D
     JSR F_F917
     PLA
     JMP SwitchBank
 F_F80D:
-    LDA cur_bank
-    PHA
+    .byte $A5,$0C,$48
+F_F810:
     LDA #$03
     JSR F_C919
     JSR $BE91
+F_F818:
     PLA
     JMP F_C919
 F_F81C:
-    STX $D3
-    JSR F_FC26
+    .byte $86,$D3,$20
+    ROL $FC
     CMP #$C8
     BCC F_F840
     CMP #$CD
@@ -7152,17 +7298,23 @@ F_F843:
     JSR $BEA9
     PLA
     JMP F_C919
+F_F85E:
     LDA #$06
+F_F860:
     JSR SwitchBank
     JMP $A3EC
+F_F866:
     LDA #$03
+F_F868:
     JSR SwitchBank
     JMP $BD67
+F_F86E:
     LDA #$03
     JSR SwitchBank
     JMP $BD8D
 F_F876:
     LDA cur_bank
+F_F878:
     PHA
     LDA #$05
     JSR F_C919
@@ -7184,6 +7336,7 @@ F_F885:
     LDA $5F
     STA $0540,x
     LDA $60
+F_F8A0:
     STA $04B0,x
     LDA $61
     STA $04E0,x
@@ -7192,7 +7345,6 @@ F_F885:
     TAX
     PLA
     JMP F_C919
-F_F8B1:
     LDA $01AE
     CLC
     ADC $55
@@ -7204,8 +7356,8 @@ F_F8B1:
 F_F8C3:
     RTS
 F_F8C4:
-    LDA $01AE
-    SEC
+    .byte $AD
+    LDX $3801
     SBC $55
     STA $01AE
     RTS
@@ -7215,11 +7367,9 @@ F_F8CE:
     SBC $55
     STA $01AA
     RTS
-    LDA $01AA
-    CLC
-    ADC $55
-    STA $01AA
-    RTS
+F_F8D8:
+    .byte $AD,$AA,$01,$18,$65,$55,$8D,$AA
+    ORA ($60,x)
 F_F8E2:
     LDA $01AB
     CLC
@@ -7227,13 +7377,15 @@ F_F8E2:
     STA $01AB
     LDA $01AC
     ADC $56
+F_F8F0:
     STA $01AC
     LDA $01AD
     ADC #$00
     STA $01AD
     RTS
-    LDA #$00
-    STA $51
+F_F8FC:
+    .byte $A9,$00,$85,$51
+F_F900:
     STA $55
     LDX #$07
 F_F904:
@@ -7250,50 +7402,14 @@ F_F911:
     BPL F_F904
     RTS
 F_F917:
-    STA $51
-    STY $52
+    .byte $85,$51,$84,$52
 F_F91B:
-    LDX #$0F
-F_F91D:
-    LDA $04A0,x
-    BEQ F_F928
-    DEX
-    BPL F_F91D
-    JMP F_F99B
-F_F928:
-    LDY #$00
-    LDA ($51),y
-    CMP #$FF
-    BEQ F_F99B
-    INY
-    STA $04A0,x
-    STX farcall_ptr_lo
-    LDX $42
-    LDA $04B0,x
-    CLC
-    ADC ($51),y
-    INY
-    PHA
-    LDA $04E0,x
-    ADC ($51),y
-    INY
-    PHA
-    LDA $0510,x
-    CLC
-    ADC ($51),y
-    INY
-    PHA
-    LDA $0540,x
-    ADC ($51),y
-    INY
-    LDX farcall_ptr_lo
-    STA $0560,x
-    PLA
-    STA $0530,x
-    PLA
-    STA $0500,x
-    PLA
-    STA $04D0,x
+    .byte $A2,$0F,$BD,$A0,$04,$F0,$06,$CA,$10,$F8,$4C,$9B,$F9,$A0,$00,$B1
+    .byte $51,$C9,$FF,$F0,$6B,$C8,$9D,$A0,$04,$86,$04,$A6,$42,$BD,$B0,$04
+    .byte $18,$71,$51,$C8,$48,$BD,$E0,$04,$71,$51,$C8,$48,$BD,$10,$05,$18
+    .byte $71,$51,$C8,$48,$BD,$40,$05,$71,$51,$C8,$A6,$04,$9D,$60,$05,$68
+    .byte $9D,$30,$05,$68,$9D,$00,$05,$68,$9D
+    .byte $D0,$04   ; BNE $F96A (target not an instruction start)
     LDA ($51),y
     INY
     STA $0590,x
@@ -7308,6 +7424,7 @@ F_F928:
     STA $0620,x
     LDA ($51),y
     INY
+F_F981:
     STA $0650,x
     LDA #$FF
     STA $0160,x
@@ -7320,40 +7437,21 @@ F_F928:
     ADC #$00
     STA $52
     JMP F_F91B
-F_F99B:
-    LDX $42
-    RTS
+    .byte $A6,$42,$60
 F_F99E:
     .byte $0A
 F_F99F:
     .byte $00,$14,$00,$1E,$00,$32,$00,$64,$00,$C8,$00,$2C,$01,$F4,$01,$E8
     .byte $03,$D0,$07,$B8,$0B,$88,$13
 F_F9B6:
-    LDA $53
-    CMP #$0C
-    BCC F_F9EA
-    CMP #$0D
-    BNE F_F9D7
-    LDA #$32
-    LDY #$FA
-    JSR F_F917
-    LDY $93
-    LDA F_F9D2,y
-    LDY farcall_ptr_lo
-    STA $05C0,y
-    RTS
-F_F9D2:
-    .byte $29,$3F,$3E,$40,$29
-F_F9D7:
-    LDA #$01
-    STA $55
-    JSR F_F8B1
-    LDA #$1A
-    JSR F_CE61
+    .byte $A5,$53,$C9,$0C,$90,$2E,$C9,$0D,$D0,$17,$A9,$32,$A0,$FA,$20,$17
+    .byte $F9,$A4,$93,$B9,$D2,$F9,$A4,$04,$99,$C0,$05,$60,$29,$3F,$3E,$40
+    .byte $29,$A9,$01,$85,$55,$20,$B1,$F8,$A9,$1A,$20
+F_F9E1:
+    ADC ($CE,x)
     LDA #$1A
     STA $53
     JMP F_F9F9
-F_F9EA:
     ASL a
     TAY
     LDA F_F99E,y
@@ -7366,7 +7464,9 @@ F_F9F9:
     LDA #$04
     STA $0480,y
     LDA $04B0,x
+F_FA04:
     STA $04B0,y
+F_FA07:
     LDA $04E0,x
     STA $04E0,y
     LDA $0510,x
@@ -7379,6 +7479,7 @@ F_F9F9:
     CLC
     ADC #$03
     STA $05A0,y
+F_FA26:
     LDA #$00
     STA $05D0,y
     STA $0600,y
@@ -7398,14 +7499,17 @@ F_FA3F:
     LDY #$2F
 F_FA4F:
     RTS
+F_FA50:
     LDY #$05
     LDX #$47
     LDA #$BC
     JMP FarCall
+F_FA59:
     LDY #$05
     LDX #$70
     LDA #$BC
     JMP FarCall
+F_FA62:
     LDY #$05
     LDX #$75
     LDA #$BC
@@ -7427,7 +7531,7 @@ F_FA7A:
     CMP $05D0,x
     BNE F_FA8F
 F_FA8A:
-    JSR B1_8A5B
+    JSR $8A5B
     LDX $42
 F_FA8F:
     INX
@@ -7454,6 +7558,7 @@ F_FAAC:
     ADC #$01
     CMP #$30
     BNE F_FAB7
+F_FAB5:
     LDA #$00
 F_FAB7:
     STA $B7
@@ -7464,6 +7569,7 @@ F_FABC:
     LDA #$01
     JSR SwitchBank
     LDA #$30
+F_FAC7:
     STA $B8
     LDX $B7
 F_FACB:
@@ -7475,7 +7581,7 @@ F_FACB:
     CMP $05D0,x
     BNE F_FAE0
 F_FADB:
-    JSR B1_8A5B
+    JSR $8A5B
     LDX $42
 F_FAE0:
     DEX
@@ -7488,6 +7594,7 @@ F_FAE0:
 F_FAE9:
     DEC $B8
     LDA $B8
+F_FAED:
     BEQ F_FAF7
     CMP #$18
     BNE F_FACB
@@ -7590,6 +7697,7 @@ F_FB86:
     STA $51
     INY
     LDA ($55),y
+F_FBAA:
     STA $52
     LDA #$FB
     PHA
@@ -7637,16 +7745,19 @@ F_FBD6:
     LDA ($55),y
     STA $52
     LDA #$FC
+F_FBFE:
     PHA
     LDA #$0C
     PHA
     LDA #$00
+F_FC04:
     STA $55
     STA $56
     STX $42
     JMP ($0051)
 F_FC0D:
     LDA $01
+F_FC0F:
     BEQ F_FC1C
     INX
     CPX #$30
@@ -7666,6 +7777,7 @@ F_FC26:
     PHA
     JSR SwitchBankFromAC
     LDY #$00
+F_FC30:
     LDA ($51),y
     STA $08
     PLA
@@ -7685,6 +7797,7 @@ F_FC3F:
     LDA $51
     SEC
     SBC $25
+F_FC50:
     STA $55
     LDA $52
     SBC $26
@@ -7693,6 +7806,7 @@ F_FC3F:
     STA farcall_ptr_lo
     LSR $56
     ROR $55
+F_FC60:
     LSR $56
     ROR $55
     LSR $56
@@ -7763,15 +7877,18 @@ F_FCC6:
     PLA
     STA $51
     PLA
+F_FCD3:
     STA $56
     PLA
     STA $55
+F_FCD8:
     LDA farcall_ptr_lo
     ASL a
     RTS
 F_FCDC:
     LDA $55
     STA farcall_ptr_lo
+F_FCE0:
     LDA $52
     STA farcall_ptr_hi
     TXA
@@ -7784,12 +7901,17 @@ F_FCDC:
     LDA farcall_ptr_lo
     EOR #$FF
     STA farcall_ptr_lo
+F_FCF4:
     ROR farcall_ptr_lo
+F_FCF6:
     BCS F_FD00
+F_FCF8:
     TYA
+F_FCF9:
     ADC farcall_ptr_hi
     TAY
     TXA
+F_FCFD:
     ADC $55
     TAX
 F_FD00:
@@ -7798,10 +7920,12 @@ F_FD00:
     ROR farcall_ptr_lo
     BCS F_FD10
     TYA
+F_FD09:
     ADC farcall_ptr_hi
     TAY
     TXA
     ADC $55
+F_FD0F:
     TAX
 F_FD10:
     ASL farcall_ptr_hi
@@ -7817,6 +7941,7 @@ F_FD10:
 F_FD20:
     ASL farcall_ptr_hi
     ROL $55
+F_FD24:
     ROR farcall_ptr_lo
     BCS F_FD30
     TYA
@@ -7824,6 +7949,7 @@ F_FD20:
     TAY
     TXA
     ADC $55
+F_FD2F:
     TAX
 F_FD30:
     ASL farcall_ptr_hi
@@ -7839,6 +7965,7 @@ F_FD30:
 F_FD40:
     ASL farcall_ptr_hi
     ROL $55
+F_FD44:
     ROR farcall_ptr_lo
     BCS F_FD50
     TYA
@@ -7928,6 +8055,7 @@ F_FDC3:
     RTS
 F_FDD7:
     PHP
+F_FDD8:
     INC $51
     BNE F_FDDE
     INC $52
@@ -7947,13 +8075,18 @@ F_FDE9:
     JMP F_C7D4
 F_FDEF:
     ROR $0397
+F_FDF2:
     LDY #$00
     LDA ($51),y
     STA $08
+F_FDF8:
     JSR F_FDD7
     SEC
+F_FDFC:
     LDA $08
+F_FDFE:
     ROL a
+F_FDFF:
     STA $08
     STA $53
 F_FE03:
@@ -8052,6 +8185,7 @@ F_FEAA:
     LDA $08
     ADC #$09
     STA $08
+F_FEB1:
     BCS F_FEB6
     JMP F_FE52
 F_FEB6:
@@ -8060,6 +8194,7 @@ F_FEB6:
     JSR F_FEF5
     LDA $51
     PHA
+F_FEC0:
     LDA $52
     PHA
     LDA $08
@@ -8070,6 +8205,7 @@ F_FEB6:
     ADC $08
     STA $08
     STA $51
+F_FED2:
     JSR F_FD9F
     ADC $56
     STA $08
@@ -8080,6 +8216,7 @@ F_FEDB:
     JSR F_FDD7
     LDA $08
     JSR F_FD84
+F_FEE8:
     JSR F_FDE0
     DEC $54
     BEQ F_FEF2
@@ -8089,8 +8226,10 @@ F_FEF2:
 F_FEF5:
     LDA #$00
     STA $08
+F_FEF9:
     ASL $53
     BEQ F_FF00
+F_FEFD:
     JMP F_FF09
 F_FF00:
     LDA ($51),y
@@ -8101,11 +8240,14 @@ F_FF09:
     ROL $08
     ASL $53
     BEQ F_FF12
+F_FF0F:
     JMP F_FF1B
 F_FF12:
     LDA ($51),y
     STA $53
+F_FF16:
     ROL $53
+F_FF18:
     JSR F_FDD7
 F_FF1B:
     ROL $08
@@ -8115,6 +8257,7 @@ F_FF1B:
     JSR F_FD84
 F_FF26:
     ASL $53
+F_FF28:
     BEQ F_FF2D
     JMP F_FF36
 F_FF2D:
@@ -8124,7 +8267,9 @@ F_FF2D:
     JSR F_FDD7
 F_FF36:
     ROL $08
+F_FF38:
     ASL $53
+F_FF3A:
     BEQ F_FF3F
     JMP F_FF48
 F_FF3F:
@@ -8154,7 +8299,9 @@ F_FF63:
     JSR F_FDD7
 F_FF6C:
     ROL $08
+F_FF6E:
     ASL $53
+F_FF70:
     BEQ F_FF75
     JMP F_FF7E
 F_FF75:
@@ -8172,6 +8319,7 @@ F_FF87:
     LDA ($51),y
     STA $53
     ROL $53
+F_FF8D:
     JSR F_FDD7
 F_FF90:
     ROL $08
@@ -8196,8 +8344,16 @@ F_FFAB:
 F_FFB4:
     ROL $08
     RTS
-    .byte $08,$60,$08,$60,$51,$85,$53,$26,$53,$20,$E6,$FD,$26,$08,$60,$00
-    .byte $01,$FF,$FB,$FF,$BB,$00,$00,$20,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$41,$4C,$46,$52,$45,$44,$20
-    .byte $43,$48,$49,$43,$4B,$45,$4E,$00,$00,$00,$00,$00,$00,$30,$02,$01
-    .byte $07,$00,$2A,$E3,$C7,$C6,$C5,$4A,$C8
+    .byte $08,$60,$08,$60,$51,$85,$53
+F_FFBE:
+    ROL $53
+    JSR $FDE6
+    ROL $08
+    RTS
+    .byte $00,$01,$FF,$FB,$FF,$BB,$00,$00,$20,$00,$00,$00,$00,$00,$00,$00
+    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$41,$4C,$46,$52,$45,$44
+    .byte $20,$43,$48,$49,$43,$4B,$45,$4E,$00,$00,$00,$00,$00,$00,$30,$02
+    .byte $01,$07,$00,$2A
+    .word NMI
+    .word Reset
+    .word IRQ
