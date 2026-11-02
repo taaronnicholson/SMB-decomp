@@ -4,7 +4,7 @@ words 2 B5AA 31
 name f DEB9 PlayerState00   ; player_state $00 - on the ground (walk, start jump, peck)
 name f E965 PlayerState01   ; player_state $01 - rising in a jump [v]
 name f E524 PlayerState02   ; player_state $02 - falling [v]
-name f E8EE PlayerState03   ; player_state $03 - short state (17 ticks) back to $00, bank 2 $B53A
+name f E8EE PlayerState03   ; player_state $03 - landing variant when zp_7C is non-zero: sfx $11, a 17-tick animation (bank 2 $B53A), camera shake after long falls, brief invulnerability; code-read, not triggered
 name f E8E6 PlayerState04   ; player_state $04 - landing recovery [v]
 name f E8F6 PlayerState05   ; player_state $05 - peck: inspects the tile in front of the beak [v]
 name f E8FE PlayerState06   ; player_state $06 - peck swing (nothing solid) [v]

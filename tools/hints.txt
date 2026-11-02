@@ -306,9 +306,9 @@ ram 00DF powerup_shot            ; set by touching a type $0D pickup; must be no
 
 ; ---- switch tiles pecked by the player ----
 name f F770 PeckSwitchPhase      ; tile $D8: sfx $16, steps switch_phase 0..4 (direction by facing); the track movers ($50) read it
-name f F79D PeckSwitchToggle     ; tile $DA: toggles switch_flag, sfx $1B/$1C; the gates ($83-$85) follow it
+name f F79D PeckSwitchToggle     ; tile $DA: toggles switch_flag, sfx $1B/$1C; the falling weights ($83-$85) follow it
 ram 0730 switch_phase            ; 0-4, cycled by pecking tile $D8; selects the direction table entry for type $50
-ram 0731 switch_flag             ; 0/1, toggled by pecking tile $DA; gates $83/$84/$85
+ram 0731 switch_flag             ; 0/1, toggled by pecking tile $DA; releases the falling weights $83/$84/$85
 
 ; ---- player variables (hurt, lives, invulnerability, balloon ride) ----
 ram 01AE lives                   ; starts at 2; HurtPlayer/respawn decrements it, the bonus tally adds one; 0 -> game over
