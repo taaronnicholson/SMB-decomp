@@ -1855,9 +1855,9 @@ F_D139:
     ASL a
     PHA
     TAX
-    LDA B0_8C9B,x
+    LDA TilesetRecord0,x
     STA ptr_lo
-    LDA B0_8C9C,x
+    LDA $8C9C,x
     STA ptr_hi
     LDA ram_01A5
     JSR SwitchBankKeepX
@@ -1880,9 +1880,9 @@ F_D16B:
     PLA
     PHA
     TAX
-    LDA B0_8C9D,x
+    LDA $8C9D,x
     STA tmp_ptr_lo
-    LDA B0_8C9E,x
+    LDA $8C9E,x
     STA tmp_ptr_hi
     LDA #$00
     STA zp_55
@@ -1928,9 +1928,9 @@ F_D16B:
 F_D1DA:
     PLA
     TAX
-    LDA B0_8C9F,x
+    LDA $8C9F,x
     STA zp_29
-    LDA B0_8CA0,x
+    LDA $8CA0,x
     STA zp_2A
     LDA zp_29
     CLC
@@ -1953,9 +1953,9 @@ F_D1DA:
     LDA zp_2E
     ADC #$00
     STA zp_30
-    LDA B0_8CA1,x
+    LDA $8CA1,x
     STA zp_27
-    LDA B0_8CA2,x
+    LDA $8CA2,x
     STA zp_28
     LDA #$03
     JSR SwitchBank

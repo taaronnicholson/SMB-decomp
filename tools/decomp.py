@@ -506,3 +506,21 @@ if os.environ.get('MAP'):
         print(f'bank {p} data/unreached runs:', ' '.join(f'{s:04X}-{e-1:04X}({e-s})' for s, e in runs if e - s >= 8))
 if os.environ.get('DBG'):
     k = (FIXED, 0xC5EA); print('ctx C5EA', ctx.get(k), instr.get(k), (0, 0x8245) in starts, (0,0x8245) in code_bytes)
+
+if os.environ.get('GAPS'):
+    described = set(code_bytes) | set(blob_bytes)
+    for (b, a), (n, _) in stream_cells.items(): described |= {(b, a + k) for k in range(n)}
+    for (b, a), (n, _) in text_cells.items(): described |= {(b, a + k) for k in range(n)}
+    for (b, a), fmt in struct_rows.items(): described |= {(b, a + k) for k in range(sum(2 if c in 'wp' else 1 for c in fmt))}
+    for (b, a) in word_cells: described |= {(b, a), (b, a + 1)}
+    for (b, a) in lo_cells: described.add((b, a))
+    tot = 0; allgaps = []
+    for p in range(NB):
+        base = 0xC000 if p == FIXED else 0x8000; a = base
+        while a < base + 0x4000:
+            if (p, a) in described: a += 1; continue
+            s0 = a
+            while a < base + 0x4000 and (p, a) not in described: a += 1
+            allgaps.append((a - s0, p, s0)); tot += a - s0
+    print(f'unclassified bytes: {tot} of {NB * 16384} ({100 * tot / (NB * 16384):.1f}%)')
+    for n, p, s0 in sorted(allgaps, reverse=True)[:int(os.environ.get("GAPS"))]: print(f'  bank {p} ${s0:04X}-${s0 + n - 1:04X} ({n} bytes)')

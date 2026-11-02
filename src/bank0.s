@@ -744,29 +744,21 @@ Gfx_B0_88A7:
     .byte $2C,$1C,$CB,$E7,$67,$70,$79,$BC,$3E,$CC,$BF,$80,$00,$00
 B0_8C95:
     .byte $00,$04,$04,$04,$04,$04
-B0_8C9B:
-    .byte $31
-B0_8C9C:
-    .byte $AD
-B0_8C9D:
-    .byte $3B
-B0_8C9E:
-    .byte $A4
-B0_8C9F:
-    .byte $81
-B0_8CA0:
-    .byte $A8
-B0_8CA1:
-    .byte $41
-B0_8CA2:
-    .byte $AC,$86,$90,$A0,$8C,$CB,$8C,$8B,$90,$12,$97,$AC,$90,$6B,$92,$7B
-    .byte $91,$66,$9E,$42,$97,$1B,$97,$2B,$96,$00,$A5,$9A,$9E,$CB,$9B,$DB
-    .byte $9A,$B2,$AB,$2A,$A5,$7B,$A0,$8B,$9F,$53,$54,$56,$54,$58,$59,$56
-    .byte $5E,$61,$62,$63,$66,$56,$58,$56,$6B,$6F,$56,$56,$76,$7A,$7B,$7F
-    .byte $83,$87,$56,$56,$8F,$56,$92,$53,$7A,$54,$56,$56,$56,$99,$9A,$53
-    .byte $53,$9C,$9B,$53,$9F,$53,$53,$54,$A3,$A4,$A4,$A5,$53,$A3,$A6,$A8
-    .byte $A5,$AC,$56,$62,$99,$92,$92,$56,$AF,$AF,$56,$7A,$54,$56,$53,$53
-    .res 49, $53
+TilesetRecord0:
+    .word $AD31, $A43B, $A881, $AC41
+    .word $9086, $8CA0, $8CCB, $908B
+    .word $9712, $90AC, $926B, $917B
+    .word $9E66, $9742, $971B, $962B
+    .word $A500, $9E9A, $9BCB, $9ADB
+    .word $ABB2, $A52A, $A07B, $9F8B
+; Tileset1_Planes: metatile tile numbers for tileset 1: top-left, top-right, bottom-left, bottom-right planes of 240 entries
+Tileset1_Planes:
+    .byte $53,$54,$56,$54,$58,$59,$56,$5E,$61,$62,$63,$66,$56,$58,$56,$6B
+    .byte $6F,$56,$56,$76,$7A,$7B,$7F,$83,$87,$56,$56,$8F,$56,$92,$53,$7A
+    .byte $54,$56,$56,$56,$99,$9A,$53,$53,$9C,$9B,$53,$9F,$53,$53,$54,$A3
+    .byte $A4,$A4,$A5,$53,$A3,$A6,$A8,$A5,$AC,$56,$62,$99,$92,$92,$56,$AF
+    .byte $AF,$56,$7A,$54,$56,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53
+    .res 40, $53
     .res 8, $00
     .res 60, $04
     .byte $08,$14,$14,$14,$0C,$10,$14,$14,$14,$17,$1B,$1F,$14,$14,$14,$14
@@ -805,6 +797,8 @@ B0_8CA2:
     .byte $0B,$14,$14,$14,$0F,$13,$14,$14,$16,$1A,$1E,$22,$14,$14,$14,$14
     .byte $14,$14,$24,$26,$28,$2C,$30,$34,$38,$3A,$3E,$42,$46,$4A,$4E,$52
     .res 20, $14
+; Tileset1_Attr: palette (0-3) per metatile for tileset 1
+Tileset1_Attr:
     .byte $00,$55,$00,$55,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
     .byte $00,$00,$00,$00,$55,$55,$55,$55,$00,$00,$00,$00,$00,$55,$55,$55
     .byte $55,$55,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$55,$55,$55,$00
@@ -814,19 +808,23 @@ B0_8CA2:
     .res 68, $FF
     .byte $AA,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00
     .byte $00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$FF,$FF,$FF,$FF
-    .res 23, $00
-    .byte $AA,$AA,$FF,$FF,$FF,$FF,$00,$00,$00,$FF,$FF,$FF,$FF,$AA,$FF,$AA
-    .byte $AA,$55,$00,$00,$AA,$AA,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-    .byte $FF,$AA,$FF,$AA,$AA,$AA,$55,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-    .byte $FF,$00,$00,$AA,$AA,$FF,$FF,$FF,$FF,$55,$FF,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$00,$FF,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$AA,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
-    .res 10, $FF
+    .res 20, $00
+; Tileset2_Attr: palette (0-3) per metatile for tileset 2
+Tileset2_Attr:
+    .byte $00,$00,$00,$AA,$AA,$FF,$FF,$FF,$FF,$00,$00,$00,$FF,$FF,$FF,$FF
+    .byte $AA,$FF,$AA,$AA,$55,$00,$00,$AA,$AA,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+    .byte $FF,$FF,$FF,$FF,$AA,$FF,$AA,$AA,$AA,$55,$FF,$FF,$FF,$FF,$FF,$FF
+    .byte $FF,$FF,$FF,$FF,$00,$00,$AA,$AA,$FF,$FF,$FF,$FF,$55,$FF,$00,$00
+    .res 10, $00
+    .byte $FF,$00,$00,$00,$00,$00,$00,$00,$00,$00,$AA,$FF,$FF,$FF,$FF,$FF
+    .res 19, $FF
     .res 11, $00
     .res 68, $FF
     .byte $55,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00
     .byte $00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$FF,$FF,$FF,$FF
     .res 20, $00
+; Tileset2_Planes: metatile tile numbers for tileset 2: top-left, top-right, bottom-left, bottom-right planes of 240 entries
+Tileset2_Planes:
     .byte $53,$54,$55,$54,$55,$54,$55,$5F,$60,$56,$67,$53,$54,$55,$54,$55
     .byte $69,$6C,$6E,$53,$72,$56,$67,$56,$77,$56,$79,$61,$53,$72,$7D,$81
     .byte $56,$67,$56,$77,$6B,$87,$6B,$8B,$7D,$81,$8D,$91,$92,$91,$93,$53
@@ -879,6 +877,8 @@ B0_8CA2:
     .byte $0B,$14,$14,$14,$0F,$13,$14,$14,$16,$1A,$1E,$22,$14,$14,$14,$14
     .byte $14,$14,$24,$26,$28,$2C,$30,$34,$38,$3A,$3E,$42,$46,$4A,$4E,$52
     .res 20, $14
+; Tileset3_Attr: palette (0-3) per metatile for tileset 3
+Tileset3_Attr:
     .byte $00,$00,$55,$55,$55,$55,$55,$55,$55,$55,$55,$55,$00,$55,$00,$AA
     .byte $55,$55,$55,$55,$FF,$FF,$FF,$00,$00,$00,$00,$55,$55,$55,$00,$00
     .res 19, $00
@@ -889,6 +889,8 @@ B0_8CA2:
     .byte $55,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00
     .byte $00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$FF,$FF,$FF,$FF
     .res 20, $00
+; Tileset3_Planes: metatile tile numbers for tileset 3: top-left, top-right, bottom-left, bottom-right planes of 240 entries
+Tileset3_Planes:
     .byte $53,$54,$58,$5A,$5C,$5C,$60,$63,$65,$69,$6D,$71,$53,$63,$73,$77
     .byte $7B,$7C,$7C,$53,$80,$84,$88,$8C,$5C,$91,$95,$53,$99,$7C,$73,$73
     .byte $73,$9C,$73,$9C,$A1,$A4,$A4,$9F,$56,$73,$53,$A6,$AB,$53,$AF,$B3
@@ -933,6 +935,8 @@ B0_8CA2:
     .byte $0B,$14,$14,$14,$0F,$13,$14,$14,$16,$1A,$1E,$22,$14,$14,$14,$14
     .byte $14,$14,$24,$26,$28,$2C,$30,$34,$38,$3A,$3E,$42,$46,$4A,$4E,$52
     .res 20, $14
+; Tileset4_Attr: palette (0-3) per metatile for tileset 4
+Tileset4_Attr:
     .byte $00,$00,$00,$AA,$AA,$00,$00,$00,$00,$00,$00,$FF,$00,$00,$FF,$FF
     .byte $FF,$FF,$FF,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
     .byte $00,$00,$00,$AA,$FF,$AA,$AA,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$AA
@@ -944,6 +948,8 @@ B0_8CA2:
     .byte $00,$00,$00,$00,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00
     .byte $FF,$FF,$FF,$FF,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
     .res 8, $00
+; Tileset4_Planes: metatile tile numbers for tileset 4: top-left, top-right, bottom-left, bottom-right planes of 240 entries
+Tileset4_Planes:
     .byte $53,$54,$54,$57,$5B,$5F,$63,$67,$6B,$6F,$73,$57,$53,$79,$5B,$7C
     .byte $80,$84,$80,$88,$88,$8D,$8E,$53,$5F,$63,$53,$53,$67,$53,$9A,$6F
     .byte $9D,$9F,$53,$A5,$5B,$A5,$A5,$88,$AE,$AF,$AE,$B0,$53,$AF,$B0,$B1
@@ -988,6 +994,8 @@ B0_8CA2:
     .byte $0B,$14,$14,$14,$0F,$13,$14,$14,$16,$1A,$1E,$22,$14,$14,$14,$14
     .byte $14,$14,$24,$26,$28,$2C,$30,$34,$38,$3A,$3E,$42,$46,$4A,$4E,$52
     .res 20, $14
+; Tileset5_Attr: palette (0-3) per metatile for tileset 5
+Tileset5_Attr:
     .res 11, $00
     .res 13, $55
     .byte $AA,$AA,$AA,$AA,$55,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$AA,$AA,$AA,$AA
@@ -999,6 +1007,8 @@ B0_8CA2:
     .byte $AA,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00
     .byte $00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$FF,$FF,$FF,$FF
     .res 20, $00
+; Tileset5_Planes: metatile tile numbers for tileset 5: top-left, top-right, bottom-left, bottom-right planes of 240 entries
+Tileset5_Planes:
     .byte $53,$54,$55,$55,$56,$57,$57,$56,$57,$57,$54,$5D,$61,$65,$69,$6D
     .byte $71,$75,$79,$7B,$7D,$81,$85,$89,$8D,$8D,$93,$97,$9B,$9D,$9E,$9D
     .byte $9F,$53,$9E,$9F,$53,$A1,$A5,$A7,$54,$55,$53,$53,$AF,$56,$B3,$B6
@@ -1051,6 +1061,8 @@ B0_8CA2:
     .byte $0B,$14,$14,$14,$0F,$13,$14,$14,$16,$1A,$1E,$22,$14,$14,$14,$14
     .byte $14,$14,$24,$26,$28,$2C,$30,$34,$38,$3A,$3E,$42,$46,$4A,$4E,$52
     .res 20, $14
+; Tileset0_Gfx: LZ-compressed tile graphics for tileset 0 (1392 bytes decompressed)
+Tileset0_Gfx:
     .byte $00,$60,$24,$00,$00,$80,$80,$A0,$B0,$BE,$C0,$80,$18,$1C,$1E,$0F
     .byte $08,$09,$DD,$E2,$F7,$7B,$7D,$BE,$00,$07,$87,$C3,$F0,$0A,$EF,$77
     .byte $BC,$01,$0E,$47,$BB,$D1,$D2,$EB,$6B,$80,$1E,$0F,$87,$C3,$ED,$EE
@@ -1119,12 +1131,15 @@ B0_8CA2:
     .byte $3A,$40,$E7,$E1,$F6,$53,$C2,$BF,$7F,$60,$06,$B8,$BB,$9F,$DD,$06
     .byte $61,$A7,$01,$41,$F8,$FA,$DC,$47,$6F,$8F,$C0,$35,$CF,$81,$61,$B3
     .byte $49,$BD,$60,$00,$B3,$F2,$3B,$1D,$0F,$85,$A5,$FB,$E5,$E7,$78,$2C
-    .byte $03,$17,$09,$7E,$B8,$00,$53,$53,$53,$53,$53,$53,$58,$5C,$60,$64
-    .byte $53,$6A,$6E,$71,$53,$53,$74,$53,$53,$53,$78,$53,$7F,$83,$53,$88
-    .byte $8B,$53,$8F,$90,$92,$74,$98,$53,$53,$53,$53,$53,$53,$53,$53,$53
-    .byte $53,$53,$53,$53,$53,$9A,$9B,$53,$53,$53,$53,$53,$53,$9F,$92,$9F
-    .byte $53,$A3,$A5,$9B,$53,$53,$A6,$53,$53,$53,$53,$53,$53,$53,$53,$53
-    .res 46, $53
+    .byte $03,$17,$09,$7E,$B8,$00
+; Tileset0_Planes: metatile tile numbers for tileset 0
+Tileset0_Planes:
+    .byte $53,$53,$53,$53,$53,$53,$58,$5C,$60,$64,$53,$6A,$6E,$71,$53,$53
+    .byte $74,$53,$53,$53,$78,$53,$7F,$83,$53,$88,$8B,$53,$8F,$90,$92,$74
+    .byte $98,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$9A
+    .byte $9B,$53,$53,$53,$53,$53,$53,$9F,$92,$9F,$53,$A3,$A5,$9B,$53,$53
+    .byte $A6,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53,$53
+    .res 40, $53
     .res 8, $00
     .res 60, $04
     .byte $08,$14,$14,$14,$0C,$10,$14,$14,$14,$17,$1B,$1F,$14,$14,$14,$14
@@ -1163,6 +1178,8 @@ B0_8CA2:
     .byte $0B,$14,$14,$14,$0F,$13,$14,$14,$16,$1A,$1E,$22,$14,$14,$14,$14
     .byte $14,$14,$24,$26,$28,$2C,$30,$34,$38,$3A,$3E,$42,$46,$4A,$4E,$52
     .res 20, $14
+; Tileset0_Attr: palette (0-3) per metatile for tileset 0
+Tileset0_Attr:
     .byte $00,$AA,$FF,$00,$00,$00,$00,$00,$00,$00,$FF,$55,$AA,$AA,$00,$00
     .byte $FF,$AA,$55,$00,$00,$AA,$AA,$AA,$FF,$FF,$FF,$FF,$FF,$FF,$00,$FF
     .byte $FF,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
@@ -1172,8 +1189,10 @@ B0_8CA2:
     .res 68, $FF
     .byte $AA,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00
     .byte $00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$FF,$FF,$FF,$FF
-    .res 21, $00
-    .byte $60,$50,$00,$02,$E0,$A0,$18,$C0,$F8,$2F,$80,$00,$00
+    .res 20, $00
+; Tileset0_Props: LZ-compressed tile property table for tileset 0 (120 bytes decompressed)
+Tileset0_Props:
+    .byte $00,$60,$50,$00,$02,$E0,$A0,$18,$C0,$F8,$2F,$80,$00,$00
 ; CollectTable0: collectible flags for area(s) 2,5: 15 row offsets, then (column, flag index) pairs
 CollectTable0:
     .word $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0000, $0020, $0022, $0000, $0024, $0000, $0000, $0000
@@ -1748,9 +1767,9 @@ B0_B5FB:
     ASL a
     ASL a
     TAX
-    LDA B0_8C9D,x
+    LDA $8C9D,x
     STA ptr_lo
-    LDA B0_8C9E,x
+    LDA $8C9E,x
     STA ptr_hi
 B0_B636:
     LDA #$30

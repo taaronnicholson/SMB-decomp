@@ -3,7 +3,8 @@
 
 .segment "BANK2"
 
-B2_8000:
+; PixelTables: 32 tables of 240 bytes
+PixelTables:
     .byte $00,$1E,$00,$00,$00,$3F,$00,$1F,$00,$1F,$00,$1E,$00,$1E,$00,$FC
     .byte $00,$FC,$00,$FC,$00,$FC,$00,$7E,$00,$1A,$00,$DF,$00,$19,$00,$28
     .byte $00,$3E,$00,$0E,$00,$06,$00,$6D,$00,$10,$00,$10,$00,$5D,$00,$5F
@@ -829,7 +830,7 @@ B2_A075:
     LDA #$C0
     STA PPUADDR
 B2_A084:
-    LDA B2_8000,x
+    LDA PixelTables,x
     STA PPUDATA
     LDA B2_80F0,x
     STA PPUDATA
@@ -1184,7 +1185,7 @@ B2_A3AF:
     STA PPUADDR
     INX
 B2_A3BF:
-    LDA B2_8000,x
+    LDA PixelTables,x
     STA PPUDATA
     LDA B2_80F0,x
     STA PPUDATA

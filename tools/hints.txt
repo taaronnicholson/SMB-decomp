@@ -190,3 +190,6 @@ ram 01AF water_level_lo          ; area header byte 8: Y below which the player 
 ram 01B0 water_level_hi          ; area header byte 9
 ram 0063 player_state            ; player state index ($0D = in water, $07 = ..., $16 = level complete); indexes per-state tables
 name f CE8F PlaySfxNoise          ; A = sfx id (bank-safe wrapper for Sound_PlaySfxNoise)
+
+; ---- bank 2: pixel/bitmap tables for the unrolled CHR upload routines ----
+blob 2 8000 7680 PixelTables 32 tables of 240 bytes; the unrolled upload routines at $9E00+ write 16 zero bytes then one byte from each of 16 tables (same index X) to a CHR tile

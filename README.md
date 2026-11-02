@@ -264,13 +264,21 @@ output position as scratch and reads them back for 16-bit address arithmetic.
 - `SwitchBankKeepX` (`$C919`) is `SwitchBank` that preserves X.
 
 ## Status
-Code is found by (1) tracing from the vectors with bank-context and constant tracking,
-(2) far-call resolution, and (3) automatic detection of code-pointer tables (emitted as `.word label`), and (4) a conservative speculative decode (blocks are accepted only
-if every path decodes to a terminator with no illegal opcodes). Everything else is `.byte` data.
-~33% of PRG is classified as code (bank 7 ≈ 88%, bank 5 ≈ 52%); banks 0 and 3 are mostly data
-(levels/graphics/music, not yet split). Speculatively-found code may include a few false
-positives – harmless for the byte-exact build, but treat labels as provisional.
-Next steps: name more RAM/routines, split data tables (`words`/`lohi` hints), decode the
-music/level formats, convert data to `.incbin`/structured tables.
+`make verify` rebuilds the ROM byte-for-byte. Of the 128 KB of PRG, about 36% is code (traced from the vectors, far calls,
+pointer tables and a conservative speculative decode) and about 52% more is classified data with labels, structure or comments
+(compressed graphics blocks, maps, tilesets, palettes, animation frames, spawn lists, sound data, text, tile property and
+height tables, pixel tables); **about 11% remains unclassified** (`GAPS=20 python3 -I tools/decomp.py` lists the largest
+gaps: the tail of bank 2, the start of bank 3, and assorted small tables in banks 6, 0, 1 and 5).
+Speculatively found code may include a few false positives (harmless for the byte-exact build; labels are provisional).
 
-Regenerate sources after editing `tools/hints.txt`: `make regen` (overwrites `src/*.s`).
+Known unknowns: the meaning of most entity handlers beyond `docs/entity_handlers.md`, the 3-byte kind field of special-tile
+entries, the rest of the one-time/area spawn semantics, and the data in the unclassified gaps.
+
+Regenerate the sources after editing `tools/hints*.txt` or the generators: `make regen` (overwrites `src/*.s`, needs `rom/game.nes`;
+`tools/gfx_blocks.json` caches the slow emulator scan).
+
+## Tools
+`decomp.py` (the disassembler/generator), `dis6502.py`, `emu.py` (6502+PPU emulator), `lzdec.py` (decompressor),
+generators `gen_*_hints.py` (sound, ppu, text, gfx, area, palette, spawn, anim, entity, map), `summarize_handlers.py`,
+renderers `extract_gfx.py`, `extract_maps.py`, `render_maps.py`, `render_sprites.py`, and analysis helpers `chrtrace.py`,
+`decomptrace.py`, `gfx_scan.py`, `check_decomp.py`. Rendered images and extracted data go to `build/` (not committed).
