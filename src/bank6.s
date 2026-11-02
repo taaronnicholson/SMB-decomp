@@ -3438,7 +3438,7 @@ B6_A38F:
     STA ram_0722
     LDA #$02
     STA ram_0720
-    LDA zp_79
+    LDA riding_flag
     BNE B6_A3CF
     LDA #$03
     STA zp_91
@@ -3454,7 +3454,7 @@ B6_A3AF:
     LDX #$16
 B6_A3C0:
     STX zp_65
-    LDA zp_79
+    LDA riding_flag
     BNE B6_A3CF
     LDA #$03
     STA zp_91

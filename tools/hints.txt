@@ -286,3 +286,12 @@ ram 001F prev_focus_x_lo
 ram 0020 prev_focus_y_lo
 ram 0009 scroll_x_px             ; horizontal scroll counter used by ScrollX
 ram 01A6 camera_mode
+
+; ---- shared entity physics helpers (bank 5) ----
+name 5 8434 Ent_MoveYWithGround  ; tmp_a = dy: adds it to Y, snaps the feet to the tile's height profile; ent_angle bit 7 = blocked/landed
+name 5 8546 Ent_GroundCheck      ; like Ent_MoveYWithGround with dy = 0
+name 5 87A7 Ent_MoveX            ; tmp_a = dx: horizontal step with map edge checks; ent_angle bit 7 set when blocked
+name 5 86EF Ent_MoveXLeft        ; counterpart of Ent_MoveX used by the other direction
+name 5 818D Ent_TickParam2       ; counts the low nibble of ent_param2 down
+ram 00B6 riding_slot             ; entity slot the player is standing on (platform carrying the player)
+ram 0079 riding_flag

@@ -3037,7 +3037,7 @@ ResetLevelState:
     STA zp_4E
     STA camera_mode
     STA ram_0736
-    STA zp_79
+    STA riding_flag
     STA zp_7E
     STA zp_18
     STA zp_19

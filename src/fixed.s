@@ -3535,7 +3535,7 @@ F_DD4B:
     STA zp_7D
     STA zp_86
     STA zp_7C
-    STA zp_79
+    STA riding_flag
     LDA #$02
     STA tmp_a
     LDA zp_57
@@ -4008,11 +4008,11 @@ F_E0CE:
     STA zp_6E
 F_E0D4:
     JSR SwitchBankFromAC
-    LDA zp_79
+    LDA riding_flag
     BNE F_E0DE
     JMP F_E313
 F_E0DE:
-    LDX zp_B6
+    LDX riding_slot
     LDA ent_type,x
     BNE F_E0E8
     JMP F_E505
@@ -4159,7 +4159,7 @@ F_E1E8:
     AND #$F0
     STA player_y_lo
     LDA #$00
-    STA zp_79
+    STA riding_flag
     RTS
 F_E1F7:
     LDA player_x_lo
@@ -4290,7 +4290,7 @@ F_E2E2:
     ADC #$05
     STA player_x_lo
 F_E2EB:
-    LDX zp_B6
+    LDX riding_slot
     LDA player_x_lo
     CLC
     ADC #$09
@@ -4586,7 +4586,7 @@ F_E505:
     STA player_state
     LDA #$00
     STA zp_86
-    STA zp_79
+    STA riding_flag
     STA zp_7D
     STA zp_7C
     RTS
@@ -4606,7 +4606,7 @@ F_E524:
     DEX
     STX zp_7E
 F_E52B:
-    LDA zp_79
+    LDA riding_flag
     BEQ F_E532
     JMP F_E6DC
 F_E532:
@@ -4853,7 +4853,7 @@ F_E6DC:
     STX ram_01A5
     DEX
     STX zp_86
-    LDA zp_79
+    LDA riding_flag
     BNE F_E70B
     LDA zp_85
     CMP #$8C
@@ -4885,7 +4885,7 @@ F_E722:
     STA zp_80
     STA zp_84
 F_E72C:
-    LDA zp_79
+    LDA riding_flag
     BNE F_E731
     RTS
 F_E731:
@@ -6651,7 +6651,7 @@ F_F4AD:
     STA zp_C0
     LDA #$00
     STA zp_BF
-    STA zp_79
+    STA riding_flag
     LDA zp_C0
 F_F4B9:
     RTS
