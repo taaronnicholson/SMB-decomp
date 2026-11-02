@@ -237,29 +237,29 @@ ram 0008 tmp_08
 ram 00FE ptr2_lo                 ; second indirect pointer (sound engine, table readers)
 ram 00FF ptr2_hi
 
-; ---- secondary object, 2 slots (arrays $E1..$F6, element 0 / 1; drawn into OAM entries 19-20 by bank 1 $802C) ----
-ram 00E1 obj2_state
-ram 00E2 obj2_state_1
-ram 00E3 obj2_E3
-ram 00E4 obj2_E3_1
-ram 00E5 obj2_x_lo
-ram 00E6 obj2_x_lo_1
-ram 00E7 obj2_x_hi
-ram 00E8 obj2_x_hi_1
-ram 00E9 obj2_y_lo
-ram 00EA obj2_y_lo_1
-ram 00EB obj2_y_hi
-ram 00EC obj2_y_hi_1
-ram 00ED obj2_onscreen
-ram 00EE obj2_onscreen_1
-ram 00EF obj2_screen_x
-ram 00F0 obj2_screen_x_1
-ram 00F1 obj2_screen_y
-ram 00F2 obj2_screen_y_1
-ram 00F3 obj2_attr
-ram 00F4 obj2_attr_1
-ram 00F5 obj2_frame
-ram 00F6 obj2_frame_1
+; ---- player attack projectile (B button), 2 slots (arrays $E1..$F6, element 0 / 1; drawn into OAM entries 19-20 by bank 1 $802C) ----
+ram 00E1 shot_state
+ram 00E2 shot_state_1
+ram 00E3 shot_E3
+ram 00E4 shot_E3_1
+ram 00E5 shot_x_lo
+ram 00E6 shot_x_lo_1
+ram 00E7 shot_x_hi
+ram 00E8 shot_x_hi_1
+ram 00E9 shot_y_lo
+ram 00EA shot_y_lo_1
+ram 00EB shot_y_hi
+ram 00EC shot_y_hi_1
+ram 00ED shot_onscreen
+ram 00EE shot_onscreen_1
+ram 00EF shot_screen_x
+ram 00F0 shot_screen_x_1
+ram 00F1 shot_screen_y
+ram 00F2 shot_screen_y_1
+ram 00F3 shot_attr
+ram 00F4 shot_attr_1
+ram 00F5 shot_frame
+ram 00F6 shot_frame_1
 
 ; ---- camera and misc ----
 ram 0068 cam_x_lo

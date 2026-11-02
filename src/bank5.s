@@ -1181,10 +1181,10 @@ Ent_CheckPlayerOverlap:
     LDA ent_flags,x
     AND #$04
     BNE B5_8903
-    LDY obj2_state
+    LDY shot_state
     LDA B5_8983,y
     BEQ B5_8949
-    LDA obj2_screen_y
+    LDA shot_screen_y
     SEC
     SBC #$10
     CMP tmp_c
@@ -1192,7 +1192,7 @@ Ent_CheckPlayerOverlap:
     ADC #$1A
     CMP tmp_c
     BCC B5_8949
-    LDA obj2_screen_x
+    LDA shot_screen_x
     SEC
     SBC #$10
     CMP tmp_d
@@ -1205,17 +1205,17 @@ Ent_CheckPlayerOverlap:
     SEC
     SBC #$01
     BNE B5_8903
-    STA obj2_frame
+    STA shot_frame
     STA zp_E0
     LDA #$03
-    STA obj2_state
-    STA obj2_E3
+    STA shot_state
+    STA shot_E3
     RTS
 B5_8949:
-    LDY obj2_state_1
+    LDY shot_state_1
     LDA B5_8983,y
     BEQ B5_8982
-    LDA obj2_screen_y_1
+    LDA shot_screen_y_1
     SEC
     SBC #$10
     CMP tmp_c
@@ -1223,7 +1223,7 @@ B5_8949:
     ADC #$1A
     CMP tmp_c
     BCC B5_8982
-    LDA obj2_screen_x_1
+    LDA shot_screen_x_1
     SEC
     SBC #$10
     CMP tmp_d
@@ -1236,11 +1236,11 @@ B5_8949:
     SEC
     SBC #$01
     BNE B5_8982
-    STA obj2_frame_1
+    STA shot_frame_1
     STA zp_E0
     LDA #$03
-    STA obj2_state_1
-    STA obj2_E3_1
+    STA shot_state_1
+    STA shot_E3_1
 B5_8982:
     RTS
 B5_8983:
@@ -1989,7 +1989,7 @@ B5_8FB3:
     LDA #$19
     JSR PlaySfxSq2
     LDA #$0E
-    STA obj2_state
+    STA shot_state
     LDA #$07
     STA ent_type,x
     LDA #$00
@@ -4606,10 +4606,10 @@ B5_A99A:
     LDA ent_flags,x
     AND #$04
     BNE B5_A975
-    LDY obj2_state
+    LDY shot_state
     LDA B5_8983,y
     BEQ B5_A9DB
-    LDA obj2_screen_y
+    LDA shot_screen_y
     SEC
     SBC #$14
     CMP tmp_c
@@ -4617,7 +4617,7 @@ B5_A99A:
     ADC #$1E
     CMP tmp_c
     BCC B5_A9DB
-    LDA obj2_screen_x
+    LDA shot_screen_x
     SEC
     SBC #$14
     CMP tmp_d
@@ -4630,18 +4630,18 @@ B5_A99A:
     SEC
     SBC #$01
     BNE B5_A9DA
-    STA obj2_frame
+    STA shot_frame
     STA zp_E0
     LDA #$03
-    STA obj2_state
-    STA obj2_E3
+    STA shot_state
+    STA shot_E3
 B5_A9DA:
     RTS
 B5_A9DB:
-    LDY obj2_state_1
+    LDY shot_state_1
     LDA B5_8983,y
     BEQ B5_A9DA
-    LDA obj2_screen_y_1
+    LDA shot_screen_y_1
     SEC
     SBC #$14
     CMP tmp_c
@@ -4649,7 +4649,7 @@ B5_A9DB:
     ADC #$1E
     CMP tmp_c
     BCC B5_A9DA
-    LDA obj2_screen_x_1
+    LDA shot_screen_x_1
     SEC
     SBC #$14
     CMP tmp_d
@@ -4662,11 +4662,11 @@ B5_A9DB:
     SEC
     SBC #$01
     BNE B5_A9DA
-    STA obj2_frame_1
+    STA shot_frame_1
     STA zp_E0
     LDA #$03
-    STA obj2_state_1
-    STA obj2_E3_1
+    STA shot_state_1
+    STA shot_E3_1
     RTS
 B5_AA15:
     LDA ram_01B8

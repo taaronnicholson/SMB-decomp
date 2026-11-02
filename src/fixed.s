@@ -3357,6 +3357,7 @@ F_DBF1:
     LDX tmp_d
     LDA tmp_b
     RTS
+F_DBF6:
     .res 12, $01
     .byte $00,$01,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$00
 F_DC11:
@@ -3486,9 +3487,9 @@ F_DCF8:
     LDA player_state
     ASL a
     TAY
-    LDA B2_B5AA,y
+    LDA PlayerStateHandlers,y
     STA ptr_lo
-    LDA B2_B5AB,y
+    LDA PlayerStateHandlers+1,y
     STA ptr_hi
     JSR SwitchBankFromAC
     JMP (ptr_lo)
@@ -3575,16 +3576,16 @@ F_DD9E:
     BEQ F_DDA5
     JMP F_DDC1
 F_DDA5:
-    LDA obj2_state_1
+    LDA shot_state_1
     BNE F_DDB0
     LDA #$04
-    STA obj2_state_1
+    STA shot_state_1
     JMP F_DDB8
 F_DDB0:
-    LDA obj2_state
+    LDA shot_state
     BNE F_DD46
     LDA #$04
-    STA obj2_state
+    STA shot_state
 F_DDB8:
     LDA zp_BB
     AND #$1F
@@ -3601,35 +3602,35 @@ F_DDC1:
     LDA buttons
     AND #$02
     BEQ F_DD9B
-    LDA obj2_state
+    LDA shot_state
     BNE F_DDE8
 F_DDD7:
     LDA #$06
-    STA obj2_state
+    STA shot_state
     STA zp_88
     LDA #$03
-    STA obj2_E3
+    STA shot_E3
     LDA #$82
     STA zp_E0
     JMP F_DD46
 F_DDE8:
-    LDA obj2_state_1
+    LDA shot_state_1
     BEQ F_DDFC
-    LDX obj2_state
+    LDX shot_state
     LDA F_DC11,x
     BNE F_DDD7
     TXA
     CLC
-    ADC obj2_state_1
+    ADC shot_state_1
     LDA F_DC11,x
 F_DDFA:
     BEQ F_DE09
 F_DDFC:
     LDA #$06
-    STA obj2_state_1
+    STA shot_state_1
     STA zp_88
     LSR a
-    STA obj2_E3_1
+    STA shot_E3_1
     LDA #$82
     STA zp_E0
 F_DE09:
@@ -3643,23 +3644,23 @@ F_DE15:
     LDA zp_85
     CMP #$10
     BCC F_DE09
-    LDA obj2_state
+    LDA shot_state
     BNE F_DE2C
-    LDA obj2_state_1
+    LDA shot_state_1
     CMP #$07
     BEQ F_DE09
     LDA #$07
-    STA obj2_state
+    STA shot_state
     JMP F_DD46
 F_DE2C:
-    LDA obj2_state_1
+    LDA shot_state_1
     CMP #$07
     BEQ F_DE09
-    LDA obj2_state
+    LDA shot_state
     CMP #$07
     BEQ F_DE09
     LDA #$07
-    STA obj2_state_1
+    STA shot_state_1
     JMP F_DD46
 F_DE3F:
     LDA zp_88
@@ -3670,20 +3671,20 @@ F_DE3F:
     AND #$02
     BEQ F_DE72
     STA zp_88
-    LDA obj2_state
+    LDA shot_state
     BNE F_DE5E
     LDA #$01
-    STA obj2_state
+    STA shot_state
     LDA #$05
-    STA obj2_E3
+    STA shot_E3
     JMP F_DE6A
 F_DE5E:
-    LDA obj2_state_1
+    LDA shot_state_1
     BNE F_DE72
     LDA #$01
-    STA obj2_state_1
+    STA shot_state_1
     LDA #$05
-    STA obj2_E3_1
+    STA shot_E3_1
 F_DE6A:
     LDA #$10
     STA zp_E0
@@ -3720,7 +3721,7 @@ F_DE75:
     STA ent_param2,y
     PLA
     JMP SwitchBank
-F_DEB9:
+PlayerState00:
     JSR SwitchBankFromAC
     LDA buttons
     AND #$B1
@@ -3728,7 +3729,7 @@ F_DEB9:
     BNE F_DECB
     LDA #$05
     STA player_state
-    JMP $E8F6
+    JMP PlayerState05
 F_DECB:
     LDA buttons
     AND #$20
@@ -3920,12 +3921,13 @@ F_E02F:
     JSR F_EEBB
     JMP F_E0C6
 F_E035:
-    .byte $A9,$00,$85,$63
+    LDA #$00
+    STA player_state
     STA zp_6D
     LDA zp_7A
     ORA zp_7B
     BNE F_E08F
-    LDA obj2_state
+    LDA shot_state
     BNE F_E08F
     LDA zp_70
     STA tmp_c
@@ -3955,15 +3957,15 @@ F_E066:
     STA zp_71
     LDA #$01
     JSR SwitchBank
-    LDA $89FD,y
+    LDA B1_89FD,y
     INY
     CMP #$FF
     BEQ F_E08F
     STA ram_024D
-    LDA $89FD,y
+    LDA B1_89FD,y
     INY
     STA zp_72
-    LDA $89FD,y
+    LDA B1_89FD,y
     JMP F_E0AF
 F_E08F:
     LDA #$00
@@ -3998,7 +4000,7 @@ F_E0B4:
     LDA #$00
     JMP F_E0CE
 F_E0C6:
-    .byte $A9,$00
+    LDA #$00
     STA zp_70
     STA zp_71
     STA zp_72
@@ -4015,7 +4017,7 @@ F_E0DE:
     LDX riding_slot
     LDA ent_type,x
     BNE F_E0E8
-    JMP F_E505
+    JMP PlayerState0E
 F_E0E8:
     LDA ent_dy,x
     STA tmp_c
@@ -4106,7 +4108,7 @@ F_E17E:
     STA player_y_hi
     LDA #$08
     STA zp_7E
-    JMP F_E505
+    JMP PlayerState0E
 F_E194:
     LDA player_y_lo
     CLC
@@ -4310,7 +4312,7 @@ F_E2EB:
     BCS F_E310
     RTS
 F_E310:
-    JMP F_E505
+    JMP PlayerState0E
 F_E313:
     LDA player_y_lo
     STA tmp_c
@@ -4579,9 +4581,9 @@ F_E4E5:
 F_E4FD:
     LDA player_state
     CMP #$07
-    BNE F_E505
+    BNE PlayerState0E
     STA zp_86
-F_E505:
+PlayerState0E:
     LDA #$02
     STA player_state
     LDA #$00
@@ -4600,7 +4602,7 @@ GetTilePropsAtPosY:
     TAY
     LDA tile_props,y
     RTS
-F_E524:
+PlayerState02:
     LDX zp_7E
     BEQ F_E52B
     DEX
@@ -4770,7 +4772,8 @@ F_E641:
     STA zp_64
     JMP F_E650
 F_E64C:
-    .byte $A9,$09,$85,$65
+    LDA #$09
+    STA zp_65
 F_E650:
     LDA player_y_lo
     CLC
@@ -4893,7 +4896,7 @@ F_E731:
 F_E734:
     LDA #$06
     JSR SwitchBank
-    JSR $BA04
+    JSR B6_BA04
     LDA player_y_lo
     STA tmp_c
     LDA player_y_hi
@@ -5130,20 +5133,27 @@ F_E89E:
     LDA zp_76
     STA ptr_hi
     JMP F_E7B6
+PlayerState04:
     LDA #$02
     JSR SwitchBank
-    JMP $B517
-    .byte $A9,$02,$20,$0D,$C9,$4C,$3A
-    LDA balloons_popped,x
-    ASL prev_focus_y_lo
-    ORA $4CC9
-    LDX $A9A2,y
-    ASL prev_focus_y_lo
-    ORA $4CC9
-    ROL $A9A3
-    ASL prev_focus_y_lo
-    ORA $4CC9
-    DEC zp_A3,x
+    JMP B2_B517
+PlayerState03:
+    LDA #$02
+    JSR SwitchBank
+    JMP B2_B53A
+PlayerState05:
+    LDA #$06
+    JSR SwitchBank
+    JMP B6_A2BE
+PlayerState06:
+    LDA #$06
+    JSR SwitchBank
+    JMP B6_A32E
+PlayerState07:
+    LDA #$06
+    JSR SwitchBank
+    JMP B6_A3D6
+PlayerState08:
     DEC zp_8F
     LDX zp_8F
     STX zp_67
@@ -5153,7 +5163,7 @@ F_E89E:
     STX player_state
     LDA zp_7F
     STA zp_66
-    JMP F_E965
+    JMP PlayerState01
 F_E922:
     LDA player_y_lo
     SEC
@@ -5190,11 +5200,12 @@ F_E94E:
     STA zp_66
     LDA #$06
     JSR SwitchBank
-    JMP $B953
-F_E965:
+    JMP B6_B953
+PlayerState01:
     LDA #$06
     JSR SwitchBank
-    JMP $B842
+    JMP B6_B842
+PlayerState09:
     INC zp_80
     LDA zp_80
     AND #$1E
@@ -5208,23 +5219,63 @@ F_E965:
 F_E97F:
     STA zp_65
     RTS
-    .byte $A9,$02,$85,$7A,$A9,$00,$85,$7B,$A4,$B9,$F0,$28,$C8,$84,$B9,$C0
-    .byte $30,$D0,$34,$A9,$CD,$85,$60,$A9,$03,$85,$61,$A9,$78,$85,$5E,$A9
-    .byte $00
+PlayerState16:
+    LDA #$02
+    STA zp_7A
+    LDA #$00
+    STA zp_7B
+    LDY zp_B9
+    BEQ F_E9B6
+    INY
+    STY zp_B9
+    CPY #$30
+    BNE F_E9C9
+    LDA #$CD
+    STA player_y_lo
+    LDA #$03
+    STA player_y_hi
+    LDA #$78
+    STA player_x_lo
+    LDA #$00
     STA player_x_hi
     LDA #$04
     STA zp_9C
     LDA #$0C
     STA zp_92
     LDA #$00
-    STA obj2_state
-    STA obj2_state_1
+    STA shot_state
+    STA shot_state_1
     JMP F_F043
-    .byte $A5,$61,$D0,$10,$A5,$60,$C9,$10,$B0,$0A,$A0,$00,$84,$60,$84,$61
-    .byte $C8,$84,$B9,$60,$A4,$BA,$B9,$B0,$04,$18,$69,$0F,$85,$53,$B9,$E0
-    .byte $04,$69,$00,$85,$54,$A5,$60,$38,$E5,$53,$A5,$61,$E5,$54,$B0,$70
-    .byte $B9,$10
-    ORA zp_38
+F_E9B6:
+    LDA player_y_hi
+    BNE F_E9CA
+    LDA player_y_lo
+    CMP #$10
+    BCS F_E9CA
+    LDY #$00
+    STY player_y_lo
+    STY player_y_hi
+    INY
+    STY zp_B9
+F_E9C9:
+    RTS
+F_E9CA:
+    LDY zp_BA
+    LDA ent_y_lo,y
+    CLC
+    ADC #$0F
+    STA tmp_a
+    LDA ent_y_hi,y
+    ADC #$00
+    STA tmp_b
+    LDA player_y_lo
+    SEC
+    SBC tmp_a
+    LDA player_y_hi
+    SBC tmp_b
+    BCS F_EA56
+    LDA ent_x_lo,y
+    SEC
     SBC #$02
     STA tmp_a
     LDA ent_x_hi,y
@@ -5284,6 +5335,7 @@ F_EA42:
     SBC #$00
     STA player_x_hi
     JMP F_EA81
+F_EA56:
     LDA tmp_a
     STA player_y_lo
     LDA tmp_b
@@ -5315,6 +5367,7 @@ F_EA81:
     ADC #$07
     STA zp_65
     RTS
+PlayerState0C:
     LDA #$01
     STA zp_64
     JSR F_EB25
@@ -5343,19 +5396,45 @@ F_EAB5:
 F_EAB9:
     STA zp_BD
     RTS
+PlayerState0A:
     LDA #$00
     STA player_state
     RTS
-    .byte $A5,$90,$49,$01,$85,$90,$85,$64,$20,$25,$EB,$A5,$12,$29,$40,$D0
-    .byte $03,$4C,$05,$EB,$AD,$AF,$01,$18,$69,$08,$85,$51,$AD,$B0,$01,$69
-    .byte $00,$85,$52,$A5,$60,$38,$E5,$51,$A5,$61,$E5,$52,$B0,$16,$A9,$22
-    .byte $20,$8F,$CE,$A9,$00,$85
-    ADC $8685,x
+PlayerState0D:
+    LDA zp_90
+    EOR #$01
+    STA zp_90
+    STA zp_64
+    JSR F_EB25
+    LDA buttons
+    AND #$40
+    BNE F_EAD5
+    JMP F_EB05
+F_EAD5:
+    LDA water_level_lo
+    CLC
+    ADC #$08
+    STA ptr_lo
+    LDA water_level_hi
+    ADC #$00
+    STA ptr_hi
+    LDA player_y_lo
+    SEC
+    SBC ptr_lo
+    LDA player_y_hi
+    SBC ptr_hi
+    BCS F_EB05
+    LDA #$22
+    JSR PlaySfxNoise
+    LDA #$00
+    STA zp_7D
+    STA zp_86
     STA zp_8F
     LDA #$01
     STA player_state
     STA zp_8C
     JMP F_DE75
+F_EB05:
     LDA zp_BD
     SEC
     SBC #$01
@@ -5462,7 +5541,7 @@ F_EBB5:
     STA player_y_hi
     JMP F_EC73
 F_EBC7:
-    .byte $A5,$12
+    LDA buttons
 F_EBC9:
     AND #$80
     BNE F_EBD0
@@ -5640,13 +5719,51 @@ F_ED0B:
     STA player_x_lo
     JMP F_EDE8
 F_ED17:
-    .byte $A5,$12,$29,$10,$D0,$03,$4C,$E8,$ED,$A5,$66,$D0,$07,$A9,$01,$85
-    .byte $66,$4C,$E8,$ED,$A5,$64,$85,$53,$A5,$5E,$18,$65,$53,$85,$51,$A5
-    .byte $5F,$69,$00,$85,$52,$A5,$34,$38,$E9,$11,$85,$53,$A5,$35,$E9,$00
-    .byte $85,$54,$A5,$53,$38,$E5,$51,$A5,$54,$E5,$52,$B0,$14,$A5,$53,$18
-    .byte $69,$01,$85,$53,$85,$5E,$A5,$54,$69,$00,$85,$54,$85,$5F,$4C
-    INX
-    SBC $51A5
+    LDA buttons
+    AND #$10
+    BNE F_ED20
+    JMP F_EDE8
+F_ED20:
+    LDA zp_66
+    BNE F_ED2B
+    LDA #$01
+    STA zp_66
+    JMP F_EDE8
+F_ED2B:
+    LDA zp_64
+    STA tmp_a
+    LDA player_x_lo
+    CLC
+    ADC tmp_a
+    STA ptr_lo
+    LDA player_x_hi
+    ADC #$00
+    STA ptr_hi
+    LDA zp_34
+    SEC
+    SBC #$11
+    STA tmp_a
+    LDA zp_35
+    SBC #$00
+    STA tmp_b
+    LDA tmp_a
+    SEC
+    SBC ptr_lo
+    LDA tmp_b
+    SBC ptr_hi
+    BCS F_ED68
+    LDA tmp_a
+    CLC
+    ADC #$01
+    STA tmp_a
+    STA player_x_lo
+    LDA tmp_b
+    ADC #$00
+    STA tmp_b
+    STA player_x_hi
+    JMP F_EDE8
+F_ED68:
+    LDA ptr_lo
     STA player_x_lo
     CLC
     ADC #$0B
@@ -5996,8 +6113,9 @@ F_EFB6:
 F_EFCF:
     .byte $12,$00,$16,$05
 F_EFD3:
-    .byte $B1,$51,$38,$E9
-    SEI
+    LDA (ptr_lo),y
+    SEC
+    SBC #$78
     BCS F_EFDB
 F_EFDA:
     RTS
@@ -6074,17 +6192,17 @@ F_F04C:
     JSR F_C956
     LDA #$09
     STA player_state
-    LDA obj2_state
+    LDA shot_state
     CMP #$0F
     BEQ F_F06A
     LDA #$00
-    STA obj2_state
+    STA shot_state
 F_F06A:
-    LDA obj2_state_1
+    LDA shot_state_1
     CMP #$0F
     BEQ F_F074
     LDA #$00
-    STA obj2_state_1
+    STA shot_state_1
 F_F074:
     LDX #$FF
     TXS
@@ -6098,7 +6216,8 @@ F_F083:
     LDA zp_9C
     JMP F_C6CC
 F_F088:
-    .byte $A6,$63,$BD,$F6,$DB
+    LDX player_state
+    LDA F_DBF6,x
     BNE F_F090
 F_F08F:
     RTS
@@ -6671,6 +6790,7 @@ F_F4BA:
 F_F4D5:
     .res 14, $01
     .res 14, $00
+PlayerState0F:
     INC zp_BF
     LDA zp_BF
     LSR a
@@ -6681,7 +6801,7 @@ F_F4D5:
     STA player_state
     LDA #$00
     STA zp_BF
-    JMP F_F51C
+    JMP PlayerState10
 F_F507:
     STA zp_65
     LDA #$00
@@ -6690,12 +6810,18 @@ F_F507:
     RTS
 F_F510:
     .byte $46,$46,$47,$47,$48,$48,$48,$45,$45,$45,$45,$00
-F_F51C:
-    .byte $A5,$BF,$C9,$63,$F0,$03,$4C,$7A,$F5,$A5,$11,$F0,$01,$60
+PlayerState10:
+    LDA zp_BF
+    CMP #$63
+    BEQ F_F525
+    JMP F_F57A
+F_F525:
+    LDA fade_dir
+    BEQ F_F52A
+    RTS
 F_F52A:
-    .byte $20
-    CMP $20C7
-    LDA zp_C9
+    JSR RenderOffAndWait
+    JSR DisableNMI
     JSR SilenceSound
     LDA ram_01AE
     BNE F_F548
@@ -6724,14 +6850,15 @@ F_F548:
     LDA #$11
     STA player_state
     LDA #$00
-    STA obj2_state
-    STA obj2_state_1
+    STA shot_state
+    STA shot_state_1
     STA ram_01A7
     LDX #$FF
     TXS
     LDA zp_98
     STA zp_9C
     JMP F_C6CC
+F_F57A:
     CMP #$5E
     BNE F_F580
     DEC fade_dir
@@ -6791,7 +6918,7 @@ F_F5BA:
     STA tmp_ptr_lo
 F_F5DB:
     INX
-    LDA $8000,y
+    LDA B3_8000,y
     AND #$30
     LSR a
     LSR a
@@ -6801,20 +6928,20 @@ F_F5E3:
     EOR tmp_ptr_hi
     STA ram_023C,x
     INX
-    LDA $8000,y
+    LDA B3_8000,y
     AND #$C0
     STA ram_023C,x
     INX
     INX
     INX
-    LDA $8000,y
+    LDA B3_8000,y
     AND #$03
     ASL a
     ADC #$F9
     EOR tmp_ptr_hi
     STA ram_023C,x
     INX
-    LDA $8000,y
+    LDA B3_8000,y
     AND #$0C
     ASL a
     ASL a
@@ -6852,28 +6979,34 @@ F_F631:
     STA zp_67
     STA zp_66
     RTS
+PlayerState11:
     LDA #$01
     JSR SwitchBank
-    JMP $AF23
+    JMP B1_AF23
+PlayerState12:
     LDA #$01
     JSR SwitchBank
-    JMP $AFAF
+    JMP B1_AFAF
+PlayerState13:
     LDA #$01
     JSR SwitchBank
-    JMP $AFD3
+    JMP B1_AFD3
+PlayerState14:
     LDA #$01
     JSR SwitchBank
-    JMP $AFF8
-    .byte $A9
-    ORA (prev_focus_y_lo,x)
-    ORA $4CC9
-    STY zp_B0,x
+    JMP B1_AFF8
+PlayerState15:
     LDA #$01
     JSR SwitchBank
-    JMP $B15B
+    JMP B1_B094
+PlayerState17:
     LDA #$01
     JSR SwitchBank
-    JMP $B241
+    JMP B1_B15B
+PlayerState18:
+    LDA #$01
+    JSR SwitchBank
+    JMP B1_B241
 ApplyCollectedFlag:
     STA zp_C6
     STX zp_42
@@ -7030,9 +7163,15 @@ F_F793:
     LDA #$04
     JMP F_F786
 F_F79D:
-    .byte $48,$AD,$31,$07,$29,$01,$18,$69,$1B,$20,$78,$CE,$AD,$31,$07,$49
-    .byte $01,$8D
-    AND (jump_ptr_hi),y
+    PHA
+    LDA ram_0731
+    AND #$01
+    CLC
+    ADC #$1B
+    JSR PlaySfxSq2
+    LDA ram_0731
+    EOR #$01
+    STA ram_0731
     CLC
     ADC #$1E
     STA zp_DA
@@ -7048,7 +7187,7 @@ F_F7B8:
     LDX #$2F
 F_F7C7:
     LDY ent_type,x
-    LDA $A21E,y
+    LDA B6_A21E,y
     BEQ F_F7E1
     LDA #$5D
     STA ent_type,x
@@ -7082,12 +7221,12 @@ F_F80D:
     PHA
     LDA #$03
     JSR SwitchBankKeepX
-    JSR $BE91
+    JSR B3_BE91
     PLA
     JMP SwitchBankKeepX
 F_F81C:
-    .byte $86,$D3,$20
-    ROL zp_FC
+    STX zp_D3
+    JSR GetMapTile
     CMP #$C8
     BCC F_F840
     CMP #$CD
@@ -7119,21 +7258,24 @@ F_F843:
     JSR $BEA9
     PLA
     JMP SwitchBankKeepX
+PlayerState19:
     LDA #$06
     JSR SwitchBank
-    JMP $A3EC
+    JMP B6_A3EC
+PlayerState1A:
     LDA #$03
     JSR SwitchBank
-    JMP $BD67
+    JMP B3_BD67
+PlayerState1B:
     LDA #$03
     JSR SwitchBank
-    JMP $BD8D
+    JMP B3_BD8D
 F_F876:
     LDA cur_bank
     PHA
     LDA #$05
     JSR SwitchBankKeepX
-    JSR $8434
+    JSR Ent_MoveYWithGround
     PLA
     JMP SwitchBankKeepX
 F_F885:
@@ -7367,14 +7509,17 @@ F_FA3F:
     LDY #$2F
 F_FA4F:
     RTS
+PlayerState1C:
     LDY #$05
     LDX #$47
     LDA #$BC
     JMP FarCall
+PlayerState1D:
     LDY #$05
     LDX #$70
     LDA #$BC
     JMP FarCall
+PlayerState1E:
     LDY #$05
     LDX #$75
     LDA #$BC
@@ -8062,6 +8207,7 @@ F_FEF5:
     STA tmp_08
     ASL tmp_a
     BEQ F_FF00
+PlayerState1F:
     JMP F_FF09
 F_FF00:
     LDA (ptr_lo),y

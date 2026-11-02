@@ -3338,8 +3338,9 @@ AreaMap22:
     .byte $00,$00,$00,$04,$06,$04,$06,$00,$00,$78,$00,$79,$00,$00,$00,$00
     .byte $00,$00,$00,$37,$06,$37,$06,$00,$01,$02,$02,$02,$36,$02,$02,$02
     .byte $02,$36,$03,$04,$06,$07,$09,$3B,$07,$08,$08,$08,$08,$08,$08,$08
-    .byte $08,$08,$09,$07,$09,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .res 14, $00
+    .byte $08,$08,$09,$07,$09
+B6_A21E:
+    .res 25, $00
     .res 9, $01
     .byte $00,$00,$00,$00,$00,$00,$00,$01,$01,$00,$00,$00,$00,$00,$00,$01
     .byte $00,$00,$00,$00,$00,$00,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00
@@ -3349,15 +3350,50 @@ AreaMap22:
     .res 9, $01
     .byte $00,$00,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
     .res 21, $00
-    .byte $01,$01,$00,$00,$A5,$66,$D0,$10,$A5,$5E,$38,$E9,$03,$85,$51,$A5
-    .byte $5F,$E9,$00,$85,$52,$4C,$DF,$A2,$A5,$5E,$18,$69,$12,$85,$51,$A5
-    .byte $5F,$69,$00,$85,$52,$A5,$60,$85,$55,$A5,$61,$85,$56,$20,$24,$EF
-    .byte $20,$26,$FC,$48,$C9,$DA,$D0,$03,$20,$9D,$F7,$C9,$D8,$D0,$03,$20
-    .byte $70,$F7,$68,$C9,$D1,$D0,$0A
+    .byte $01,$01,$00,$00
+B6_A2BE:
+    LDA zp_66
+    BNE B6_A2D2
+    LDA player_x_lo
+    SEC
+    SBC #$03
+    STA ptr_lo
+    LDA player_x_hi
+    SBC #$00
+    STA ptr_hi
+    JMP B6_A2DF
+B6_A2D2:
+    LDA player_x_lo
+    CLC
+    ADC #$12
+    STA ptr_lo
+    LDA player_x_hi
+    ADC #$00
+    STA ptr_hi
+B6_A2DF:
+    LDA player_y_lo
+    STA tmp_c
+    LDA player_y_hi
+    STA tmp_d
+    JSR MapPtrFromPos
+    JSR GetMapTile
+    PHA
+    CMP #$DA
+    BNE B6_A2F5
+    JSR F_F79D
+B6_A2F5:
+    CMP #$D8
+    BNE B6_A2FC
+    JSR F_F770
+B6_A2FC:
+    PLA
+    CMP #$D1
+    BNE B6_A30B
     LDA #$39
     JSR PlaySfxNoise
     LDA #$24
     JMP B6_A38F
+B6_A30B:
     TAX
     LDA tile_props,x
     AND #$01
@@ -3375,6 +3411,7 @@ B6_A323:
     LDA #$06
     STA player_state
     JMP F_E0D4
+B6_A32E:
     LDA zp_91
     BEQ B6_A335
     JMP B6_A3CB
@@ -3458,13 +3495,16 @@ B6_A3C0:
     BNE B6_A3CF
     LDA #$03
     STA zp_91
+B6_A3CA:
     RTS
 B6_A3CB:
-    .byte $C6,$91,$D0,$FB
+    DEC zp_91
+    BNE B6_A3CA
 B6_A3CF:
     LDA #$07
     STA player_state
     JMP F_E0D4
+B6_A3D6:
     LDA buttons
     AND #$B1
     CMP #$80
@@ -3476,6 +3516,7 @@ B6_A3E1:
     LDA #$01
     STA zp_86
     JMP F_E0D4
+B6_A3EC:
     LDA zp_BD
     AND #$FE
     TAY
@@ -4097,6 +4138,7 @@ Gfx_B6_B738:
     .byte $F4,$0A,$04,$82,$21,$20,$A0,$72,$4F,$9F,$87,$C1,$E1,$F1,$F9,$03
     .byte $0F,$E8,$42,$42,$42,$1E,$32,$3F,$9E,$06,$11,$0D,$80,$95,$F8,$85
     .byte $D0,$10,$84,$24,$99,$A1,$24,$06,$60,$00
+B6_B842:
     INC zp_7D
     LDA zp_7D
     CMP #$11
@@ -4229,7 +4271,7 @@ B6_B92A:
     LDA #$00
     STA zp_7D
     STA zp_7C
-    JMP F_E524
+    JMP PlayerState02
 B6_B937:
     LDA player_y_lo
     SEC
@@ -4247,6 +4289,7 @@ B6_B948:
     TAX
     LDA F_C235,x
     STA zp_65
+B6_B953:
     LDA player_y_lo
     STA tmp_c
     LDA player_y_hi

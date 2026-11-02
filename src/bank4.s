@@ -1995,17 +1995,17 @@ B4_B77C:
     JSR SilenceSound
     LDA #$09
     STA player_state
-    LDA obj2_state
+    LDA shot_state
     CMP #$0F
     BEQ B4_B79D
     LDA #$00
-    STA obj2_state
+    STA shot_state
 B4_B79D:
-    LDA obj2_state_1
+    LDA shot_state_1
     CMP #$0F
     BEQ B4_B7A7
     LDA #$00
-    STA obj2_state_1
+    STA shot_state_1
 B4_B7A7:
     LDX #$FF
     TXS

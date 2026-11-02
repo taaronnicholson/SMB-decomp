@@ -2746,6 +2746,7 @@ B2_B509:
     LDA #$D0
     STA PPUADDR
     RTS
+B2_B517:
     LDA buttons
     AND #$B1
     BNE B2_B52A
@@ -2761,10 +2762,11 @@ B2_B52A:
     STA player_state
     STA zp_7C
     STA zp_85
-    JMP F_DEB9
+    JMP PlayerState00
 B2_B535:
     STA zp_65
     JMP F_E0D4
+B2_B53A:
     LDA ram_01A5
     BEQ B2_B548
     AND #$07
@@ -2792,29 +2794,54 @@ B2_B548:
     LDA #$08
     STA zp_7A
 B2_B56B:
-    JMP F_DEB9
+    JMP PlayerState00
 B2_B56E:
     .byte $01,$01,$02,$00,$01,$01,$01,$01,$01,$00,$01,$01,$00,$01,$00,$00
     .res 14, $00
     .byte $03,$03,$04,$00,$03,$03,$03,$03,$03,$00,$00,$00,$01,$02,$00,$00
     .res 14, $00
-B2_B5AA:
-    .byte $B9
-B2_B5AB:
-    .byte $DE,$65,$E9,$24,$E5,$EE,$E8,$E6,$E8,$F6,$E8,$FE,$E8,$06,$E9,$0E
-    .byte $E9,$6D,$E9,$BC,$EA,$BC,$EA,$8D,$EA,$C1,$EA,$05,$E5,$F1,$F4,$1C
-    .byte $F5,$41,$F6,$49,$F6,$51,$F6,$59,$F6,$61,$F6,$82,$E9,$69,$F6,$71
-    .byte $F6,$5E,$F8,$66,$F8,$6E,$F8,$50,$FA,$59,$FA,$62
-B2_B5E7:
-    .byte $FA,$FD,$FE,$FE,$FE,$FF,$FF,$00,$01,$01,$02,$02,$02,$03,$FD,$FE
-    .byte $FE,$FE,$FF,$FF,$00,$01,$01,$02,$02,$02,$03,$FE,$FE,$FF,$FF,$00
-    .byte $01,$01,$02,$02,$FE,$FF,$FF,$00,$01,$01,$02,$FE,$FF,$00,$01,$02
-    .byte $80
+PlayerStateHandlers:
+    .word PlayerState00
+    .word PlayerState01
+    .word PlayerState02
+    .word PlayerState03
+    .word PlayerState04
+    .word PlayerState05
+    .word PlayerState06
+    .word PlayerState07
+    .word PlayerState08
+    .word PlayerState09
+    .word PlayerState0A
+    .word PlayerState0A
+    .word PlayerState0C
+    .word PlayerState0D
+    .word PlayerState0E
+    .word PlayerState0F
+    .word PlayerState10
+    .word PlayerState11
+    .word PlayerState12
+    .word PlayerState13
+    .word PlayerState14
+    .word PlayerState15
+    .word PlayerState16
+    .word PlayerState17
+    .word PlayerState18
+    .word PlayerState19
+    .word PlayerState1A
+    .word PlayerState1B
+    .word PlayerState1C
+    .word PlayerState1D
+B2_B5E6:
+    .word PlayerState1E
+    .word PlayerState1F
+    .byte $FE,$FE,$FF,$FF,$00,$01,$01,$02,$02,$02,$03,$FD,$FE,$FE,$FE,$FF
+    .byte $FF,$00,$01,$01,$02,$02,$02,$03,$FE,$FE,$FF,$FF,$00,$01,$01,$02
+    .byte $02,$FE,$FF,$FF,$00,$01,$01,$02,$FE,$FF,$00,$01,$02,$80
     LDX ram_01A5
     INC ram_01A5
     LDA #$00
     STA tmp_d
-    LDA B2_B5E7,x
+    LDA B2_B5E6+1,x
     STA tmp_a
     CMP #$80
     BNE B2_B639
@@ -3084,8 +3111,8 @@ ResetGameState:
     STA ram_01A7
     STA zp_FC
     STA zp_A5
-    STA obj2_state
-    STA obj2_state_1
+    STA shot_state
+    STA shot_state_1
     STA zp_DF
     STA zp_DC
     STA zp_DD
