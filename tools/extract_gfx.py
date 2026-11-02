@@ -21,7 +21,8 @@ def sheet(data, path, cols=16):
     png(path, W, H, img)
 if __name__ == '__main__':
     out = os.path.join(ROOT, 'build/gfx'); os.makedirs(out, exist_ok=True)
-    for r in json.load(open(os.path.join(HERE, 'gfx_blocks.json'))):
+    extra = os.path.join(HERE, 'gfx_extra.json')
+    for r in json.load(open(os.path.join(HERE, 'gfx_blocks.json'))) + (json.load(open(extra)) if os.path.exists(extra) else []):
         data, end = lzdec.decompress(PRG[r['bank']], r['src'] - 0x8000)
         assert end + 0x8000 == r['end'], (hex(r['src']), hex(end + 0x8000), hex(r['end']))
         name = f"Gfx_B{r['bank']}_{r['src']:04X}"

@@ -13,5 +13,13 @@ for r in rows:
     dst = ','.join('$%04X' % d for d in r.get('dsts', []))
     kind = 'RAM' if r.get('ram') else 'PPU'
     out.append(f"blob {r['bank']} {r['src']:X} {r['insize']} {name} LZ-compressed, {r['insize']} bytes -> {r['outsize']} bytes to {kind} {dst} ({who})")
+# blocks found by scanning the unclassified gaps (tools/scan_lz_gaps.py); not seen loaded in the emulator runs
+ep = os.path.join(HERE, 'gfx_extra.json')
+if os.path.exists(ep):
+    known = {(r['bank'], r['src']) for r in rows}
+    for r in json.load(open(ep)):
+        if (r['bank'], r['src']) in known: continue
+        what = {(0, 0x8749): 'a second, larger font: digits, A-Z and punctuation'}.get((r['bank'], r['src']), 'sprite tile fragments')
+        out.append(f"blob {r['bank']} {r['src']:X} {r['insize']} Gfx_B{r['bank']}_{r['src']:04X} LZ-compressed, {r['insize']} bytes -> {r['outsize']} bytes: {what} (found by scanning, not loaded in the emulator runs; load address unknown)")
 open(os.path.join(HERE, 'hints_gfx.txt'), 'w').write('\n'.join(out) + '\n')
 print(len(rows), 'blocks')

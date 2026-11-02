@@ -1,0 +1,44 @@
+[
+ {
+  "bank": 6,
+  "src": 45776,
+  "end": 45924,
+  "insize": 148,
+  "outsize": 256
+ },
+ {
+  "bank": 0,
+  "src": 34633,
+  "end": 34983,
+  "insize": 350,
+  "outsize": 832
+ },
+ {
+  "bank": 6,
+  "src": 46904,
+  "end": 47170,
+  "insize": 266,
+  "outsize": 416
+ },
+ {
+  "bank": 6,
+  "src": 44066,
+  "end": 44124,
+  "insize": 58,
+  "outsize": 64
+ },
+ {
+  "bank": 6,
+  "src": 44398,
+  "end": 44499,
+  "insize": 101,
+  "outsize": 128
+ },
+ {
+  "bank": 6,
+  "src": 43312,
+  "end": 43388,
+  "insize": 76,
+  "outsize": 128
+ }
+]
