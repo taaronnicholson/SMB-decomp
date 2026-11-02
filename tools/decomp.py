@@ -22,6 +22,7 @@ def bn(t): return FIXED if t == 'f' else int(t)
 # ---- hints ----------------------------------------------------------------
 entries, words_tab, lohi_tab, names, datas = [], [], [], {}, []
 ramnames = {}
+dlohi_tab = []
 stream_tab = []
 struct_tab = []
 refbank = {}
@@ -47,6 +48,8 @@ for ln in _hint_lines:
         struct_tab.append((bn(t[1]), int(t[2], 16), int(t[3]), t[4]))
     elif t[0] == 'stream':  # stream <bank> <addr> <len> : sound bytecode, one command per line
         stream_tab.append((bn(t[1]), int(t[2], 16), int(t[3])))
+    elif t[0] == 'dlohi':   # dlohi <bank> <lo> <hi> <n> : split lo/hi tables of pointers to DATA (not traced)
+        dlohi_tab.append((bn(t[1]), int(t[2], 16), int(t[3], 16), int(t[4])))
     elif t[0] == 'ram':   # ram <addr> <name>
         ramnames[int(t[1], 16)] = t[2]
     elif t[0] == 'name':  # name <bank|f> <addr> <label>
@@ -318,8 +321,13 @@ for b, a, n in dwords_tab:
         tp = FIXED if t >= 0xC000 else b
         nm = want(tp, t)
         if nm: word_cells[(b, a + 2 * i)] = nm
-# lo/hi tables: emit as .byte <label / .byte >label
 lo_cells = {}
+for b, lo, hi, n in dlohi_tab:
+    for i in range(n):
+        t = byte(b, lo + i) | byte(b, hi + i) << 8
+        nm = want(FIXED if t >= 0xC000 else b, t)
+        if nm: lo_cells[(b, lo + i)] = ('<', nm, 0); lo_cells[(b, hi + i)] = ('>', nm, 0)
+# lo/hi tables: emit as .byte <label / .byte >label
 for b, lo, hi, n, tb, adj in lohi_tab:
     for i in range(n):
         t = (byte(b, lo + i) | byte(b, hi + i) << 8) + adj

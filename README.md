@@ -76,6 +76,14 @@ A **pattern** is a byte stream:
 | `$FE` | end of song |
 | `$FF` | next pattern from the list |
 
+**Instrument tables**
+- `EnvelopePtrLo/Hi` → 21 `EnvelopeN` volume envelopes: speed byte, then volume nibbles; a final byte with bit 7 set holds that volume.
+- `PitchModPtrLo/Hi` → 9 `PitchModN` signed period-offset tables (vibrato); `$80` loops.
+
+**Sound effects**: `Sound_PlaySfxSq1/Sq2/Noise` (A = id 0-74) copy a 14-byte `SfxDefN` (via `SfxDefPtrs`) into that
+channel's SFX state and set `snd_sfx_*` so music stops writing that channel. SFX volume shapes are `SfxSeq0-15`
+(via `SfxSeqPtrs`, `$FF`-terminated). The meaning of each definition byte is not yet decoded.
+
 `tools/gen_sound_hints.py` walks the song table and emits `tools/hints_sound.txt`
 (lists, 72 streams, and the `snd_*` RAM names); `make regen` runs it.
 

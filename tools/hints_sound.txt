@@ -221,6 +221,261 @@ ram 07A1 snd_noi_env_speed
 ram 07A2 snd_noi_env_count
 ram 07A3 snd_noi_env_idx
 ram 07A4 snd_noi_env_active
+dlohi 6 930D 9322 21
+dlohi 6 93CB 93D4 9
+name 6 930D EnvelopePtrLo
+name 6 9322 EnvelopePtrHi
+name 6 93CB PitchModPtrLo
+name 6 93D4 PitchModPtrHi
+name 6 9337 Envelope0
+struct 6 9337 1 bbbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 9340 Envelope1
+struct 6 9340 1 bbbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 9349 Envelope2
+struct 6 9349 1 bbbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 9352 Envelope3
+struct 6 9352 1 bbbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 935B Envelope4
+struct 6 935B 1 bbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 9363 Envelope5
+struct 6 9363 1 bbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 936B Envelope6
+struct 6 936B 1 bbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 9373 Envelope7
+struct 6 9373 1 bbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 937B Envelope8
+struct 6 937B 1 bbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 9382 Envelope9
+struct 6 9382 1 bbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 9389 Envelope10
+struct 6 9389 1 bbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 9390 Envelope11
+struct 6 9390 1 bbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 9397 Envelope12
+struct 6 9397 1 bbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 939D Envelope13
+struct 6 939D 1 bbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 93A3 Envelope14
+struct 6 93A3 1 bbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 93AB Envelope15
+struct 6 93AB 1 bbb   ; speed, volumes..., final byte bit7 = hold
+name 6 93AE Envelope16
+struct 6 93AE 1 bbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 93B2 Envelope17
+struct 6 93B2 1 bbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 93B6 Envelope18
+struct 6 93B6 1 bbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 93BA Envelope19
+struct 6 93BA 1 bbbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 93C3 Envelope20
+struct 6 93C3 1 bbbbbbbb   ; speed, volumes..., final byte bit7 = hold
+name 6 93DD PitchMod0
+struct 6 93DD 1 bb   ; signed period offsets, $80 = loop
+name 6 93DF PitchMod1
+struct 6 93DF 1 bbbbbbbbb   ; signed period offsets, $80 = loop
+name 6 93E8 PitchMod2
+struct 6 93E8 1 bbbbbbbbb   ; signed period offsets, $80 = loop
+name 6 93F1 PitchMod3
+struct 6 93F1 1 bbbbbbbbb   ; signed period offsets, $80 = loop
+name 6 93FA PitchMod4
+struct 6 93FA 1 bbbbbbbbb   ; signed period offsets, $80 = loop
+name 6 9403 PitchMod5
+struct 6 9403 1 bbbbbbbbb   ; signed period offsets, $80 = loop
+name 6 940C PitchMod6
+struct 6 940C 1 bbbbbbbbb   ; signed period offsets, $80 = loop
+name 6 9415 PitchMod7
+struct 6 9415 1 bbbbbbbbb   ; signed period offsets, $80 = loop
+name 6 941E PitchMod8
+struct 6 941E 1 bbbbbbbbb   ; signed period offsets, $80 = loop
+name 6 8DBD SfxDefPtrs
+dwords 6 8DBD 75   ; pointers to 14-byte SFX definitions
+name 6 926D SfxSeqPtrs
+dwords 6 926D 16   ; pointers to SFX volume sequences
+name 6 8E53 SfxDef0
+struct 6 8E53 1 bbbbbbbbbbbbbb
+name 6 8E61 SfxDef1
+struct 6 8E61 1 bbbbbbbbbbbbbb
+name 6 8E6F SfxDef2
+struct 6 8E6F 1 bbbbbbbbbbbbbb
+name 6 8E7D SfxDef3
+struct 6 8E7D 1 bbbbbbbbbbbbbb
+name 6 8E8B SfxDef4
+struct 6 8E8B 1 bbbbbbbbbbbbbb
+name 6 8E99 SfxDef5
+struct 6 8E99 1 bbbbbbbbbbbbbb
+name 6 8EA7 SfxDef6
+struct 6 8EA7 1 bbbbbbbbbbbbbb
+name 6 8EB5 SfxDef7
+struct 6 8EB5 1 bbbbbbbbbbbbbb
+name 6 8EC3 SfxDef8
+struct 6 8EC3 1 bbbbbbbbbbbbbb
+name 6 8ED1 SfxDef9
+struct 6 8ED1 1 bbbbbbbbbbbbbb
+name 6 8EDF SfxDef10
+struct 6 8EDF 1 bbbbbbbbbbbbbb
+name 6 8EED SfxDef11
+struct 6 8EED 1 bbbbbbbbbbbbbb
+name 6 8EFB SfxDef12
+struct 6 8EFB 1 bbbbbbbbbbbbbb
+name 6 8F09 SfxDef13
+struct 6 8F09 1 bbbbbbbbbbbbbb
+name 6 8F17 SfxDef14
+struct 6 8F17 1 bbbbbbbbbbbbbb
+name 6 8F25 SfxDef15
+struct 6 8F25 1 bbbbbbbbbbbbbb
+name 6 8F33 SfxDef16
+struct 6 8F33 1 bbbbbbbbbbbbbb
+name 6 8F41 SfxDef17
+struct 6 8F41 1 bbbbbbbbbbbbbb
+name 6 8F4F SfxDef18
+struct 6 8F4F 1 bbbbbbbbbbbbbb
+name 6 8F5D SfxDef19
+struct 6 8F5D 1 bbbbbbbbbbbbbb
+name 6 8F6B SfxDef20
+struct 6 8F6B 1 bbbbbbbbbbbbbb
+name 6 8F79 SfxDef21
+struct 6 8F79 1 bbbbbbbbbbbbbb
+name 6 8F87 SfxDef22
+struct 6 8F87 1 bbbbbbbbbbbbbb
+name 6 8F95 SfxDef23
+struct 6 8F95 1 bbbbbbbbbbbbbb
+name 6 8FA3 SfxDef24
+struct 6 8FA3 1 bbbbbbbbbbbbbb
+name 6 8FB1 SfxDef25
+struct 6 8FB1 1 bbbbbbbbbbbbbb
+name 6 8FBF SfxDef26
+struct 6 8FBF 1 bbbbbbbbbbbbbb
+name 6 8FCD SfxDef27
+struct 6 8FCD 1 bbbbbbbbbbbbbb
+name 6 8FDB SfxDef28
+struct 6 8FDB 1 bbbbbbbbbbbbbb
+name 6 8FE9 SfxDef29
+struct 6 8FE9 1 bbbbbbbbbbbbbb
+name 6 8FF7 SfxDef30
+struct 6 8FF7 1 bbbbbbbbbbbbbb
+name 6 9005 SfxDef31
+struct 6 9005 1 bbbbbbbbbbbbbb
+name 6 9013 SfxDef32
+struct 6 9013 1 bbbbbbbbbbbbbb
+name 6 9021 SfxDef33
+struct 6 9021 1 bbbbbbbbbbbbbb
+name 6 902F SfxDef34
+struct 6 902F 1 bbbbbbbbbbbbbb
+name 6 903D SfxDef35
+struct 6 903D 1 bbbbbbbbbbbbbb
+name 6 904B SfxDef36
+struct 6 904B 1 bbbbbbbbbbbbbb
+name 6 9059 SfxDef37
+struct 6 9059 1 bbbbbbbbbbbbbb
+name 6 9067 SfxDef38
+struct 6 9067 1 bbbbbbbbbbbbbb
+name 6 9075 SfxDef39
+struct 6 9075 1 bbbbbbbbbbbbbb
+name 6 9083 SfxDef40
+struct 6 9083 1 bbbbbbbbbbbbbb
+name 6 9091 SfxDef41
+struct 6 9091 1 bbbbbbbbbbbbbb
+name 6 909F SfxDef42
+struct 6 909F 1 bbbbbbbbbbbbbb
+name 6 90AD SfxDef43
+struct 6 90AD 1 bbbbbbbbbbbbbb
+name 6 90BB SfxDef44
+struct 6 90BB 1 bbbbbbbbbbbbbb
+name 6 90C9 SfxDef45
+struct 6 90C9 1 bbbbbbbbbbbbbb
+name 6 90D7 SfxDef46
+struct 6 90D7 1 bbbbbbbbbbbbbb
+name 6 90E5 SfxDef47
+struct 6 90E5 1 bbbbbbbbbbbbbb
+name 6 90F3 SfxDef48
+struct 6 90F3 1 bbbbbbbbbbbbbb
+name 6 9101 SfxDef49
+struct 6 9101 1 bbbbbbbbbbbbbb
+name 6 910F SfxDef50
+struct 6 910F 1 bbbbbbbbbbbbbb
+name 6 911D SfxDef51
+struct 6 911D 1 bbbbbbbbbbbbbb
+name 6 912B SfxDef52
+struct 6 912B 1 bbbbbbbbbbbbbb
+name 6 9139 SfxDef53
+struct 6 9139 1 bbbbbbbbbbbbbb
+name 6 9147 SfxDef54
+struct 6 9147 1 bbbbbbbbbbbbbb
+name 6 9155 SfxDef55
+struct 6 9155 1 bbbbbbbbbbbbbb
+name 6 9163 SfxDef56
+struct 6 9163 1 bbbbbbbbbbbbbb
+name 6 9171 SfxDef57
+struct 6 9171 1 bbbbbbbbbbbbbb
+name 6 917F SfxDef58
+struct 6 917F 1 bbbbbbbbbbbbbb
+name 6 918D SfxDef59
+struct 6 918D 1 bbbbbbbbbbbbbb
+name 6 919B SfxDef60
+struct 6 919B 1 bbbbbbbbbbbbbb
+name 6 91A9 SfxDef61
+struct 6 91A9 1 bbbbbbbbbbbbbb
+name 6 91B7 SfxDef62
+struct 6 91B7 1 bbbbbbbbbbbbbb
+name 6 91C5 SfxDef63
+struct 6 91C5 1 bbbbbbbbbbbbbb
+name 6 91D3 SfxDef64
+struct 6 91D3 1 bbbbbbbbbbbbbb
+name 6 91E1 SfxDef65
+struct 6 91E1 1 bbbbbbbbbbbbbb
+name 6 91EF SfxDef66
+struct 6 91EF 1 bbbbbbbbbbbbbb
+name 6 91FD SfxDef67
+struct 6 91FD 1 bbbbbbbbbbbbbb
+name 6 920B SfxDef68
+struct 6 920B 1 bbbbbbbbbbbbbb
+name 6 9219 SfxDef69
+struct 6 9219 1 bbbbbbbbbbbbbb
+name 6 9227 SfxDef70
+struct 6 9227 1 bbbbbbbbbbbbbb
+name 6 9235 SfxDef71
+struct 6 9235 1 bbbbbbbbbbbbbb
+name 6 9243 SfxDef72
+struct 6 9243 1 bbbbbbbbbbbbbb
+name 6 9251 SfxDef73
+struct 6 9251 1 bbbbbbbbbbbbbb
+name 6 925F SfxDef74
+struct 6 925F 1 bbbbbbbbbbbbbb
+name 6 928D SfxSeq0
+struct 6 928D 1 bbbbbbbbbb
+name 6 9297 SfxSeq1
+struct 6 9297 1 bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+name 6 92B9 SfxSeq2
+struct 6 92B9 1 bbbbbbb
+name 6 92C0 SfxSeq3
+struct 6 92C0 1 bb
+name 6 92C2 SfxSeq4
+struct 6 92C2 1 bb
+name 6 92C4 SfxSeq5
+struct 6 92C4 1 bbbbb
+name 6 92C9 SfxSeq6
+struct 6 92C9 1 bbbbb
+name 6 92CE SfxSeq7
+struct 6 92CE 1 bb
+name 6 92D0 SfxSeq8
+struct 6 92D0 1 bbbbbbbbbb
+name 6 92DA SfxSeq9
+struct 6 92DA 1 bbbbbbbb
+name 6 92E2 SfxSeq10
+struct 6 92E2 1 bbbb
+name 6 92E6 SfxSeq11
+struct 6 92E6 1 bbbb
+name 6 92EA SfxSeq12
+struct 6 92EA 1 bbbbbbbbbb
+name 6 92F4 SfxSeq13
+struct 6 92F4 1 bb
+name 6 92F6 SfxSeq14
+struct 6 92F6 1 bbbbbbbbbbbbb
+name 6 9303 SfxSeq15
+struct 6 9303 1 bbbbbbbbbb
+name 6 8980 Sound_PlaySfxSq1       ; A = sfx id (0-74)
+name 6 89EC Sound_PlaySfxSq2
+name 6 8A6F Sound_PlaySfxNoise
 ram 074A snd_playing
 ram 074B snd_sfx_sq1
 ram 074C snd_sfx_sq2

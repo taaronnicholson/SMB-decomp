@@ -10,9 +10,9 @@ B6_8006:
     JMP Sound_Silence
 B6_8009:
     JMP Sound_Resume
-    JMP B6_8980
-    JMP B6_89EC
-    JMP B6_8A6F
+    JMP Sound_PlaySfxSq1
+    JMP Sound_PlaySfxSq2
+    JMP Sound_PlaySfxNoise
 Sound_PlaySong:
     TAY
     JSR Sound_Silence
@@ -408,9 +408,9 @@ Snd_Sq1_Effects:
     LDA snd_sq1_env_active
     BEQ B6_8378
     LDX snd_sq1_env_idx
-    LDA B6_930D,x
+    LDA EnvelopePtrLo,x
     STA zp_FE
-    LDA B6_9322,x
+    LDA EnvelopePtrHi,x
     STA zp_FF
     LDY #$00
     LDA (zp_FE),y
@@ -429,9 +429,9 @@ B6_8370:
     STA snd_out_sq1_vol
 B6_8378:
     LDX snd_sq1_pitchmod_idx
-    LDA B6_93CB,x
+    LDA PitchModPtrLo,x
     STA zp_FE
-    LDA B6_93D4,x
+    LDA PitchModPtrHi,x
     STA zp_FF
     LDY snd_sq1_pitchmod_pos
     LDA (zp_FE),y
@@ -662,9 +662,9 @@ Snd_Sq2_Effects:
     LDA snd_sq2_env_active
     BEQ B6_8573
     LDX snd_sq2_env_idx
-    LDA B6_930D,x
+    LDA EnvelopePtrLo,x
     STA zp_FE
-    LDA B6_9322,x
+    LDA EnvelopePtrHi,x
     STA zp_FF
     LDY #$00
     LDA (zp_FE),y
@@ -683,9 +683,9 @@ B6_856B:
     STA snd_out_sq2_vol
 B6_8573:
     LDX snd_sq2_pitchmod_idx
-    LDA B6_93CB,x
+    LDA PitchModPtrLo,x
     STA zp_FE
-    LDA B6_93D4,x
+    LDA PitchModPtrHi,x
     STA zp_FF
     LDY snd_sq2_pitchmod_pos
     LDA (zp_FE),y
@@ -890,9 +890,9 @@ Snd_Tri_Effects:
     STA TRI_LINEAR
 B6_870B:
     LDX snd_tri_pitchmod_idx
-    LDA B6_93CB,x
+    LDA PitchModPtrLo,x
     STA zp_FE
-    LDA B6_93D4,x
+    LDA PitchModPtrHi,x
     STA zp_FF
     LDY snd_tri_pitchmod_pos
     LDA (zp_FE),y
@@ -1070,9 +1070,9 @@ Snd_Noise_Effects:
     LDA snd_noi_env_active
     BEQ B6_88A0
     LDX snd_noi_env_idx
-    LDA B6_930D,x
+    LDA EnvelopePtrLo,x
     STA zp_FE
-    LDA B6_9322,x
+    LDA EnvelopePtrHi,x
     STA zp_FF
     LDY #$00
     LDA (zp_FE),y
@@ -1091,9 +1091,9 @@ B6_8899:
     STA snd_out_noi_vol
 B6_88A0:
     LDX snd_noi_pitchmod_idx
-    LDA B6_93CB,x
+    LDA PitchModPtrLo,x
     STA zp_FE
-    LDA B6_93D4,x
+    LDA PitchModPtrHi,x
     STA zp_FF
     LDY snd_noi_pitchmod_pos
     LDA (zp_FE),y
@@ -1191,14 +1191,14 @@ PeriodTable:
     .word $0013
     .word $0012
     .word $0011
-B6_8980:
+Sound_PlaySfxSq1:
     ASL a
     TAY
     LDA #$00
     STA snd_sfx_sq1
-    LDA B6_8DBD,y
+    LDA SfxDefPtrs,y
     STA zp_FE
-    LDA B6_8DBE,y
+    LDA SfxDefPtrs+1,y
     STA zp_FF
     LDY #$0D
 B6_8993:
@@ -1215,10 +1215,10 @@ B6_8993:
     LDA ram_07BF
     ASL a
     TAY
-    LDA B6_926D,y
+    LDA SfxSeqPtrs,y
     STA ram_07F3
     STA zp_FE
-    LDA B6_926E,y
+    LDA SfxSeqPtrs+1,y
     STA ram_07F4
     STA zp_FF
     LDY #$00
@@ -1237,15 +1237,15 @@ B6_8993:
     STA SQ1_HI
     DEC snd_sfx_sq1
     RTS
-B6_89EC:
+Sound_PlaySfxSq2:
     STA ram_07DD
     ASL a
     TAY
     LDA #$00
     STA snd_sfx_sq2
-    LDA B6_8DBD,y
+    LDA SfxDefPtrs,y
     STA zp_FE
-    LDA B6_8DBE,y
+    LDA SfxDefPtrs+1,y
     STA zp_FF
     LDY #$0D
 B6_8A02:
@@ -1271,10 +1271,10 @@ B6_8A1E:
     LDA ram_07D3
     ASL a
     TAY
-    LDA B6_926D,y
+    LDA SfxSeqPtrs,y
     STA ram_07F5
     STA zp_FE
-    LDA B6_926E,y
+    LDA SfxSeqPtrs+1,y
     STA ram_07F6
     STA zp_FF
     LDY #$00
@@ -1294,14 +1294,14 @@ B6_8A52:
     STA SQ2_HI
     DEC snd_sfx_sq2
     RTS
-B6_8A6F:
+Sound_PlaySfxNoise:
     ASL a
     TAY
     LDA #$00
     STA snd_sfx_noise
-    LDA B6_8DBD,y
+    LDA SfxDefPtrs,y
     STA zp_FE
-    LDA B6_8DBE,y
+    LDA SfxDefPtrs+1,y
     STA zp_FF
     LDY #$0D
 B6_8A82:
@@ -1318,10 +1318,10 @@ B6_8A82:
     LDA ram_07E9
     ASL a
     TAY
-    LDA B6_926D,y
+    LDA SfxSeqPtrs,y
     STA ram_07F7
     STA zp_FE
-    LDA B6_926E,y
+    LDA SfxSeqPtrs+1,y
     STA ram_07F8
     STA zp_FF
     LDY #$00
@@ -1676,121 +1676,405 @@ B6_8DA7:
     ROL ram_0752
     ROL ram_0751
     RTS
-B6_8DBD:
-    .byte $53
-B6_8DBE:
-    .byte $8E,$61,$8E,$6F,$8E,$7D,$8E,$8B,$8E,$99,$8E,$A7,$8E,$B5,$8E,$C3
-    .byte $8E,$D1,$8E,$DF,$8E,$ED,$8E,$FB,$8E,$09,$8F,$17,$8F,$25,$8F,$33
-    .byte $8F,$41,$8F,$4F,$8F,$5D,$8F,$6B,$8F,$79,$8F,$87,$8F,$95,$8F,$A3
-    .byte $8F,$B1,$8F,$BF,$8F,$CD,$8F,$DB,$8F,$E9,$8F,$F7,$8F,$05,$90,$13
-    .byte $90,$21,$90,$2F,$90,$3D,$90,$4B,$90,$59,$90,$67,$90,$75,$90,$83
-    .byte $90,$91,$90,$9F,$90,$AD,$90,$BB,$90,$C9,$90,$D7,$90,$E5,$90,$F3
-    .byte $90,$01,$91,$0F,$91,$1D,$91,$2B,$91,$39,$91,$47,$91,$55,$91,$63
-    .byte $91,$71,$91,$7F,$91,$8D,$91,$9B,$91,$A9,$91,$B7,$91,$C5,$91,$D3
-    .byte $91,$E1,$91,$EF,$91,$FD,$91,$0B,$92,$19,$92,$27,$92,$35,$92,$43
-    .byte $92,$51,$92,$5F,$92,$19,$05,$20,$03,$40,$00,$B0,$00,$01,$FF,$00
-    .byte $03,$00,$00,$FF,$FF,$C0,$01,$02,$00,$30,$00,$FF,$00,$01,$08,$00
-    .byte $00,$FF,$FF,$10,$00,$01,$00,$B0,$00,$FF,$00,$01,$08,$00,$00,$19
-    .byte $03,$8C,$00,$01,$00,$30,$00,$FF,$63,$00,$03,$00,$00,$32,$03,$8A
-    .byte $00,$01,$00,$30,$00,$FF,$63,$00,$06,$00,$00,$19,$03,$88,$00,$06
-    .byte $00,$30,$FF,$FF,$63,$00,$03,$00,$00,$32,$03,$88,$00,$06,$00,$30
-    .byte $FF,$FF,$63,$00,$06,$00,$00,$08,$63,$F0,$03,$10,$00,$B0,$00,$01
-    .byte $63,$09,$02,$00,$00,$64,$32,$0F,$00,$01,$00,$30,$00,$01,$00,$00
-    .byte $0C,$00,$06,$32,$28,$0D,$00,$01,$00,$30,$00,$01,$00,$00,$07,$00
-    .byte $04,$06,$06,$08,$00,$01,$00,$30,$00,$FF,$00,$08,$01,$00,$00,$02
-    .byte $63,$06,$00,$00,$00,$30,$00,$00,$00,$0A,$01,$00,$00,$0F,$03,$F6
-    .byte $00,$7E,$00,$30,$00,$FF,$63,$08,$02,$00,$00,$14,$02,$BC,$00,$01
-    .byte $00,$B0,$00,$FF,$63,$01,$01,$00,$00,$14,$02,$CA,$00,$01,$00,$B0
-    .byte $00,$FF,$63,$01,$01,$00,$00,$0D,$07,$20,$00,$01,$00,$70,$00,$FF
-    .byte $63,$08,$02,$00,$00,$03,$00,$0B,$00,$00,$00,$30,$00,$00,$00,$0F
-    .byte $01,$00,$00,$0E,$05,$50,$02,$30,$00,$30,$00,$FF,$63,$00,$03,$00
-    .byte $00,$18,$04,$60,$02,$20,$00,$70,$00,$FF,$63,$00,$04,$00,$00,$19
-    .byte $02,$64,$00,$18,$00,$B0,$00,$01,$63,$01,$01,$00,$02,$05,$04,$FF
-    .byte $03,$80,$00,$30,$00,$01,$63,$01,$01,$00,$02,$FF,$04,$FF,$03,$50
-    .byte $00,$30,$00,$01,$63,$02,$01,$FF,$02,$0F,$0A,$10,$01,$10,$00,$B0
-    .byte $00,$01,$63,$08,$02,$00,$00,$0F,$06,$6A,$00,$10,$00,$70,$00,$01
-    .byte $63,$08,$02,$00,$02,$0F,$09,$A0,$00,$1A,$00,$70,$00,$01,$00,$08
-    .byte $02,$00,$03,$2D,$0E,$00,$01,$40,$00,$B0,$00,$01,$01,$00,$05,$00
-    .byte $05,$5A,$14,$20,$00,$10,$00,$B0,$00,$FF,$63,$00,$0A,$00,$04,$2D
-    .byte $0F,$C0,$01,$0D,$00,$70,$00,$01,$01,$08,$08,$00,$00,$2D,$0F,$C0
-    .byte $01,$22,$00,$30,$00,$FF,$01,$08,$09,$00,$00,$63,$0A,$22,$00,$01
-    .byte $00,$B0,$00,$01,$FF,$01,$02,$00,$00,$19,$04,$42,$01,$08,$00,$30
-    .byte $00,$01,$63,$00,$03,$00,$02,$0E,$03,$42,$03,$29,$01,$70,$00,$01
-    .byte $FF,$08,$03,$00,$00,$14,$09,$00,$02,$80,$00,$B0,$00,$01,$00,$08
-    .byte $02,$00,$03,$14,$0C,$80,$00,$80,$00,$70,$00,$FF,$00,$08,$02,$00
-    .byte $04,$1E,$05,$40,$03,$28,$00,$B0,$00,$01,$FF,$00,$04,$00,$00,$19
-    .byte $14,$06,$00,$01,$00,$B0,$00,$FF,$00,$00,$03,$00,$02,$0C,$04,$A6
-    .byte $00,$01,$00,$30,$00,$FF,$63,$0E,$01,$00,$00,$08,$63,$A7,$01,$00
-    .byte $00,$30,$00,$00,$00,$01,$01,$00,$00,$14,$02,$A1,$01,$02,$00,$30
-    .byte $00,$FF,$63,$0E,$02,$00,$00,$19,$63,$FF,$03,$14,$00,$30,$00,$01
-    .byte $63,$00,$02,$00,$00,$19,$04,$BC,$00,$02,$00,$B0,$00,$01,$63,$08
-    .byte $03,$00,$00,$09,$04,$20,$00,$08,$00,$B0,$00,$01,$63,$08,$01,$00
-    .byte $02,$09,$09,$10,$00,$01,$00,$70,$00,$FF,$63,$0C,$02,$00,$00,$09
-    .byte $09,$14,$00,$01,$00,$70,$00,$FF,$63,$0C,$02,$00,$00,$09,$09,$18
-    .byte $00,$01,$00,$70,$00,$FF,$63,$0C,$02,$00,$00,$09,$09,$20,$00,$01
-    .byte $00,$70,$00,$FF,$63,$0C,$02,$00,$00,$12,$05,$0C,$00,$01,$00,$30
-    .byte $00,$FF,$00,$08,$02,$00,$03,$12,$02,$0C,$00,$01,$00,$30,$FF,$FF
-    .byte $63,$08,$02,$00,$03,$09,$09,$24,$00,$01,$00,$70,$00,$01,$63,$08
-    .byte $01,$00,$00,$0C,$07,$20,$00,$01,$00,$70,$00,$FF,$63,$00,$02,$00
-    .byte $00,$0C,$63,$40,$00,$01,$00,$70,$00,$01,$63,$01,$01,$00,$00,$16
-    .byte $63,$20,$00,$01,$00,$70,$00,$FF,$63,$01,$01,$00,$00,$23,$0F,$FF
-    .byte $03,$18,$00,$30,$00,$01,$00,$00,$04,$00,$00,$2D,$14,$A0,$01,$68
-    .byte $00,$30,$00,$01,$01,$08,$08,$00,$07,$3B,$14,$20,$00,$10,$00,$B0
-    .byte $00,$FF,$63,$08,$06,$00,$04,$0C,$05,$2C,$01,$02,$00,$30,$00,$FF
-    .byte $63,$01,$01,$00,$03,$14,$11,$40,$01,$18,$00,$30,$00,$01,$01,$08
-    .byte $04,$00,$03,$09,$02,$6C,$00,$01,$00,$B0,$00,$FF,$63,$00,$02,$00
-    .byte $00,$19,$09,$08,$01,$01,$00,$30,$00,$FF,$63,$00,$03,$00,$00,$05
-    .byte $02,$6C,$00,$01,$00,$B0,$00,$FF,$63,$0C,$01,$00,$00,$0F,$02,$55
-    .byte $00,$14,$00,$B0,$00,$FF,$63,$00,$02,$00,$00,$13,$03,$6C,$00,$21
-    .byte $00,$B0,$00,$FF,$63,$00,$03,$00,$00,$0F,$02,$4F,$00,$29,$00,$B0
-    .byte $FF,$01,$FF,$00,$02,$00,$00,$09,$02,$54,$00,$14,$00,$B0,$00,$FF
-    .byte $63,$0C,$01,$00,$00,$19,$04,$46,$01,$02,$00,$30,$00,$FF,$63,$08
-    .byte $03,$00,$00,$19,$63,$38,$00,$02,$00,$B0,$00,$FF,$63,$01,$01,$00
-    .byte $00,$18,$63,$00,$01,$04,$00,$B0,$00,$01,$63,$01,$01,$00,$00,$09
-    .byte $63,$80,$03,$38,$00,$B0,$00,$01,$00,$01,$01,$00,$00,$0F,$02,$6C
-    .byte $00,$01,$00,$B0,$00,$01,$63,$00,$02,$00,$00,$19,$04,$A2,$01,$02
-    .byte $00,$30,$00,$FF,$63,$0E,$03,$00,$00,$FF,$04,$FF,$03,$08,$00,$70
-    .byte $00,$01,$63,$07,$01,$FF,$00,$06,$03,$2C,$01,$02,$00,$30,$00,$01
-    .byte $63,$01,$01,$00,$03,$1E,$12,$C0,$00,$10,$00,$B0,$00,$01,$00,$08
-    .byte $04,$00,$06,$08,$04,$24,$01,$02,$00,$30,$00,$FF,$63,$01,$01,$00
-    .byte $02,$01,$00,$00,$00,$00,$00,$30,$00,$00,$00,$0D,$00,$00,$00
-B6_926D:
-    .byte $8D
-B6_926E:
-    .byte $92,$97,$92,$B9,$92,$C0,$92,$C2,$92,$C4,$92,$C9,$92,$CE,$92,$D0
-    .byte $92,$DA,$92,$E2,$92,$E6,$92,$EA,$92,$F4,$92,$F6,$92,$03,$93,$0F
-    .byte $0D,$0B,$09,$07,$05,$03,$01,$00,$FF,$03,$05,$07,$09,$0B,$0D,$0E
-    .byte $0E,$0D,$0D,$0D,$0C,$0C,$0B,$0B,$0A,$0A,$09,$09,$08,$08,$07,$07
-    .byte $06,$06,$05,$05,$04,$04,$03,$03,$02,$01,$FF,$03,$05,$07,$09,$0B
-    .byte $0D,$FF,$06,$80,$04,$80,$01,$04,$09,$0D,$80,$01,$04,$07,$09,$FF
-    .byte $0A,$80,$0D,$0B,$09,$07,$05,$04,$03,$02,$01,$FF,$09,$07,$05,$04
-    .byte $03,$02,$01,$FF,$09,$02,$01,$FF,$0C,$07,$01,$80,$0C,$0A,$09,$07
-    .byte $05,$04,$03,$02,$01,$FF,$00,$FF,$05,$09,$0D,$0E,$0D,$0B,$09,$07
-    .byte $05,$03,$02,$01,$FF,$05,$09,$0B,$09,$07,$05,$03,$02,$01,$FF
-B6_930D:
-    .byte $37,$40,$49,$52,$5B,$63,$6B,$73,$7B,$82,$89,$90,$97,$9D,$A3,$AB
-    .byte $AE,$B2,$B6,$BA,$C3
-B6_9322:
-    .res 21, $93
-    .byte $01,$0E,$0C,$0A,$08,$06,$04,$02,$81,$02,$0E,$0C,$0A,$08,$06,$04
-    .byte $02,$81,$03,$0E,$0C,$0A,$08,$06,$04,$02,$81,$04,$0E,$0C,$0A,$08
-    .byte $06,$04,$02,$81,$01,$0C,$0A,$08,$06,$04,$02,$81,$02,$0C,$0A,$08
-    .byte $06,$04,$02,$81,$03,$0C,$0A,$08,$06,$04,$02,$81,$04,$0C,$0A,$08
-    .byte $06,$04,$02,$81,$01,$0A,$08,$06,$04,$02,$81,$02,$0A,$08,$06,$04
-    .byte $02,$81,$03,$0A,$08,$06,$04,$02,$81,$04,$0A,$08,$06,$04,$02,$81
-    .byte $01,$08,$06,$04,$02,$81,$02,$08,$06,$04,$02,$81,$04,$03,$05,$07
-    .byte $09,$0B,$0C,$8D,$01,$00,$80,$01,$0C,$06,$81,$01,$0A,$05,$81,$01
-    .byte $07,$03,$81,$08,$0E,$0C,$0A,$08,$06,$04,$02,$81,$08,$0C,$0A,$08
-    .byte $06,$04,$02,$81
-B6_93CB:
-    .byte $DD,$DF,$E8,$F1,$FA,$03,$0C,$15,$1E
-B6_93D4:
-    .byte $93,$93,$93,$93,$93,$94,$94,$94,$94,$00,$80,$00,$01,$02,$01,$00
-    .byte $FF,$FE,$FF,$80,$00,$02,$04,$02,$00,$FE,$FC,$FE,$80,$00,$03,$06
-    .byte $03,$00,$FD,$FA,$FD,$80,$00,$04,$08,$04,$00,$FC,$F8,$FC,$80,$00
-    .byte $08,$10,$08,$00,$F8,$F0,$F8,$80,$00,$10,$20,$10,$00,$F0,$E0,$F0
-    .byte $80,$00,$20,$40,$20,$00,$E0,$C0,$E0,$80,$00,$3F,$7E,$3F,$00,$C1
-    .byte $82,$C1,$80
+SfxDefPtrs:
+    .word SfxDef0
+    .word SfxDef1
+    .word SfxDef2
+    .word SfxDef3
+    .word SfxDef4
+    .word SfxDef5
+    .word SfxDef6
+    .word SfxDef7
+    .word SfxDef8
+    .word SfxDef9
+    .word SfxDef10
+    .word SfxDef11
+    .word SfxDef12
+    .word SfxDef13
+    .word SfxDef14
+    .word SfxDef15
+    .word SfxDef16
+    .word SfxDef17
+    .word SfxDef18
+    .word SfxDef19
+    .word SfxDef20
+    .word SfxDef21
+    .word SfxDef22
+    .word SfxDef23
+    .word SfxDef24
+    .word SfxDef25
+    .word SfxDef26
+    .word SfxDef27
+    .word SfxDef28
+    .word SfxDef29
+    .word SfxDef30
+    .word SfxDef31
+    .word SfxDef32
+    .word SfxDef33
+    .word SfxDef34
+    .word SfxDef35
+    .word SfxDef36
+    .word SfxDef37
+    .word SfxDef38
+    .word SfxDef39
+    .word SfxDef40
+    .word SfxDef41
+    .word SfxDef42
+    .word SfxDef43
+    .word SfxDef44
+    .word SfxDef45
+    .word SfxDef46
+    .word SfxDef47
+    .word SfxDef48
+    .word SfxDef49
+    .word SfxDef50
+    .word SfxDef51
+    .word SfxDef52
+    .word SfxDef53
+    .word SfxDef54
+    .word SfxDef55
+    .word SfxDef56
+    .word SfxDef57
+    .word SfxDef58
+    .word SfxDef59
+    .word SfxDef60
+    .word SfxDef61
+    .word SfxDef62
+    .word SfxDef63
+    .word SfxDef64
+    .word SfxDef65
+    .word SfxDef66
+    .word SfxDef67
+    .word SfxDef68
+    .word SfxDef69
+    .word SfxDef70
+    .word SfxDef71
+    .word SfxDef72
+    .word SfxDef73
+    .word SfxDef74
+SfxDef0:
+    .byte $19, $05, $20, $03, $40, $00, $B0, $00, $01, $FF, $00, $03, $00, $00
+SfxDef1:
+    .byte $FF, $FF, $C0, $01, $02, $00, $30, $00, $FF, $00, $01, $08, $00, $00
+SfxDef2:
+    .byte $FF, $FF, $10, $00, $01, $00, $B0, $00, $FF, $00, $01, $08, $00, $00
+SfxDef3:
+    .byte $19, $03, $8C, $00, $01, $00, $30, $00, $FF, $63, $00, $03, $00, $00
+SfxDef4:
+    .byte $32, $03, $8A, $00, $01, $00, $30, $00, $FF, $63, $00, $06, $00, $00
+SfxDef5:
+    .byte $19, $03, $88, $00, $06, $00, $30, $FF, $FF, $63, $00, $03, $00, $00
+SfxDef6:
+    .byte $32, $03, $88, $00, $06, $00, $30, $FF, $FF, $63, $00, $06, $00, $00
+SfxDef7:
+    .byte $08, $63, $F0, $03, $10, $00, $B0, $00, $01, $63, $09, $02, $00, $00
+SfxDef8:
+    .byte $64, $32, $0F, $00, $01, $00, $30, $00, $01, $00, $00, $0C, $00, $06
+SfxDef9:
+    .byte $32, $28, $0D, $00, $01, $00, $30, $00, $01, $00, $00, $07, $00, $04
+SfxDef10:
+    .byte $06, $06, $08, $00, $01, $00, $30, $00, $FF, $00, $08, $01, $00, $00
+SfxDef11:
+    .byte $02, $63, $06, $00, $00, $00, $30, $00, $00, $00, $0A, $01, $00, $00
+SfxDef12:
+    .byte $0F, $03, $F6, $00, $7E, $00, $30, $00, $FF, $63, $08, $02, $00, $00
+SfxDef13:
+    .byte $14, $02, $BC, $00, $01, $00, $B0, $00, $FF, $63, $01, $01, $00, $00
+SfxDef14:
+    .byte $14, $02, $CA, $00, $01, $00, $B0, $00, $FF, $63, $01, $01, $00, $00
+SfxDef15:
+    .byte $0D, $07, $20, $00, $01, $00, $70, $00, $FF, $63, $08, $02, $00, $00
+SfxDef16:
+    .byte $03, $00, $0B, $00, $00, $00, $30, $00, $00, $00, $0F, $01, $00, $00
+SfxDef17:
+    .byte $0E, $05, $50, $02, $30, $00, $30, $00, $FF, $63, $00, $03, $00, $00
+SfxDef18:
+    .byte $18, $04, $60, $02, $20, $00, $70, $00, $FF, $63, $00, $04, $00, $00
+SfxDef19:
+    .byte $19, $02, $64, $00, $18, $00, $B0, $00, $01, $63, $01, $01, $00, $02
+SfxDef20:
+    .byte $05, $04, $FF, $03, $80, $00, $30, $00, $01, $63, $01, $01, $00, $02
+SfxDef21:
+    .byte $FF, $04, $FF, $03, $50, $00, $30, $00, $01, $63, $02, $01, $FF, $02
+SfxDef22:
+    .byte $0F, $0A, $10, $01, $10, $00, $B0, $00, $01, $63, $08, $02, $00, $00
+SfxDef23:
+    .byte $0F, $06, $6A, $00, $10, $00, $70, $00, $01, $63, $08, $02, $00, $02
+SfxDef24:
+    .byte $0F, $09, $A0, $00, $1A, $00, $70, $00, $01, $00, $08, $02, $00, $03
+SfxDef25:
+    .byte $2D, $0E, $00, $01, $40, $00, $B0, $00, $01, $01, $00, $05, $00, $05
+SfxDef26:
+    .byte $5A, $14, $20, $00, $10, $00, $B0, $00, $FF, $63, $00, $0A, $00, $04
+SfxDef27:
+    .byte $2D, $0F, $C0, $01, $0D, $00, $70, $00, $01, $01, $08, $08, $00, $00
+SfxDef28:
+    .byte $2D, $0F, $C0, $01, $22, $00, $30, $00, $FF, $01, $08, $09, $00, $00
+SfxDef29:
+    .byte $63, $0A, $22, $00, $01, $00, $B0, $00, $01, $FF, $01, $02, $00, $00
+SfxDef30:
+    .byte $19, $04, $42, $01, $08, $00, $30, $00, $01, $63, $00, $03, $00, $02
+SfxDef31:
+    .byte $0E, $03, $42, $03, $29, $01, $70, $00, $01, $FF, $08, $03, $00, $00
+SfxDef32:
+    .byte $14, $09, $00, $02, $80, $00, $B0, $00, $01, $00, $08, $02, $00, $03
+SfxDef33:
+    .byte $14, $0C, $80, $00, $80, $00, $70, $00, $FF, $00, $08, $02, $00, $04
+SfxDef34:
+    .byte $1E, $05, $40, $03, $28, $00, $B0, $00, $01, $FF, $00, $04, $00, $00
+SfxDef35:
+    .byte $19, $14, $06, $00, $01, $00, $B0, $00, $FF, $00, $00, $03, $00, $02
+SfxDef36:
+    .byte $0C, $04, $A6, $00, $01, $00, $30, $00, $FF, $63, $0E, $01, $00, $00
+SfxDef37:
+    .byte $08, $63, $A7, $01, $00, $00, $30, $00, $00, $00, $01, $01, $00, $00
+SfxDef38:
+    .byte $14, $02, $A1, $01, $02, $00, $30, $00, $FF, $63, $0E, $02, $00, $00
+SfxDef39:
+    .byte $19, $63, $FF, $03, $14, $00, $30, $00, $01, $63, $00, $02, $00, $00
+SfxDef40:
+    .byte $19, $04, $BC, $00, $02, $00, $B0, $00, $01, $63, $08, $03, $00, $00
+SfxDef41:
+    .byte $09, $04, $20, $00, $08, $00, $B0, $00, $01, $63, $08, $01, $00, $02
+SfxDef42:
+    .byte $09, $09, $10, $00, $01, $00, $70, $00, $FF, $63, $0C, $02, $00, $00
+SfxDef43:
+    .byte $09, $09, $14, $00, $01, $00, $70, $00, $FF, $63, $0C, $02, $00, $00
+SfxDef44:
+    .byte $09, $09, $18, $00, $01, $00, $70, $00, $FF, $63, $0C, $02, $00, $00
+SfxDef45:
+    .byte $09, $09, $20, $00, $01, $00, $70, $00, $FF, $63, $0C, $02, $00, $00
+SfxDef46:
+    .byte $12, $05, $0C, $00, $01, $00, $30, $00, $FF, $00, $08, $02, $00, $03
+SfxDef47:
+    .byte $12, $02, $0C, $00, $01, $00, $30, $FF, $FF, $63, $08, $02, $00, $03
+SfxDef48:
+    .byte $09, $09, $24, $00, $01, $00, $70, $00, $01, $63, $08, $01, $00, $00
+SfxDef49:
+    .byte $0C, $07, $20, $00, $01, $00, $70, $00, $FF, $63, $00, $02, $00, $00
+SfxDef50:
+    .byte $0C, $63, $40, $00, $01, $00, $70, $00, $01, $63, $01, $01, $00, $00
+SfxDef51:
+    .byte $16, $63, $20, $00, $01, $00, $70, $00, $FF, $63, $01, $01, $00, $00
+SfxDef52:
+    .byte $23, $0F, $FF, $03, $18, $00, $30, $00, $01, $00, $00, $04, $00, $00
+SfxDef53:
+    .byte $2D, $14, $A0, $01, $68, $00, $30, $00, $01, $01, $08, $08, $00, $07
+SfxDef54:
+    .byte $3B, $14, $20, $00, $10, $00, $B0, $00, $FF, $63, $08, $06, $00, $04
+SfxDef55:
+    .byte $0C, $05, $2C, $01, $02, $00, $30, $00, $FF, $63, $01, $01, $00, $03
+SfxDef56:
+    .byte $14, $11, $40, $01, $18, $00, $30, $00, $01, $01, $08, $04, $00, $03
+SfxDef57:
+    .byte $09, $02, $6C, $00, $01, $00, $B0, $00, $FF, $63, $00, $02, $00, $00
+SfxDef58:
+    .byte $19, $09, $08, $01, $01, $00, $30, $00, $FF, $63, $00, $03, $00, $00
+SfxDef59:
+    .byte $05, $02, $6C, $00, $01, $00, $B0, $00, $FF, $63, $0C, $01, $00, $00
+SfxDef60:
+    .byte $0F, $02, $55, $00, $14, $00, $B0, $00, $FF, $63, $00, $02, $00, $00
+SfxDef61:
+    .byte $13, $03, $6C, $00, $21, $00, $B0, $00, $FF, $63, $00, $03, $00, $00
+SfxDef62:
+    .byte $0F, $02, $4F, $00, $29, $00, $B0, $FF, $01, $FF, $00, $02, $00, $00
+SfxDef63:
+    .byte $09, $02, $54, $00, $14, $00, $B0, $00, $FF, $63, $0C, $01, $00, $00
+SfxDef64:
+    .byte $19, $04, $46, $01, $02, $00, $30, $00, $FF, $63, $08, $03, $00, $00
+SfxDef65:
+    .byte $19, $63, $38, $00, $02, $00, $B0, $00, $FF, $63, $01, $01, $00, $00
+SfxDef66:
+    .byte $18, $63, $00, $01, $04, $00, $B0, $00, $01, $63, $01, $01, $00, $00
+SfxDef67:
+    .byte $09, $63, $80, $03, $38, $00, $B0, $00, $01, $00, $01, $01, $00, $00
+SfxDef68:
+    .byte $0F, $02, $6C, $00, $01, $00, $B0, $00, $01, $63, $00, $02, $00, $00
+SfxDef69:
+    .byte $19, $04, $A2, $01, $02, $00, $30, $00, $FF, $63, $0E, $03, $00, $00
+SfxDef70:
+    .byte $FF, $04, $FF, $03, $08, $00, $70, $00, $01, $63, $07, $01, $FF, $00
+SfxDef71:
+    .byte $06, $03, $2C, $01, $02, $00, $30, $00, $01, $63, $01, $01, $00, $03
+SfxDef72:
+    .byte $1E, $12, $C0, $00, $10, $00, $B0, $00, $01, $00, $08, $04, $00, $06
+SfxDef73:
+    .byte $08, $04, $24, $01, $02, $00, $30, $00, $FF, $63, $01, $01, $00, $02
+SfxDef74:
+    .byte $01, $00, $00, $00, $00, $00, $30, $00, $00, $00, $0D, $00, $00, $00
+SfxSeqPtrs:
+    .word SfxSeq0
+    .word SfxSeq1
+    .word SfxSeq2
+    .word SfxSeq3
+    .word SfxSeq4
+    .word SfxSeq5
+    .word SfxSeq6
+    .word SfxSeq7
+    .word SfxSeq8
+    .word SfxSeq9
+    .word SfxSeq10
+    .word SfxSeq11
+    .word SfxSeq12
+    .word SfxSeq13
+    .word SfxSeq14
+    .word SfxSeq15
+SfxSeq0:
+    .byte $0F, $0D, $0B, $09, $07, $05, $03, $01, $00, $FF
+SfxSeq1:
+    .byte $03, $05, $07, $09, $0B, $0D, $0E, $0E, $0D, $0D, $0D, $0C, $0C, $0B, $0B, $0A, $0A, $09, $09, $08, $08, $07, $07, $06, $06, $05, $05, $04, $04, $03, $03, $02, $01, $FF
+SfxSeq2:
+    .byte $03, $05, $07, $09, $0B, $0D, $FF
+SfxSeq3:
+    .byte $06, $80
+SfxSeq4:
+    .byte $04, $80
+SfxSeq5:
+    .byte $01, $04, $09, $0D, $80
+SfxSeq6:
+    .byte $01, $04, $07, $09, $FF
+SfxSeq7:
+    .byte $0A, $80
+SfxSeq8:
+    .byte $0D, $0B, $09, $07, $05, $04, $03, $02, $01, $FF
+SfxSeq9:
+    .byte $09, $07, $05, $04, $03, $02, $01, $FF
+SfxSeq10:
+    .byte $09, $02, $01, $FF
+SfxSeq11:
+    .byte $0C, $07, $01, $80
+SfxSeq12:
+    .byte $0C, $0A, $09, $07, $05, $04, $03, $02, $01, $FF
+SfxSeq13:
+    .byte $00, $FF
+SfxSeq14:
+    .byte $05, $09, $0D, $0E, $0D, $0B, $09, $07, $05, $03, $02, $01, $FF
+SfxSeq15:
+    .byte $05, $09, $0B, $09, $07, $05, $03, $02, $01, $FF
+EnvelopePtrLo:
+    .byte <(Envelope0)
+    .byte <(Envelope1)
+    .byte <(Envelope2)
+    .byte <(Envelope3)
+    .byte <(Envelope4)
+    .byte <(Envelope5)
+    .byte <(Envelope6)
+    .byte <(Envelope7)
+    .byte <(Envelope8)
+    .byte <(Envelope9)
+    .byte <(Envelope10)
+    .byte <(Envelope11)
+    .byte <(Envelope12)
+    .byte <(Envelope13)
+    .byte <(Envelope14)
+    .byte <(Envelope15)
+    .byte <(Envelope16)
+    .byte <(Envelope17)
+    .byte <(Envelope18)
+    .byte <(Envelope19)
+    .byte <(Envelope20)
+EnvelopePtrHi:
+    .byte >(Envelope0)
+    .byte >(Envelope1)
+    .byte >(Envelope2)
+    .byte >(Envelope3)
+    .byte >(Envelope4)
+    .byte >(Envelope5)
+    .byte >(Envelope6)
+    .byte >(Envelope7)
+    .byte >(Envelope8)
+    .byte >(Envelope9)
+    .byte >(Envelope10)
+    .byte >(Envelope11)
+    .byte >(Envelope12)
+    .byte >(Envelope13)
+    .byte >(Envelope14)
+    .byte >(Envelope15)
+    .byte >(Envelope16)
+    .byte >(Envelope17)
+    .byte >(Envelope18)
+    .byte >(Envelope19)
+    .byte >(Envelope20)
+Envelope0:
+    .byte $01, $0E, $0C, $0A, $08, $06, $04, $02, $81
+Envelope1:
+    .byte $02, $0E, $0C, $0A, $08, $06, $04, $02, $81
+Envelope2:
+    .byte $03, $0E, $0C, $0A, $08, $06, $04, $02, $81
+Envelope3:
+    .byte $04, $0E, $0C, $0A, $08, $06, $04, $02, $81
+Envelope4:
+    .byte $01, $0C, $0A, $08, $06, $04, $02, $81
+Envelope5:
+    .byte $02, $0C, $0A, $08, $06, $04, $02, $81
+Envelope6:
+    .byte $03, $0C, $0A, $08, $06, $04, $02, $81
+Envelope7:
+    .byte $04, $0C, $0A, $08, $06, $04, $02, $81
+Envelope8:
+    .byte $01, $0A, $08, $06, $04, $02, $81
+Envelope9:
+    .byte $02, $0A, $08, $06, $04, $02, $81
+Envelope10:
+    .byte $03, $0A, $08, $06, $04, $02, $81
+Envelope11:
+    .byte $04, $0A, $08, $06, $04, $02, $81
+Envelope12:
+    .byte $01, $08, $06, $04, $02, $81
+Envelope13:
+    .byte $02, $08, $06, $04, $02, $81
+Envelope14:
+    .byte $04, $03, $05, $07, $09, $0B, $0C, $8D
+Envelope15:
+    .byte $01, $00, $80
+Envelope16:
+    .byte $01, $0C, $06, $81
+Envelope17:
+    .byte $01, $0A, $05, $81
+Envelope18:
+    .byte $01, $07, $03, $81
+Envelope19:
+    .byte $08, $0E, $0C, $0A, $08, $06, $04, $02, $81
+Envelope20:
+    .byte $08, $0C, $0A, $08, $06, $04, $02, $81
+PitchModPtrLo:
+    .byte <(PitchMod0)
+    .byte <(PitchMod1)
+    .byte <(PitchMod2)
+    .byte <(PitchMod3)
+    .byte <(PitchMod4)
+    .byte <(PitchMod5)
+    .byte <(PitchMod6)
+    .byte <(PitchMod7)
+    .byte <(PitchMod8)
+PitchModPtrHi:
+    .byte >(PitchMod0)
+    .byte >(PitchMod1)
+    .byte >(PitchMod2)
+    .byte >(PitchMod3)
+    .byte >(PitchMod4)
+    .byte >(PitchMod5)
+    .byte >(PitchMod6)
+    .byte >(PitchMod7)
+    .byte >(PitchMod8)
+PitchMod0:
+    .byte $00, $80
+PitchMod1:
+    .byte $00, $01, $02, $01, $00, $FF, $FE, $FF, $80
+PitchMod2:
+    .byte $00, $02, $04, $02, $00, $FE, $FC, $FE, $80
+PitchMod3:
+    .byte $00, $03, $06, $03, $00, $FD, $FA, $FD, $80
+PitchMod4:
+    .byte $00, $04, $08, $04, $00, $FC, $F8, $FC, $80
+PitchMod5:
+    .byte $00, $08, $10, $08, $00, $F8, $F0, $F8, $80
+PitchMod6:
+    .byte $00, $10, $20, $10, $00, $F0, $E0, $F0, $80
+PitchMod7:
+    .byte $00, $20, $40, $20, $00, $E0, $C0, $E0, $80
+PitchMod8:
+    .byte $00, $3F, $7E, $3F, $00, $C1, $82, $C1, $80
 SongTable:
     .byte $32
     .word B6_94A8, B6_947C, B6_9492, B6_94C2

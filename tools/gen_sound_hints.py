@@ -57,6 +57,40 @@ FIELDS = ['stream_lo', 'stream_hi', 'list_lo', 'list_hi', 'listpos_lo', 'listpos
 for ci, cn in enumerate(['sq1', 'sq2', 'tri', 'noi']):
     for fi, fn in enumerate(FIELDS):
         out.append(f'ram {0x759 + 0x13 * ci + fi:04X} snd_{cn}_{fn}')
+# ---- envelopes (speed byte, volume nibbles, final byte has bit 7 = hold) and pitch-mod tables ----
+ENV_LO, ENV_HI, NENV, PIT_LO, PIT_HI, NPIT = 0x930D, 0x9322, 21, 0x93CB, 0x93D4, 9
+out += [f'dlohi 6 {ENV_LO:X} {ENV_HI:X} {NENV}', f'dlohi 6 {PIT_LO:X} {PIT_HI:X} {NPIT}',
+        f'name 6 {ENV_LO:X} EnvelopePtrLo', f'name 6 {ENV_HI:X} EnvelopePtrHi',
+        f'name 6 {PIT_LO:X} PitchModPtrLo', f'name 6 {PIT_HI:X} PitchModPtrHi']
+envs = sorted({by(ENV_LO + i) | by(ENV_HI + i) << 8 for i in range(NENV)})
+end = PIT_LO
+for i in range(NENV):
+    a = by(ENV_LO + i) | by(ENV_HI + i) << 8
+    nxt = min([e for e in envs if e > a] + [end])
+    out.append(f'name 6 {a:X} Envelope{i}')
+    out.append(f'struct 6 {a:X} 1 ' + 'b' * (nxt - a) + '   ; speed, volumes..., final byte bit7 = hold')
+pits = sorted({by(PIT_LO + i) | by(PIT_HI + i) << 8 for i in range(NPIT)})
+for i in range(NPIT):
+    a = by(PIT_LO + i) | by(PIT_HI + i) << 8
+    nxt = min([e for e in pits if e > a] + [TAB])
+    out.append(f'name 6 {a:X} PitchMod{i}')
+    out.append(f'struct 6 {a:X} 1 ' + 'b' * (nxt - a) + '   ; signed period offsets, $80 = loop')
+# ---- sound effects: 75 x 14-byte definitions via pointer table, plus 16 SFX volume sequences ----
+SFX_TAB, NSFX, SEQ_TAB, NSEQ, SEQ_END = 0x8DBD, 75, 0x926D, 16, ENV_LO
+def wd(a): return by(a) | by(a + 1) << 8
+out += [f'name 6 {SFX_TAB:X} SfxDefPtrs', f'dwords 6 {SFX_TAB:X} {NSFX}   ; pointers to 14-byte SFX definitions',
+        f'name 6 {SEQ_TAB:X} SfxSeqPtrs', f'dwords 6 {SEQ_TAB:X} {NSEQ}   ; pointers to SFX volume sequences']
+for i in range(NSFX):
+    a = wd(SFX_TAB + 2 * i)
+    out.append(f'name 6 {a:X} SfxDef{i}')
+    out.append(f'struct 6 {a:X} 1 ' + 'b' * 14)
+sq = sorted({wd(SEQ_TAB + 2 * i) for i in range(NSEQ)})
+for i in range(NSEQ):
+    a = wd(SEQ_TAB + 2 * i)
+    nxt = min([e for e in sq if e > a] + [SEQ_END])
+    out.append(f'name 6 {a:X} SfxSeq{i}')
+    out.append(f'struct 6 {a:X} 1 ' + 'b' * (nxt - a))
+out += ['name 6 8980 Sound_PlaySfxSq1       ; A = sfx id (0-74)', 'name 6 89EC Sound_PlaySfxSq2', 'name 6 8A6F Sound_PlaySfxNoise']
 out += ['ram 074A snd_playing', 'ram 074B snd_sfx_sq1', 'ram 074C snd_sfx_sq2', 'ram 074D snd_sfx_noise',
         'ram 074E snd_tempo', 'ram 074F snd_tempo_base', 'ram 0756 snd_tempo_acc', 'ram 0757 snd_song_transpose',
         'ram 0758 snd_song_ended',
