@@ -23,5 +23,13 @@ ram 000C cur_bank
 ram 000E frame_counter
 ram 0006 jump_ptr_lo          ; scratch indirect-jump vector
 ram 0007 jump_ptr_hi
-ram 0004 farcall_ptr_lo
-ram 0005 farcall_ptr_hi
+ram 0004 tmp_ptr_lo           ; scratch pointer (also FarCall target vector)
+ram 0005 tmp_ptr_hi
+ram 0012 buttons              ; current controller state (A,B,Sel,Start,U,D,L,R bits)
+ram 0013 buttons_prev
+ram 0014 buttons_pressed      ; newly pressed this frame
+ram 0015 buttons_released
+
+name 0 8205 ReadController
+name 0 8245 ClearRAM           ; zeroes RAM $0000-$06FF except the $0100 stack page
+dwords 0 8263 6                ; table of 6 pointers to record lists

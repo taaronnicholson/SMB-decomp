@@ -22,6 +22,7 @@ def bn(t): return FIXED if t == 'f' else int(t)
 # ---- hints ----------------------------------------------------------------
 entries, words_tab, lohi_tab, names, datas = [], [], [], {}, []
 ramnames = {}
+dwords_tab = []
 for ln in open(os.path.join(HERE, 'hints.txt')):
     t = ln.split(';')[0].split()
     if not t: continue
@@ -33,6 +34,8 @@ for ln in open(os.path.join(HERE, 'hints.txt')):
     elif t[0] == 'lohi':  # lohi <bank|f> <lo> <hi> <n> [tgtbank|-] [adj]
         lohi_tab.append((bn(t[1]), int(t[2], 16), int(t[3], 16), int(t[4]),
                          int(t[5]) if len(t) > 5 and t[5] != '-' else None, int(t[6]) if len(t) > 6 else 0))
+    elif t[0] == 'dwords':  # dwords <bank> <addr> <n>  : n pointers to DATA in the same bank
+        dwords_tab.append((bn(t[1]), int(t[2], 16), int(t[3])))
     elif t[0] == 'ram':   # ram <addr> <name>
         ramnames[int(t[1], 16)] = t[2]
     elif t[0] == 'name':  # name <bank|f> <addr> <label>
@@ -231,12 +234,18 @@ for i, n in enumerate(['SQ1_VOL','SQ1_SWEEP','SQ1_LO','SQ1_HI','SQ2_VOL','SQ2_SW
                        'DMC_FREQ','DMC_RAW','DMC_START','DMC_LEN']):
     HW[0x4000 + i] = n
 
+autoram = set()
+def ramname(a):
+    if a in ramnames: return ramnames[a]
+    autoram.add(a)
+    return f'zp_{a:02X}' if a < 0x100 else f'ram_{a:04X}'
+
 def fmt_instr(p, pc):
     o, l = instr[(p, pc)]; mn, m = OPS[o]
     val = int.from_bytes(bytes(byte(p, pc + 1 + k) for k in range(l - 1)), 'little') if l > 1 else 0
     def sym(a):
         if a in HW: return HW[a]
-        if a in ramnames: return ramnames[a]
+        if a < 0x2000 or 0x6000 <= a < 0x8000: return ramname(a)
         b = res_bank(a, p, pc)
         if b is not None:
             n = want(b, a)
@@ -251,7 +260,7 @@ def fmt_instr(p, pc):
         if not nm: return f'.byte ${o:02X},${val:02X}   ; {mn} $%04X (target not an instruction start)' % t
         return f'{mn} {nm}'
     if m in ('zp', 'zpx', 'zpy', 'izx', 'izy'):
-        s = ramnames.get(val, f'${val:02X}')
+        s = ramname(val)
         return {'zp': f'{mn} {s}', 'zpx': f'{mn} {s},x', 'zpy': f'{mn} {s},y',
                 'izx': f'{mn} ({s},x)', 'izy': f'{mn} ({s}),y'}[m]
     if m == 'ind': return f'{mn} (${val:04X})'
@@ -289,6 +298,12 @@ for p, a, run in auto_tables:
     for b, t, tp in run:
         nm = want(tp, t)
         if nm: word_cells[(p, b)] = nm
+for b, a, n in dwords_tab:
+    for i in range(n):
+        t = byte(b, a + 2 * i) | byte(b, a + 2 * i + 1) << 8
+        tp = FIXED if t >= 0xC000 else b
+        nm = want(tp, t)
+        if nm: word_cells[(b, a + 2 * i)] = nm
 # lo/hi tables: emit as .byte <label / .byte >label
 lo_cells = {}
 for b, lo, hi, n, tb, adj in lohi_tab:
@@ -321,6 +336,14 @@ def emit_bank(p):
         if (p, a) in lo_cells:
             k, nm, adj = lo_cells[(p, a)]
             out.append(f'    .byte {k}({nm}{"-%d" % -adj if adj < 0 else "+%d" % adj if adj else ""})'); a += 1; continue
+        # long fill runs
+        n = 0
+        while (a + n < base + 0x4000 and byte(p, a + n) == byte(p, a)
+               and (n == 0 or ((p, a + n) not in labels and a + n not in text
+                               and (p, a + n) not in word_cells and (p, a + n) not in lo_cells))):
+            n += 1
+        if n >= 8:
+            out.append(f'    .res {n}, ${byte(p, a):02X}'); a += n; continue
         # data run until next label / instr / special cell
         run = []
         while a < base + 0x4000 and len(run) < 16 and (run == [] or ((p, a) not in labels and a not in text
@@ -354,6 +377,9 @@ with open(os.path.join(ROOT, 'src', 'hardware.inc'), 'w') as f:
     for a, n in sorted(HW.items()): f.write(f'{n} = ${a:04X}\n')
     f.write('\n; RAM (names inferred from usage)\n')
     for a, n in sorted(ramnames.items()): f.write(f'{n} = ${a:04X}\n')
+    f.write('\n; unnamed RAM locations referenced by code\n')
+    for a in sorted(autoram - set(ramnames)):
+        f.write((f'zp_{a:02X} = ${a:02X}' if a < 0x100 else f'ram_{a:04X} = ${a:04X}') + '\n')
 
 ncode = len(code_bytes)
 print('auto pointer tables:', len(auto_tables), 'words:', sum(len(r) for _,_,r in auto_tables))

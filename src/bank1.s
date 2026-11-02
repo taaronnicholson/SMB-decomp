@@ -11,105 +11,105 @@ B1_8000:
     .word F_D4D8
     .byte $D0,$CC,$C8,$C4,$C0,$BC,$B8,$B4,$B0,$AC,$A8,$A4,$A0,$9C,$98,$94
     .byte $90,$8C,$88,$84,$80,$7C,$78,$74,$70,$6C,$68,$64,$60,$5C,$58,$54
-    LDA $63
+    LDA zp_63
     CMP #$10
     BNE B1_8033
     RTS
 B1_8033:
-    LDA $E1
+    LDA zp_E1
     BEQ B1_808F
     LDX #$00
     JSR B1_813E
     LDA #$01
-    STA $ED
-    LDA $E5
+    STA zp_ED
+    LDA zp_E5
     SEC
-    SBC $68
-    STA $54
-    LDA $E7
-    SBC $69
-    STA $53
-    LDA $54
+    SBC zp_68
+    STA zp_54
+    LDA zp_E7
+    SBC zp_69
+    STA zp_53
+    LDA zp_54
     SEC
     SBC #$10
-    STA $54
-    STA $EF
-    LDA $53
+    STA zp_54
+    STA zp_EF
+    LDA zp_53
     SBC #$00
     BNE B1_8075
-    LDA $54
-    STA $024F
-    LDA $E9
+    LDA zp_54
+    STA ram_024F
+    LDA zp_E9
     SEC
-    SBC $6A
-    STA $53
-    LDA $EB
-    SBC $6B
+    SBC zp_6A
+    STA zp_53
+    LDA zp_EB
+    SBC zp_6B
     BNE B1_8075
-    LDA $53
-    STA $F1
+    LDA zp_53
+    STA zp_F1
     JMP B1_807C
 B1_8075:
     LDA #$00
-    STA $ED
+    STA zp_ED
     JMP B1_808F
 B1_807C:
-    STA $024C
-    LDX $F5
+    STA ram_024C
+    LDX zp_F5
     LDA B1_8105,x
-    STA $024D
-    LDA $F3
+    STA ram_024D
+    LDA zp_F3
     ORA B1_80EB,x
-    STA $024E
+    STA ram_024E
 B1_808F:
-    LDA $E2
+    LDA zp_E2
     BNE B1_8094
     RTS
 B1_8094:
     LDX #$01
     JSR B1_813E
     LDA #$01
-    STA $EE
-    LDA $E6
+    STA zp_EE
+    LDA zp_E6
     SEC
-    SBC $68
-    STA $54
-    LDA $E8
-    SBC $69
-    STA $53
-    LDA $54
+    SBC zp_68
+    STA zp_54
+    LDA zp_E8
+    SBC zp_69
+    STA zp_53
+    LDA zp_54
     SEC
     SBC #$10
-    STA $54
-    STA $F0
-    LDA $53
+    STA zp_54
+    STA zp_F0
+    LDA zp_53
     SBC #$00
     BNE B1_80D2
-    LDA $54
-    STA $0253
-    LDA $EA
+    LDA zp_54
+    STA ram_0253
+    LDA zp_EA
     SEC
-    SBC $6A
-    STA $53
-    LDA $EC
-    SBC $6B
+    SBC zp_6A
+    STA zp_53
+    LDA zp_EC
+    SBC zp_6B
     BNE B1_80D2
-    LDA $53
-    STA $F2
+    LDA zp_53
+    STA zp_F2
     JMP B1_80D7
 B1_80D2:
     LDA #$00
-    STA $EE
+    STA zp_EE
     RTS
 B1_80D7:
-    STA $0250
-    LDX $F6
+    STA ram_0250
+    LDX zp_F6
 B1_80DC:
     LDA B1_8105,x
-    STA $0251
-    LDA $F4
+    STA ram_0251
+    LDA zp_F4
     ORA B1_80EB,x
-    STA $0252
+    STA ram_0252
     RTS
 B1_80EB:
     .byte $00,$00,$01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03,$00,$00,$03
@@ -137,317 +137,317 @@ B1_811F:
     .word B1_865F
     .word B1_8679
 B1_813E:
-    LDA $E1,x
+    LDA zp_E1,x
     ASL a
     TAY
     LDA B1_811E,y
-    STA $51
+    STA zp_51
     LDA B1_811F,y
-    STA $52
+    STA zp_52
     JMP ($0051)
 B1_814F:
-    DEC $E0
+    DEC zp_E0
     BNE B1_8156
     JMP B1_8568
 B1_8156:
-    LDA $E3,x
+    LDA zp_E3,x
     BEQ B1_815D
     SEC
     SBC #$01
 B1_815D:
-    STA $E3,x
+    STA zp_E3,x
     AND #$03
     CLC
     ADC #$05
-    STA $F5,x
-    LDA $ED,x
+    STA zp_F5,x
+    LDA zp_ED,x
     BNE B1_816E
-    STA $E0
-    STA $E1,x
+    STA zp_E0
+    STA zp_E1,x
 B1_816E:
     RTS
 B1_816F:
-    LDA $E9,x
+    LDA zp_E9,x
     CLC
     ADC #$04
-    STA $55
-    LDA $EB,x
+    STA zp_55
+    LDA zp_EB,x
     ADC #$00
-    STA $56
-    LDA $E5,x
+    STA zp_56
+    LDA zp_E5,x
     CLC
     ADC #$08
-    STA $51
-    LDA $E7,x
+    STA zp_51
+    LDA zp_E7,x
     ADC #$00
-    STA $52
+    STA zp_52
     JSR F_EF24
     JSR F_F81C
     JSR F_FC26
     TAY
-    LDA $03A4,y
+    LDA ram_03A4,y
     AND #$01
     BNE B1_81D0
     JSR B1_8982
-    LDA $E5,x
+    LDA zp_E5,x
     CLC
     ADC #$02
-    STA $E5,x
-    LDA $E7,x
+    STA zp_E5,x
+    LDA zp_E7,x
     ADC #$00
-    STA $E7,x
-    LDA $34
+    STA zp_E7,x
+    LDA zp_34
     SEC
     SBC #$09
-    STA $53
-    LDA $35
+    STA zp_53
+    LDA zp_35
     SBC #$00
-    STA $54
-    LDA $53
+    STA zp_54
+    LDA zp_53
     SEC
-    SBC $E5,x
-    LDA $54
-    SBC $E7,x
+    SBC zp_E5,x
+    LDA zp_54
+    SBC zp_E7,x
     BCC B1_81C3
     RTS
 B1_81C3:
-    LDA $53
+    LDA zp_53
     CLC
     ADC #$01
-    STA $E5,x
-    LDA $54
+    STA zp_E5,x
+    LDA zp_54
     ADC #$00
-    STA $E7,x
+    STA zp_E7,x
 B1_81D0:
     JSR B1_83FB
-    LDA $E1,x
+    LDA zp_E1,x
     EOR #$01
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_81DA:
     .byte $B5,$E9
     CLC
     ADC #$04
-    STA $55
-    LDA $EB,x
+    STA zp_55
+    LDA zp_EB,x
     ADC #$00
-    STA $56
-    LDA $E5,x
-    STA $51
-    LDA $E7,x
-    STA $52
+    STA zp_56
+    LDA zp_E5,x
+    STA zp_51
+    LDA zp_E7,x
+    STA zp_52
     JSR F_EF24
     JSR F_F81C
     JSR F_FC26
     TAY
-    LDA $03A4,y
+    LDA ram_03A4,y
     AND #$01
     BNE B1_8219
     JSR B1_8982
-    LDA $E5,x
+    LDA zp_E5,x
     SEC
     SBC #$02
-    STA $E5,x
-    LDA $E7,x
+    STA zp_E5,x
+    LDA zp_E7,x
     SBC #$00
-    STA $E7,x
+    STA zp_E7,x
     BCC B1_8213
     RTS
 B1_8213:
     LDA #$00
-    STA $E5,x
-    STA $E7,x
+    STA zp_E5,x
+    STA zp_E7,x
 B1_8219:
     JSR B1_83FB
-    LDA $E1,x
+    LDA zp_E1,x
     EOR #$01
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_8223:
-    LDA $E9,x
-    STA $55
-    LDA $EB,x
-    STA $56
-    LDA $E5,x
+    LDA zp_E9,x
+    STA zp_55
+    LDA zp_EB,x
+    STA zp_56
+    LDA zp_E5,x
     CLC
     ADC #$04
-    STA $51
-    LDA $E7,x
+    STA zp_51
+    LDA zp_E7,x
     ADC #$00
-    STA $52
+    STA zp_52
     JSR F_EF24
     JSR F_F81C
     JSR F_FC26
     TAY
-    LDA $03A4,y
+    LDA ram_03A4,y
     AND #$01
     BNE B1_8262
     JSR B1_8982
-    LDA $E9,x
+    LDA zp_E9,x
     SEC
     SBC #$02
-    STA $E9,x
-    LDA $EB,x
+    STA zp_E9,x
+    LDA zp_EB,x
     SBC #$00
-    STA $EB,x
+    STA zp_EB,x
     BCC B1_825C
     RTS
 B1_825C:
     LDA #$00
-    STA $E9,x
-    STA $EB,x
+    STA zp_E9,x
+    STA zp_EB,x
 B1_8262:
     JSR B1_83FB
-    LDA $E1,x
+    LDA zp_E1,x
     EOR #$02
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_826C:
     .byte $B5,$E9,$18,$69,$08,$85,$55,$B5,$EB,$69,$00,$85,$56,$B5,$E5,$18
     .byte $69,$04,$85,$51,$B5,$E7,$69,$00,$85,$52,$20
 B1_8287:
-    BIT $EF
+    BIT zp_EF
     JSR F_F81C
     JSR F_FC26
     TAY
-    LDA $03A4,y
+    LDA ram_03A4,y
     AND #$01
     BEQ B1_829A
     JMP B1_83F1
 B1_829A:
     JSR B1_8982
-    LDA $E9,x
-    STA $55
-    LDA $EB,x
-    STA $56
-    LDA $E5,x
+    LDA zp_E9,x
+    STA zp_55
+    LDA zp_EB,x
+    STA zp_56
+    LDA zp_E5,x
     CLC
     ADC #$04
-    STA $51
-    LDA $E7,x
+    STA zp_51
+    LDA zp_E7,x
     ADC #$00
-    STA $52
+    STA zp_52
     JSR F_EF24
-    LDA $51
+    LDA zp_51
     PHA
-    LDA $52
+    LDA zp_52
     PHA
     JSR F_FC26
-    STY $52
+    STY zp_52
     TAY
-    LDA $03A4,y
-    STA $75
+    LDA ram_03A4,y
+    STA zp_75
     AND #$FC
     ASL a
-    ROL $52
+    ROL zp_52
     ASL a
-    ROL $52
+    ROL zp_52
     ADC #$3C
-    STA $51
-    LDA $52
+    STA zp_51
+    LDA zp_52
     ADC #$C3
-    STA $52
-    LDA $E5,x
+    STA zp_52
+    LDA zp_E5,x
     CLC
     ADC #$04
     AND #$0F
     CLC
-    ADC $51
-    STA $51
-    LDA $52
+    ADC zp_51
+    STA zp_51
+    LDA zp_52
     ADC #$00
-    STA $52
+    STA zp_52
     LDY #$00
-    LDA ($51),y
-    STA $53
+    LDA (zp_51),y
+    STA zp_53
     CMP #$FF
     BEQ B1_8317
-    LDA $E9,x
+    LDA zp_E9,x
     AND #$0F
-    CMP $53
+    CMP zp_53
     BCS B1_8317
-    LDA $E9,x
+    LDA zp_E9,x
     AND #$F0
     CLC
-    ADC $53
+    ADC zp_53
     SEC
     SBC #$08
-    STA $E9,x
-    LDA $EB,x
+    STA zp_E9,x
+    LDA zp_EB,x
     SBC #$00
-    STA $EB,x
+    STA zp_EB,x
     PLA
-    STA $52
+    STA zp_52
     PLA
-    STA $51
+    STA zp_51
     JMP B1_838D
 B1_8317:
     PLA
-    STA $52
+    STA zp_52
     PLA
-    STA $51
-    LDA $51
+    STA zp_51
+    LDA zp_51
     CLC
-    ADC $23
-    STA $51
-    LDA $52
+    ADC zp_23
+    STA zp_51
+    LDA zp_52
     ADC #$00
-    STA $52
+    STA zp_52
     LDY #$00
     JSR F_FC26
-    STY $52
+    STY zp_52
     TAY
-    LDA $03A4,y
-    STA $75
+    LDA ram_03A4,y
+    STA zp_75
     AND #$FC
     ASL a
-    ROL $52
+    ROL zp_52
     ASL a
-    ROL $52
+    ROL zp_52
     ADC #$3C
-    STA $51
-    LDA $52
+    STA zp_51
+    LDA zp_52
     ADC #$C3
-    STA $52
-    LDA $E5,x
+    STA zp_52
+    LDA zp_E5,x
     CLC
     ADC #$04
     AND #$0F
     CLC
-    ADC $51
-    STA $51
-    LDA $52
+    ADC zp_51
+    STA zp_51
+    LDA zp_52
     ADC #$00
-    STA $52
+    STA zp_52
     LDY #$00
-    LDA ($51),y
-    STA $53
+    LDA (zp_51),y
+    STA zp_53
     CMP #$FF
     BEQ B1_83BE
-    LDA $53
+    LDA zp_53
     CLC
     ADC #$10
-    STA $53
-    LDA $E9,x
+    STA zp_53
+    LDA zp_E9,x
     AND #$0F
     CLC
     ADC #$08
-    CMP $53
+    CMP zp_53
     BCC B1_83BE
-    LDA $53
+    LDA zp_53
     SEC
     SBC #$08
-    STA $53
-    LDA $E9,x
+    STA zp_53
+    LDA zp_E9,x
     AND #$F0
     CLC
-    ADC $53
-    STA $E9,x
-    LDA $EB,x
+    ADC zp_53
+    STA zp_E9,x
+    LDA zp_EB,x
     ADC #$00
-    STA $EB,x
+    STA zp_EB,x
 B1_838D:
-    LDA $75
+    LDA zp_75
     LSR a
     LSR a
     TAY
@@ -455,63 +455,63 @@ B1_838D:
     CMP #$03
     BCS B1_83A0
 B1_8399:
-    LDA $E1,x
+    LDA zp_E1,x
     EOR #$02
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_83A0:
     AND #$01
     BNE B1_83B1
-    LDA $E1,x
+    LDA zp_E1,x
     AND #$01
     BEQ B1_8399
-    LDA $E1,x
+    LDA zp_E1,x
     EOR #$03
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_83B1:
-    LDA $E1,x
+    LDA zp_E1,x
     AND #$01
     BNE B1_8399
-    LDA $E1,x
+    LDA zp_E1,x
     EOR #$03
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_83BE:
-    LDA $E9,x
+    LDA zp_E9,x
     CLC
     ADC #$02
-    STA $E9,x
-    LDA $EB,x
+    STA zp_E9,x
+    LDA zp_EB,x
     ADC #$00
-    STA $EB,x
-    LDA $36
+    STA zp_EB,x
+    LDA zp_36
     SEC
     SBC #$09
-    STA $53
-    LDA $37
+    STA zp_53
+    LDA zp_37
     SBC #$00
-    STA $54
-    LDA $53
+    STA zp_54
+    LDA zp_53
     SEC
-    SBC $E9,x
-    LDA $54
-    SBC $EB,x
+    SBC zp_E9,x
+    LDA zp_54
+    SBC zp_EB,x
     BCC B1_83E4
     RTS
 B1_83E4:
-    LDA $53
+    LDA zp_53
     CLC
     ADC #$01
-    STA $E9,x
-    LDA $54
+    STA zp_E9,x
+    LDA zp_54
     ADC #$00
-    STA $EB,x
+    STA zp_EB,x
 B1_83F1:
     JSR B1_83FB
-    LDA $E1,x
+    LDA zp_E1,x
     EOR #$02
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_83FB:
     JSR F_FC26
@@ -523,119 +523,119 @@ B1_83FB:
     PLA
     PLA
     LDA #$03
-    STA $E1,x
+    STA zp_E1,x
     ASL a
-    STA $E3,x
+    STA zp_E3,x
     LDA #$00
-    STA $F5,x
-    STA $E0
+    STA zp_F5,x
+    STA zp_E0
 B1_8416:
     RTS
 B1_8417:
     LDA #$00
-    STA $F5,x
-    DEC $E3,x
+    STA zp_F5,x
+    DEC zp_E3,x
     BNE B1_846C
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_8422:
     LDA #$01
-    STA $F5,x
+    STA zp_F5,x
     LDA #$10
-    STA $53
+    STA zp_53
     LDA #$00
-    STA $54
+    STA zp_54
     LDA #$40
-    STA $51
-    LDA $66
+    STA zp_51
+    LDA zp_66
     BNE B1_8440
     LDA #$F8
-    STA $53
-    DEC $54
+    STA zp_53
+    DEC zp_54
     LDA #$00
-    STA $51
+    STA zp_51
 B1_8440:
-    LDA $51
-    STA $F3,x
-    LDA $60
+    LDA zp_51
+    STA zp_F3,x
+    LDA zp_60
     CLC
     ADC #$08
-    STA $E9,x
-    LDA $61
+    STA zp_E9,x
+    LDA zp_61
     ADC #$00
-    STA $EB,x
-    LDA $5E
-    ADC $53
-    STA $E5,x
-    LDA $5F
-    ADC $54
-    STA $E7,x
-    DEC $E3,x
+    STA zp_EB,x
+    LDA zp_5E
+    ADC zp_53
+    STA zp_E5,x
+    LDA zp_5F
+    ADC zp_54
+    STA zp_E7,x
+    DEC zp_E3,x
     BEQ B1_846C
     LDA #$02
-    STA $E1,x
-    STA $F5,x
+    STA zp_E1,x
+    STA zp_F5,x
     LDA #$2E
     JSR F_CE8F
 B1_846C:
     RTS
 B1_846D:
-    LDA $ED,x
+    LDA zp_ED,x
     BNE B1_8474
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_8474:
-    LDA $E9,x
+    LDA zp_E9,x
     CLC
     ADC #$02
-    STA $77
-    STA $55
-    LDA $EB,x
+    STA zp_77
+    STA zp_55
+    LDA zp_EB,x
     ADC #$00
-    STA $56
-    LDA $E5,x
+    STA zp_56
+    LDA zp_E5,x
     CLC
     ADC #$04
-    STA $51
-    LDA $E7,x
+    STA zp_51
+    LDA zp_E7,x
     ADC #$00
-    STA $52
-    LDA $51
+    STA zp_52
+    LDA zp_51
     PHA
-    LDA $52
+    LDA zp_52
     PHA
     JSR F_EF24
-    LDA $51
-    STA $75
-    LDA $52
-    STA $76
+    LDA zp_51
+    STA zp_75
+    LDA zp_52
+    STA zp_76
     JSR F_FC26
     TAY
     PLA
-    STA $52
+    STA zp_52
     PLA
-    STA $51
-    LDA $03A4,y
-    STA $53
+    STA zp_51
+    LDA ram_03A4,y
+    STA zp_53
     AND #$03
     BNE B1_84DE
-    LDA $E9,x
+    LDA zp_E9,x
     CLC
     ADC #$04
-    STA $77
-    STA $55
-    LDA $EB,x
+    STA zp_77
+    STA zp_55
+    LDA zp_EB,x
     ADC #$00
-    STA $56
+    STA zp_56
     JSR F_EF24
-    LDA $51
-    STA $75
-    LDA $52
-    STA $76
+    LDA zp_51
+    STA zp_75
+    LDA zp_52
+    STA zp_76
     JSR F_FC26
     TAY
-    LDA $03A4,y
-    STA $53
+    LDA ram_03A4,y
+    STA zp_53
     AND #$03
     BNE B1_84DE
     JMP B1_8574
@@ -643,48 +643,48 @@ B1_84DE:
     CMP #$02
     BNE B1_8528
     LDY #$00
-    LDA $53
+    LDA zp_53
     AND #$FC
-    STY $52
+    STY zp_52
     ASL a
-    ROL $52
+    ROL zp_52
     ASL a
-    ROL $52
+    ROL zp_52
     ADC #$3C
-    STA $51
-    LDA $52
+    STA zp_51
+    LDA zp_52
     ADC #$C3
-    STA $52
-    LDA $E5,x
+    STA zp_52
+    LDA zp_E5,x
     CLC
     ADC #$04
     AND #$0F
     CLC
-    ADC $51
-    STA $51
-    LDA $52
+    ADC zp_51
+    STA zp_51
+    LDA zp_52
     ADC #$00
-    STA $52
-    LDA ($51),y
-    STA $53
+    STA zp_52
+    LDA (zp_51),y
+    STA zp_53
     CMP #$FF
     BEQ B1_8574
-    LDA $77
+    LDA zp_77
     AND #$0F
     SEC
-    SBC $53
+    SBC zp_53
     BCS B1_8528
-    LDA $77
+    LDA zp_77
     ADC #$04
     AND #$0F
     SEC
-    SBC $53
+    SBC zp_53
     BCC B1_8574
 B1_8528:
-    LDA $75
-    STA $51
-    LDA $76
-    STA $52
+    LDA zp_75
+    STA zp_51
+    LDA zp_76
+    STA zp_52
     JSR F_FC26
     CMP #$DA
     BNE B1_853A
@@ -706,97 +706,97 @@ B1_854F:
     BNE B1_8568
     JSR F_F6B0
     JSR F_F192
-    LDA $51
-    STA $0721
-    LDA $52
-    STA $0722
+    LDA zp_51
+    STA ram_0721
+    LDA zp_52
+    STA ram_0722
     LDA #$02
-    STA $0720
+    STA ram_0720
 B1_8568:
     LDA #$03
-    STA $E1,x
+    STA zp_E1,x
     ASL a
-    STA $E3,x
+    STA zp_E3,x
     LDA #$00
-    STA $F5,x
+    STA zp_F5,x
     RTS
 B1_8574:
-    LDA $F3,x
+    LDA zp_F3,x
     BEQ B1_85B6
-    LDA $E5,x
+    LDA zp_E5,x
     CLC
     ADC #$02
-    STA $51
-    STA $E5,x
-    LDA $E7,x
+    STA zp_51
+    STA zp_E5,x
+    LDA zp_E7,x
     ADC #$00
-    STA $52
-    STA $E7,x
-    LDA $34
+    STA zp_52
+    STA zp_E7,x
+    LDA zp_34
     CLC
     ADC #$08
-    STA $53
-    LDA $35
+    STA zp_53
+    LDA zp_35
     ADC #$00
-    STA $54
-    LDA $53
+    STA zp_54
+    LDA zp_53
     SEC
-    SBC $51
-    LDA $54
-    SBC $52
+    SBC zp_51
+    LDA zp_54
+    SBC zp_52
     BCS B1_85B5
-    LDA $53
+    LDA zp_53
     CLC
     ADC #$01
-    STA $E5,x
-    STA $53
-    LDA $54
+    STA zp_E5,x
+    STA zp_53
+    LDA zp_54
     ADC #$00
-    STA $E7,x
-    STA $54
+    STA zp_E7,x
+    STA zp_54
     JMP B1_8568
 B1_85B5:
     RTS
 B1_85B6:
-    LDA $E5,x
+    LDA zp_E5,x
     SEC
     SBC #$02
-    STA $E5,x
-    LDA $E7,x
+    STA zp_E5,x
+    LDA zp_E7,x
     SBC #$00
-    STA $E7,x
+    STA zp_E7,x
     BCS B1_85B5
     LDA #$00
-    STA $E5,x
-    STA $E7,x
+    STA zp_E5,x
+    STA zp_E7,x
     JMP B1_8568
 B1_85CE:
-    LDA $60
+    LDA zp_60
     CLC
     ADC #$02
-    STA $E9,x
-    LDA $61
+    STA zp_E9,x
+    LDA zp_61
     ADC #$00
-    STA $EB,x
-    LDA $5E
+    STA zp_EB,x
+    LDA zp_5E
     CLC
     ADC #$04
-    STA $E5,x
-    LDA $5F
+    STA zp_E5,x
+    LDA zp_5F
     ADC #$00
-    STA $E7,x
+    STA zp_E7,x
     LDA #$08
-    STA $F5,x
+    STA zp_F5,x
     LDA #$00
-    STA $F3,x
+    STA zp_F3,x
     LDA #$0A
-    STA $53
-    LDA $66
+    STA zp_53
+    LDA zp_66
     BEQ B1_85FA
-    INC $53
+    INC zp_53
 B1_85FA:
-    LDA $53
-    STA $E1,x
+    LDA zp_53
+    STA zp_E1,x
     LDA #$0A
     JSR F_CE8F
     RTS
@@ -821,178 +821,178 @@ B1_8622:
     JSR B1_814F
     RTS
 B1_862C:
-    LDA $60
+    LDA zp_60
     SEC
     SBC #$0D
-    STA $E9,x
-    LDA $61
+    STA zp_E9,x
+    LDA zp_61
     SBC #$00
-    STA $EB,x
-    LDA $5E
+    STA zp_EB,x
+    LDA zp_5E
     CLC
     ADC #$04
-    STA $E5,x
-    LDA $5F
+    STA zp_E5,x
+    LDA zp_5F
     ADC #$00
-    STA $E7,x
-    INC $E3,x
-    LDA $E3,x
+    STA zp_E7,x
+    INC zp_E3,x
+    LDA zp_E3,x
     AND #$02
     BEQ B1_8654
     LDA #$00
-    STA $E9,x
-    STA $EB,x
+    STA zp_E9,x
+    STA zp_EB,x
 B1_8654:
     LDA #$11
-    STA $F5,x
+    STA zp_F5,x
     LDA #$00
-    STA $E1,x
-    STA $F3,x
+    STA zp_E1,x
+    STA zp_F3,x
     RTS
 B1_865F:
     LDA #$00
-    STA $E3,x
-    STA $C8
-    STA $C9
+    STA zp_E3,x
+    STA zp_C8
+    STA zp_C9
     LDA #$06
-    STA $CA
-    STA $C1
+    STA zp_CA
+    STA zp_C1
     LDA #$46
-    STA $CC
+    STA zp_CC
     LDA #$0F
-    STA $E1,x
+    STA zp_E1,x
     LDA #$13
-    STA $F5,x
+    STA zp_F5,x
 B1_8679:
     JSR B1_8795
-    LDA $C1
+    LDA zp_C1
     BEQ B1_8688
-    LDA $C9
-    ORA $CA
+    LDA zp_C9
+    ORA zp_CA
     BNE B1_8693
-    STA $C1
+    STA zp_C1
 B1_8688:
     LDA #$0A
-    STA $E3,x
+    STA zp_E3,x
     LDA #$03
-    STA $E1,x
+    STA zp_E1,x
     JMP B1_8711
 B1_8693:
-    LDA $C9
+    LDA zp_C9
     SEC
     SBC #$01
-    STA $C9
-    LDA $CA
+    STA zp_C9
+    LDA zp_CA
     SBC #$00
-    STA $CA
-    LDA $66
-    STA $54
-    LDA $63
+    STA zp_CA
+    LDA zp_66
+    STA zp_54
+    LDA zp_63
     CMP #$08
     BEQ B1_86B2
     CMP #$02
     BNE B1_86B6
-    LDA $7C
+    LDA zp_7C
     BEQ B1_86B6
 B1_86B2:
-    LDA $7F
-    STA $54
+    LDA zp_7F
+    STA zp_54
 B1_86B6:
-    LDA $C8
-    STA $53
-    LDA $CB
+    LDA zp_C8
+    STA zp_53
+    LDA zp_CB
     BEQ B1_86E6
-    LDA $54
+    LDA zp_54
     BNE B1_86D4
-    LDA $53
+    LDA zp_53
     SEC
     SBC #$02
-    STA $53
+    STA zp_53
     BCS B1_86DC
     LDA #$00
-    STA $CB
-    STA $53
+    STA zp_CB
+    STA zp_53
     JMP B1_86DC
 B1_86D4:
-    LDA $53
+    LDA zp_53
     CMP #$04
     BCS B1_86DC
-    INC $53
+    INC zp_53
 B1_86DC:
-    LDA $C7
+    LDA zp_C7
     CLC
-    ADC $53
-    STA $C7
+    ADC zp_53
+    STA zp_C7
     JMP B1_870D
 B1_86E6:
-    LDA $54
+    LDA zp_54
     BEQ B1_86FE
-    LDA $53
+    LDA zp_53
     SEC
     SBC #$02
-    STA $53
+    STA zp_53
     BCS B1_8706
     ADC #$01
-    STA $CB
+    STA zp_CB
     LDA #$00
-    STA $53
+    STA zp_53
     JMP B1_8706
 B1_86FE:
-    LDA $53
+    LDA zp_53
     CMP #$04
     BCS B1_8706
-    INC $53
+    INC zp_53
 B1_8706:
-    LDA $C7
+    LDA zp_C7
     SEC
-    SBC $53
-    STA $C7
+    SBC zp_53
+    STA zp_C7
 B1_870D:
-    LDA $53
-    STA $C8
+    LDA zp_53
+    STA zp_C8
 B1_8711:
     LDA #$01
-    STA $53
-    LDA $CB
+    STA zp_53
+    LDA zp_CB
     BNE B1_871D
     LDA #$FF
-    STA $53
+    STA zp_53
 B1_871D:
-    LDA $E3,x
+    LDA zp_E3,x
     CLC
-    ADC $53
-    STA $E3,x
+    ADC zp_53
+    STA zp_E3,x
     LSR a
     AND #$0E
     TAY
     LDA B1_8785,y
-    STA $F5,x
+    STA zp_F5,x
     LDA B1_8786,y
-    STA $F3,x
-    LDA $E9,x
+    STA zp_F3,x
+    LDA zp_E9,x
     CLC
     ADC #$04
-    STA $55
-    LDA $EB,x
+    STA zp_55
+    LDA zp_EB,x
     ADC #$00
-    STA $56
-    LDA $E5,x
+    STA zp_56
+    LDA zp_E5,x
     CLC
     ADC #$04
-    STA $51
-    LDA $E7,x
+    STA zp_51
+    LDA zp_E7,x
     ADC #$00
-    STA $52
-    LDA $F3,x
+    STA zp_52
+    LDA zp_F3,x
     AND #$80
     BEQ B1_875F
-    LDA $E9,x
+    LDA zp_E9,x
     SEC
     SBC #$08
-    STA $E9,x
-    LDA $EB,x
+    STA zp_E9,x
+    LDA zp_EB,x
     SBC #$00
-    STA $EB,x
+    STA zp_EB,x
 B1_875F:
     JSR F_EF24
     JSR F_FC26
@@ -1004,160 +1004,160 @@ B1_876A:
     LDA #$39
     JSR F_CE8F
     JSR F_F192
-    LDA $51
-    STA $0721
-    LDA $52
-    STA $0722
+    LDA zp_51
+    STA ram_0721
+    LDA zp_52
+    STA ram_0722
     LDA #$02
-    STA $0720
+    STA ram_0720
     RTS
 B1_8785:
     .byte $03
 B1_8786:
     .byte $00,$04,$00,$12,$00,$13,$00,$03,$C0,$04,$C0,$12,$C0,$13,$C0
 B1_8795:
-    LDY $C7
+    LDY zp_C7
     JSR F_CEA6
-    STA $53
+    STA zp_53
     JSR F_CEBA
-    STA $54
-    STA $52
+    STA zp_54
+    STA zp_52
     BPL B1_87AE
-    LDA $52
+    LDA zp_52
     EOR #$FF
     CLC
     ADC #$01
-    STA $52
+    STA zp_52
 B1_87AE:
-    LDA $CC
-    STA $55
+    LDA zp_CC
+    STA zp_55
     JSR F_FCDC
-    INC $52
-    LDA $54
+    INC zp_52
+    LDA zp_54
     BPL B1_87CB
-    LDA $5E
+    LDA zp_5E
     SEC
-    SBC $52
-    STA $51
-    LDA $5F
+    SBC zp_52
+    STA zp_51
+    LDA zp_5F
     SBC #$00
-    STA $52
+    STA zp_52
     JMP B1_87D8
 B1_87CB:
-    LDA $5E
+    LDA zp_5E
     CLC
-    ADC $52
-    STA $51
-    LDA $5F
+    ADC zp_52
+    STA zp_51
+    LDA zp_5F
     ADC #$00
-    STA $52
+    STA zp_52
 B1_87D8:
-    LDA $51
+    LDA zp_51
     CLC
     ADC #$04
-    STA $E5,x
-    LDA $52
+    STA zp_E5,x
+    LDA zp_52
     ADC #$00
-    STA $E7,x
-    LDA $53
-    STA $52
+    STA zp_E7,x
+    LDA zp_53
+    STA zp_52
     BPL B1_87F4
-    LDA $52
+    LDA zp_52
     EOR #$FF
     CLC
     ADC #$01
-    STA $52
+    STA zp_52
 B1_87F4:
-    LDA $CC
-    STA $55
+    LDA zp_CC
+    STA zp_55
     JSR F_FCDC
-    INC $52
-    LDA $53
+    INC zp_52
+    LDA zp_53
     BPL B1_880F
-    LDA $60
+    LDA zp_60
     SEC
-    SBC $52
-    STA $E9,x
-    LDA $61
+    SBC zp_52
+    STA zp_E9,x
+    LDA zp_61
     SBC #$00
-    STA $EB,x
+    STA zp_EB,x
     RTS
 B1_880F:
-    LDA $60
+    LDA zp_60
     CLC
-    ADC $52
-    STA $E9,x
-    LDA $61
+    ADC zp_52
+    STA zp_E9,x
+    LDA zp_61
     ADC #$00
-    STA $EB,x
+    STA zp_EB,x
     RTS
 B1_881D:
-    LDA $01AF
+    LDA ram_01AF
     CLC
     ADC #$03
-    STA $51
-    LDA $01B0
+    STA zp_51
+    LDA ram_01B0
     ADC #$00
-    STA $52
-    LDA $E9,x
+    STA zp_52
+    LDA zp_E9,x
     SEC
-    SBC $51
-    LDA $EB,x
-    SBC $52
+    SBC zp_51
+    LDA zp_EB,x
+    SBC zp_52
     BCS B1_883C
     LDA #$00
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_883C:
-    LDY $E3,x
-    INC $E3,x
+    LDY zp_E3,x
+    INC zp_E3,x
     LDA B1_8889,y
-    STA $56
+    STA zp_56
     LSR a
     LSR a
-    STA $53
+    STA zp_53
     LSR a
     LSR a
     BNE B1_8850
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_8850:
-    STA $F5,x
-    LDA $53
+    STA zp_F5,x
+    LDA zp_53
     AND #$03
-    STA $53
-    LDA $E9,x
+    STA zp_53
+    LDA zp_E9,x
     SEC
-    SBC $53
-    STA $E9,x
-    LDA $EB,x
+    SBC zp_53
+    STA zp_E9,x
+    LDA zp_EB,x
     SBC #$00
-    STA $EB,x
-    LDA $56
+    STA zp_EB,x
+    LDA zp_56
     AND #$01
-    STA $53
+    STA zp_53
     LDA #$00
-    STA $54
-    LDA $56
+    STA zp_54
+    LDA zp_56
     AND #$02
     BEQ B1_887B
     LDA #$FF
-    STA $54
-    STA $53
+    STA zp_54
+    STA zp_53
 B1_887B:
-    LDA $E5,x
+    LDA zp_E5,x
     CLC
-    ADC $53
-    STA $E5,x
-    LDA $E7,x
-    ADC $54
-    STA $E7,x
+    ADC zp_53
+    STA zp_E5,x
+    LDA zp_E7,x
+    ADC zp_54
+    STA zp_E7,x
     RTS
 B1_8889:
     CPY #$C0
-    LDY $B4,x
-    LDY $A4
-    LDY $98
+    LDY zp_B4,x
+    LDY zp_A4
+    LDY zp_98
     TYA
     TYA
     TYA
@@ -1176,42 +1176,42 @@ B1_8889:
     TAY
     TAY
     TAY
-    LDY $B4
-    LDY $B0,x
+    LDY zp_B4
+    LDY zp_B0,x
     CPY #$C0
     BNE B1_88AF
 B1_88AF:
-    LDA $60
+    LDA zp_60
     CLC
     ADC #$03
-    STA $E9,x
-    LDA $61
+    STA zp_E9,x
+    LDA zp_61
     ADC #$00
-    STA $EB,x
+    STA zp_EB,x
     LDA #$FC
-    STA $53
+    STA zp_53
     LDA #$FF
-    STA $54
-    LDA $66
+    STA zp_54
+    LDA zp_66
     BEQ B1_88D0
     LDA #$0C
-    STA $53
+    STA zp_53
     LDA #$00
-    STA $54
+    STA zp_54
 B1_88D0:
-    LDA $5E
+    LDA zp_5E
     CLC
-    ADC $53
-    STA $E5,x
-    LDA $5F
-    ADC $54
-    STA $E7,x
+    ADC zp_53
+    STA zp_E5,x
+    LDA zp_5F
+    ADC zp_54
+    STA zp_E7,x
     LDA #$0C
-    STA $F5,x
+    STA zp_F5,x
     LDA #$00
-    STA $E3,x
+    STA zp_E3,x
     LDA #$05
-    STA $E1,x
+    STA zp_E1,x
     RTS
     .byte $00,$00,$00,$00,$FF,$00,$FE,$00,$FD,$FF,$FD,$FF,$FE,$FE,$FF,$FE
     .byte $FF,$FE,$00,$FE,$01,$FF,$02,$FF,$02,$FF,$02,$00,$80,$00,$00,$00
@@ -1219,120 +1219,116 @@ B1_88D0:
     .byte $02,$02,$01,$02,$01,$02,$00,$80
 B1_8922:
     LDA #$10
-    STA $F5,x
+    STA zp_F5,x
     LDA #$07
-    STA $53
+    STA zp_53
     LDA #$89
-    STA $54
+    STA zp_54
     JMP B1_893D
 B1_8931:
     LDA #$0F
-    STA $F5,x
+    STA zp_F5,x
     LDA #$EA
-    STA $53
+    STA zp_53
     LDA #$88
-    STA $54
+    STA zp_54
 B1_893D:
-    LDA $E3,x
-    INC $E3,x
+    LDA zp_E3,x
+    INC zp_E3,x
     ASL a
     TAY
-    LDA ($53),y
+    LDA (zp_53),y
     INY
-    STA $51
+    STA zp_51
     CMP #$80
     BNE B1_8951
     LDA #$00
-    STA $E1,x
+    STA zp_E1,x
     RTS
 B1_8951:
     LDA #$00
-    STA $52
+    STA zp_52
     BCC B1_8959
-    DEC $52
+    DEC zp_52
 B1_8959:
-    LDA $E9,x
+    LDA zp_E9,x
     CLC
-    ADC $51
-    STA $E9,x
-    LDA $EB,x
-    ADC $52
-    STA $EB,x
+    ADC zp_51
+    STA zp_E9,x
+    LDA zp_EB,x
+    ADC zp_52
+    STA zp_EB,x
     LDA #$00
-    STA $52
-    LDA ($53),y
-    STA $51
+    STA zp_52
+    LDA (zp_53),y
+    STA zp_51
     CMP #$80
     BCC B1_8974
-    DEC $52
+    DEC zp_52
 B1_8974:
-    LDA $E5,x
+    LDA zp_E5,x
     CLC
-    ADC $51
-    STA $E5,x
-    LDA $E7,x
-    ADC $52
-    STA $E7,x
+    ADC zp_51
+    STA zp_E5,x
+    LDA zp_E7,x
+    ADC zp_52
+    STA zp_E7,x
 B1_8981:
     RTS
 B1_8982:
-    LDA $EF,x
+    LDA zp_EF,x
     CMP #$EC
     BCS B1_8981
     CMP #$10
     BCC B1_8981
-    LDA $F1,x
+    LDA zp_F1,x
     CMP #$E0
     BCS B1_8981
     CMP #$10
     BCC B1_8981
     JMP F_F0EA
-    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$0A,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$0E,$12,$12,$12,$05,$0E,$0E,$0E,$0E,$00,$05
-    .byte $05,$05,$05,$05,$00,$0E,$44,$00,$0E,$00,$00,$0E,$26,$00,$0A,$00
-    .byte $00,$06,$24,$00,$14,$25,$22,$0E,$2D,$22,$0A,$2E,$24,$0A,$2F,$26
-    .byte $0A,$2F,$24,$0A,$30,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$2F,$24,$0A
-    .byte $2F,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$30,$24,$0A,$2F,$26,$0A,$2F
-    .byte $24,$0A,$2F,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$2F,$22,$0A,$2E,$22
-    .byte $0A,$2D,$22,$0F,$25,$00,$07,$24,$FF
+    .res 76, $00
+    .byte $0A,$00,$00,$00,$00,$00,$00,$00,$00,$0E,$12,$12,$12,$05,$0E,$0E
+    .byte $0E,$0E,$00,$05,$05,$05,$05,$05,$00,$0E,$44,$00,$0E,$00,$00,$0E
+    .byte $26,$00,$0A,$00,$00,$06,$24,$00,$14,$25,$22,$0E,$2D,$22,$0A,$2E
+    .byte $24,$0A,$2F,$26,$0A,$2F,$24,$0A,$30,$26,$0A,$2F,$24,$0A,$2F,$26
+    .byte $0A,$2F,$24,$0A,$2F,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$30,$24,$0A
+    .byte $2F,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$2F
+    .byte $22,$0A,$2E,$22,$0A,$2D,$22,$0F,$25,$00,$07,$24,$FF
 B1_8A52:
-    LDA $0570,x
+    LDA ram_0570,x
     ORA #$04
-    STA $0570,x
+    STA ram_0570,x
     RTS
-    STX $42
-    LDA $04B0,x
+    STX zp_42
+    LDA ram_04B0,x
     SEC
-    SBC $6A
-    STA $53
-    LDA $04E0,x
-    SBC $6B
+    SBC zp_6A
+    STA zp_53
+    LDA ram_04E0,x
+    SBC zp_6B
     BNE B1_8A52
-    LDA $0510,x
+    LDA ram_0510,x
     SEC
-    SBC $68
-    STA $55
-    LDA $0540,x
-    SBC $69
-    STA $56
-    LDA $55
+    SBC zp_68
+    STA zp_55
+    LDA ram_0540,x
+    SBC zp_69
+    STA zp_56
+    LDA zp_55
     SBC #$0F
-    LDA $56
+    LDA zp_56
     SBC #$01
     BCS B1_8A52
-    LDA $55
+    LDA zp_55
     SBC #$0F
-    STA $55
-    LDA $56
+    STA zp_55
+    LDA zp_56
     SBC #$00
-    STA $56
-    LDA $0570,x
+    STA zp_56
+    LDA ram_0570,x
     AND #$FB
-    STA $0570,x
+    STA ram_0570,x
     LSR a
     BCC B1_8A9F
     JMP B1_8C00
@@ -1343,90 +1339,90 @@ B1_8A9F:
 B1_8AA5:
     AND #$3E
     TAY
-    LDA $53
-    STA $0170,x
-    LDA $55
-    STA $0140,x
-    LDA $05A0,x
+    LDA zp_53
+    STA ram_0170,x
+    LDA zp_55
+    STA ram_0140,x
+    LDA ram_05A0,x
     ASL a
     ADC B1_8D7D,y
-    STA farcall_ptr_lo
+    STA tmp_ptr_lo
     LDA B1_8D7E,y
     ADC #$00
-    STA farcall_ptr_hi
+    STA tmp_ptr_hi
     TYA
     LSR a
     TAY
-    LDA $0120,y
-    STA $AF
+    LDA ram_0120,y
+    STA zp_AF
     LDY #$00
-    LDA (farcall_ptr_lo),y
-    ADC farcall_ptr_lo
-    STA $51
+    LDA (tmp_ptr_lo),y
+    ADC tmp_ptr_lo
+    STA zp_51
     INY
-    LDA (farcall_ptr_lo),y
-    ADC farcall_ptr_hi
-    STA $52
+    LDA (tmp_ptr_lo),y
+    ADC tmp_ptr_hi
+    STA zp_52
     DEY
-    LDA $B0
+    LDA zp_B0
     TAX
     SEC
-    SBC ($51),y
+    SBC (zp_51),y
     BCS B1_8AF5
-    ADC ($51),y
+    ADC (zp_51),y
     BNE B1_8AE7
     RTS
 B1_8AE7:
     INY
-    STA $75
+    STA zp_75
     LDA #$00
-    STA $B0
+    STA zp_B0
     LDA B1_8000,x
     TAX
     JMP B1_8B00
 B1_8AF5:
-    STA $B0
+    STA zp_B0
     LDA B1_8000,x
     TAX
-    LDA ($51),y
+    LDA (zp_51),y
     INY
-    STA $75
+    STA zp_75
 B1_8B00:
-    LDA ($51),y
+    LDA (zp_51),y
     INY
     CLC
-    ADC $55
-    STA $AD
-    LDA ($51),y
+    ADC zp_55
+    STA zp_AD
+    LDA (zp_51),y
     INY
-    ADC $56
+    ADC zp_56
     BNE B1_8B40
-    LDA $AD
-    STA $0203,x
-    LDA ($51),y
+    LDA zp_AD
+    STA ram_0203,x
+    LDA (zp_51),y
     INY
     CLC
-    ADC $53
-    STA $AD
-    LDA ($51),y
+    ADC zp_53
+    STA zp_AD
+    LDA (zp_51),y
     INY
     ADC #$00
     BNE B1_8B42
-    LDA $AF
+    LDA zp_AF
     CLC
-    ADC ($51),y
+    ADC (zp_51),y
     INY
-    STA $0201,x
-    LDA ($51),y
+    STA ram_0201,x
+    LDA (zp_51),y
     INY
-    STA $0202,x
-    LDA $AD
-    STA $0200,x
+    STA ram_0202,x
+    LDA zp_AD
+    STA ram_0200,x
     INX
     INX
     INX
     INX
-    DEC $75
+    DEC zp_75
     BNE B1_8B00
     RTS
 B1_8B40:
@@ -1435,105 +1431,105 @@ B1_8B40:
 B1_8B42:
     INY
     INY
-    INC $B0
-    DEC $75
+    INC zp_B0
+    DEC zp_75
     BNE B1_8B00
     RTS
 B1_8B4B:
     AND #$3E
     TAY
-    LDA $53
-    STA $0170,x
-    LDA $55
-    STA $0140,x
-    LDA $05A0,x
+    LDA zp_53
+    STA ram_0170,x
+    LDA zp_55
+    STA ram_0140,x
+    LDA ram_05A0,x
     ASL a
     ADC B1_8D7D,y
-    STA farcall_ptr_lo
+    STA tmp_ptr_lo
     LDA B1_8D7E,y
     ADC #$00
-    STA farcall_ptr_hi
+    STA tmp_ptr_hi
     TYA
     LSR a
     TAY
-    LDA $0120,y
-    STA $AF
+    LDA ram_0120,y
+    STA zp_AF
     LDY #$00
-    LDA (farcall_ptr_lo),y
-    ADC farcall_ptr_lo
-    STA $51
+    LDA (tmp_ptr_lo),y
+    ADC tmp_ptr_lo
+    STA zp_51
     INY
-    LDA (farcall_ptr_lo),y
-    ADC farcall_ptr_hi
-    STA $52
+    LDA (tmp_ptr_lo),y
+    ADC tmp_ptr_hi
+    STA zp_52
     DEY
-    LDA $B0
+    LDA zp_B0
     TAX
     SEC
-    SBC ($51),y
+    SBC (zp_51),y
     BCS B1_8B9B
-    ADC ($51),y
+    ADC (zp_51),y
     BNE B1_8B8D
     RTS
 B1_8B8D:
     INY
-    STA $75
+    STA zp_75
     LDA #$00
-    STA $B0
+    STA zp_B0
     LDA B1_8000,x
     TAX
     JMP B1_8BA6
 B1_8B9B:
-    STA $B0
+    STA zp_B0
     LDA B1_8000,x
     TAX
-    LDA ($51),y
+    LDA (zp_51),y
     INY
-    STA $75
+    STA zp_75
 B1_8BA6:
     LDA #$08
     SEC
-    SBC ($51),y
+    SBC (zp_51),y
     INY
-    STA $AD
+    STA zp_AD
     LDA #$00
-    SBC ($51),y
+    SBC (zp_51),y
     INY
-    STA $AE
-    LDA $AD
+    STA zp_AE
+    LDA zp_AD
     CLC
-    ADC $55
-    STA $AD
-    LDA $AE
-    ADC $56
+    ADC zp_55
+    STA zp_AD
+    LDA zp_AE
+    ADC zp_56
     BNE B1_8BF5
-    LDA $AD
-    STA $0203,x
-    LDA ($51),y
+    LDA zp_AD
+    STA ram_0203,x
+    LDA (zp_51),y
     INY
     CLC
-    ADC $53
-    STA $AD
-    LDA ($51),y
+    ADC zp_53
+    STA zp_AD
+    LDA (zp_51),y
     INY
     ADC #$00
     BNE B1_8BF7
-    LDA $AF
+    LDA zp_AF
     CLC
-    ADC ($51),y
+    ADC (zp_51),y
     INY
-    STA $0201,x
-    LDA ($51),y
+    STA ram_0201,x
+    LDA (zp_51),y
     INY
     EOR #$40
-    STA $0202,x
-    LDA $AD
-    STA $0200,x
+    STA ram_0202,x
+    LDA zp_AD
+    STA ram_0200,x
     INX
     INX
     INX
     INX
-    DEC $75
+    DEC zp_75
     BNE B1_8BA6
     RTS
 B1_8BF5:
@@ -1542,8 +1538,8 @@ B1_8BF5:
 B1_8BF7:
     INY
     INY
-    INC $B0
-    DEC $75
+    INC zp_B0
+    DEC zp_75
     BNE B1_8BA6
     RTS
 B1_8C00:
@@ -1553,98 +1549,98 @@ B1_8C00:
 B1_8C06:
     AND #$3E
     TAY
-    LDA $53
-    STA $0170,x
-    LDA $55
-    STA $0140,x
-    LDA $05A0,x
+    LDA zp_53
+    STA ram_0170,x
+    LDA zp_55
+    STA ram_0140,x
+    LDA ram_05A0,x
     ASL a
     ADC B1_8D7D,y
-    STA farcall_ptr_lo
+    STA tmp_ptr_lo
     LDA B1_8D7E,y
     ADC #$00
-    STA farcall_ptr_hi
+    STA tmp_ptr_hi
     TYA
     LSR a
     TAY
-    LDA $0120,y
-    STA $AF
+    LDA ram_0120,y
+    STA zp_AF
     LDY #$00
-    LDA (farcall_ptr_lo),y
-    ADC farcall_ptr_lo
-    STA $51
+    LDA (tmp_ptr_lo),y
+    ADC tmp_ptr_lo
+    STA zp_51
     INY
-    LDA (farcall_ptr_lo),y
-    ADC farcall_ptr_hi
-    STA $52
+    LDA (tmp_ptr_lo),y
+    ADC tmp_ptr_hi
+    STA zp_52
     DEY
-    LDA $B0
+    LDA zp_B0
     TAX
     SEC
-    SBC ($51),y
+    SBC (zp_51),y
     BCS B1_8C56
-    ADC ($51),y
+    ADC (zp_51),y
     BNE B1_8C48
     RTS
 B1_8C48:
     INY
-    STA $75
+    STA zp_75
     LDA #$00
-    STA $B0
+    STA zp_B0
     LDA B1_8000,x
     TAX
     JMP B1_8C61
 B1_8C56:
-    STA $B0
+    STA zp_B0
     LDA B1_8000,x
     TAX
-    LDA ($51),y
+    LDA (zp_51),y
     INY
-    STA $75
+    STA zp_75
 B1_8C61:
-    LDA ($51),y
+    LDA (zp_51),y
     INY
     CLC
-    ADC $55
-    STA $AD
-    LDA ($51),y
+    ADC zp_55
+    STA zp_AD
+    LDA (zp_51),y
     INY
-    ADC $56
+    ADC zp_56
     BNE B1_8CB0
-    LDA $AD
-    STA $0203,x
+    LDA zp_AD
+    STA ram_0203,x
     LDA #$00
     SEC
-    SBC ($51),y
+    SBC (zp_51),y
     INY
-    STA $AD
+    STA zp_AD
     LDA #$00
-    SBC ($51),y
+    SBC (zp_51),y
     INY
-    STA $AE
-    LDA $AD
+    STA zp_AE
+    LDA zp_AD
     CLC
-    ADC $53
-    STA $AD
-    LDA $AE
+    ADC zp_53
+    STA zp_AD
+    LDA zp_AE
     ADC #$00
     BNE B1_8CB2
-    LDA $AF
+    LDA zp_AF
     CLC
-    ADC ($51),y
+    ADC (zp_51),y
     INY
-    STA $0201,x
-    LDA ($51),y
+    STA ram_0201,x
+    LDA (zp_51),y
     INY
     EOR #$80
-    STA $0202,x
-    LDA $AD
-    STA $0200,x
+    STA ram_0202,x
+    LDA zp_AD
+    STA ram_0200,x
     INX
     INX
     INX
     INX
-    DEC $75
+    DEC zp_75
     BNE B1_8C61
     RTS
 B1_8CB0:
@@ -1653,112 +1649,112 @@ B1_8CB0:
 B1_8CB2:
     INY
     INY
-    INC $B0
-    DEC $75
+    INC zp_B0
+    DEC zp_75
     BNE B1_8C61
     RTS
 B1_8CBB:
     AND #$3E
     TAY
-    LDA $53
-    STA $0170,x
-    LDA $55
-    STA $0140,x
-    LDA $05A0,x
+    LDA zp_53
+    STA ram_0170,x
+    LDA zp_55
+    STA ram_0140,x
+    LDA ram_05A0,x
     ASL a
     ADC B1_8D7D,y
-    STA farcall_ptr_lo
+    STA tmp_ptr_lo
     LDA B1_8D7E,y
     ADC #$00
-    STA farcall_ptr_hi
+    STA tmp_ptr_hi
     TYA
     LSR a
     TAY
-    LDA $0120,y
-    STA $AF
+    LDA ram_0120,y
+    STA zp_AF
     LDY #$00
-    LDA (farcall_ptr_lo),y
-    ADC farcall_ptr_lo
-    STA $51
+    LDA (tmp_ptr_lo),y
+    ADC tmp_ptr_lo
+    STA zp_51
     INY
-    LDA (farcall_ptr_lo),y
-    ADC farcall_ptr_hi
-    STA $52
+    LDA (tmp_ptr_lo),y
+    ADC tmp_ptr_hi
+    STA zp_52
     DEY
-    LDA $B0
+    LDA zp_B0
     TAX
     SEC
-    SBC ($51),y
+    SBC (zp_51),y
     BCS B1_8D0B
-    ADC ($51),y
+    ADC (zp_51),y
     BNE B1_8CFD
     RTS
 B1_8CFD:
     INY
-    STA $75
+    STA zp_75
     LDA #$00
-    STA $B0
+    STA zp_B0
     LDA B1_8000,x
     TAX
     JMP B1_8D16
 B1_8D0B:
-    STA $B0
+    STA zp_B0
     LDA B1_8000,x
     TAX
-    LDA ($51),y
+    LDA (zp_51),y
     INY
-    STA $75
+    STA zp_75
 B1_8D16:
     LDA #$08
     SEC
-    SBC ($51),y
+    SBC (zp_51),y
     INY
-    STA $AD
+    STA zp_AD
     LDA #$00
-    SBC ($51),y
+    SBC (zp_51),y
     INY
-    STA $AE
-    LDA $AD
+    STA zp_AE
+    LDA zp_AD
     CLC
-    ADC $55
-    STA $AD
-    LDA $AE
-    ADC $56
+    ADC zp_55
+    STA zp_AD
+    LDA zp_AE
+    ADC zp_56
     BNE B1_8D72
-    LDA $AD
-    STA $0203,x
+    LDA zp_AD
+    STA ram_0203,x
     LDA #$00
     SEC
-    SBC ($51),y
+    SBC (zp_51),y
     INY
-    STA $AD
+    STA zp_AD
     LDA #$00
-    SBC ($51),y
+    SBC (zp_51),y
     INY
-    STA $AE
-    LDA $AD
+    STA zp_AE
+    LDA zp_AD
     CLC
-    ADC $53
-    STA $AD
-    LDA $AE
+    ADC zp_53
+    STA zp_AD
+    LDA zp_AE
     ADC #$00
     BNE B1_8D74
-    LDA $AF
+    LDA zp_AF
     CLC
-    ADC ($51),y
+    ADC (zp_51),y
     INY
-    STA $0201,x
-    LDA ($51),y
+    STA ram_0201,x
+    LDA (zp_51),y
     INY
     EOR #$C0
-    STA $0202,x
-    LDA $AD
-    STA $0200,x
+    STA ram_0202,x
+    LDA zp_AD
+    STA ram_0200,x
     INX
     INX
     INX
     INX
-    DEC $75
+    DEC zp_75
     BNE B1_8D16
     RTS
 B1_8D72:
@@ -1767,8 +1763,8 @@ B1_8D72:
 B1_8D74:
     INY
     INY
-    INC $B0
-    DEC $75
+    INC zp_B0
+    DEC zp_75
     BNE B1_8D16
     RTS
 B1_8D7D:
@@ -2316,380 +2312,380 @@ B1_AAA8:
     .byte $FF,$03,$FF,$92,$00,$04,$20,$00,$C0,$0B,$00,$00,$00,$FF,$00,$00
     .byte $FE,$FF,$1E,$18,$02,$FF,$FF,$00,$00,$FE,$FF
     LDA #$02
-    STA $01A6
-    LDA $60
-    STA $F8
-    LDA $61
-    STA $F9
-    LDA $5E
-    STA $53
-    STA $FA
-    LDA $5F
-    STA $54
-    STA $FB
-    LDA $1D
+    STA ram_01A6
+    LDA zp_60
+    STA zp_F8
+    LDA zp_61
+    STA zp_F9
+    LDA zp_5E
+    STA zp_53
+    STA zp_FA
+    LDA zp_5F
+    STA zp_54
+    STA zp_FB
+    LDA zp_1D
     CLC
     ADC #$12
-    STA $60
-    LDA $1E
+    STA zp_60
+    LDA zp_1E
     ADC #$01
-    STA $61
-    LDA $1B
+    STA zp_61
+    LDA zp_1B
     CLC
     ADC #$7C
-    STA $5E
-    LDA $1C
+    STA zp_5E
+    LDA zp_1C
     ADC #$00
-    STA $5F
+    STA zp_5F
     LDA #$00
-    STA $55
-    LDA $5E
+    STA zp_55
+    LDA zp_5E
     SEC
-    SBC $53
-    STA $53
-    LDA $5F
-    SBC $54
-    STA $54
+    SBC zp_53
+    STA zp_53
+    LDA zp_5F
+    SBC zp_54
+    STA zp_54
     BCS B1_AF74
-    LDA $53
+    LDA zp_53
     EOR #$FF
     CLC
     ADC #$01
-    STA $53
-    INC $55
+    STA zp_53
+    INC zp_55
 B1_AF74:
-    LDA $55
-    STA $D1
+    LDA zp_55
+    STA zp_D1
     LDA #$00
-    STA $55
+    STA zp_55
     LDA #$52
-    STA $54
-    LDA $53
-    CMP $54
+    STA zp_54
+    LDA zp_53
+    CMP zp_54
     BCC B1_AF90
-    INC $55
-    LDY $53
-    LDA $54
-    STA $53
-    STY $54
+    INC zp_55
+    LDY zp_53
+    LDA zp_54
+    STA zp_53
+    STY zp_54
 B1_AF90:
-    LDA $53
-    STA $D2
-    LDA $54
-    STA $D3
-    LDA $55
-    STA $D4
+    LDA zp_53
+    STA zp_D2
+    LDA zp_54
+    STA zp_D3
+    LDA zp_55
+    STA zp_D4
     LDA #$3E
-    STA $65
+    STA zp_65
     LDA #$00
-    STA $D5
-    STA $81
-    STA $80
-    STA $D6
+    STA zp_D5
+    STA zp_81
+    STA zp_80
+    STA zp_D6
     LDA #$12
-    STA $63
+    STA zp_63
     RTS
     JSR B1_B129
-    LDA $60
+    LDA zp_60
     SEC
     SBC #$02
-    STA $53
-    STA $60
-    LDA $61
+    STA zp_53
+    STA zp_60
+    LDA zp_61
     SBC #$00
-    STA $54
-    STA $61
-    LDA $F8
+    STA zp_54
+    STA zp_61
+    LDA zp_F8
     SEC
-    SBC $53
-    LDA $F9
-    SBC $54
+    SBC zp_53
+    LDA zp_F9
+    SBC zp_54
     BCC B1_AFD2
     LDA #$13
-    STA $63
+    STA zp_63
 B1_AFD2:
     RTS
     JSR B1_B129
-    LDY $D6
+    LDY zp_D6
     LDA B1_B06A,y
     CMP #$14
     BNE B1_AFE4
-    STA $63
+    STA zp_63
     JMP B1_AFF8
 B1_AFE4:
-    STA $53
-    LDA $60
+    STA zp_53
+    LDA zp_60
     SEC
-    SBC $53
-    STA $60
-    LDA $61
+    SBC zp_53
+    STA zp_60
+    LDA zp_61
     SBC #$00
-    STA $61
-    INC $D6
+    STA zp_61
+    INC zp_D6
     JMP B1_B015
 B1_AFF8:
-    DEC $D6
+    DEC zp_D6
     BNE B1_B005
     LDA #$15
-    STA $63
+    STA zp_63
     LDA #$07
-    STA $80
+    STA zp_80
     RTS
 B1_B005:
-    LDY $D6
-    LDA $60
+    LDY zp_D6
+    LDA zp_60
     CLC
     ADC B1_B06A,y
-    STA $60
-    LDA $61
+    STA zp_60
+    LDA zp_61
     ADC #$00
-    STA $61
+    STA zp_61
 B1_B015:
     LDA #$00
-    STA $56
-    LDA $D2
-    STA $53
-    LDA $D3
-    STA $54
-    STA $55
-    INC $55
-    LDA $D4
+    STA zp_56
+    LDA zp_D2
+    STA zp_53
+    LDA zp_D3
+    STA zp_54
+    STA zp_55
+    INC zp_55
+    LDA zp_D4
     BNE B1_B03A
-    LDA $D5
+    LDA zp_D5
     CLC
-    ADC $53
-    CMP $55
+    ADC zp_53
+    CMP zp_55
     BCS B1_B048
-    INC $56
+    INC zp_56
     SEC
-    SBC $54
+    SBC zp_54
     JMP B1_B048
 B1_B03A:
-    LDA $D5
+    LDA zp_D5
 B1_B03C:
-    INC $56
+    INC zp_56
     CLC
-    ADC $53
-    CMP $55
+    ADC zp_53
+    CMP zp_55
     BCS B1_B03C
     SEC
-    SBC $54
+    SBC zp_54
 B1_B048:
-    STA $D5
-    LDA $D1
+    STA zp_D5
+    LDA zp_D1
     BEQ B1_B05C
-    LDA $5E
+    LDA zp_5E
     CLC
-    ADC $56
-    STA $5E
-    LDA $5F
+    ADC zp_56
+    STA zp_5E
+    LDA zp_5F
     ADC #$00
-    STA $5F
+    STA zp_5F
     RTS
 B1_B05C:
-    LDA $5E
+    LDA zp_5E
     SEC
-    SBC $56
-    STA $5E
-    LDA $5F
+    SBC zp_56
+    STA zp_5E
+    LDA zp_5F
     SBC #$00
-    STA $5F
+    STA zp_5F
     RTS
 B1_B06A:
-    .byte $02,$02,$02,$02,$02,$02,$02,$02,$01,$02,$02,$02,$01,$02,$02,$01
-    .byte $02,$02,$01,$01,$01,$02,$01,$01,$01,$01,$02,$01,$01,$01,$01,$01
-    .byte $00,$01,$00,$01,$00,$00,$00,$00,$00,$14,$A5,$D6,$4A,$A8,$B9,$44
-    .byte $B1,$C9,$80,$D0,$09,$A9,$15,$85,$65,$C6,$80,$F0,$1F,$60,$85,$53
-    .byte $A9,$00,$85,$54,$A5,$53,$C9,$FF,$D0,$02,$C6,$54,$A5,$60,$18,$65
-    .byte $53,$85,$60,$A5,$61,$65,$54,$85,$61,$E6,$D6,$60,$A9,$4A,$20,$8F
-    .byte $CE,$A5,$F8,$85,$60,$A5,$F9,$85,$61,$A5,$FA,$85,$5E,$A5,$FB,$85
-    .byte $5F,$A5,$99,$85,$63,$A9,$00
+    .res 8, $02
+    .byte $01,$02,$02,$02,$01,$02,$02,$01,$02,$02,$01,$01,$01,$02,$01,$01
+    .byte $01,$01,$02,$01,$01,$01,$01,$01,$00,$01,$00,$01,$00,$00,$00,$00
+    .byte $00,$14,$A5,$D6,$4A,$A8,$B9,$44,$B1,$C9,$80,$D0,$09,$A9,$15,$85
+    .byte $65,$C6,$80,$F0,$1F,$60,$85,$53,$A9,$00,$85,$54,$A5,$53,$C9,$FF
+    .byte $D0,$02,$C6,$54,$A5,$60,$18,$65,$53,$85,$60,$A5,$61,$65,$54,$85
+    .byte $61,$E6,$D6,$60,$A9,$4A,$20,$8F,$CE,$A5,$F8,$85,$60,$A5,$F9,$85
+    .byte $61,$A5,$FA,$85,$5E,$A5,$FB,$85,$5F,$A5,$99,$85,$63,$A9,$00
 B1_B0E1:
-    STA $F3
-    STA $F4
-    STA $E3
-    STA $E4
-    STA $01A6
-    STA $6F
-    STA $6E
-    STA $7B
+    STA zp_F3
+    STA zp_F4
+    STA zp_E3
+    STA zp_E4
+    STA ram_01A6
+    STA zp_6F
+    STA zp_6E
+    STA zp_7B
     LDA #$96
-    STA $7A
+    STA zp_7A
     LDA #$0C
-    STA $E1
+    STA zp_E1
     LDA #$0D
-    STA $E2
+    STA zp_E2
     LDA #$0F
-    STA $F5
+    STA zp_F5
     LDA #$10
-    STA $F6
-    LDA $60
+    STA zp_F6
+    LDA zp_60
     SEC
     SBC #$08
-    STA $E9
-    STA $EA
-    LDA $61
+    STA zp_E9
+    STA zp_EA
+    LDA zp_61
     SBC #$00
-    STA $EB
-    STA $EC
-    LDA $5E
-    STA $E5
+    STA zp_EB
+    STA zp_EC
+    LDA zp_5E
+    STA zp_E5
     CLC
     ADC #$08
-    STA $E6
-    LDA $5F
-    STA $E7
+    STA zp_E6
+    LDA zp_5F
+    STA zp_E7
     ADC #$00
-    STA $E8
+    STA zp_E8
     RTS
 B1_B129:
-    LDA $80
+    LDA zp_80
     CLC
     ADC #$01
     CMP #$08
     BNE B1_B141
-    LDY $81
+    LDY zp_81
     LDA B1_B151,y
     CMP #$FF
     BEQ B1_B143
-    STA $65
-    INC $81
+    STA zp_65
+    INC zp_81
     LDA #$00
 B1_B141:
-    STA $80
+    STA zp_80
 B1_B143:
     RTS
     .byte $00,$00,$00,$00,$FF,$00,$01,$01,$FF,$FF,$00,$00,$80
 B1_B151:
     .byte $3E,$3E,$3F,$40,$41,$42,$43,$4C,$4D,$FF
-    LDA $072D
+    LDA ram_072D
     BEQ B1_B193
-    LDA $60
+    LDA zp_60
     CLC
-    ADC $0741
-    STA $60
+    ADC ram_0741
+    STA zp_60
     LDA #$00
-    STA $0741
-    LDA $61
-    ADC $0742
-    STA $61
+    STA ram_0741
+    LDA zp_61
+    ADC ram_0742
+    STA zp_61
     LDA #$00
-    STA $0742
-    LDA $5E
+    STA ram_0742
+    LDA zp_5E
     CLC
-    ADC $0743
-    STA $5E
+    ADC ram_0743
+    STA zp_5E
     LDA #$00
-    STA $0743
+    STA ram_0743
     INY
-    LDA $5F
-    ADC $0744
-    STA $5F
+    LDA zp_5F
+    ADC ram_0744
+    STA zp_5F
     LDA #$00
-    STA $0744
+    STA ram_0744
 B1_B193:
-    LDA $1D
+    LDA zp_1D
     SEC
     SBC #$30
-    LDA $1E
+    LDA zp_1E
     SBC #$00
     BCC B1_B1A1
     JMP B1_B22E
 B1_B1A1:
     LDA #$04
-    STA $01A6
+    STA ram_01A6
     LDA #$FF
-    STA $55
-    STA $56
-    LDA $60
+    STA zp_55
+    STA zp_56
+    LDA zp_60
     SEC
     SBC #$63
-    STA $53
-    LDA $61
+    STA zp_53
+    LDA zp_61
     SBC #$00
     BCS B1_B1C3
     PHA
     LDA #$01
-    STA $55
+    STA zp_55
     LDA #$00
-    STA $56
+    STA zp_56
     PLA
 B1_B1C3:
-    ORA $53
-    STA $73
+    ORA zp_53
+    STA zp_73
     BEQ B1_B1E0
-    LDA $55
-    STA $0741
-    LDA $56
-    STA $0742
-    LDA $60
+    LDA zp_55
+    STA ram_0741
+    LDA zp_56
+    STA ram_0742
+    LDA zp_60
     CLC
-    ADC $55
-    STA $60
-    LDA $61
-    ADC $56
-    STA $61
+    ADC zp_55
+    STA zp_60
+    LDA zp_61
+    ADC zp_56
+    STA zp_61
 B1_B1E0:
     LDA #$01
-    STA $55
-    STA $53
+    STA zp_55
+    STA zp_53
     LDA #$00
-    STA $56
-    LDA $5E
+    STA zp_56
+    LDA zp_5E
     SEC
     SBC #$77
-    STA $51
-    LDA $5F
+    STA zp_51
+    LDA zp_5F
     SBC #$00
-    STA $52
+    STA zp_52
     BCC B1_B205
     PHA
-    LDA $56
-    STA $53
+    LDA zp_56
+    STA zp_53
     LDA #$FF
-    STA $55
-    STA $56
+    STA zp_55
+    STA zp_56
     PLA
 B1_B205:
-    ORA $51
+    ORA zp_51
     BEQ B1_B21A
-    LDA $53
-    STA $66
-    LDA $5E
+    LDA zp_53
+    STA zp_66
+    LDA zp_5E
     CLC
-    ADC $55
-    STA $5E
-    LDA $5F
-    ADC $56
-    STA $5F
+    ADC zp_55
+    STA zp_5E
+    LDA zp_5F
+    ADC zp_56
+    STA zp_5F
 B1_B21A:
-    LDA $73
-    ORA $51
-    ORA $52
+    LDA zp_73
+    ORA zp_51
+    ORA zp_52
     BNE B1_B235
-    STA $BD
+    STA zp_BD
     LDA #$18
-    STA $63
+    STA zp_63
     LDA #$43
     JMP F_CE61
     .byte $60
 B1_B22E:
     LDA #$02
-    STA $64
+    STA zp_64
     JSR F_EB25
 B1_B235:
-    LDA $B1
+    LDA zp_B1
     LSR a
     LSR a
     AND #$01
     CLC
     ADC #$07
-    STA $65
+    STA zp_65
 B1_B240:
     RTS
-    LDA $072D
+    LDA ram_072D
     BNE B1_B235
-    LDA $BD
+    LDA zp_BD
     ASL a
     TAY
     LDA B1_B272,y
@@ -2699,19 +2695,19 @@ B1_B240:
     CMP #$44
     BNE B1_B25B
     LDX #$0A
-    STX $072C
+    STX ram_072C
 B1_B25B:
-    STA $65
-    LDA $60
+    STA zp_65
+    LDA zp_60
     CLC
     ADC B1_B272,y
-    STA $60
-    LDA $61
+    STA zp_60
+    LDA zp_61
     ADC #$00
-    STA $61
-    INC $BD
+    STA zp_61
+    INC zp_BD
     LDA #$01
-    STA $66
+    STA zp_66
     RTS
 B1_B272:
     .byte $32,$00,$32,$00,$32,$00,$32,$00,$32,$00,$33,$00,$33,$00,$33,$00
@@ -2725,66 +2721,66 @@ B1_B272:
     .byte $00,$00,$00,$00,$21,$00,$21,$00,$21,$00,$21,$00,$22,$00,$22,$00
     .byte $22,$00,$22,$00,$21,$00,$21,$00,$21,$00,$00,$00,$00,$00,$00,$00
     .byte $44,$00,$FF,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$4D,$00,$4D,$00,$00,$0C,$0D,$00,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$00,$00,$00,$00,$00,$4E,$00,$4E,$00,$00,$00,$00
-    .byte $00,$00,$14,$14,$0D,$00,$4D,$00,$00,$00,$00,$00,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$00,$00,$A2,$00,$00,$4D,$00,$4D,$00,$A3,$00,$00
-    .byte $03,$0B,$14,$14,$00,$0C,$0D,$00,$3C,$02,$01,$3F,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$00,$D0,$00,$00,$0C,$4F,$00,$4D,$00,$00,$C4,$00
-    .byte $04,$0E,$14,$14,$00,$00,$00,$00,$00,$00,$00,$00,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$3E,$02,$01,$3D,$00,$4D,$00,$4D,$00,$3C,$02,$01
-    .byte $02,$3F,$14,$14,$00,$00,$4C,$4C,$4C,$4C,$4C,$4C,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$00,$00,$00,$00,$00,$4D,$0C,$0D,$00,$00,$00,$00
-    .byte $00,$00,$14,$14,$33,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$03,$03,$00,$A1,$00,$4D,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$14,$14,$33,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$04,$04,$00,$00,$00,$4D,$00,$2F,$00,$00,$00,$34
-    .byte $35,$36,$14,$14,$33,$33,$33,$33,$33,$33,$33,$14,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$3E,$3D,$00,$00,$0C,$0D,$00,$00,$00,$A0,$00,$34
-    .byte $35,$36,$14,$14,$14,$14,$14,$14,$14,$14,$33,$14,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$3C
-    .byte $01,$3F,$14,$14,$14,$14,$14,$14,$14,$14,$33,$33,$33,$33,$33,$33
-    .byte $33,$33,$14,$14,$3E,$02,$3D,$00,$00,$00,$9E,$00,$00,$00,$00,$00
-    .byte $00,$00,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
-    .byte $14,$33,$14,$14,$00,$00,$00,$00,$2F,$00,$00,$00,$2F,$00,$00,$00
-    .byte $9F,$00,$14,$14,$00,$00,$96,$00,$00,$97,$00,$00,$98,$00,$00,$00
-    .byte $00,$00,$30,$30,$00,$9B,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$14,$14,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$32,$31,$00,$00,$00,$00,$00,$9C,$00,$00,$00,$9D,$00,$00
-    .byte $3C,$3F,$14,$14,$34,$35,$35,$35,$35,$36,$00,$00,$C4,$00,$00,$00
-    .byte $00,$37,$35,$35,$38,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$14,$14,$3E,$02,$01,$02,$02,$01,$02,$02,$3D,$00,$00,$00
-    .byte $00,$00,$00,$32,$00,$00,$00,$00,$00,$00,$2F,$00,$00,$00,$2F,$00
-    .byte $00,$00,$14,$14,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$37
-    .byte $35,$35,$35,$35,$35,$38,$00,$00,$9A,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$0B,$14,$14,$00,$2F,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$0E,$14,$14,$2F,$2E,$29,$29,$29,$29,$29,$29,$29,$29,$29,$29
-    .byte $29,$29,$29,$29,$29,$29,$29,$2F,$00,$00,$00,$00,$99,$00,$00,$3C
-    .byte $01,$3F,$14,$14,$00,$28,$00,$4C,$4C,$4C,$4C,$4C,$4C,$4C,$4C,$4C
-    .byte $4C,$4C,$4C,$4C,$4C,$00,$00,$00,$00,$4C,$4C,$00,$00,$00,$00,$00
-    .byte $00,$00,$14,$14,$0B,$28,$0B,$0B,$0B,$0B,$0B,$0B,$0B,$0B,$0B,$0B
-    .byte $0B,$0B,$0B,$0B,$0B,$0B,$0B,$03,$0B,$0B,$0B,$0B,$03,$0B,$03,$0B
-    .byte $03,$03,$14,$14,$0E,$28,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
-    .byte $0E,$0E,$0E,$0E,$0E,$0E,$0E,$04,$0E,$0E,$0E,$0E,$04,$0E,$04,$0E
-    .byte $04,$04,$14,$14,$3D,$28,$3C,$02,$01,$02,$02,$02,$02,$01,$01,$02
-    .byte $02,$02,$02,$02,$02,$02,$02,$01,$02,$02,$02,$02,$02,$02,$01,$02
-    .byte $02,$3F,$14,$14,$00,$28,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $C7,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$14,$14,$00,$28,$00,$00,$00,$00,$17,$05,$06,$1A,$00,$00
-    .byte $C7,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$7D,$00,$00
-    .byte $00,$00,$14,$14,$00,$28,$00,$00,$00,$00,$1B,$07,$08,$1E,$00,$00
-    .byte $C7,$00,$00,$7B,$00,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
-    .byte $D8,$D8,$14,$14,$00,$2F,$00,$00,$03,$0B,$00,$09,$0A,$21,$00,$00
-    .byte $C7,$00,$00,$C6,$00,$14,$D9,$D9,$D9,$D9,$D9,$14,$D9,$D9,$D9,$14
-    .byte $D9,$00,$14,$14,$00,$00,$00,$00,$04,$0E,$00,$00,$00,$00,$00,$37
-    .byte $35,$38,$00,$00,$00,$14,$D9,$00,$14,$D9,$D9,$D9,$D9,$14,$D9,$D9
-    .byte $D9,$D9,$14,$14,$00,$00,$00,$37,$35,$35,$38,$00,$00,$00,$00,$34
-    .byte $35,$35,$36,$00,$00,$14,$D9,$D9,$D9,$D9,$D9,$14,$D9,$D9,$D9,$D9
-    .byte $14,$CF,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
-    .byte $14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
-    .byte $14,$14,$14
+    .res 20, $14
+    .byte $4D,$00,$4D,$00,$00,$0C,$0D,$00,$14,$14,$14,$14,$14,$14,$14,$14
+    .byte $00,$00,$00,$00,$00,$4E,$00,$4E,$00,$00,$00,$00,$00,$00,$14,$14
+    .byte $0D,$00,$4D,$00,$00,$00,$00,$00,$14,$14,$14,$14,$14,$14,$14,$14
+    .byte $00,$00,$A2,$00,$00,$4D,$00,$4D,$00,$A3,$00,$00,$03,$0B,$14,$14
+    .byte $00,$0C,$0D,$00,$3C,$02,$01,$3F,$14,$14,$14,$14,$14,$14,$14,$14
+    .byte $00,$D0,$00,$00,$0C,$4F,$00,$4D,$00,$00,$C4,$00,$04,$0E,$14,$14
+    .res 8, $00
+    .res 8, $14
+    .byte $3E,$02,$01,$3D,$00,$4D,$00,$4D,$00,$3C,$02,$01,$02,$3F,$14,$14
+    .byte $00,$00,$4C,$4C,$4C,$4C,$4C,$4C,$14,$14,$14,$14,$14,$14,$14,$14
+    .byte $00,$00,$00,$00,$00,$4D,$0C,$0D,$00,$00,$00,$00,$00,$00,$14,$14
+    .byte $33,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
+    .byte $03,$03,$00,$A1,$00,$4D,$00,$00,$00,$00,$00,$00,$00,$00,$14,$14
+    .byte $33,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
+    .byte $04,$04,$00,$00,$00,$4D,$00,$2F,$00,$00,$00,$34,$35,$36,$14,$14
+    .byte $33,$33,$33,$33,$33,$33,$33,$14,$14,$14,$14,$14,$14,$14,$14,$14
+    .byte $3E,$3D,$00,$00,$0C,$0D,$00,$00,$00,$A0,$00,$34,$35,$36,$14,$14
+    .byte $14,$14,$14,$14,$14,$14,$33,$14,$14,$14,$14,$14,$14,$14,$14,$14
+    .res 11, $00
+    .byte $3C,$01,$3F,$14,$14,$14,$14,$14,$14,$14,$14,$33,$33,$33,$33,$33
+    .byte $33,$33,$33,$14,$14,$3E,$02,$3D,$00,$00,$00,$9E,$00,$00,$00,$00
+    .byte $00,$00,$00,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
+    .byte $14,$14,$33,$14,$14,$00,$00,$00,$00,$2F,$00,$00,$00,$2F,$00,$00
+    .byte $00,$9F,$00,$14,$14,$00,$00,$96,$00,$00,$97,$00,$00,$98,$00,$00
+    .byte $00,$00,$00,$30,$30,$00,$9B,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    .byte $00,$00,$00,$14,$14,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    .byte $00,$00,$00,$32,$31,$00,$00,$00,$00,$00,$9C,$00,$00,$00,$9D,$00
+    .byte $00,$3C,$3F,$14,$14,$34,$35,$35,$35,$35,$36,$00,$00,$C4,$00,$00
+    .byte $00,$00,$37,$35,$35,$38,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    .byte $00,$00,$00,$14,$14,$3E,$02,$01,$02,$02,$01,$02,$02,$3D,$00,$00
+    .byte $00,$00,$00,$00,$32,$00,$00,$00,$00,$00,$00,$2F,$00,$00,$00,$2F
+    .byte $00,$00,$00,$14,$14,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    .byte $37,$35,$35,$35,$35,$35,$38,$00,$00,$9A,$00,$00,$00,$00,$00,$00
+    .byte $00,$00,$0B,$14,$14,$00,$2F,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    .res 18, $00
+    .byte $0E,$14,$14,$2F,$2E,$29,$29,$29,$29,$29,$29,$29,$29,$29,$29,$29
+    .byte $29,$29,$29,$29,$29,$29,$2F,$00,$00,$00,$00,$99,$00,$00,$3C,$01
+    .byte $3F,$14,$14,$00,$28,$00,$4C,$4C,$4C,$4C,$4C,$4C,$4C,$4C,$4C,$4C
+    .byte $4C,$4C,$4C,$4C,$00,$00,$00,$00,$4C,$4C,$00,$00,$00,$00,$00,$00
+    .byte $00,$14,$14,$0B,$28,$0B,$0B,$0B,$0B,$0B,$0B,$0B,$0B,$0B,$0B,$0B
+    .byte $0B,$0B,$0B,$0B,$0B,$0B,$03,$0B,$0B,$0B,$0B,$03,$0B,$03,$0B,$03
+    .byte $03,$14,$14,$0E,$28,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E,$0E
+    .byte $0E,$0E,$0E,$0E,$0E,$0E,$04,$0E,$0E,$0E,$0E,$04,$0E,$04,$0E,$04
+    .byte $04,$14,$14,$3D,$28,$3C,$02,$01,$02,$02,$02,$02,$01,$01,$02,$02
+    .byte $02,$02,$02,$02,$02,$02,$01,$02,$02,$02,$02,$02,$02,$01,$02,$02
+    .byte $3F,$14,$14,$00,$28,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$C7
+    .res 17, $00
+    .byte $14,$14,$00,$28,$00,$00,$00,$00,$17,$05,$06,$1A,$00,$00,$C7,$00
+    .res 11, $00
+    .byte $7D,$00,$00,$00,$00,$14,$14,$00,$28,$00,$00,$00,$00,$1B,$07,$08
+    .byte $1E,$00,$00,$C7,$00,$00,$7B,$00,$14,$14,$14,$14,$14,$14,$14,$14
+    .byte $14,$14,$14,$D8,$D8,$14,$14,$00,$2F,$00,$00,$03,$0B,$00,$09,$0A
+    .byte $21,$00,$00,$C7,$00,$00,$C6,$00,$14,$D9,$D9,$D9,$D9,$D9,$14,$D9
+    .byte $D9,$D9,$14,$D9,$00,$14,$14,$00,$00,$00,$00,$04,$0E,$00,$00,$00
+    .byte $00,$00,$37,$35,$38,$00,$00,$00,$14,$D9,$00,$14,$D9,$D9,$D9,$D9
+    .byte $14,$D9,$D9,$D9,$D9,$14,$14,$00,$00,$00,$37,$35,$35,$38,$00,$00
+    .byte $00,$00,$34,$35,$35,$36,$00,$00,$14,$D9,$D9,$D9,$D9,$D9,$14,$D9
+    .byte $D9,$D9,$D9,$14,$CF,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
+    .res 22, $14
     .word F_D7D7
     .word F_D7D7
     .word F_D7D7
@@ -2913,7 +2909,7 @@ B1_B272:
     LDY #$3C
     LDA #$FF
 B1_BD99:
-    STA $0200,y
+    STA ram_0200,y
     INY
     INY
     INY
@@ -2921,19 +2917,19 @@ B1_BD99:
     BNE B1_BD99
     RTS
     LDA #$6E
-    STA $0200
-    STA $0204
+    STA ram_0200
+    STA ram_0204
     LDA #$76
-    STA $0203
+    STA ram_0203
     LDA #$7E
-    STA $0207
+    STA ram_0207
     LDA #$00
-    STA $0202
-    STA $0206
+    STA ram_0202
+    STA ram_0206
     LDA #$D6
-    STA $0201
+    STA ram_0201
     LDA #$D8
-    STA $0205
+    STA ram_0205
     LDA PPUSTATUS
     LDA #$22
     LDY #$0C
@@ -2941,7 +2937,7 @@ B1_BD99:
     LDA #$FF
     LDY #$BD
     JSR B1_BE3C
-    LDA $D7
+    LDA zp_D7
     CLC
     ADC #$C4
     STA PPUDATA
@@ -2963,11 +2959,11 @@ B1_BD99:
     .byte $43,$48,$20,$53,$54,$41,$47,$45,$3A,$00,$54,$4F,$20,$42,$45,$20
     .byte $43,$4F,$4E,$54,$49,$4E,$55,$45,$44,$3A,$3A,$3A,$00
 B1_BE3C:
-    STA $51
-    STY $52
+    STA zp_51
+    STY zp_52
     LDY #$00
 B1_BE42:
-    LDA ($51),y
+    LDA (zp_51),y
     BEQ B1_BE56
     CMP #$20
     BNE B1_BE4C
@@ -2980,14 +2976,14 @@ B1_BE4C:
     JMP B1_BE42
 B1_BE56:
     RTS
-    DEC $11
+    DEC zp_11
     JSR F_CE52
     LDA #$01
     STA nmi_state
-    DEC $11
+    DEC zp_11
 B1_BE62:
     JSR F_C9AC
-    LDA $11
+    LDA zp_11
     BNE B1_BE62
     JSR F_C7CD
     JSR F_C9A5
@@ -3003,7 +2999,7 @@ B1_BE62:
 B1_BE85:
     JSR F_CE52
     LDA #$40
-    STA $0389
+    STA ram_0389
     LDA #$23
     LDY #$C0
     JSR F_FD7D
@@ -3014,31 +3010,31 @@ B1_BE98:
     DEY
     BPL B1_BE98
     LDA #$08
-    STA $0F
+    STA zp_0F
     LDA #$00
-    STA $0A
-    STA $0B
-    STA $038A
+    STA zp_0A
+    STA zp_0B
+    STA ram_038A
     JSR F_CEE1
     LDA #$01
     STA nmi_state
     JSR F_C99E
     JSR F_C9AC
-    INC $11
+    INC zp_11
     JSR F_C9AC
     JSR F_C7C8
 B1_BEC0:
     JSR F_C9AC
-    DEC $038A
+    DEC ram_038A
     JSR F_CEE1
-    LDA $11
+    LDA zp_11
     BNE B1_BEC0
 B1_BECD:
     JSR F_C9AC
-    DEC $038A
+    DEC ram_038A
     JSR F_CEE1
     JSR F_C9B3
-    LDA $14
+    LDA buttons_pressed
     AND #$0B
     BEQ B1_BECD
     LDY #$06
