@@ -1,6 +1,10 @@
 # NES ROM reverse engineering (ca65 project)
 
-Disassembly of a 128 KB NES game (mapper 2 / UxROM, 8 × 16 KB PRG banks, CHR-RAM)
+Disassembly of a 128 KB NES game (mapper 2 / UxROM, 8 × 16 KB PRG banks, CHR-RAM).
+**This is not Super Mario Bros.** The on-screen text identifies a Mindscape-published, Nintendo-licensed
+title with an egg/balloon theme (credits: "BILLY EGG AND BROS", "MEKA MONSTER INC", "PETE TATTERSALL",
+"MUSIC AND SFX BY JAMES THORNTON III"; copyright line "… 1993"). The repository name is misleading.
+The code is back-translated
 back into buildable ca65 assembly. `make verify` rebuilds the ROM and checks that it is
 **byte-identical** to the original (SHA-1 `c1bc357fce0aee0973e8d1f7aac75a68d52bea02`).
 
@@ -86,6 +90,15 @@ channel's SFX state and set `snd_sfx_*` so music stops writing that channel. SFX
 
 `tools/gen_sound_hints.py` walks the song table and emits `tools/hints_sound.txt`
 (lists, 72 streams, and the `snd_*` RAM names); `make regen` runs it.
+
+## PPU update buffer and text
+`FlushPPUBuffer` (called from NMI with bank 0 mapped) executes commands queued at `ppu_buffer` (`$0300`):
+`[addr_hi][addr_lo][len][data…]`, `addr_hi = 0` ends the list; `len = 1` writes one byte, `len` bit 7 selects
+horizontal (+1) increment, otherwise vertical (+32). Multi-byte copies jump into an unrolled copy chain in the
+fixed bank through `PPUCopyLo/Hi` (`PPUCopy1`…`PPUCopy32`).
+Text appears as ASCII strings (44 found by `tools/gen_text_hints.py`, rendered as `.byte "…"`).
+Bank 4's title/credits strings are stored **reversed** (a trailing comment shows the readable form); bank 1's
+messages are forward and printed with tile = char + `$94`. `PaletteFadeStep` (bank 0) fades the palette.
 
 ## Shared helpers
 - `SineTable` (bank 0 `$BE8A`): 256 signed entries, amplitude ±64, index = angle (256 = full turn).

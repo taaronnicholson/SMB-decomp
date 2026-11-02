@@ -23,7 +23,7 @@ F_C088:
 F_C098:
     .res 8, $23
     .res 8, $2B
-F_C0A8:
+FlushPPUBuffer:
     LDA PPUSTATUS
     LDA ppuctrl_shadow
     ORA #$04
@@ -32,20 +32,20 @@ F_C0A8:
 F_C0B3:
     LDA ppuctrl_shadow
     STA PPUCTRL
-    LDA ram_0300,x
+    LDA ppu_buffer,x
     BEQ F_C0F7
     STA PPUADDR
 F_C0C0:
     INX
 F_C0C1:
-    LDA ram_0300,x
+    LDA ppu_buffer,x
     STA PPUADDR
     INX
-    LDY ram_0300,x
+    LDY ppu_buffer,x
     CPY #$01
     BNE F_C0DA
     INX
-    LDA ram_0300,x
+    LDA ppu_buffer,x
     STA PPUDATA
     INX
     JMP F_C0B3
@@ -60,83 +60,115 @@ F_C0E0:
     STA PPUCTRL
 F_C0E7:
     INX
-    LDA ram_7FFF,y
+    LDA PPUCopyLo-1,y
     STA jump_ptr_lo
-    LDA $801F,y
+    LDA PPUCopyHi-1,y
     STA jump_ptr_hi
     STY zp_44
     JMP (jump_ptr_lo)
 F_C0F7:
     STA zp_44
-    STA ram_0300
+    STA ppu_buffer
     LDA ppuctrl_shadow
     AND #$FB
     STA PPUCTRL
     STA ppuctrl_shadow
     JMP F_C7D4
+PPUCopy32:
     LDA ram_031F,x
     STA PPUDATA
+PPUCopy31:
     LDA ram_031E,x
     STA PPUDATA
+PPUCopy30:
     LDA ram_031D,x
     STA PPUDATA
+PPUCopy29:
     LDA ram_031C,x
     STA PPUDATA
+PPUCopy28:
     LDA ram_031B,x
     STA PPUDATA
+PPUCopy27:
     LDA ram_031A,x
     STA PPUDATA
+PPUCopy26:
     LDA ram_0319,x
     STA PPUDATA
+PPUCopy25:
     LDA ram_0318,x
     STA PPUDATA
+PPUCopy24:
     LDA ram_0317,x
     STA PPUDATA
+PPUCopy23:
     LDA ram_0316,x
     STA PPUDATA
+PPUCopy22:
     LDA ram_0315,x
     STA PPUDATA
+PPUCopy21:
     LDA ram_0314,x
     STA PPUDATA
+PPUCopy20:
     LDA ram_0313,x
     STA PPUDATA
+PPUCopy19:
     LDA ram_0312,x
     STA PPUDATA
+PPUCopy18:
     LDA ram_0311,x
     STA PPUDATA
+PPUCopy17:
     LDA ram_0310,x
     STA PPUDATA
+PPUCopy16:
     LDA ram_030F,x
     STA PPUDATA
+PPUCopy15:
     LDA ram_030E,x
     STA PPUDATA
+PPUCopy14:
     LDA ram_030D,x
     STA PPUDATA
+PPUCopy13:
     LDA ram_030C,x
     STA PPUDATA
+PPUCopy12:
     LDA ram_030B,x
     STA PPUDATA
+PPUCopy11:
     LDA ram_030A,x
     STA PPUDATA
+PPUCopy10:
     LDA ram_0309,x
     STA PPUDATA
+PPUCopy9:
     LDA ram_0308,x
     STA PPUDATA
+PPUCopy8:
     LDA ram_0307,x
     STA PPUDATA
+PPUCopy7:
     LDA ram_0306,x
     STA PPUDATA
+PPUCopy6:
     LDA ram_0305,x
     STA PPUDATA
+PPUCopy5:
     LDA ram_0304,x
     STA PPUDATA
+PPUCopy4:
     LDA ram_0303,x
     STA PPUDATA
+PPUCopy3:
     LDA ram_0302,x
     STA PPUDATA
+PPUCopy2:
     LDA ram_0301,x
     STA PPUDATA
-    LDA ram_0300,x
+PPUCopy1:
+    LDA ppu_buffer,x
     STA PPUDATA
     TXA
     CLC
@@ -397,10 +429,10 @@ F_C6CC:
     JSR EnableNMI
     JSR WaitForNMI
     JSR EnableRendering
-    INC zp_11
+    INC fade_dir
 F_C6F2:
     JSR WaitForNMI
-    LDA zp_11
+    LDA fade_dir
     BNE F_C6F2
     LDA #$02
     STA nmi_state
@@ -565,7 +597,7 @@ F_C82F:
 IRQ:
     RTI
 F_C84B:
-    LDA zp_11
+    LDA fade_dir
     BNE F_C852
     JSR F_CF1E
 F_C852:
@@ -574,7 +606,7 @@ F_C852:
     BEQ F_C874
     LDA #$00
     JSR SwitchBank
-    JSR B0_8108
+    JSR PaletteFadeStep
     JMP F_C874
 F_C863:
     LDA #$00
@@ -582,9 +614,9 @@ F_C863:
     LDA frame_counter
     AND #$01
     BEQ F_C871
-    JSR B0_8108
+    JSR PaletteFadeStep
 F_C871:
-    JSR F_C0A8
+    JSR FlushPPUBuffer
 F_C874:
     JSR F_C7A1
     LDA #$06
@@ -595,13 +627,13 @@ F_C882:
     LDA #$00
     JSR SwitchBank
 F_C887:
-    JSR B0_8108
+    JSR PaletteFadeStep
     LDA #$02
     JSR SwitchBank
     JSR B2_B78F
     LDA #$00
     JSR SwitchBank
-    JSR F_C0A8
+    JSR FlushPPUBuffer
     INC nmi_state
     JMP F_C874
 F_C89F:
@@ -610,7 +642,7 @@ F_C89F:
     JSR B2_9E00
     LDA #$00
     JSR SwitchBank
-    JSR F_C0A8
+    JSR FlushPPUBuffer
     DEC nmi_state
     JMP F_C874
 F_C8B4:
@@ -1284,7 +1316,7 @@ F_CD44:
     STA zp_55
     JMP F_CAD3
 F_CD53:
-    LDA zp_10
+    LDA fade_step
     CMP #$04
     BNE F_CD5F
     LDA buttons_pressed
@@ -1302,9 +1334,9 @@ F_CD60:
     STA zp_FD
     LDA zp_0F
     PHA
-    DEC zp_11
+    DEC fade_dir
 F_CD74:
-    LDA zp_11
+    LDA fade_dir
     BNE F_CD74
     JSR F_C7CD
     JSR F_C9A5
@@ -1327,7 +1359,7 @@ F_CD9A:
     LDA #$00
     JSR SwitchBank
     JSR ReadController
-    LDA zp_11
+    LDA fade_dir
     BNE F_CD9A
     LDA #$00
     JSR SwitchBank
@@ -1348,12 +1380,12 @@ F_CDC2:
     LDA buttons_pressed
     AND #$08
     BEQ F_CDC2
-    DEC zp_11
+    DEC fade_dir
 F_CDDD:
     LDA #$04
     JSR SwitchBank
     JSR B4_BEDF
-    LDA zp_11
+    LDA fade_dir
     BNE F_CDDD
     LDA #$00
     JSR SwitchBank
@@ -1375,10 +1407,10 @@ F_CE05:
     JSR B6_8009
     JSR EnableNMI
     JSR WaitForNMI
-    INC zp_11
+    INC fade_dir
     JSR EnableRendering
 F_CE1B:
-    LDA zp_11
+    LDA fade_dir
     BNE F_CE1B
     PLA
     STA nmi_state
@@ -1404,7 +1436,7 @@ F_CE3B:
     LDA #$06
     JSR SwitchBankKeepX
     LDA zp_08
-    JSR B0_8000
+    JSR PPUCopyLo
     PLA
     TAY
     PLA
@@ -1722,7 +1754,7 @@ F_D05C:
     STY zp_0A
     STY ram_07FF
     STY zp_44
-    STY ram_0300
+    STY ppu_buffer
     STY zp_47
     STY zp_49
     STY zp_48
@@ -2434,7 +2466,7 @@ F_D500:
     LDA ptr_hi
     PHA
     JSR F_D5E4
-    JSR F_C0A8
+    JSR FlushPPUBuffer
     PLA
     STA ptr_hi
     PLA
@@ -2446,7 +2478,7 @@ F_D500:
     AND #$07
     STA zp_1D
     JSR F_D5E4
-    JSR F_C0A8
+    JSR FlushPPUBuffer
     PLA
     STA zp_1E
     PLA
@@ -2780,12 +2812,12 @@ F_D7C7:
 F_D7D7:
     STA tmp_ptr_lo
     LDA F_C048,y
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA F_C008,y
     CLC
     ADC zp_45
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     AND #$01
     BNE F_D801
@@ -2810,7 +2842,7 @@ F_D80F:
     STA zp_41
 F_D811:
     LDA tmp_ptr_lo
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     TXA
     CLC
@@ -2834,7 +2866,7 @@ F_D811:
     LDA #$00
     JSR SwitchBankKeepX
     LDA (zp_40),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     DEX
     LDA zp_21
     CLC
@@ -2856,10 +2888,10 @@ F_D854:
     LDA #$00
     JSR SwitchBankKeepX
     LDA (zp_3E),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     DEX
     LDA (zp_40),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     DEX
     LDA zp_21
     CLC
@@ -2884,13 +2916,13 @@ F_D885:
     LDY #$20
 F_D898:
     LDA F_C048,y
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA zp_45
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA zp_43
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     TXA
     CLC
@@ -2908,12 +2940,12 @@ F_D8B3:
     LDA #$00
     JSR SwitchBankKeepX
     LDA (zp_3E),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     DEX
     DEC zp_43
     BEQ F_D8E6
     LDA (zp_40),y
-    STA ram_0300,x
+    STA ppu_buffer,x
 F_D8D4:
     DEX
     LDA zp_21
@@ -2929,7 +2961,7 @@ F_D8D7:
 F_D8E6:
     LDX zp_44
     LDA #$00
-    STA ram_0300,x
+    STA ppu_buffer,x
     STA ram_0749
     PLA
     STA zp_22
@@ -2987,11 +3019,11 @@ F_D943:
     STA ram_0301,y
     LDA F_C098,x
     ADC #$00
-    STA ram_0300,y
+    STA ppu_buffer,y
     INY
     INY
     LDA #$01
-    STA ram_0300,y
+    STA ppu_buffer,y
     INY
     STY zp_44
     LDA #$00
@@ -3018,7 +3050,7 @@ F_D943:
     ORA tmp_ptr_lo
     INX
     LDY zp_44
-    STA ram_0300,y
+    STA ppu_buffer,y
     INY
     STY zp_44
     INC zp_46
@@ -3033,7 +3065,7 @@ F_D9A8:
     DEC zp_43
     BPL F_D943
     LDA #$00
-    STA ram_0300,y
+    STA ppu_buffer,y
     STA ram_0749
     PLA
     STA zp_22
@@ -3067,12 +3099,12 @@ F_D9DB:
     STA zp_41
 F_D9EB:
     LDA F_C048,y
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA F_C008,y
     CLC
     ADC zp_45
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     AND #$1F
     EOR #$FF
@@ -3083,7 +3115,7 @@ F_DA03:
     STA zp_43
     STA tmp_ptr_lo
     ORA #$80
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     TXA
     CLC
@@ -3107,7 +3139,7 @@ F_DA03:
     LDA #$00
     JSR SwitchBankKeepX
     LDA (zp_40),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     DEX
     INC zp_21
     BNE F_DA3F
@@ -3125,10 +3157,10 @@ F_DA43:
     LDA #$00
     JSR SwitchBankKeepX
     LDA (zp_3E),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     DEX
     LDA (zp_40),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     DEX
     INC zp_21
     BNE F_DA67
@@ -3140,7 +3172,7 @@ F_DA67:
 F_DA6D:
     LDX zp_44
     LDA #$00
-    STA ram_0300,x
+    STA ppu_buffer,x
     LDA #$20
     SEC
     SBC zp_43
@@ -3155,14 +3187,14 @@ F_DA82:
     STA tmp_ptr_lo
     LDY zp_46
     LDA F_C048,y
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA F_C008,y
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA zp_43
     ORA #$80
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     TXA
     CLC
@@ -3180,12 +3212,12 @@ F_DAA6:
     LDA #$00
     JSR SwitchBankKeepX
     LDA (zp_3E),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     DEX
     DEC tmp_ptr_lo
     BEQ F_DAD2
     LDA (zp_40),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     DEX
     INC zp_21
     BNE F_DACE
@@ -3196,7 +3228,7 @@ F_DACE:
 F_DAD2:
     LDX zp_44
     LDA #$00
-    STA ram_0300,x
+    STA ppu_buffer,x
 F_DAD9:
     STA ram_0749
     PLA
@@ -3232,7 +3264,7 @@ F_DAFE:
     STA ram_0301,y
     LDA #$23
     ADC #$00
-    STA ram_0300,y
+    STA ppu_buffer,y
     INY
     INY
     JMP F_DB2C
@@ -3243,14 +3275,14 @@ F_DB1B:
     STA ram_0301,y
     LDA #$2B
     ADC #$00
-    STA ram_0300,y
+    STA ppu_buffer,y
     INY
     INY
 F_DB2C:
     LDA #$08
     STA tmp_ptr_hi
     ORA #$80
-    STA ram_0300,y
+    STA ppu_buffer,y
     INY
     TYA
     CLC
@@ -3311,7 +3343,7 @@ F_DB87:
     ORA tmp_ptr_lo
     LDY zp_43
     DEC zp_43
-    STA ram_0300,y
+    STA ppu_buffer,y
     INX
     TXA
     AND #$0F
@@ -3320,7 +3352,7 @@ F_DB87:
     BNE F_DB6F
     LDY zp_44
     LDA #$00
-    STA ram_0300,y
+    STA ppu_buffer,y
     STA ram_0749
     RTS
 F_DBB7:
@@ -6109,10 +6141,10 @@ F_F043:
     JSR F_CE52
     LDA #$01
     STA nmi_state
-    DEC zp_11
+    DEC fade_dir
 F_F04C:
     JSR WaitForNMI
-    LDA zp_11
+    LDA fade_dir
     BNE F_F04C
     JSR F_C7CD
     JSR F_C9A5
@@ -6512,7 +6544,7 @@ F_F318:
     LDA #$00
     STA ram_030A,x
     LDA tmp_ptr_hi
-    STA ram_0300,x
+    STA ppu_buffer,x
     LDA zp_01
     BNE F_F36C
     DEC zp_01
@@ -6788,7 +6820,7 @@ F_F548:
     JMP F_C6CC
     CMP #$5E
     BNE F_F580
-    DEC zp_11
+    DEC fade_dir
 F_F580:
     CLC
     ADC #$01

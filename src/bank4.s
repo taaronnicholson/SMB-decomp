@@ -848,7 +848,7 @@ B4_ACA1:
     JSR EnableNMI
     LDA #$07
     JSR F_CE3B
-    INC zp_11
+    INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
 B4_ACD8:
@@ -856,7 +856,7 @@ B4_ACD8:
     INC ram_0389
     INC ram_038A
     JSR F_CEE1
-    LDA zp_11
+    LDA fade_dir
     BNE B4_ACD8
 B4_ACE8:
     LDA ram_0389
@@ -902,12 +902,12 @@ B4_AD30:
     JSR F_CE52
     LDA #$01
     STA nmi_state
-    DEC zp_11
+    DEC fade_dir
 B4_AD39:
     JSR WaitForNMI
     INC ram_038A
     JSR F_CEE1
-    LDA zp_11
+    LDA fade_dir
     BNE B4_AD39
     JSR F_C7CD
     JSR F_C9A5
@@ -942,12 +942,12 @@ B4_AD60:
     JSR WaitForNMI
     LDA #$06
     JSR F_CE3B
-    INC zp_11
+    INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
 B4_AD99:
     JSR WaitForNMI
-    LDA zp_11
+    LDA fade_dir
     BNE B4_AD99
     LDA #$02
     STA nmi_state
@@ -1163,8 +1163,9 @@ B4_AF7B:
     LDA #$4A
     JMP F_CE8F
     .byte $21,$22,$87,$40,$44,$45,$52,$46,$4C,$41,$FF,$21,$62,$89,$4C,$4C
-    .byte $49,$57,$20,$53,$49,$48,$54,$FF,$21,$82,$89,$3A,$55,$4F,$59,$20
-    .byte $50,$4C,$45,$48,$00
+    .byte $49,$57,$20,$53,$49,$48,$54,$FF,$21,$82,$89
+    .byte ":UOY PLEH"   ; reads: "HELP YOU:"
+    .byte $00
 B4_AFD8:
     LDA #$00
     STA zp_53
@@ -1240,7 +1241,9 @@ B4_B06F:
     LDA zp_53
     STA zp_47
     RTS
-    .byte $26,$6A,$8C,$40,$52,$41,$45,$4C,$43,$20,$45,$47,$41,$54,$53,$00
+    .byte $26,$6A,$8C,$40
+    .byte "RAELC EGATS"   ; reads: "STAGE CLEAR"
+    .byte $00
 B4_B084:
     LDA ram_072F
     ASL a
@@ -1731,9 +1734,11 @@ B4_B49F:
     STA zp_47
 B4_B4A8:
     RTS
-    .byte $21,$22,$87,$40,$44,$45,$52,$46,$4C,$41,$FF,$21,$62,$8A,$54,$53
-    .byte $45,$55,$51,$20,$52,$55,$4F,$59,$FF,$21,$82,$88,$3A,$52,$45,$56
-    .byte $4F,$20,$53,$49,$00
+    .byte $21,$22,$87,$40,$44,$45,$52,$46,$4C,$41,$FF,$21,$62,$8A
+    .byte "TSEUQ RUOY"   ; reads: "YOUR QUEST"
+    .byte $FF,$21,$82,$88
+    .byte ":REVO SI"   ; reads: "IS OVER:"
+    .byte $00
 B4_B4CE:
     DEC ram_0737
     BNE B4_B4A8
@@ -2055,10 +2060,10 @@ B4_B76F:
 B4_B776:
     LDA #$01
     STA nmi_state
-    DEC zp_11
+    DEC fade_dir
 B4_B77C:
     JSR WaitForNMI
-    LDA zp_11
+    LDA fade_dir
     BNE B4_B77C
     JSR F_C7CD
     JSR F_C956
@@ -2098,14 +2103,19 @@ B4_B7B8:
     .byte $46,$02,$CF,$B9,$D1,$B7,$3D,$87,$8A,$5E,$41,$4C,$46,$52,$45,$44
     .byte $3A,$20,$20,$20,$20,$20,$20,$20,$5F,$5E,$20,$20,$20,$20,$20,$20
     .res 8, $20
-    .byte $5F,$5E,$54,$48,$45,$20,$54,$49,$4D,$45,$20,$48,$41,$53,$20,$20
-    .byte $5F,$5E,$43,$4F,$4D,$45,$20,$46,$4F,$52,$20,$4F,$55,$52,$20,$20
+    .byte $5F,$5E
+    .byte "THE TIME HAS  "
+    .byte $5F,$5E
+    .byte "COME FOR OUR  "
     .byte $5F,$5E,$46,$49,$4E,$41,$4C,$20,$42,$41,$54,$54,$4C,$45,$3A,$20
     .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
     .byte $5F,$5E,$41,$46,$54,$45,$52,$20,$49,$20,$48,$41,$56,$45,$20,$20
-    .byte $5F,$5E,$44,$45,$46,$45,$41,$54,$45,$44,$20,$59,$4F,$55,$20,$20
-    .byte $5F,$5E,$54,$48,$45,$20,$57,$4F,$52,$4C,$44,$20,$57,$49,$4C,$4C
-    .byte $5F,$5E,$46,$41,$4C,$4C,$20,$49,$4E,$54,$4F,$20,$4D,$59,$20,$20
+    .byte $5F,$5E
+    .byte "DEFEATED YOU  "
+    .byte $5F,$5E
+    .byte "THE WORLD WILL"
+    .byte $5F,$5E
+    .byte "FALL INTO MY  "
     .byte $5F,$5E,$45,$56,$49,$4C,$20,$47,$52,$41,$53,$50,$3C,$20,$20,$20
     .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
     .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41
@@ -2114,23 +2124,28 @@ B4_B7B8:
     .byte $5F,$00,$5E,$53,$4F,$20,$41,$4C,$46,$52,$45,$44,$20,$57,$45,$20
     .byte $20,$5F,$5E,$4D,$45,$45,$54,$20,$41,$47,$41,$49,$4E,$3A,$20,$20
     .byte $20,$5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
-    .byte $20,$5F,$5E,$42,$55,$54,$20,$59,$4F,$55,$52,$20,$50,$4F,$57,$45
-    .byte $52,$5F,$5E,$49,$53,$20,$4E,$4F,$20,$4D,$41,$54,$43,$48,$20,$20
-    .byte $20,$5F,$5E,$46,$4F,$52,$20,$54,$48,$45,$20,$4D,$49,$47,$48,$54
-    .byte $59,$5F,$5E,$4D,$45,$4B,$41,$20,$43,$48,$49,$43,$4B,$45,$4E,$53
-    .byte $20,$5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
-    .byte $20,$5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48
-    .byte $41,$5F,$5E,$48,$41,$20,$48,$41,$20,$3B,$3B,$3B,$20,$20,$20,$20
-    .byte $20,$5F,$00,$5E,$54,$48,$45,$20,$45,$47,$47,$53,$20,$41,$52,$45
-    .byte $20,$20,$5F,$5E,$46,$41,$52,$20,$46,$41,$52,$20,$41,$57,$41,$59
-    .byte $3A,$20,$5F,$5E,$59,$4F,$55,$20,$57,$49,$4C,$4C,$20,$4E,$45,$56
-    .byte $45,$52,$5F,$5E,$53,$45,$45,$20,$54,$48,$45,$4D,$20,$41,$47,$41
-    .byte $49,$4E,$5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
-    .byte $20,$20,$5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$3B,$3B,$3B
-    .byte $20,$20,$5F,$00,$64,$D9,$B9,$00,$78,$F6,$B9,$64,$EC,$B9,$00,$50
-    .byte $EC,$B9,$50,$D9,$B9,$78,$F6,$B9,$00,$06,$3A,$FE,$14,$5C,$FF,$00
-    .byte $96,$FF,$00,$B8,$FE,$14,$48,$FE,$32,$A8,$FE,$32,$03,$38,$FE,$14
-    .byte $B8,$FE,$14,$78,$FF,$00,$03,$42,$FE,$00,$AE,$FE,$28,$78,$FE,$50
+    .byte $20,$5F,$5E
+    .byte "BUT YOUR POWER"
+    .byte $5F,$5E,$49,$53,$20,$4E,$4F,$20,$4D,$41,$54,$43,$48,$20,$20,$20
+    .byte $5F,$5E
+    .byte "FOR THE MIGHTY"
+    .byte $5F,$5E,$4D,$45,$4B,$41,$20,$43,$48,$49,$43,$4B,$45,$4E,$53,$20
+    .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
+    .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41
+    .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$3B,$3B,$3B,$20,$20,$20,$20,$20
+    .byte $5F,$00,$5E
+    .byte "THE EGGS ARE  "
+    .byte $5F,$5E,$46,$41,$52,$20,$46,$41,$52,$20,$41,$57,$41,$59,$3A,$20
+    .byte $5F,$5E
+    .byte "YOU WILL NEVER"
+    .byte $5F,$5E
+    .byte "SEE THEM AGAIN"
+    .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
+    .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$3B,$3B,$3B,$20,$20
+    .byte $5F,$00,$64,$D9,$B9,$00,$78,$F6,$B9,$64,$EC,$B9,$00,$50,$EC,$B9
+    .byte $50,$D9,$B9,$78,$F6,$B9,$00,$06,$3A,$FE,$14,$5C,$FF,$00,$96,$FF
+    .byte $00,$B8,$FE,$14,$48,$FE,$32,$A8,$FE,$32,$03,$38,$FE,$14,$B8,$FE
+    .byte $14,$78,$FF,$00,$03,$42,$FE,$00,$AE,$FE,$28,$78,$FE,$50
 B4_BA00:
     LDA ram_0732
     BNE B4_BA65
@@ -2161,13 +2176,13 @@ B4_BA26:
     STA zp_53
     LDX zp_44
     LDA #$27
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA #$4B
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA #$8A
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
 B4_BA45:
     LDA zp_55
@@ -2177,7 +2192,7 @@ B4_BA45:
 B4_BA4D:
     LDA #$23
 B4_BA4F:
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA zp_55
     BEQ B4_BA59
@@ -2187,7 +2202,7 @@ B4_BA59:
     BNE B4_BA45
 B4_BA5D:
     LDA #$00
-    STA ram_0300,x
+    STA ppu_buffer,x
     STX zp_44
     RTS
 B4_BA65:
@@ -2195,18 +2210,18 @@ B4_BA65:
     STA ram_0732
     LDX zp_44
     LDA #$27
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA #$4B
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA #$8A
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDY #$09
     LDA #$53
 B4_BA82:
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     DEY
     BPL B4_BA82
@@ -2280,13 +2295,13 @@ B4_BAE7:
     STA zp_54
     LDX zp_44
     LDA zp_54
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA zp_53
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA #$90
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDY #$0F
 B4_BB1A:
@@ -2302,12 +2317,12 @@ B4_BB28:
 B4_BB2A:
     CLC
     ADC #$E4
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     DEY
     BPL B4_BB1A
     LDA #$00
-    STA ram_0300,x
+    STA ppu_buffer,x
     STX zp_44
     LDY ptr_lo
     LDA (zp_55),y
@@ -2435,15 +2450,15 @@ B4_BC4E:
 B4_BC56:
     INY
     LDA (zp_55),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     INY
     INX
     LDA (zp_55),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     INY
     INX
     LDA (zp_55),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     AND #$7F
     STA tmp_ptr_hi
@@ -2463,7 +2478,7 @@ B4_BC81:
 B4_BC83:
     INY
     LDA (zp_55),y
-    STA ram_0300,x
+    STA ppu_buffer,x
     BEQ B4_BCAA
     CMP #$FF
     BEQ B4_BC56
@@ -2473,18 +2488,18 @@ B4_BC83:
 B4_BC95:
     CLC
     ADC #$94
-    STA ram_0300,x
+    STA ppu_buffer,x
     LDA zp_53
     BEQ B4_BCA6
     DEC zp_53
     LDA #$F0
-    STA ram_0300,x
+    STA ppu_buffer,x
 B4_BCA6:
     INX
     JMP B4_BC83
 B4_BCAA:
     LDA #$00
-    STA ram_0300,x
+    STA ppu_buffer,x
     STX zp_44
     RTS
     .byte $A9,$20,$4C,$B9,$BC
@@ -2566,11 +2581,12 @@ B4_BD3D:
     ADC #$00
     STA ram_01A9
     RTS
-    .byte $20,$A8,$8C,$44,$45,$53,$55,$41,$50,$20,$20,$45,$4D,$41,$47,$FF
-    .byte $21,$88,$85,$45,$52,$4F,$43,$53,$FF,$21,$C9,$88,$53,$4E,$4F,$4F
-    .byte $4C,$4C,$41,$42,$FF,$22,$0A,$84,$45,$4D,$49,$54,$FF,$22,$49,$88
-    .byte $53,$44,$4E,$4F,$4D,$41,$49,$44,$FF,$22,$8A,$85,$53,$45,$56,$49
-    .byte $4C,$00
+    .byte $20,$A8,$8C
+    .byte "DESUAP  EMAG"   ; reads: "GAME  PAUSED"
+    .byte $FF,$21,$88,$85,$45,$52,$4F,$43,$53,$FF,$21,$C9,$88
+    .byte "SNOOLLAB"   ; reads: "BALLOONS"
+    .byte $FF,$22,$0A,$84,$45,$4D,$49,$54,$FF,$22,$49,$88,$53,$44,$4E,$4F
+    .byte $4D,$41,$49,$44,$FF,$22,$8A,$85,$53,$45,$56,$49,$4C,$00
 B4_BD91:
     LDA #$4F
     STA zp_55
@@ -2587,13 +2603,17 @@ B4_BD91:
     JSR B4_BEDF
     JMP WaitForNMI
     .byte $21,$28,$90,$44,$45,$52,$45,$54,$53,$49,$47,$45,$52,$20,$20,$41
-    .byte $20,$53,$49,$FF,$21,$6A,$8C,$46,$4F,$20,$4B,$52,$41,$4D,$45,$44
-    .byte $41,$52,$54,$FF,$21,$AC,$88,$54,$48,$47,$49,$4C,$49,$57,$54,$FF
-    .byte $22,$27,$91,$54,$48,$47,$49,$4C,$49,$57,$54,$20,$33,$39,$39,$31
-    .byte $20,$3E,$43,$3D,$00,$22,$AA,$8C,$59,$42,$20,$44,$45,$48,$53,$49
-    .byte $4C,$42,$55,$50,$FF,$22,$E9,$8F,$3A,$43,$4E,$49,$20,$20,$45,$50
-    .byte $41,$43,$53,$44,$4E,$49,$4D,$FF,$23,$66,$94,$4F,$44,$4E,$45,$54
-    .byte $4E,$49,$4E,$20,$59,$42,$20,$44,$45,$53,$4E,$45,$43,$49,$4C,$00
+    .byte $20,$53,$49,$FF,$21,$6A,$8C
+    .byte "FO KRAMEDART"   ; reads: "TRADEMARK OF"
+    .byte $FF,$21,$AC,$88,$54,$48,$47,$49,$4C,$49,$57,$54,$FF,$22,$27,$91
+    .byte $54,$48,$47,$49,$4C,$49,$57,$54,$20,$33,$39,$39,$31,$20,$3E,$43
+    .byte $3D,$00,$22,$AA,$8C
+    .byte "YB DEHSILBUP"   ; reads: "PUBLISHED BY"
+    .byte $FF,$22,$E9,$8F
+    .byte ":CNI  EPACSDNIM"   ; reads: "MINDSCAPE  INC:"
+    .byte $FF,$23,$66,$94
+    .byte "ODNETNIN YB DESNECIL"   ; reads: "LICENSED BY NINTENDO"
+    .byte $00
 B4_BE32:
     JSR F_CE52
     LDA #$08
@@ -2638,7 +2658,7 @@ B4_BE47:
     JSR EnableRendering
     LDA #$00
     STA ram_01A8
-    INC zp_11
+    INC fade_dir
     LDA #$01
     STA nmi_state
 B4_BE99:
@@ -2656,7 +2676,7 @@ B4_BE99:
     AND #$0B
     BEQ B4_BE99
 B4_BEB7:
-    DEC zp_11
+    DEC fade_dir
 B4_BEB9:
     JSR WaitForNMI
     JSR F_C9B3
@@ -2665,7 +2685,7 @@ B4_BEB9:
     LDA zp_B1
     LSR a
     STA ram_038A
-    LDA zp_10
+    LDA fade_step
     BNE B4_BEB9
     JSR F_C7CD
     JSR ClearOAMBuffer

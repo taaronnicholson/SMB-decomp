@@ -3515,10 +3515,10 @@ B6_A41E:
     LDA #$01
     STA nmi_state
     JSR F_CE52
-    DEC zp_11
+    DEC fade_dir
 B6_A433:
     JSR WaitForNMI
-    LDA zp_10
+    LDA fade_step
     BNE B6_A433
     JSR F_C7CD
     JSR F_C9A5
@@ -4899,7 +4899,7 @@ B6_BE4D:
     STA nmi_state
     JSR EnableNMI
     JSR WaitForNMI
-    INC zp_11
+    INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
 B6_BE63:
@@ -4910,7 +4910,7 @@ B6_BE63:
     STA ram_0389
     DEC ram_038A
     JSR F_CEE1
-    LDA zp_11
+    LDA fade_dir
     BNE B6_BE63
 B6_BE79:
     JSR WaitForNMI
@@ -4933,7 +4933,7 @@ B6_BE9B:
     AND #$0B
     BEQ B6_BE79
 B6_BEA1:
-    DEC zp_11
+    DEC fade_dir
     LDA ram_01AB
     SEC
     SBC ram_0746
@@ -4954,7 +4954,7 @@ B6_BECA:
     LDX #$03
     LDA #$80
     JSR FarCall
-    LDA zp_11
+    LDA fade_dir
     BNE B6_BECA
     JSR F_CE52
     JSR F_C7CD

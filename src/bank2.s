@@ -3102,34 +3102,34 @@ B2_B64F:
     LDA #$90
     STA ptr_lo
     JSR B2_B6EF
-    INC zp_11
+    INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
     RTS
 B2_B6EF:
     LDX zp_44
     LDA ptr_hi
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA ptr_lo
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDA zp_53
     ORA #$80
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     LDY #$05
 B2_B707:
     LDA ram_038C,y
     CLC
     ADC #$C4
-    STA ram_0300,x
+    STA ppu_buffer,x
     INX
     DEY
     DEC zp_53
     BNE B2_B707
     LDA #$00
-    STA ram_0300,x
+    STA ppu_buffer,x
     STX zp_44
     RTS
     JSR B2_B732
@@ -3218,7 +3218,7 @@ ResetLevelState:
     LDA #$00
     STA zp_4D
     STA zp_44
-    STA ram_0300
+    STA ppu_buffer
     STA zp_DA
     STA zp_7C
     STA zp_85

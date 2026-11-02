@@ -1099,7 +1099,7 @@ B3_BDF4:
     LDA zp_D4
     CMP #$FF
     BCC B3_BE04
-    LDA zp_10
+    LDA fade_step
     BNE B3_BE0D
     JMP F_F52A
 B3_BE04:
@@ -1107,7 +1107,7 @@ B3_BE04:
     SBC #$01
     STA zp_D4
     BNE B3_BE0D
-    DEC zp_11
+    DEC fade_dir
 B3_BE0D:
     RTS
 B3_BE0E:

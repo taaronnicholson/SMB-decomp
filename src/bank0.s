@@ -3,10 +3,72 @@
 
 .segment "BANK0"
 
-B0_8000:
-    .byte $C2,$BC,$B6,$B0,$AA,$A4,$9E,$98,$92,$8C,$86,$80,$7A,$74,$6E,$68
-    .byte $62,$5C,$56,$50,$4A,$44,$3E,$38,$32,$2C,$26,$20,$1A,$14,$0E,$08
-    .res 32, $C1
+PPUCopyLo:
+    .byte <(PPUCopy1)
+    .byte <(PPUCopy2)
+    .byte <(PPUCopy3)
+    .byte <(PPUCopy4)
+    .byte <(PPUCopy5)
+    .byte <(PPUCopy6)
+    .byte <(PPUCopy7)
+    .byte <(PPUCopy8)
+    .byte <(PPUCopy9)
+    .byte <(PPUCopy10)
+    .byte <(PPUCopy11)
+    .byte <(PPUCopy12)
+    .byte <(PPUCopy13)
+    .byte <(PPUCopy14)
+    .byte <(PPUCopy15)
+    .byte <(PPUCopy16)
+    .byte <(PPUCopy17)
+    .byte <(PPUCopy18)
+    .byte <(PPUCopy19)
+    .byte <(PPUCopy20)
+    .byte <(PPUCopy21)
+    .byte <(PPUCopy22)
+    .byte <(PPUCopy23)
+    .byte <(PPUCopy24)
+    .byte <(PPUCopy25)
+    .byte <(PPUCopy26)
+    .byte <(PPUCopy27)
+    .byte <(PPUCopy28)
+    .byte <(PPUCopy29)
+    .byte <(PPUCopy30)
+    .byte <(PPUCopy31)
+    .byte <(PPUCopy32)
+PPUCopyHi:
+    .byte >(PPUCopy1)
+    .byte >(PPUCopy2)
+    .byte >(PPUCopy3)
+    .byte >(PPUCopy4)
+    .byte >(PPUCopy5)
+    .byte >(PPUCopy6)
+    .byte >(PPUCopy7)
+    .byte >(PPUCopy8)
+    .byte >(PPUCopy9)
+    .byte >(PPUCopy10)
+    .byte >(PPUCopy11)
+    .byte >(PPUCopy12)
+    .byte >(PPUCopy13)
+    .byte >(PPUCopy14)
+    .byte >(PPUCopy15)
+    .byte >(PPUCopy16)
+    .byte >(PPUCopy17)
+    .byte >(PPUCopy18)
+    .byte >(PPUCopy19)
+    .byte >(PPUCopy20)
+    .byte >(PPUCopy21)
+    .byte >(PPUCopy22)
+    .byte >(PPUCopy23)
+    .byte >(PPUCopy24)
+    .byte >(PPUCopy25)
+    .byte >(PPUCopy26)
+    .byte >(PPUCopy27)
+    .byte >(PPUCopy28)
+    .byte >(PPUCopy29)
+    .byte >(PPUCopy30)
+    .byte >(PPUCopy31)
+    .byte >(PPUCopy32)
 B0_8040:
     .byte $52,$62,$73,$84,$95,$A6,$B7,$C8,$E8
 B0_8049:
@@ -24,30 +86,30 @@ B0_8052:
     .byte $1A,$2A,$02,$0F,$1C,$3C,$17,$0F,$07,$28,$17,$0F,$10,$20,$17,$0F
     .byte $16,$28,$17,$0F,$06,$26,$17,$0F,$1A,$2A,$17,$00,$00,$00,$17,$0F
     .byte $20,$00,$17,$0F,$06,$00
-B0_8108:
-    LDA zp_11
+PaletteFadeStep:
+    LDA fade_dir
     BNE B0_810F
     JMP F_C7D4
 B0_810F:
     BPL B0_811E
-    LDA zp_10
+    LDA fade_step
     SEC
     SBC #$01
     BCS B0_812D
     LDA #$00
-    STA zp_11
+    STA fade_dir
     BEQ B0_812D
 B0_811E:
-    LDA zp_10
+    LDA fade_step
     CLC
     ADC #$01
     CMP #$05
     BCC B0_812D
     LDA #$00
-    STA zp_11
+    STA fade_dir
     LDA #$04
 B0_812D:
-    STA zp_10
+    STA fade_step
     LDY zp_0F
     LDA B0_8040,y
     STA jump_ptr_lo
@@ -61,7 +123,7 @@ B0_812D:
     STA PPUADDR
     LDA #$00
     STA PPUADDR
-    LDX zp_10
+    LDX fade_step
     LDY #$00
     LDA zp_08
     PHA
@@ -139,7 +201,7 @@ B0_81D7:
     .byte $40,$30,$20,$10,$00
 B0_81DC:
     LDY #$00
-    STY zp_10
+    STY fade_step
     STY zp_0F
     LDA PPUSTATUS
     LDA ppuctrl_shadow
@@ -1182,11 +1244,11 @@ B0_B63F:
     STA nmi_state
     JSR EnableNMI
     JSR WaitForNMI
-    INC zp_11
+    INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
 B0_B68B:
-    LDA zp_11
+    LDA fade_dir
     BNE B0_B68B
 B0_B68F:
     JSR WaitForNMI
@@ -1205,14 +1267,14 @@ B0_B6A8:
     LDA buttons_pressed
     AND #$08
     BEQ B0_B68F
-    DEC zp_11
+    DEC fade_dir
 B0_B6B3:
     JSR WaitForNMI
     LDY #$06
     LDX #$03
     LDA #$80
     JSR FarCall
-    LDA zp_11
+    LDA fade_dir
     BNE B0_B6B3
     JSR F_CE52
     JSR F_C7CD
@@ -1409,7 +1471,7 @@ B0_B8AB:
     LDX zp_44
 B0_B8AD:
     LDA B0_B8BC,y
-    STA ram_0300,x
+    STA ppu_buffer,x
     BEQ B0_B8B9
     INX
     INY
@@ -1567,7 +1629,7 @@ B0_BF96:
 B0_BFA0:
     RTS
 B0_BFA1:
-    LDA zp_10
+    LDA fade_step
     CMP #$04
     BNE B0_BFA0
     LDA zp_44

@@ -98,3 +98,10 @@ ram 0096 spawn_y_lo
 ram 0097 spawn_y_hi
 ram 009A entry_list_lo        ; pointer to the current record's entry list (record+7)
 ram 009B entry_list_hi
+
+; ---- PPU update buffer (flushed by NMI) ----
+name f C0A8 FlushPPUBuffer     ; reads commands at ppu_buffer: [addr_hi][addr_lo][len][data...], hi=0 ends
+ram 0300 ppu_buffer            ; len=1: single byte; len bit7 set: horizontal (+1) else vertical (+32)
+name 0 8108 PaletteFadeStep    ; fades the palette at $3F00 toward/away from black (zp_10 = step 0-4, zp_11 = direction)
+ram 0010 fade_step
+ram 0011 fade_dir

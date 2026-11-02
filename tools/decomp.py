@@ -22,6 +22,8 @@ def bn(t): return FIXED if t == 'f' else int(t)
 # ---- hints ----------------------------------------------------------------
 entries, words_tab, lohi_tab, names, datas = [], [], [], {}, []
 ramnames = {}
+text_tab = []
+refexpr = {}
 dlohi_tab = []
 stream_tab = []
 struct_tab = []
@@ -50,6 +52,10 @@ for ln in _hint_lines:
         stream_tab.append((bn(t[1]), int(t[2], 16), int(t[3])))
     elif t[0] == 'dlohi':   # dlohi <bank> <lo> <hi> <n> : split lo/hi tables of pointers to DATA (not traced)
         dlohi_tab.append((bn(t[1]), int(t[2], 16), int(t[3], 16), int(t[4])))
+    elif t[0] == 'refexpr':  # refexpr <addr> <bank> <base> <off> : operand addr -> label(base)+off
+        refexpr[int(t[1], 16)] = (int(t[2]), int(t[3], 16), int(t[4]))
+    elif t[0] == 'text':    # text <bank> <addr> <len> [rev] : ASCII string (rev = stored reversed)
+        text_tab.append((bn(t[1]), int(t[2], 16), int(t[3]), len(t) > 4 and t[4] == 'rev'))
     elif t[0] == 'ram':   # ram <addr> <name>
         ramnames[int(t[1], 16)] = t[2]
     elif t[0] == 'name':  # name <bank|f> <addr> <label>
@@ -260,7 +266,10 @@ def fmt_instr(p, pc):
     val = int.from_bytes(bytes(byte(p, pc + 1 + k) for k in range(l - 1)), 'little') if l > 1 else 0
     def sym(a):
         if a in HW: return HW[a]
-        if a < 0x2000 or 0x6000 <= a < 0x8000: return ramname(a)
+        if a in refexpr and p == FIXED:
+            rb, base, off = refexpr[a]; nm = want(rb, base)
+            if nm: return f'{nm}{off:+d}'
+        if a < 0x2000 or 0x6000 <= a < 0x7FFF: return ramname(a)
         b = res_bank(a, p, pc)
         if b is not None:
             if (b, a - 1) in word_cells and (b, a) not in labels:   # high byte of a pointer word
@@ -353,6 +362,10 @@ for b, a, n in stream_tab:
             while r < end and byte(b, r) < 0x80 and r - q < 12 and (r == q or (b, r) not in _starts): r += 1
             stream_cells[(b, q)] = (r - q, ''); q = r
 
+text_cells = {}    # (p, addr) -> (len, rev)
+for b, a, n, rev in text_tab:
+    if all((b, a + k) not in code_bytes for k in range(n)): text_cells[(b, a)] = (n, rev)
+
 struct_rows = {}   # (p, addr) -> fmt
 for b, a, n, fmt in struct_tab:
     sz = sum(2 if c in 'wp' else 1 for c in fmt)
@@ -381,6 +394,11 @@ def emit_bank(p):
         if (p, a) in lo_cells:
             k, nm, adj = lo_cells[(p, a)]
             out.append(f'    .byte {k}({nm}{"-%d" % -adj if adj < 0 else "+%d" % adj if adj else ""})'); a += 1; continue
+        if (p, a) in text_cells:
+            n, rev = text_cells[(p, a)]
+            st = ''.join(chr(byte(p, a + k)) for k in range(n))
+            out.append(f'    .byte "{st}"' + (f'   ; reads: "{st[::-1]}"' if rev else ''))
+            a += n; continue
         if (p, a) in stream_cells:
             n, cm = stream_cells[(p, a)]
             out.append('    .byte ' + ','.join(f'${byte(p, a + k):02X}' for k in range(n)) + (f'   ; {cm}' if cm else ''))
@@ -405,7 +423,8 @@ def emit_bank(p):
         while (a + n < base + 0x4000 and byte(p, a + n) == byte(p, a)
                and (n == 0 or ((p, a + n) not in labels and a + n not in text
                                and (p, a + n) not in word_cells and (p, a + n) not in lo_cells
-                               and (p, a + n) not in struct_rows and (p, a + n) not in stream_cells))):
+                               and (p, a + n) not in struct_rows and (p, a + n) not in stream_cells
+                               and (p, a + n) not in text_cells))):
             n += 1
         if n >= 8:
             out.append(f'    .res {n}, ${byte(p, a):02X}'); a += n; continue
@@ -413,7 +432,8 @@ def emit_bank(p):
         run = []
         while a < base + 0x4000 and len(run) < 16 and (run == [] or ((p, a) not in labels and a not in text
                                    and (p, a) not in word_cells and (p, a) not in lo_cells
-                                   and (p, a) not in struct_rows and (p, a) not in stream_cells)):
+                                   and (p, a) not in struct_rows and (p, a) not in stream_cells
+                                   and (p, a) not in text_cells)):
             run.append(byte(p, a)); a += 1
         out.append('    .byte ' + ','.join(f'${x:02X}' for x in run))
     return out

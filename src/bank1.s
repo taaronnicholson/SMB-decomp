@@ -2961,10 +2961,13 @@ B1_BD99:
     LDY #$BE
     JSR B1_BE3C
     JMP B1_BE85
-    .byte $46,$4F,$55,$4E,$44,$40,$20,$00,$4E,$4F,$57,$20,$46,$49,$4E,$44
-    .byte $20,$41,$4C,$4C,$20,$34,$00,$4F,$4E,$45,$20,$4F,$4E,$20,$45,$41
-    .byte $43,$48,$20,$53,$54,$41,$47,$45,$3A,$00,$54,$4F,$20,$42,$45,$20
-    .byte $43,$4F,$4E,$54,$49,$4E,$55,$45,$44,$3A,$3A,$3A,$00
+    .byte $46,$4F,$55,$4E,$44,$40,$20,$00
+    .byte "NOW FIND ALL 4"
+    .byte $00
+    .byte "ONE ON EACH STAGE:"
+    .byte $00
+    .byte "TO BE CONTINUED:::"
+    .byte $00
 B1_BE3C:
     STA ptr_lo
     STY ptr_hi
@@ -2983,14 +2986,14 @@ B1_BE4C:
     JMP B1_BE42
 B1_BE56:
     RTS
-    DEC zp_11
+    DEC fade_dir
     JSR F_CE52
     LDA #$01
     STA nmi_state
-    DEC zp_11
+    DEC fade_dir
 B1_BE62:
     JSR WaitForNMI
-    LDA zp_11
+    LDA fade_dir
     BNE B1_BE62
     JSR F_C7CD
     JSR F_C9A5
@@ -3027,14 +3030,14 @@ B1_BE98:
     STA nmi_state
     JSR EnableNMI
     JSR WaitForNMI
-    INC zp_11
+    INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
 B1_BEC0:
     JSR WaitForNMI
     DEC ram_038A
     JSR F_CEE1
-    LDA zp_11
+    LDA fade_dir
     BNE B1_BEC0
 B1_BECD:
     JSR WaitForNMI

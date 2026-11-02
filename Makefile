@@ -18,6 +18,8 @@ verify: $(TARGET)
 
 regen:
 	python3 -I tools/gen_sound_hints.py
+	python3 -I tools/gen_ppu_hints.py
+	python3 -I tools/gen_text_hints.py
 	python3 -I tools/decomp.py
 
 clean:
