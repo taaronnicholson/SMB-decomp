@@ -29,14 +29,14 @@ back into buildable ca65 assembly. `make verify` rebuilds the ROM and checks tha
 ## What each bank does (from reading the code)
 | Bank | Role |
 |------|------|
-| 0 | Controller input (`ReadController` → `buttons*`), `ClearRAM`, stage record pointer table at `$8263` (indexed by `stage_index`, `$93`) and the stage data it points to |
-| 1 | Sprite/OAM management (`HideSprites`), per-frame object code |
-| 2 | Nametable/PPU drawing (≈800 `PPUDATA` writes), `ResetGameState`, `ResetLevelState` |
-| 3 | Mostly data (tile/pattern and map-like tables) with a little code |
-| 4 | Game-state machine: `DispatchGameState` jumps through a 16-entry table indexed by `game_state` (`$072C`) |
-| 5 | Entity movement code: per-entity arrays indexed by X (`ent_y_lo/hi`, `ent_x_lo/hi`, `ent_angle`, `ent_radius`, `ent_dx/dy` …, 48 slots, stride `$30`); `SetEntityPolarPos` places an entity at a polar offset from a centre point |
-| 6 | **Sound engine** – owns almost all APU writes; `$8000` is a jump-table API, `Sound_Update` (`$8003`) runs every frame |
-| 7 | Fixed: vectors, `Reset`, `NMI`, bank switching/`FarCall`, main loop (`F_C700`–`F_C6FD`) |
+| 0 | Controller input (`ReadController`), `ClearRAM`, `PaletteFadeStep` and the 9 palette sets, the PPU buffer copy table (`PPUCopyLo/Hi`), the stage records (`$8263`), the 24 area headers and tables, the tileset records (metatile planes, attributes, tileset 0's compressed data), sine table, shared compressed graphics |
+| 1 | Entity drawing (`DrawEntity`, animation groups and frames), `HideSprites`, per-area spawn data (entities, special tiles, one-time objects), some object code, 2 area maps, shared compressed graphics |
+| 2 | Nametable/PPU drawing (≈800 `PPUDATA` writes), `ResetGameState`/`ResetLevelState`, the pixel tables for the unrolled CHR upload routines |
+| 3 | Area maps (areas 0-5, 7-10, 12-20) and per-stage raw tile tables, plus a little code |
+| 4 | Game-state machine (`DispatchGameState`, table indexed by `game_state`), title/credits text, per-stage compressed tilesets and tile-property tables, 2 area maps |
+| 5 | Entity behaviour: `EntityHandlerTable` and the 120 `EntXX_Update` handlers, shared movement/overlap helpers, the credits text |
+| 6 | **Sound engine** (song, pattern, envelope and effect data) and the compressed sprite tile sets; 1 area map |
+| 7 | Fixed: vectors, `Reset`, `NMI`, bank switching/`FarCall`, main loop, `UpdateEntities`, spawn/area loading, decompressor, tile helpers, height profiles |
 
 Main loop per frame: `WaitForNMI`, then (state 3) bank 1 sprite clear → `ReadController` → game-state
 dispatch (bank 4) → object/collision updates → `Sound_Update`. The NMI handler does OAM DMA,
