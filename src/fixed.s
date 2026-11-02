@@ -351,7 +351,7 @@ F_C647:
     JSR B0_B63F
     LDA #$00
     LDX #$02
-    STX ram_01AE
+    STX lives
 F_C659:
     STA score_lo,x
     DEX
@@ -3365,28 +3365,28 @@ F_DC11:
 F_DC21:
     LDY #$FF
     STY zp_62
-    LDA zp_7B
+    LDA invuln_hi
     BNE F_DC36
-    ORA zp_7A
+    ORA invuln_lo
     BEQ F_DC4C
-    LDA zp_7A
+    LDA invuln_lo
     CMP #$19
     BCS F_DC36
     JMP F_DC3D
 F_DC36:
-    LDA zp_7A
+    LDA invuln_lo
     AND #$04
     BNE F_DC3D
     INY
 F_DC3D:
     STY zp_62
-    LDA zp_7A
+    LDA invuln_lo
     SEC
     SBC #$01
-    STA zp_7A
-    LDA zp_7B
+    STA invuln_lo
+    LDA invuln_hi
     SBC #$00
-    STA zp_7B
+    STA invuln_hi
 F_DC4C:
     LDA #$01
     STA zp_64
@@ -3416,13 +3416,13 @@ F_DC78:
     AND #$FE
     STA buttons
 F_DC7E:
-    LDA zp_88
+    LDA shot_cooldown
     BEQ F_DC8C
     LDA buttons
     AND #$02
     BNE F_DC8C
     LDA #$00
-    STA zp_88
+    STA shot_cooldown
 F_DC8C:
     LDA #$DD
     PHA
@@ -3595,7 +3595,7 @@ F_DDB8:
 F_DDC1:
     LDA powerup_shot
     BEQ F_DD9B
-    LDA zp_88
+    LDA shot_cooldown
     BNE F_DD9B
     LDA zp_E0
     BNE F_DD9B
@@ -3607,7 +3607,7 @@ F_DDC1:
 F_DDD7:
     LDA #$06
     STA shot_state
-    STA zp_88
+    STA shot_cooldown
     LDA #$03
     STA shot_E3
     LDA #$82
@@ -3628,7 +3628,7 @@ F_DDFA:
 F_DDFC:
     LDA #$06
     STA shot_state_1
-    STA zp_88
+    STA shot_cooldown
     LSR a
     STA shot_E3_1
     LDA #$82
@@ -3663,14 +3663,14 @@ F_DE2C:
     STA shot_state_1
     JMP F_DD46
 F_DE3F:
-    LDA zp_88
+    LDA shot_cooldown
     BNE F_DE72
     LDA zp_E0
     BNE F_DE72
     LDA buttons
     AND #$02
     BEQ F_DE72
-    STA zp_88
+    STA shot_cooldown
     LDA shot_state
     BNE F_DE5E
     LDA #$01
@@ -3924,8 +3924,8 @@ F_E035:
     LDA #$00
     STA player_state
     STA zp_6D
-    LDA zp_7A
-    ORA zp_7B
+    LDA invuln_lo
+    ORA invuln_hi
     BNE F_E08F
     LDA shot_state
     BNE F_E08F
@@ -5221,13 +5221,13 @@ F_E97F:
     RTS
 PlayerState16:
     LDA #$02
-    STA zp_7A
+    STA invuln_lo
     LDA #$00
-    STA zp_7B
-    LDY zp_B9
+    STA invuln_hi
+    LDY ride_timer
     BEQ F_E9B6
     INY
-    STY zp_B9
+    STY ride_timer
     CPY #$30
     BNE F_E9C9
     LDA #$CD
@@ -5256,11 +5256,11 @@ F_E9B6:
     STY player_y_lo
     STY player_y_hi
     INY
-    STY zp_B9
+    STY ride_timer
 F_E9C9:
     RTS
 F_E9CA:
-    LDY zp_BA
+    LDY ride_balloon_slot
     LDA ent_y_lo,y
     CLC
     ADC #$0F
@@ -6750,13 +6750,13 @@ F_F47A:
     CMP #$03
     BNE F_F496
 HurtPlayer:
-    LDA zp_C0
+    LDA hurt_flag
     BEQ F_F497
 F_F496:
     RTS
 F_F497:
-    LDA zp_7A
-    ORA zp_7B
+    LDA invuln_lo
+    ORA invuln_hi
     BNE F_F496
     LDY player_state
     LDA F_F4D5,y
@@ -6767,18 +6767,18 @@ F_F497:
     LDA #$0F
 F_F4AD:
     STA player_state
-    STA zp_C0
+    STA hurt_flag
     LDA #$00
-    STA zp_BF
+    STA death_timer
     STA riding_flag
-    LDA zp_C0
+    LDA hurt_flag
 F_F4B9:
     RTS
-F_F4BA:
-    LDA zp_C0
+HurtPlayerKnockout:
+    LDA hurt_flag
     BNE F_F4B9
-    LDA zp_7A
-    ORA zp_7B
+    LDA invuln_lo
+    ORA invuln_hi
     BNE F_F4B9
     LDY player_state
     LDA F_F4D5,y
@@ -6791,8 +6791,8 @@ F_F4D5:
     .res 14, $01
     .res 14, $00
 PlayerState0F:
-    INC zp_BF
-    LDA zp_BF
+    INC death_timer
+    LDA death_timer
     LSR a
     TAY
     LDA F_F510,y
@@ -6800,7 +6800,7 @@ PlayerState0F:
     LDA #$10
     STA player_state
     LDA #$00
-    STA zp_BF
+    STA death_timer
     JMP PlayerState10
 F_F507:
     STA zp_65
@@ -6811,7 +6811,7 @@ F_F507:
 F_F510:
     .byte $46,$46,$47,$47,$48,$48,$48,$45,$45,$45,$45,$00
 PlayerState10:
-    LDA zp_BF
+    LDA death_timer
     CMP #$63
     BEQ F_F525
     JMP F_F57A
@@ -6823,7 +6823,7 @@ F_F52A:
     JSR RenderOffAndWait
     JSR DisableNMI
     JSR SilenceSound
-    LDA ram_01AE
+    LDA lives
     BNE F_F548
     LDA zp_BB
     AND #$01
@@ -6865,7 +6865,7 @@ F_F57A:
 F_F580:
     CLC
     ADC #$01
-    STA zp_BF
+    STA death_timer
     LDY #$00
     STY ptr_hi
     ASL a
@@ -6900,7 +6900,7 @@ F_F5BA:
     INY
     DEX
     BNE F_F5BA
-    LDA zp_BF
+    LDA death_timer
     LSR a
     STA tmp_a
     ASL a
@@ -7302,21 +7302,21 @@ F_F885:
     PLA
     JMP SwitchBankKeepX
 F_F8B1:
-    LDA ram_01AE
+    LDA lives
     CLC
     ADC tmp_c
-    STA ram_01AE
+    STA lives
     CMP #$63
     BCC F_F8C3
     LDA #$63
-    STA ram_01AE
+    STA lives
 F_F8C3:
     RTS
 F_F8C4:
-    LDA ram_01AE
+    LDA lives
     SEC
     SBC tmp_c
-    STA ram_01AE
+    STA lives
     RTS
 F_F8CE:
     LDA ram_01AA
@@ -8207,7 +8207,6 @@ F_FEF5:
     STA tmp_08
     ASL tmp_a
     BEQ F_FF00
-PlayerState1F:
     JMP F_FF09
 F_FF00:
     LDA (ptr_lo),y

@@ -1145,7 +1145,7 @@ B5_88AA:
     ADC #$16
     CMP tmp_d
     BCC B5_8903
-    LDA zp_C0
+    LDA hurt_flag
     BNE B5_8903
     LDA zp_7C
     BNE B5_88D8
@@ -1159,9 +1159,9 @@ B5_88D8:
     LDA zp_7F
     STA zp_66
     LDA #$14
-    STA zp_7A
+    STA invuln_lo
     LDA #$00
-    STA zp_7B
+    STA invuln_hi
     STA zp_85
     STA zp_7C
     STA zp_7D
@@ -1266,7 +1266,7 @@ B5_8993:
     CMP tmp_d
     BCC B5_8982
     JMP HurtPlayer
-B5_89BB:
+Ent_HurtOnTouchKnockout:
     LDA ent_flags,x
     AND #$04
     BNE B5_8982
@@ -1286,7 +1286,7 @@ B5_89BB:
     ADC #$0F
     CMP tmp_d
     BCC B5_8982
-    JMP F_F4BA
+    JMP HurtPlayerKnockout
 Ent_HurtOnTouch:
     LDA ent_flags,x
     AND #$04
@@ -1322,7 +1322,7 @@ Ent_CheckPlayerTouch:
     ADC #$16
     CMP tmp_d
     BCC B5_8A30
-    LDA zp_C0
+    LDA hurt_flag
     BNE B5_8A30
     LDA zp_7C
     BNE B5_8A31
@@ -1379,9 +1379,9 @@ B5_8A5C:
 B5_8A91:
     STA ent_param2,x
     LDA #$14
-    STA zp_7A
+    STA invuln_lo
     LDA #$00
-    STA zp_7B
+    STA invuln_hi
     JMP Ent_SpawnBurst
 B5_8A9F:
     LDA ent_y_lo,x
@@ -1695,11 +1695,11 @@ B5_8CBB:
     DEC balloons_left
     BNE B5_8D33
     LDA #$00
-    STA zp_B9
+    STA ride_timer
     LDA #$16
     STA player_state
     STA ent_param2,x
-    STX zp_BA
+    STX ride_balloon_slot
     LDA #$09
     JSR PlaySfxNoise
     LDA #$B8
@@ -2597,9 +2597,9 @@ Ent11_Update:
     LDA #$19
     JSR PlaySfxSq2
     LDA #$20
-    STA zp_7A
+    STA invuln_lo
     LDA #$03
-    STA zp_7B
+    STA invuln_hi
     JMP Ent_SpawnBurst
 Ent16_Update:
     JSR B5_80D3
@@ -3302,7 +3302,7 @@ B5_9CE2:
     JMP Ent_TickRadius
     .byte $30,$0E,$00,$04,$00,$88,$03,$00,$00,$00,$FF
 Ent30_Update:
-    JSR B5_89BB
+    JSR Ent_HurtOnTouchKnockout
     LDA entity_tick
     AND #$02
     LSR a
@@ -3820,8 +3820,8 @@ Ent3D_Update:
     LDA #$42
     STA ram_0488
     LDA #$FF
-    STA zp_7A
-    STA zp_7B
+    STA invuln_lo
+    STA invuln_hi
     STA ent_angle,x
     LDA #$41
     STA ent_type,x
@@ -4135,9 +4135,9 @@ Ent47_Update:
     BNE B5_A5B7
     STA ent_type,x
     LDA #$02
-    STA zp_7A
+    STA invuln_lo
     LDA #$00
-    STA zp_7B
+    STA invuln_hi
     LDA #$AC
     LDY #$A5
     JMP SpawnEffects
@@ -6105,9 +6105,9 @@ B5_B6CB:
     LDA #$0E
     STA ent_param,x
     LDA #$3C
-    STA zp_7A
+    STA invuln_lo
     LDA #$00
-    STA zp_7B
+    STA invuln_hi
     LDA #$32
     STA ent_radius,x
     LDA #$0A
@@ -6190,8 +6190,8 @@ B5_B769:
     JMP SpawnEffects
 B5_B783:
     LDA #$FF
-    STA zp_7A
-    STA zp_7B
+    STA invuln_lo
+    STA invuln_hi
     LDA #$78
     STA tmp_c
     LDA #$00

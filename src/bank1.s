@@ -4867,9 +4867,9 @@ B1_B0C6:
     STA camera_mode
     STA zp_6F
     STA zp_6E
-    STA zp_7B
+    STA invuln_hi
     LDA #$96
-    STA zp_7A
+    STA invuln_lo
     LDA #$0C
     STA shot_state
     LDA #$0D

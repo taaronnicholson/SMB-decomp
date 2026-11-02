@@ -2786,13 +2786,13 @@ B2_B548:
     STA player_state
     STA zp_7C
     STA zp_85
-    LDA zp_7B
+    LDA invuln_hi
     BNE B2_B56B
-    LDA zp_7A
+    LDA invuln_lo
     CMP #$08
     BCS B2_B56B
     LDA #$08
-    STA zp_7A
+    STA invuln_lo
 B2_B56B:
     JMP PlayerState00
 B2_B56E:
@@ -2833,10 +2833,9 @@ PlayerStateHandlers:
     .word PlayerState1D
 B2_B5E6:
     .word PlayerState1E
-    .word PlayerState1F
-    .byte $FE,$FE,$FF,$FF,$00,$01,$01,$02,$02,$02,$03,$FD,$FE,$FE,$FE,$FF
-    .byte $FF,$00,$01,$01,$02,$02,$02,$03,$FE,$FE,$FF,$FF,$00,$01,$01,$02
-    .byte $02,$FE,$FF,$FF,$00,$01,$01,$02,$FE,$FF,$00,$01,$02,$80
+    .byte $FD,$FE,$FE,$FE,$FF,$FF,$00,$01,$01,$02,$02,$02,$03,$FD,$FE,$FE
+    .byte $FE,$FF,$FF,$00,$01,$01,$02,$02,$02,$03,$FE,$FE,$FF,$FF,$00,$01
+    .byte $01,$02,$02,$FE,$FF,$FF,$00,$01,$01,$02,$FE,$FF,$00,$01,$02,$80
     LDX ram_01A5
     INC ram_01A5
     LDA #$00
@@ -2922,7 +2921,7 @@ B2_B64F:
     LDA #$00
     STA tmp_a
     STA ptr_hi
-    LDA ram_01AE
+    LDA lives
     STA ptr_lo
     JSR B2_B732
     LDA #$02
@@ -3068,10 +3067,10 @@ ResetLevelState:
     STA zp_7E
     STA zp_18
     STA zp_19
-    STA zp_C0
+    STA hurt_flag
     STA zp_E0
-    STA zp_7A
-    STA zp_7B
+    STA invuln_lo
+    STA invuln_hi
     STA zp_80
     STA zp_6D
     STA zp_BE

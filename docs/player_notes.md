@@ -11,11 +11,28 @@ uses read order instead: A, B, Select, Start, Up, Down, Left, Right = bits 0-7):
   a free slot and the cooldown `zp_88` is 0 [from the code; B did nothing in the emulator without the power-up].
 - **Start** (fresh press, only when the fade has finished) is handled by `CheckPause`.
 
-**States** (`player_state`, `$63`; dispatch table `PlayerStateHandlers`, bank 2 `$B5AA`, 32 entries, 31 distinct handlers; `player_states.md` is the
-generated table): `$00` ground, `$01` rising (jump), `$02` falling [verified], `$04` landing [verified], `$05`-`$07` peck sequence [verified; `$05`,
-`$06`, `$07` are trampolines into bank 6 `$A2BE`, `$A32E`, `$A3D6`], `$0D` in water (entered below `water_level`, splash sfx `$22`, Up leaves it),
-`$16` level complete (set when `balloons_left` reaches 0), `$09` set by the reset code (idle/start of life). `$10`/`$11` and `$1C`-`$1F` are longer
-sequences whose meaning is unverified.
+**States** (`player_state`, `$63`; dispatch table `PlayerStateHandlers`, bank 2 `$B5AA`: 31 entries `$00`-`$1E`; `player_states.md` is the generated table and the
+`PlayerStateNN` labels in `src/fixed.s` carry the one-line meaning). Verified chains (forced or driven in the emulator, `[v]`):
 
-**Hurt:** `HurtPlayer` is called by hazards (tile class 3), by entity touch handlers (`Ent_HurtOnTouch`) and by some states.
+| Sequence | Meaning |
+|----------|---------|
+| `$00` → `$01` → `$02` → `$04` → `$00` [v] | jump (A): rising about 36 frames, falling, landing recovery |
+| `$00` → `$05` → `$06` → `$07` → `$00` [v] | peck (Down): `$05` inspects the tile at the beak, `$06` swings, `$07` = hit a solid tile |
+| `$0F` → `$10` → `$11`..`$15` → `$0E` → `$02` → `$04` → `$00` [v] | hurt: death animation (~21 ticks), dead (~100 ticks, `lives--`), a ~150-frame respawn arc in bank 1 that returns to the spawn point, then a drop |
+| `$1A` → `$1B` → `$11` [v] | knocked-out death (`HurtPlayerKnockout`, e.g. type `$30`), then the same respawn |
+| `$09` → `$0E` → `$02` → `$04` → `$00` [v] | start of a life: drops in and lands |
+| `$16` → `$17` → `$18` → `$19` [v] | level complete: balloon ride up, bonus ascent in area 4, tally, walk off |
+
+**Level completion in detail** [v]: touching the last balloon (`balloons_left` reaches 0) sets `$16`; the player follows the popped balloon (type `$02`, `ride_balloon_slot`)
+upward; at the top of the area `ride_timer` counts to `$30`, the player is moved to area 4 (Y `$03CD`, X `$78`) and `game_state` goes `$08` → `$09` → `$0D`.
+`$17` is the **bonus ascent**: a night-sky area with stars and "50" score popups through which the player rises steadily (the score grew by 50 about every 200 frames);
+at the top `$18` (`game_state` `$0A`/`$0B`) tallies the bonus (6120 points in the test and `lives` went 2 → 3, i.e. an extra life), `$19` walks to a "NEXT" sign and the next stage starts.
+(The emulator hook that forced stage 0 each load restarted stage 0 afterwards; the real game advances `stage_index`.)
+
+**Other states:** `$0D` in water (`water_level`, splash sfx `$22`, Up leaves it); `$03` is a 17-tick state back to `$00` (bank 2 `$B53A`); `$0A` returns to `$00` immediately;
+`$08` is an assisted rise (19 ticks at 3 px per tick set up at `F_DD72`, then it continues as `$01`) whose trigger I could not reproduce (pressing A again while falling does
+not enter it, so it probably needs a power-up); `$1C`-`$1E` call bank 5 `$BC47`/`$BC70`/`$BC75` and showed x-position changes when forced, but their trigger and meaning are unknown; `$0C` and `$1B`
+alone have no observable effect without their set-up variables.
+
+**Hurt:** `HurtPlayer` does nothing while `hurt_flag` (`$C0`) or the invulnerability counter (`invuln_lo/hi`) is set, only hits in states `$00`-`$0D` (table `F_F4D5`), plays noise sfx `$06`, sets `player_state` = `$0F` and `hurt_flag` = `$0F`. It is called by hazards (tile class 3), by entity touch handlers (`Ent_HurtOnTouch`) and by some states; `HurtPlayerKnockout` (`$1A`) is the heavier variant.
 **Vulnerable enemies** (`$5E`) die when the player touches them in state `$02` with `zp_7C` set.
