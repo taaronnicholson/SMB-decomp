@@ -1207,16 +1207,16 @@ Sound_PlaySfxSq1Impl:
     LDY #$0D
 B6_8993:
     LDA (zp_FE),y
-    STA ram_07B5,y
+    STA snd_sfx1_duration,y
     DEY
     BPL B6_8993
-    LDA ram_07C0
-    STA ram_07C8
-    LDA ram_07C2
-    STA ram_07C6
-    LDA ram_07B6
-    STA ram_07C5
-    LDA ram_07BF
+    LDA snd_sfx1_seq_speed
+    STA snd_sfx1_seq_timer
+    LDA snd_sfx1_slide_interval
+    STA snd_sfx1_slide_timer
+    LDA snd_sfx1_pitch_interval
+    STA snd_sfx1_pitch_timer
+    LDA snd_sfx1_seq_index
     ASL a
     TAY
     LDA SfxSeqPtrs,y
@@ -1226,17 +1226,17 @@ B6_8993:
     STA ram_07F4
     STA zp_FF
     LDY #$00
-    STY ram_07C7
+    STY snd_sfx1_seq_pos
     LDA (zp_FE),y
-    ORA ram_07BB
+    ORA snd_sfx1_duty_vol
     STA SQ1_VOL
     LDA #$00
     STA SQ1_SWEEP
-    LDA ram_07B7
-    STA ram_07C3
+    LDA snd_sfx1_period_lo
+    STA snd_sfx1_cur_period_lo
     STA SQ1_LO
-    LDA ram_07B8
-    STA ram_07C4
+    LDA snd_sfx1_period_hi
+    STA snd_sfx1_cur_period_hi
     AND #$03
     STA SQ1_HI
     DEC snd_sfx_sq1
@@ -1353,9 +1353,9 @@ B6_8AE3:
     BNE B6_8AE9
     RTS
 B6_8AE9:
-    LDA ram_07B5
+    LDA snd_sfx1_duration
     BNE B6_8B17
-    LDX ram_07C1
+    LDX snd_sfx1_sustain
     BNE B6_8B17
     LDA snd_playing
     BEQ B6_8B0E
@@ -1373,12 +1373,12 @@ B6_8B0E:
     STX snd_sfx_sq1
     RTS
 B6_8B17:
-    DEC ram_07B5
-    DEC ram_07C8
+    DEC snd_sfx1_duration
+    DEC snd_sfx1_seq_timer
     BNE B6_8B48
-    LDA ram_07C0
-    STA ram_07C8
-    LDY ram_07C7
+    LDA snd_sfx1_seq_speed
+    STA snd_sfx1_seq_timer
+    LDY snd_sfx1_seq_pos
     LDA ram_07F3
     STA zp_FE
     LDA ram_07F4
@@ -1390,71 +1390,71 @@ B6_8B17:
     LDY #$00
     LDA (zp_FE),y
 B6_8B3E:
-    ORA ram_07BB
+    ORA snd_sfx1_duty_vol
     STA SQ1_VOL
     INY
-    STY ram_07C7
+    STY snd_sfx1_seq_pos
 B6_8B48:
-    LDA ram_07C5
+    LDA snd_sfx1_pitch_timer
     BNE B6_8B82
-    LDA ram_07C1
+    LDA snd_sfx1_sustain
     BNE B6_8B58
-    LDA ram_07BE
+    LDA snd_sfx1_repeat
     BNE B6_8B58
     RTS
 B6_8B58:
-    DEC ram_07BE
-    LDA ram_07B6
-    STA ram_07C5
-    LDA ram_07B7
-    LDX ram_07BC
+    DEC snd_sfx1_repeat
+    LDA snd_sfx1_pitch_interval
+    STA snd_sfx1_pitch_timer
+    LDA snd_sfx1_period_lo
+    LDX snd_sfx1_add_pitch_offset
     BEQ B6_8B6C
     ADC ram_0751
 B6_8B6C:
-    STA ram_07C3
+    STA snd_sfx1_cur_period_lo
     STA SQ1_LO
-    LDA ram_07B8
-    CMP ram_07C4
+    LDA snd_sfx1_period_hi
+    CMP snd_sfx1_cur_period_hi
     BEQ B6_8B82
-    STA ram_07C4
+    STA snd_sfx1_cur_period_hi
     AND #$03
     STA SQ1_HI
 B6_8B82:
-    DEC ram_07C5
-    LDA ram_07C2
+    DEC snd_sfx1_pitch_timer
+    LDA snd_sfx1_slide_interval
     BEQ B6_8B92
-    DEC ram_07C6
+    DEC snd_sfx1_slide_timer
     BNE B6_8BDA
-    STA ram_07C6
+    STA snd_sfx1_slide_timer
 B6_8B92:
-    LDA ram_07BD
+    LDA snd_sfx1_slide_mode
     BEQ B6_8BDA
     BMI B6_8BBA
-    LDA ram_07C3
+    LDA snd_sfx1_cur_period_lo
     SEC
-    SBC ram_07B9
-    STA ram_07C3
+    SBC snd_sfx1_slide_lo
+    STA snd_sfx1_cur_period_lo
     STA SQ1_LO
-    LDA ram_07C4
-    SBC ram_07BA
-    CMP ram_07C4
+    LDA snd_sfx1_cur_period_hi
+    SBC snd_sfx1_slide_hi
+    CMP snd_sfx1_cur_period_hi
     BEQ B6_8BB9
-    STA ram_07C4
+    STA snd_sfx1_cur_period_hi
     AND #$03
     STA SQ1_HI
 B6_8BB9:
     RTS
 B6_8BBA:
-    LDA ram_07C3
+    LDA snd_sfx1_cur_period_lo
     CLC
-    ADC ram_07B9
-    STA ram_07C3
+    ADC snd_sfx1_slide_lo
+    STA snd_sfx1_cur_period_lo
     STA SQ1_LO
-    LDA ram_07C4
-    ADC ram_07BA
-    CMP ram_07C4
+    LDA snd_sfx1_cur_period_hi
+    ADC snd_sfx1_slide_hi
+    CMP snd_sfx1_cur_period_hi
     BEQ B6_8BDA
-    STA ram_07C4
+    STA snd_sfx1_cur_period_hi
     AND #$03
     STA SQ1_HI
 B6_8BDA:

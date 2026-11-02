@@ -188,7 +188,24 @@ A **pattern** is a byte stream:
 
 **Sound effects**: `Sound_PlaySfxSq1/Sq2/Noise` (A = id 0-74) copy a 14-byte `SfxDefN` (via `SfxDefPtrs`) into that
 channel's SFX state and set `snd_sfx_*` so music stops writing that channel. SFX volume shapes are `SfxSeq0-15`
-(via `SfxSeqPtrs`, `$FF`-terminated). The meaning of each definition byte is not yet decoded.
+(via `SfxSeqPtrs`, `$FF`-terminated). The 14 definition bytes (copied to `snd_sfx1_*` at `$07B5` for pulse 1; pulse 2 and noise use the same layout):
+
+| Byte | Field | Meaning |
+|------|-------|---------|
+| 0 | `duration` | frames to play (counted down; the effect ends at 0 unless `sustain`) |
+| 1 | `pitch_interval` | frames between pitch re-triggers |
+| 2-3 | `period_lo/hi` | start timer period (hi uses 2 bits) |
+| 4-5 | `slide_lo/hi` | period change per slide step |
+| 6 | `duty_vol` | duty / length-halt bits ORed into the volume register |
+| 7 | `add_pitch_offset` | if non-zero, adds the global pitch offset `$0751` at each re-trigger |
+| 8 | `slide_mode` | 0 none, positive = subtract the slide (pitch rises), negative = add |
+| 9 | `repeat` | pitch re-trigger count |
+| 10 | `seq_index` | which `SfxSeq` volume sequence |
+| 11 | `seq_speed` | frames per sequence step |
+| 12 | `sustain` | non-zero = keep playing until stopped |
+| 13 | `slide_interval` | frames per slide step (0 = every frame) |
+
+(`$FF`-terminated volume sequences are stepped every `seq_speed` frames; a `$80` entry restarts the sequence.)
 
 `tools/gen_sound_hints.py` walks the song table and emits `tools/hints_sound.txt`
 (lists, 72 streams, and the `snd_*` RAM names); `make regen` runs it.

@@ -288,7 +288,7 @@ struct 6 9415 1 bbbbbbbbb   ; signed period offsets, $80 = loop
 name 6 941E PitchMod8
 struct 6 941E 1 bbbbbbbbb   ; signed period offsets, $80 = loop
 name 6 8DBD SfxDefPtrs
-dwords 6 8DBD 75   ; pointers to 14-byte SFX definitions
+dwords 6 8DBD 75   ; pointers to 14-byte SFX definitions: duration, pitch interval, period lo/hi, slide lo/hi, duty+volume bits, add-pitch-offset flag, slide mode, repeat count, seq index, seq speed, sustain, slide interval
 name 6 926D SfxSeqPtrs
 dwords 6 926D 16   ; pointers to SFX volume sequences
 name 6 8E53 SfxDef0
@@ -479,6 +479,26 @@ name 6 8012 Sound_PlaySfxNoise
 name 6 8980 Sound_PlaySfxSq1Impl
 name 6 89EC Sound_PlaySfxSq2Impl
 name 6 8A6F Sound_PlaySfxNoiseImpl
+ram 07B5 snd_sfx1_duration
+ram 07B6 snd_sfx1_pitch_interval
+ram 07B7 snd_sfx1_period_lo
+ram 07B8 snd_sfx1_period_hi
+ram 07B9 snd_sfx1_slide_lo
+ram 07BA snd_sfx1_slide_hi
+ram 07BB snd_sfx1_duty_vol
+ram 07BC snd_sfx1_add_pitch_offset
+ram 07BD snd_sfx1_slide_mode
+ram 07BE snd_sfx1_repeat
+ram 07BF snd_sfx1_seq_index
+ram 07C0 snd_sfx1_seq_speed
+ram 07C1 snd_sfx1_sustain
+ram 07C2 snd_sfx1_slide_interval
+ram 07C3 snd_sfx1_cur_period_lo
+ram 07C4 snd_sfx1_cur_period_hi
+ram 07C5 snd_sfx1_pitch_timer
+ram 07C6 snd_sfx1_slide_timer
+ram 07C7 snd_sfx1_seq_pos
+ram 07C8 snd_sfx1_seq_timer
 ram 074A snd_playing
 ram 074B snd_sfx_sq1
 ram 074C snd_sfx_sq2

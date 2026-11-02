@@ -78,7 +78,7 @@ for i in range(NPIT):
 # ---- sound effects: 75 x 14-byte definitions via pointer table, plus 16 SFX volume sequences ----
 SFX_TAB, NSFX, SEQ_TAB, NSEQ, SEQ_END = 0x8DBD, 75, 0x926D, 16, ENV_LO
 def wd(a): return by(a) | by(a + 1) << 8
-out += [f'name 6 {SFX_TAB:X} SfxDefPtrs', f'dwords 6 {SFX_TAB:X} {NSFX}   ; pointers to 14-byte SFX definitions',
+out += [f'name 6 {SFX_TAB:X} SfxDefPtrs', f'dwords 6 {SFX_TAB:X} {NSFX}   ; pointers to 14-byte SFX definitions: duration, pitch interval, period lo/hi, slide lo/hi, duty+volume bits, add-pitch-offset flag, slide mode, repeat count, seq index, seq speed, sustain, slide interval',
         f'name 6 {SEQ_TAB:X} SfxSeqPtrs', f'dwords 6 {SEQ_TAB:X} {NSEQ}   ; pointers to SFX volume sequences']
 for i in range(NSFX):
     a = wd(SFX_TAB + 2 * i)
@@ -92,6 +92,11 @@ for i in range(NSEQ):
     out.append(f'struct 6 {a:X} 1 ' + 'b' * (nxt - a))
 out += ['name 6 800C Sound_PlaySfxSq1       ; jump-table entry: A = sfx id (0-74)', 'name 6 800F Sound_PlaySfxSq2', 'name 6 8012 Sound_PlaySfxNoise',
         'name 6 8980 Sound_PlaySfxSq1Impl', 'name 6 89EC Sound_PlaySfxSq2Impl', 'name 6 8A6F Sound_PlaySfxNoiseImpl']
+# pulse 1 sound-effect state: 14 definition bytes copied to $07B5, then runtime values (pulse 2 / noise blocks use the same layout)
+SFX_FIELDS = ['duration', 'pitch_interval', 'period_lo', 'period_hi', 'slide_lo', 'slide_hi', 'duty_vol', 'add_pitch_offset',
+              'slide_mode', 'repeat', 'seq_index', 'seq_speed', 'sustain', 'slide_interval',
+              'cur_period_lo', 'cur_period_hi', 'pitch_timer', 'slide_timer', 'seq_pos', 'seq_timer']
+for i, f in enumerate(SFX_FIELDS): out.append(f'ram {0x7B5 + i:04X} snd_sfx1_{f}')
 out += ['ram 074A snd_playing', 'ram 074B snd_sfx_sq1', 'ram 074C snd_sfx_sq2', 'ram 074D snd_sfx_noise',
         'ram 074E snd_tempo', 'ram 074F snd_tempo_base', 'ram 0756 snd_tempo_acc', 'ram 0757 snd_song_transpose',
         'ram 0758 snd_song_ended',
