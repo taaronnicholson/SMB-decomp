@@ -28,6 +28,6 @@ name f F671 PlayerState18   ; player_state $18 - bonus tally: score added, extra
 name f F85E PlayerState19   ; player_state $19 - walks to the NEXT sign, then the next stage starts [v]
 name f F866 PlayerState1A   ; player_state $1A - knocked-out death animation (HurtOnTouch variant, bank 3) [v]
 name f F86E PlayerState1B   ; player_state $1B - knocked-out death, second part, then respawn [v]
-name f FA50 PlayerState1C   ; player_state $1C
-name f FA59 PlayerState1D   ; player_state $1D
-name f FA62 PlayerState1E   ; player_state $1E
+name f FA50 PlayerState1C   ; player_state $1C - cutscene: walks right until X = $0140, then holds frame $44 (bank 5 $BC47; code-read, not triggered)
+name f FA59 PlayerState1D   ; player_state $1D - cutscene: stands still, frame 0 (bank 5 $BC70; code-read)
+name f FA62 PlayerState1E   ; player_state $1E - cutscene: scripted hop along a Y-offset table ($BCD7), sfx $29 and an effect burst at the end (bank 5 $BC75; code-read)

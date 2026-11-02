@@ -31,7 +31,7 @@ at the top `$18` (`game_state` `$0A`/`$0B`) tallies the bonus (6120 points in th
 
 **Other states:** `$0D` in water (`water_level`, splash sfx `$22`, Up leaves it); `$03` is a 17-tick state back to `$00` (bank 2 `$B53A`); `$0A` returns to `$00` immediately;
 `$08` is an assisted rise (19 ticks at 3 px per tick set up at `F_DD72`, then it continues as `$01`) whose trigger I could not reproduce (pressing A again while falling does
-not enter it, so it probably needs a power-up); `$1C`-`$1E` call bank 5 `$BC47`/`$BC70`/`$BC75` and showed x-position changes when forced, but their trigger and meaning are unknown; `$0C` and `$1B`
+not enter it, so it probably needs a power-up); `$1C`-`$1E` are scripted cutscene states in bank 5 (`$BC47`: walk right until X = `$0140` then hold a pose; `$BC70`: stand still; `$BC75`: a hop along a Y-offset table with sfx `$29` and an effect burst), entered from boss/ending code (bank 5, around `STA player_state` with `$1D`/`$1E`); read from the code, not triggered; `$0C` and `$1B`
 alone have no observable effect without their set-up variables.
 
 **Hurt:** `HurtPlayer` does nothing while `hurt_flag` (`$C0`) or the invulnerability counter (`invuln_lo/hi`) is set, only hits in states `$00`-`$0D` (table `F_F4D5`), plays noise sfx `$06`, sets `player_state` = `$0F` and `hurt_flag` = `$0F`. It is called by hazards (tile class 3), by entity touch handlers (`Ent_HurtOnTouch`) and by some states; `HurtPlayerKnockout` (`$1A`) is the heavier variant.
