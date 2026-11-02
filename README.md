@@ -84,7 +84,12 @@ then 10-byte entity records ended by `$FF`: `type, Y (16-bit), X (16-bit), flags
 the entity arrays (`ent_type`, `ent_y_lo/hi`, `ent_x_lo/hi`, `ent_flags`, `ent_param`, `ent_angle`, `ent_radius`,
 `ent_param2`). Y is the long axis for tall areas: coordinates are (Y, X) throughout, like the stage-record spawn points
 (an earlier version of the entity names had X and Y swapped). Area 0 has 9 entities (types `$2E`, `$51`, `$4E`×7).
-Some pointers sit right before code in bank 1, so only the parsed span is claimed as data. `tools/render_maps.py` also writes `build/maps/area_NN_spawns.png` with each record drawn at (X, Y-32) and labelled with
+Some pointers sit right before code in bank 1, so only the parsed span is claimed as data.
+After the entity records each area has: a word (`zp_B4`) giving the offset to a per-row table read by `F_FC3F` (used by the
+patrol step to look ahead; not decoded), 3-byte entries grouped by `$FF` and ended by `$FE` (not decoded), and **one-time objects**:
+8-byte records `flag bit, type, Y, X, flags, frame` ended by `$FF`, skipped when their bit in `onetime_flags` (`$0733`) is set.
+Area 0's one is the type `$08` hidden bonus item at (Y `$E0`, X `$50`), inside a dotted-outline secret area of the map.
+`build/maps/area_NN_spawns.png` marks spawn records (red), balloons (cyan) and one-time objects (green). `tools/render_maps.py` also writes `build/maps/area_NN_spawns.png` with each record drawn at (X, Y-32) and labelled with
 its type. Observed in the emulator at the start of stage 0 (area 0): slots 0-2 hold type `01` (X = `$30`, `$30`, `$80`;
 slots 0-1 are not in the spawn list, so they are created elsewhere), slot 8 type `2E`, slot 9 type `51` (it changes to `52`
 at runtime), slots 10-16 seven type `4E`, and slot 17 type `08`, which comes from a second per-area record list after the
@@ -137,7 +142,9 @@ helpers (`Ent_CheckPlayerOverlap`, `Ent_CheckPlayerTouch`). Other handlers read 
 - `$01` **balloon** (inferred, the level goal): on touching the player it stores the respawn point (`spawn_y/x`, area), becomes `$02`
   (a popped balloon that rises along a displacement table) and decrements `balloons_left` (`$A8`, set from the stage data at level
   load and drawn on the HUD; `balloons_popped` is `$A9`); at 0 the level-end state (`$16`) starts. Slots 0-7 are reserved for
-  balloons, so they come from the per-area list after the entity list, not from the spawn records.
+  balloons. **Balloons are map tile `$C4`**: at level load `ScanMapForBalloons` walks the whole map and `SpawnBalloon` creates a
+  type `$01` entity for each `$C4` (skipping ones already present for that area). Area 0 has three, matching the three balloon
+  slots seen in the emulator; counts per area: 3,1,0,3,0,0,0,1,1,1,4,2,0,0,1,1,4,0,1,0,1,1,1,2.
 - `$08` hidden bonus item: on touch plays sfx `$19` (`PlaySfxSq2`), turns into type `$07` and increments `items_found` (`$D7`), which the
   "FOUND n / NOW FIND ALL 4 / ONE ON EACH STAGE" message prints.
 - `$51` → `$52` orbiter: `$51` saves its position as a centre point and becomes `$52`, which adds `ent_param2` to `ent_angle` each frame

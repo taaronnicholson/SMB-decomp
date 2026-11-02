@@ -165,3 +165,8 @@ name f CE78 PlaySfxSq2           ; A = sfx id (bank-safe wrapper for Sound_PlayS
 ram 00A8 balloons_left           ; set from the stage data at level load, drawn on the HUD; level ends at 0 (inferred)
 ram 00A9 balloons_popped
 ram 00D7 items_found             ; hidden bonus items found (the "FOUND n" message)
+
+; ---- balloons and one-time objects ----
+name f CCC1 SpawnBalloon          ; called for each map tile $C4: reuses or takes a free slot 0-7, type $01, ent_angle = area
+name f CA6F ScanMapForBalloons    ; level load: walks every map tile of the area
+ram 0733 onetime_flags            ; bitmap: one-time objects (from the area spawn data) already taken

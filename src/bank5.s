@@ -2093,8 +2093,8 @@ B5_90BF:
     AND #$07
     TAX
     LDA F_C53C,x
-    ORA ram_0733,y
-    STA ram_0733,y
+    ORA onetime_flags,y
+    STA onetime_flags,y
     LDX zp_42
     RTS
 Ent09_Update:
@@ -2699,12 +2699,8 @@ B5_96FF:
     JMP EntityDeltaFromCentre
 B5_9720:
     .byte $02,$04,$06,$07,$09,$0A,$0B,$0B,$0C,$0C,$0C,$0C,$0B,$0B,$0A,$09
-    .byte $07,$06,$04,$02,$00
-    .word F_FDFE
-    .word F_FCFD
-    .word F_FDFC
-    .word F_FEFD
-    .byte $00,$01,$02,$03,$03,$04,$04,$04,$03,$03,$02,$02,$01,$01,$00,$80
+    .byte $07,$06,$04,$02,$00,$FE,$FD,$FD,$FC,$FC,$FD,$FD,$FE,$00,$01,$02
+    .byte $03,$03,$04,$04,$04,$03,$03,$02,$02,$01,$01,$00,$80
 B5_974D:
     .byte $FF,$FE,$FE,$FD,$FD,$FD,$FD,$FD,$FD,$FD,$FE,$FE,$FF,$00,$00,$00
     .byte $01,$02,$02,$03,$03,$03,$03,$03,$03,$03,$02,$02,$01,$00,$00,$00
@@ -3412,26 +3408,16 @@ B5_9E25:
 B5_9E2E:
     .res 20, $0F
     .byte $1F,$0F,$0F,$1F,$0F,$0F,$1F,$0F,$1F,$0F,$0F,$0F,$0F,$FF,$0F,$FF
-    .byte $FF,$FF,$EF,$FF,$EF,$FF
-    .word F_EFEF
-    .word F_EFEF
-    .word F_E0EF
-    .word F_E0FF
-    .word F_E1F0
-    .word F_F1F1
-    .word F_F1F1
-    .byte $01,$F1,$01,$01,$F1,$01,$01,$01,$01,$01,$01,$01,$11,$01,$11,$11
-    .byte $11,$21,$11,$11,$21,$10,$21,$20,$20,$20,$20,$21,$20,$20,$10,$10
-    .byte $1F,$10,$0F,$10,$0F,$1F,$0F,$0F,$1F,$0F,$0F,$0F,$0F,$0F,$0F,$0F
-    .byte $0F,$0F,$0F,$0F,$FF,$0F,$0F,$0F,$FF,$0F,$0F,$0F,$FF,$0F,$0F,$0F
-    .byte $FF,$0F,$0F,$0F,$FF,$0F,$0F,$0F,$FF,$0F,$0F,$FF,$0F
-    .word F_FF0F
-    .word F_F00F
-    .word F_F00F
-    .word F_F00F
-    .byte $F0,$FF,$F0,$FF,$F0,$00,$FF,$00,$0F,$FF,$0F,$0F,$0F,$0F,$0F,$00
-    .byte $1F,$00,$0F,$10,$0F,$00,$10,$00,$1F,$10,$10,$10,$1F,$10,$10,$10
-    .byte $80
+    .byte $FF,$FF,$EF,$FF,$EF,$FF,$EF,$EF,$EF,$EF,$EF,$E0,$FF,$E0,$F0,$E1
+    .byte $F1,$F1,$F1,$F1,$01,$F1,$01,$01,$F1,$01,$01,$01,$01,$01,$01,$01
+    .byte $11,$01,$11,$11,$11,$21,$11,$11,$21,$10,$21,$20,$20,$20,$20,$21
+    .byte $20,$20,$10,$10,$1F,$10,$0F,$10,$0F,$1F,$0F,$0F,$1F,$0F,$0F,$0F
+    .res 8, $0F
+    .byte $FF,$0F,$0F,$0F,$FF,$0F,$0F,$0F,$FF,$0F,$0F,$0F,$FF,$0F,$0F,$0F
+    .byte $FF,$0F,$0F,$0F,$FF,$0F,$0F,$FF,$0F,$0F,$FF,$0F,$F0,$0F,$F0,$0F
+    .byte $F0,$F0,$FF,$F0,$FF,$F0,$00,$FF,$00,$0F,$FF,$0F,$0F,$0F,$0F,$0F
+    .byte $00,$1F,$00,$0F,$10,$0F,$00,$10,$00,$1F,$10,$10,$10,$1F,$10,$10
+    .byte $10,$80
 Ent33_Update:
     LDY ent_angle,x
     INC ent_angle,x

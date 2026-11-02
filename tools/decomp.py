@@ -317,7 +317,8 @@ for p in range(NB):
             tp = FIXED if t >= 0xC000 else (p if p != FIXED else None)
             if tp is not None and t >= 0x8000 and (tp, t) in starts: run.append((b, t, tp)); b += 2
             else: break
-        if len(run) >= 4:
+        same = sum(1 for _b, _t, tp in run if tp == p)
+        if len(run) >= 4 and same * 2 >= len(run):      # most targets must lie in the table's own bank
             auto_tables.append((p, a, run)); a = b
         else: a += 1
 # word tables of code pointers (from hints) get .word emission

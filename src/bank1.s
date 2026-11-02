@@ -4,13 +4,9 @@
 .segment "BANK1"
 
 B1_8000:
-    .byte $00,$FC,$F8,$F4
-    .word F_ECF0
-    .word F_E4E8
-    .word F_DCE0
-    .word F_D4D8
-    .byte $D0,$CC,$C8,$C4,$C0,$BC,$B8,$B4,$B0,$AC,$A8,$A4,$A0,$9C,$98,$94
-    .byte $90,$8C,$88,$84,$80,$7C,$78,$74,$70,$6C,$68,$64,$60,$5C,$58,$54
+    .byte $00,$FC,$F8,$F4,$F0,$EC,$E8,$E4,$E0,$DC,$D8,$D4,$D0,$CC,$C8,$C4
+    .byte $C0,$BC,$B8,$B4,$B0,$AC,$A8,$A4,$A0,$9C,$98,$94,$90,$8C,$88,$84
+    .byte $80,$7C,$78,$74,$70,$6C,$68,$64,$60,$5C,$58,$54
 B1_802C:
     LDA zp_63
     CMP #$10
@@ -3556,7 +3552,7 @@ AreaSpawnPtrs:
     .word AreaSpawn14
     .word AreaSpawn15
     .byte $4D,$AB
-; AreaSpawn0: entity spawn list for area(s) 18: 0 setup actions, 9 entities
+; AreaSpawn0: spawn data for area(s) 18: 0 setup actions, 9 entities, 15 3-byte entries, 2 one-time objects
 AreaSpawn0:
     .byte $FF
     .byte $75
@@ -3587,18 +3583,48 @@ AreaSpawn0:
     .word $0090, $00E0
     .byte $B8, $00, $02, $00, $00
     .byte $FF
-    .byte $46,$00,$06,$0D,$07,$06,$24,$07,$FF,$08,$37,$03,$08,$3D,$02,$FF
-    .byte $09,$0D,$07,$09,$12,$06,$09,$0F,$15,$FF,$0A,$0D,$02,$0A,$06,$03
-    .byte $0A,$2A,$03,$0A,$2D,$02,$FF,$0B,$12,$07,$0B,$24,$07,$FF,$0C,$21
-    .byte $03,$0C,$16,$02,$FE,$00,$06,$70,$00,$10,$00,$08,$00,$02,$09,$70
-    .byte $00,$D0,$01,$18,$00,$FF,$34,$00,$34,$00,$34,$00,$34,$00,$34,$00
-    .byte $34,$00,$02,$00,$34,$00,$09,$00,$10,$00,$1A,$00,$27,$00,$2E,$00
-; AreaSpawn1: entity spawn list for area(s) 19: 0 setup actions, 0 entities
+    .word $0046
+    .byte $06, $0D, $07
+    .byte $06, $24, $07
+    .byte $FF
+    .byte $08, $37, $03
+    .byte $08, $3D, $02
+    .byte $FF
+    .byte $09, $0D, $07
+    .byte $09, $12, $06
+    .byte $09, $0F, $15
+    .byte $FF
+    .byte $0A, $0D, $02
+    .byte $0A, $06, $03
+    .byte $0A, $2A, $03
+    .byte $0A, $2D, $02
+    .byte $FF
+    .byte $0B, $12, $07
+    .byte $0B, $24, $07
+    .byte $FF
+    .byte $0C, $21, $03
+    .byte $0C, $16, $02
+    .byte $FE
+    .byte $00, $06
+    .word $0070, $0010
+    .byte $08, $00
+    .byte $02, $09
+    .word $0070, $01D0
+    .byte $18, $00
+    .byte $FF
+    .byte $34,$00,$34,$00,$34,$00,$34,$00,$34,$00,$34,$00,$02,$00,$34,$00
+    .byte $09,$00,$10,$00,$1A,$00,$27,$00,$2E,$00
+; AreaSpawn1: spawn data for area(s) 19: 0 setup actions, 0 entities, 0 3-byte entries, 1 one-time objects
 AreaSpawn1:
     .byte $FF
     .byte $FF
-    .byte $0C,$00,$FE,$01,$08,$60,$00,$B8,$00,$10,$00,$FF
-; AreaSpawn2: entity spawn list for area(s) 20: 0 setup actions, 16 entities
+    .word $000C
+    .byte $FE
+    .byte $01, $08
+    .word $0060, $00B8
+    .byte $10, $00
+    .byte $FF
+; AreaSpawn2: spawn data for area(s) 20: 0 setup actions, 16 entities, 24 3-byte entries, 0 one-time objects
 AreaSpawn2:
     .byte $FF
     .byte $56
@@ -3650,19 +3676,52 @@ AreaSpawn2:
     .word $0120, $00D0
     .byte $78, $00, $02, $00, $20
     .byte $FF
-    .byte $57,$00,$0C,$02,$05,$FF,$0F,$0B,$03,$0F,$0E,$02,$FF,$12,$0B,$03
-    .byte $12,$0E,$02,$FF,$14,$02,$04,$FF,$15,$0B,$03,$15,$0E,$02,$FF,$16
-    .byte $02,$07,$16,$08,$07,$FF,$1C,$02,$07,$1C,$08,$07,$FF,$1E,$07,$06
-    .byte $1E,$01,$06,$FF,$24,$01,$06,$24,$07,$06,$FF,$28,$01,$03,$28,$06
-    .byte $02,$FF,$2D,$0B,$06,$2D,$0E,$06,$2D,$08,$02,$2D,$01,$03,$FF,$30
-    .byte $0E,$06,$30,$0B,$06,$FE,$FF,$55,$00,$55,$00,$55,$00,$55,$00,$55
-    .byte $00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$02
-    .byte $00,$55,$00,$55,$00,$06,$00,$55,$00,$55,$00,$0D,$00,$55,$00,$14
-    .byte $00,$18,$00,$1F,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$26
-    .byte $00,$55,$00,$2D,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$34
-    .byte $00,$55,$00,$55,$00,$55,$00,$3B,$00,$55,$00,$55,$00,$55,$00,$55
-    .byte $00,$42,$00,$55,$00,$55,$00,$4F,$00
-; AreaSpawn3: entity spawn list for area(s) 3: 0 setup actions, 10 entities
+    .word $0057
+    .byte $0C, $02, $05
+    .byte $FF
+    .byte $0F, $0B, $03
+    .byte $0F, $0E, $02
+    .byte $FF
+    .byte $12, $0B, $03
+    .byte $12, $0E, $02
+    .byte $FF
+    .byte $14, $02, $04
+    .byte $FF
+    .byte $15, $0B, $03
+    .byte $15, $0E, $02
+    .byte $FF
+    .byte $16, $02, $07
+    .byte $16, $08, $07
+    .byte $FF
+    .byte $1C, $02, $07
+    .byte $1C, $08, $07
+    .byte $FF
+    .byte $1E, $07, $06
+    .byte $1E, $01, $06
+    .byte $FF
+    .byte $24, $01, $06
+    .byte $24, $07, $06
+    .byte $FF
+    .byte $28, $01, $03
+    .byte $28, $06, $02
+    .byte $FF
+    .byte $2D, $0B, $06
+    .byte $2D, $0E, $06
+    .byte $2D, $08, $02
+    .byte $2D, $01, $03
+    .byte $FF
+    .byte $30, $0E, $06
+    .byte $30, $0B, $06
+    .byte $FE
+    .byte $FF
+    .byte $55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00
+    .byte $55,$00,$55,$00,$55,$00,$55,$00,$02,$00,$55,$00,$55,$00,$06,$00
+    .byte $55,$00,$55,$00,$0D,$00,$55,$00,$14,$00,$18,$00,$1F,$00,$55,$00
+    .byte $55,$00,$55,$00,$55,$00,$55,$00,$26,$00,$55,$00,$2D,$00,$55,$00
+    .byte $55,$00,$55,$00,$55,$00,$55,$00,$34,$00,$55,$00,$55,$00,$55,$00
+    .byte $3B,$00,$55,$00,$55,$00,$55,$00,$55,$00,$42,$00,$55,$00,$55,$00
+    .byte $4F,$00
+; AreaSpawn3: spawn data for area(s) 3: 0 setup actions, 10 entities, 7 3-byte entries, 0 one-time objects
 AreaSpawn3:
     .byte $FF
     .byte $31
@@ -3696,20 +3755,38 @@ AreaSpawn3:
     .word $0070, $0070
     .byte $DA, $00, $03, $1E, $20
     .byte $FF
-    .byte $1E,$00,$05,$07,$05,$FF,$0B,$07,$04,$FF,$0C,$08,$05,$FF,$11,$08
-    .byte $04,$FF,$14,$09,$03,$14,$0D,$02,$FF,$17,$09,$02,$FE,$FF,$1C,$00
-    .byte $1C,$00,$1C,$00,$1C,$00,$1C,$00,$02,$00,$1C,$00,$1C,$00,$1C,$00
-    .byte $1C,$00,$1C,$00,$06,$00,$0A,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00
-    .byte $0E,$00,$1C,$00,$1C,$00,$12,$00,$1C,$00,$1C,$00,$19,$00,$1C,$00
+    .word $001E
+    .byte $05, $07, $05
+    .byte $FF
+    .byte $0B, $07, $04
+    .byte $FF
+    .byte $0C, $08, $05
+    .byte $FF
+    .byte $11, $08, $04
+    .byte $FF
+    .byte $14, $09, $03
+    .byte $14, $0D, $02
+    .byte $FF
+    .byte $17, $09, $02
+    .byte $FE
+    .byte $FF
+    .byte $1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$02,$00,$1C,$00,$1C,$00
+    .byte $1C,$00,$1C,$00,$1C,$00,$06,$00,$0A,$00,$1C,$00,$1C,$00,$1C,$00
+    .byte $1C,$00,$0E,$00,$1C,$00,$1C,$00,$12,$00,$1C,$00,$1C,$00,$19,$00
     .byte $1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00
     .byte $1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00,$1C,$00
-    .byte $1C,$00
-; AreaSpawn4: entity spawn list for area(s) 7: 0 setup actions, 0 entities
+    .byte $1C,$00,$1C,$00
+; AreaSpawn4: spawn data for area(s) 7: 0 setup actions, 0 entities, 0 3-byte entries, 1 one-time objects
 AreaSpawn4:
     .byte $FF
     .byte $FF
-    .byte $0C,$00,$FE,$01,$08,$40,$00,$60,$00,$10,$00,$FF
-; AreaSpawn5: entity spawn list for area(s) 8: 0 setup actions, 12 entities
+    .word $000C
+    .byte $FE
+    .byte $01, $08
+    .word $0040, $0060
+    .byte $10, $00
+    .byte $FF
+; AreaSpawn5: spawn data for area(s) 8: 0 setup actions, 12 entities, 4 3-byte entries, 1 one-time objects
 AreaSpawn5:
     .byte $FF
     .byte $19
@@ -3749,11 +3826,22 @@ AreaSpawn5:
     .word $00B0, $01F0
     .byte $58, $00, $10, $78, $00
     .byte $FF
-    .byte $1B,$00,$06,$10,$05,$FF,$08,$2A,$02,$FF,$09,$10,$04,$FF,$0B,$25
-    .byte $02,$FE,$00,$06,$60,$00,$50,$01,$08,$00,$FF,$11,$00,$11,$00,$11
-    .byte $00,$11,$00,$11,$00,$11,$00,$02,$00,$11,$00,$06,$00,$0A,$00,$11
-    .byte $00,$0E,$00
-; AreaSpawn6: entity spawn list for area(s) 9: 0 setup actions, 7 entities
+    .word $001B
+    .byte $06, $10, $05
+    .byte $FF
+    .byte $08, $2A, $02
+    .byte $FF
+    .byte $09, $10, $04
+    .byte $FF
+    .byte $0B, $25, $02
+    .byte $FE
+    .byte $00, $06
+    .word $0060, $0150
+    .byte $08, $00
+    .byte $FF
+    .byte $11,$00,$11,$00,$11,$00,$11,$00,$11,$00,$11,$00,$02,$00,$11,$00
+    .byte $06,$00,$0A,$00,$11,$00,$0E,$00
+; AreaSpawn6: spawn data for area(s) 9: 0 setup actions, 7 entities, 2 3-byte entries, 2 one-time objects
 AreaSpawn6:
     .byte $FF
     .byte $19
@@ -3778,13 +3866,23 @@ AreaSpawn6:
     .word $0080, $0058
     .byte $5A, $00, $10, $00, $00
     .byte $FF
-    .byte $1B,$00,$14,$0B,$02,$FF,$1C,$0D,$02,$FE,$02,$09,$40,$00,$B0,$00
-    .byte $18,$00,$00,$0E,$00,$02,$20,$00,$28,$00,$FF,$09,$00,$09,$00,$09
-    .byte $00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09
-    .byte $00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09
-    .byte $00,$09,$00,$02,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09
-    .byte $00,$09,$00,$06,$00
-; AreaSpawn7: entity spawn list for area(s) 10: 1 setup actions, 15 entities
+    .word $001B
+    .byte $14, $0B, $02
+    .byte $FF
+    .byte $1C, $0D, $02
+    .byte $FE
+    .byte $02, $09
+    .word $0040, $00B0
+    .byte $18, $00
+    .byte $00, $0E
+    .word $0200, $0020
+    .byte $28, $00
+    .byte $FF
+    .byte $09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00
+    .byte $09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00
+    .byte $09,$00,$09,$00,$09,$00,$09,$00,$02,$00,$09,$00,$09,$00,$09,$00
+    .byte $09,$00,$09,$00,$09,$00,$09,$00,$06,$00
+; AreaSpawn7: spawn data for area(s) 10: 1 setup actions, 15 entities, 23 3-byte entries, 1 one-time objects
 AreaSpawn7:
     .byte $1D, $FF
     .byte $31
@@ -3833,22 +3931,59 @@ AreaSpawn7:
     .word $03B0, $0090
     .byte $78, $00, $03, $00, $20
     .byte $FF
-    .byte $5F,$00,$04,$01,$06,$04,$04,$06,$FF,$0B,$01,$06,$0B,$04,$06,$FF
-    .byte $12,$04,$05,$FF,$15,$02,$03,$15,$06,$02,$FF,$1E,$04,$04,$FF,$25
-    .byte $06,$05,$FF,$2D,$06,$04,$FF,$2F,$0A,$11,$2F,$06,$11,$FF,$30,$08
-    .byte $10,$FF,$3A,$07,$07,$3A,$09,$07,$FF,$3C,$07,$07,$3C,$09,$07,$FF
-    .byte $3E,$09,$05,$FF,$42,$08,$06,$42,$0E,$06,$FF,$44,$09,$04,$FF,$45
-    .byte $0E,$06,$45,$08,$06,$FE,$00,$11,$60,$03,$60,$00,$38,$00,$FF,$55
-    .byte $00,$55,$00,$55,$00,$55,$00,$02,$00,$55,$00,$55,$00,$55,$00,$55
-    .byte $00,$55,$00,$55,$00,$09,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55
-    .byte $00,$55,$00,$10,$00,$55,$00,$55,$00,$14,$00,$55,$00,$55,$00,$55
-    .byte $00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$1B,$00,$55,$00,$55
-    .byte $00,$55,$00,$55,$00,$55,$00,$55,$00,$1F,$00,$55,$00,$55,$00,$55
-    .byte $00,$55,$00,$55,$00,$55,$00,$55,$00,$23,$00,$55,$00,$27,$00,$2E
-    .byte $00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55
-    .byte $00,$55,$00,$32,$00,$55,$00,$39,$00,$55,$00,$40,$00,$55,$00,$55
-    .byte $00,$55,$00,$44,$00,$55,$00,$4B,$00,$4F,$00
-; AreaSpawn8: entity spawn list for area(s) 11: 0 setup actions, 16 entities
+    .word $005F
+    .byte $04, $01, $06
+    .byte $04, $04, $06
+    .byte $FF
+    .byte $0B, $01, $06
+    .byte $0B, $04, $06
+    .byte $FF
+    .byte $12, $04, $05
+    .byte $FF
+    .byte $15, $02, $03
+    .byte $15, $06, $02
+    .byte $FF
+    .byte $1E, $04, $04
+    .byte $FF
+    .byte $25, $06, $05
+    .byte $FF
+    .byte $2D, $06, $04
+    .byte $FF
+    .byte $2F, $0A, $11
+    .byte $2F, $06, $11
+    .byte $FF
+    .byte $30, $08, $10
+    .byte $FF
+    .byte $3A, $07, $07
+    .byte $3A, $09, $07
+    .byte $FF
+    .byte $3C, $07, $07
+    .byte $3C, $09, $07
+    .byte $FF
+    .byte $3E, $09, $05
+    .byte $FF
+    .byte $42, $08, $06
+    .byte $42, $0E, $06
+    .byte $FF
+    .byte $44, $09, $04
+    .byte $FF
+    .byte $45, $0E, $06
+    .byte $45, $08, $06
+    .byte $FE
+    .byte $00, $11
+    .word $0360, $0060
+    .byte $38, $00
+    .byte $FF
+    .byte $55,$00,$55,$00,$55,$00,$55,$00,$02,$00,$55,$00,$55,$00,$55,$00
+    .byte $55,$00,$55,$00,$55,$00,$09,$00,$55,$00,$55,$00,$55,$00,$55,$00
+    .byte $55,$00,$55,$00,$10,$00,$55,$00,$55,$00,$14,$00,$55,$00,$55,$00
+    .byte $55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$1B,$00,$55,$00
+    .byte $55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$1F,$00,$55,$00,$55,$00
+    .byte $55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$23,$00,$55,$00,$27,$00
+    .byte $2E,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00,$55,$00
+    .byte $55,$00,$55,$00,$32,$00,$55,$00,$39,$00,$55,$00,$40,$00,$55,$00
+    .byte $55,$00,$55,$00,$44,$00,$55,$00,$4B,$00,$4F,$00
+; AreaSpawn8: spawn data for area(s) 11: 0 setup actions, 16 entities, 5 3-byte entries, 3 one-time objects
 AreaSpawn8:
     .byte $FF
     .byte $4E
@@ -3900,14 +4035,31 @@ AreaSpawn8:
     .word $0150, $01B8
     .byte $70, $00, $08, $6E, $01
     .byte $FF
-    .byte $2E,$00,$13,$02,$05,$FF,$14,$01,$03,$14,$14,$02,$FF,$15,$1C,$02
-    .byte $FF,$1C,$02,$04,$FE,$05,$09,$40,$00,$67,$00,$18,$00,$06,$09,$40
-    .byte $00,$80,$00,$18,$00,$03,$09,$40,$00,$50,$00,$18,$00,$FF,$14,$00
+    .word $002E
+    .byte $13, $02, $05
+    .byte $FF
+    .byte $14, $01, $03
+    .byte $14, $14, $02
+    .byte $FF
+    .byte $15, $1C, $02
+    .byte $FF
+    .byte $1C, $02, $04
+    .byte $FE
+    .byte $05, $09
+    .word $0040, $0067
+    .byte $18, $00
+    .byte $06, $09
+    .word $0040, $0080
+    .byte $18, $00
+    .byte $03, $09
+    .word $0040, $0050
+    .byte $18, $00
+    .byte $FF
     .byte $14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00
     .byte $14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00,$14,$00
-    .byte $14,$00,$14,$00,$02,$00,$06,$00,$0D,$00,$14,$00,$14,$00,$14,$00
-    .byte $14,$00,$14,$00,$14,$00,$11,$00
-; AreaSpawn9: entity spawn list for area(s) 12: 0 setup actions, 2 entities
+    .byte $14,$00,$14,$00,$14,$00,$02,$00,$06,$00,$0D,$00,$14,$00,$14,$00
+    .byte $14,$00,$14,$00,$14,$00,$14,$00,$11,$00
+; AreaSpawn9: spawn data for area(s) 12: 0 setup actions, 2 entities, 0 3-byte entries, 1 one-time objects
 AreaSpawn9:
     .byte $FF
     .byte $50
@@ -3917,10 +4069,16 @@ AreaSpawn9:
     .word $0070, $0028
     .byte $70, $00, $08, $6E, $01
     .byte $FF
-    .byte $0C,$00,$FE,$08,$10,$40,$00,$D0,$00,$30,$00,$FF,$01,$00,$01,$00
+    .word $000C
+    .byte $FE
+    .byte $08, $10
+    .word $0040, $00D0
+    .byte $30, $00
+    .byte $FF
     .byte $01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00
     .byte $01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00
-; AreaSpawn10: entity spawn list for area(s) 13: 0 setup actions, 2 entities
+    .byte $01,$00,$01,$00
+; AreaSpawn10: spawn data for area(s) 13: 0 setup actions, 2 entities, 8 3-byte entries, 1 one-time objects
 AreaSpawn10:
     .byte $FF
     .byte $2E
@@ -3930,12 +4088,27 @@ AreaSpawn10:
     .word $00A0, $0080
     .byte $B8, $00, $03, $00, $10
     .byte $FF
-    .byte $27,$00,$03,$08,$02,$03,$07,$05,$FF,$0C,$0A,$02,$0C,$05,$05,$FF
-    .byte $0D,$08,$04,$0D,$07,$03,$FF,$10,$05,$03,$10,$0A,$04,$FE,$01,$08
-    .byte $E0,$00,$80,$00,$10,$00,$FF,$1D,$00,$1D,$00,$1D,$00,$02,$00,$1D
-    .byte $00,$1D,$00,$1D,$00,$1D,$00,$1D,$00,$1D,$00,$1D,$00,$1D,$00,$09
-    .byte $00,$10,$00,$1D,$00,$1D,$00,$17,$00
-; AreaSpawn11: entity spawn list for area(s) 15: 0 setup actions, 2 entities
+    .word $0027
+    .byte $03, $08, $02
+    .byte $03, $07, $05
+    .byte $FF
+    .byte $0C, $0A, $02
+    .byte $0C, $05, $05
+    .byte $FF
+    .byte $0D, $08, $04
+    .byte $0D, $07, $03
+    .byte $FF
+    .byte $10, $05, $03
+    .byte $10, $0A, $04
+    .byte $FE
+    .byte $01, $08
+    .word $00E0, $0080
+    .byte $10, $00
+    .byte $FF
+    .byte $1D,$00,$1D,$00,$1D,$00,$02,$00,$1D,$00,$1D,$00,$1D,$00,$1D,$00
+    .byte $1D,$00,$1D,$00,$1D,$00,$1D,$00,$09,$00,$10,$00,$1D,$00,$1D,$00
+    .byte $17,$00
+; AreaSpawn11: spawn data for area(s) 15: 0 setup actions, 2 entities, 2 3-byte entries, 0 one-time objects
 AreaSpawn11:
     .byte $FF
     .byte $83
@@ -3945,10 +4118,16 @@ AreaSpawn11:
     .word $00B0, $0040
     .byte $B8, $00, $03, $00, $10
     .byte $FF
-    .byte $0B,$00,$04,$04,$05,$FF,$11,$04,$04,$FE,$FF,$09,$00,$09,$00,$09
-    .byte $00,$09,$00,$02,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09
-    .byte $00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$06,$00
-; AreaSpawn12: entity spawn list for area(s) 14: 0 setup actions, 14 entities
+    .word $000B
+    .byte $04, $04, $05
+    .byte $FF
+    .byte $11, $04, $04
+    .byte $FE
+    .byte $FF
+    .byte $09,$00,$09,$00,$09,$00,$09,$00,$02,$00,$09,$00,$09,$00,$09,$00
+    .byte $09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00,$09,$00
+    .byte $09,$00,$06,$00
+; AreaSpawn12: spawn data for area(s) 14: 0 setup actions, 14 entities, 15 3-byte entries, 2 one-time objects
 AreaSpawn12:
     .byte $FF
     .byte $83
@@ -3994,15 +4173,38 @@ AreaSpawn12:
     .word $0130, $0380
     .byte $78, $00, $03, $00, $10
     .byte $FF
-    .byte $45,$00,$05,$19,$03,$FF,$07,$05,$03,$07,$0B,$02,$FF,$08,$03,$03
-    .byte $08,$0C,$02,$FF,$12,$20,$05,$12,$24,$05,$12,$28,$05,$12,$34,$05
-    .byte $12,$38,$05,$FF,$16,$20,$04,$16,$24,$04,$16,$28,$04,$16,$34,$04
-    .byte $16,$38,$04,$FE,$0A,$09,$49,$01,$14,$00,$18,$00,$00,$0E,$40,$01
-    .byte $C0,$03,$28,$00,$FF,$33,$00,$33,$00,$33,$00,$33,$00,$33,$00,$02
-    .byte $00,$33,$00,$06,$00,$0D,$00,$33,$00,$33,$00,$33,$00,$33,$00,$33
-    .byte $00,$33,$00,$33,$00,$33,$00,$33,$00,$14,$00,$33,$00,$33,$00,$33
-    .byte $00,$24,$00
-; AreaSpawn13: entity spawn list for area(s) 21: 0 setup actions, 17 entities
+    .word $0045
+    .byte $05, $19, $03
+    .byte $FF
+    .byte $07, $05, $03
+    .byte $07, $0B, $02
+    .byte $FF
+    .byte $08, $03, $03
+    .byte $08, $0C, $02
+    .byte $FF
+    .byte $12, $20, $05
+    .byte $12, $24, $05
+    .byte $12, $28, $05
+    .byte $12, $34, $05
+    .byte $12, $38, $05
+    .byte $FF
+    .byte $16, $20, $04
+    .byte $16, $24, $04
+    .byte $16, $28, $04
+    .byte $16, $34, $04
+    .byte $16, $38, $04
+    .byte $FE
+    .byte $0A, $09
+    .word $0149, $0014
+    .byte $18, $00
+    .byte $00, $0E
+    .word $0140, $03C0
+    .byte $28, $00
+    .byte $FF
+    .byte $33,$00,$33,$00,$33,$00,$33,$00,$33,$00,$02,$00,$33,$00,$06,$00
+    .byte $0D,$00,$33,$00,$33,$00,$33,$00,$33,$00,$33,$00,$33,$00,$33,$00
+    .byte $33,$00,$33,$00,$14,$00,$33,$00,$33,$00,$33,$00,$24,$00
+; AreaSpawn13: spawn data for area(s) 21: 0 setup actions, 17 entities, 25 3-byte entries, 0 one-time objects
 AreaSpawn13:
     .byte $FF
     .byte $2E
@@ -4057,28 +4259,68 @@ AreaSpawn13:
     .word $018A, $0064
     .byte $B8, $00, $00, $00, $00
     .byte $FF
-    .byte $5B,$00,$06,$04,$12,$06,$07,$12,$FF,$08,$11,$02,$FF,$0A,$13,$13
-    .byte $FF,$0B,$1C,$13,$FF,$0C,$1C,$05,$FF,$0F,$1A,$12,$0F,$1C,$04,$FF
-    .byte $10,$1C,$13,$10,$04,$13,$FF,$17,$07,$03,$17,$0A,$02,$FF,$18,$14
-    .byte $03,$18,$17,$02,$FF,$1A,$12,$13,$FF,$1B,$08,$07,$1B,$0B,$07,$1B
-    .byte $18,$07,$1B,$1B,$07,$FF,$1E,$0B,$07,$1E,$08,$07,$1E,$1B,$07,$1E
-    .byte $18,$07,$FF,$1F,$0D,$03,$1F,$10,$02,$FE,$FF,$59,$00,$59,$00,$59
-    .byte $00,$59,$00,$59,$00,$59,$00,$02,$00,$59,$00,$09,$00,$59,$00,$0D
-    .byte $00,$11,$00,$15,$00,$59,$00,$59,$00,$19,$00,$20,$00,$59,$00,$59
-    .byte $00,$59,$00,$59,$00,$59,$00,$59,$00,$27,$00,$2E,$00,$59,$00,$35
-    .byte $00,$39,$00,$59,$00,$59,$00,$46,$00,$53,$00
-; AreaSpawn14: entity spawn list for area(s) 22: 1 setup actions, 0 entities
+    .word $005B
+    .byte $06, $04, $12
+    .byte $06, $07, $12
+    .byte $FF
+    .byte $08, $11, $02
+    .byte $FF
+    .byte $0A, $13, $13
+    .byte $FF
+    .byte $0B, $1C, $13
+    .byte $FF
+    .byte $0C, $1C, $05
+    .byte $FF
+    .byte $0F, $1A, $12
+    .byte $0F, $1C, $04
+    .byte $FF
+    .byte $10, $1C, $13
+    .byte $10, $04, $13
+    .byte $FF
+    .byte $17, $07, $03
+    .byte $17, $0A, $02
+    .byte $FF
+    .byte $18, $14, $03
+    .byte $18, $17, $02
+    .byte $FF
+    .byte $1A, $12, $13
+    .byte $FF
+    .byte $1B, $08, $07
+    .byte $1B, $0B, $07
+    .byte $1B, $18, $07
+    .byte $1B, $1B, $07
+    .byte $FF
+    .byte $1E, $0B, $07
+    .byte $1E, $08, $07
+    .byte $1E, $1B, $07
+    .byte $1E, $18, $07
+    .byte $FF
+    .byte $1F, $0D, $03
+    .byte $1F, $10, $02
+    .byte $FE
+    .byte $FF
+    .byte $59,$00,$59,$00,$59,$00,$59,$00,$59,$00,$59,$00,$02,$00,$59,$00
+    .byte $09,$00,$59,$00,$0D,$00,$11,$00,$15,$00,$59,$00,$59,$00,$19,$00
+    .byte $20,$00,$59,$00,$59,$00,$59,$00,$59,$00,$59,$00,$59,$00,$27,$00
+    .byte $2E,$00,$59,$00,$35,$00,$39,$00,$59,$00,$59,$00,$46,$00,$53,$00
+; AreaSpawn14: spawn data for area(s) 22: 1 setup actions, 0 entities, 3 3-byte entries, 0 one-time objects
 AreaSpawn14:
     .byte $0B, $FF
     .byte $FF
-    .byte $0E,$00,$24,$09,$12,$24,$0B,$12,$FF,$2A,$07,$14,$FE,$FF,$0C,$00
+    .word $000E
+    .byte $24, $09, $12
+    .byte $24, $0B, $12
+    .byte $FF
+    .byte $2A, $07, $14
+    .byte $FE
+    .byte $FF
     .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00
     .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00
     .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00
     .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00
-    .byte $0C,$00,$0C,$00,$0C,$00,$02,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00
-    .byte $0C,$00,$09,$00
-; AreaSpawn15: entity spawn list for area(s) 23: 0 setup actions, 20 entities
+    .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$02,$00,$0C,$00,$0C,$00,$0C,$00
+    .byte $0C,$00,$0C,$00,$09,$00
+; AreaSpawn15: spawn data for area(s) 23: 0 setup actions, 20 entities, 43 3-byte entries, 1 one-time objects
 AreaSpawn15:
     .byte $FF
     .byte $56
@@ -4142,20 +4384,66 @@ AreaSpawn15:
     .word $0086, $07D8
     .byte $E0, $00, $00, $00, $00
     .byte $FF
-    .byte $94,$00,$05,$3A,$06,$05,$3E,$06,$05,$40,$07
+    .word $0094
+    .byte $05, $3A, $06
+    .byte $05, $3E, $06
+    .byte $05, $40, $07
 B1_AAA8:
-    .byte $05,$44,$07,$05,$6A,$06,$05,$64,$06,$FF,$06,$3E,$06,$06,$3A,$06
-    .byte $06,$40,$07,$06,$44,$07,$06,$6A,$06,$06,$64,$06,$06,$52,$13,$06
-    .byte $57,$13,$FF,$07,$0F,$06,$07,$15,$06,$FF,$08,$03,$12,$08,$15,$06
-    .byte $08,$0F,$06,$08,$1A,$07,$08,$1D,$07,$FF,$09,$34,$13,$FF,$0B,$1A
-    .byte $07,$0B,$1D,$07,$0B,$4E,$07,$0B,$59,$07,$0B,$6E,$03,$0B,$77,$02
-    .byte $0B,$45,$03,$0B,$4A,$02,$FF,$0C,$78,$12,$0C,$1C,$03,$0C,$24,$02
-    .byte $0C,$29,$03,$0C,$39,$02,$0C,$4C,$03,$0C,$5B,$02,$FF,$0D,$4E,$07
-    .byte $0D,$59,$07,$0D,$25,$03,$0D,$2C,$02,$0D,$2F,$03,$0D,$39,$02,$FE
-    .byte $00,$06,$70,$00,$20,$02,$08,$00,$FF,$8A,$00,$8A,$00,$8A,$00,$8A
-    .byte $00,$8A,$00,$02,$00,$15,$00,$2E,$00,$35,$00,$45,$00,$8A,$00,$49
-    .byte $00,$62,$00,$78,$00
-; AreaSpawn16: entity spawn list for area(s) 0: 0 setup actions, 9 entities
+    .byte $05, $44, $07
+    .byte $05, $6A, $06
+    .byte $05, $64, $06
+    .byte $FF
+    .byte $06, $3E, $06
+    .byte $06, $3A, $06
+    .byte $06, $40, $07
+    .byte $06, $44, $07
+    .byte $06, $6A, $06
+    .byte $06, $64, $06
+    .byte $06, $52, $13
+    .byte $06, $57, $13
+    .byte $FF
+    .byte $07, $0F, $06
+    .byte $07, $15, $06
+    .byte $FF
+    .byte $08, $03, $12
+    .byte $08, $15, $06
+    .byte $08, $0F, $06
+    .byte $08, $1A, $07
+    .byte $08, $1D, $07
+    .byte $FF
+    .byte $09, $34, $13
+    .byte $FF
+    .byte $0B, $1A, $07
+    .byte $0B, $1D, $07
+    .byte $0B, $4E, $07
+    .byte $0B, $59, $07
+    .byte $0B, $6E, $03
+    .byte $0B, $77, $02
+    .byte $0B, $45, $03
+    .byte $0B, $4A, $02
+    .byte $FF
+    .byte $0C, $78, $12
+    .byte $0C, $1C, $03
+    .byte $0C, $24, $02
+    .byte $0C, $29, $03
+    .byte $0C, $39, $02
+    .byte $0C, $4C, $03
+    .byte $0C, $5B, $02
+    .byte $FF
+    .byte $0D, $4E, $07
+    .byte $0D, $59, $07
+    .byte $0D, $25, $03
+    .byte $0D, $2C, $02
+    .byte $0D, $2F, $03
+    .byte $0D, $39, $02
+    .byte $FE
+    .byte $00, $06
+    .word $0070, $0220
+    .byte $08, $00
+    .byte $FF
+    .byte $8A,$00,$8A,$00,$8A,$00,$8A,$00,$8A,$00,$02,$00,$15,$00,$2E,$00
+    .byte $35,$00,$45,$00,$8A,$00,$49,$00,$62,$00,$78,$00
+; AreaSpawn16: spawn data for area(s) 0: 0 setup actions, 9 entities, 4 3-byte entries, 1 one-time objects
 AreaSpawn16:
     .byte $FF
     .byte $2E
@@ -4186,21 +4474,30 @@ AreaSpawn16:
     .word $0460, $0060
     .byte $70, $00, $10, $02, $01
     .byte $FF
-    .byte $19,$00,$0D,$07,$02,$0D,$03,$05,$FF,$15,$03,$03,$15,$07,$04,$FE
-    .byte $01,$08,$E0,$00,$50,$00,$10,$00,$FF,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$02,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$09,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F
-    .byte $00,$0F,$00,$0F,$00
-; AreaSpawn17: entity spawn list for area(s) 1: 0 setup actions, 12 entities
+    .word $0019
+    .byte $0D, $07, $02
+    .byte $0D, $03, $05
+    .byte $FF
+    .byte $15, $03, $03
+    .byte $15, $07, $04
+    .byte $FE
+    .byte $01, $08
+    .word $00E0, $0050
+    .byte $10, $00
+    .byte $FF
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$02,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$09,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+    .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
+; AreaSpawn17: spawn data for area(s) 1: 0 setup actions, 12 entities, 5 3-byte entries, 0 one-time objects
 AreaSpawn17:
     .byte $FF
     .byte $2E
@@ -4240,12 +4537,20 @@ AreaSpawn17:
     .word $00C0, $00B0
     .byte $70, $00, $10, $02, $01
     .byte $FF
-    .byte $15,$00,$06,$08,$03,$06,$0B,$05,$FF,$0B,$0B,$02,$0B,$08,$04,$FF
-    .byte $14,$0F,$08,$FE,$FF,$13,$00,$13,$00,$13,$00,$13,$00,$13,$00,$13
-    .byte $00,$02,$00,$13,$00,$13,$00,$13,$00,$13,$00,$09,$00,$13,$00,$13
-    .byte $00,$13,$00,$13,$00,$13,$00,$13,$00,$13,$00,$13,$00,$10,$00,$13
-    .byte $00,$13,$00,$13,$00
-; AreaSpawn18: entity spawn list for area(s) 16: 0 setup actions, 18 entities
+    .word $0015
+    .byte $06, $08, $03
+    .byte $06, $0B, $05
+    .byte $FF
+    .byte $0B, $0B, $02
+    .byte $0B, $08, $04
+    .byte $FF
+    .byte $14, $0F, $08
+    .byte $FE
+    .byte $FF
+    .byte $13,$00,$13,$00,$13,$00,$13,$00,$13,$00,$13,$00,$02,$00,$13,$00
+    .byte $13,$00,$13,$00,$13,$00,$09,$00,$13,$00,$13,$00,$13,$00,$13,$00
+    .byte $13,$00,$13,$00,$13,$00,$13,$00,$10,$00,$13,$00,$13,$00,$13,$00
+; AreaSpawn18: spawn data for area(s) 16: 0 setup actions, 18 entities, 29 3-byte entries, 0 one-time objects
 AreaSpawn18:
     .byte $FF
     .byte $51
@@ -4303,53 +4608,104 @@ AreaSpawn18:
     .word $0220, $00B0
     .byte $58, $00, $20, $00, $00
     .byte $FF
-    .byte $6B,$00,$07,$05,$03,$07,$0A,$02,$FF,$0A,$06,$02,$0A,$02,$03,$0A
-    .byte $0C,$02,$0A,$0A,$03,$FF,$0D,$05,$03,$0D,$09,$02,$FF,$12,$03,$05
-    .byte $FF,$13,$09,$02,$13,$06,$03,$FF,$18,$0D,$05,$18,$03,$04,$FF,$19
-    .byte $0E,$02,$19,$01,$03,$FF,$1D,$0D,$04,$FF,$1E,$04,$05,$FF,$1F,$0D
-    .byte $02,$1F,$02,$03,$FF,$25,$04,$04,$FF,$27,$07,$02,$FF,$2D,$0B,$02
-    .byte $2D,$06,$03,$FF,$37,$0B,$06,$37,$0E,$06,$FF,$38,$05,$02,$FF,$3B
-    .byte $0E,$06,$3B,$0B,$06,$FF,$43,$09,$02,$FE,$FF,$69,$00,$69,$00,$69
-    .byte $00,$69,$00,$69,$00,$69,$00,$69,$00,$02,$00,$69,$00,$69,$00,$09
-    .byte $00,$69,$00,$69,$00,$16,$00,$69,$00,$69,$00,$69,$00,$69,$00,$1D
-    .byte $00,$21,$00,$69,$00,$69,$00,$69,$00,$69,$00,$28,$00,$2F,$00,$69
-    .byte $00,$69,$00,$69,$00,$36,$00,$3A,$00,$3E,$00,$69,$00,$69,$00,$69
-    .byte $00,$69,$00,$69,$00,$45,$00,$69,$00,$49,$00,$69,$00,$69,$00,$69
-    .byte $00,$69,$00,$69,$00,$4D,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69
-    .byte $00,$69,$00,$69,$00,$69,$00,$69,$00,$54,$00,$5B,$00,$69,$00,$69
-    .byte $00,$5F,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69
-    .byte $00,$66,$00
-; AreaSpawn19: entity spawn list for area(s) 17: 0 setup actions, 1 entities
+    .word $006B
+    .byte $07, $05, $03
+    .byte $07, $0A, $02
+    .byte $FF
+    .byte $0A, $06, $02
+    .byte $0A, $02, $03
+    .byte $0A, $0C, $02
+    .byte $0A, $0A, $03
+    .byte $FF
+    .byte $0D, $05, $03
+    .byte $0D, $09, $02
+    .byte $FF
+    .byte $12, $03, $05
+    .byte $FF
+    .byte $13, $09, $02
+    .byte $13, $06, $03
+    .byte $FF
+    .byte $18, $0D, $05
+    .byte $18, $03, $04
+    .byte $FF
+    .byte $19, $0E, $02
+    .byte $19, $01, $03
+    .byte $FF
+    .byte $1D, $0D, $04
+    .byte $FF
+    .byte $1E, $04, $05
+    .byte $FF
+    .byte $1F, $0D, $02
+    .byte $1F, $02, $03
+    .byte $FF
+    .byte $25, $04, $04
+    .byte $FF
+    .byte $27, $07, $02
+    .byte $FF
+    .byte $2D, $0B, $02
+    .byte $2D, $06, $03
+    .byte $FF
+    .byte $37, $0B, $06
+    .byte $37, $0E, $06
+    .byte $FF
+    .byte $38, $05, $02
+    .byte $FF
+    .byte $3B, $0E, $06
+    .byte $3B, $0B, $06
+    .byte $FF
+    .byte $43, $09, $02
+    .byte $FE
+    .byte $FF
+    .byte $69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$02,$00
+    .byte $69,$00,$69,$00,$09,$00,$69,$00,$69,$00,$16,$00,$69,$00,$69,$00
+    .byte $69,$00,$69,$00,$1D,$00,$21,$00,$69,$00,$69,$00,$69,$00,$69,$00
+    .byte $28,$00,$2F,$00,$69,$00,$69,$00,$69,$00,$36,$00,$3A,$00,$3E,$00
+    .byte $69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$45,$00,$69,$00,$49,$00
+    .byte $69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$4D,$00,$69,$00,$69,$00
+    .byte $69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$69,$00,$54,$00
+    .byte $5B,$00,$69,$00,$69,$00,$5F,$00,$69,$00,$69,$00,$69,$00,$69,$00
+    .byte $69,$00,$69,$00,$69,$00,$66,$00
+; AreaSpawn19: spawn data for area(s) 17: 0 setup actions, 1 entities, 0 3-byte entries, 0 one-time objects
 AreaSpawn19:
     .byte $FF
     .byte $31
     .word $02D0, $00D9
     .byte $68, $00, $00, $00, $00
     .byte $FF
-    .byte $04,$00,$FE,$FF
-; AreaSpawn20: entity spawn list for area(s) 5: 1 setup actions, 0 entities
+    .word $0004
+    .byte $FE
+    .byte $FF
+; AreaSpawn20: spawn data for area(s) 5: 1 setup actions, 0 entities, 0 3-byte entries, 0 one-time objects
 AreaSpawn20:
     .byte $04, $FF
     .byte $FF
-    .byte $00,$00,$FE,$FF
-; AreaSpawn21: entity spawn list for area(s) 4: 6 setup actions, 0 entities
+    .word $0000
+    .byte $FE
+    .byte $FF
+; AreaSpawn21: spawn data for area(s) 4: 6 setup actions, 0 entities, 0 3-byte entries, 0 one-time objects
 AreaSpawn21:
     .byte $0F, $06, $02, $07, $18, $15, $FF
     .byte $FF
-    .byte $00,$00,$FE,$FF
-; AreaSpawn22: entity spawn list for area(s) 6: 1 setup actions, 1 entities
+    .word $0000
+    .byte $FE
+    .byte $FF
+; AreaSpawn22: spawn data for area(s) 6: 1 setup actions, 1 entities, 0 3-byte entries, 0 one-time objects
 AreaSpawn22:
     .byte $03, $FF
     .byte $92
     .word $0400, $0020
     .byte $C0, $0B, $00, $00, $00
     .byte $FF
-    .byte $00,$00,$FE,$FF
-; AreaSpawn23: entity spawn list for area(s) 2: 3 setup actions, 0 entities
+    .word $0000
+    .byte $FE
+    .byte $FF
+; AreaSpawn23: spawn data for area(s) 2: 3 setup actions, 0 entities, 0 3-byte entries, 0 one-time objects
 AreaSpawn23:
     .byte $1E, $18, $02, $FF
     .byte $FF
-    .byte $00,$00,$FE,$FF
+    .word $0000
+    .byte $FE
+    .byte $FF
     LDA #$02
     STA ram_01A6
     LDA player_y_lo
@@ -4819,85 +5175,70 @@ B1_B272:
     .byte $00,$00,$34,$35,$35,$36,$00,$00,$14,$D9,$D9,$D9,$D9,$D9,$14,$D9
     .byte $D9,$D9,$D9,$14,$CF,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14,$14
     .res 22, $14
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$00,$00,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$00,$00,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$D7
-    .byte $D7,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$D7
-    .byte $D7,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$D7
-    .byte $D7,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$33,$00,$BE,$00
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .word F_D7D7
-    .byte $D7
+    .res 17, $D7
+    .byte $BC,$BC,$BC,$BC,$BC,$BC,$00,$00,$BC,$BC,$BC,$BC,$BC,$BC,$D7,$D7
+    .byte $BC,$BC,$BC,$BC,$BC,$BC,$00,$00,$BC,$BC,$BC,$BC,$BC,$BC,$D7,$D7
+    .res 14, $BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC,$BC
+    .byte $D7,$D7,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    .byte $D7,$D7,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
+    .byte $D7,$D7,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$33,$00,$BE,$00
+    .res 17, $D7
 ; Gfx_B1_BAD5: LZ-compressed, 704 bytes -> 1408 bytes to PPU $0000 (title/all stages)
 Gfx_B1_BAD5:
     .byte $7F,$F4,$00,$00,$74,$00,$C0,$38,$1E,$08,$21,$09,$03,$0B,$D1,$60

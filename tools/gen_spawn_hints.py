@@ -3,7 +3,8 @@
 
 Per area: setup-action bytes ended by $FF, then 10-byte entity records ended by $FF:
   type, Y (16-bit), X (16-bit), flags, four parameters (the 4th..7th ends up in ent_param/angle/radius/...).
-Some pointers land right before code in bank 1, so only the parsed span is claimed as data."""
+Then: a word offset (zp_B4) to a per-row table, 3-byte entries grouped by $FF and ended by $FE, and 8-byte one-time objects
+(flag bit in ram $0733, type, Y, X, flags, frame) ended by $FF. Some pointers land right before code, so only the parsed span is data."""
 import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 d = open(os.path.join(ROOT, 'rom/game.nes'), 'rb').read()
@@ -20,10 +21,34 @@ for k, p in enumerate(sorted(areas)):
     while by(i) != 0xFF: i += 1; acts += 1
     start_ents = i + 1; n = 0; i = start_ents
     while by(i) != 0xFF and n < 40: i += 10; n += 1
-    end = i + 1
-    out.append(f'blob 1 {p:X} {end - p} AreaSpawn{k} entity spawn list for area(s) {",".join(map(str, areas[p]))}: {acts} setup actions, {n} entities')
-    out.append(f'struct 1 {p:X} 1 ' + 'b' * (acts + 1))
-    if n: out.append(f'struct 1 {start_ents:X} {n} bwwbbbbb')
-    out.append(f'struct 1 {i:X} 1 b')
+    ent_end = i
+    rows = [f'struct 1 {p:X} 1 ' + 'b' * (acts + 1)]
+    if n: rows.append(f'struct 1 {start_ents:X} {n} bwwbbbbb')
+    rows.append(f'struct 1 {i:X} 1 b')
+    i += 1
+    # section A (zp_B4): word offset to a per-row table, then 3-byte entries in groups separated by $FF, ended by $FE
+    a = i + 2; ok = True; groups = 0; trip = 0
+    while by(a) != 0xFE and a - i < 200:
+        if by(a) == 0xFF: a += 1; groups += 1
+        else: a += 3; trip += 1
+    if by(a) != 0xFE: ok = False
+    one = 0
+    if ok:
+        rows.append(f'struct 1 {i:X} 1 w   ; offset (from here) to a per-row table')
+        b = i + 2
+        while b < a:
+            if by(b) == 0xFF: rows.append(f'struct 1 {b:X} 1 b'); b += 1
+            else: rows.append(f'struct 1 {b:X} 1 bbb'); b += 3
+        rows.append(f'struct 1 {a:X} 1 b')
+        # section B: 8-byte one-time objects (flag bit, type, Y, X, flags, frame), ended by $FF
+        b = a + 1
+        while by(b) != 0xFF and one < 20: b += 8; one += 1
+        if one: rows.append(f'struct 1 {a + 1:X} {one} bbwwbb')
+        rows.append(f'struct 1 {b:X} 1 b')
+        end = b + 1
+    else:
+        end = ent_end + 1
+    out.append(f'blob 1 {p:X} {end - p} AreaSpawn{k} spawn data for area(s) {",".join(map(str, areas[p]))}: {acts} setup actions, {n} entities' + (f', {trip} 3-byte entries, {one} one-time objects' if ok else ''))
+    out += rows
 open(os.path.join(ROOT, 'tools/hints_spawn.txt'), 'w').write('\n'.join(out) + '\n')
 print(len(areas), 'spawn lists')

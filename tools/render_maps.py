@@ -54,8 +54,29 @@ def spawns(area):
     while by(p) != 0xFF and len(out) < 60:
         out.append((by(p), by(p + 1) | by(p + 2) << 8, by(p + 3) | by(p + 4) << 8, by(p + 5), tuple(by(p + 6 + k) for k in range(4)))); p += 10
     return out
-def overlay(img, area):
+def one_time(area):
+    """8-byte one-time objects after the zp_B4 section: [(flag, type, y, x)]"""
+    b1 = PRG[1]
+    def by(a): return b1[a - 0x8000]
+    p = by(0x9F25 + 2 * area) | by(0x9F26 + 2 * area) << 8
+    while by(p) != 0xFF: p += 1
+    p += 1
+    while by(p) != 0xFF: p += 10
+    p += 3; n = 0
+    while by(p) != 0xFE and n < 200:
+        p += 1 if by(p) == 0xFF else 3; n += 1
+    if by(p) != 0xFE: return []
+    p += 1; out = []
+    while by(p) != 0xFF and len(out) < 20:
+        out.append((by(p), by(p + 1), by(p + 2) | by(p + 3) << 8, by(p + 4) | by(p + 5) << 8)); p += 8
+    return out
+def overlay(img, area, balloons=()):
     d = ImageDraw.Draw(img)
+    for r, c in balloons:                         # map tile $C4 = balloon (spawned as type $01 at level load)
+        d.ellipse((c * 16, (r - 2) * 16, c * 16 + 15, (r - 2) * 16 + 15), outline=(80, 255, 255), width=2)
+    for flag, typ, y, x in one_time(area):
+        d.rectangle((x - 6, y - 32 - 6, x + 6, y - 32 + 6), outline=(80, 255, 80), width=2)
+        d.text((x + 8, y - 32 + 2), f'{typ:02X}*', fill=(80, 255, 80))
     for typ, y, x, fl, pr in spawns(area):
         px, py = x, y - 32                       # first two map rows are not stored
         d.rectangle((px - 5, py - 5, px + 5, py + 5), outline=(255, 40, 40))
@@ -69,14 +90,15 @@ if __name__ == '__main__':
         if t not in cache: cache[t] = tileset(t)
         pal = bg_palette(hdr[5])
         chr_, pl, at = cache[t]; tiles = {}
-        img = Image.new('RGB', (width * 16, (rows - 2) * 16))
+        img = Image.new('RGB', (width * 16, (rows - 2) * 16)); balloons = []
         for r in range(2, rows):
             for c in range(width):
                 a = base + r * width + c - 0x8000
                 m = PRG[bank][a] if 0 <= a < 0x4000 else 0
+                if m == 0xC4: balloons.append((r, c))
                 for k, (dx, dy) in enumerate(((0, 0), (8, 0), (0, 8), (8, 8))):
                     key = (pl[k][m] if m < 240 else 0, at[m] if m < 240 else 0)
                     if key not in tiles: tiles[key] = tile_img(chr_, key[0], key[1], pal)
                     img.paste(tiles[key], (c * 16 + dx, (r - 2) * 16 + dy))
         img.save(os.path.join(out, f'area_{i:02d}.png'))
-        ov = img.copy(); overlay(ov, i); ov.save(os.path.join(out, f'area_{i:02d}_spawns.png')); print(f'area {i:2d}: tileset {t}, {width}x{rows - 2} tiles -> area_{i:02d}.png')
+        ov = img.copy(); overlay(ov, i, balloons); ov.save(os.path.join(out, f'area_{i:02d}_spawns.png')); print(f'area {i:2d}: tileset {t}, {width}x{rows - 2} tiles -> area_{i:02d}.png')
