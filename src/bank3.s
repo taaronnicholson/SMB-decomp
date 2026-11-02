@@ -1028,7 +1028,7 @@ B3_BD75:
     LDA #$1B
     STA player_state
 B3_BD7F:
-    LDA zp_B1
+    LDA entity_tick
     LSR a
     LSR a
     LSR a
@@ -1038,15 +1038,15 @@ B3_BD7F:
     STA zp_65
     RTS
     .byte $20,$7F,$BD,$A5
-    STA (zp_0A,x)
+    STA (scroll_y_lo,x)
     TAY
     LDA B3_BE2A,y
-    STA zp_53
+    STA tmp_a
     CMP #$80
     BEQ B3_BDF4
     CMP #$7F
     BNE B3_BDE3
-    JSR F_FA3D
+    JSR FindFreeEntitySlot
     TYA
     TAX
     LDA player_x_lo
@@ -1058,7 +1058,7 @@ B3_BD7F:
     LDA player_y_hi
     STA ent_y_hi,x
     LDA #$02
-    STA zp_53
+    STA tmp_a
     JSR F_F876
     LDA ent_x_lo,x
     STA player_x_lo
@@ -1078,7 +1078,7 @@ B3_BDDB:
 B3_BDE3:
     LDA player_y_lo
     CLC
-    ADC zp_53
+    ADC tmp_a
     STA player_y_lo
     LDA player_y_hi
     ADC B3_BE2B,y
@@ -1121,30 +1121,30 @@ B3_BE38:
     .byte $C9,$CE,$90,$01
 B3_BE9C:
     RTS
-    STA zp_53
+    STA tmp_a
     LDA current_area
     CMP #$05
     BEQ B3_BE9C
     CMP #$02
     BEQ B3_BE9C
-    LDA zp_53
+    LDA tmp_a
     PHA
-    LDA zp_54
+    LDA tmp_b
     PHA
     LDA ptr_lo
-    STA zp_53
+    STA tmp_a
     LDA ptr_hi
-    STA zp_54
+    STA tmp_b
     LDA #$D7
     JSR F_F28D
     PLA
-    STA zp_54
+    STA tmp_b
     PLA
-    STA zp_53
-    JSR F_F6B0
+    STA tmp_a
+    JSR SetCollectedFlag
     LDA #$28
     JSR PlaySfxSq2
-    LDY zp_53
+    LDY tmp_a
     LDA B3_BE38,y
     BEQ B3_BE9C
     PHA
@@ -1159,7 +1159,7 @@ B3_BE9C:
     LDA ptr_hi
     SBC #$00
     STA ptr_hi
-    JSR F_F6B0
+    JSR SetCollectedFlag
     JSR F_F192
     LDA ptr_lo
     STA ram_0721

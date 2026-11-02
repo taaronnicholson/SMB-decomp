@@ -44,50 +44,50 @@ B6_8028:
     STA snd_tempo_base
     LDA $9428,x
     STA snd_sq1_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA $9429,x
     STA snd_sq1_list_hi
-    STA zp_FF
-    LDA (zp_FE),y
+    STA ptr2_hi
+    LDA (ptr2_lo),y
     STA snd_sq1_stream_lo
     INY
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_sq1_stream_hi
     LDA $942A,x
     STA snd_sq2_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA $942B,x
     STA snd_sq2_list_hi
-    STA zp_FF
+    STA ptr2_hi
     DEY
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_sq2_stream_lo
     INY
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_sq2_stream_hi
     LDA $942C,x
     STA snd_tri_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA $942D,x
     STA snd_tri_list_hi
-    STA zp_FF
+    STA ptr2_hi
     DEY
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_tri_stream_lo
     INY
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_tri_stream_hi
     LDA $942E,x
     STA snd_noi_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA $942F,x
     STA snd_noi_list_hi
-    STA zp_FF
+    STA ptr2_hi
     DEY
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_noi_stream_lo
     INY
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_noi_stream_hi
     STY snd_sq1_len_count
     STY snd_sq2_len_count
@@ -202,19 +202,19 @@ Snd_Sq1_Step:
     RTS
 B6_81AB:
     LDA snd_sq1_stream_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_sq1_stream_hi
-    STA zp_FF
+    STA ptr2_hi
     LDA #$00
     STA snd_sq1_sweep
     STA snd_sq1_env_active
-B6_81BD:
+Snd_Sq1_NextToken:
     LDY #$00
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAY
-    INC zp_FE
+    INC ptr2_lo
     BNE B6_81C8
-    INC zp_FF
+    INC ptr2_hi
 B6_81C8:
     TYA
     BMI B6_8225
@@ -222,7 +222,7 @@ B6_81C8:
     BCC B6_81D7
     ADC #$A0
     STA snd_sq1_next_len
-    JMP B6_81BD
+    JMP Snd_Sq1_NextToken
 B6_81D7:
     CLC
     ADC snd_song_transpose
@@ -251,9 +251,9 @@ B6_820F:
     LDA #$FF
     STA snd_sq1_env_active
 B6_8214:
-    LDA zp_FE
+    LDA ptr2_lo
     STA snd_sq1_stream_lo
-    LDA zp_FF
+    LDA ptr2_hi
     STA snd_sq1_stream_hi
     LDA snd_sq1_next_len
     STA snd_sq1_len_count
@@ -265,67 +265,67 @@ B6_8225:
     LDA snd_sq1_listpos_lo
     CLC
     ADC snd_sq1_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_sq1_listpos_hi
     ADC snd_sq1_list_hi
-    STA zp_FF
+    STA ptr2_hi
     LDA snd_sq1_listpos_lo
     ADC #$02
     STA snd_sq1_listpos_lo
     TYA
     ADC snd_sq1_listpos_hi
     STA snd_sq1_listpos_hi
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     INY
-    ORA (zp_FE),y
+    ORA (ptr2_lo),y
     BNE B6_8266
     LDA snd_sq1_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_sq1_list_hi
-    STA zp_FF
+    STA ptr2_hi
     LDA #$02
     STA snd_sq1_listpos_lo
     LDA #$00
     STA snd_sq1_listpos_hi
 B6_8266:
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     DEY
-    LDA (zp_FE),y
-    STA zp_FE
-    STX zp_FF
-    JMP B6_81BD
+    LDA (ptr2_lo),y
+    STA ptr2_lo
+    STX ptr2_hi
+    JMP Snd_Sq1_NextToken
 B6_8273:
     CMP #$F6
     BNE B6_8285
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_827F
-    INC zp_FF
+    INC ptr2_hi
 B6_827F:
     STA snd_sq1_env_idx
-    JMP B6_81BD
+    JMP Snd_Sq1_NextToken
 B6_8285:
     CMP #$F7
     BNE B6_829A
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_8291
-    INC zp_FF
+    INC ptr2_hi
 B6_8291:
     STA snd_sq1_pitchmod_idx
     STY snd_sq1_pitchmod_pos
-    JMP B6_81BD
+    JMP Snd_Sq1_NextToken
 B6_829A:
     CMP #$FA
     BNE B6_82AC
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_sq1_duty
-    INC zp_FE
+    INC ptr2_lo
     BNE B6_82A9
-    INC zp_FF
+    INC ptr2_hi
 B6_82A9:
-    JMP B6_81BD
+    JMP Snd_Sq1_NextToken
 B6_82AC:
     CMP #$F8
     BNE B6_82B8
@@ -339,66 +339,66 @@ B6_82B8:
 B6_82BF:
     CMP #$FD
     BNE B6_82D1
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_82CB
-    INC zp_FF
+    INC ptr2_hi
 B6_82CB:
     STA snd_sq1_sweep
-    JMP B6_81BD
+    JMP Snd_Sq1_NextToken
 B6_82D1:
     CMP #$FB
     BNE B6_82E3
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_82DD
-    INC zp_FF
+    INC ptr2_hi
 B6_82DD:
     STA snd_song_transpose
-    JMP B6_81BD
+    JMP Snd_Sq1_NextToken
 B6_82E3:
     CMP #$FC
     BNE B6_82F5
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_82EF
-    INC zp_FF
+    INC ptr2_hi
 B6_82EF:
     STA snd_sq1_transpose
-    JMP B6_81BD
+    JMP Snd_Sq1_NextToken
 B6_82F5:
     CMP #$F5
     BNE B6_831F
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     STA snd_sq1_list_lo
     INY
-    LDA (zp_FE),y
-    STX zp_FE
-    STA zp_FF
+    LDA (ptr2_lo),y
+    STX ptr2_lo
+    STA ptr2_hi
     STA snd_sq1_list_hi
     LDA #$02
     STA snd_sq1_listpos_lo
     DEY
     STY snd_sq1_listpos_hi
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     INY
-    LDA (zp_FE),y
-    STA zp_FF
-    STX zp_FE
-    JMP B6_81BD
+    LDA (ptr2_lo),y
+    STA ptr2_hi
+    STX ptr2_lo
+    JMP Snd_Sq1_NextToken
 B6_831F:
     CMP #$F4
     BNE B6_8334
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_832B
-    INC zp_FF
+    INC ptr2_hi
 B6_832B:
     STA snd_tempo
     STA snd_tempo_base
-    JMP B6_81BD
+    JMP Snd_Sq1_NextToken
 B6_8334:
     CMP #$FE
     BNE B6_8340
@@ -413,14 +413,14 @@ Snd_Sq1_Effects:
     BEQ B6_8378
     LDX snd_sq1_env_idx
     LDA EnvelopePtrLo,x
-    STA zp_FE
+    STA ptr2_lo
     LDA EnvelopePtrHi,x
-    STA zp_FF
+    STA ptr2_hi
     LDY #$00
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_sq1_env_speed
     LDY snd_sq1_env_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     BMI B6_8370
     DEC snd_sq1_env_count
     BPL B6_8370
@@ -434,16 +434,16 @@ B6_8370:
 B6_8378:
     LDX snd_sq1_pitchmod_idx
     LDA PitchModPtrLo,x
-    STA zp_FE
+    STA ptr2_lo
     LDA PitchModPtrHi,x
-    STA zp_FF
+    STA ptr2_hi
     LDY snd_sq1_pitchmod_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     CMP #$80
     BNE B6_8395
     LDY #$00
     STY snd_sq1_pitchmod_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
 B6_8395:
     INC snd_sq1_pitchmod_pos
     CLC
@@ -456,19 +456,19 @@ Snd_Sq2_Step:
     RTS
 B6_83A6:
     LDA snd_sq2_stream_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_sq2_stream_hi
-    STA zp_FF
+    STA ptr2_hi
     LDA #$00
     STA snd_sq2_sweep
     STA snd_sq2_env_active
-B6_83B8:
+Snd_Sq2_NextToken:
     LDY #$00
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAY
-    INC zp_FE
+    INC ptr2_lo
     BNE B6_83C3
-    INC zp_FF
+    INC ptr2_hi
 B6_83C3:
     TYA
     BMI B6_8420
@@ -476,7 +476,7 @@ B6_83C3:
     BCC B6_83D2
     ADC #$A0
     STA snd_sq2_next_len
-    JMP B6_83B8
+    JMP Snd_Sq2_NextToken
 B6_83D2:
     CLC
     ADC snd_song_transpose
@@ -505,9 +505,9 @@ B6_840A:
     LDA #$FF
     STA snd_sq2_env_active
 B6_840F:
-    LDA zp_FE
+    LDA ptr2_lo
     STA snd_sq2_stream_lo
-    LDA zp_FF
+    LDA ptr2_hi
     STA snd_sq2_stream_hi
     LDA snd_sq2_next_len
     STA snd_sq2_len_count
@@ -519,67 +519,67 @@ B6_8420:
     LDA snd_sq2_listpos_lo
     CLC
     ADC snd_sq2_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_sq2_listpos_hi
     ADC snd_sq2_list_hi
-    STA zp_FF
+    STA ptr2_hi
     LDA snd_sq2_listpos_lo
     ADC #$02
     STA snd_sq2_listpos_lo
     TYA
     ADC snd_sq2_listpos_hi
     STA snd_sq2_listpos_hi
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     INY
-    ORA (zp_FE),y
+    ORA (ptr2_lo),y
     BNE B6_8461
     LDA snd_sq2_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_sq2_list_hi
-    STA zp_FF
+    STA ptr2_hi
     LDA #$02
     STA snd_sq2_listpos_lo
     LDA #$00
     STA snd_sq2_listpos_hi
 B6_8461:
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     DEY
-    LDA (zp_FE),y
-    STA zp_FE
-    STX zp_FF
-    JMP B6_83B8
+    LDA (ptr2_lo),y
+    STA ptr2_lo
+    STX ptr2_hi
+    JMP Snd_Sq2_NextToken
 B6_846E:
     CMP #$F6
     BNE B6_8480
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_847A
-    INC zp_FF
+    INC ptr2_hi
 B6_847A:
     STA snd_sq2_env_idx
-    JMP B6_83B8
+    JMP Snd_Sq2_NextToken
 B6_8480:
     CMP #$F7
     BNE B6_8495
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_848C
-    INC zp_FF
+    INC ptr2_hi
 B6_848C:
     STA snd_sq2_pitchmod_idx
     STY snd_sq2_pitchmod_pos
-    JMP B6_83B8
+    JMP Snd_Sq2_NextToken
 B6_8495:
     CMP #$FA
     BNE B6_84A7
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_sq2_duty
-    INC zp_FE
+    INC ptr2_lo
     BNE B6_84A4
-    INC zp_FF
+    INC ptr2_hi
 B6_84A4:
-    JMP B6_83B8
+    JMP Snd_Sq2_NextToken
 B6_84A7:
     CMP #$F8
     BNE B6_84B3
@@ -593,66 +593,66 @@ B6_84B3:
 B6_84BA:
     CMP #$FD
     BNE B6_84CC
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_84C6
-    INC zp_FF
+    INC ptr2_hi
 B6_84C6:
     STA snd_sq2_sweep
-    JMP B6_83B8
+    JMP Snd_Sq2_NextToken
 B6_84CC:
     CMP #$FB
     BNE B6_84DE
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_84D8
-    INC zp_FF
+    INC ptr2_hi
 B6_84D8:
     STA snd_song_transpose
-    JMP B6_83B8
+    JMP Snd_Sq2_NextToken
 B6_84DE:
     CMP #$FC
     BNE B6_84F0
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_84EA
-    INC zp_FF
+    INC ptr2_hi
 B6_84EA:
     STA snd_sq2_transpose
-    JMP B6_83B8
+    JMP Snd_Sq2_NextToken
 B6_84F0:
     CMP #$F5
     BNE B6_851A
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     STA snd_sq2_list_lo
     INY
-    LDA (zp_FE),y
-    STX zp_FE
-    STA zp_FF
+    LDA (ptr2_lo),y
+    STX ptr2_lo
+    STA ptr2_hi
     STA snd_sq2_list_hi
     LDA #$02
     STA snd_sq2_listpos_lo
     DEY
     STY snd_sq2_listpos_hi
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     INY
-    LDA (zp_FE),y
-    STA zp_FF
-    STX zp_FE
-    JMP B6_83B8
+    LDA (ptr2_lo),y
+    STA ptr2_hi
+    STX ptr2_lo
+    JMP Snd_Sq2_NextToken
 B6_851A:
     CMP #$F4
     BNE B6_852F
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_8526
-    INC zp_FF
+    INC ptr2_hi
 B6_8526:
     STA snd_tempo
     STA snd_tempo_base
-    JMP B6_83B8
+    JMP Snd_Sq2_NextToken
 B6_852F:
     CMP #$FE
     BNE B6_853B
@@ -667,14 +667,14 @@ Snd_Sq2_Effects:
     BEQ B6_8573
     LDX snd_sq2_env_idx
     LDA EnvelopePtrLo,x
-    STA zp_FE
+    STA ptr2_lo
     LDA EnvelopePtrHi,x
-    STA zp_FF
+    STA ptr2_hi
     LDY #$00
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_sq2_env_speed
     LDY snd_sq2_env_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     BMI B6_856B
     DEC snd_sq2_env_count
     BPL B6_856B
@@ -688,16 +688,16 @@ B6_856B:
 B6_8573:
     LDX snd_sq2_pitchmod_idx
     LDA PitchModPtrLo,x
-    STA zp_FE
+    STA ptr2_lo
     LDA PitchModPtrHi,x
-    STA zp_FF
+    STA ptr2_hi
     LDY snd_sq2_pitchmod_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     CMP #$80
     BNE B6_8590
     LDY #$00
     STY snd_sq2_pitchmod_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
 B6_8590:
     INC snd_sq2_pitchmod_pos
     CLC
@@ -710,16 +710,16 @@ Snd_Tri_Step:
     RTS
 B6_85A1:
     LDA snd_tri_stream_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_tri_stream_hi
-    STA zp_FF
-B6_85AB:
+    STA ptr2_hi
+Snd_Tri_NextToken:
     LDY #$00
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAY
-    INC zp_FE
+    INC ptr2_lo
     BNE B6_85B6
-    INC zp_FF
+    INC ptr2_hi
 B6_85B6:
     TYA
     BMI B6_8603
@@ -727,7 +727,7 @@ B6_85B6:
     BCC B6_85C5
     ADC #$A0
     STA snd_tri_next_len
-    JMP B6_85AB
+    JMP Snd_Tri_NextToken
 B6_85C5:
     CLC
     ADC snd_song_transpose
@@ -748,9 +748,9 @@ B6_85C5:
     LDA #$81
     STA TRI_LINEAR
 B6_85F2:
-    LDA zp_FE
+    LDA ptr2_lo
     STA snd_tri_stream_lo
-    LDA zp_FF
+    LDA ptr2_hi
     STA snd_tri_stream_hi
     LDA snd_tri_next_len
     STA snd_tri_len_count
@@ -762,57 +762,57 @@ B6_8603:
     LDA snd_tri_listpos_lo
     CLC
     ADC snd_tri_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_tri_listpos_hi
     ADC snd_tri_list_hi
-    STA zp_FF
+    STA ptr2_hi
     LDA snd_tri_listpos_lo
     ADC #$02
     STA snd_tri_listpos_lo
     TYA
     ADC snd_tri_listpos_hi
     STA snd_tri_listpos_hi
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     INY
-    ORA (zp_FE),y
+    ORA (ptr2_lo),y
     BNE B6_8644
     LDA snd_tri_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_tri_list_hi
-    STA zp_FF
+    STA ptr2_hi
     LDA #$02
     STA snd_tri_listpos_lo
     LDA #$00
     STA snd_tri_listpos_hi
 B6_8644:
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     DEY
-    LDA (zp_FE),y
-    STA zp_FE
-    STX zp_FF
-    JMP B6_85AB
+    LDA (ptr2_lo),y
+    STA ptr2_lo
+    STX ptr2_hi
+    JMP Snd_Tri_NextToken
 B6_8651:
     CMP #$F6
     BNE B6_8663
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_865D
-    INC zp_FF
+    INC ptr2_hi
 B6_865D:
     STA snd_tri_env_idx
-    JMP B6_85AB
+    JMP Snd_Tri_NextToken
 B6_8663:
     CMP #$F7
     BNE B6_8678
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_866F
-    INC zp_FF
+    INC ptr2_hi
 B6_866F:
     STA snd_tri_pitchmod_idx
     STY snd_tri_pitchmod_pos
-    JMP B6_85AB
+    JMP Snd_Tri_NextToken
 B6_8678:
     CMP #$F8
     BNE B6_8684
@@ -826,56 +826,56 @@ B6_8684:
 B6_868B:
     CMP #$FB
     BNE B6_869D
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_8697
-    INC zp_FF
+    INC ptr2_hi
 B6_8697:
     STA snd_song_transpose
-    JMP B6_85AB
+    JMP Snd_Tri_NextToken
 B6_869D:
     CMP #$FC
     BNE B6_86AF
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_86A9
-    INC zp_FF
+    INC ptr2_hi
 B6_86A9:
     STA snd_tri_transpose
-    JMP B6_85AB
+    JMP Snd_Tri_NextToken
 B6_86AF:
     CMP #$F5
     BNE B6_86D9
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     STA snd_tri_list_lo
     INY
-    LDA (zp_FE),y
-    STX zp_FE
-    STA zp_FF
+    LDA (ptr2_lo),y
+    STX ptr2_lo
+    STA ptr2_hi
     STA snd_tri_list_hi
     LDA #$02
     STA snd_tri_listpos_lo
     DEY
     STY snd_tri_listpos_hi
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     INY
-    LDA (zp_FE),y
-    STA zp_FF
-    STX zp_FE
-    JMP B6_85AB
+    LDA (ptr2_lo),y
+    STA ptr2_hi
+    STX ptr2_lo
+    JMP Snd_Tri_NextToken
 B6_86D9:
     CMP #$F4
     BNE B6_86EE
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_86E5
-    INC zp_FF
+    INC ptr2_hi
 B6_86E5:
     STA snd_tempo
     STA snd_tempo_base
-    JMP B6_85AB
+    JMP Snd_Tri_NextToken
 B6_86EE:
     CMP #$FE
     BNE B6_86FA
@@ -895,16 +895,16 @@ Snd_Tri_Effects:
 B6_870B:
     LDX snd_tri_pitchmod_idx
     LDA PitchModPtrLo,x
-    STA zp_FE
+    STA ptr2_lo
     LDA PitchModPtrHi,x
-    STA zp_FF
+    STA ptr2_hi
     LDY snd_tri_pitchmod_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     CMP #$80
     BNE B6_8728
     LDY #$00
     STY snd_tri_pitchmod_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
 B6_8728:
     INC snd_tri_pitchmod_pos
     CLC
@@ -917,17 +917,17 @@ Snd_Noise_Step:
     RTS
 B6_8739:
     LDA snd_noi_stream_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_noi_stream_hi
-    STA zp_FF
+    STA ptr2_hi
     STA snd_noi_env_active
-B6_8746:
+Snd_Noise_NextToken:
     LDY #$00
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAY
-    INC zp_FE
+    INC ptr2_lo
     BNE B6_8751
-    INC zp_FF
+    INC ptr2_hi
 B6_8751:
     TYA
     BMI B6_8796
@@ -935,7 +935,7 @@ B6_8751:
     BCC B6_8760
     ADC #$A0
     STA snd_noi_next_len
-    JMP B6_8746
+    JMP Snd_Noise_NextToken
 B6_8760:
     AND #$0F
     STA snd_noi_period_lo
@@ -953,9 +953,9 @@ B6_8775:
 B6_8780:
     LDA #$FF
     STA snd_noi_env_active
-    LDA zp_FE
+    LDA ptr2_lo
     STA snd_noi_stream_lo
-    LDA zp_FF
+    LDA ptr2_hi
     STA snd_noi_stream_hi
     LDA snd_noi_next_len
     STA snd_noi_len_count
@@ -967,57 +967,57 @@ B6_8796:
     LDA snd_noi_listpos_lo
     CLC
     ADC snd_noi_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_noi_listpos_hi
     ADC snd_noi_list_hi
-    STA zp_FF
+    STA ptr2_hi
     LDA snd_noi_listpos_lo
     ADC #$02
     STA snd_noi_listpos_lo
     TYA
     ADC snd_noi_listpos_hi
     STA snd_noi_listpos_hi
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     INY
-    ORA (zp_FE),y
+    ORA (ptr2_lo),y
     BNE B6_87D7
     LDA snd_noi_list_lo
-    STA zp_FE
+    STA ptr2_lo
     LDA snd_noi_list_hi
-    STA zp_FF
+    STA ptr2_hi
     LDA #$02
     STA snd_noi_listpos_lo
     LDA #$00
     STA snd_noi_listpos_hi
 B6_87D7:
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     DEY
-    LDA (zp_FE),y
-    STA zp_FE
-    STX zp_FF
-    JMP B6_8746
+    LDA (ptr2_lo),y
+    STA ptr2_lo
+    STX ptr2_hi
+    JMP Snd_Noise_NextToken
 B6_87E4:
     CMP #$F6
     BNE B6_87F6
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_87F0
-    INC zp_FF
+    INC ptr2_hi
 B6_87F0:
     STA snd_noi_env_idx
-    JMP B6_8746
+    JMP Snd_Noise_NextToken
 B6_87F6:
     CMP #$F7
     BNE B6_880B
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_8802
-    INC zp_FF
+    INC ptr2_hi
 B6_8802:
     STA snd_noi_pitchmod_idx
     STY snd_noi_pitchmod_pos
-    JMP B6_8746
+    JMP Snd_Noise_NextToken
 B6_880B:
     CMP #$F8
     BNE B6_8817
@@ -1031,36 +1031,36 @@ B6_8817:
 B6_881E:
     CMP #$F5
     BNE B6_8848
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     STA snd_noi_list_lo
     INY
-    LDA (zp_FE),y
-    STX zp_FE
-    STA zp_FF
+    LDA (ptr2_lo),y
+    STX ptr2_lo
+    STA ptr2_hi
     STA snd_noi_list_hi
     LDA #$02
     STA snd_noi_listpos_lo
     DEY
     STY snd_noi_listpos_hi
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     TAX
     INY
-    LDA (zp_FE),y
-    STA zp_FF
-    STX zp_FE
-    JMP B6_8746
+    LDA (ptr2_lo),y
+    STA ptr2_hi
+    STX ptr2_lo
+    JMP Snd_Noise_NextToken
 B6_8848:
     CMP #$F4
     BNE B6_885D
-    LDA (zp_FE),y
-    INC zp_FE
+    LDA (ptr2_lo),y
+    INC ptr2_lo
     BNE B6_8854
-    INC zp_FF
+    INC ptr2_hi
 B6_8854:
     STA snd_tempo
     STA snd_tempo_base
-    JMP B6_8746
+    JMP Snd_Noise_NextToken
 B6_885D:
     CMP #$FE
     BNE B6_8869
@@ -1075,14 +1075,14 @@ Snd_Noise_Effects:
     BEQ B6_88A0
     LDX snd_noi_env_idx
     LDA EnvelopePtrLo,x
-    STA zp_FE
+    STA ptr2_lo
     LDA EnvelopePtrHi,x
-    STA zp_FF
+    STA ptr2_hi
     LDY #$00
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_noi_env_speed
     LDY snd_noi_env_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     BMI B6_8899
     DEC snd_noi_env_count
     BPL B6_8899
@@ -1096,16 +1096,16 @@ B6_8899:
 B6_88A0:
     LDX snd_noi_pitchmod_idx
     LDA PitchModPtrLo,x
-    STA zp_FE
+    STA ptr2_lo
     LDA PitchModPtrHi,x
-    STA zp_FF
+    STA ptr2_hi
     LDY snd_noi_pitchmod_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     CMP #$80
     BNE B6_88BD
     LDY #$00
     STY snd_noi_pitchmod_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
 B6_88BD:
     INC snd_noi_pitchmod_pos
     CLC
@@ -1201,12 +1201,12 @@ Sound_PlaySfxSq1Impl:
     LDA #$00
     STA snd_sfx_sq1
     LDA SfxDefPtrs,y
-    STA zp_FE
+    STA ptr2_lo
     LDA SfxDefPtrs+1,y
-    STA zp_FF
+    STA ptr2_hi
     LDY #$0D
 B6_8993:
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA snd_sfx1_duration,y
     DEY
     BPL B6_8993
@@ -1221,13 +1221,13 @@ B6_8993:
     TAY
     LDA SfxSeqPtrs,y
     STA ram_07F3
-    STA zp_FE
+    STA ptr2_lo
     LDA SfxSeqPtrs+1,y
     STA ram_07F4
-    STA zp_FF
+    STA ptr2_hi
     LDY #$00
     STY snd_sfx1_seq_pos
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     ORA snd_sfx1_duty_vol
     STA SQ1_VOL
     LDA #$00
@@ -1248,12 +1248,12 @@ Sound_PlaySfxSq2Impl:
     LDA #$00
     STA snd_sfx_sq2
     LDA SfxDefPtrs,y
-    STA zp_FE
+    STA ptr2_lo
     LDA SfxDefPtrs+1,y
-    STA zp_FF
+    STA ptr2_hi
     LDY #$0D
 B6_8A02:
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA ram_07C9,y
     DEY
     BPL B6_8A02
@@ -1277,13 +1277,13 @@ B6_8A1E:
     TAY
     LDA SfxSeqPtrs,y
     STA ram_07F5
-    STA zp_FE
+    STA ptr2_lo
     LDA SfxSeqPtrs+1,y
     STA ram_07F6
-    STA zp_FF
+    STA ptr2_hi
     LDY #$00
     STY ram_07DB
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     ORA ram_07CF
     STA SQ2_VOL
 B6_8A52:
@@ -1304,12 +1304,12 @@ Sound_PlaySfxNoiseImpl:
     LDA #$00
     STA snd_sfx_noise
     LDA SfxDefPtrs,y
-    STA zp_FE
+    STA ptr2_lo
     LDA SfxDefPtrs+1,y
-    STA zp_FF
+    STA ptr2_hi
     LDY #$0D
 B6_8A82:
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     STA ram_07DF,y
     DEY
     BPL B6_8A82
@@ -1324,13 +1324,13 @@ B6_8A82:
     TAY
     LDA SfxSeqPtrs,y
     STA ram_07F7
-    STA zp_FE
+    STA ptr2_lo
     LDA SfxSeqPtrs+1,y
     STA ram_07F8
-    STA zp_FF
+    STA ptr2_hi
     LDY #$00
     STY ram_07F1
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
     ORA ram_07E5
     STA NOISE_VOL
     LDA #$00
@@ -1380,15 +1380,15 @@ B6_8B17:
     STA snd_sfx1_seq_timer
     LDY snd_sfx1_seq_pos
     LDA ram_07F3
-    STA zp_FE
+    STA ptr2_lo
     LDA ram_07F4
-    STA zp_FF
-    LDA (zp_FE),y
+    STA ptr2_hi
+    LDA (ptr2_lo),y
     BPL B6_8B3E
     CMP #$80
     BNE B6_8B48
     LDY #$00
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
 B6_8B3E:
     ORA snd_sfx1_duty_vol
     STA SQ1_VOL
@@ -1499,15 +1499,15 @@ B6_8C24:
     STA ram_07DC
     LDY ram_07DB
     LDA ram_07F5
-    STA zp_FE
+    STA ptr2_lo
     LDA ram_07F6
-    STA zp_FF
-    LDA (zp_FE),y
+    STA ptr2_hi
+    LDA (ptr2_lo),y
     BPL B6_8C48
     CMP #$80
     BNE B6_8C52
     LDY #$00
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
 B6_8C48:
     ORA ram_07CF
     STA SQ2_VOL
@@ -1608,15 +1608,15 @@ B6_8D13:
     STA ram_07F2
     LDY ram_07F1
     LDA ram_07F7
-    STA zp_FE
+    STA ptr2_lo
     LDA ram_07F8
-    STA zp_FF
-    LDA (zp_FE),y
+    STA ptr2_hi
+    LDA (ptr2_lo),y
     BPL B6_8D3A
     CMP #$80
     BNE B6_8D44
     LDY #$00
-    LDA (zp_FE),y
+    LDA (ptr2_lo),y
 B6_8D3A:
     ORA ram_07E5
     STA NOISE_VOL
@@ -3193,7 +3193,7 @@ B6_9F02:
 B6_9F3A:
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
-    INC zp_0A,x
+    INC scroll_y_lo,x
     ADC (jump_ptr_hi,x)
     INC tmp_ptr_hi,x
     RTS
@@ -3380,14 +3380,14 @@ B6_A323:
     JMP B6_A3CB
 B6_A335:
     LDA #$0F
-    STA zp_53
+    STA tmp_a
     LDA zp_66
     BNE B6_A33F
-    STA zp_53
+    STA tmp_a
 B6_A33F:
     LDA player_x_lo
     CLC
-    ADC zp_53
+    ADC tmp_a
     STA ptr_lo
     LDA player_x_hi
     ADC #$00
@@ -3395,10 +3395,10 @@ B6_A33F:
     LDA player_y_lo
     CLC
     ADC #$10
-    STA zp_55
+    STA tmp_c
     LDA player_y_hi
     ADC #$00
-    STA zp_56
+    STA tmp_d
     JSR MapPtrFromPos
     JSR GetMapTile
     PHA
@@ -3430,7 +3430,7 @@ B6_A383:
     LDA #$17
 B6_A38F:
     STA zp_65
-    JSR F_F6B0
+    JSR SetCollectedFlag
     JSR F_F192
     LDA ptr_lo
     STA ram_0721
@@ -3519,8 +3519,8 @@ B6_A433:
     JSR WaitForNMI
     LDA fade_step
     BNE B6_A433
-    JSR F_C7CD
-    JSR F_C9A5
+    JSR RenderOffAndWait
+    JSR DisableNMI
     JSR F_C956
     JSR F_C9B2
     INC stage_index
@@ -3584,12 +3584,12 @@ B6_A524:
 B6_A535:
     LDA player_y_lo
     SEC
-    SBC zp_6A
-    STA zp_53
+    SBC cam_y_lo
+    STA tmp_a
     LDA player_y_hi
-    SBC zp_6B
+    SBC cam_y_hi
     BNE B6_A56E
-    LDA zp_53
+    LDA tmp_a
     SEC
     SBC #$0E
     STA zp_19
@@ -3598,15 +3598,15 @@ B6_A535:
 B6_A54D:
     LDA player_x_lo
     SEC
-    SBC zp_68
-    STA zp_54
+    SBC cam_x_lo
+    STA tmp_b
     LDA player_x_hi
-    SBC zp_69
+    SBC cam_x_hi
     BNE B6_A56E
-    LDA zp_54
+    LDA tmp_b
     SEC
     SBC #$10
-    STA zp_54
+    STA tmp_b
     SEC
     SBC #$0A
     BCS B6_A568
@@ -3633,18 +3633,18 @@ B6_A57F:
     LDA B6_A653,y
     TAY
     LDA B6_A6A3,y
-    STA zp_55
+    STA tmp_c
     LDA B6_A6AE,y
-    STA zp_56
+    STA tmp_d
     LDY #$00
-    LDA (zp_55),y
+    LDA (tmp_c),y
     INY
     STA ptr_lo
-    LDA (zp_55),y
+    LDA (tmp_c),y
     INY
     STA ptr_hi
-    LDA (zp_55),y
-    STA zp_55
+    LDA (tmp_c),y
+    STA tmp_c
     LDX #$00
     LDY #$00
     LDA zp_67
@@ -3655,7 +3655,7 @@ B6_A5AB:
     LDA (ptr_lo),y
     INY
     CLC
-    ADC zp_53
+    ADC tmp_a
     STA ram_023C,x
     INX
     INX
@@ -3671,17 +3671,17 @@ B6_A5C1:
     SBC (ptr_lo),y
     INY
     CLC
-    ADC zp_54
+    ADC tmp_b
     STA ram_023C,x
     INX
-    DEC zp_55
+    DEC tmp_c
     BNE B6_A5AB
     RTS
 B6_A5D4:
     LDA (ptr_lo),y
     INY
     CLC
-    ADC zp_53
+    ADC tmp_a
     STA ram_023C,x
     INX
     INX
@@ -3695,10 +3695,10 @@ B6_A5EA:
     LDA (ptr_lo),y
     INY
     CLC
-    ADC zp_54
+    ADC tmp_b
     STA ram_023C,x
     INX
-    DEC zp_55
+    DEC tmp_c
     BNE B6_A5D4
     RTS
 B6_A5FA:
@@ -3710,7 +3710,7 @@ B6_A5FE:
     SBC (ptr_lo),y
     INY
     CLC
-    ADC zp_53
+    ADC tmp_a
     STA ram_023C,x
     INX
     INX
@@ -3726,10 +3726,10 @@ B6_A617:
     SBC (ptr_lo),y
     INY
     CLC
-    ADC zp_54
+    ADC tmp_b
     STA ram_023C,x
     INX
-    DEC zp_55
+    DEC tmp_c
     BNE B6_A5FE
     RTS
 B6_A62A:
@@ -3738,7 +3738,7 @@ B6_A62A:
     SBC (ptr_lo),y
     INY
     CLC
-    ADC zp_53
+    ADC tmp_a
     STA ram_023C,x
     INX
     INX
@@ -3752,10 +3752,10 @@ B6_A643:
     LDA (ptr_lo),y
     INY
     CLC
-    ADC zp_54
+    ADC tmp_b
     STA ram_023C,x
     INX
-    DEC zp_55
+    DEC tmp_c
     BNE B6_A62A
     RTS
 B6_A653:
@@ -4102,7 +4102,7 @@ Gfx_B6_B738:
     CMP #$11
     BCS B6_B862
     LDA #$03
-    STA zp_53
+    STA tmp_a
     LDA buttons
     AND #$01
     BEQ B6_B857
@@ -4117,7 +4117,7 @@ B6_B85E:
 B6_B862:
     TAX
     LDA F_C20F,x
-    STA zp_53
+    STA tmp_a
     CMP #$FF
     BNE B6_B86F
     JMP B6_B92A
@@ -4127,9 +4127,9 @@ B6_B86F:
     JMP B6_B937
 B6_B876:
     LDA player_y_lo
-    STA zp_55
+    STA tmp_c
     LDA player_y_hi
-    STA zp_56
+    STA tmp_d
     LDA player_x_lo
     CLC
     ADC #$08
@@ -4155,7 +4155,7 @@ B6_B876:
     ADC #$00
     STA ptr_hi
     LDA (ptr_lo),y
-    STA zp_53
+    STA tmp_a
     CMP #$FF
     BEQ B6_B8DF
     LDA player_y_lo
@@ -4163,14 +4163,14 @@ B6_B876:
     CLC
     ADC #$10
     SEC
-    SBC zp_53
+    SBC tmp_a
     BCC B6_B8DF
     CMP #$05
     BCS B6_B8DF
     LDA player_y_lo
     AND #$F0
     CLC
-    ADC zp_53
+    ADC tmp_a
     SEC
     SBC #$10
     STA player_y_lo
@@ -4206,20 +4206,20 @@ B6_B8DF:
     ADC #$00
     STA ptr_hi
     LDA (ptr_lo),y
-    STA zp_53
+    STA tmp_a
     CMP #$FF
     BEQ B6_B927
     LDA player_y_lo
     AND #$0F
     SEC
-    SBC zp_53
+    SBC tmp_a
     BCC B6_B927
     CMP #$05
     BCS B6_B927
     LDA player_y_lo
     AND #$F0
     CLC
-    ADC zp_53
+    ADC tmp_a
     STA player_y_lo
 B6_B927:
     JMP B6_BA04
@@ -4233,7 +4233,7 @@ B6_B92A:
 B6_B937:
     LDA player_y_lo
     SEC
-    SBC zp_53
+    SBC tmp_a
     STA player_y_lo
     LDA player_y_hi
     SBC #$00
@@ -4248,12 +4248,12 @@ B6_B948:
     LDA F_C235,x
     STA zp_65
     LDA player_y_lo
-    STA zp_55
+    STA tmp_c
     LDA player_y_hi
-    STA zp_56
-    LDA zp_55
+    STA tmp_d
+    LDA tmp_c
     PHA
-    LDA zp_56
+    LDA tmp_d
     PHA
     LDA player_x_lo
     CLC
@@ -4265,9 +4265,9 @@ B6_B948:
     JSR MapPtrFromPos
     JSR F_F80D
     PLA
-    STA zp_56
+    STA tmp_d
     PLA
-    STA zp_55
+    STA tmp_c
     JSR GetTilePropsAtPos
     AND #$01
     BNE B6_B998
@@ -4288,7 +4288,7 @@ B6_B998:
     JSR GetMapTile
     CMP #$D1
     BNE B6_B9C0
-    JSR F_F6B0
+    JSR SetCollectedFlag
     LDA #$39
     JSR PlaySfxNoise
     JSR F_F192
@@ -4381,9 +4381,9 @@ B6_BA39:
     ADC #$00
     STA ptr_hi
     LDA player_y_lo
-    STA zp_55
+    STA tmp_c
     LDA player_y_hi
-    STA zp_56
+    STA tmp_d
     JSR MapPtrFromPos
     JSR GetTilePropsAtPos
     AND #$01
@@ -4441,20 +4441,20 @@ B6_BA9C:
     LDA zp_34
     SEC
     SBC #$11
-    STA zp_53
+    STA tmp_a
     LDA zp_35
     SBC #$00
-    STA zp_54
-    LDA zp_53
+    STA tmp_b
+    LDA tmp_a
     SEC
     SBC ptr_lo
-    LDA zp_54
+    LDA tmp_b
     SBC ptr_hi
     BCS B6_BACE
-    LDA zp_53
+    LDA tmp_a
     ADC #$01
     STA player_x_lo
-    LDA zp_54
+    LDA tmp_b
     ADC #$00
     STA player_x_hi
     RTS
@@ -4469,9 +4469,9 @@ B6_BACE:
     ADC #$00
     STA ptr_hi
     LDA player_y_lo
-    STA zp_55
+    STA tmp_c
     LDA player_y_hi
-    STA zp_56
+    STA tmp_d
     JSR MapPtrFromPos
     JSR GetTilePropsAtPos
     AND #$01
@@ -4499,35 +4499,35 @@ B6_BB0C:
     ADC #$05
     STA player_x_lo
     RTS
-    LDA zp_1D
+    LDA focus_y_lo
     CLC
     ADC zp_4B
     STA ptr_lo
-    LDA zp_1E
+    LDA focus_y_hi
     ADC #$00
     STA ptr_hi
     LDA player_y_lo
     SEC
     SBC ptr_lo
-    STA zp_55
+    STA tmp_c
     LDA player_y_hi
     SBC ptr_hi
-    STA zp_56
+    STA tmp_d
     BCS B6_BB53
-    LDA zp_55
+    LDA tmp_c
     EOR #$FF
     CLC
     ADC #$01
     STA ptr_lo
-    LDA zp_56
+    LDA tmp_d
     EOR #$FF
     ADC #$00
     STA ptr_hi
-    LDA zp_1D
+    LDA focus_y_lo
     SEC
     SBC ptr_lo
     STA ptr_lo
-    LDA zp_1E
+    LDA focus_y_hi
     SBC ptr_hi
     STA ptr_hi
     JMP B6_BB87
@@ -4547,17 +4547,17 @@ B6_BB53:
     SBC ptr_hi
     STA ptr_hi
     BCS B6_BB7A
-    LDA zp_1D
+    LDA focus_y_lo
     STA ptr_lo
-    LDA zp_1E
+    LDA focus_y_hi
     STA ptr_hi
     JMP B6_BB87
 B6_BB7A:
-    LDA zp_1D
+    LDA focus_y_lo
     CLC
     ADC ptr_lo
     STA ptr_lo
-    LDA zp_1E
+    LDA focus_y_hi
     ADC ptr_hi
     STA ptr_hi
 B6_BB87:
@@ -4569,73 +4569,73 @@ B6_BB87:
     BCS B6_BB9E
 B6_BB93:
     LDA #$20
-    STA zp_1D
+    STA focus_y_lo
     LDA #$00
-    STA zp_1E
+    STA focus_y_hi
     JMP B6_BBC6
 B6_BB9E:
     LDA zp_36
     SEC
     SBC #$F0
-    STA zp_55
+    STA tmp_c
     LDA zp_37
     SBC #$00
-    STA zp_56
+    STA tmp_d
     LDA ptr_lo
     SEC
-    SBC zp_55
+    SBC tmp_c
     LDA ptr_hi
-    SBC zp_56
+    SBC tmp_d
     BCS B6_BBBE
     LDA ptr_lo
-    STA zp_55
+    STA tmp_c
     LDA ptr_hi
-    STA zp_56
+    STA tmp_d
 B6_BBBE:
-    LDA zp_55
-    STA zp_1D
-    LDA zp_56
-    STA zp_1E
+    LDA tmp_c
+    STA focus_y_lo
+    LDA tmp_d
+    STA focus_y_hi
 B6_BBC6:
     LDA player_x_hi
     BMI B6_BC06
-    LDA zp_1B
+    LDA focus_x_lo
     CLC
     ADC zp_4A
     STA ptr_lo
-    LDA zp_1C
+    LDA focus_x_hi
     ADC #$00
     STA ptr_hi
     LDA player_x_lo
     SEC
     SBC ptr_lo
-    STA zp_55
+    STA tmp_c
     LDA player_x_hi
     SBC ptr_hi
-    STA zp_56
+    STA tmp_d
     BCS B6_BC0D
-    LDA zp_55
+    LDA tmp_c
     EOR #$FF
     CLC
     ADC #$01
     STA ptr_lo
-    LDA zp_56
+    LDA tmp_d
     EOR #$FF
     ADC #$00
     STA ptr_hi
-    LDA zp_1B
+    LDA focus_x_lo
     SEC
     SBC ptr_lo
-    STA zp_1B
-    LDA zp_1C
+    STA focus_x_lo
+    LDA focus_x_hi
 B6_BC00:
     SBC ptr_hi
-    STA zp_1C
+    STA focus_x_hi
     BCS B6_BC0C
 B6_BC06:
     LDA #$00
-    STA zp_1B
-    STA zp_1C
+    STA focus_x_lo
+    STA focus_x_hi
 B6_BC0C:
     RTS
 B6_BC0D:
@@ -4654,13 +4654,13 @@ B6_BC0D:
     SBC ptr_hi
     STA ptr_hi
     BCC B6_BC0C
-    LDA zp_1B
+    LDA focus_x_lo
     SEC
     ADC ptr_lo
-    STA zp_55
-    LDA zp_1C
+    STA tmp_c
+    LDA focus_x_hi
     ADC ptr_hi
-    STA zp_56
+    STA tmp_d
     LDA zp_34
     SEC
     SBC #$F0
@@ -4670,166 +4670,166 @@ B6_BC0D:
     STA ptr_hi
     LDA ptr_lo
     SEC
-    SBC zp_55
+    SBC tmp_c
     LDA ptr_hi
-    SBC zp_56
+    SBC tmp_d
     BCS B6_BC56
     LDA ptr_lo
-    STA zp_55
+    STA tmp_c
     LDA ptr_hi
-    STA zp_56
+    STA tmp_d
 B6_BC56:
-    LDA zp_55
-    STA zp_1B
-    LDA zp_56
-    STA zp_1C
+    LDA tmp_c
+    STA focus_x_lo
+    LDA tmp_d
+    STA focus_x_hi
     RTS
     LDA #$FF
-    STA zp_56
-    STA zp_55
-    LDA zp_1D
+    STA tmp_d
+    STA tmp_c
+    LDA focus_y_lo
     SEC
     SBC ram_073B
-    STA zp_53
-    LDA zp_1E
+    STA tmp_a
+    LDA focus_y_hi
     SBC ram_073C
     BCS B6_BC7B
     LDY #$01
-    STY zp_55
+    STY tmp_c
     DEY
-    STY zp_56
+    STY tmp_d
 B6_BC7B:
-    ORA zp_53
+    ORA tmp_a
     STA zp_73
     BEQ B6_BC98
-    LDA zp_55
+    LDA tmp_c
     STA ram_0741
-    LDA zp_56
+    LDA tmp_d
     STA ram_0742
-    LDA zp_1D
+    LDA focus_y_lo
     CLC
-    ADC zp_55
-    STA zp_1D
-    LDA zp_1E
-    ADC zp_56
-    STA zp_1E
+    ADC tmp_c
+    STA focus_y_lo
+    LDA focus_y_hi
+    ADC tmp_d
+    STA focus_y_hi
 B6_BC98:
     LDA #$FF
-    STA zp_55
-    STA zp_56
-    LDA zp_1B
+    STA tmp_c
+    STA tmp_d
+    LDA focus_x_lo
     SEC
     SBC ram_0739
     STA ptr_lo
-    LDA zp_1C
+    LDA focus_x_hi
     SBC ram_073A
     STA ptr_hi
     BCS B6_BCB6
     LDY #$01
-    STY zp_55
+    STY tmp_c
     DEY
-    STY zp_56
+    STY tmp_d
 B6_BCB6:
     ORA ptr_lo
     BEQ B6_BCD1
-    LDA zp_55
+    LDA tmp_c
 B6_BCBC:
     STA ram_0743
-    LDA zp_56
+    LDA tmp_d
     STA ram_0744
-    LDA zp_1B
+    LDA focus_x_lo
     CLC
-    ADC zp_55
-    STA zp_1B
-    LDA zp_1C
-    ADC zp_56
-    STA zp_1C
+    ADC tmp_c
+    STA focus_x_lo
+    LDA focus_x_hi
+    ADC tmp_d
+    STA focus_x_hi
 B6_BCD1:
     LDA zp_73
     ORA ptr_lo
     ORA ptr_hi
     STA ram_072D
-    LDA ram_01A6
+    LDA camera_mode
     CMP #$04
     BNE B6_BCE2
     RTS
 B6_BCE2:
-    LDA zp_1D
+    LDA focus_y_lo
     CLC
     ADC #$12
-    STA zp_55
-    LDA zp_1E
+    STA tmp_c
+    LDA focus_y_hi
     ADC #$00
-    STA zp_56
-    LDA zp_55
+    STA tmp_d
+    LDA tmp_c
     SEC
     SBC player_y_lo
-    LDA zp_56
+    LDA tmp_d
     SBC player_y_hi
     BCC B6_BD05
-    LDA zp_55
+    LDA tmp_c
     STA player_y_lo
-    LDA zp_56
+    LDA tmp_d
     STA player_y_hi
     JMP B6_BD25
 B6_BD05:
-    LDA zp_55
+    LDA tmp_c
     CLC
     ADC #$CE
-    STA zp_55
-    LDA zp_56
+    STA tmp_c
+    LDA tmp_d
     ADC #$00
-    STA zp_56
+    STA tmp_d
     LDA player_y_lo
     SEC
-    SBC zp_55
+    SBC tmp_c
     LDA player_y_hi
-    SBC zp_56
+    SBC tmp_d
     BCC B6_BD25
-    LDA zp_55
+    LDA tmp_c
     STA player_y_lo
-    LDA zp_56
+    LDA tmp_d
     STA player_y_hi
 B6_BD25:
-    LDA zp_1B
-    STA zp_55
+    LDA focus_x_lo
+    STA tmp_c
     SEC
     SBC player_x_lo
-    LDA zp_1C
-    STA zp_56
+    LDA focus_x_hi
+    STA tmp_d
     SBC player_x_hi
     BCC B6_BD3D
-    LDA zp_55
+    LDA tmp_c
     STA player_x_lo
-    LDA zp_56
+    LDA tmp_d
     STA player_x_hi
 B6_BD3C:
     RTS
 B6_BD3D:
-    LDA zp_55
+    LDA tmp_c
     CLC
     ADC #$E0
-    STA zp_55
-    LDA zp_56
+    STA tmp_c
+    LDA tmp_d
     ADC #$00
-    STA zp_56
+    STA tmp_d
     LDA player_x_lo
     SEC
-    SBC zp_55
+    SBC tmp_c
     LDA player_x_hi
-    SBC zp_56
+    SBC tmp_d
     BCC B6_BD3C
-    LDA zp_55
+    LDA tmp_c
     STA player_x_lo
-    LDA zp_56
+    LDA tmp_d
     STA player_x_hi
     RTS
-    LDA zp_B1
+    LDA entity_tick
     AND #$7E
     BEQ B6_BD65
     RTS
 B6_BD65:
-    JSR F_FA3D
+    JSR FindFreeEntitySlot
     LDA #$81
     STA ent_type,y
     LDA #$F8
@@ -4850,12 +4850,12 @@ B6_BD65:
     LDA #$06
     STA ent_param2,y
     RTS
-    LDA zp_B1
+    LDA entity_tick
     AND #$7E
     BEQ B6_BDA0
     RTS
 B6_BDA0:
-    JSR F_FA3D
+    JSR FindFreeEntitySlot
     LDA #$9B
     STA ent_type,y
     LDA #$5C
@@ -4882,11 +4882,11 @@ B6_BDA0:
     LDA #$10
     STA ram_0389
     LDA #$FC
-    STA zp_09
+    STA scroll_x_px
     LDA #$00
     STA ram_038A
-    STA zp_0B
-    STA zp_0A
+    STA scroll_y_hi
+    STA scroll_y_lo
     JSR F_CEE1
     LDA #$5A
     STA zp_8C
@@ -4913,11 +4913,11 @@ B6_BE17:
     LDA #$E0
     CLC
     ADC (ptr_lo),y
-    STA zp_55
+    STA tmp_c
     LDA #$21
     ADC #$00
     STA PPUADDR
-    LDA zp_55
+    LDA tmp_c
     STA PPUADDR
 B6_BE32:
     INY
@@ -4976,19 +4976,19 @@ B6_BE9B:
     BEQ B6_BE79
 B6_BEA1:
     DEC fade_dir
-    LDA ram_01AB
+    LDA score_lo
     SEC
     SBC ram_0746
-    LDA ram_01AC
+    LDA score_mid
     SBC ram_0747
-    LDA ram_01AD
+    LDA score_hi
     SBC ram_0748
     BCC B6_BECA
-    LDA ram_01AB
+    LDA score_lo
     STA ram_0746
-    LDA ram_01AC
+    LDA score_mid
     STA ram_0747
-    LDA ram_01AD
+    LDA score_hi
     STA ram_0748
 B6_BECA:
     JSR WaitForNMI
@@ -4999,9 +4999,9 @@ B6_BECA:
     LDA fade_dir
     BNE B6_BECA
     JSR SilenceSound
-    JSR F_C7CD
+    JSR RenderOffAndWait
     JSR ClearOAMBuffer
-    JMP F_C9A5
+    JMP DisableNMI
 B6_BEE6:
     .byte $01,$02,$02
 B6_BEE9:

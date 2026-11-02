@@ -595,7 +595,7 @@ B2_9E00:
     BEQ B2_9E1D
     LDA ram_0749
     BNE B2_9E1E
-    LDA zp_44
+    LDA ppu_buffer_idx
     CMP #$18
     BCC B2_9E1E
 B2_9E1D:
@@ -763,7 +763,7 @@ B2_9F2C:
     STA PPUDATA
     LDA B2_8E88,x
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
 B2_9FD0:
     LDA PPUSTATUS
     LDA #$1F
@@ -821,7 +821,7 @@ B2_9FD0:
     LDA B2_9D88,x
     STA PPUDATA
     INX
-    JMP F_C7D4
+    JMP SetScroll
 B2_A075:
     LDA PPUSTATUS
     LDA #$1F
@@ -894,7 +894,7 @@ B2_A084:
     STA PPUDATA
     LDA B2_8E88,x
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
 B2_A147:
     LDA PPUSTATUS
     LDA #$1F
@@ -967,7 +967,7 @@ B2_A156:
     STA PPUDATA
     LDA B2_9D88,x
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
 B2_A219:
     TXA
     SEC
@@ -1234,7 +1234,7 @@ B2_A3BF:
     STA PPUDATA
     STA PPUDATA
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
 B2_A454:
     LDA PPUSTATUS
     LDA #$1F
@@ -1292,7 +1292,7 @@ B2_A463:
     STA PPUDATA
     STA PPUDATA
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
 B2_A4F8:
     LDA PPUSTATUS
     LDA #$1F
@@ -1344,7 +1344,7 @@ B2_A559:
     INX
     CPX #$0B
     BNE B2_A559
-    JMP F_C7D4
+    JMP SetScroll
     JSR B2_A5CC
     LDX #$00
 B2_A56C:
@@ -1353,7 +1353,7 @@ B2_A56C:
     INX
     CPX #$0B
     BNE B2_A56C
-    JMP F_C7D4
+    JMP SetScroll
     JSR B2_A5CC
     LDX #$00
 B2_A57F:
@@ -1362,7 +1362,7 @@ B2_A57F:
     INX
     CPX #$0B
     BNE B2_A57F
-    JMP F_C7D4
+    JMP SetScroll
     JSR B2_A5CC
     LDX #$00
 B2_A592:
@@ -1371,7 +1371,7 @@ B2_A592:
     INX
     CPX #$0B
     BNE B2_A592
-    JMP F_C7D4
+    JMP SetScroll
 B2_A5A0:
     .byte $00,$0F,$16,$2C,$00,$00,$00,$00,$00,$00,$0F
 B2_A5AB:
@@ -1424,7 +1424,7 @@ B2_A61B:
     INX
     CPX #$1E
     BNE B2_A61B
-    JMP F_C7D4
+    JMP SetScroll
 B2_A629:
     .byte $1F,$26,$20,$20,$FF,$9C,$00,$00,$00,$1F,$1F,$1F,$00,$7F,$00,$00
     .byte $F8,$0C,$2C,$2C,$FF,$8D,$00,$00,$00,$F0,$D0,$D0,$00,$F6
@@ -1465,7 +1465,7 @@ B2_A688:
     INX
     CPX #$1E
     BNE B2_A688
-    JMP F_C7D4
+    JMP SetScroll
 B2_A696:
     .byte $00,$00,$1F,$26,$FF,$9C,$00,$00,$00,$00,$00,$1F,$00,$7F,$00,$00
     .byte $00,$00,$F8,$0C,$FF,$8D,$00,$00,$00,$00,$00,$F0,$00,$F6,$4C,$D4
@@ -1618,7 +1618,7 @@ B2_A7EF:
     STA PPUDATA
     LDA #$00
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
     LDA PPUSTATUS
     LDA #$11
     STA PPUADDR
@@ -1736,7 +1736,7 @@ B2_A7EF:
     STA PPUDATA
     STA PPUDATA
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
 B2_AA65:
     LDA PPUSTATUS
     LDA #$11
@@ -1871,7 +1871,7 @@ B2_AA65:
     STA PPUDATA
     LDA #$00
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
     LDA PPUSTATUS
     LDA #$11
     STA PPUADDR
@@ -1982,7 +1982,7 @@ B2_AA65:
     STA PPUDATA
     STA PPUDATA
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
 B2_ACD7:
     LDA PPUSTATUS
     LDA #$11
@@ -2104,7 +2104,7 @@ B2_ACD7:
     STA PPUDATA
     LDA #$00
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
     JSR B2_AE46
     LDX #$00
 B2_AE12:
@@ -2113,7 +2113,7 @@ B2_AE12:
     INX
     CPX #$20
     BNE B2_AE12
-    JMP F_C7D4
+    JMP SetScroll
     JSR B2_AE46
     LDX #$00
 B2_AE25:
@@ -2122,7 +2122,7 @@ B2_AE25:
     INX
     CPX #$20
     BNE B2_AE25
-    JMP F_C7D4
+    JMP SetScroll
     JSR B2_AE46
     LDX #$00
 B2_AE38:
@@ -2131,7 +2131,7 @@ B2_AE38:
     INX
     CPX #$20
     BNE B2_AE38
-    JMP F_C7D4
+    JMP SetScroll
 B2_AE46:
     LDA PPUSTATUS
     LDA #$13
@@ -2262,7 +2262,7 @@ B2_AF27:
     STA PPUDATA
     LDA #$FE
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
 B2_B02D:
     JSR B2_AF19
     LDA #$B0
@@ -2383,7 +2383,7 @@ B2_B02D:
     STA PPUDATA
     LDA #$FE
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
     JSR B2_AF19
     LDA #$B7
     STA PPUDATA
@@ -2505,7 +2505,7 @@ B2_B238:
     STA PPUDATA
     LDA #$00
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
     JSR B2_AF19
     LDA #$B0
     STA PPUDATA
@@ -2683,7 +2683,7 @@ B2_B238:
     STA PPUDATA
     LDA #$1E
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
     JSR B2_B467
     JSR B2_B494
     JSR B2_B475
@@ -2717,12 +2717,12 @@ B2_B483:
 B2_B494:
     LDA #$95
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
     JSR B2_B483
 B2_B49F:
     LDA #$69
     STA PPUDATA
-    JMP F_C7D4
+    JMP SetScroll
 B2_B4A7:
     JSR B2_B509
     LDY #$00
@@ -2732,7 +2732,7 @@ B2_B4AC:
     INY
     CPY #$1E
     BNE B2_B4AC
-    JMP F_C7D4
+    JMP SetScroll
 B2_B4BA:
     .byte $8F,$98,$A7,$A8,$A3,$9C,$C0,$7F,$70,$6F,$58,$57,$5C,$63,$3F,$00
     .byte $F1,$09,$E5,$15,$CD,$39,$03,$FE,$0E,$F6,$1A,$EA,$3A,$C6,$20,$09
@@ -2813,93 +2813,93 @@ B2_B5E7:
     LDX ram_01A5
     INC ram_01A5
     LDA #$00
-    STA zp_56
+    STA tmp_d
     LDA B2_B5E7,x
-    STA zp_53
+    STA tmp_a
     CMP #$80
     BNE B2_B639
     LDA #$00
     STA ram_01A5
     LDA ram_01A4
-    STA ram_01A6
-    JMP F_D00E
+    STA camera_mode
+    JMP UpdateCamera
 B2_B639:
-    LDA zp_53
+    LDA tmp_a
     AND #$80
     BEQ B2_B641
-    DEC zp_56
+    DEC tmp_d
 B2_B641:
-    LDA zp_1D
+    LDA focus_y_lo
     CLC
-    ADC zp_53
-    STA zp_1D
-    LDA zp_1E
-    ADC zp_56
-    STA zp_1E
+    ADC tmp_a
+    STA focus_y_lo
+    LDA focus_y_hi
+    ADC tmp_d
+    STA focus_y_hi
     RTS
 B2_B64F:
-    LDA ram_01AB
+    LDA score_lo
     STA ptr_lo
-    LDA ram_01AC
+    LDA score_mid
     STA ptr_hi
-    LDA ram_01AD
-    STA zp_53
+    LDA score_hi
+    STA tmp_a
     JSR B2_B732
     LDA #$06
-    STA zp_53
+    STA tmp_a
     LDA #$21
     STA ptr_hi
     LDA #$8E
     STA ptr_lo
     JSR B2_B6EF
     LDA #$00
-    STA zp_53
+    STA tmp_a
     STA ptr_hi
     LDA balloons_left
     STA ptr_lo
     JSR B2_B732
     LDA #$01
-    STA zp_53
+    STA tmp_a
     LDA #$21
     STA ptr_hi
     LDA #$D2
     STA ptr_lo
     JSR B2_B6EF
     LDA #$00
-    STA zp_53
+    STA tmp_a
     LDA ram_01A8
     STA ptr_lo
     LDA ram_01A9
     STA ptr_hi
     JSR B2_B732
     LDA #$03
-    STA zp_53
+    STA tmp_a
     LDA #$22
     STA ptr_hi
     LDA #$0F
     STA ptr_lo
     JSR B2_B6EF
     LDA #$00
-    STA zp_53
+    STA tmp_a
     STA ptr_hi
     LDA ram_01AA
     STA ptr_lo
     JSR B2_B732
     LDA #$02
-    STA zp_53
+    STA tmp_a
     LDA #$22
     STA ptr_hi
     LDA #$52
     STA ptr_lo
     JSR B2_B6EF
     LDA #$00
-    STA zp_53
+    STA tmp_a
     STA ptr_hi
     LDA ram_01AE
     STA ptr_lo
     JSR B2_B732
     LDA #$02
-    STA zp_53
+    STA tmp_a
     LDA #$22
     STA ptr_hi
     LDA #$90
@@ -2910,14 +2910,14 @@ B2_B64F:
     JSR EnableRendering
     RTS
 B2_B6EF:
-    LDX zp_44
+    LDX ppu_buffer_idx
     LDA ptr_hi
     STA ppu_buffer,x
     INX
     LDA ptr_lo
     STA ppu_buffer,x
     INX
-    LDA zp_53
+    LDA tmp_a
     ORA #$80
     STA ppu_buffer,x
     INX
@@ -2929,11 +2929,11 @@ B2_B707:
     STA ppu_buffer,x
     INX
     DEY
-    DEC zp_53
+    DEC tmp_a
     BNE B2_B707
     LDA #$00
     STA ppu_buffer,x
-    STX zp_44
+    STX ppu_buffer_idx
     RTS
     JSR B2_B732
     LDY #$00
@@ -2961,7 +2961,7 @@ B2_B73D:
     SBC B2_B777,x
     LDA ptr_hi
     SBC B2_B778,x
-    LDA zp_53
+    LDA tmp_a
     SBC B2_B779,x
     BCC B2_B771
     LDA ptr_lo
@@ -2971,9 +2971,9 @@ B2_B73D:
     LDA ptr_hi
     SBC B2_B778,x
     STA ptr_hi
-    LDA zp_53
+    LDA tmp_a
     SBC B2_B779,x
-    STA zp_53
+    STA tmp_a
     LDA ram_038C,y
     CLC
     ADC #$01
@@ -2993,7 +2993,7 @@ B2_B779:
     .byte $01,$00,$10,$27,$00,$00,$E8,$03,$00,$00,$64,$00,$00,$00,$0A,$00
     .byte $00,$00,$01,$00,$00,$00
 B2_B78F:
-    LDA zp_44
+    LDA ppu_buffer_idx
     CMP #$18
     BCS B2_B776
     LDY zp_47
@@ -3020,7 +3020,7 @@ B2_B7D2:
 ResetLevelState:
     LDA #$00
     STA zp_4D
-    STA zp_44
+    STA ppu_buffer_idx
     STA ppu_buffer
     STA zp_DA
     STA zp_7C
@@ -3035,7 +3035,7 @@ ResetLevelState:
     STA zp_65
     STA zp_4F
     STA zp_4E
-    STA ram_01A6
+    STA camera_mode
     STA ram_0736
     STA zp_79
     STA zp_7E
@@ -3048,10 +3048,10 @@ ResetLevelState:
     STA zp_80
     STA zp_6D
     STA zp_BE
-    STA zp_1B
-    STA zp_1C
-    STA zp_1D
-    STA zp_1E
+    STA focus_x_lo
+    STA focus_x_hi
+    STA focus_y_lo
+    STA focus_y_hi
     STA ram_0731
     STA ram_0730
     LDX #$1F
@@ -3084,8 +3084,8 @@ ResetGameState:
     STA ram_01A7
     STA zp_FC
     STA zp_A5
-    STA zp_E1
-    STA zp_E2
+    STA obj2_state
+    STA obj2_state_1
     STA zp_DF
     STA zp_DC
     STA zp_DD

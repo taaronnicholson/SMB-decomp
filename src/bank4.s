@@ -834,8 +834,8 @@ B4_AD39:
     JSR F_CEE1
     LDA fade_dir
     BNE B4_AD39
-    JSR F_C7CD
-    JSR F_C9A5
+    JSR RenderOffAndWait
+    JSR DisableNMI
     LDA #$F0
     JSR F_C8B4
     LDA items_found
@@ -946,7 +946,7 @@ B4_AE56:
     JSR B4_AEF6
     LDA zp_A6
     BEQ B4_AE8F
-    JSR F_FA3D
+    JSR FindFreeEntitySlot
     LDA #$D0
     STA ent_y_lo,y
     LDA #$20
@@ -958,7 +958,7 @@ B4_AE56:
     TYA
     TAX
     LDA #$08
-    STA zp_53
+    STA tmp_a
     JSR F_F9B6
     LDA #$05
     STA game_state
@@ -1004,7 +1004,7 @@ B4_AEF6:
     SBC #$00
     BCC B4_AEB5
     LDA #$01
-    STA ram_01A6
+    STA camera_mode
     LDA #$00
     STA ram_073C
     LDA #$20
@@ -1016,20 +1016,20 @@ B4_AEF6:
     RTS
 B4_AF1B:
     LDA #$B3
-    STA zp_55
+    STA tmp_c
     LDA #$AF
-    STA zp_56
+    STA tmp_d
     LDA #$00
-    STA zp_54
-    JSR B4_BC4E
+    STA tmp_b
+    JSR PPUBuffer_Append
     LDA #$03
     STA game_state
     JMP F_F843
 B4_AF32:
     LDA #$B3
-    STA zp_55
+    STA tmp_c
     LDA #$AF
-    STA zp_56
+    STA tmp_d
     LDA ram_072D
     BEQ B4_AF40
     RTS
@@ -1050,22 +1050,22 @@ B4_AF52:
 B4_AF5A:
     STA ram_0738
     LDA ram_0737
-    STA zp_54
-    JSR B4_BC4E
+    STA tmp_b
+    JSR PPUBuffer_Append
     LDA #$14
-    STA zp_53
+    STA tmp_a
     LDA ram_0737
     CMP #$19
     BCS B4_AF76
     AND #$01
     BNE B4_AF76
-    INC zp_53
+    INC tmp_a
 B4_AF76:
-    LDA zp_53
+    LDA tmp_a
     STA zp_47
     RTS
 B4_AF7B:
-    JSR F_FA3D
+    JSR FindFreeEntitySlot
     LDA #$0B
     STA ent_type,y
     LDA #$9C
@@ -1093,7 +1093,7 @@ B4_AF7B:
     .byte $00
 B4_AFD8:
     LDA #$00
-    STA zp_53
+    STA tmp_a
     JSR B4_B4F7
     LDA #$00
     STA ram_0735
@@ -1102,7 +1102,7 @@ B4_AFD8:
     STA ram_0736
 B4_AFEC:
     LDA #$03
-    STA ram_01A6
+    STA camera_mode
     JSR B4_B515
 B4_AFF4:
     RTS
@@ -1111,7 +1111,7 @@ B4_AFF5:
     CMP #$09
     BEQ B4_AFF4
     LDA #$01
-    STA ram_01A6
+    STA camera_mode
     STA ram_0737
     LDA #$08
     STA ram_0739
@@ -1134,9 +1134,9 @@ B4_AFF5:
     RTS
 B4_B033:
     LDA #$74
-    STA zp_55
+    STA tmp_c
     LDA #$B0
-    STA zp_56
+    STA tmp_d
     LDA ram_0738
     SEC
     SBC #$01
@@ -1146,10 +1146,10 @@ B4_B033:
 B4_B048:
     STA ram_0738
     LDA ram_0737
-    STA zp_54
-    JSR B4_BC4E
+    STA tmp_b
+    JSR PPUBuffer_Append
     LDA #$14
-    STA zp_53
+    STA tmp_a
     LDA ram_0737
     CMP #$0E
     BNE B4_B069
@@ -1161,9 +1161,9 @@ B4_B048:
 B4_B069:
     AND #$01
     BNE B4_B06F
-    INC zp_53
+    INC tmp_a
 B4_B06F:
-    LDA zp_53
+    LDA tmp_a
     STA zp_47
     RTS
     .byte $26,$6A,$8C,$40
@@ -1219,23 +1219,23 @@ B4_B0D8:
     SBC #$00
     BCS B4_B0F1
     LDA #$0C
-    STA zp_53
+    STA tmp_a
     JSR F_F885
 B4_B0F1:
     LDA #$28
     JSR PlaySfxNoise
     LDA #$1F
-    STA zp_55
+    STA tmp_c
     LDA #$B3
-    STA zp_56
+    STA tmp_d
     LDA #$30
-    STA zp_53
+    STA tmp_a
     LDA #$00
-    STA zp_54
+    STA tmp_b
     JMP B4_B2D9
 B4_B109:
     LDA #$0A
-    STA zp_54
+    STA tmp_b
 B4_B10D:
     LDA ram_01A8
     CMP #$57
@@ -1245,14 +1245,14 @@ B4_B10D:
     BEQ B4_B132
 B4_B11B:
     LDA #$01
-    STA zp_55
+    STA tmp_c
     JSR B4_BD3D
     LDA #$0A
-    STA zp_55
+    STA tmp_c
     LDA #$00
-    STA zp_56
-    JSR F_F8E2
-    DEC zp_54
+    STA tmp_d
+    JSR AddScore
+    DEC tmp_b
     BNE B4_B10D
     RTS
 B4_B132:
@@ -1279,13 +1279,13 @@ B4_B14D:
     LDA #$28
     JSR PlaySfxNoise
     LDA #$27
-    STA zp_55
+    STA tmp_c
     LDA #$B3
-    STA zp_56
+    STA tmp_d
     LDA #$00
-    STA zp_53
+    STA tmp_a
     LDA #$28
-    STA zp_54
+    STA tmp_b
     JSR B4_B2D9
 B4_B170:
     LDA ram_01AA
@@ -1296,20 +1296,20 @@ B4_B170:
     SBC #$01
     BNE B4_B192
     LDA #$32
-    STA zp_55
+    STA tmp_c
     LDA #$00
-    STA zp_56
-    JSR F_F8E2
+    STA tmp_d
+    JSR AddScore
     LDA #$01
-    STA zp_55
+    STA tmp_c
     JSR F_F8D8
-    LDA zp_55
+    LDA tmp_c
 B4_B192:
     STA zp_D1
     RTS
 B4_B195:
     LDA #$0C
-    STA zp_53
+    STA tmp_a
     LDA zp_D3
     BNE B4_B1A0
     JSR F_F885
@@ -1322,14 +1322,14 @@ B4_B1A0:
     RTS
 B4_B1AC:
     LDA #$00
-    STA ram_04A0
+    STA effect_type
     LDA #$2F
-    STA zp_55
+    STA tmp_c
     LDA #$B3
-    STA zp_56
+    STA tmp_d
     LDA #$04
-    STA zp_54
-    JSR B4_BC4E
+    STA tmp_b
+    JSR PPUBuffer_Append
     INC ram_072F
     LDA onetime_flags
     AND F_C53D
@@ -1348,22 +1348,22 @@ B4_B1D9:
     LDA #$28
     JSR PlaySfxNoise
     LDA #$0A
-    STA zp_54
+    STA tmp_b
     LDA #$27
-    STA zp_55
+    STA tmp_c
     LDA #$B2
-    STA zp_56
-    JSR B4_BC4E
+    STA tmp_d
+    JSR PPUBuffer_Append
     LDA #$32
-    STA ram_04A0
+    STA effect_type
     LDA #$5D
-    STA ram_04D0
+    STA effect_y_lo
     LDA #$00
-    STA ram_0500
+    STA effect_y_hi
     LDA #$7B
-    STA ram_0530
+    STA effect_x_lo
     LDA #$00
-    STA ram_0560
+    STA effect_x_hi
     LDA #$00
     STA ram_0590
     LDA #$1F
@@ -1385,14 +1385,14 @@ B4_B239:
     CMP #$4B
     BNE B4_B248
     LDA #$0C
-    STA zp_53
+    STA tmp_a
     JSR F_F885
 B4_B248:
     CMP #$00
     BNE B4_B226
     INC ram_072F
     LDA #$07
-    STA ram_04A0
+    STA effect_type
     STA zp_D2
     LDA #$00
     STA ram_05F0
@@ -1402,12 +1402,12 @@ B4_B248:
     LDA #$FF
     STA ram_0650
     LDA #$30
-    STA zp_55
+    STA tmp_c
     LDA #$B2
-    STA zp_56
+    STA tmp_d
     LDA #$05
-    STA zp_54
-    JSR B4_BC4E
+    STA tmp_b
+    JSR PPUBuffer_Append
 B4_B277:
     RTS
 B4_B278:
@@ -1418,15 +1418,15 @@ B4_B278:
     CMP #$FF
     BNE B4_B2BB
     LDA #$33
-    STA ram_04A0
+    STA effect_type
     LDA #$5F
-    STA ram_04D0
+    STA effect_y_lo
     LDA #$00
-    STA ram_0500
+    STA effect_y_hi
     LDA #$A3
-    STA ram_0530
+    STA effect_x_lo
     LDA #$00
-    STA ram_0560
+    STA effect_x_hi
     STA ram_0590
     LDA #$1E
     STA ram_05C0
@@ -1449,35 +1449,35 @@ B4_B2D9:
     .byte $A5,$53,$48,$A5,$54,$48,$A9,$04,$85,$54,$20,$4E,$BC,$A9,$32,$8D
     .byte $A0,$04,$A9,$52,$8D,$D0,$04,$A9,$00,$8D,$00,$05,$A9,$65,$8D,$30
     .byte $05,$A9,$00,$8D,$60
-    ORA zp_68
-    STA zp_54
+    ORA cam_x_lo
+    STA tmp_b
     PLA
-    STA zp_53
+    STA tmp_a
     LDA #$00
     STA ram_0590
     LDA #$1F
     STA ram_05C0
     LDA #$00
     STA ram_05F0
-    LDA zp_53
+    LDA tmp_a
     STA ram_0620
-    LDA zp_54
+    LDA tmp_b
     STA ram_0650
     RTS
     .byte $26,$EF,$84,$30,$31,$20,$58,$00,$26,$EF,$84,$30,$35,$20,$58,$00
     .byte $26,$EF,$84,$20,$20,$20,$20,$00
 B4_B337:
-    LDA zp_1D
+    LDA focus_y_lo
     SEC
     SBC #$18
-    LDA zp_1E
+    LDA focus_y_hi
     SBC #$01
     BCS B4_B354
     LDA ram_0745
     BNE B4_B351
     INC ram_0745
     LDA #$0C
-    STA zp_53
+    STA tmp_a
     JSR F_F885
 B4_B351:
     JMP B4_B3AC
@@ -1497,11 +1497,11 @@ B4_B35E:
 B4_B36B:
     LDA #$35
     STA ent_type,y
-    LDA zp_1D
+    LDA focus_y_lo
     SEC
     SBC #$14
     STA ent_y_lo,y
-    LDA zp_1E
+    LDA focus_y_hi
     SBC #$00
     STA ent_y_hi,y
 B4_B37F:
@@ -1544,11 +1544,11 @@ B4_B3B6:
 B4_B3C3:
     LDA #$36
     STA ent_type,y
-    LDA zp_1D
+    LDA focus_y_lo
     SEC
     SBC #$10
     STA ent_y_lo,y
-    LDA zp_1E
+    LDA focus_y_hi
     SBC #$00
     STA ent_y_hi,y
     LDA #$04
@@ -1587,21 +1587,21 @@ B4_B40E:
     LDA ram_073F
     STA ptr_hi
     LDA #$07
-    STA zp_55
+    STA tmp_c
     JSR ScaledMultiply
     LDA ptr_lo
     CLC
     ADC #$09
     STA ram_073F
-    STA zp_54
+    STA tmp_b
     LDA zp_73
-    STA zp_53
+    STA tmp_a
     JSR F_F8FC
     PLA
     STA ptr_hi
     PLA
     STA ptr_lo
-    LDA zp_55
+    LDA tmp_c
 B4_B43B:
     RTS
 B4_B43C:
@@ -1618,19 +1618,19 @@ B4_B445:
     LDA #$04
     STA collected_flags
     STA ram_0738
-    LDA ram_01A6
+    LDA camera_mode
     CMP #$01
     BNE B4_B43B
-    LDA zp_1B
+    LDA focus_x_lo
     CMP #$C0
     BNE B4_B43B
     INC game_state
     RTS
 B4_B46B:
     LDA #$A9
-    STA zp_55
+    STA tmp_c
     LDA #$B4
-    STA zp_56
+    STA tmp_d
     LDA ram_0738
     SEC
     SBC #$01
@@ -1640,10 +1640,10 @@ B4_B46B:
 B4_B480:
     STA ram_0738
     LDA ram_0737
-    STA zp_54
-    JSR B4_BC4E
+    STA tmp_b
+    JSR PPUBuffer_Append
     LDA #$14
-    STA zp_53
+    STA tmp_a
     LDA ram_0737
     CMP #$1A
     BNE B4_B49F
@@ -1655,7 +1655,7 @@ B4_B49F:
     EOR #$01
     AND #$01
     CLC
-    ADC zp_53
+    ADC tmp_a
     STA zp_47
 B4_B4A8:
     RTS
@@ -1731,7 +1731,7 @@ B4_B540:
     LDA #$08
     JMP PlaySong
     .byte $8D,$B1,$01,$A9,$06,$20,$3B,$CE,$20,$8D,$C9,$AD,$B1
-    ORA (zp_0A,x)
+    ORA (scroll_y_lo,x)
     ASL a
     ASL a
     STA ptr_lo
@@ -1782,10 +1782,10 @@ B4_B5C8:
     INY
     STA ram_01B2
     LDA (zp_CF),y
-    STA zp_55
+    STA tmp_c
     INY
     LDA (zp_CF),y
-    STA zp_56
+    STA tmp_d
     LDA zp_CF
     CLC
     ADC #$03
@@ -1794,10 +1794,10 @@ B4_B5C8:
     ADC #$00
     STA zp_D0
     LDY #$00
-    LDA (zp_55),y
-    INC zp_55
+    LDA (tmp_c),y
+    INC tmp_c
     BNE B4_B5EC
-    INC zp_56
+    INC tmp_d
 B4_B5EC:
     PHA
     LDY #$09
@@ -1816,7 +1816,7 @@ B4_B5F7:
     TYA
     TAX
     LDY #$00
-    LDA (zp_55),y
+    LDA (tmp_c),y
     STA ent_x_lo,x
     TYA
     STA ent_x_hi,x
@@ -1826,19 +1826,19 @@ B4_B5F7:
     STA ent_param,x
     STA ent_angle,x
     INY
-    LDA (zp_55),y
+    LDA (tmp_c),y
     STA ent_radius,x
     INY
-    LDA (zp_55),y
+    LDA (tmp_c),y
     STA ent_param2,x
     INY
     TYA
     CLC
-    ADC zp_55
-    STA zp_55
-    LDA zp_56
+    ADC tmp_c
+    STA tmp_c
+    LDA tmp_d
     ADC #$00
-    STA zp_56
+    STA tmp_d
     PLA
     SEC
     SBC #$01
@@ -1905,7 +1905,7 @@ B4_B6B6:
     STA ram_01B7
     LDA #$29
     JSR PlaySfxSq1
-    JSR F_FA3D
+    JSR FindFreeEntitySlot
     LDA player_x_lo
     STA ent_x_lo,y
     LDA player_x_hi
@@ -1917,7 +1917,7 @@ B4_B6B6:
     STY zp_42
     LDA #$EF
     LDY #$B6
-    JMP F_F917
+    JMP SpawnEffects
     .byte $40,$E8,$FF,$04,$00,$C0,$09,$50,$00,$00,$FF
 B4_B6FA:
     CMP #$02
@@ -1929,14 +1929,14 @@ B4_B6FA:
     AND #$01
     BEQ B4_B71C
     LDA #$03
-    STA zp_53
+    STA tmp_a
     LDA ram_05A9
     BEQ B4_B717
 B4_B713:
     LDA #$00
-    STA zp_53
+    STA tmp_a
 B4_B717:
-    LDA zp_53
+    LDA tmp_a
     STA ram_05A9
 B4_B71C:
     RTS
@@ -1989,23 +1989,23 @@ B4_B77C:
     JSR WaitForNMI
     LDA fade_dir
     BNE B4_B77C
-    JSR F_C7CD
+    JSR RenderOffAndWait
     JSR F_C956
-    JSR F_C9A5
+    JSR DisableNMI
     JSR SilenceSound
     LDA #$09
     STA player_state
-    LDA zp_E1
+    LDA obj2_state
     CMP #$0F
     BEQ B4_B79D
     LDA #$00
-    STA zp_E1
+    STA obj2_state
 B4_B79D:
-    LDA zp_E2
+    LDA obj2_state_1
     CMP #$0F
     BEQ B4_B7A7
     LDA #$00
-    STA zp_E2
+    STA obj2_state_1
 B4_B7A7:
     LDX #$FF
     TXS
@@ -2075,30 +2075,30 @@ B4_BA00:
     BNE B4_BA65
     LDY #$0F
 B4_BA07:
-    LDA ram_04A0,y
+    LDA effect_type,y
     CMP #$47
     BEQ B4_BA65
     DEY
     BPL B4_BA07
     LDA ram_01B8
     BNE B4_BA1B
-    STA zp_55
+    STA tmp_c
     JMP B4_BA26
 B4_BA1B:
-    STA zp_54
+    STA tmp_b
 B4_BA1D:
     LDA #$0A
-    STA zp_53
+    STA tmp_a
     JSR F_F8FC
-    INC zp_55
+    INC tmp_c
 B4_BA26:
     LDA #$0A
     SEC
-    SBC zp_55
-    STA zp_55
+    SBC tmp_c
+    STA tmp_c
     LDA #$0A
-    STA zp_53
-    LDX zp_44
+    STA tmp_a
+    LDX ppu_buffer_idx
     LDA #$27
     STA ppu_buffer,x
     INX
@@ -2109,7 +2109,7 @@ B4_BA26:
     STA ppu_buffer,x
     INX
 B4_BA45:
-    LDA zp_55
+    LDA tmp_c
     BEQ B4_BA4D
     LDA #$22
     BNE B4_BA4F
@@ -2118,21 +2118,21 @@ B4_BA4D:
 B4_BA4F:
     STA ppu_buffer,x
     INX
-    LDA zp_55
+    LDA tmp_c
     BEQ B4_BA59
-    DEC zp_55
+    DEC tmp_c
 B4_BA59:
-    DEC zp_53
+    DEC tmp_a
     BNE B4_BA45
 B4_BA5D:
     LDA #$00
     STA ppu_buffer,x
-    STX zp_44
+    STX ppu_buffer_idx
     RTS
 B4_BA65:
     LDA #$FF
     STA ram_0732
-    LDX zp_44
+    LDX ppu_buffer_idx
     LDA #$27
     STA ppu_buffer,x
     INX
@@ -2195,33 +2195,33 @@ B4_BAD9:
     LDA #$11
     STA ptr_lo
     LDA #$1E
-    STA zp_55
+    STA tmp_c
     LDA #$BC
-    STA zp_56
+    STA tmp_d
     PLA
 B4_BAE7:
     LDY #$00
-    STY zp_54
+    STY tmp_b
     ASL a
-    ROL zp_54
+    ROL tmp_b
     ASL a
-    ROL zp_54
+    ROL tmp_b
     ASL a
-    ROL zp_54
+    ROL tmp_b
     ASL a
-    ROL zp_54
+    ROL tmp_b
     ASL a
-    ROL zp_54
+    ROL tmp_b
     ADC #$C8
-    STA zp_53
-    LDA zp_54
+    STA tmp_a
+    LDA tmp_b
     ADC #$24
-    STA zp_54
-    LDX zp_44
-    LDA zp_54
+    STA tmp_b
+    LDX ppu_buffer_idx
+    LDA tmp_b
     STA ppu_buffer,x
     INX
-    LDA zp_53
+    LDA tmp_a
     STA ppu_buffer,x
     INX
     LDA #$90
@@ -2229,7 +2229,7 @@ B4_BAE7:
     INX
     LDY #$0F
 B4_BB1A:
-    LDA (zp_55),y
+    LDA (tmp_c),y
     CPY #$0F
     BEQ B4_BB2A
     CPY ptr_lo
@@ -2247,33 +2247,33 @@ B4_BB2A:
     BPL B4_BB1A
     LDA #$00
     STA ppu_buffer,x
-    STX zp_44
+    STX ppu_buffer_idx
     LDY ptr_lo
-    LDA (zp_55),y
+    LDA (tmp_c),y
     RTS
 B4_BB40:
     LDA #$0A
-    STA zp_55
+    STA tmp_c
     LDA #$BC
-    STA zp_56
+    STA tmp_d
     LDA #$11
-    STA zp_54
-    JMP B4_BC4E
+    STA tmp_b
+    JMP PPUBuffer_Append
 B4_BB4F:
     PHA
     LDA #$2E
-    STA zp_55
+    STA tmp_c
     LDA #$BC
-    STA zp_56
+    STA tmp_d
     LDA #$11
     STA ptr_lo
     PLA
     JMP B4_BAE7
 B4_BB60:
     LDA credits_ptr_lo
-    STA zp_55
+    STA tmp_c
     LDA credits_ptr_hi
-    STA zp_56
+    STA tmp_d
     LDA ram_01BC
     SEC
     SBC #$01
@@ -2308,20 +2308,20 @@ B4_BB9E:
     CLC
     ADC #$10
     STA credits_ptr_lo
-    STA zp_55
+    STA tmp_c
     LDA credits_ptr_hi
     ADC #$00
     STA credits_ptr_hi
-    STA zp_56
+    STA tmp_d
     LDY #$00
-    LDA (zp_55),y
+    LDA (tmp_c),y
     BEQ B4_BC04
     INC ram_01BF
     LDA ram_01BF
     PHA
-    LDA zp_55
+    LDA tmp_c
     PHA
-    LDA zp_56
+    LDA tmp_d
     PHA
     LDA ram_01BA
     SEC
@@ -2330,21 +2330,21 @@ B4_BB9E:
     JSR B4_BAD9
     INC ram_01BF
     PLA
-    STA zp_56
+    STA tmp_d
     PLA
-    STA zp_55
+    STA tmp_c
 B4_BBD6:
     LDA tmp_ptr_lo
     CMP #$02
     BEQ B4_BBF8
     DEC tmp_ptr_lo
-    LDA zp_55
+    LDA tmp_c
     SEC
     SBC #$10
-    STA zp_55
-    LDA zp_56
+    STA tmp_c
+    LDA tmp_d
     SBC #$00
-    STA zp_56
+    STA tmp_d
     DEC ram_01BF
     BEQ B4_BBF8
     LDA tmp_ptr_lo
@@ -2365,22 +2365,22 @@ B4_BC04:
     .byte $63,$63,$63,$5F,$60,$61,$61,$61,$61,$61,$61,$61,$61,$61,$61,$61
     .byte $61,$61,$61,$62,$6F,$6F,$6F,$6F,$6F,$6F,$6F,$6F,$6F,$6F,$6F,$6F
     .byte $6F,$6F,$6F,$6F
-B4_BC4E:
-    LDA zp_54
+PPUBuffer_Append:
+    LDA tmp_b
     STA tmp_ptr_lo
     LDY #$FF
-    LDX zp_44
+    LDX ppu_buffer_idx
 B4_BC56:
     INY
-    LDA (zp_55),y
+    LDA (tmp_c),y
     STA ppu_buffer,x
     INY
     INX
-    LDA (zp_55),y
+    LDA (tmp_c),y
     STA ppu_buffer,x
     INY
     INX
-    LDA (zp_55),y
+    LDA (tmp_c),y
     STA ppu_buffer,x
     INX
     AND #$7F
@@ -2390,7 +2390,7 @@ B4_BC56:
     BCS B4_BC76
     LDA #$00
 B4_BC76:
-    STA zp_53
+    STA tmp_a
     LDA tmp_ptr_lo
     SEC
     SBC tmp_ptr_hi
@@ -2400,7 +2400,7 @@ B4_BC81:
     STA tmp_ptr_lo
 B4_BC83:
     INY
-    LDA (zp_55),y
+    LDA (tmp_c),y
     STA ppu_buffer,x
     BEQ B4_BCAA
     CMP #$FF
@@ -2412,9 +2412,9 @@ B4_BC95:
     CLC
     ADC #$94
     STA ppu_buffer,x
-    LDA zp_53
+    LDA tmp_a
     BEQ B4_BCA6
-    DEC zp_53
+    DEC tmp_a
     LDA #$F0
     STA ppu_buffer,x
 B4_BCA6:
@@ -2423,11 +2423,11 @@ B4_BCA6:
 B4_BCAA:
     LDA #$00
     STA ppu_buffer,x
-    STX zp_44
+    STX ppu_buffer_idx
     RTS
     .byte $A9,$20,$4C,$B9,$BC
     LDA #$1C
-    STA zp_08
+    STA tmp_08
     LDA zp_48
     AND #$03
     BNE B4_BCD0
@@ -2438,41 +2438,41 @@ B4_BCAA:
     LSR a
     AND #$01
     CLC
-    ADC zp_08
+    ADC tmp_08
     STA zp_47
 B4_BCD0:
     LDY #$07
 B4_BCD2:
-    LDA ram_04A0,y
+    LDA effect_type,y
     BNE B4_BD39
     LDA #$A0
-    STA ram_04A0,y
+    STA effect_type,y
     LDA zp_BB
     CLC
-    ADC zp_1B
-    STA ram_0530,y
+    ADC focus_x_lo
+    STA effect_x_lo,y
 B4_BCE4:
-    LDA zp_1C
+    LDA focus_x_hi
     ADC #$00
-    STA ram_0560,y
+    STA effect_x_hi,y
     JSR F_C929
     LDA zp_BB
     CLC
-    ADC zp_1D
-    STA ram_04D0,y
-    LDA zp_1E
+    ADC focus_y_lo
+    STA effect_y_lo,y
+    LDA focus_y_hi
     ADC #$00
-    STA ram_0500,y
-    LDA ram_04D0,y
+    STA effect_y_hi,y
+    LDA effect_y_lo,y
     SEC
     SBC water_level_lo
-    LDA ram_0500,y
+    LDA effect_y_hi,y
     SBC water_level_hi
     BCS B4_BD15
-    LDA ram_0500,y
+    LDA effect_y_hi,y
     CLC
     ADC #$01
-    STA ram_0500,y
+    STA effect_y_hi,y
 B4_BD15:
     JSR F_C929
     LDA #$00
@@ -2498,7 +2498,7 @@ B4_BD39:
 B4_BD3D:
     LDA ram_01A8
     CLC
-    ADC zp_55
+    ADC tmp_c
     STA ram_01A8
     LDA ram_01A9
     ADC #$00
@@ -2512,12 +2512,12 @@ B4_BD3D:
     .byte $4D,$41,$49,$44,$FF,$22,$8A,$85,$53,$45,$56,$49,$4C,$00
 B4_BD91:
     LDA #$4F
-    STA zp_55
+    STA tmp_c
     LDA #$BD
-    STA zp_56
+    STA tmp_d
     LDA #$FF
-    STA zp_54
-    JSR B4_BC4E
+    STA tmp_b
+    JSR PPUBuffer_Append
     LDA #$66
     STA ram_0389
     LDA #$00
@@ -2557,22 +2557,22 @@ B4_BE47:
     STA ram_0389
     LDA #$00
     STA ram_038A
-    STA zp_B1
+    STA entity_tick
     LDA #$B2
-    STA zp_55
+    STA tmp_c
     LDA #$BD
-    STA zp_56
+    STA tmp_d
     LDA #$FF
-    STA zp_54
-    JSR B4_BC4E
+    STA tmp_b
+    JSR PPUBuffer_Append
     JSR WaitForNMI
     LDA #$F7
-    STA zp_55
+    STA tmp_c
     LDA #$BD
-    STA zp_56
+    STA tmp_d
     LDA #$FF
-    STA zp_54
-    JSR B4_BC4E
+    STA tmp_b
+    JSR PPUBuffer_Append
     LDA #$68
     STA ptr_lo
     LDA #$20
@@ -2587,8 +2587,8 @@ B4_BE47:
 B4_BE99:
     JSR WaitForNMI
     JSR B4_BEE7
-    DEC zp_B1
-    LDA zp_B1
+    DEC entity_tick
+    LDA entity_tick
     LSR a
     STA ram_038A
     DEC ram_01A8
@@ -2604,15 +2604,15 @@ B4_BEB9:
     JSR WaitForNMI
     JSR F_C9B3
     JSR B4_BEE7
-    DEC zp_B1
-    LDA zp_B1
+    DEC entity_tick
+    LDA entity_tick
     LSR a
     STA ram_038A
     LDA fade_step
     BNE B4_BEB9
-    JSR F_C7CD
+    JSR RenderOffAndWait
     JSR ClearOAMBuffer
-    JMP F_C9A5
+    JMP DisableNMI
     .byte $14,$00,$14,$2D,$00,$00,$00,$00
 B4_BEDF:
     INC zp_74
@@ -2625,11 +2625,11 @@ B4_BEE7:
     LDA #$7C
     STA zp_76
     LDA #$1F
-    STA zp_54
+    STA tmp_b
     LDA #$D7
-    STA zp_55
+    STA tmp_c
     LDA #$BE
-    STA zp_56
+    STA tmp_d
     LDA #$08
     STA zp_77
     LDA #$23
@@ -2637,31 +2637,31 @@ B4_BEE7:
     LDA #$54
     STA zp_73
     LDA #$00
-    STA zp_53
+    STA tmp_a
 B4_BF0B:
-    LDA zp_53
+    LDA tmp_a
     PHA
-    LDA zp_54
+    LDA tmp_b
     PHA
-    LDA zp_55
+    LDA tmp_c
     PHA
-    LDA zp_56
+    LDA tmp_d
     PHA
-    LDA zp_54
+    LDA tmp_b
     AND #$03
     TAY
-    LDA (zp_55),y
+    LDA (tmp_c),y
     CLC
     ADC ram_0389
     STA ram_038B
     LDA ram_038A
     CLC
-    ADC zp_53
+    ADC tmp_a
     TAY
     JSR SinLookup
-    STA zp_53
+    STA tmp_a
     JSR CosLookup
-    STA zp_54
+    STA tmp_b
     STA ptr_hi
     BPL B4_BF41
     EOR #$FF
@@ -2670,13 +2670,13 @@ B4_BF0B:
     STA ptr_hi
 B4_BF41:
     LDA ram_038B
-    STA zp_55
+    STA tmp_c
     ASL ptr_hi
     JSR ScaledMultiply
     INC ptr_hi
     LDX zp_73
     LDA zp_75
-    BIT zp_54
+    BIT tmp_b
     BPL B4_BF62
     SEC
     SBC ptr_hi
@@ -2693,7 +2693,7 @@ B4_BF62:
 B4_BF69:
     STA ram_0200,x
 B4_BF6C:
-    LDA zp_53
+    LDA tmp_a
     STA ptr_hi
     BPL B4_BF79
     EOR #$FF
@@ -2702,13 +2702,13 @@ B4_BF6C:
     STA ptr_hi
 B4_BF79:
     LDA ram_038B
-    STA zp_55
+    STA tmp_c
     ASL ptr_hi
     JSR ScaledMultiply
     INC ptr_hi
     LDX zp_73
     LDA zp_76
-    BIT zp_53
+    BIT tmp_a
     BPL B4_BF96
     SEC
     SBC ptr_hi
@@ -2728,18 +2728,18 @@ B4_BF9C:
     ADC #$04
     STA zp_73
     PLA
-    STA zp_56
+    STA tmp_d
     PLA
-    STA zp_55
+    STA tmp_c
     PLA
-    STA zp_54
+    STA tmp_b
     PLA
-    STA zp_53
-    LDA zp_53
+    STA tmp_a
+    LDA tmp_a
     CLC
     ADC zp_77
-    STA zp_53
-    DEC zp_54
+    STA tmp_a
+    DEC tmp_b
     BMI B4_BFD6
     LDA zp_01
     BNE B4_BFD3

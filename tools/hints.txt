@@ -203,3 +203,86 @@ blob 3 8337 64 StageTileSet2 raw tiles for stage 2
 blob 3 8377 64 StageTileSet1 raw tiles for stages 1 and 5
 blob 3 83B7 64 StageTileSet3 raw tiles for stage 3
 blob 3 83F7 64 StageTileSet4 raw tiles for stage 4
+
+; ---- frequently used routines (ranked by call count) ----
+name f C7D4 SetScroll            ; writes scroll_x ($07FF) and scroll_y_lo ($0A) to PPUSCROLL (38 callers)
+name f C7CD RenderOffAndWait     ; render_enable = 0, then WaitForNMI
+name f C9A5 DisableNMI           ; clears PPUCTRL bit 7
+name f FD7D SetPPUAddr           ; A = high byte, Y = low byte -> PPUADDR
+name f F917 SpawnEffects         ; A/Y = pointer to an effect template; creates short-lived effect objects at entity X's position
+name f F6B0 SetCollectedFlag     ; marks the map cell's collectible as taken in collected_flags
+name f FA3D FindFreeEntitySlot   ; scans slots $2F..$20 for a free one (type 0 or $A0); Y = slot
+name f F8E2 AddScore             ; score (24-bit at $01AB) += $55/$56
+name 4 BC4E PPUBuffer_Append     ; copies a record from ($55) into ppu_buffer at index zp_44 (Y/ptr lists)
+name 5 91C1 Ent_StartCollectAnim ; type $07, frame $1E, ent_param2 = $FF: the collect sparkle
+name 5 89E3 Ent_HurtOnTouch      ; overlap test, then HurtPlayer
+name 5 8A55 Ent_SpawnBurst       ; SpawnEffects with the template at $8D4D
+name 5 9C03 Ent_TickRadius       ; counts ent_radius down to 0 (timer helper)
+ram 07FF scroll_x
+ram 000A scroll_y_lo
+ram 000B scroll_y_hi
+ram 01AB score_lo
+ram 01AC score_mid
+ram 01AD score_hi
+ram 04A0 effect_type             ; 16 effect slots (created by SpawnEffects)
+ram 04D0 effect_y_lo
+ram 0500 effect_y_hi
+ram 0530 effect_x_lo
+ram 0560 effect_x_hi
+ram 0053 tmp_a                   ; scratch/argument bytes shared by many routines
+ram 0054 tmp_b
+ram 0055 tmp_c
+ram 0056 tmp_d
+ram 0008 tmp_08
+ram 00FE ptr2_lo                 ; second indirect pointer (sound engine, table readers)
+ram 00FF ptr2_hi
+
+; ---- secondary object, 2 slots (arrays $E1..$F6, element 0 / 1; drawn into OAM entries 19-20 by bank 1 $802C) ----
+ram 00E1 obj2_state
+ram 00E2 obj2_state_1
+ram 00E3 obj2_E3
+ram 00E4 obj2_E3_1
+ram 00E5 obj2_x_lo
+ram 00E6 obj2_x_lo_1
+ram 00E7 obj2_x_hi
+ram 00E8 obj2_x_hi_1
+ram 00E9 obj2_y_lo
+ram 00EA obj2_y_lo_1
+ram 00EB obj2_y_hi
+ram 00EC obj2_y_hi_1
+ram 00ED obj2_onscreen
+ram 00EE obj2_onscreen_1
+ram 00EF obj2_screen_x
+ram 00F0 obj2_screen_x_1
+ram 00F1 obj2_screen_y
+ram 00F2 obj2_screen_y_1
+ram 00F3 obj2_attr
+ram 00F4 obj2_attr_1
+ram 00F5 obj2_frame
+ram 00F6 obj2_frame_1
+
+; ---- camera and misc ----
+ram 0068 cam_x_lo
+ram 0069 cam_x_hi
+ram 006A cam_y_lo
+ram 006B cam_y_hi
+ram 00B1 entity_tick            ; incremented once per UpdateEntities pass (animation clock)
+ram 0044 ppu_buffer_idx         ; next free index in ppu_buffer ($0300)
+name 6 81BD Snd_Sq1_NextToken
+name 6 83B8 Snd_Sq2_NextToken
+name 6 85AB Snd_Tri_NextToken
+name 6 8746 Snd_Noise_NextToken
+
+; ---- main loop routines and camera ----
+name f CD53 CheckPause           ; fade complete and START pressed -> pause handling
+name f D00E UpdateCamera         ; dispatch on camera_mode ($01A6), then cam_x/cam_y follow the focus position
+name f D5E4 ScrollX              ; moves the horizontal scroll (zp_09) by the change in focus_x and draws new columns
+name f D5D9 ScrollY              ; stores the previous focus position, then falls into the vertical scroll update
+ram 001B focus_x_lo              ; world position the camera follows (smoothed player position)
+ram 001C focus_x_hi
+ram 001D focus_y_lo
+ram 001E focus_y_hi
+ram 001F prev_focus_x_lo
+ram 0020 prev_focus_y_lo
+ram 0009 scroll_x_px             ; horizontal scroll counter used by ScrollX
+ram 01A6 camera_mode

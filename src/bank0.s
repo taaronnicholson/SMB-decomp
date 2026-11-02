@@ -119,7 +119,7 @@ PaletteSet8:
 PaletteFadeStep:
     LDA fade_dir
     BNE B0_810F
-    JMP F_C7D4
+    JMP SetScroll
 B0_810F:
     BPL B0_811E
     LDA fade_step
@@ -155,7 +155,7 @@ B0_812D:
     STA PPUADDR
     LDX fade_step
     LDY #$00
-    LDA zp_08
+    LDA tmp_08
     PHA
     LDA (jump_ptr_lo),y
     SEC
@@ -163,7 +163,7 @@ B0_812D:
     BCS B0_8160
     LDA #$0F
 B0_8160:
-    STA zp_08
+    STA tmp_08
     JSR B0_8183
     LDA jump_ptr_lo
     CLC
@@ -192,7 +192,7 @@ B0_818D:
     BNE B0_8183
     RTS
 B0_8196:
-    LDA zp_08
+    LDA tmp_08
     STA PPUDATA
     INY
     LDA SpritePalettes,y
@@ -223,10 +223,10 @@ B0_81C5:
     BNE B0_8196
 B0_81CD:
     PLA
-    STA zp_08
+    STA tmp_08
     LDA #$00
     STA zp_50
-    JMP F_C7D4
+    JMP SetScroll
 B0_81D7:
     .byte $40,$30,$20,$10,$00
 B0_81DC:
@@ -248,7 +248,7 @@ B0_81FA:
     INY
     CPY #$20
     BNE B0_81FA
-    JMP F_C7D4
+    JMP SetScroll
 ReadController:
     LDA buttons
     STA buttons_prev
@@ -1674,9 +1674,9 @@ CollectTable16:
     .byte $0D, $00
 B0_B563:
     LDA #$40
-    STA zp_55
+    STA tmp_c
     LDA #$1C
-    STA zp_56
+    STA tmp_d
     LDA #$21
     STA ptr_lo
     LDA #$85
@@ -1684,17 +1684,17 @@ B0_B563:
     CLC
     JMP DecompressAndFinish
 B0_B577:
-    LDA zp_0B
+    LDA scroll_y_hi
     STA ram_0392
-    LDA zp_0A
+    LDA scroll_y_lo
     STA ram_0393
-    LDA zp_09
+    LDA scroll_x_px
     STA ram_0394
     LDA #$00
-    STA zp_0A
-    STA zp_0B
+    STA scroll_y_lo
+    STA scroll_y_hi
     LDA #$F8
-    STA zp_09
+    STA scroll_x_px
     LDA #$00
     STA ptr_lo
     LDA #$20
@@ -1702,7 +1702,7 @@ B0_B577:
     JSR B0_B636
     JSR B0_B5B3
     LDA #$F0
-    STA zp_08
+    STA tmp_08
     LDA #$20
     JSR F_C8DD
     JSR ClearOAMBuffer
@@ -1711,9 +1711,9 @@ B0_B577:
     JMP WaitForNMI
 B0_B5B3:
     LDA #$01
-    STA zp_53
+    STA tmp_a
     LDA #$05
-    STA zp_54
+    STA tmp_b
     LDA PPUSTATUS
     LDA ppuctrl_shadow
     AND #$FB
@@ -1726,9 +1726,9 @@ B0_B5C5:
     LDA PPUDATA
     LDA PPUDATA
     PHA
-    LDA zp_56
+    LDA tmp_d
     STA PPUADDR
-    LDA zp_55
+    LDA tmp_c
     STA PPUADDR
     PLA
     STA PPUDATA
@@ -1736,28 +1736,28 @@ B0_B5C5:
     BNE B0_B5EA
     INC ptr_hi
 B0_B5EA:
-    INC zp_55
+    INC tmp_c
     BNE B0_B5F0
-    INC zp_56
+    INC tmp_d
 B0_B5F0:
-    DEC zp_53
+    DEC tmp_a
     BNE B0_B5C5
-    DEC zp_54
+    DEC tmp_b
     BNE B0_B5C5
-    JMP F_C7D4
+    JMP SetScroll
 B0_B5FB:
-    JSR F_C7CD
-    JSR F_C9A5
+    JSR RenderOffAndWait
+    JSR DisableNMI
     LDA ram_0392
-    STA zp_0B
+    STA scroll_y_hi
     LDA ram_0393
-    STA zp_0A
+    STA scroll_y_lo
     LDA ram_0394
-    STA zp_09
+    STA scroll_x_px
     LDA #$00
-    STA zp_55
+    STA tmp_c
     LDA #$20
-    STA zp_56
+    STA tmp_d
     LDA #$30
     STA ptr_lo
     LDA #$15
@@ -1775,9 +1775,9 @@ B0_B5FB:
     STA ptr_hi
 B0_B636:
     LDA #$30
-    STA zp_55
+    STA tmp_c
     LDA #$15
-    STA zp_56
+    STA tmp_d
     RTS
 B0_B63F:
     LDA ppumask_shadow
@@ -1796,14 +1796,14 @@ B0_B63F:
     STA ram_0389
     LDA #$00
     STA ram_038A
-    STA zp_B1
+    STA entity_tick
     STA zp_65
     LDA #$08
     STA palette_set
     LDA #$00
-    STA zp_09
-    STA zp_0A
-    STA zp_0B
+    STA scroll_x_px
+    STA scroll_y_lo
+    STA scroll_y_hi
     JSR PlaySong
     LDA #$01
     STA nmi_state
@@ -1842,16 +1842,16 @@ B0_B6B3:
     LDA fade_dir
     BNE B0_B6B3
     JSR SilenceSound
-    JSR F_C7CD
+    JSR RenderOffAndWait
     JSR ClearOAMBuffer
-    JMP F_C9A5
+    JMP DisableNMI
 B0_B6CF:
     LDA #$0F
-    STA zp_54
+    STA tmp_b
     LDA #$DB
-    STA zp_55
+    STA tmp_c
     LDA #$BE
-    STA zp_56
+    STA tmp_d
     LDA #$49
     STA zp_75
     LDA #$7C
@@ -1860,8 +1860,8 @@ B0_B6CF:
     STA zp_77
     LDA #$02
     STA zp_78
-    INC zp_B1
-    LDA zp_B1
+    INC entity_tick
+    LDA entity_tick
     STA ram_038A
     LDA ram_0389
     SEC
@@ -1878,28 +1878,28 @@ B0_B704:
     JMP F_CED8
 B0_B70A:
     LDA #$55
-    STA zp_55
+    STA tmp_c
     LDA #$B7
-    STA zp_56
+    STA tmp_d
     LDA #$05
-    STA zp_54
+    STA tmp_b
     LDA #$11
-    STA zp_53
+    STA tmp_a
 B0_B71A:
     LDA PPUSTATUS
     LDA ptr_hi
     LDY ptr_lo
-    JSR F_FD7D
+    JSR SetPPUAddr
     LDY #$00
 B0_B726:
-    LDA (zp_55),y
+    LDA (tmp_c),y
     SEC
     SBC #$80
     STA PPUDATA
     INY
-    CPY zp_53
+    CPY tmp_a
     BNE B0_B726
-    JSR F_C7D4
+    JSR SetScroll
     LDA ptr_lo
     CLC
     ADC #$20
@@ -1907,14 +1907,14 @@ B0_B726:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_55
+    LDA tmp_c
     CLC
-    ADC zp_53
-    STA zp_55
-    LDA zp_56
+    ADC tmp_a
+    STA tmp_c
+    LDA tmp_d
     ADC #$00
-    STA zp_56
-    DEC zp_54
+    STA tmp_d
+    DEC tmp_b
     BNE B0_B71A
     RTS
     .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8E,$8F
@@ -1927,7 +1927,7 @@ B0_B7AA:
     JSR B0_B70A
     LDA #$23
     LDY #$C0
-    JSR F_FD7D
+    JSR SetPPUAddr
     LDX #$1F
     LDA #$AA
 B0_B7B8:
@@ -1936,7 +1936,7 @@ B0_B7B8:
     BPL B0_B7B8
     LDA #$23
     LDY #$E8
-    JSR F_FD7D
+    JSR SetPPUAddr
     LDX #$0F
     LDA #$5A
 B0_B7C9:
@@ -1949,33 +1949,33 @@ B0_B7C9:
     BNE B0_B7C9
 B0_B7D7:
     LDA #$4F
-    STA zp_55
+    STA tmp_c
     LDA #$B8
-    STA zp_56
+    STA tmp_d
     LDA #$22
     LDY #$CB
     JSR B0_B873
     LDA #$5B
-    STA zp_55
+    STA tmp_c
     LDA #$B8
-    STA zp_56
+    STA tmp_d
     LDA #$23
     LDY #$28
     JSR B0_B873
-    LDA ram_01AB
+    LDA score_lo
     STA ptr_lo
-    LDA ram_01AC
+    LDA score_mid
     STA ptr_hi
-    LDA ram_01AD
-    STA zp_53
+    LDA score_hi
+    STA tmp_a
     LDY #$02
     LDX #$1E
     LDA #$B7
     JSR FarCall
     LDA #$67
-    STA zp_55
+    STA tmp_c
     LDA #$B8
-    STA zp_56
+    STA tmp_d
     LDA #$23
     LDY #$68
     JSR B0_B873
@@ -1984,32 +1984,32 @@ B0_B7D7:
     LDA ram_0747
     STA ptr_hi
     LDA ram_0748
-    STA zp_53
+    STA tmp_a
     LDY #$02
     LDX #$1E
     LDA #$B7
     JSR FarCall
     LDA #$87
-    STA zp_55
+    STA tmp_c
     LDA #$B8
-    STA zp_56
+    STA tmp_d
     LDA #$EE
     STA ptr_lo
     LDA #$20
     STA ptr_hi
     LDA #$06
-    STA zp_54
+    STA tmp_b
     LDA #$05
-    STA zp_53
+    STA tmp_a
     JMP B0_B71A
     .byte $50,$52,$45,$53,$53,$5C,$53,$54,$41,$52,$54,$00,$4C,$41,$53,$54
     .byte $5C,$53,$43,$4F,$52,$45,$5C,$00,$48,$49,$47,$48,$5C,$53,$43,$4F
     .byte $52,$45,$5C,$00
 B0_B873:
-    JSR F_FD7D
+    JSR SetPPUAddr
     LDY #$00
 B0_B878:
-    LDA (zp_55),y
+    LDA (tmp_c),y
     BEQ B0_B886
     CLC
     ADC #$94
@@ -2026,7 +2026,7 @@ B0_B8A5:
 B0_B8A9:
     LDY #$0B
 B0_B8AB:
-    LDX zp_44
+    LDX ppu_buffer_idx
 B0_B8AD:
     LDA B0_B8BC,y
     STA ppu_buffer,x
@@ -2035,16 +2035,16 @@ B0_B8AD:
     INY
     BNE B0_B8AD
 B0_B8B9:
-    STX zp_44
+    STX ppu_buffer_idx
     RTS
 B0_B8BC:
     .byte $21,$0F,$82,$62,$61,$21,$2F,$82,$64,$63,$00,$21,$0F,$82,$4C,$4B
     .byte $21,$2F,$82,$50,$4F,$00
 B0_B8D2:
     LDA #$00
-    STA zp_55
+    STA tmp_c
     LDA #$10
-    STA zp_56
+    STA tmp_d
     LDA #$E6
     STA ptr_lo
     LDA #$B8
@@ -2181,7 +2181,7 @@ B0_BFA1:
     LDA fade_step
     CMP #$04
     BNE B0_BFA0
-    LDA zp_44
+    LDA ppu_buffer_idx
     CMP #$18
     BCS B0_BFA0
     LDA zp_47
