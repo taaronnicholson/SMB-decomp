@@ -283,6 +283,7 @@ def emit_bank(p):
     return out
 
 os.makedirs(os.path.join(ROOT, 'src'), exist_ok=True)
+for i in range(3): want(FIXED, byte(FIXED, 0x3FFA + 2 * i) | byte(FIXED, 0x3FFB + 2 * i) << 8)
 # two rounds so labels created by later banks (cross refs) appear in earlier outputs
 for _ in range(2):
     banks = {p: emit_bank(p) for p in range(NB)}

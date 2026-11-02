@@ -230,6 +230,7 @@ F_C544:
     .byte $62,$FF,$64,$D2,$00,$00,$68,$C1,$6A,$FF,$6C,$C0,$6E,$FF,$70,$FF
     .byte $72,$CE,$00,$00,$76,$C1,$78,$FF,$7A,$C0,$7C,$FF,$7E,$FF,$80,$78
     .byte $00,$00
+Reset:
     SEI
     LDX #$00
     STX PPUCTRL
@@ -479,6 +480,7 @@ F_C7D4:
     LDA $0A
     STA PPUSCROLL
     RTS
+NMI:
     PHA
     TYA
     PHA
@@ -537,6 +539,7 @@ F_C82F:
     PLA
     TAY
     PLA
+IRQ:
     RTI
 F_C84B:
     LDA $11
