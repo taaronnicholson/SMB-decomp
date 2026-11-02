@@ -3363,7 +3363,7 @@ B6_A03B:
     LDA #$23
     STA zp_65
     LDA #$07
-    STA zp_63
+    STA player_state
     LDA #$0B
     JSR F_CE8F
     JMP F_E0D4
@@ -3371,7 +3371,7 @@ B6_A323:
     LDA #$24
     STA zp_65
     LDA #$06
-    STA zp_63
+    STA player_state
     JMP F_E0D4
     LDA zp_91
     BEQ B6_A335
@@ -3461,7 +3461,7 @@ B6_A3CB:
     .byte $C6,$91,$D0,$FB
 B6_A3CF:
     LDA #$07
-    STA zp_63
+    STA player_state
     JMP F_E0D4
     LDA buttons
     AND #$B1
@@ -3470,7 +3470,7 @@ B6_A3CF:
     JMP F_E0D4
 B6_A3E1:
     LDA #$00
-    STA zp_63
+    STA player_state
     LDA #$01
     STA zp_86
     JMP F_E0D4
@@ -3657,7 +3657,7 @@ B6_A5AB:
     STA ram_023C,x
     INX
     INX
-    LDA zp_63
+    LDA player_state
     CMP #$10
     BEQ B6_A5C1
     LDA #$40
@@ -3683,7 +3683,7 @@ B6_A5D4:
     STA ram_023C,x
     INX
     INX
-    LDA zp_63
+    LDA player_state
     CMP #$10
     BEQ B6_A5EA
     LDA #$00
@@ -3712,7 +3712,7 @@ B6_A5FE:
     STA ram_023C,x
     INX
     INX
-    LDA zp_63
+    LDA player_state
     CMP #$10
     BEQ B6_A617
     LDA #$C0
@@ -3740,7 +3740,7 @@ B6_A62A:
     STA ram_023C,x
     INX
     INX
-    LDA zp_63
+    LDA player_state
     CMP #$10
     BEQ B6_A643
     LDA #$80
@@ -4211,7 +4211,7 @@ B6_B927:
     JMP B6_BA04
 B6_B92A:
     LDA #$02
-    STA zp_63
+    STA player_state
     LDA #$00
     STA zp_7D
     STA zp_7C
@@ -4311,7 +4311,7 @@ B6_B9D1:
     STX zp_7C
     STX zp_67
     INX
-    STX zp_63
+    STX player_state
     LDA #$07
     STA zp_65
     LDA zp_7F

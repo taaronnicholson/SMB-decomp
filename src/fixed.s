@@ -412,7 +412,7 @@ F_C66C:
     ADC #$00
     STA entry_list_hi
     LDA #$09
-    STA zp_63
+    STA player_state
     PLA
 F_C6CC:
     JSR LoadArea
@@ -1830,10 +1830,10 @@ F_D0D9:
     STA zp_CE
     INY
     LDA (tmp_ptr_lo),y
-    STA ram_01AF
+    STA water_level_lo
     INY
     LDA (tmp_ptr_lo),y
-    STA ram_01B0
+    STA water_level_hi
     INY
     LDA (tmp_ptr_lo),y
     STA game_state
@@ -3429,17 +3429,17 @@ F_DC8C:
     PHA
     LDA #$02
     JSR SwitchBank
-    LDY zp_63
+    LDY player_state
     LDX B2_B56E,y
     BEQ F_DCF8
     DEX
     BEQ F_DCF2
 F_DCA1:
-    LDA ram_01AF
+    LDA water_level_lo
     CLC
     ADC #$08
     STA ptr_lo
-    LDA ram_01B0
+    LDA water_level_hi
     ADC #$00
     STA ptr_hi
     LDA player_y_lo
@@ -3448,7 +3448,7 @@ F_DCA1:
     LDA player_y_hi
     SBC ptr_hi
     BCC F_DCE0
-    LDA zp_63
+    LDA player_state
     CMP #$0D
     BEQ F_DCF8
     CMP #$02
@@ -3458,7 +3458,7 @@ F_DCC8:
     LDA #$22
     JSR F_CE8F
     LDA #$0D
-    STA zp_63
+    STA player_state
     LDA zp_7C
     BEQ F_DCF8
     LDA #$00
@@ -3467,11 +3467,11 @@ F_DCC8:
     STA zp_66
     JMP F_DCF8
 F_DCE0:
-    LDA zp_63
+    LDA player_state
     CMP #$0D
     BNE F_DCF8
     LDA #$00
-    STA zp_63
+    STA player_state
     LDA #$22
     JSR F_CE8F
     JMP F_DCF8
@@ -3483,7 +3483,7 @@ F_DCF8:
     LDA #$00
     STA zp_16
     STA zp_17
-    LDA zp_63
+    LDA player_state
     ASL a
     TAY
     LDA B2_B5AA,y
@@ -3494,7 +3494,7 @@ F_DCF8:
     JMP (ptr_lo)
     JSR F_F47A
     JSR F_F088
-    LDY zp_63
+    LDY player_state
     BEQ F_DD24
     LDA #$00
     STA zp_70
@@ -3521,7 +3521,7 @@ F_DD40:
 F_DD43:
     JMP F_DDC1
 F_DD46:
-    LDA zp_63
+    LDA player_state
     BEQ F_DD4B
 F_DD4A:
     RTS
@@ -3557,13 +3557,13 @@ F_DD72:
     LDA #$03
     STA zp_8B
     LDA #$08
-    STA zp_63
+    STA player_state
     STA zp_7C
     LDA #$27
     JMP PlaySfxSq1
 F_DD8F:
     LDX #$01
-    STX zp_63
+    STX player_state
     DEX
     STX zp_8F
     LDA #$07
@@ -3697,11 +3697,11 @@ F_DE75:
     LDA #$05
     JSR SwitchBank
     JSR F_FA3D
-    LDA ram_01AF
+    LDA water_level_lo
     SEC
     SBC #$0C
     STA ent_y_lo,y
-    LDA ram_01B0
+    LDA water_level_hi
     SBC #$00
     STA ent_y_hi,y
     LDA player_x_lo
@@ -3727,7 +3727,7 @@ F_DEB9:
     CMP #$80
     BNE F_DECB
     LDA #$05
-    STA zp_63
+    STA player_state
     JMP $E8F6
 F_DECB:
     LDA buttons
@@ -4577,13 +4577,13 @@ F_E4E5:
     BEQ F_E4FD
     RTS
 F_E4FD:
-    LDA zp_63
+    LDA player_state
     CMP #$07
     BNE F_E505
     STA zp_86
 F_E505:
     LDA #$02
-    STA zp_63
+    STA player_state
     LDA #$00
     STA zp_86
     STA zp_79
@@ -4867,7 +4867,7 @@ F_E6DC:
     STA ram_01A6
 F_E70B:
     LDA #$03
-    STA zp_63
+    STA player_state
     LDA #$00
     BIT zp_7C
     BMI F_E718
@@ -4880,7 +4880,7 @@ F_E718:
     JMP F_E72C
 F_E722:
     LDA #$04
-    STA zp_63
+    STA player_state
     LDA #$00
     STA zp_80
     STA zp_84
@@ -4986,7 +4986,7 @@ F_E7B6:
     STA zp_66
     CLC
     ADC #$0A
-    STA zp_63
+    STA player_state
     LDX #$FF
     STX zp_86
     STX zp_89
@@ -5055,7 +5055,7 @@ F_E848:
     STA zp_66
 F_E858:
     LDA #$08
-    STA zp_63
+    STA player_state
     STA zp_7C
     LDA #$00
     STA zp_85
@@ -5150,7 +5150,7 @@ F_E89E:
     BNE F_E922
     STX zp_7C
     INX
-    STX zp_63
+    STX player_state
     LDA zp_7F
     STA zp_66
     JMP F_E965
@@ -5203,7 +5203,7 @@ F_E965:
     LDA F_C25C,x
     BNE F_E97F
     LDA zp_92
-    STA zp_63
+    STA player_state
     RTS
 F_E97F:
     STA zp_65
@@ -5344,7 +5344,7 @@ F_EAB9:
     STA zp_BD
     RTS
     LDA #$00
-    STA zp_63
+    STA player_state
     RTS
     .byte $A5,$90,$49,$01,$85,$90,$85,$64,$20,$25,$EB,$A5,$12,$29,$40,$D0
     .byte $03,$4C,$05,$EB,$AD,$AF,$01,$18,$69,$08,$85,$51,$AD,$B0,$01,$69
@@ -5353,7 +5353,7 @@ F_EAB9:
     ADC $8685,x
     STA zp_8F
     LDA #$01
-    STA zp_63
+    STA player_state
     STA zp_8C
     JMP F_DE75
     LDA zp_BD
@@ -6073,7 +6073,7 @@ F_F04C:
     JSR F_C9A5
     JSR F_C956
     LDA #$09
-    STA zp_63
+    STA player_state
     LDA zp_E1
     CMP #$0F
     BEQ F_F06A
@@ -6619,7 +6619,7 @@ F_F477:
     DEC zp_5D
     RTS
 F_F47A:
-    LDA zp_63
+    LDA player_state
     BNE F_F496
     LDA zp_16
     STA ptr_lo
@@ -6639,7 +6639,7 @@ F_F497:
     LDA zp_7A
     ORA zp_7B
     BNE F_F496
-    LDY zp_63
+    LDY player_state
     LDA F_F4D5,y
     STA zp_53
     BEQ F_F496
@@ -6647,7 +6647,7 @@ F_F497:
     JSR F_CE8F
     LDA #$0F
 F_F4AD:
-    STA zp_63
+    STA player_state
     STA zp_C0
     LDA #$00
     STA zp_BF
@@ -6661,7 +6661,7 @@ F_F4BA:
     LDA zp_7A
     ORA zp_7B
     BNE F_F4B9
-    LDY zp_63
+    LDY player_state
     LDA F_F4D5,y
     BEQ F_F4B9
     LDA #$09
@@ -6678,7 +6678,7 @@ F_F4D5:
     LDA F_F510,y
     BNE F_F507
     LDA #$10
-    STA zp_63
+    STA player_state
     LDA #$00
     STA zp_BF
     JMP F_F51C
@@ -6722,7 +6722,7 @@ F_F548:
     LDA zp_99
     STA zp_92
     LDA #$11
-    STA zp_63
+    STA player_state
     LDA #$00
     STA zp_E1
     STA zp_E2
@@ -7523,7 +7523,7 @@ F_FB5D:
     LDA ent_type,x
     CMP #$02
     BNE F_FB72
-    LDA zp_63
+    LDA player_state
     CMP #$16
     BNE F_FB56
     LDA #$02

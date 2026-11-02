@@ -57,12 +57,15 @@ applies the `ppuctrl_shadow`/`ppumask_shadow` values and calls one of 6 state ha
 Records 0–3 have 11 entries, record 4 has 3, record 5 has none. The six starting areas are 0, 16, 3, 10, 21 and 6.
 
 **Areas** (`LoadArea` = `F_D05C`, A = area number): `AreaHeaderPtrLo/Hi` (`$83B9`/`$83D1`) point to a 6-byte
-12-byte `AreaHeaderN` (song number, map address, log2 width, height, palette set, collectible-table pointer, two more bytes, initial `game_state`, tileset id) and `AreaMapBank` (`$83E9`) gives the PRG
+12-byte `AreaHeaderN` (song number, map address, log2 width, height, palette set, collectible-table pointer, **water level**, initial `game_state`, tileset id) and `AreaMapBank` (`$83E9`) gives the PRG
 bank of the map. A map is one byte per 16×16 tile, `8 << log2width` tiles wide (16, 32, 64 or 128), `height` rows tall,
 row-major, and the levels scroll **vertically**. The address of tile (x, y) is `map_ptr + (x>>4) + (y>>4)*width`
 (`MapPtrFromPos`); `GetMapTile` reads it. The first two rows are phantom (above the playfield, not stored), so the real
 data starts at `base + 2*width` (area 23's base is `$7F80`, just below its bank). Maps live in bank 3 (areas 0-5, 7-10,
 12-20), bank 1 (6, 11), bank 4 (21, 23) and bank 6 (22). `tools/extract_maps.py` dumps them to `build/maps/`.
+**Water level** (header bytes 8-9, 16-bit Y, `water_level` at `$01AF`): when the player is below it the state becomes `$0D` and
+sound effect `$22` plays; most areas hold `$FF00` (no water), areas 20 and 23 have 108 and 156.
+
 **Collectibles:** header bytes 6-7 point (in bank 0) to a `CollectTableN`: one word per map row from row 2 (an offset
 from the table start, 0 = none), then per-row lists of (column, flag index) pairs. Tile ids `$80`-`$BB` are collectible
 tiles; `GetCollectibleBit` finds the flag index for a map cell and the game keeps collected state in `collected_flags`

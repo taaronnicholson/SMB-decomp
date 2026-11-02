@@ -1103,7 +1103,7 @@ B4_AFEC:
 B4_AFF4:
     RTS
 B4_AFF5:
-    LDA zp_63
+    LDA player_state
     CMP #$09
     BEQ B4_AFF4
     LDA #$01
@@ -1717,7 +1717,7 @@ B4_B528:
     .byte $A4,$93,$B9,$B4,$B7,$D0,$16
 B4_B540:
     LDA #$09
-    STA zp_63
+    STA player_state
     LDA #$17
     STA zp_92
     LDA #$00
@@ -1990,7 +1990,7 @@ B4_B77C:
     JSR F_C9A5
     JSR SilenceSound
     LDA #$09
-    STA zp_63
+    STA player_state
     LDA zp_E1
     CMP #$0F
     BEQ B4_B79D
@@ -2461,9 +2461,9 @@ B4_BCE4:
     STA ram_0500,y
     LDA ram_04D0,y
     SEC
-    SBC ram_01AF
+    SBC water_level_lo
     LDA ram_0500,y
-    SBC ram_01B0
+    SBC water_level_hi
     BCS B4_BD15
     LDA ram_0500,y
     CLC

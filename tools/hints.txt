@@ -184,3 +184,8 @@ name f F492 HurtPlayer          ; called when the player touches a hazard tile o
 name f E514 GetTilePropsAtPos   ; GetMapTile then tile_props lookup (A = properties, X = tile id)
 name f E51C GetTilePropsAtPosY  ; same but leaves the tile id in Y
 name f EEA6 ProfilePtrFromProps ; ptr = TileHeightProfiles + (props & $FC) * 4
+
+; ---- water level and player state ----
+ram 01AF water_level_lo          ; area header byte 8: Y below which the player is in water ($FF00 = no water)
+ram 01B0 water_level_hi          ; area header byte 9
+ram 0063 player_state            ; player state index ($0D = in water, $07 = ..., $16 = level complete); indexes per-state tables

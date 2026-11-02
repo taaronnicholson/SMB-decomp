@@ -2757,7 +2757,7 @@ B2_B509:
     BNE B2_B535
 B2_B52A:
     LDA #$00
-    STA zp_63
+    STA player_state
     STA zp_7C
     STA zp_85
     JMP F_DEB9
@@ -2780,7 +2780,7 @@ B2_B548:
     CMP #$FF
     BNE B2_B535
     LDA #$00
-    STA zp_63
+    STA player_state
     STA zp_7C
     STA zp_85
     LDA zp_7B

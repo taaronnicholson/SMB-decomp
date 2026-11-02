@@ -8,7 +8,7 @@ B1_8000:
     .byte $C0,$BC,$B8,$B4,$B0,$AC,$A8,$A4,$A0,$9C,$98,$94,$90,$8C,$88,$84
     .byte $80,$7C,$78,$74,$70,$6C,$68,$64,$60,$5C,$58,$54
 B1_802C:
-    LDA zp_63
+    LDA player_state
     CMP #$10
     BNE B1_8033
     RTS
@@ -882,7 +882,7 @@ B1_8693:
     STA zp_CA
     LDA zp_66
     STA zp_54
-    LDA zp_63
+    LDA player_state
     CMP #$08
     BEQ B1_86B2
     CMP #$02
@@ -1087,11 +1087,11 @@ B1_880F:
     STA zp_EB,x
     RTS
 B1_881D:
-    LDA ram_01AF
+    LDA water_level_lo
     CLC
     ADC #$03
     STA ptr_lo
-    LDA ram_01B0
+    LDA water_level_hi
     ADC #$00
     STA ptr_hi
     LDA zp_E9,x
@@ -4698,7 +4698,7 @@ B1_AF90:
     STA zp_80
     STA zp_D6
     LDA #$12
-    STA zp_63
+    STA player_state
     RTS
     JSR B1_B129
     LDA player_y_lo
@@ -4717,7 +4717,7 @@ B1_AF90:
     SBC zp_54
     BCC B1_AFD2
     LDA #$13
-    STA zp_63
+    STA player_state
 B1_AFD2:
     RTS
     JSR B1_B129
@@ -4725,7 +4725,7 @@ B1_AFD2:
     LDA B1_B06A,y
     CMP #$14
     BNE B1_AFE4
-    STA zp_63
+    STA player_state
     JMP B1_AFF8
 B1_AFE4:
     STA zp_53
@@ -4742,7 +4742,7 @@ B1_AFF8:
     DEC zp_D6
     BNE B1_B005
     LDA #$15
-    STA zp_63
+    STA player_state
     LDA #$07
     STA zp_80
     RTS
@@ -4979,7 +4979,7 @@ B1_B21A:
     BNE B1_B235
     STA zp_BD
     LDA #$18
-    STA zp_63
+    STA player_state
     LDA #$43
     JMP PlaySfxSq1
     .byte $60

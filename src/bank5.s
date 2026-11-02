@@ -115,7 +115,7 @@ B5_80D8:
     LDA ent_flags,x
     AND #$04
     BNE B5_80D7
-    LDY zp_63
+    LDY player_state
     LDA B5_80B7,y
     BEQ B5_80D7
     LDA zp_19
@@ -1151,7 +1151,7 @@ B5_88AA:
     BNE B5_88D8
     JMP HurtPlayer
 B5_88D8:
-    LDA zp_63
+    LDA player_state
     CMP #$02
     BNE B5_8901
     LDA #$0C
@@ -1169,7 +1169,7 @@ B5_88D8:
     STA zp_79
     STA zp_8F
     LDA #$01
-    STA zp_63
+    STA player_state
     STA zp_8C
 B5_8901:
     STA zp_53
@@ -1334,7 +1334,7 @@ B5_8A31:
     PLA
     LDA #$03
     JSR F_CE8F
-    LDA zp_63
+    LDA player_state
     CMP #$02
     BEQ B5_8A5C
     LDA #$07
@@ -1365,7 +1365,7 @@ B5_8A5C:
     STA zp_79
     STA zp_8F
     LDA #$01
-    STA zp_63
+    STA player_state
     STA zp_8C
     LDA #$1E
     STA ent_param,x
@@ -1613,9 +1613,9 @@ B5_8C53:
     BCC B5_8C81
     LDA zp_53
     SEC
-    SBC ram_01AF
+    SBC water_level_lo
     LDA zp_54
-    SBC ram_01B0
+    SBC water_level_hi
     BCC B5_8C81
     RTS
 B5_8C81:
@@ -1669,7 +1669,7 @@ B5_8CBB:
     ADC #$16
     CMP zp_56
     BCC B5_8CBA
-    LDA zp_63
+    LDA player_state
     CMP #$07
     BNE B5_8CBA
     LDA ent_y_lo,x
@@ -1697,7 +1697,7 @@ B5_8CBB:
     LDA #$00
     STA zp_B9
     LDA #$16
-    STA zp_63
+    STA player_state
     STA ent_param2,x
     STX zp_BA
     LDA #$09
@@ -1737,7 +1737,7 @@ B5_8D62:
     STA ent_y_hi,x
     LDA #$00
     STA ent_param,x
-    LDA zp_63
+    LDA player_state
     CMP #$16
     BEQ B5_8D80
     RTS
@@ -2379,7 +2379,7 @@ B5_946F:
     ADC #$16
     CMP zp_56
     BCC B5_9467
-    LDA zp_63
+    LDA player_state
     CMP #$07
     BNE B5_9467
     LDA #$05
@@ -2646,7 +2646,7 @@ B5_96AC:
     BEQ B5_96AC
     CPX zp_B6
     BNE B5_96AC
-    LDA zp_63
+    LDA player_state
     BEQ B5_96E0
     LDA #$00
     STA ent_radius,x
@@ -2689,11 +2689,11 @@ B5_96FF:
     LDA zp_56
     ADC #$00
     STA zp_56
-    LDA ram_01AF
+    LDA water_level_lo
     CLC
     ADC zp_53
     STA ent_y_lo,x
-    LDA ram_01B0
+    LDA water_level_hi
     ADC zp_56
     STA ent_y_hi,x
     JMP EntityDeltaFromCentre
@@ -3425,7 +3425,7 @@ Ent33_Update:
     CMP #$80
     BNE B5_9F0B
     LDA #$19
-    STA zp_63
+    STA player_state
     LDA #$0A
     STA ram_072F
     LDA #$00
@@ -3878,7 +3878,7 @@ B5_A2E8:
     BCS B5_A2F3
     INC zp_55
 B5_A2F3:
-    LDA zp_63
+    LDA player_state
     CMP #$0C
     BEQ B5_A2FD
     LDA #$07
@@ -5193,7 +5193,7 @@ Ent5E_Update:
     BCC B5_AF0A
     LDA zp_7C
     BEQ B5_AEEF
-    LDA zp_63
+    LDA player_state
     CMP #$02
     BNE B5_AEEF
     LDA #$07
@@ -6520,7 +6520,7 @@ B5_BB3F:
     LDA #$93
     STA ent_type,x
     LDA #$1D
-    STA zp_63
+    STA player_state
     RTS
 Ent93_Update:
     LDA ent_radius,x
@@ -6588,7 +6588,7 @@ B5_BBDF:
     LDA #$16
     STA zp_47
     LDA #$1E
-    STA zp_63
+    STA player_state
     LDA #$34
     JSR F_CE8F
     JSR B5_91C1

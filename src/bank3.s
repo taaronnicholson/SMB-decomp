@@ -969,7 +969,7 @@ B3_BD75:
     LDA #$64
     STA zp_D4
     LDA #$1B
-    STA zp_63
+    STA player_state
 B3_BD7F:
     LDA zp_B1
     LSR a
