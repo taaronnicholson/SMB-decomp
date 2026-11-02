@@ -1,2 +1,27 @@
-; extra analysis hints.  entry <bank|f> <addr> [curbank]
-words f C825 6    ; NMI dispatch table
+; Analysis hints for tools/decomp.py
+;   entry <bank|f> <addr> [curbank]   extra code entry point
+;   words <bank|f> <addr> <n> [bank]  table of n code pointers (lo,hi)
+;   lohi  <bank|f> <lo> <hi> <n> [bank|-] [adj]  split lo/hi pointer tables
+;   name  <bank|f> <addr> <label>     rename a label
+;   ram   <addr> <name>               name a RAM location
+words f C825 6                ; NMI state dispatch (indexed by nmi_state, $00)
+
+name f C5C6 Reset
+name f C7E3 NMI
+name f C84A IRQ
+name f C90D SwitchBank        ; A = PRG bank 0-6 -> $8000; shadows in cur_bank
+name f C917 SwitchBankFromAC  ; bank taken from $AC
+name f C901 SetPPUCtrl        ; writes A to $2000 and shadow
+name f C907 SetPPUMask        ; writes A to $2001 and shadow
+name f C93D ClearOAMBuffer    ; fills $0200-$02FF with $FF/0
+name f CEEE FarCall           ; A=hi X=lo Y=bank : call $AAXX in bank Y, restores bank
+
+ram 0002 ppuctrl_shadow
+ram 0003 ppumask_shadow
+ram 0000 nmi_state            ; index into NMI dispatch table
+ram 000C cur_bank
+ram 000E frame_counter
+ram 0006 jump_ptr_lo          ; scratch indirect-jump vector
+ram 0007 jump_ptr_hi
+ram 0004 farcall_ptr_lo
+ram 0005 farcall_ptr_hi

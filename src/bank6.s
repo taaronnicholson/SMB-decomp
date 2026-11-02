@@ -1745,41 +1745,231 @@ B6_93D4:
     .byte $01,$01,$01,$01,$00,$00,$01,$01,$01,$01,$01,$01,$01,$01,$01,$01
     .byte $01,$00,$00,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
     .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$01,$01,$00,$00,$A5,$66,$D0,$10,$A5,$5E
-    .byte $38,$E9,$03,$85,$51,$A5,$5F,$E9,$00,$85,$52,$4C,$DF,$A2,$A5,$5E
-    .byte $18,$69,$12,$85,$51,$A5,$5F,$69,$00,$85,$52,$A5,$60,$85,$55,$A5
-    .byte $61,$85,$56,$20,$24,$EF,$20,$26,$FC,$48,$C9,$DA,$D0,$03,$20,$9D
-    .byte $F7,$C9,$D8,$D0,$03,$20,$70,$F7,$68,$C9,$D1,$D0,$0A,$A9,$39,$20
-    .byte $8F,$CE,$A9,$24,$4C,$8F,$A3,$AA,$BD,$A4,$03,$29,$01,$F0,$10,$A9
-    .byte $23,$85,$65,$A9,$07,$85,$63,$A9,$0B,$20,$8F,$CE,$4C,$D4,$E0,$A9
-    .byte $24,$85,$65,$A9,$06,$85,$63,$4C,$D4,$E0,$A5,$91,$F0,$03,$4C,$CB
-    .byte $A3,$A9,$0F,$85,$53,$A5,$66,$D0,$02,$85,$53,$A5,$5E,$18,$65,$53
-    .byte $85,$51,$A5,$5F,$69,$00,$85,$52,$A5,$60,$18,$69,$10,$85,$55,$A5
-    .byte $61,$69,$00,$85,$56,$20,$24,$EF,$20,$26,$FC,$48,$C9,$CE,$D0,$03
-    .byte $20,$AB,$EF,$C9,$CF,$D0,$03,$20,$5D,$EF,$C9,$D0,$D0,$03,$20,$81
-    .byte $EF,$C9,$DA,$D0,$03,$20,$9D,$F7,$C9,$D8,$D0,$03,$20,$70,$F7,$68
-    .byte $C9,$D1,$D0,$27,$A9,$39,$20,$8F,$CE,$A9,$17,$85,$65,$20,$B0,$F6
-    .byte $20,$92,$F1,$A5,$51,$8D,$21,$07,$A5,$52,$8D,$22,$07,$A9,$02,$8D
-    .byte $20,$07,$A5,$79,$D0,$25,$A9,$03,$85,$91,$60,$AA,$BD,$A4,$03,$A2
-    .byte $17,$29,$01,$F0,$07,$A9,$0B,$20,$8F,$CE,$A2,$16,$86,$65,$A5,$79
-    .byte $D0,$09,$A9,$03,$85,$91,$60,$C6,$91,$D0,$FB,$A9,$07,$85,$63,$4C
-    .byte $D4,$E0,$A5,$12,$29,$B1,$C9,$80,$D0,$03,$4C,$D4,$E0,$A9,$00,$85
-    .byte $63,$A9,$01,$85,$86,$4C,$D4,$E0,$A5,$BD,$29,$FE,$A8,$B9,$4E,$A4
-    .byte $C9,$FF,$F0,$26,$C9,$FD,$D0,$07,$A9,$08,$20,$8F,$CE,$A9,$4A,$C9
-    .byte $FE,$D0,$04,$A9,$00,$85,$66,$85,$65,$A5,$5E,$38,$F9,$4F,$A4,$85
-    .byte $5E,$A5,$5F,$E9,$00,$85,$5F,$E6,$BD,$60,$A9,$16,$85,$47,$A9,$00
-    .byte $85,$62,$C6,$D3,$D0,$F3,$A9,$01,$85,$00,$20,$52,$CE,$C6,$11,$20
-    .byte $AC,$C9,$A5,$10,$D0,$F9,$20,$CD,$C7,$20,$A5,$C9,$20,$56,$C9,$20
-    .byte $B2,$C9,$E6,$93,$A2,$FF,$9A,$4C,$67,$C6,$00,$00,$00,$00,$00,$00
+    .byte $00,$00,$00,$00,$00,$00,$01,$01,$00,$00
+    LDA $66
+    BNE B6_A2D2
+    LDA $5E
+    SEC
+    SBC #$03
+    STA $51
+    LDA $5F
+    SBC #$00
+    STA $52
+    JMP B6_A2DF
+B6_A2D2:
+    LDA $5E
+    CLC
+    ADC #$12
+    STA $51
+    LDA $5F
+    ADC #$00
+    STA $52
+B6_A2DF:
+    LDA $60
+    STA $55
+    LDA $61
+    STA $56
+    JSR F_EF24
+    JSR F_FC26
+    PHA
+    CMP #$DA
+    BNE B6_A2F5
+    JSR F_F79D
+B6_A2F5:
+    CMP #$D8
+    BNE B6_A2FC
+    JSR F_F770
+B6_A2FC:
+    PLA
+    CMP #$D1
+    BNE B6_A30B
+    LDA #$39
+    JSR F_CE8F
+    LDA #$24
+    JMP B6_A38F
+B6_A30B:
+    TAX
+    LDA $03A4,x
+    AND #$01
+    BEQ B6_A323
+    LDA #$23
+    STA $65
+    LDA #$07
+    STA $63
+    LDA #$0B
+    JSR F_CE8F
+    JMP F_E0D4
+B6_A323:
+    LDA #$24
+    STA $65
+    LDA #$06
+    STA $63
+    JMP F_E0D4
+    LDA $91
+    BEQ B6_A335
+    JMP B6_A3CB
+B6_A335:
+    LDA #$0F
+    STA $53
+    LDA $66
+    BNE B6_A33F
+    STA $53
+B6_A33F:
+    LDA $5E
+    CLC
+    ADC $53
+    STA $51
+    LDA $5F
+    ADC #$00
+    STA $52
+    LDA $60
+    CLC
+    ADC #$10
+    STA $55
+    LDA $61
+    ADC #$00
+    STA $56
+    JSR F_EF24
+    JSR F_FC26
+    PHA
+    CMP #$CE
+    BNE B6_A367
+    JSR F_EFAB
+B6_A367:
+    CMP #$CF
+    BNE B6_A36E
+    JSR F_EF5D
+B6_A36E:
+    CMP #$D0
+    BNE B6_A375
+    JSR F_EF81
+B6_A375:
+    CMP #$DA
+    BNE B6_A37C
+    JSR F_F79D
+B6_A37C:
+    CMP #$D8
+    BNE B6_A383
+    JSR F_F770
+B6_A383:
+    PLA
+    CMP #$D1
+    BNE B6_A3AF
+    LDA #$39
+    JSR F_CE8F
+    LDA #$17
+B6_A38F:
+    STA $65
+    JSR F_F6B0
+    JSR F_F192
+    LDA $51
+    STA $0721
+    LDA $52
+    STA $0722
+    LDA #$02
+    STA $0720
+    LDA $79
+    BNE B6_A3CF
+    LDA #$03
+    STA $91
+    RTS
+B6_A3AF:
+    TAX
+    LDA $03A4,x
+    LDX #$17
+    AND #$01
+    BEQ B6_A3C0
+    LDA #$0B
+    JSR F_CE8F
+    LDX #$16
+B6_A3C0:
+    STX $65
+    LDA $79
+    BNE B6_A3CF
+    LDA #$03
+    STA $91
+    RTS
+B6_A3CB:
+    .byte $C6,$91,$D0,$FB
+B6_A3CF:
+    LDA #$07
+    STA $63
+    JMP F_E0D4
+    LDA $12
+    AND #$B1
+    CMP #$80
+    BNE B6_A3E1
+    JMP F_E0D4
+B6_A3E1:
+    LDA #$00
+    STA $63
+    LDA #$01
+    STA $86
+    JMP F_E0D4
+    LDA $BD
+    AND #$FE
+    TAY
+    LDA B6_A44E,y
+    CMP #$FF
+    BEQ B6_A41E
+    CMP #$FD
+    BNE B6_A403
+    LDA #$08
+    JSR F_CE8F
+    LDA #$4A
+B6_A403:
+    CMP #$FE
+    BNE B6_A40B
+    LDA #$00
+    STA $66
+B6_A40B:
+    STA $65
+    LDA $5E
+    SEC
+    SBC B6_A44F,y
+    STA $5E
+    LDA $5F
+    SBC #$00
+    STA $5F
+    INC $BD
+B6_A41D:
+    RTS
+B6_A41E:
+    LDA #$16
+    STA $47
+    LDA #$00
+    STA $62
+    DEC $D3
+    BNE B6_A41D
+    LDA #$01
+    STA nmi_state
+    JSR F_CE52
+    DEC $11
+B6_A433:
+    JSR F_C9AC
+    LDA $10
+    BNE B6_A433
+    JSR F_C7CD
+    JSR F_C9A5
+    JSR F_C956
+    JSR F_C9B2
+    INC $93
+    LDX #$FF
+    TXS
+    JMP F_C667
+B6_A44E:
+    .byte $00
+B6_A44F:
     .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$FE,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $02,$01,$02,$01,$02,$01,$03,$01,$03,$01,$03,$01,$04,$01,$04,$01
-    .byte $04,$01,$05,$01,$05,$01,$05,$01,$02,$01,$02,$01,$02,$01,$03,$01
-    .byte $03,$01,$03,$01,$04,$01,$04,$01,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $08,$00,$08,$00,$08,$00,$4A,$00,$4A,$00,$FD,$00,$08,$00,$08,$00
-    .byte $08,$00,$4A,$00,$4A,$00,$4A,$00,$08,$00,$08,$00,$08,$00,$4A,$00
-    .byte $4A,$00,$4A,$00,$08,$00,$08,$00,$08,$00,$4A,$00,$4A,$00,$4A,$00
-    .byte $08,$00,$08,$00,$08,$00,$4A,$00,$4A,$00,$4A,$00,$FF
+    .byte $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$FE,$00,$00,$00,$00
+    .byte $00,$00,$00,$00,$00,$02,$01,$02,$01,$02,$01,$03,$01,$03,$01,$03
+    .byte $01,$04,$01,$04,$01,$04,$01,$05,$01,$05,$01,$05,$01,$02,$01,$02
+    .byte $01,$02,$01,$03,$01,$03,$01,$03,$01,$04,$01,$04,$01,$00,$00,$00
+    .byte $00,$00,$00,$00,$00,$08,$00,$08,$00,$08,$00,$4A,$00,$4A,$00,$FD
+    .byte $00,$08,$00,$08,$00,$08,$00,$4A,$00,$4A,$00,$4A,$00,$08,$00,$08
+    .byte $00,$08,$00,$4A,$00,$4A,$00,$4A,$00,$08,$00,$08,$00,$08,$00,$4A
+    .byte $00,$4A,$00,$4A,$00,$08,$00,$08,$00,$08,$00,$4A,$00,$4A,$00,$4A
+    .byte $00,$FF
 B6_A4E1:
     JSR B6_A535
     LDA $4E
@@ -2289,115 +2479,917 @@ B6_A6AE:
     .byte $0A,$4F,$23,$C6,$1C,$F4,$02,$C0,$47,$89,$F4,$0A,$04,$82,$21,$20
     .byte $A0,$72,$4F,$9F,$87,$C1,$E1,$F1,$F9,$03,$0F,$E8,$42,$42,$42,$1E
     .byte $32,$3F,$9E,$06,$11,$0D,$80,$95,$F8,$85,$D0,$10,$84,$24,$99,$A1
-    .byte $24,$06,$60,$00,$E6,$7D,$A5,$7D,$C9,$11,$B0,$18,$A9,$03,$85,$53
-    .byte $A5,$12,$29,$01,$F0,$03,$4C,$37,$B9,$A5,$8C,$F0,$03,$4C,$37,$B9
-    .byte $A9,$11,$85,$7D,$AA,$BD,$0F,$C2,$85,$53,$C9,$FF,$D0,$03,$4C,$2A
-    .byte $B9,$C9,$00,$F0,$03,$4C,$37,$B9,$A5,$60,$85,$55,$A5,$61,$85,$56
-    .byte $A5,$5E,$18,$69,$08,$85,$51,$A5,$5F,$69,$00,$85,$52,$20,$24,$EF
-    .byte $A5,$51,$48,$A5,$52,$48,$20,$14,$E5,$20,$A6,$EE,$A5,$5E,$18,$69
-    .byte $08,$29,$0F,$18,$65,$51,$85,$51,$A5,$52,$69,$00,$85,$52,$B1,$51
-    .byte $85,$53,$C9,$FF,$F0,$2B,$A5,$60,$29,$0F,$18,$69,$10,$38,$E5,$53
-    .byte $90,$1F,$C9,$05,$B0,$1B,$A5,$60,$29,$F0,$18,$65,$53,$38,$E9,$10
-    .byte $85,$60,$A5,$61,$E9,$00,$85,$61,$68,$85,$52,$68,$85,$51,$4C,$04
-    .byte $BA,$68,$85,$52,$68,$85,$51,$A5,$51,$18,$65,$23,$85,$51,$A5,$52
-    .byte $69,$00,$85,$52,$20,$14,$E5,$20,$A6,$EE,$A5,$5E,$18,$69,$08,$29
-    .byte $0F,$65,$51,$85,$51,$A5,$52,$69,$00,$85,$52,$B1,$51,$85,$53,$C9
-    .byte $FF,$F0,$16,$A5,$60,$29,$0F,$38,$E5,$53,$90,$0D,$C9,$05,$B0,$09
-    .byte $A5,$60,$29,$F0,$18,$65,$53,$85,$60,$4C,$04,$BA,$A9,$02,$85,$63
-    .byte $A9,$00,$85,$7D,$85,$7C,$4C,$24,$E5,$A5,$60,$38,$E5,$53,$85,$60
-    .byte $A5,$61,$E9,$00,$B0,$04,$A9,$00,$85,$60,$85,$61,$A5,$7D,$4A,$AA
-    .byte $BD,$35,$C2,$85,$65,$A5,$60,$85,$55,$A5,$61,$85,$56,$A5,$55,$48
-    .byte $A5,$56,$48,$A5,$5E,$18,$69,$0A,$85,$51,$A5,$5F,$69,$00,$85,$52
-    .byte $20,$24,$EF,$20,$0D,$F8,$68,$85,$56,$68,$85,$55,$20,$14,$E5,$29
-    .byte $01,$D0,$17,$A5,$5E,$18,$69,$06,$85,$51,$A5,$5F,$69,$00,$85,$52
-    .byte $20,$24,$EF,$20,$14,$E5,$29,$01,$F0,$6C,$A5,$7C,$F0,$24,$20,$26
-    .byte $FC,$C9,$D1,$D0,$1D,$20,$B0,$F6,$A9,$39,$20,$8F,$CE,$20,$92,$F1
-    .byte $A5,$51,$8D,$21,$07,$A5,$52,$8D,$22,$07,$A9,$02,$8D,$20,$07,$4C
-    .byte $04,$BA,$20,$14,$E5,$29,$03,$C9,$03,$D0,$03,$20,$92,$F4,$C9,$0F
-    .byte $D0,$01,$60,$A5,$60,$29,$F0,$18,$69,$10,$85,$60,$A5,$61,$69,$00
-    .byte $85,$61,$A5,$8F,$F0,$16,$A2,$00,$86,$8F,$86,$7C,$86,$67,$E8,$86
-    .byte $63,$A9,$07,$85,$65,$A5,$7F,$85,$66,$4C,$00,$BA,$A5,$7D,$C9,$0E
-    .byte $B0,$04,$A9,$0E,$85,$7D,$A5,$12,$29,$20,$D0,$03,$4C,$81,$BA,$A5
-    .byte $7C,$F0,$09,$A5,$7F,$F0,$0E,$A9,$00,$85,$7F,$60,$A5,$66,$F0,$05
-    .byte $A9,$00,$85,$66,$60,$A5,$5E,$38,$E5,$64,$85,$51,$A5,$5F,$E9,$00
-    .byte $85,$52,$B0,$07,$A9,$00,$85,$5E,$85,$5F,$60,$A5,$51,$85,$5E,$18
-    .byte $69,$05,$85,$51,$A5,$52,$85,$5F,$69,$00,$85,$52,$A5,$60,$85,$55
-    .byte $A5,$61,$85,$56,$20,$24,$EF,$20,$14,$E5,$29,$01,$D0,$1B,$A5,$60
-    .byte $29,$0F,$D0,$01,$60,$A5,$51,$18,$65,$23,$85,$51,$A5,$52,$69,$00
-    .byte $85,$52,$20,$14,$E5,$29,$01,$F0,$EB,$A5,$5E,$29,$F0,$18,$69,$0A
-    .byte $85,$5E,$60,$A5,$12,$29,$10,$D0,$01,$60,$A5,$7C,$F0,$08,$A6,$7F
-    .byte $D0,$0C,$E8,$86,$7F,$60,$A6,$66,$D0,$04,$E8,$86,$66,$60,$A5,$5E
-    .byte $18,$65,$64,$85,$51,$A5,$5F,$69,$00,$85,$52,$A5,$34,$38,$E9,$11
-    .byte $85,$53,$A5,$35,$E9,$00,$85,$54,$A5,$53,$38,$E5,$51,$A5,$54,$E5
-    .byte $52,$B0,$0D,$A5,$53,$69,$01,$85,$5E,$A5,$54,$69,$00,$85,$5F,$60
-    .byte $A5,$51,$85,$5E,$18,$69,$0B,$85,$51,$A5,$52,$85,$5F,$69,$00,$85
-    .byte $52,$A5,$60,$85,$55,$A5,$61,$85,$56,$20,$24,$EF,$20,$14,$E5,$29
-    .byte $01,$D0,$1B,$A5,$60,$29,$0F,$D0,$01,$60,$A5,$51,$18,$65,$23,$85
-    .byte $51,$A5,$52,$69,$00,$85,$52,$20,$14,$E5,$29,$01,$F0,$EB,$A5,$5E
-    .byte $29,$F0,$18,$69,$05,$85,$5E,$60,$A5,$1D,$18,$65,$4B,$85,$51,$A5
-    .byte $1E,$69,$00,$85,$52,$A5,$60,$38,$E5,$51,$85,$55,$A5,$61,$E5,$52
-    .byte $85,$56,$B0,$21,$A5,$55,$49,$FF,$18,$69,$01,$85,$51,$A5,$56,$49
-    .byte $FF,$69,$00,$85,$52,$A5,$1D,$38,$E5,$51,$85,$51,$A5,$1E,$E5,$52
-    .byte $85,$52,$4C,$87,$BB,$A5,$51,$18,$69,$10,$85,$51,$A5,$52,$69,$00
-    .byte $85,$52,$A5,$60,$38,$E5,$51,$85,$51,$A5,$61,$E5,$52,$85,$52,$B0
-    .byte $0B,$A5,$1D,$85,$51,$A5,$1E,$85,$52,$4C,$87,$BB,$A5,$1D,$18,$65
-    .byte $51,$85,$51,$A5,$1E,$65,$52,$85,$52,$A5,$52,$30,$08,$D0,$11,$A5
-    .byte $51,$C9,$20,$B0,$0B,$A9,$20,$85,$1D,$A9,$00,$85,$1E,$4C,$C6,$BB
-    .byte $A5,$36,$38,$E9,$F0,$85,$55,$A5,$37,$E9,$00,$85,$56,$A5,$51,$38
-    .byte $E5,$55,$A5,$52,$E5,$56,$B0,$08,$A5,$51,$85,$55,$A5,$52,$85,$56
-    .byte $A5,$55,$85,$1D,$A5,$56,$85,$1E,$A5,$5F,$30,$3C,$A5,$1B,$18,$65
-    .byte $4A,$85,$51,$A5,$1C,$69,$00,$85,$52,$A5,$5E,$38,$E5,$51,$85,$55
-    .byte $A5,$5F,$E5,$52,$85,$56,$B0,$27,$A5,$55,$49,$FF,$18,$69,$01,$85
-    .byte $51,$A5,$56,$49,$FF,$69,$00,$85,$52,$A5,$1B,$38,$E5,$51,$85,$1B
-    .byte $A5,$1C,$E5,$52,$85,$1C,$B0,$06,$A9,$00,$85,$1B,$85,$1C,$60,$A5
-    .byte $51,$18,$69,$0A,$85,$51,$A5,$52,$69,$00,$85,$52,$A5,$5E,$38,$E5
-    .byte $51,$85,$51,$A5,$5F,$E5,$52,$85,$52,$90,$E3,$A5,$1B,$38,$65,$51
-    .byte $85,$55,$A5,$1C,$65,$52,$85,$56,$A5,$34,$38,$E9,$F0,$85,$51,$A5
-    .byte $35,$E9,$00,$85,$52,$A5,$51,$38,$E5,$55,$A5,$52,$E5,$56,$B0,$08
-    .byte $A5,$51,$85,$55,$A5,$52,$85,$56,$A5,$55,$85,$1B,$A5,$56,$85,$1C
-    .byte $60,$A9,$FF,$85,$56,$85,$55,$A5,$1D,$38,$ED,$3B,$07,$85,$53,$A5
-    .byte $1E,$ED,$3C,$07,$B0,$07,$A0,$01,$84,$55,$88,$84,$56,$05,$53,$85
-    .byte $73,$F0,$17,$A5,$55,$8D,$41,$07,$A5,$56,$8D,$42,$07,$A5,$1D,$18
-    .byte $65,$55,$85,$1D,$A5,$1E,$65,$56,$85,$1E,$A9,$FF,$85,$55,$85,$56
-    .byte $A5,$1B,$38,$ED,$39,$07,$85,$51,$A5,$1C,$ED,$3A,$07,$85,$52,$B0
-    .byte $07,$A0,$01,$84,$55,$88,$84,$56,$05,$51,$F0,$17,$A5,$55,$8D,$43
-    .byte $07,$A5,$56,$8D,$44,$07,$A5,$1B,$18,$65,$55,$85,$1B,$A5,$1C,$65
-    .byte $56,$85,$1C,$A5,$73,$05,$51,$05,$52,$8D,$2D,$07,$AD,$A6,$01,$C9
-    .byte $04,$D0,$01,$60,$A5,$1D,$18,$69,$12,$85,$55,$A5,$1E,$69,$00,$85
-    .byte $56,$A5,$55,$38,$E5,$60,$A5,$56,$E5,$61,$90,$0B,$A5,$55,$85,$60
-    .byte $A5,$56,$85,$61,$4C,$25,$BD,$A5,$55,$18,$69,$CE,$85,$55,$A5,$56
-    .byte $69,$00,$85,$56,$A5,$60,$38,$E5,$55,$A5,$61,$E5,$56,$90,$08,$A5
-    .byte $55,$85,$60,$A5,$56,$85,$61,$A5,$1B,$85,$55,$38,$E5,$5E,$A5,$1C
-    .byte $85,$56,$E5,$5F,$90,$09,$A5,$55,$85,$5E,$A5,$56,$85,$5F,$60,$A5
-    .byte $55,$18,$69,$E0,$85,$55,$A5,$56,$69,$00,$85,$56,$A5,$5E,$38,$E5
-    .byte $55,$A5,$5F,$E5,$56,$90,$E7,$A5,$55,$85,$5E,$A5,$56,$85,$5F,$60
-    .byte $A5,$B1,$29,$7E,$F0,$01,$60,$20,$3D,$FA,$A9,$81,$99,$80,$04,$A9
-    .byte $F8,$99,$B0,$04,$A9,$02,$99,$E0,$04,$A9,$80,$99,$10,$05,$A9,$00
-    .byte $99,$40,$05,$A9,$E8,$99,$70,$05,$A9,$03,$99,$A0,$05,$A9,$00,$99
-    .byte $D0,$05,$99,$00,$06,$A9,$06,$99,$30,$06,$60,$A5,$B1,$29,$7E,$F0
-    .byte $01,$60,$20,$3D,$FA,$A9,$9B,$99,$80,$04,$A9,$5C,$99,$B0,$04,$A9
-    .byte $01,$99,$E0,$04,$A9,$6C,$99,$10,$05,$A9,$00,$99,$40,$05,$A9,$00
-    .byte $99,$70,$05,$A9,$1E,$99,$A0,$05,$60,$A5,$03,$09,$06,$20,$07,$C9
-    .byte $A9,$F0,$20,$B4,$C8,$AC,$45,$07,$B9,$E6,$BE,$20,$3B,$CE,$A9,$10
-    .byte $8D,$89,$03,$A9,$FC,$85,$09,$A9,$00,$8D,$8A,$03,$85,$0B,$85,$0A
-    .byte $20,$E1,$CE,$A9,$5A,$85,$8C,$AC,$45,$07,$D0,$02,$46,$8C,$B9,$E9
-    .byte $BE,$85,$51,$B9,$EC,$BE,$85,$52,$AD,$02,$20,$A9,$23,$8D,$06,$20
-    .byte $A9,$C0,$8D,$06,$20,$A0,$3F,$A9,$55,$8D,$07,$20,$88,$10,$FA,$A0
-    .byte $00,$A9,$E0,$18,$71,$51,$85,$55,$A9,$21,$69,$00,$8D,$06,$20,$A5
-    .byte $55,$8D,$06,$20,$C8,$B1,$51,$F0,$09,$18,$69,$94,$8D,$07,$20,$4C
-    .byte $32,$BE,$AD,$45,$07,$D0,$08,$A5,$93,$18,$69,$C5,$8D,$07,$20,$A9
-    .byte $08,$85,$0F,$A9,$01,$85,$00,$20,$9E,$C9,$20,$AC,$C9,$E6,$11,$20
-    .byte $AC,$C9,$20,$C8,$C7,$20,$AC,$C9,$AD,$89,$03,$18,$69,$04,$8D,$89
-    .byte $03,$CE,$8A,$03,$20,$E1,$CE,$A5,$11,$D0,$EA,$20,$AC,$C9,$20,$B3
-    .byte $C9,$AD,$89,$03,$18,$69,$04,$C9,$88,$F0,$03,$8D,$89,$03,$CE,$8A
-    .byte $03,$20,$E1,$CE,$AD,$4A,$07,$D0,$04,$C6,$8C,$F0,$06,$A5,$12,$29
-    .byte $0B,$F0,$D8,$C6,$11,$AD,$AB,$01,$38,$ED,$46,$07,$AD,$AC,$01,$ED
-    .byte $47,$07,$AD,$AD,$01,$ED,$48,$07,$90,$12,$AD,$AB,$01,$8D,$46,$07
-    .byte $AD,$AC,$01,$8D,$47,$07,$AD,$AD,$01,$8D,$48,$07,$20,$AC,$C9,$A0
-    .byte $06,$A2,$03,$A9,$80,$20,$EE,$CE,$A5,$11,$D0,$F0,$20,$52,$CE,$20
-    .byte $CD,$C7,$20,$3D,$C9,$4C,$A5,$C9,$01,$02,$02,$FA,$EF,$EF,$BE,$BE
-    .byte $BE,$0B,$47,$41,$4D,$45,$5C,$4F,$56,$45,$52,$00,$0C,$53,$54,$41
-    .byte $47,$45,$5C,$00
+    .byte $24,$06,$60,$00
+    INC $7D
+    LDA $7D
+    CMP #$11
+    BCS B6_B862
+    LDA #$03
+    STA $53
+    LDA $12
+    AND #$01
+    BEQ B6_B857
+    JMP B6_B937
+B6_B857:
+    LDA $8C
+    BEQ B6_B85E
+    JMP B6_B937
+B6_B85E:
+    LDA #$11
+    STA $7D
+B6_B862:
+    TAX
+    LDA F_C20F,x
+    STA $53
+    CMP #$FF
+    BNE B6_B86F
+    JMP B6_B92A
+B6_B86F:
+    CMP #$00
+    BEQ B6_B876
+    JMP B6_B937
+B6_B876:
+    LDA $60
+    STA $55
+    LDA $61
+    STA $56
+    LDA $5E
+    CLC
+    ADC #$08
+    STA $51
+    LDA $5F
+    ADC #$00
+    STA $52
+    JSR F_EF24
+    LDA $51
+    PHA
+    LDA $52
+    PHA
+    JSR F_E514
+    JSR F_EEA6
+    LDA $5E
+    CLC
+    ADC #$08
+    AND #$0F
+    CLC
+    ADC $51
+    STA $51
+    LDA $52
+    ADC #$00
+    STA $52
+    LDA ($51),y
+    STA $53
+    CMP #$FF
+    BEQ B6_B8DF
+    LDA $60
+    AND #$0F
+    CLC
+    ADC #$10
+    SEC
+    SBC $53
+    BCC B6_B8DF
+    CMP #$05
+    BCS B6_B8DF
+    LDA $60
+    AND #$F0
+    CLC
+    ADC $53
+    SEC
+    SBC #$10
+    STA $60
+    LDA $61
+    SBC #$00
+    STA $61
+    PLA
+    STA $52
+    PLA
+    STA $51
+    JMP B6_BA04
+B6_B8DF:
+    PLA
+    STA $52
+    PLA
+    STA $51
+    LDA $51
+    CLC
+    ADC $23
+    STA $51
+    LDA $52
+    ADC #$00
+    STA $52
+    JSR F_E514
+    JSR F_EEA6
+    LDA $5E
+    CLC
+    ADC #$08
+    AND #$0F
+    ADC $51
+    STA $51
+    LDA $52
+    ADC #$00
+    STA $52
+    LDA ($51),y
+    STA $53
+    CMP #$FF
+    BEQ B6_B927
+    LDA $60
+    AND #$0F
+    SEC
+    SBC $53
+    BCC B6_B927
+    CMP #$05
+    BCS B6_B927
+    LDA $60
+    AND #$F0
+    CLC
+    ADC $53
+    STA $60
+B6_B927:
+    JMP B6_BA04
+B6_B92A:
+    LDA #$02
+    STA $63
+    LDA #$00
+    STA $7D
+    STA $7C
+    JMP F_E524
+B6_B937:
+    LDA $60
+    SEC
+    SBC $53
+    STA $60
+    LDA $61
+    SBC #$00
+    BCS B6_B948
+    LDA #$00
+    STA $60
+B6_B948:
+    STA $61
+    LDA $7D
+    LSR a
+    TAX
+    LDA F_C235,x
+    STA $65
+    LDA $60
+    STA $55
+    LDA $61
+    STA $56
+    LDA $55
+    PHA
+    LDA $56
+    PHA
+    LDA $5E
+    CLC
+    ADC #$0A
+    STA $51
+    LDA $5F
+    ADC #$00
+    STA $52
+    JSR F_EF24
+    JSR F_F80D
+    PLA
+    STA $56
+    PLA
+    STA $55
+    JSR F_E514
+    AND #$01
+    BNE B6_B998
+    LDA $5E
+    CLC
+    ADC #$06
+    STA $51
+    LDA $5F
+    ADC #$00
+    STA $52
+    JSR F_EF24
+    JSR F_E514
+    AND #$01
+    BEQ B6_BA04
+B6_B998:
+    LDA $7C
+    BEQ B6_B9C0
+    JSR F_FC26
+    CMP #$D1
+    BNE B6_B9C0
+    JSR F_F6B0
+    LDA #$39
+    JSR F_CE8F
+    JSR F_F192
+    LDA $51
+    STA $0721
+    LDA $52
+    STA $0722
+    LDA #$02
+    STA $0720
+    JMP B6_BA04
+B6_B9C0:
+    JSR F_E514
+    AND #$03
+    CMP #$03
+    BNE B6_B9CC
+    JSR F_F492
+B6_B9CC:
+    CMP #$0F
+    BNE B6_B9D1
+    RTS
+B6_B9D1:
+    LDA $60
+    AND #$F0
+    CLC
+    ADC #$10
+    STA $60
+    LDA $61
+    ADC #$00
+    STA $61
+    LDA $8F
+    BEQ B6_B9FA
+    LDX #$00
+    STX $8F
+    STX $7C
+    STX $67
+    INX
+    STX $63
+    LDA #$07
+    STA $65
+    LDA $7F
+    STA $66
+    JMP B6_BA00
+B6_B9FA:
+    LDA $7D
+    CMP #$0E
+    BCS B6_BA04
+B6_BA00:
+    LDA #$0E
+    STA $7D
+B6_BA04:
+    LDA $12
+    AND #$20
+    BNE B6_BA0D
+    JMP B6_BA81
+B6_BA0D:
+    LDA $7C
+    BEQ B6_BA1A
+    LDA $7F
+    BEQ B6_BA23
+    LDA #$00
+    STA $7F
+    RTS
+B6_BA1A:
+    LDA $66
+    BEQ B6_BA23
+    LDA #$00
+    STA $66
+    RTS
+B6_BA23:
+    LDA $5E
+    SEC
+    SBC $64
+    STA $51
+    LDA $5F
+    SBC #$00
+    STA $52
+    BCS B6_BA39
+    LDA #$00
+    STA $5E
+    STA $5F
+    RTS
+B6_BA39:
+    LDA $51
+    STA $5E
+    CLC
+    ADC #$05
+    STA $51
+    LDA $52
+    STA $5F
+    ADC #$00
+    STA $52
+    LDA $60
+    STA $55
+    LDA $61
+    STA $56
+    JSR F_EF24
+    JSR F_E514
+    AND #$01
+    BNE B6_BA77
+    LDA $60
+    AND #$0F
+    BNE B6_BA63
+B6_BA62:
+    RTS
+B6_BA63:
+    LDA $51
+    CLC
+    ADC $23
+    STA $51
+    LDA $52
+    ADC #$00
+    STA $52
+    JSR F_E514
+    AND #$01
+    BEQ B6_BA62
+B6_BA77:
+    LDA $5E
+    AND #$F0
+    CLC
+    ADC #$0A
+    STA $5E
+    RTS
+B6_BA81:
+    LDA $12
+    AND #$10
+    BNE B6_BA88
+    RTS
+B6_BA88:
+    LDA $7C
+    BEQ B6_BA94
+    LDX $7F
+    BNE B6_BA9C
+    INX
+    STX $7F
+    RTS
+B6_BA94:
+    LDX $66
+    BNE B6_BA9C
+    INX
+    STX $66
+    RTS
+B6_BA9C:
+    LDA $5E
+    CLC
+    ADC $64
+    STA $51
+    LDA $5F
+    ADC #$00
+    STA $52
+    LDA $34
+    SEC
+    SBC #$11
+    STA $53
+    LDA $35
+    SBC #$00
+    STA $54
+    LDA $53
+    SEC
+    SBC $51
+    LDA $54
+    SBC $52
+    BCS B6_BACE
+    LDA $53
+    ADC #$01
+    STA $5E
+    LDA $54
+    ADC #$00
+    STA $5F
+    RTS
+B6_BACE:
+    LDA $51
+    STA $5E
+    CLC
+    ADC #$0B
+    STA $51
+    LDA $52
+    STA $5F
+    ADC #$00
+    STA $52
+    LDA $60
+    STA $55
+    LDA $61
+    STA $56
+    JSR F_EF24
+    JSR F_E514
+    AND #$01
+    BNE B6_BB0C
+    LDA $60
+    AND #$0F
+    BNE B6_BAF8
+B6_BAF7:
+    RTS
+B6_BAF8:
+    LDA $51
+    CLC
+    ADC $23
+    STA $51
+    LDA $52
+    ADC #$00
+    STA $52
+    JSR F_E514
+    AND #$01
+    BEQ B6_BAF7
+B6_BB0C:
+    LDA $5E
+    AND #$F0
+    CLC
+    ADC #$05
+    STA $5E
+    RTS
+    LDA $1D
+    CLC
+    ADC $4B
+    STA $51
+    LDA $1E
+    ADC #$00
+    STA $52
+    LDA $60
+    SEC
+    SBC $51
+    STA $55
+    LDA $61
+    SBC $52
+    STA $56
+    BCS B6_BB53
+    LDA $55
+    EOR #$FF
+    CLC
+    ADC #$01
+    STA $51
+    LDA $56
+    EOR #$FF
+    ADC #$00
+    STA $52
+    LDA $1D
+    SEC
+    SBC $51
+    STA $51
+    LDA $1E
+    SBC $52
+    STA $52
+    JMP B6_BB87
+B6_BB53:
+    LDA $51
+    CLC
+    ADC #$10
+    STA $51
+    LDA $52
+    ADC #$00
+    STA $52
+    LDA $60
+    SEC
+    SBC $51
+    STA $51
+    LDA $61
+    SBC $52
+    STA $52
+    BCS B6_BB7A
+    LDA $1D
+    STA $51
+    LDA $1E
+    STA $52
+    JMP B6_BB87
+B6_BB7A:
+    LDA $1D
+    CLC
+    ADC $51
+    STA $51
+    LDA $1E
+    ADC $52
+    STA $52
+B6_BB87:
+    LDA $52
+    BMI B6_BB93
+    BNE B6_BB9E
+    LDA $51
+    CMP #$20
+    BCS B6_BB9E
+B6_BB93:
+    LDA #$20
+    STA $1D
+    LDA #$00
+    STA $1E
+    JMP B6_BBC6
+B6_BB9E:
+    LDA $36
+    SEC
+    SBC #$F0
+    STA $55
+    LDA $37
+    SBC #$00
+    STA $56
+    LDA $51
+    SEC
+    SBC $55
+    LDA $52
+    SBC $56
+    BCS B6_BBBE
+    LDA $51
+    STA $55
+    LDA $52
+    STA $56
+B6_BBBE:
+    LDA $55
+    STA $1D
+    LDA $56
+    STA $1E
+B6_BBC6:
+    LDA $5F
+    BMI B6_BC06
+    LDA $1B
+    CLC
+    ADC $4A
+    STA $51
+    LDA $1C
+    ADC #$00
+    STA $52
+    LDA $5E
+    SEC
+    SBC $51
+    STA $55
+    LDA $5F
+    SBC $52
+    STA $56
+    BCS B6_BC0D
+    LDA $55
+    EOR #$FF
+    CLC
+    ADC #$01
+    STA $51
+    LDA $56
+    EOR #$FF
+    ADC #$00
+    STA $52
+    LDA $1B
+    SEC
+    SBC $51
+    STA $1B
+    LDA $1C
+    SBC $52
+    STA $1C
+    BCS B6_BC0C
+B6_BC06:
+    LDA #$00
+    STA $1B
+    STA $1C
+B6_BC0C:
+    RTS
+B6_BC0D:
+    LDA $51
+    CLC
+    ADC #$0A
+    STA $51
+    LDA $52
+    ADC #$00
+    STA $52
+    LDA $5E
+    SEC
+    SBC $51
+    STA $51
+    LDA $5F
+    SBC $52
+    STA $52
+    BCC B6_BC0C
+    LDA $1B
+    SEC
+    ADC $51
+    STA $55
+    LDA $1C
+    ADC $52
+    STA $56
+    LDA $34
+    SEC
+    SBC #$F0
+    STA $51
+    LDA $35
+    SBC #$00
+    STA $52
+    LDA $51
+    SEC
+    SBC $55
+    LDA $52
+    SBC $56
+    BCS B6_BC56
+    LDA $51
+    STA $55
+    LDA $52
+    STA $56
+B6_BC56:
+    LDA $55
+    STA $1B
+    LDA $56
+    STA $1C
+    RTS
+    LDA #$FF
+    STA $56
+    STA $55
+    LDA $1D
+    SEC
+    SBC $073B
+    STA $53
+    LDA $1E
+    SBC $073C
+    BCS B6_BC7B
+    LDY #$01
+    STY $55
+    DEY
+    STY $56
+B6_BC7B:
+    ORA $53
+    STA $73
+    BEQ B6_BC98
+    LDA $55
+    STA $0741
+    LDA $56
+    STA $0742
+    LDA $1D
+    CLC
+    ADC $55
+    STA $1D
+    LDA $1E
+    ADC $56
+    STA $1E
+B6_BC98:
+    LDA #$FF
+    STA $55
+    STA $56
+    LDA $1B
+    SEC
+    SBC $0739
+    STA $51
+    LDA $1C
+    SBC $073A
+    STA $52
+    BCS B6_BCB6
+    LDY #$01
+    STY $55
+    DEY
+    STY $56
+B6_BCB6:
+    ORA $51
+    BEQ B6_BCD1
+    LDA $55
+    STA $0743
+    LDA $56
+    STA $0744
+    LDA $1B
+    CLC
+    ADC $55
+    STA $1B
+    LDA $1C
+    ADC $56
+    STA $1C
+B6_BCD1:
+    LDA $73
+    ORA $51
+    ORA $52
+    STA $072D
+    LDA $01A6
+    CMP #$04
+    BNE B6_BCE2
+    RTS
+B6_BCE2:
+    LDA $1D
+    CLC
+    ADC #$12
+    STA $55
+    LDA $1E
+    ADC #$00
+    STA $56
+    LDA $55
+    SEC
+    SBC $60
+    LDA $56
+    SBC $61
+    BCC B6_BD05
+    LDA $55
+    STA $60
+    LDA $56
+    STA $61
+    JMP B6_BD25
+B6_BD05:
+    LDA $55
+    CLC
+    ADC #$CE
+    STA $55
+    LDA $56
+    ADC #$00
+    STA $56
+    LDA $60
+    SEC
+    SBC $55
+    LDA $61
+    SBC $56
+    BCC B6_BD25
+    LDA $55
+    STA $60
+    LDA $56
+    STA $61
+B6_BD25:
+    LDA $1B
+    STA $55
+    SEC
+    SBC $5E
+    LDA $1C
+    STA $56
+    SBC $5F
+    BCC B6_BD3D
+    LDA $55
+    STA $5E
+    LDA $56
+    STA $5F
+B6_BD3C:
+    RTS
+B6_BD3D:
+    LDA $55
+    CLC
+    ADC #$E0
+    STA $55
+    LDA $56
+    ADC #$00
+    STA $56
+    LDA $5E
+    SEC
+    SBC $55
+    LDA $5F
+    SBC $56
+    BCC B6_BD3C
+    LDA $55
+    STA $5E
+    LDA $56
+    STA $5F
+    RTS
+    LDA $B1
+    AND #$7E
+    BEQ B6_BD65
+    RTS
+B6_BD65:
+    JSR F_FA3D
+    LDA #$81
+    STA $0480,y
+    LDA #$F8
+    STA $04B0,y
+    LDA #$02
+    STA $04E0,y
+    LDA #$80
+    STA $0510,y
+    LDA #$00
+    STA $0540,y
+    LDA #$E8
+    STA $0570,y
+    LDA #$03
+    STA $05A0,y
+    LDA #$00
+    STA $05D0,y
+    STA $0600,y
+    LDA #$06
+    STA $0630,y
+    RTS
+    LDA $B1
+    AND #$7E
+    BEQ B6_BDA0
+    RTS
+B6_BDA0:
+    JSR F_FA3D
+    LDA #$9B
+    STA $0480,y
+    LDA #$5C
+    STA $04B0,y
+    LDA #$01
+    STA $04E0,y
+    LDA #$6C
+    STA $0510,y
+    LDA #$00
+    STA $0540,y
+    LDA #$00
+    STA $0570,y
+    LDA #$1E
+    STA $05A0,y
+    RTS
+    LDA ppumask_shadow
+    ORA #$06
+    JSR SetPPUMask
+    LDA #$F0
+    JSR F_C8B4
+    LDY $0745
+    LDA B6_BEE6,y
+    JSR F_CE3B
+    LDA #$10
+    STA $0389
+    LDA #$FC
+    STA $09
+    LDA #$00
+    STA $038A
+    STA $0B
+    STA $0A
+    JSR F_CEE1
+    LDA #$5A
+    STA $8C
+    LDY $0745
+    BNE B6_BDFC
+    LSR $8C
+B6_BDFC:
+    LDA B6_BEE9,y
+    STA $51
+    LDA B6_BEEC,y
+    STA $52
+    LDA PPUSTATUS
+    LDA #$23
+    STA PPUADDR
+    LDA #$C0
+    STA PPUADDR
+    LDY #$3F
+    LDA #$55
+B6_BE17:
+    STA PPUDATA
+    DEY
+    BPL B6_BE17
+    LDY #$00
+    LDA #$E0
+    CLC
+    ADC ($51),y
+    STA $55
+    LDA #$21
+    ADC #$00
+    STA PPUADDR
+    LDA $55
+    STA PPUADDR
+B6_BE32:
+    INY
+    LDA ($51),y
+    BEQ B6_BE40
+    CLC
+    ADC #$94
+    STA PPUDATA
+    JMP B6_BE32
+B6_BE40:
+    LDA $0745
+    BNE B6_BE4D
+    LDA $93
+    CLC
+    ADC #$C5
+    STA PPUDATA
+B6_BE4D:
+    LDA #$08
+    STA $0F
+    LDA #$01
+    STA nmi_state
+    JSR F_C99E
+    JSR F_C9AC
+    INC $11
+    JSR F_C9AC
+    JSR F_C7C8
+B6_BE63:
+    JSR F_C9AC
+    LDA $0389
+    CLC
+    ADC #$04
+    STA $0389
+    DEC $038A
+    JSR F_CEE1
+    LDA $11
+    BNE B6_BE63
+B6_BE79:
+    JSR F_C9AC
+    JSR F_C9B3
+    LDA $0389
+    CLC
+    ADC #$04
+    CMP #$88
+    BEQ B6_BE8C
+    STA $0389
+B6_BE8C:
+    DEC $038A
+    JSR F_CEE1
+    LDA $074A
+    BNE B6_BE9B
+    DEC $8C
+    BEQ B6_BEA1
+B6_BE9B:
+    LDA $12
+    AND #$0B
+    BEQ B6_BE79
+B6_BEA1:
+    DEC $11
+    LDA $01AB
+    SEC
+    SBC $0746
+    LDA $01AC
+    SBC $0747
+    LDA $01AD
+    SBC $0748
+    BCC B6_BECA
+    LDA $01AB
+    STA $0746
+    LDA $01AC
+    STA $0747
+    LDA $01AD
+    STA $0748
+B6_BECA:
+    JSR F_C9AC
+    LDY #$06
+    LDX #$03
+    LDA #$80
+    JSR FarCall
+    LDA $11
+    BNE B6_BECA
+    JSR F_CE52
+    JSR F_C7CD
+    JSR ClearOAMBuffer
+    JMP F_C9A5
+B6_BEE6:
+    .byte $01,$02,$02
+B6_BEE9:
+    .byte $FA,$EF,$EF
+B6_BEEC:
+    .byte $BE,$BE,$BE,$0B,$47,$41,$4D,$45,$5C,$4F,$56,$45,$52,$00,$0C,$53
+    .byte $54,$41,$47,$45,$5C,$00
 B6_BF02:
     LDA $BB
     ASL a
@@ -2422,16 +3414,35 @@ B6_BF02:
     ADC $93
     STA $BB
     RTS
-    .byte $A5,$FC,$4A,$4A,$4A,$4A,$49,$01,$29,$01,$85,$04,$A9,$F8,$05,$04
-    .byte $8D,$3D,$02,$A9,$FA,$05,$04,$8D,$41,$02,$A9,$FC,$05,$04,$8D,$45
-    .byte $02,$A9,$FE,$05,$04,$8D,$49,$02,$60,$24,$FF,$FE,$FF,$64,$FF,$FF
-    .byte $FF,$FF,$00,$00,$00,$40,$FF,$FE,$FF,$FB,$01,$00,$00,$00,$8E,$00
-    .byte $00,$01,$BF,$BF,$FF,$FB,$0C,$00,$08,$20,$9B,$FF,$FF,$6F,$FF,$BF
-    .byte $FB,$FF,$00,$00,$00,$00,$F5,$FF,$FE,$FF,$00,$00,$00,$00,$70,$00
-    .byte $00,$20,$FF,$FF,$A5,$7D,$00,$00,$02,$02,$77,$FF,$BE,$19,$FF,$DF
-    .byte $DF,$FF,$24,$00,$00,$00,$FF,$BF,$BF,$7B,$00,$02,$02,$00,$FE,$00
-    .byte $00,$00,$FE,$F7,$EF,$77,$00,$28,$00,$00,$FF,$FF,$FF,$60,$FF,$F5
-    .byte $DF,$D6,$00,$00,$00,$04,$DF,$FF,$FB,$EE,$00,$00,$00,$00,$FE,$00
-    .byte $00,$00,$BB,$CF,$FF,$7F,$00,$02,$00,$00,$FB,$EF,$B7,$5C,$FF,$FF
-    .byte $DF,$7F,$00,$00,$00,$00,$F7,$F3,$FD,$FF,$00,$00,$00,$00,$B3,$30
-    .byte $00,$00,$FF,$FF,$F9,$F6,$00,$00,$00,$10,$FF,$7D,$7F,$31
+    LDA $FC
+    LSR a
+    LSR a
+    LSR a
+    LSR a
+    EOR #$01
+    AND #$01
+    STA farcall_ptr_lo
+    LDA #$F8
+    ORA farcall_ptr_lo
+    STA $023D
+    LDA #$FA
+    ORA farcall_ptr_lo
+    STA $0241
+    LDA #$FC
+    ORA farcall_ptr_lo
+    STA $0245
+    LDA #$FE
+    ORA farcall_ptr_lo
+    STA $0249
+    RTS
+    .byte $24,$FF,$FE,$FF,$64,$FF,$FF,$FF,$FF,$00,$00,$00,$40,$FF,$FE,$FF
+    .byte $FB,$01,$00,$00,$00,$8E,$00,$00,$01,$BF,$BF,$FF,$FB,$0C,$00,$08
+    .byte $20,$9B,$FF,$FF,$6F,$FF,$BF,$FB,$FF,$00,$00,$00,$00,$F5,$FF,$FE
+    .byte $FF,$00,$00,$00,$00,$70,$00,$00,$20,$FF,$FF,$A5,$7D,$00,$00,$02
+    .byte $02,$77,$FF,$BE,$19,$FF,$DF,$DF,$FF,$24,$00,$00,$00,$FF,$BF,$BF
+    .byte $7B,$00,$02,$02,$00,$FE,$00,$00,$00,$FE,$F7,$EF,$77,$00,$28,$00
+    .byte $00,$FF,$FF,$FF,$60,$FF,$F5,$DF,$D6,$00,$00,$00,$04,$DF,$FF,$FB
+    .byte $EE,$00,$00,$00,$00,$FE,$00,$00,$00,$BB,$CF,$FF,$7F,$00,$02,$00
+    .byte $00,$FB,$EF,$B7,$5C,$FF,$FF,$DF,$7F,$00,$00,$00,$00,$F7,$F3,$FD
+    .byte $FF,$00,$00,$00,$00,$B3,$30,$00,$00,$FF,$FF,$F9,$F6,$00,$00,$00
+    .byte $10,$FF,$7D,$7F,$31

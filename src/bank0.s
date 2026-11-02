@@ -51,13 +51,13 @@ B0_812D:
     STA $10
     LDY $0F
     LDA B0_8040,y
-    STA $06
+    STA jump_ptr_lo
     LDA B0_8049,y
-    STA $07
+    STA jump_ptr_hi
     LDA PPUSTATUS
-    LDA $02
+    LDA ppuctrl_shadow
     AND #$FB
-    JSR F_C901
+    JSR SetPPUCtrl
     LDA #$3F
     STA PPUADDR
     LDA #$00
@@ -66,7 +66,7 @@ B0_812D:
     LDY #$00
     LDA $08
     PHA
-    LDA ($06),y
+    LDA (jump_ptr_lo),y
     SEC
     SBC B0_81D7,x
     BCS B0_8160
@@ -74,22 +74,22 @@ B0_812D:
 B0_8160:
     STA $08
     JSR B0_8183
-    LDA $06
+    LDA jump_ptr_lo
     CLC
     ADC #$10
-    STA $06
-    LDA $07
+    STA jump_ptr_lo
+    LDA jump_ptr_hi
     ADC #$00
-    STA $07
+    STA jump_ptr_hi
     LDY #$00
-    LDA ($06),y
+    LDA (jump_ptr_lo),y
     BEQ B0_8196
     JSR B0_8183
     BEQ B0_81CD
     JSR B0_8183
     JMP B0_81CD
 B0_8183:
-    LDA ($06),y
+    LDA (jump_ptr_lo),y
     SEC
     SBC B0_81D7,x
     BCS B0_818D
@@ -143,9 +143,9 @@ B0_81DC:
     STY $10
     STY $0F
     LDA PPUSTATUS
-    LDA $02
+    LDA ppuctrl_shadow
     AND #$FB
-    JSR F_C901
+    JSR SetPPUCtrl
     LDA #$3F
     STA PPUADDR
     LDA #$00
@@ -169,9 +169,9 @@ B0_8205:
     LDY #$07
 B0_8217:
     LDA JOY1
-    STA $04
+    STA farcall_ptr_lo
     LSR a
-    ORA $04
+    ORA farcall_ptr_lo
     LSR a
     BCC B0_8229
     LDA $12
@@ -193,19 +193,19 @@ B0_823D:
     .byte $10,$20,$80,$40,$08,$04,$02,$01
 B0_8245:
     LDA #$07
-    STA $05
+    STA farcall_ptr_hi
     LDA #$00
-    STA $04
+    STA farcall_ptr_lo
     TAY
 B0_824E:
     LDA #$00
-    STA ($04),y
+    STA (farcall_ptr_lo),y
     DEY
     BNE B0_824E
 B0_8255:
-    DEC $05
+    DEC farcall_ptr_hi
     BMI B0_8262
-    LDA $05
+    LDA farcall_ptr_hi
     CMP #$01
     BNE B0_824E
     JMP B0_8255
@@ -1086,7 +1086,7 @@ B0_B577:
     STA $08
     LDA #$20
     JSR F_C8DD
-    JSR F_C93D
+    JSR ClearOAMBuffer
     JSR B0_B563
     JSR F_C99E
     JMP F_C9AC
@@ -1096,9 +1096,9 @@ B0_B5B3:
     LDA #$05
     STA $54
     LDA PPUSTATUS
-    LDA $02
+    LDA ppuctrl_shadow
     AND #$FB
-    JSR F_C901
+    JSR SetPPUCtrl
 B0_B5C5:
     LDA $52
     STA PPUADDR
@@ -1161,9 +1161,9 @@ B0_B636:
     STA $56
     RTS
 B0_B63F:
-    LDA $03
+    LDA ppumask_shadow
     ORA #$06
-    JSR F_C907
+    JSR SetPPUMask
     LDA #$F0
     JSR F_C8B4
     JSR B0_B563
@@ -1187,7 +1187,7 @@ B0_B63F:
     STA $0B
     JSR F_CE3B
     LDA #$01
-    STA $00
+    STA nmi_state
     JSR F_C99E
     JSR F_C9AC
     INC $11
@@ -1219,12 +1219,12 @@ B0_B6B3:
     LDY #$06
     LDX #$03
     LDA #$80
-    JSR F_CEEE
+    JSR FarCall
     LDA $11
     BNE B0_B6B3
     JSR F_CE52
     JSR F_C7CD
-    JSR F_C93D
+    JSR ClearOAMBuffer
     JMP F_C9A5
 B0_B6CF:
     LDA #$0F
@@ -1352,7 +1352,7 @@ B0_B7D7:
     LDY #$02
     LDX #$1E
     LDA #$B7
-    JSR F_CEEE
+    JSR FarCall
     LDA #$67
     STA $55
     LDA #$B8
@@ -1369,7 +1369,7 @@ B0_B7D7:
     LDY #$02
     LDX #$1E
     LDA #$B7
-    JSR F_CEEE
+    JSR FarCall
     LDA #$87
     STA $55
     LDA #$B8

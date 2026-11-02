@@ -31,3 +31,14 @@ OAMDMA = $4014
 SND_CHN = $4015
 JOY1 = $4016
 JOY2 = $4017
+
+; RAM (names inferred from usage)
+nmi_state = $0000
+ppuctrl_shadow = $0002
+ppumask_shadow = $0003
+farcall_ptr_lo = $0004
+farcall_ptr_hi = $0005
+jump_ptr_lo = $0006
+jump_ptr_hi = $0007
+cur_bank = $000C
+frame_counter = $000E
