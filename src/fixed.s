@@ -77,97 +77,97 @@ F_C0B3:
     STA ppuctrl_shadow
     JMP SetScroll
 PPUCopy32:
-    LDA ram_031F,x
+    LDA ppu_copy_buf_1F,x
     STA PPUDATA
 PPUCopy31:
-    LDA ram_031E,x
+    LDA ppu_copy_buf_1E,x
     STA PPUDATA
 PPUCopy30:
-    LDA ram_031D,x
+    LDA ppu_copy_buf_1D,x
     STA PPUDATA
 PPUCopy29:
-    LDA ram_031C,x
+    LDA ppu_copy_buf_1C,x
     STA PPUDATA
 PPUCopy28:
-    LDA ram_031B,x
+    LDA ppu_copy_buf_1B,x
     STA PPUDATA
 PPUCopy27:
-    LDA ram_031A,x
+    LDA ppu_copy_buf_1A,x
     STA PPUDATA
 PPUCopy26:
-    LDA ram_0319,x
+    LDA ppu_copy_buf_19,x
     STA PPUDATA
 PPUCopy25:
-    LDA ram_0318,x
+    LDA ppu_copy_buf_18,x
     STA PPUDATA
 PPUCopy24:
-    LDA ram_0317,x
+    LDA ppu_copy_buf_17,x
     STA PPUDATA
 PPUCopy23:
-    LDA ram_0316,x
+    LDA ppu_copy_buf_16,x
     STA PPUDATA
 PPUCopy22:
-    LDA ram_0315,x
+    LDA ppu_copy_buf_15,x
     STA PPUDATA
 PPUCopy21:
-    LDA ram_0314,x
+    LDA ppu_copy_buf_14,x
     STA PPUDATA
 PPUCopy20:
-    LDA ram_0313,x
+    LDA ppu_copy_buf_13,x
     STA PPUDATA
 PPUCopy19:
-    LDA ram_0312,x
+    LDA ppu_copy_buf_12,x
     STA PPUDATA
 PPUCopy18:
-    LDA ram_0311,x
+    LDA ppu_copy_buf_11,x
     STA PPUDATA
 PPUCopy17:
-    LDA ram_0310,x
+    LDA ppu_copy_buf_10,x
     STA PPUDATA
 PPUCopy16:
-    LDA ram_030F,x
+    LDA ppu_copy_buf_0F,x
     STA PPUDATA
 PPUCopy15:
-    LDA ram_030E,x
+    LDA ppu_copy_buf_0E,x
     STA PPUDATA
 PPUCopy14:
-    LDA ram_030D,x
+    LDA ppu_copy_buf_0D,x
     STA PPUDATA
 PPUCopy13:
-    LDA ram_030C,x
+    LDA ppu_copy_buf_0C,x
     STA PPUDATA
 PPUCopy12:
-    LDA ram_030B,x
+    LDA ppu_copy_buf_0B,x
     STA PPUDATA
 PPUCopy11:
-    LDA ram_030A,x
+    LDA ppu_copy_buf_0A,x
     STA PPUDATA
 PPUCopy10:
-    LDA ram_0309,x
+    LDA ppu_copy_buf_09,x
     STA PPUDATA
 PPUCopy9:
-    LDA ram_0308,x
+    LDA ppu_copy_buf_08,x
     STA PPUDATA
 PPUCopy8:
-    LDA ram_0307,x
+    LDA ppu_copy_buf_07,x
     STA PPUDATA
 PPUCopy7:
-    LDA ram_0306,x
+    LDA ppu_copy_buf_06,x
     STA PPUDATA
 PPUCopy6:
-    LDA ram_0305,x
+    LDA ppu_copy_buf_05,x
     STA PPUDATA
 PPUCopy5:
-    LDA ram_0304,x
+    LDA ppu_copy_buf_04,x
     STA PPUDATA
 PPUCopy4:
-    LDA ram_0303,x
+    LDA ppu_copy_buf_03,x
     STA PPUDATA
 PPUCopy3:
-    LDA ram_0302,x
+    LDA ppu_copy_buf_02,x
     STA PPUDATA
 PPUCopy2:
-    LDA ram_0301,x
+    LDA ppu_copy_buf_01,x
     STA PPUDATA
 PPUCopy1:
     LDA ppu_buffer,x
@@ -943,7 +943,7 @@ InitAnimTileState:
     LDX #$27
     LDA #$00
 @F_CA35:
-    STA ram_0488,x
+    STA ent_type_8,x
     DEX
     BPL @F_CA35
     LDX #$1F
@@ -1392,7 +1392,7 @@ CheckPause:
     LDA #$01
     STA nmi_state
     JSR SilenceSound
-    LDA ram_024D
+    LDA oam_buf_4D
     STA zp_FD
     LDA palette_set
     PHA
@@ -1477,7 +1477,7 @@ F_CE00:
     PLA
     STA nmi_state
     LDA zp_FD
-    STA ram_024D
+    STA oam_buf_4D
     PLA
     PLA
     JMP MainLoopBody
@@ -1743,7 +1743,7 @@ CreditsStep:
 @F_CFEC:
     LDA #$F8
     STA oam_buffer,x
-    STA ram_0204,x
+    STA oam_buf_04,x
     RTS
 NudgeSpritesUp:
     LDX #$00
@@ -1752,7 +1752,7 @@ NudgeSpritesUp:
     CMP #$FF
     BEQ @F_D004
     DEC oam_buffer,x
-    DEC ram_0204,x
+    DEC oam_buf_04,x
 @F_D004:
     TXA
     CLC
@@ -3060,7 +3060,7 @@ F_D8F7:
     LDA AttrRowLo,x
     CLC
     ADC draw_x
-    STA ram_0301,y
+    STA ppu_copy_buf_01,y
     LDA AttrRowHi,x
     ADC #$00
     STA ppu_buffer,y
@@ -3302,7 +3302,7 @@ F_DAE3:
     BCS @F_DB1B
     CLC
     ADC #$C0
-    STA ram_0301,y
+    STA ppu_copy_buf_01,y
     LDA #$23
     ADC #$00
     STA ppu_buffer,y
@@ -3313,7 +3313,7 @@ F_DAE3:
     AND #$3F
     CLC
     ADC #$C0
-    STA ram_0301,y
+    STA ppu_copy_buf_01,y
     LDA #$2B
     ADC #$00
     STA ppu_buffer,y
@@ -4037,7 +4037,7 @@ PlayerIdleAnim:
     INY
     CMP #$FF
     BEQ F_E08F
-    STA ram_024D
+    STA oam_buf_4D
     LDA IdleAnim,y
     INY
     STA idle_anim_timer
@@ -6632,31 +6632,31 @@ QueueMapTileDraw:
     LDA NametableRowLo,y
     CLC
     ADC tmp_ptr_lo
-    STA ram_0301,x
+    STA ppu_copy_buf_01,x
     LDA NametableRowHi,y
     ADC #$00
     STA tmp_ptr_hi
     LDA #$02
-    STA ram_0302,x
-    STA ram_0307,x
+    STA ppu_copy_buf_02,x
+    STA ppu_copy_buf_07,x
     LDY zp_3E
     LDA (meta_bl_ptr_lo),y
-    STA ram_0303,x
+    STA ppu_copy_buf_03,x
     LDA (meta_tl_ptr_lo),y
-    STA ram_0304,x
-    LDA ram_0301,x
+    STA ppu_copy_buf_04,x
+    LDA ppu_copy_buf_01,x
     CLC
     ADC #$01
-    STA ram_0306,x
+    STA ppu_copy_buf_06,x
     LDA tmp_ptr_hi
     ADC #$00
-    STA ram_0305,x
+    STA ppu_copy_buf_05,x
     LDA (meta_br_ptr_lo),y
-    STA ram_0308,x
+    STA ppu_copy_buf_08,x
     LDA (meta_tr_ptr_lo),y
-    STA ram_0309,x
+    STA ppu_copy_buf_09,x
     LDA #$00
-    STA ram_030A,x
+    STA ppu_copy_buf_0A,x
     LDA tmp_ptr_hi
     STA ppu_buffer,x
     LDA zp_01
@@ -7005,11 +7005,11 @@ F_F5E3:
     LSR a
     ADC #$F9
     EOR tmp_ptr_hi
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     LDA DeathAnimTiles,y
     AND #$C0
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     INX
     INX
@@ -7018,7 +7018,7 @@ F_F5E3:
     ASL a
     ADC #$F9
     EOR tmp_ptr_hi
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     LDA DeathAnimTiles,y
     AND #$0C
@@ -7026,7 +7026,7 @@ F_F5E3:
     ASL a
     ASL a
     ASL a
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     INX
     INY
@@ -7038,7 +7038,7 @@ F_F5E3:
     ASL a
     ASL a
     TAY
-    LDA ram_023E,y
+    LDA oam_buf_3E,y
     AND #$80
     BEQ @F_F631
     TXA

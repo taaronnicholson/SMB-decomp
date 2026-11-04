@@ -841,10 +841,10 @@ Gfx_B4_ABB2:
     LDA #$78
     STA oam_x,y
     LDA #$80
-    STA ram_0207,y
+    STA oam_buf_07,y
     LDA #$02
     STA oam_attr,y
-    STA ram_0206,y
+    STA oam_buf_06,y
     TYA
     CLC
     ADC #$08
@@ -899,7 +899,7 @@ Gfx_B4_ABB2:
     STA oam_tile,x
     CLC
     ADC #$02
-    STA ram_0205,x
+    STA oam_buf_05,x
 @B4_AD1F:
     TXA
     CLC
@@ -1985,41 +1985,41 @@ B4_B5B7:
     RTS
 B4_B63F:
     LDA #$3B
-    STA ram_0489
+    STA ent_type_9
     LDA #$94
-    STA ram_04B9
+    STA ent_y_lo_9
     LDA #$04
-    STA ram_04E9
+    STA ent_y_hi_9
     LDA #$78
-    STA ram_0519
+    STA ent_x_lo_9
     LDA #$00
-    STA ram_0549
+    STA ent_x_hi_9
     LDA #$C0
-    STA ram_0579
+    STA ent_flags_9
     LDA #$00
-    STA ram_05A9
-    STA ram_05D9
-    STA ram_0609
-    STA ram_0639
+    STA ent_param_9
+    STA ent_angle_9
+    STA ent_radius_9
+    STA ent_param2_9
     LDA #$3C
-    STA ram_0488
+    STA ent_type_8
     LDA #$AC
-    STA ram_04B8
+    STA ent_y_lo_8
     LDA #$04
-    STA ram_04E8
+    STA ent_y_hi_8
     LDA #$78
-    STA ram_0518
+    STA ent_x_lo_8
     LDA #$00
-    STA ram_0548
+    STA ent_x_hi_8
     LDA #$C0
-    STA ram_0578
+    STA ent_flags_8
     LDA #$08
-    STA ram_05A8
+    STA ent_param_8
     LDA #$00
-    STA ram_05D8
-    STA ram_0608
+    STA ent_angle_8
+    STA ent_radius_8
     LDA #$0D
-    STA ram_0638
+    STA ent_param2_8
     LDA #$03
     STA story_step
     STA ram_01B2
@@ -2074,14 +2074,14 @@ B4_B6FA:
     BEQ B4_B71C
     LDA #$03
     STA tmp_a
-    LDA ram_05A9
+    LDA ent_param_9
     BEQ @B4_B717
 @B4_B713:
     LDA #$00
     STA tmp_a
 @B4_B717:
     LDA tmp_a
-    STA ram_05A9
+    STA ent_param_9
 B4_B71C:
     RTS
 B4_B71D:
@@ -2092,7 +2092,7 @@ B4_B71D:
     RTS
 B4_B728:
     LDA #$07
-    STA ram_05A9
+    STA ent_param_9
     LDA ram_01B7
     BEQ @B4_B73B
     SEC
@@ -2108,9 +2108,9 @@ B4_B728:
     STA ram_01B3
 B4_B74B:
     LDA ram_01B4
-    STA ram_0489
+    STA ent_type_9
     LDA ram_01B5
-    STA ram_0488
+    STA ent_type_8
     LDA #$00
     STA ram_0732
     LDA #$07

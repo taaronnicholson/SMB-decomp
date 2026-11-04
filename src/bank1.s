@@ -36,7 +36,7 @@ UpdateShots:
     SBC #$00
     BNE @B1_8075
     LDA tmp_b
-    STA ram_024F
+    STA oam_buf_4F
     LDA shot_y_lo
     SEC
     SBC cam_y_lo
@@ -52,13 +52,13 @@ UpdateShots:
     STA shot_onscreen
     JMP @B1_808F
 @B1_807C:
-    STA ram_024C
+    STA oam_buf_4C
     LDX shot_frame
     LDA Tbl_B1_8105,x
-    STA ram_024D
+    STA oam_buf_4D
     LDA shot_attr
     ORA Tbl_B1_80EB,x
-    STA ram_024E
+    STA oam_buf_4E
 @B1_808F:
     LDA shot_state_1
     BNE @B1_8094
@@ -84,7 +84,7 @@ UpdateShots:
     SBC #$00
     BNE @B1_80D2
     LDA tmp_b
-    STA ram_0253
+    STA oam_buf_53
     LDA shot_y_lo_1
     SEC
     SBC cam_y_lo
@@ -100,13 +100,13 @@ UpdateShots:
     STA shot_onscreen_1
     RTS
 @B1_80D7:
-    STA ram_0250
+    STA oam_buf_50
     LDX shot_frame_1
     LDA Tbl_B1_8105,x
-    STA ram_0251
+    STA oam_buf_51
     LDA shot_attr_1
     ORA Tbl_B1_80EB,x
-    STA ram_0252
+    STA oam_buf_52
     RTS
 ; Tbl_B1_80EB: 26 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B1_80EB:
@@ -5406,18 +5406,18 @@ HideSprites:
     RTS
     LDA #$6E
     STA oam_buffer
-    STA ram_0204
+    STA oam_buf_04
     LDA #$76
     STA oam_x
     LDA #$7E
-    STA ram_0207
+    STA oam_buf_07
     LDA #$00
     STA oam_attr
-    STA ram_0206
+    STA oam_buf_06
     LDA #$D6
     STA oam_tile
     LDA #$D8
-    STA ram_0205
+    STA oam_buf_05
     LDA PPUSTATUS
     LDA #$22
     LDY #$0C

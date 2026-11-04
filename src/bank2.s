@@ -678,22 +678,22 @@ B2_9E99:
     EOR #$01
     AND #$01
     STA jump_ptr_lo
-    LDA ram_023D
+    LDA oam_buf_3D
     AND #$FE
     ORA jump_ptr_lo
-    STA ram_023D
-    LDA ram_0241
+    STA oam_buf_3D
+    LDA oam_buf_41
     AND #$FE
     ORA jump_ptr_lo
-    STA ram_0241
-    LDA ram_0245
+    STA oam_buf_41
+    LDA oam_buf_45
     AND #$FE
     ORA jump_ptr_lo
-    STA ram_0245
-    LDA ram_0249
+    STA oam_buf_45
+    LDA oam_buf_49
     AND #$FE
     ORA jump_ptr_lo
-    STA ram_0249
+    STA oam_buf_49
     LDA ram_07FD
     STA player_draw_frame
     LDA ram_07FE

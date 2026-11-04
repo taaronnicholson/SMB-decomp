@@ -3681,27 +3681,27 @@ DrawPlayer:
     BCC @B6_A4FA
     CMP #$38
     BCS @B6_A4FA
-    LDA ram_0246
+    LDA oam_buf_46
     ORA #$01
-    STA ram_0246
-    LDA ram_024A
+    STA oam_buf_46
+    LDA oam_buf_4A
     ORA #$01
-    STA ram_024A
+    STA oam_buf_4A
     RTS
 @B6_A514:
-    LDA ram_023E
+    LDA oam_buf_3E
     ORA #$03
-    STA ram_023E
-    LDA ram_0242
+    STA oam_buf_3E
+    LDA oam_buf_42
     ORA #$03
-    STA ram_0242
+    STA oam_buf_42
 @B6_A524:
-    LDA ram_0246
+    LDA oam_buf_46
     ORA #$03
-    STA ram_0246
-    LDA ram_024A
+    STA oam_buf_46
+    LDA oam_buf_4A
     ORA #$03
-    STA ram_024A
+    STA oam_buf_4A
     RTS
 PlayerToScreen:
     LDA player_y_lo
@@ -3778,14 +3778,14 @@ PlayerToScreen:
     INY
     CLC
     ADC tmp_a
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     INX
     LDA player_state
     CMP #$10
     BEQ @B6_A5C1
     LDA #$40
-    STA ram_023C,x
+    STA oam_buf_3C,x
 @B6_A5C1:
     INX
     LDA #$08
@@ -3794,7 +3794,7 @@ PlayerToScreen:
     INY
     CLC
     ADC tmp_b
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     DEC tmp_c
     BNE @B6_A5AB
@@ -3804,21 +3804,21 @@ PlayerToScreen:
     INY
     CLC
     ADC tmp_a
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     INX
     LDA player_state
     CMP #$10
     BEQ @B6_A5EA
     LDA #$00
-    STA ram_023C,x
+    STA oam_buf_3C,x
 @B6_A5EA:
     INX
     LDA (ptr_lo),y
     INY
     CLC
     ADC tmp_b
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     DEC tmp_c
     BNE @B6_A5D4
@@ -3833,14 +3833,14 @@ PlayerToScreen:
     INY
     CLC
     ADC tmp_a
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     INX
     LDA player_state
     CMP #$10
     BEQ @B6_A617
     LDA #$C0
-    STA ram_023C,x
+    STA oam_buf_3C,x
 @B6_A617:
     INX
     LDA #$08
@@ -3849,7 +3849,7 @@ PlayerToScreen:
     INY
     CLC
     ADC tmp_b
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     DEC tmp_c
     BNE @B6_A5FE
@@ -3861,21 +3861,21 @@ PlayerToScreen:
     INY
     CLC
     ADC tmp_a
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     INX
     LDA player_state
     CMP #$10
     BEQ @B6_A643
     LDA #$80
-    STA ram_023C,x
+    STA oam_buf_3C,x
 @B6_A643:
     INX
     LDA (ptr_lo),y
     INY
     CLC
     ADC tmp_b
-    STA ram_023C,x
+    STA oam_buf_3C,x
     INX
     DEC tmp_c
     BNE @B6_A62A
@@ -5332,16 +5332,16 @@ RngStep:
     STA tmp_ptr_lo
     LDA #$F8
     ORA tmp_ptr_lo
-    STA ram_023D
+    STA oam_buf_3D
     LDA #$FA
     ORA tmp_ptr_lo
-    STA ram_0241
+    STA oam_buf_41
     LDA #$FC
     ORA tmp_ptr_lo
-    STA ram_0245
+    STA oam_buf_45
     LDA #$FE
     ORA tmp_ptr_lo
-    STA ram_0249
+    STA oam_buf_49
     RTS
 ; Bank6_TailData: unreferenced leftover fill at the end of bank 6
 Bank6_TailData:

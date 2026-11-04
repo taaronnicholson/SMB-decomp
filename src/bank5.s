@@ -4084,7 +4084,7 @@ Ent3D_Update:
     LDA ram_01B8
     BNE B5_A295
     LDA #$42
-    STA ram_0488
+    STA ent_type_8
     LDA #$FF
     STA invuln_lo
     STA invuln_hi
@@ -4153,18 +4153,18 @@ B5_A2FD:
     LDA tmp_c
     STA ent_param,x
 B5_A302:
-    LDA ram_04B8
+    LDA ent_y_lo_8
     SEC
     SBC #$18
     STA ent_y_lo,x
-    LDA ram_04E8
+    LDA ent_y_hi_8
     SBC #$00
     STA ent_y_hi,x
     LDA ent_angle,x
 B5_A316:
-    LDA ram_0518
+    LDA ent_x_lo_8
     STA ent_x_lo,x
-    LDA ram_0548
+    LDA ent_x_hi_8
     STA ent_x_hi,x
 B5_A322:
     RTS
@@ -4324,13 +4324,13 @@ B5_A451:
     RTS
 B5_A452:
     LDA #$44
-    STA ram_0489
+    STA ent_type_9
     CLC
     ADC #$01
     STA ent_type,x
     LDA #$1E
-    STA ram_05D9
-    STA ram_0639
+    STA ent_angle_9
+    STA ent_param2_9
     LDA #$00
     STA ent_radius,x
     LDA #$50
@@ -6395,24 +6395,24 @@ Ent88_Update:
     STA ent_angle,x
     TAY
     LDA #$8F
-    STA ram_048A
+    STA ent_type_A
     LDA B5_B5CC,y
     SEC
     SBC #$06
-    STA ram_04BA
+    STA ent_y_lo_A
     LDA B5_B5CD,y
     SBC #$00
-    STA ram_04EA
+    STA ent_y_hi_A
     LDA Tbl_B5_B5CE,y
-    STA ram_051A
+    STA ent_x_lo_A
     LDA B5_B5CF,y
-    STA ram_054A
+    STA ent_x_hi_A
     LDA #$C0
-    STA ram_057A
+    STA ent_flags_A
     LDA #$0F
-    STA ram_05AA
+    STA ent_param_A
     LDA #$00
-    STA ram_05DA
+    STA ent_angle_A
     LDA #$30
     JMP PlaySfxSq2
 Ent89_Update:
@@ -6657,16 +6657,16 @@ Ent9A_Update:
     BCS @B5_B8C0
     INC ent_angle,x
 @B5_B8C0:
-    LDA ram_04B8
+    LDA ent_y_lo_8
     SEC
     SBC #$0C
     STA tmp_a
-    LDA ram_04E8
+    LDA ent_y_hi_8
     SBC #$00
     STA tmp_b
-    LDA ram_0518
+    LDA ent_x_lo_8
     STA tmp_c
-    LDA ram_0548
+    LDA ent_x_hi_8
     STA tmp_d
     INC ent_angle,x
     JMP SetEntityPolarPos
@@ -6686,7 +6686,7 @@ Ent9D_Update:
 @B5_B8FD:
     RTS
 Ent9E_Update:
-    LDA ram_0488
+    LDA ent_type_8
     CMP #$8D
     BEQ @B5_B908
     JMP Ent7C_Update
