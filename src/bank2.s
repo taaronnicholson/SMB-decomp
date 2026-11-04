@@ -626,7 +626,7 @@ SetPlayerFacingBit:
     LDA pixel_page_xor
     EOR #$10
     STA pixel_page_xor
-    LDX SetPlayerFacingBit_Tbl_9EDC,y
+    LDX Tbl_B2_9EDC,y
     CPX #$60
     BCS @B2_9E5A
     JSR ClearPixelTilesA
@@ -701,8 +701,8 @@ B2_9E99:
     LDA #$00
     STA zp_4D
     RTS
-; SetPlayerFacingBit_Tbl_9EDC: 80 bytes, read by SetPlayerFacingBit
-SetPlayerFacingBit_Tbl_9EDC:
+; Tbl_B2_9EDC: 80 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_9EDC:
     .byte $00,$02,$04,$06,$08,$0A,$0C,$0E,$10,$12,$14,$FF,$FF,$FF,$FF,$FF
     .byte $FF,$FF,$FF,$FF,$FF,$6C,$60,$62,$16,$18,$1A,$1C,$1E,$20,$22,$24
     .byte $26,$28,$2A,$5A,$5C,$5E,$34,$48,$58,$2C,$2E,$30,$32,$50,$52,$54
@@ -1340,7 +1340,7 @@ WriteTileStrip_1044:
     JSR SetPPUAddr_1044
     LDX #$00
 @B2_A559:
-    LDA WriteTileStrip_1044_Tbl_A5A0,x
+    LDA Tbl_B2_A5A0,x
     STA PPUDATA
     INX
     CPX #$0B
@@ -1349,7 +1349,7 @@ WriteTileStrip_1044:
     JSR SetPPUAddr_1044
     LDX #$00
 @B2_A56C:
-    LDA WriteTileStrip_1044_Tbl_A5AB,x
+    LDA Tbl_B2_A5AB,x
     STA PPUDATA
     INX
     CPX #$0B
@@ -1358,7 +1358,7 @@ WriteTileStrip_1044:
     JSR SetPPUAddr_1044
     LDX #$00
 @B2_A57F:
-    LDA WriteTileStrip_1044_Tbl_A5B6,x
+    LDA Tbl_B2_A5B6,x
     STA PPUDATA
     INX
     CPX #$0B
@@ -1367,23 +1367,23 @@ WriteTileStrip_1044:
     JSR SetPPUAddr_1044
     LDX #$00
 @B2_A592:
-    LDA WriteTileStrip_1044_Tbl_A5C1,x
+    LDA Tbl_B2_A5C1,x
     STA PPUDATA
     INX
     CPX #$0B
     BNE @B2_A592
     JMP SetScroll
-; WriteTileStrip_1044_Tbl_A5A0: 11 bytes, read by WriteTileStrip_1044
-WriteTileStrip_1044_Tbl_A5A0:
+; Tbl_B2_A5A0: 11 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_A5A0:
     .byte $00,$0F,$16,$2C,$00,$00,$00,$00,$00,$00,$0F
-; WriteTileStrip_1044_Tbl_A5AB: 11 bytes, read by WriteTileStrip_1044
-WriteTileStrip_1044_Tbl_A5AB:
+; Tbl_B2_A5AB: 11 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_A5AB:
     .byte $10,$3B,$16,$2C,$00,$00,$00,$10,$10,$7C,$1F
-; WriteTileStrip_1044_Tbl_A5B6: 11 bytes, read by WriteTileStrip_1044
-WriteTileStrip_1044_Tbl_A5B6:
+; Tbl_B2_A5B6: 11 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_A5B6:
     .byte $00,$17,$06,$2C,$00,$00,$00,$00,$10,$38,$1F
-; WriteTileStrip_1044_Tbl_A5C1: 11 bytes, read by WriteTileStrip_1044
-WriteTileStrip_1044_Tbl_A5C1:
+; Tbl_B2_A5C1: 11 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_A5C1:
     .byte $00,$0F,$16,$2C,$00,$00,$00,$00,$00,$10,$0F
 SetPPUAddr_1044:
     LDA PPUSTATUS
@@ -2218,7 +2218,7 @@ WriteTiles_11F0:
     JSR SetPPUAddr_13B0
     LDX #$00
 @B2_AE12:
-    LDA WriteTiles_11F0_Tbl_AE54,x
+    LDA Tbl_B2_AE54,x
     STA PPUDATA
     INX
     CPX #$20
@@ -2227,7 +2227,7 @@ WriteTiles_11F0:
     JSR SetPPUAddr_13B0
     LDX #$00
 @B2_AE25:
-    LDA WriteTiles_11F0_Tbl_AE74,x
+    LDA Tbl_B2_AE74,x
     STA PPUDATA
     INX
     CPX #$20
@@ -2249,12 +2249,12 @@ SetPPUAddr_13B0:
     LDA #$B0
     STA PPUADDR
     RTS
-; WriteTiles_11F0_Tbl_AE54: 32 bytes, read by WriteTiles_11F0
-WriteTiles_11F0_Tbl_AE54:
+; Tbl_B2_AE54: 32 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_AE54:
     .byte $1F,$67,$80,$68,$57,$93,$67,$47,$00,$1F,$7F,$F7,$E8,$6F,$1D,$3F
     .byte $F8,$A6,$01,$10,$E8,$C9,$E6,$E2,$00,$F8,$FE,$EF,$17,$F6,$B8,$FC
-; WriteTiles_11F0_Tbl_AE74: 32 bytes, read by WriteTiles_11F0
-WriteTiles_11F0_Tbl_AE74:
+; Tbl_B2_AE74: 32 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_AE74:
     .byte $03,$3D,$48,$A0,$8F,$93,$67,$47,$00,$03,$3F,$7F,$70,$6F,$1D,$3F
     .byte $C6,$81,$00,$70,$E9,$CE,$E4,$E2,$38,$FE,$FF,$8F,$16,$F0,$B8,$FC
 ; Anim_TileFrames: 32-byte tile frames copied to PPUDATA by B2_AE38 (animated background tiles)
@@ -2840,14 +2840,14 @@ WriteTileFrame_14D0:
     JSR SetPPUAddr_14D0
     LDY #$00
 @B2_B4AC:
-    LDA WriteTileFrame_14D0_Tbl_B4BA,y
+    LDA Tbl_B2_B4BA,y
     STA PPUDATA
     INY
     CPY #$1E
     BNE @B2_B4AC
     JMP SetScroll
-; WriteTileFrame_14D0_Tbl_B4BA: 79 bytes, read by WriteTileFrame_14D0
-WriteTileFrame_14D0_Tbl_B4BA:
+; Tbl_B2_B4BA: 79 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_B4BA:
     .byte $8F,$98,$A7,$A8,$A3,$9C,$C0,$7F,$70,$6F,$58,$57,$5C,$63,$3F,$00
     .byte $F1,$09,$E5,$15,$CD,$39,$03,$FE,$0E,$F6,$1A,$EA,$3A,$C6,$20,$09
     .byte $B5,$A0,$00,$B9,$EB,$B4,$8D,$07,$20,$C8,$C0,$1E,$D0,$F5,$4C,$D4
@@ -2909,8 +2909,8 @@ B2_B53A:
     STA invuln_lo
 @B2_B56B:
     JMP PlayerState00
-; PlayerBlinkCheck_Tbl_B56E: 60 bytes, read by PlayerBlinkCheck
-PlayerBlinkCheck_Tbl_B56E:
+; Tbl_B2_B56E: 60 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_B56E:
     .byte $01,$01,$02,$00,$01,$01,$01,$01,$01,$00,$01,$01,$00,$01,$00,$00
     .res 14, $00
     .byte $03,$03,$04,$00,$03,$03,$03,$03,$03,$00,$00,$00,$01,$02,$00,$00
@@ -2948,8 +2948,8 @@ PlayerStateHandlers:
     .word PlayerState1D
 B2_B5E6:
     .word PlayerState1E
-; Tbl_B2_B5E8: 48 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B2_B5E8:
+; HopArc_B2_B5E8: signed Y offsets in several arcs, $80 ends the table
+HopArc_B2_B5E8:
     .byte $FD,$FE,$FE,$FE,$FF,$FF,$00,$01,$01,$02,$02,$02,$03,$FD,$FE,$FE
     .byte $FE,$FF,$FF,$00,$01,$01,$02,$02,$02,$03,$FE,$FE,$FF,$FF,$00,$01
     .byte $01,$02,$02,$FE,$FF,$FF,$00,$01,$01,$02,$FE,$FF,$00,$01,$02,$80
@@ -3146,20 +3146,20 @@ PpuJobDispatch:
     LDA #$00
     STA zp_DA
 @B2_B79F:
-    LDA PpuJobDispatch_Tbl_B7B0,y
+    LDA Tbl_B2_B7B0,y
     STA jump_ptr_lo
-    LDA PpuJobDispatch_Tbl_B7D2,y
+    LDA Tbl_B2_B7D2,y
     STA jump_ptr_hi
     LDA #$00
     STA zp_47
     JMP (jump_ptr_lo)
-; PpuJobDispatch_Tbl_B7B0: 34 bytes, read by PpuJobDispatch
-PpuJobDispatch_Tbl_B7B0:
+; Tbl_B2_B7B0: 34 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_B7B0:
     .byte $00,$67,$7A,$8D,$54,$06,$B7,$73,$EF,$DA,$35,$47,$65,$F0,$B5,$5D
     .byte $D7,$0D,$20,$33,$B4,$C7,$DA,$27,$77,$5B,$8B,$71,$91,$9C,$A7,$D8
     .byte $4F,$5B
-; PpuJobDispatch_Tbl_B7D2: 34 bytes, read by PpuJobDispatch
-PpuJobDispatch_Tbl_B7D2:
+; Tbl_B2_B7D2: 34 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B2_B7D2:
     .byte $9E,$A5,$A5,$A5,$A5,$A6,$A6,$A6,$A7,$A5,$A9,$A6,$AA,$A5,$AB,$A6
     .byte $AC,$AE,$AE,$AE,$AE,$AE,$AE,$AF,$B0,$B1,$B2,$B3,$B4,$B4,$B4,$B4
     .byte $B4,$B4

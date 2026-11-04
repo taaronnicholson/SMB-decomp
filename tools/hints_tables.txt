@@ -7,13 +7,13 @@ blob 0 B755 85 IntroBlockTiles 5 rows x 17 source bytes for DrawTileBlock17x5 (e
 blob 0 B84F 36 PressStartText 0-terminated tile string "PRESS START" (written by the title screen)
 blob 0 B887 30 TitleLogoTilemap tile rows of the title logo ($70 separates rows)
 blob 0 B8BC 22 Tbl_B0_B8BC 22 bytes, read by B0_B8AB
-blob 0 BFBB 69 FadeTableStep_Tbl_BFBB 69 bytes, read by FadeTableStep
-blob 1 8000 44 DrawEntity_Tbl_8000 44 bytes, read by DrawEntity
-blob 1 80EB 26 UpdateShots_Tbl_80EB 26 bytes, read by UpdateShots
-blob 1 8105 25 UpdateShots_Tbl_8105 25 bytes, read by UpdateShots
+blob 0 BFBB 69 Tbl_B0_BFBB 69 bytes, no direct code reference (continuation or unreferenced)
+blob 1 8000 44 Tbl_B1_8000 44 bytes, no direct code reference (continuation or unreferenced)
+blob 1 80EB 26 Tbl_B1_80EB 26 bytes, no direct code reference (continuation or unreferenced)
+blob 1 8105 25 Tbl_B1_8105 25 bytes, no direct code reference (continuation or unreferenced)
 blob 1 8785 16 Tbl_B1_8785 16 bytes, read by B1_8679
-blob 1 88EA 56 Tbl_B1_88EA 56 bytes, no direct code reference (continuation or unreferenced)
-blob 1 8999 100 LoadArea_Tbl_8999 100 bytes, read by LoadArea
+blob 1 88EA 56 ArcPairs_B1_88EA (dx, dy) signed byte pairs of two motion arcs, each ended by $80
+blob 1 8999 100 Tbl_B1_8999 100 bytes, no direct code reference (continuation or unreferenced)
 blob 1 89FD 85 IdleAnim the idle animation after 600 idle frames: (OAM tile for the sprite at ram_024D, duration in zp_72, player_frame) triples, $FF ends
 struct 1 89FD 28 bbb
 blob 1 A015 12 Tbl_B1_A015 12 bytes, no direct code reference (continuation or unreferenced)
@@ -32,20 +32,20 @@ blob 1 B272 163 BonusAscentEndAnim (player_frame, Y offset) pairs for the end of
 struct 1 B272 81 bb
 blob 1 BDFF 8 FoundText "FOUND" / "NOW" text
 blob 1 BEEE 274 Bank1_TailData unreferenced leftover fill at the end of bank 1 (mostly $00/$FF with single-bit variations, like Bank2_TailData)
-blob 2 9EDC 80 SetPlayerFacingBit_Tbl_9EDC 80 bytes, read by SetPlayerFacingBit
-blob 2 A5A0 11 WriteTileStrip_1044_Tbl_A5A0 11 bytes, read by WriteTileStrip_1044
-blob 2 A5AB 11 WriteTileStrip_1044_Tbl_A5AB 11 bytes, read by WriteTileStrip_1044
-blob 2 A5B6 11 WriteTileStrip_1044_Tbl_A5B6 11 bytes, read by WriteTileStrip_1044
-blob 2 A5C1 11 WriteTileStrip_1044_Tbl_A5C1 11 bytes, read by WriteTileStrip_1044
-blob 2 AE54 32 WriteTiles_11F0_Tbl_AE54 32 bytes, read by WriteTiles_11F0
-blob 2 AE74 32 WriteTiles_11F0_Tbl_AE74 32 bytes, read by WriteTiles_11F0
+blob 2 9EDC 80 Tbl_B2_9EDC 80 bytes, no direct code reference (continuation or unreferenced)
+blob 2 A5A0 11 Tbl_B2_A5A0 11 bytes, no direct code reference (continuation or unreferenced)
+blob 2 A5AB 11 Tbl_B2_A5AB 11 bytes, no direct code reference (continuation or unreferenced)
+blob 2 A5B6 11 Tbl_B2_A5B6 11 bytes, no direct code reference (continuation or unreferenced)
+blob 2 A5C1 11 Tbl_B2_A5C1 11 bytes, no direct code reference (continuation or unreferenced)
+blob 2 AE54 32 Tbl_B2_AE54 32 bytes, no direct code reference (continuation or unreferenced)
+blob 2 AE74 32 Tbl_B2_AE74 32 bytes, no direct code reference (continuation or unreferenced)
 blob 2 AE94 133 Anim_TileFrames 32-byte tile frames copied to PPUDATA by B2_AE38 (animated background tiles); the 133-byte span holds several frames
-blob 2 B4BA 79 WriteTileFrame_14D0_Tbl_B4BA 79 bytes, read by WriteTileFrame_14D0
-blob 2 B56E 60 PlayerBlinkCheck_Tbl_B56E 60 bytes, read by PlayerBlinkCheck
-blob 2 B5E8 48 Tbl_B2_B5E8 48 bytes, no direct code reference (continuation or unreferenced)
+blob 2 B4BA 79 Tbl_B2_B4BA 79 bytes, no direct code reference (continuation or unreferenced)
+blob 2 B56E 60 Tbl_B2_B56E 60 bytes, no direct code reference (continuation or unreferenced)
+blob 2 B5E8 48 HopArc_B2_B5E8 signed Y offsets in several arcs, $80 ends the table
 blob 2 B779 22 DecimalPlaceValues third (high) byte of the 24-bit place values read at stride 4 from B2_B777 by BinaryToDigits (100000, 10000, 1000, 100, 10, 1)
-blob 2 B7B0 34 PpuJobDispatch_Tbl_B7B0 34 bytes, read by PpuJobDispatch
-blob 2 B7D2 34 PpuJobDispatch_Tbl_B7D2 34 bytes, read by PpuJobDispatch
+blob 2 B7B0 34 Tbl_B2_B7B0 34 bytes, no direct code reference (continuation or unreferenced)
+blob 2 B7D2 34 Tbl_B2_B7D2 34 bytes, no direct code reference (continuation or unreferenced)
 blob 3 8437 32 Tbl_B3_8437 32 bytes, no direct code reference (continuation or unreferenced)
 blob 3 8937 32 Tbl_B3_8937 32 bytes, no direct code reference (continuation or unreferenced)
 blob 3 8B37 64 Tbl_B3_8B37 64 bytes, no direct code reference (continuation or unreferenced)
@@ -53,10 +53,10 @@ blob 3 8FD7 32 Tbl_B3_8FD7 32 bytes, no direct code reference (continuation or u
 blob 3 A317 32 Tbl_B3_A317 32 bytes, no direct code reference (continuation or unreferenced)
 blob 3 AF57 16 Tbl_B3_AF57 16 bytes, no direct code reference (continuation or unreferenced)
 blob 3 BB57 16 Tbl_B3_BB57 16 bytes, no direct code reference (continuation or unreferenced)
-blob 3 BE0E 4 PlayerFrameCycle4_Tbl_BE0E 4 bytes, read by PlayerFrameCycle4
+blob 3 BE0E 4 Tbl_B3_BE0E 4 bytes, no direct code reference (continuation or unreferenced)
 blob 3 BE12 24 Tbl_B3_BE12 24 bytes, read by B3_BD67
 blob 3 BE2A 14 Tbl_B3_BE2A 14 bytes, read by B3_BD8D
-blob 3 BE38 89 OpenBlockReward_Tbl_BE38 89 bytes, read by OpenBlockReward
+blob 3 BE38 89 Tbl_B3_BE38 89 bytes, no direct code reference (continuation or unreferenced)
 blob 3 BF00 5 Tbl_B3_BF00 5 bytes, no direct code reference (continuation or unreferenced)
 blob 3 BF63 157 Bank3_TailData unreferenced leftover fill at the end of bank 3
 blob 4 8000 128 AreaMap23_PhantomRow the second phantom row of area 23's map (its base $7F80 + 128): 128 bytes of $D7 (ceiling); the first phantom row lies before the bank
@@ -69,7 +69,7 @@ blob 4 ADBB 20 Tbl_B4_ADBB 20 bytes, no direct code reference (continuation or u
 blob 4 AEB6 64 GameState02_FrameTable indexed by the frame counter; $80+ entries skip, otherwise value+$11 goes to zp_47
 blob 4 AFB3 27 TextPackets_AFB3 PPU text packets (address hi/lo, $80|length, characters stored reversed), $FF between packets
 blob 4 B074 4 TextPackets_B074 PPU text packets
-blob 4 B0C4 20 GameState0B_Tbl_B0C4 20 bytes, read by GameState0B
+blob 4 B0C4 20 Tbl_B4_B0C4 20 bytes, no direct code reference (continuation or unreferenced)
 blob 4 B227 18 TextPackets_B227 PPU text packets
 blob 4 B2BE 64 GameState0B_Sequence indexed by zp_D1; $FF spawns effect type $33 at a fixed position
 blob 4 B31F 24 TextPackets_B31F PPU text packets
@@ -93,19 +93,19 @@ blob 4 BE06 4 TextPackets_BE06 PPU text packets
 blob 4 BE19 4 TextPackets_BE19 PPU text packets
 blob 4 BED7 8 Tbl_B4_BED7 8 bytes, no direct code reference (continuation or unreferenced)
 blob 4 BFD7 41 Tbl_B4_BFD7 41 bytes, no direct code reference (continuation or unreferenced)
-blob 5 80B7 28 Ent_TryCarryPlayer_Tbl_80B7 28 bytes, read by Ent_TryCarryPlayer
+blob 5 80B7 28 Tbl_B5_80B7 28 bytes, no direct code reference (continuation or unreferenced)
 blob 5 8122 18 Tbl_B5_8122 18 bytes, no direct code reference (continuation or unreferenced)
-blob 5 817E 15 Tbl_B5_817E 15 bytes, no direct code reference (continuation or unreferenced)
+blob 5 817E 15 PermutationTable_817E 3 permutations of 0..4 (5 entries each) used by Ent_TickParam2
 blob 5 8983 16 Tbl_B5_8983 16 bytes, read by Ent_CheckPlayerOverlap, Ent_CheckPlayerOverlapD
 blob 5 8D4D 11 EffectList_B5_8D4D effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 8D4D 1 bwwbbbbb
-blob 5 8E36 18 Ent02_Tbl_8E36 18 bytes, read by Ent02_Update
-blob 5 8EAD 23 Ent03_Tbl_8EAD 23 bytes, read by Ent03_Update
-blob 5 8EEF 40 Ent04_Tbl_8EEF 40 bytes, read by Ent04_Update
+blob 5 8E36 18 Tbl_B5_8E36 18 bytes, no direct code reference (continuation or unreferenced)
+blob 5 8EAD 23 Tbl_B5_8EAD 23 bytes, no direct code reference (continuation or unreferenced)
+blob 5 8EEF 40 Tbl_B5_8EEF 40 bytes, no direct code reference (continuation or unreferenced)
 blob 5 8F63 72 WobbleDxTable signed 16-bit X deltas, 36 steps of a wobble; B5_8F3D steps ent_radius through the first 18 (wraps at $12) and adds the word to ent_x
 struct 5 8F63 36 w
 blob 5 901A 45 Ent06_Tbl_901A 45 bytes, read by Ent06_Update
-blob 5 9067 12 Ent07_Tbl_9067 12 bytes, read by Ent07_Update
+blob 5 9067 12 Tbl_B5_9067 12 bytes, no direct code reference (continuation or unreferenced)
 blob 5 9110 11 EffectList_B5_9110 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 9110 1 bwwbbbbb
 blob 5 914C 9 Tbl_B5_914C 9 bytes, no direct code reference (continuation or unreferenced)
@@ -117,16 +117,16 @@ blob 5 93C6 139 ItemHopArc signed 16-bit Y offsets per tick for the weapon item 
 struct 5 93C6 69 w
 blob 5 950E 32 Ent0E_Tbl_950E 32 bytes, read by Ent0E_Update
 blob 5 9694 6 Ent16_Tbl_9694 6 bytes, read by Ent16_Update
-blob 5 9720 45 Ent16_Tbl_9720 45 bytes, read by Ent16_Update
-blob 5 974D 32 Ent16_Tbl_974D 32 bytes, read by Ent16_Update
-blob 5 979F 16 Ent1F_Tbl_979F 16 bytes, read by B5_978C, Ent1F_Update
+blob 5 9720 45 Tbl_B5_9720 45 bytes, no direct code reference (continuation or unreferenced)
+blob 5 974D 32 Tbl_B5_974D 32 bytes, no direct code reference (continuation or unreferenced)
+blob 5 979F 16 Tbl_B5_979F 16 bytes, no direct code reference (continuation or unreferenced)
 blob 5 97E7 61 Ent1A_Tbl_97E7 61 bytes, read by Ent1A_Update
 blob 5 9882 40 Ent1B_Tbl_9882 40 bytes, read by Ent1B_Update
 blob 5 98AA 23 Tbl_B5_98AA 23 bytes, read by Ent1B_Update, Ent1C_Update
 blob 5 98C1 20 Tbl_B5_98C1 20 bytes, read by B5_993C
-blob 5 99D1 16 Ent20_Tbl_99D1 16 bytes, read by Ent20_Update
-blob 5 9ABC 23 Ent21_Tbl_9ABC 23 bytes, read by Ent21_Update
-blob 5 9C30 18 Ent_TickRadius_Tbl_9C30 18 bytes, read by Ent_TickRadius
+blob 5 99D1 16 Tbl_B5_99D1 16 bytes, no direct code reference (continuation or unreferenced)
+blob 5 9ABC 23 Tbl_B5_9ABC 23 bytes, no direct code reference (continuation or unreferenced)
+blob 5 9C30 18 Tbl_B5_9C30 18 bytes, no direct code reference (continuation or unreferenced)
 blob 5 9CA2 26 Tbl_B5_9CA2 26 bytes, read by Ent2E_Update, Ent4A_Update
 blob 5 9CE9 11 EffectList_B5_9CE9 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 9CE9 1 bwwbbbbb
@@ -135,33 +135,33 @@ struct 5 9D6F 1 bwwbbbbb
 blob 5 9D9B 57 Tbl_B5_9D9B 57 bytes, read by B5_9D7A
 blob 5 9DD4 51 EffectList_B5_9DD4 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 9DD4 5 bwwbbbbb
-blob 5 9E25 9 Ent32_Tbl_9E25 9 bytes, read by Ent32_Update
+blob 5 9E25 9 Tbl_B5_9E25 9 bytes, no direct code reference (continuation or unreferenced)
 blob 5 9E2E 174 Ent33_Sequence per-tick sequence for type $33; at the end ($80) it sets player_state $19 (the exit walk), plays sfx $22 and bursts: type $33 starts the exit
 blob 5 9F60 11 EffectList_B5_9F60 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 9F60 1 bwwbbbbb
 blob 5 9F6B 1 Tbl_B5_9F6B 1 bytes, no direct code reference (continuation or unreferenced)
-blob 5 A071 37 Ent37_Tbl_A071 37 bytes, read by Ent37_Update
-blob 5 A096 58 Ent37_Tbl_A096 58 bytes, read by Ent37_Update
+blob 5 A071 37 Tbl_B5_A071 37 bytes, no direct code reference (continuation or unreferenced)
+blob 5 A096 58 Tbl_B5_A096 58 bytes, no direct code reference (continuation or unreferenced)
 blob 5 A1E9 21 EffectList_B5_A1E9 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 A1E9 2 bwwbbbbb
 blob 5 A1FE 51 Ent39_Tbl_A1FE 51 bytes, read by Ent39_Update
-blob 5 A4B4 35 Ent8A_Tbl_A4B4 35 bytes, read by Ent8A_Update
+blob 5 A4B4 35 Tbl_B5_A4B4 35 bytes, no direct code reference (continuation or unreferenced)
 blob 5 A4D7 81 EffectList_B5_A4D7 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 A4D7 8 bwwbbbbb
-blob 5 A528 93 Ent47_Tbl_A528 93 bytes, read by Ent47_Update, B5_A5B7
+blob 5 A528 93 Tbl_B5_A528 93 bytes, read by B5_A5B7
 blob 5 A5AC 11 EffectList_B5_A5AC effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 A5AC 1 bwwbbbbb
 blob 5 A6AA 41 EffectList_B5_A6AA effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 A6AA 4 bwwbbbbb
-blob 5 ABC1 16 Tbl_B5_ABC1 16 bytes, no direct code reference (continuation or unreferenced)
-blob 5 ABFE 39 Ent4F_Tbl_ABFE 39 bytes, read by Ent4F_Update
-blob 5 AD1A 5 Ent50_Tbl_AD1A 5 bytes, read by Ent50_Update
+blob 5 ABC1 16 Ent4F_FrameTbl frame list for Ent4F_Update
+blob 5 ABFE 39 Tbl_B5_ABFE 39 bytes, no direct code reference (continuation or unreferenced)
+blob 5 AD1A 5 Tbl_B5_AD1A 5 bytes, no direct code reference (continuation or unreferenced)
 blob 5 ADAB 79 Tbl_B5_ADAB 79 bytes, read by Ent55_Update, Ent93_Update, B5_AE3E
 blob 5 ADFA 39 Tbl_B5_ADFA 39 bytes, read by Ent3E_Update, Ent44_Update, Ent54_Update
-blob 5 AE8E 21 Ent5D_Tbl_AE8E 21 bytes, read by Ent5D_Update
-blob 5 AFA9 22 Ent5F_Tbl_AFA9 22 bytes, read by Ent5F_Update
-blob 5 AFBF 32 Ent5E_Tbl_AFBF 32 bytes, read by Ent5E_Update
-blob 5 AFDF 16 Ent60_Tbl_AFDF 16 bytes, read by Ent60_Update
+blob 5 AE8E 21 Tbl_B5_AE8E 21 bytes, no direct code reference (continuation or unreferenced)
+blob 5 AFA9 22 Tbl_B5_AFA9 22 bytes, no direct code reference (continuation or unreferenced)
+blob 5 AFBF 32 Tbl_B5_AFBF 32 bytes, no direct code reference (continuation or unreferenced)
+blob 5 AFDF 16 Tbl_B5_AFDF 16 bytes, no direct code reference (continuation or unreferenced)
 blob 5 AFEF 11 EffectList_B5_AFEF effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 AFEF 1 bwwbbbbb
 blob 5 AFFA 11 Tbl_B5_AFFA 11 bytes, no direct code reference (continuation or unreferenced)
@@ -169,29 +169,29 @@ blob 5 B04A 32 Ent62_Tbl_B04A 32 bytes, read by Ent62_Update
 blob 5 B0DB 11 Tbl_B5_B0DB 11 bytes, no direct code reference (continuation or unreferenced)
 blob 5 B0E6 11 EffectList_B5_B0E6 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 B0E6 1 bwwbbbbb
-blob 5 B239 4 Ent_PatrolTail_Tbl_B239 4 bytes, read by Ent_PatrolTail
-blob 5 B275 7 Ent76_Tbl_B275 7 bytes, read by Ent76_Update
+blob 5 B239 4 Tbl_B5_B239 4 bytes, no direct code reference (continuation or unreferenced)
+blob 5 B275 7 Tbl_B5_B275 7 bytes, no direct code reference (continuation or unreferenced)
 blob 5 B27C 41 EffectList_B5_B27C effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 B27C 4 bwwbbbbb
-blob 5 B591 59 Ent86_Tbl_B591 59 bytes, read by Ent86_Update
+blob 5 B591 59 Tbl_B5_B591 59 bytes, no direct code reference (continuation or unreferenced)
 blob 5 B5CE 30 Tbl_B5_B5CE 30 bytes, read by Ent87_Update, Ent88_Update
-blob 5 B7ED 14 Ent8C_Tbl_B7ED 14 bytes, read by Ent8C_Update
+blob 5 B7ED 14 Tbl_B5_B7ED 14 bytes, no direct code reference (continuation or unreferenced)
 blob 5 B7FB 41 EffectList_B5_B7FB effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 B7FB 4 bwwbbbbb
 blob 5 B824 41 Tbl_B5_B824 41 bytes, no direct code reference (continuation or unreferenced)
-blob 5 B84D 37 Ent8F_Tbl_B84D 37 bytes, read by Ent8F_Update
+blob 5 B84D 37 Tbl_B5_B84D 37 bytes, no direct code reference (continuation or unreferenced)
 blob 5 B93C 51 Tbl_B5_B93C 51 bytes, read by B5_B90B
 blob 5 BA26 11 EffectList_B5_BA26 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 BA26 1 bwwbbbbb
-blob 5 BA97 32 Ent90_Tbl_BA97 32 bytes, read by Ent90_Update
+blob 5 BA97 32 Tbl_B5_BA97 32 bytes, no direct code reference (continuation or unreferenced)
 blob 5 BADE 11 EffectList_B5_BADE effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 BADE 1 bwwbbbbb
 blob 5 BBA3 11 EffectList_B5_BBA3 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 BBA3 1 bwwbbbbb
 blob 5 BBF6 21 EffectList_B5_BBF6 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 BBF6 2 bwwbbbbb
-blob 5 BC33 19 Ent97_Tbl_BC33 19 bytes, read by Ent97_Update
-blob 5 BCD7 40 Ent_Noop_Tbl_BCD7 40 bytes, read by Ent_Noop
+blob 5 BC33 19 Tbl_B5_BC33 19 bytes, no direct code reference (continuation or unreferenced)
+blob 5 BCD7 40 Tbl_B5_BCD7 40 bytes, no direct code reference (continuation or unreferenced)
 blob 5 BCFF 11 EffectList_B5_BCFF effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 BCFF 1 bwwbbbbb
 blob 5 BD0A 56 CreditsScript_BD0A credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
@@ -211,9 +211,10 @@ blob 5 BF0A 48 CreditsScript_BF0A credits scroll script: lines of (control bytes
 blob 5 BF48 63 CreditsScript_BF48 credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
 blob 5 BFA9 41 CreditsScript_BFA9 credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
 blob 5 BFDC 36 CreditsScript_BFDC credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
-blob 6 88CA 24 Tbl_B6_88CA 24 bytes, no direct code reference (continuation or unreferenced)
+blob 6 88CA 24 PeriodTableLow the twelve APU period values of the lower octave, directly before PeriodTable
+struct 6 88CA 12 w
 blob 6 9478 4 Tbl_B6_9478 4 bytes, no direct code reference (continuation or unreferenced)
-blob 6 A03E 32 Tbl_B6_A03E 32 bytes, no direct code reference (continuation or unreferenced)
+blob 6 A03E 32 Bank6_Filler_A03E unreferenced bytes before AreaMap22 followed by a run of $D7
 blob 6 A21E 160 KillableTypeTable indexed by ent_type: non-zero = turned into $5D by the dive shockwave (ShockwaveKillEnemies)
 blob 6 A44E 147 ExitWalkAnim (player_frame, X offset subtracted) pairs for the walk to the NEXT sign (PlayerState19); $FD = noise sfx 8 + frame $4A, $FE = face left, $FF = end
 struct 6 A44E 73 bb
@@ -222,23 +223,23 @@ blob 6 BF5B 165 Bank6_TailData unreferenced leftover fill at the end of bank 6
 blob f C1D0 31 Tbl_F_C1D0 31 bytes, read by ShotMoveDown, F_E734
 blob f C2EF 34 Tbl_F_C2EF 34 bytes, no direct code reference (continuation or unreferenced)
 blob f C326 11 UpdateTouchKind_Tbl_C326 11 bytes, read by UpdateTouchKind
-blob f C331 5 UpdateTouchKind_Tbl_C331 5 bytes, read by UpdateTouchKind
-blob f C336 6 UpdateTouchKind_Tbl_C336 6 bytes, read by UpdateTouchKind
+blob f C331 5 Tbl_F_C331 5 bytes, no direct code reference (continuation or unreferenced)
+blob f C336 6 Tbl_F_C336 6 bytes, no direct code reference (continuation or unreferenced)
 blob f C53D 7 Tbl_F_C53D 7 bytes, read by B4_B1AC
 blob f C544 130 TileEffectScript (next index, tile) pairs forming chains: RunTileEffects follows next (0 = end) and redraws the tile ($FF = none); chains start at index $02 (peck-broken tile) or $3C
 struct f C544 65 bb
 blob f C988 5 Tbl_F_C988 5 bytes, read by F_C959
 blob f D046 12 UpdateCamera_Tbl_D046 12 bytes, read by UpdateCamera
-blob f DBF6 27 PlayerTileInteract_Tbl_DBF6 27 bytes, read by PlayerTileInteract
-blob f DC11 16 TryFireShot_Tbl_DC11 16 bytes, read by TryFireShot
+blob f DBF6 27 Tbl_F_DBF6 27 bytes, no direct code reference (continuation or unreferenced)
+blob f DC11 16 Tbl_F_DC11 16 bytes, no direct code reference (continuation or unreferenced)
 blob f EFCF 4 Tbl_F_EFCF 4 bytes, read by ApplySwitch2, ApplySwitch3, ApplySwitch1
 blob f F4D5 28 Tbl_F_F4D5 28 bytes, read by F_F497, HurtPlayerKnockout
-blob f F510 12 PlayerState0F_Tbl_F510 12 bytes, read by PlayerState0F
+blob f F510 12 Tbl_F_F510 12 bytes, no direct code reference (continuation or unreferenced)
 blob f F69F 17 Tbl_F_F69F 17 bytes, no direct code reference (continuation or unreferenced)
-blob f F6C1 16 GetCollectibleBit_Tbl_F6C1 16 bytes, read by GetCollectibleBit
+blob f F6C1 16 Tbl_F_F6C1 16 bytes, no direct code reference (continuation or unreferenced)
 blob f F99E 24 Tbl_F_F99E 24 bytes, read by F_F9EA
-blob f F9D2 5 AwardPickup_Tbl_F9D2 5 bytes, read by AwardPickup
+blob f F9D2 5 Tbl_F_F9D2 5 bytes, no direct code reference (continuation or unreferenced)
 blob f FA32 11 EffectList_F_FA32 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct f FA32 1 bwwbbbbb
 blob f FFB7 7 Tbl_F_FFB7 7 bytes, no direct code reference (continuation or unreferenced)
-blob f FFC6 58 Tbl_F_FFC6 58 bytes, no direct code reference (continuation or unreferenced)
+blob f FFC6 58 FixedBankTail end of the fixed bank: a few header-like bytes, the text "ALFRED CHICKEN" and padding before the vectors

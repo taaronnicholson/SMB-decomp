@@ -1113,10 +1113,20 @@ Snd_Noise_Effects:
     AND #$0F
     STA snd_out_noi_lo
     RTS
-; Tbl_B6_88CA: 24 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B6_88CA:
-    .byte $1A,$03,$EC,$02,$C2,$02,$9A,$02,$75,$02,$52,$02,$30,$02,$11,$02
-    .byte $E7,$03,$AF,$03,$7A,$03,$48,$03
+; PeriodTableLow: the twelve APU period values of the lower octave, directly before PeriodTable
+PeriodTableLow:
+    .word $031A
+    .word $02EC
+    .word $02C2
+    .word $029A
+    .word $0275
+    .word $0252
+    .word $0230
+    .word $0211
+    .word $03E7
+    .word $03AF
+    .word $037A
+    .word $0348
 PeriodTable:
     .word $031A
     .word $02EC
@@ -3306,8 +3316,8 @@ B6_A038:
 B6_A03B:
     .byte $FB,$03   ; song_transpose
     .byte $FF   ; next pattern
-; Tbl_B6_A03E: 32 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B6_A03E:
+; Bank6_Filler_A03E: unreferenced bytes before AreaMap22 followed by a run of $D7
+Bank6_Filler_A03E:
     .byte $7E,$F6,$00,$F8,$F5,$78,$94,$45,$6E,$64,$4D,$75,$73,$46,$58,$00
     .res 16, $D7
 ; AreaMap22: tile map for area(s) 22: 16 x 28 metatiles (rows 2..), one byte per 16x16 tile
