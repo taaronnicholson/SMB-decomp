@@ -18,10 +18,10 @@ this file explains the ones that have been read. Names such as "snail-like" desc
 |-------|---------|-----------|
 | `$01` → `$02` | balloon | on touch: respawn point stored, becomes `$02` (rises along a table), `balloons_left--`; level ends at 0 |
 | `$06`, `$08`, `$11` → `$07` | pickups | sfx `$19`, then `$07` plays a 2-frame sparkle (`$1E`/`$1F`) and spawns a score popup; `$08` also `items_found++` |
-| `$4E` ↔ `$4F` | red propeller creature | `$4E` walks 1 px/frame in X, turns at walls/ledges (`Ent_PatrolStep`); on its timer it becomes `$4F`, a pause animation, then back with a random timer |
+| `$4E` ↔ `$4F` | red propeller creature | `$4E` walks 1 px in X every `((ent_angle >> 3) & 7) + 1` frames [verified: the three samples in area 0 moved every 4, 2 and 3 frames], turns at walls/ledges (`Ent_PatrolStep`); on its timer it becomes `$4F`, a pause animation, then back with a random timer |
 | `$74` ↔ `$75` | purple dome blob | slow patroller (moves every 4th tick) that turns at special-tile markers; `$74`/`$75` are its two directions |
-| `$51` → `$52` | white and black creature | `$51` saves its position as the centre and becomes `$52`, which orbits that centre (`SetEntityPolarPos`, `ent_angle += ent_param2`); `$56` is a stationary variant that only hurts on touch |
-| `$2E` | green butterfly | follows a scripted displacement table (`$9CA2`) |
+| `$51` → `$52` | white and black creature | `$51` saves its position as the centre and becomes `$52`, which orbits that centre (`SetEntityPolarPos`, `ent_angle += ent_param2`; verified: the stage 0 sample circles with a radius of about 33 px for `ent_radius` = `$80`); `$56` is a stationary variant that only hurts on touch |
+| `$2E` | green butterfly | follows a scripted displacement table (`$9CA2`) [verified: moves left 1 px per frame while its Y follows the table] |
 | `$5E` ↔ `$5F` | group 22 enemy | vulnerable: if the player is in state 2 with `zp_7C` set when touching it, it becomes `$07` with a burst; otherwise `HurtPlayer`, then `$5F` (a recovery animation) and back to `$5E` |
 | `$4C` → `$4D` | orbiter setup | like `$51`: `Ent_BecomeOrbiter` stores the centre and switches to the orbiting state |
 | `$2F` | periodic hazard | hurts on touch; `ent_angle` counts down and at `$FF` it spawns effects from the template at `$9CE9`, sets frame 2 and reloads the timer (`$4B`) |

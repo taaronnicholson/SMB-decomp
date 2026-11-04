@@ -151,7 +151,7 @@ X. `Ent_Noop` (`$BC46`) is the shared handler of the 39 unused types; the other 
 commonly a direction flag, bits 3-7 = animation group), `ent_param` (frame), `ent_angle`/`ent_radius`/`ent_param2` (used as
 timers and counters by many handlers).
 Example, type `$4E` (the seven red propeller creatures of area 0, group 14): after the player-overlap and touch checks it
-walks one pixel per frame along X (direction = `ent_flags` bit 1), turns when `Ent_PatrolStep` reports a wall or ledge, counts
+walks one pixel along X every `((ent_angle >> 3) & 7) + 1` frames (direction = `ent_flags` bit 1), turns when `Ent_PatrolStep` reports a wall or ledge, counts
 `ent_radius` down as a timer and changes into type `$4F` when it expires. Hit detection and the player-hurt routine are shared
 helpers (`Ent_CheckPlayerOverlap`, `Ent_CheckPlayerTouch`). Other handlers read so far (stage 0 types):
 - `$01` **balloon** (inferred, the level goal): on touching the player it stores the respawn point (`spawn_y/x`, area), becomes `$02`

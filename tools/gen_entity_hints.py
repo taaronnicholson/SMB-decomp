@@ -13,7 +13,7 @@ DESCR = {0x01: 'balloon (goal): on touch sets the respawn point, becomes $02, de
          0x02: 'popped balloon: rises along a displacement table',
          0x08: 'hidden bonus item: on touch plays sfx $19, becomes $07 and increments items_found',
          0x2E: 'follows a scripted displacement path (table at $9CA2, ent_radius = step; $FF loops)',
-         0x4E: 'patrol creature: walks 1 px/frame in X, turns at walls/ledges, becomes $4F when ent_radius expires',
+         0x4E: 'patrol creature: walks 1 px in X every ((ent_angle>>3)&7)+1 frames, turns at walls/ledges, becomes $4F when ent_radius expires',
          0x51: 'orbiter, inactive: saves its position as the circle centre and becomes $52',
          0x52: 'orbiter: ent_angle += ent_param2 each frame, placed on a circle of radius ent_radius around the centre'}
 h = {t: wd(T + 2 * t) for t in range(1, N + 1)}

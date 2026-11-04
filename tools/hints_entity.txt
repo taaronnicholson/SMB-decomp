@@ -69,7 +69,7 @@ name 5 A604 Ent49_Update   ; handler for ent_type $49
 name 5 AA23 Ent4A_Update   ; handler for ent_type $4A
 name 5 AAB0 Ent4C_Update   ; handler for ent_type $4C
 name 5 AAE4 Ent4D_Update   ; handler for ent_type $4D
-name 5 AB35 Ent4E_Update   ; handler for ent_type $4E - patrol creature: walks 1 px/frame in X, turns at walls/ledges, becomes $4F when ent_radius expires
+name 5 AB35 Ent4E_Update   ; handler for ent_type $4E - patrol creature: walks 1 px in X every ((ent_angle>>3)&7)+1 frames, turns at walls/ledges, becomes $4F when ent_radius expires
 name 5 ABD1 Ent4F_Update   ; handler for ent_type $4F
 name 5 ACEC Ent50_Update   ; handler for ent_type $50
 name 5 AD1F Ent51_Update   ; handler for ent_type $51 - orbiter, inactive: saves its position as the circle centre and becomes $52
