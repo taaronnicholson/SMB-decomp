@@ -4330,7 +4330,7 @@ B6_B953:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_F80D
+    JSR CheckSpecialTile
     PLA
     STA tmp_d
     PLA
@@ -4427,7 +4427,7 @@ B6_BA1A:
 B6_BA23:
     LDA player_x_lo
     SEC
-    SBC zp_64
+    SBC walk_speed
     STA ptr_lo
     LDA player_x_hi
     SBC #$00
@@ -4500,7 +4500,7 @@ B6_BA94:
 B6_BA9C:
     LDA player_x_lo
     CLC
-    ADC zp_64
+    ADC walk_speed
     STA ptr_lo
     LDA player_x_hi
     ADC #$00

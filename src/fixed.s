@@ -3410,7 +3410,7 @@ F_DC3D:
     STA invuln_hi
 F_DC4C:
     LDA #$01
-    STA zp_64
+    STA walk_speed
     LDA zp_86
     BEQ F_DC67
     LDA buttons
@@ -3767,7 +3767,7 @@ F_DED4:
 F_DEE3:
     LDA player_x_lo
     SEC
-    SBC zp_64
+    SBC walk_speed
     STA ptr_lo
     LDA player_x_hi
     SBC #$00
@@ -3776,7 +3776,7 @@ F_DEE3:
     LDA #$00
     STA player_x_lo
     STA player_x_hi
-    JMP F_E035
+    JMP PlayerVerticalStep
 F_DEFB:
     LDA ptr_lo
     STA player_x_lo
@@ -3828,7 +3828,7 @@ F_DF54:
     CLC
     ADC #$0A
     STA player_x_lo
-    JMP F_E035
+    JMP PlayerVerticalStep
 F_DF60:
     JSR F_EEBB
     JMP F_E0C6
@@ -3836,7 +3836,7 @@ F_DF66:
     LDA buttons
     AND #$10
     BNE F_DF6F
-    JMP F_E035
+    JMP PlayerVerticalStep
 F_DF6F:
     LDA player_facing
     BNE F_DF7E
@@ -3848,7 +3848,7 @@ F_DF6F:
 F_DF7E:
     LDA player_x_lo
     CLC
-    ADC zp_64
+    ADC walk_speed
     STA ptr_lo
     LDA player_x_hi
     ADC #$00
@@ -3872,7 +3872,7 @@ F_DF7E:
     LDA tmp_b
     ADC #$00
     STA player_x_hi
-    JMP F_E035
+    JMP PlayerVerticalStep
 F_DFB2:
     LDA ptr_lo
     STA player_x_lo
@@ -3937,11 +3937,11 @@ F_E023:
     CLC
     ADC #$05
     STA player_x_lo
-    JMP F_E035
+    JMP PlayerVerticalStep
 F_E02F:
     JSR F_EEBB
     JMP F_E0C6
-F_E035:
+PlayerVerticalStep:
     LDA #$00
     STA player_state
     STA zp_6D
@@ -4085,7 +4085,7 @@ F_E119:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_F80D
+    JSR CheckSpecialTile
     PLA
     STA tmp_d
     PLA
@@ -4102,7 +4102,7 @@ F_E119:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_F80D
+    JSR CheckSpecialTile
     JSR GetTilePropsAtPosY
     STA tmp_a
     AND #$01
@@ -4790,7 +4790,7 @@ F_E641:
     LDA zp_90
     EOR #$01
     STA zp_90
-    STA zp_64
+    STA walk_speed
     JMP F_E650
 F_E64C:
     LDA #$09
@@ -5390,7 +5390,7 @@ F_EA81:
     RTS
 PlayerState0C:
     LDA #$01
-    STA zp_64
+    STA walk_speed
     JSR F_EB25
     LDA zp_E0
     BEQ F_EA9F
@@ -5425,7 +5425,7 @@ PlayerState0D:
     LDA zp_90
     EOR #$01
     STA zp_90
-    STA zp_64
+    STA walk_speed
     JSR F_EB25
     LDA buttons
     AND #$40
@@ -5489,7 +5489,7 @@ F_EB2F:
     BNE F_EB3B
     JMP F_EBC7
 F_EB3B:
-    LDA zp_64
+    LDA walk_speed
     STA tmp_a
     LDA player_y_lo
     SEC
@@ -5502,7 +5502,7 @@ F_EB3B:
     LDA #$00
     STA player_y_lo
     STA player_y_hi
-    JMP F_EC73
+    JMP PlayerMoveLeft
 F_EB57:
     LDA ptr_lo
     STA player_y_lo
@@ -5522,7 +5522,7 @@ F_EB57:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_F80D
+    JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     STA tmp_a
     PLA
@@ -5540,12 +5540,12 @@ F_EB57:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_F80D
+    JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     STA tmp_a
     AND #$01
     BNE F_EBAC
-    JMP F_EC73
+    JMP PlayerMoveLeft
 F_EBAC:
     LDA tmp_a
     AND #$02
@@ -5560,15 +5560,15 @@ F_EBB5:
     LDA player_y_hi
     ADC #$00
     STA player_y_hi
-    JMP F_EC73
+    JMP PlayerMoveLeft
 F_EBC7:
     LDA buttons
 F_EBC9:
     AND #$80
     BNE F_EBD0
-    JMP F_EC73
+    JMP PlayerMoveLeft
 F_EBD0:
-    LDA zp_64
+    LDA walk_speed
     STA tmp_a
     LDA player_y_lo
     CLC
@@ -5599,7 +5599,7 @@ F_EBD0:
     ADC #$00
     STA player_y_hi
     STA tmp_b
-    JMP F_EC73
+    JMP PlayerMoveLeft
 F_EC0D:
     LDA ptr_lo
     STA player_y_lo
@@ -5622,7 +5622,7 @@ F_EC0D:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_F80D
+    JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     STA tmp_a
     PLA
@@ -5640,11 +5640,11 @@ F_EC0D:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_F80D
+    JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     STA tmp_a
     AND #$01
-    BEQ F_EC73
+    BEQ PlayerMoveLeft
 F_EC64:
     LDA tmp_a
     AND #$02
@@ -5654,11 +5654,11 @@ F_EC6D:
     LDA player_y_lo
     AND #$F0
     STA player_y_lo
-F_EC73:
+PlayerMoveLeft:
     LDA buttons
     AND #$20
     BNE F_EC7C
-    JMP F_ED17
+    JMP PlayerMoveRight
 F_EC7C:
     LDA player_facing
     BEQ F_EC87
@@ -5666,7 +5666,7 @@ F_EC7C:
     STA player_facing
     JMP CheckPlayerDoor
 F_EC87:
-    LDA zp_64
+    LDA walk_speed
     STA tmp_a
     LDA player_x_lo
     SEC
@@ -5695,7 +5695,7 @@ F_ECA3:
     LDA player_y_hi
     STA tmp_d
     JSR MapPtrFromPos
-    JSR F_F80D
+    JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     AND #$01
     BNE F_ED0B
@@ -5711,7 +5711,7 @@ F_ECD2:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_F80D
+    JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     AND #$01
     BNE F_ECEC
@@ -5739,7 +5739,7 @@ F_ED0B:
     ADC #$0A
     STA player_x_lo
     JMP CheckPlayerDoor
-F_ED17:
+PlayerMoveRight:
     LDA buttons
     AND #$10
     BNE F_ED20
@@ -5751,7 +5751,7 @@ F_ED20:
     STA player_facing
     JMP CheckPlayerDoor
 F_ED2B:
-    LDA zp_64
+    LDA walk_speed
     STA tmp_a
     LDA player_x_lo
     CLC
@@ -5798,7 +5798,7 @@ F_ED68:
     LDA player_y_hi
     STA tmp_d
     JSR MapPtrFromPos
-    JSR F_F80D
+    JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     AND #$01
     BNE F_EDDF
@@ -5812,7 +5812,7 @@ F_ED68:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JSR F_F80D
+    JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     AND #$01
     BEQ CheckPlayerDoor
@@ -5981,7 +5981,7 @@ F_EEBB:
     STA zp_6D
 F_EECC:
     LDX #$06
-    LDA zp_64
+    LDA walk_speed
     CMP #$01
     BEQ F_EED5
     DEX
@@ -7243,12 +7243,12 @@ F_F7E1:
     JSR SpawnEffects
     PLA
     JMP SwitchBank
-F_F80D:
+CheckSpecialTile:
     LDA cur_bank
     PHA
     LDA #$03
     JSR SwitchBankKeepX
-    JSR B3_BE91
+    JSR Bank3_SpecialTileCheck
     PLA
     JMP SwitchBankKeepX
 HandleSpecialTile:

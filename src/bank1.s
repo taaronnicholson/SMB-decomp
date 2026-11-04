@@ -5062,7 +5062,7 @@ B1_B21A:
     .byte $60
 B1_B22E:
     LDA #$02
-    STA zp_64
+    STA walk_speed
     JSR F_EB25
 B1_B235:
     LDA entity_tick

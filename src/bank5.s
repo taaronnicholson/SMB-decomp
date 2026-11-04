@@ -107,7 +107,7 @@ Ent18_Update:
 Tbl_B5_80B7:
     .byte $01,$00,$01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00
     .res 12, $00
-B5_80D3:
+Ent_TryCarryPlayer:
     LDA zp_7E
     BEQ B5_80D8
 B5_80D7:
@@ -152,20 +152,29 @@ B5_8121:
     RTS
 ; Tbl_B5_8122: 18 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_8122:
-    .byte $40,$81,$40,$81,$40,$81,$40,$81,$40,$81,$49,$81,$5B,$81,$66,$81
-    .byte $71,$81
-    .word B5_8148
-    .word B5_8148
-    .word B5_8148
-    .word B5_8148
-    .word B5_8148
-    .word B5_8148
-    .byte $A5
-    EOR zp_38,x
+    .word B5_8140
+    .word B5_8140
+    .word B5_8140
+    .word B5_8140
+    .word B5_8140
+    .word B5_8149
+    .word B5_815B
+    .word B5_8166
+    .word B5_8171
+    .word Ent_Return
+    .word Ent_Return
+    .word Ent_Return
+    .word Ent_Return
+    .word Ent_Return
+    .word Ent_Return
+B5_8140:
+    LDA tmp_c
+    SEC
     SBC #$01
     STA ent_angle,x
-B5_8148:
+Ent_Return:
     RTS
+B5_8149:
     LDA #$7E
     STA tmp_a
     LDA #$81
@@ -176,19 +185,21 @@ B5_8151:
     LDA (tmp_a),y
     STA ent_angle,x
     RTS
+B5_815B:
     LDA #$83
     STA tmp_a
     LDA #$81
     STA tmp_b
     JMP B5_8151
-    .byte $A9
-    DEY
+B5_8166:
+    LDA #$88
     STA tmp_a
     LDA #$81
     STA tmp_b
     JMP B5_8151
-    .byte $E6
-    LDY $BCA5,x
+B5_8171:
+    INC rng_b
+    LDA rng_b
     AND #$03
     CLC
     ADC #$01
@@ -2626,7 +2637,7 @@ Ent11_Update:
     STA invuln_hi
     JMP Ent_SpawnBurst
 Ent16_Update:
-    JSR B5_80D3
+    JSR Ent_TryCarryPlayer
     LDA ent_y_lo,x
     STA tmp_c
     LDA ent_x_lo,x
@@ -3119,7 +3130,7 @@ Ent24_Update:
     JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
     BNE B5_9B14
-B5_9B09:
+Ent_StartFade:
     LDA #$23
     STA ent_type,x
     LDA #$07
@@ -3137,7 +3148,7 @@ B5_9B14:
     LDA #$00
     STA ent_y_lo,x
     STA ent_y_hi,x
-    JMP B5_9B09
+    JMP Ent_StartFade
 B5_9B32:
     LDA entity_tick
     LSR a
@@ -3149,7 +3160,7 @@ B5_9B32:
 Ent25_Update:
     JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
-    BEQ B5_9B09
+    BEQ Ent_StartFade
 B5_9B46:
     LDA ent_x_lo,x
     SEC
@@ -3162,11 +3173,11 @@ B5_9B46:
     LDA #$00
     STA ent_x_lo,x
     STA ent_x_hi,x
-    JMP B5_9B09
+    JMP Ent_StartFade
 Ent26_Update:
     JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
-    BEQ B5_9B09
+    BEQ Ent_StartFade
 B5_9B6C:
     LDA ent_x_lo,x
     CLC
@@ -3197,12 +3208,12 @@ B5_9B6C:
     LDA tmp_b
     ADC #$00
     STA ent_x_hi,x
-    JMP B5_9B09
+    JMP Ent_StartFade
 Ent27_Update:
     JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
     BNE B5_9BB6
-    JMP B5_9B09
+    JMP Ent_StartFade
 B5_9BB6:
     LDA ent_y_lo,x
     SEC
@@ -3217,12 +3228,12 @@ B5_9BCC:
     LDA #$00
     STA ent_y_lo,x
     STA ent_y_hi,x
-    JMP B5_9B09
+    JMP Ent_StartFade
 Ent28_Update:
     JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
     BNE B5_9BE2
-    JMP B5_9B09
+    JMP Ent_StartFade
 B5_9BE2:
     LDA ent_y_lo,x
     SEC
@@ -3237,7 +3248,7 @@ B5_9BF8:
     LDA #$00
     STA ent_y_lo,x
     STA ent_y_hi,x
-    JMP B5_9B09
+    JMP Ent_StartFade
 Ent_TickRadius:
     LDA ent_radius,x
     BEQ B5_9C0C
@@ -3269,7 +3280,7 @@ Tbl_B5_9C30:
     .byte $01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$01
     .byte $00,$FF
 Ent2E_Update:
-    JSR B5_80D3
+    JSR Ent_TryCarryPlayer
     LDA ent_y_lo,x
     STA tmp_c
     LDA ent_x_lo,x
@@ -3834,7 +3845,7 @@ Ent3B_Update:
     JSR Ent_CheckPlayerOverlap
     JMP B5_A302
 Ent3C_Update:
-    JSR B5_A96E
+    JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
     LDA ent_flags,x
     AND #$04
@@ -3953,7 +3964,7 @@ B5_A316:
 B5_A322:
     RTS
 Ent3E_Update:
-    JSR B5_A96E
+    JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
     LDA #$01
     STA tmp_c
@@ -4330,7 +4341,7 @@ Ent3F_Update:
     JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
     BNE B5_A6DE
-    JMP B5_9B09
+    JMP Ent_StartFade
 B5_A6DE:
     LDA ent_y_lo,x
     CLC
@@ -4632,7 +4643,7 @@ B5_A934:
     ADC #$00
     STA ent_x_hi,x
     RTS
-B5_A96E:
+Ent_OffscreenGuard:
     LDA ent_flags,x
     AND #$04
     BEQ B5_A976
@@ -4734,7 +4745,7 @@ B5_AA1F:
     STA ram_01B8
     RTS
 Ent4A_Update:
-    JSR B5_80D3
+    JSR Ent_TryCarryPlayer
     LDA ent_y_lo,x
     STA tmp_c
     LDA ent_x_lo,x
@@ -4832,7 +4843,7 @@ Ent_BecomeOrbiter:
     STA ram_06F0,x
     RTS
 Ent4D_Update:
-    JSR B5_80D3
+    JSR Ent_TryCarryPlayer
     LDA ent_y_lo,x
     STA tmp_c
     LDA ent_x_lo,x
@@ -5711,7 +5722,7 @@ Ent78_Update:
     CLC
     ADC #$04
     BNE B5_B2E8
-    JMP B5_9B09
+    JMP Ent_StartFade
 B5_B2E8:
     STA ent_radius,x
     JSR SetEntityPolarPos
@@ -6069,7 +6080,7 @@ B5_B5CF:
     .byte $00,$D6,$03,$B8,$00,$99,$03,$1A,$00,$99,$03,$98,$00,$14,$04,$3A
     .byte $00,$B8,$03,$D8,$00,$37,$04,$5A,$00,$F5,$03,$B8,$00
 Ent87_Update:
-    JSR B5_A96E
+    JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
     DEC ent_param2,x
     BNE B5_B616
@@ -6088,7 +6099,7 @@ Ent87_Update:
 B5_B616:
     RTS
 Ent88_Update:
-    JSR B5_A96E
+    JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
     JSR B5_A785
     LDA ram_01B8
@@ -6139,7 +6150,7 @@ B5_B652:
     LDA #$30
     JMP PlaySfxSq2
 Ent89_Update:
-    JSR B5_A96E
+    JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
     LDA #$87
     STA tmp_a
@@ -6187,7 +6198,7 @@ B5_B6CB:
     STA ent_angle,x
     RTS
 Ent8B_Update:
-    JSR B5_A96E
+    JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
     LDA ent_angle,x
     SEC
@@ -6235,7 +6246,7 @@ B5_B741:
     BEQ B5_B727
     JMP B5_A785
 Ent8C_Update:
-    JSR B5_A96E
+    JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
     LDA ram_01B8
     BNE B5_B758
@@ -6331,7 +6342,7 @@ Tbl_B5_B84D:
     .res 9, $0F
     .byte $1E,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$00
 Ent99_Update:
-    JSR B5_A96E
+    JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
     LDA #$98
     STA ent_type,x
@@ -6432,7 +6443,7 @@ Tbl_B5_B93C:
     .byte $00,$00,$FF,$00,$FF,$FF,$FF,$00,$FF,$00,$00,$FF,$00,$00,$00,$FF
     .byte $00,$00,$80
 Ent81_Update:
-    JSR B5_80D3
+    JSR Ent_TryCarryPlayer
     LDA ent_y_lo,x
     STA tmp_c
     LDA ent_x_lo,x

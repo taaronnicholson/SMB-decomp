@@ -1143,15 +1143,15 @@ Tbl_B3_BE38:
     .byte $01,$00,$02,$00,$02,$00,$03,$00,$03,$00,$FE,$FF,$FE,$FF,$FF,$FF
     .byte $FF,$FF,$00,$00,$00,$00,$01,$00,$01,$00,$02,$00,$02,$00,$FF,$FF
     .byte $FF,$FF,$00,$00,$01,$00,$01,$00,$80
-B3_BE91:
+Bank3_SpecialTileCheck:
     JSR GetMapTile
     CMP #$C8
     BCC B3_BE9C
     CMP #$CE
-    BCC B3_BE9D
+    BCC Bank3_SpecialTileAction
 B3_BE9C:
     RTS
-B3_BE9D:
+Bank3_SpecialTileAction:
     STA tmp_a
     LDA current_area
     CMP #$05

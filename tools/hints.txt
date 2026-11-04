@@ -383,3 +383,17 @@ blob 2 A696 30 TileFrameB 30 bytes written to PPU $1232 (the second frame set us
 entry 2 A6B4
 entry 2 A6B7
 words 5 B990 3 5                ; three sub-state entry points (Ent9E)
+
+; ---- naming pass 3 ----
+name 5 80D3 Ent_TryCarryPlayer      ; if the player can ride (Tbl_B5_80B7[player_state]) and stands on top of this entity: riding_slot/riding_flag set, player snapped to Y-16
+name 5 8148 Ent_Return              ; a bare RTS used as a table target
+name 5 8122 Ent_SubHandlerTable     ; 15 code pointers (indexed by an entity sub-state), many to Ent_Return
+name 5 9B09 Ent_StartFade           ; type $23 with ent_angle = 7: the fade-out before the entity disappears
+name 5 A96E Ent_OffscreenGuard      ; returns when the entity is off-screen (ent_flags bit 2)
+name f F80D CheckSpecialTile        ; switches to bank 3 and calls the special-tile check at $BE91 for the tile at (ptr)
+name 3 BE91 Bank3_SpecialTileCheck  ; GetMapTile; tiles $C8-$CD fall into Bank3_SpecialTileAction
+name 3 BE9D Bank3_SpecialTileAction ; tile in A: acts unless the area is 2 or 5 (the underwater caves)
+name f EC73 PlayerMoveLeft          ; Left held: turns first (player_facing), then x -= walk_speed with wall/slope checks, then CheckPlayerDoor
+name f ED17 PlayerMoveRight
+ram 0064 walk_speed
+name f E035 PlayerVerticalStep      ; state-0 vertical motion: invulnerability/shot checks, then zp_70/71/72 counters and ApplyRidingMotion

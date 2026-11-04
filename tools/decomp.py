@@ -152,7 +152,7 @@ while queue:
 TERM = {'RTS', 'RTI'}
 spec_bytes = set()
 
-def spec_try(p, start, cb):
+def spec_try(p, start, cb, allow_short=False):
     base = 0xC000 if p == FIXED else 0x8000
     got = {}; work = [start]; ncalls = []
     while work:
@@ -182,6 +182,7 @@ def spec_try(p, start, cb):
             elif mn == 'JMP' or mn in TERM: break
             pc += l
     first = got[start][0]
+    if allow_short and OPS[first][0] == 'RTS': return {start: (first, 1)}, []     # a bare RTS target of a pointer table
     if OPS[first][0] in TERM or len(got) < 3: return None
     return got, ncalls
 
@@ -229,15 +230,15 @@ if not os.environ.get('NOSPEC'):
                             for t in run:
                                 tp = FIXED if t >= 0xC000 else p
                                 if (tp, t) in code_bytes: ok.append((tp, t)); continue
-                                r = spec_try(tp, t, None if tp == FIXED else tp)
-                                if r and len(r[0]) >= 4: ok.append((tp, t))
+                                r = spec_try(tp, t, None if tp == FIXED else tp, allow_short=True)
+                                if r and (len(r[0]) >= 4 or (len(r[0]) == 1 and next(iter(r[0].values()))[0] == 0x60)): ok.append((tp, t))
                             if len(ok) * 4 >= len(run) * 3:
-                                for tp, t in ok: seeds.append((tp, t))
+                                for tp, t in ok: seeds.append((tp, t) if (tp, t) in code_bytes else (tp, t, 1))
                         a = b if run else a + 1
         for sd in sorted(set(seeds)):
             p, a = sd[0], sd[1]; need = sd[2] if len(sd) > 2 else 3
             if (p, a) in code_bytes: continue
-            r = spec_try(p, a, None if p == FIXED else p)
+            r = spec_try(p, a, None if p == FIXED else p, allow_short=(need == 1))
             if r and len(r[0]) >= need:
                 spec_commit(p, r[0], None if p == FIXED else p); changed = True
 
