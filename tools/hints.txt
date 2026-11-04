@@ -438,3 +438,10 @@ name 5 B181 Ent_PatrolTail          ; shared tail of types $74/$75: restores tmp
 name 6 A3EC ExitWalkStep            ; PlayerState19: steps ExitWalkAnim (player_frame, player_x -= offset)
 name 6 A41E AdvanceStage            ; end of the exit walk: fade out, silence, INC stage_index, restart at StageSetup
 name 5 91B0 Ent_FloatStep          ; ent_angle steps through FloatPathDx: Y -= 1, X += dx; word $80 -> Ent_StartCollectAnim
+
+; ---- per-group sprite graphics loader ----
+blob 6 A722 124 GroupGfxTable 31 entries of 4 bytes indexed by animation group: compressed block pointer (word), tile count, 0. A pointer of 0 means the group shares another group's tiles (8,9,12,16,18-20,26) or has none (0). Read by LoadGroupGfx
+struct 6 A722 31 pbb
+name f CC51 LoadGroupGfxFromFlags   ; A = ent_flags: group = (flags >> 3) & $3F; loads its graphics if anim_tile_base[group] is 0
+name f CC65 LoadGroupGfx            ; A = animation group: allocates tiles (anim_tile_base = 0 - sprite_tile_next), decompresses the block from GroupGfxTable to PPU $0000 + base*16
+ram 00DB sprite_tile_next           ; counts down from $A8: each loaded group lowers it by its tile count, so bases rise from $58

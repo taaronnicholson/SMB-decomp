@@ -122,6 +122,11 @@ number. A frame is a count byte followed by 6-byte sprites `dx(16) dy(16) tile a
 Observed in stage 0 (spawn flags → group): type `01` (flags `04`) → group 0 (green dome balloon with a stalk, a star, and
 the score popups 10/20/30/50/100/200/300/500/1000); `08` (`14`) → group 2 (green worm); `4E` (`70`-`76`) → group 14 (red
 creature with a propeller, 6 frames); `51` (`78`) → group 15 (white and black creature); `2E` (`B8`) → group 23 (green butterfly).
+**Graphics loading:** when an entity of a group first spawns, `LoadGroupGfxFromFlags`/`LoadGroupGfx` look the group up in `GroupGfxTable` (bank 6 `$A722`, 4 bytes per group:
+compressed block pointer, tile count) and decompress that block into the next free sprite tiles (`sprite_tile_next` `$DB` counts down from `$A8`, so bases rise from `$58`; the base
+is stored in `anim_tile_base[group]`). Groups 1-7, 10, 11, 13-15, 17, 21-25 and 27-30 own a block; 8, 9, 12, 16, 18-20 and 26 share another group's tiles; group 0 (balloon, star, score
+popups) is loaded with the level. This confirms that the 11 blocks found by `tools/scan_lz_gaps.py` are sprite sheets for those groups. Group 13 reserves 58 tiles for a 56-tile block.
+
 Which groups a stage loads (their tile bases are non-zero) differs per stage; as rendered, by stage:
 
 | Group | Looks like | Stages |

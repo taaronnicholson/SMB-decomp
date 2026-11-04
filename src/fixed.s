@@ -1045,7 +1045,7 @@ F_CAD9:
     LDA AreaSpawnPtrs+1,y
     STA ptr_hi
     LDA #$A8
-    STA zp_DB
+    STA sprite_tile_next
     LDY #$00
 F_CAFA:
     LDA (ptr_lo),y
@@ -1061,7 +1061,7 @@ F_CB02:
     LDA ptr_hi
     PHA
     LDA tmp_ptr_lo
-    JSR F_CC65
+    JSR LoadGroupGfx
     PLA
     STA ptr_hi
     PLA
@@ -1095,7 +1095,7 @@ F_CB1E:
     LDA ptr_hi
     PHA
     LDA (ptr_lo),y
-    JSR F_CC51
+    JSR LoadGroupGfxFromFlags
     PLA
     STA ptr_hi
     PLA
@@ -1217,7 +1217,7 @@ F_CBF2:
     LDA (ptr_lo),y
     STA ent_flags,x
     INY
-    JSR F_CC51
+    JSR LoadGroupGfxFromFlags
     PLA
     STA ptr_hi
     PLA
@@ -1239,7 +1239,7 @@ F_CBF2:
     ADC #$00
     STA ptr_hi
     JMP F_CBBD
-F_CC51:
+LoadGroupGfxFromFlags:
     STY saved_x
     LSR a
     LSR a
@@ -1253,14 +1253,14 @@ F_CC51:
 F_CC62:
     LDY saved_x
     RTS
-F_CC65:
+LoadGroupGfx:
     STY saved_x
     STA tmp_a
     TAY
 F_CC6A:
     LDA #$00
     SEC
-    SBC zp_DB
+    SBC sprite_tile_next
     STA anim_tile_base,y
     STA ptr_lo
     LDA #$00
@@ -1286,17 +1286,17 @@ F_CC6A:
     ASL a
     ASL a
     TAY
-    LDA B6_A722,y
+    LDA GroupGfxTable,y
     STA ptr_lo
-    LDA B6_A723,y
+    LDA $A723,y
     STA ptr_hi
-    LDA Tbl_B6_A724,y
+    LDA $A724,y
     STA tmp_a
     BEQ F_CCB7
-    LDA zp_DB
+    LDA sprite_tile_next
     SEC
     SBC tmp_a
-    STA zp_DB
+    STA sprite_tile_next
     CLC
     JSR DecompressAndFinish
 F_CCB7:

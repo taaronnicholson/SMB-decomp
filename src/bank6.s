@@ -3890,20 +3890,70 @@ Tbl_B6_A6AE:
     .byte $FF,$F4,$07,$04,$FF,$04,$07,$F0,$00,$F0,$08,$00,$00,$00,$08,$00
     .byte $F8,$00,$00,$00,$08,$FB,$00,$FB,$08,$08,$00,$08,$08,$F8,$00,$F0
     .byte $08,$08,$00,$00,$08,$F0,$00,$00,$F8
-B6_A722:
-    .byte $00
-B6_A723:
-    .byte $00
-; Tbl_B6_A724: 122 bytes, read by F_CC6A
-Tbl_B6_A724:
-    .byte $00,$08,$22,$AC,$04,$00,$5C,$AC,$04,$00,$9C,$AC,$10,$00,$6E,$AD
-    .byte $08,$00,$56,$B2,$0C,$00,$48,$B1,$0E,$00,$D4,$AD,$04,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$00,$DA,$AB,$04,$00,$76,$AA,$2E,$00,$00,$00
-    .byte $00,$00,$20,$AF,$3A,$00,$9E,$A7,$22,$00,$CA,$A8,$08,$00,$00,$00
-    .byte $00,$00,$7C,$A9,$0A,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$E8,$B1,$0C,$00,$6E,$B0,$12,$00,$E0,$A9,$12,$00,$64,$B3
-    .byte $64,$00,$D0,$B2,$10,$00,$00,$00,$00,$00,$1C,$AE,$14,$00,$30,$A9
-    .byte $08,$00,$F6,$B6,$08,$00,$38,$B7,$1A,$00
+; GroupGfxTable: 31 entries of 4 bytes indexed by animation group: compressed block pointer (word), tile count, 0. A pointer of 0 means the group shares another group's tiles (8,9,12,16,18-20,26) or has none (0). Read by LoadGroupGfx
+GroupGfxTable:
+    .word $0000
+    .byte $00, $08
+    .word Gfx_B6_AC22
+    .byte $04, $00
+    .word Gfx_B6_AC5C
+    .byte $04, $00
+    .word Gfx_B6_AC9C
+    .byte $10, $00
+    .word Gfx_B6_AD6E
+    .byte $08, $00
+    .word Gfx_B6_B256
+    .byte $0C, $00
+    .word Gfx_B6_B148
+    .byte $0E, $00
+    .word Gfx_B6_ADD4
+    .byte $04, $00
+    .word $0000
+    .byte $00, $00
+    .word $0000
+    .byte $00, $00
+    .word Gfx_B6_ABDA
+    .byte $04, $00
+    .word Gfx_B6_AA76
+    .byte $2E, $00
+    .word $0000
+    .byte $00, $00
+    .word Gfx_B6_AF20
+    .byte $3A, $00
+    .word Gfx_B6_A79E
+    .byte $22, $00
+    .word Gfx_B6_A8CA
+    .byte $08, $00
+    .word $0000
+    .byte $00, $00
+    .word Gfx_B6_A97C
+    .byte $0A, $00
+    .word $0000
+    .byte $00, $00
+    .word $0000
+    .byte $00, $00
+    .word $0000
+    .byte $00, $00
+    .word Gfx_B6_B1E8
+    .byte $0C, $00
+    .word Gfx_B6_B06E
+    .byte $12, $00
+    .word Gfx_B6_A9E0
+    .byte $12, $00
+    .word Gfx_B6_B364
+    .byte $64, $00
+    .word Gfx_B6_B2D0
+    .byte $10, $00
+    .word $0000
+    .byte $00, $00
+    .word Gfx_B6_AE1C
+    .byte $14, $00
+    .word Gfx_B6_A930
+    .byte $08, $00
+    .word Gfx_B6_B6F6
+    .byte $08, $00
+    .word Gfx_B6_B738
+    .byte $1A, $00
 ; Gfx_B6_A79E: LZ-compressed, 300 bytes -> 544 bytes to PPU $0720,$09A0 (stages 0,3 + title)
 Gfx_B6_A79E:
     .byte $00,$68,$00,$00,$81,$41,$5B,$01,$C0,$00,$20,$28,$3C,$1C,$71,$75
