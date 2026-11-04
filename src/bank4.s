@@ -1410,7 +1410,7 @@ B4_B170:
     JSR AddScore
     LDA #$01
     STA tmp_c
-    JSR F_F8D8
+    JSR AddRam01AA
     LDA tmp_c
 B4_B192:
     STA zp_D1
@@ -2719,7 +2719,7 @@ B4_BE47:
     STA ptr_lo
     LDA #$20
     STA ptr_hi
-    JSR F_CE2C
+    JSR DrawTileBlockBank0
     JSR EnableRendering
     LDA #$00
     STA ram_01A8

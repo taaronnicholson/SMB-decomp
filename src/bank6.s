@@ -5288,7 +5288,7 @@ B6_BEE9:
 Tbl_B6_BEEC:
     .byte $BE,$BE,$BE,$0B,$47,$41,$4D,$45,$5C,$4F,$56,$45,$52,$00,$0C,$53
     .byte $54,$41,$47,$45,$5C,$00
-B6_BF02:
+RngStep:
     LDA rng_a
     ASL a
     ROL rng_b

@@ -557,3 +557,24 @@ name 4 BAD9 QueueTextRowDefault      ; as QueueTextRow with the default text poi
 name 4 BAE7 QueueTextRow             ; A = row index: address = $24C8 + A*32; queues the text at (tmp_c) into the PPU buffer
 name 5 8E48 SpawnDebrisEntity        ; spawns an entity of type 5 12 px below the caller, with a random $0-$F horizontal offset
 name 5 9D55 EntPeriodicEffects       ; every $40 frames of ent_param2 runs SpawnEffectsFromList on the list at $9D6F
+name 5 B3BB EntClampMinY             ; keeps the entity at or below focus_y+$10 (otherwise pushes it back by 1)
+name 5 B3E7 EntClampMinX             ; keeps the entity at or right of focus_x
+name 5 B414 EntClampMaxX             ; keeps the entity at or left of focus_x+$E0
+name 5 B440 EntClampMaxY             ; keeps the entity at or above focus_y+$E0
+name 6 BF02 RngStep                  ; advances the random generator (rng_a/rng_b mixed with the sound noise register ram_0751..0754)
+name f C7A1 ApplyScroll              ; sets the nametable bit in PPUCTRL from scroll_y_hi and writes the scroll registers
+name f CA31 InitAnimTileState        ; clears ram_0488.. and anim_tile_base, then starts the animated tile setup (anim_tile_base = $2A)
+name f CE2C DrawTileBlockBank0       ; switches to bank 0, runs DrawTileBlock17x5, restores the bank
+name f D282 ClearPpu_1F80_0F80       ; zeroes 128 bytes of PPU memory at $1F80 and at $0F80
+name f D290 ClearPpuRegion128        ; zeroes 128 bytes of PPU memory at the address in X:Y
+name f D2A1 ComputeFocusY            ; focus_y = player_y - zp_4B, clamped to the level
+name f DC21 PlayerBlinkCheck         ; from invuln_hi/lo decides whether the player sprite is drawn this frame (zp_62: $FF when not invulnerable)
+name f DE75 SpawnWaterEntity         ; bank 5 call: spawns an entity at the water surface (water_level - $0C) under the player's X
+name f EB2F PlayerMoveByButtons      ; the up-button branch of the free-move code: tests buttons & $40 and moves player_y by walk_speed against the map
+name f F088 PlayerTileInteract       ; looks up the player state's interaction flag (Tbl_F_DBF6) and, if set, inspects the tiles at the player's feet
+name f F47A CheckHazardUnderPlayer   ; in state 0, reads the tile properties at the saved pointer zp_16/17; when both low bits are set falls into HurtPlayer
+name f F876 EntMoveYWithGroundFar    ; runs Ent_MoveYWithGround in bank 5 and restores the bank
+name f F8B1 AddLives                 ; lives += tmp_c, capped at 99
+name f F8C4 SubLives                 ; lives -= tmp_c
+name f F8CE SubRam01AA               ; ram_01AA -= tmp_c
+name f F8D8 AddRam01AA               ; ram_01AA += tmp_c

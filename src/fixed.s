@@ -487,12 +487,12 @@ F_C66C:
     PLA
 F_C6CC:
     JSR LoadArea
-    JSR F_CA31
+    JSR InitAnimTileState
     JSR F_C956
     LDA #$02
     JSR SwitchBank
     JSR ResetLevelState
-    JSR F_D2A1
+    JSR ComputeFocusY
     LDA ppumask_shadow
     AND #$F9
     JSR SetPPUMask
@@ -527,7 +527,7 @@ F_C710:
     LDA #$04
     JSR SwitchBank
     JSR DispatchGameState
-    JSR F_DC21
+    JSR PlayerBlinkCheck
     JSR UpdateCamera
     JSR ScrollX
     JSR SavePrevFocus
@@ -555,7 +555,7 @@ F_C763:
     JSR SwitchBank
     JSR ReadController
     JSR CheckPause
-    JSR F_DC21
+    JSR PlayerBlinkCheck
     JSR UpdateCamera
     JSR ScrollX
     JSR SavePrevFocus
@@ -570,7 +570,7 @@ F_C763:
     JSR Sound_Update
     JSR F_FABC
     JMP MainLoop
-F_C7A1:
+ApplyScroll:
     LDA scroll_y_hi
     AND #$01
     ASL a
@@ -688,10 +688,10 @@ F_C863:
 F_C871:
     JSR FlushPPUBuffer
 NMI_EndOfFrame:
-    JSR F_C7A1
+    JSR ApplyScroll
     LDA #$06
     JSR SwitchBank
-    JSR B6_BF02
+    JSR RngStep
     JMP F_C82F
 F_C882:
     LDA #$00
@@ -939,7 +939,7 @@ F_CA09:
     STA balloons_left
     STY balloons_popped
     RTS
-F_CA31:
+InitAnimTileState:
     LDX #$27
     LDA #$00
 F_CA35:
@@ -1481,7 +1481,7 @@ F_CE1B:
     PLA
     PLA
     JMP MainLoopBody
-F_CE2C:
+DrawTileBlockBank0:
     LDA cur_bank
     PHA
     LDA #$00
@@ -1823,7 +1823,7 @@ LoadArea:
     STY zp_48
     DEY
     STY ram_0749
-    JSR F_D282
+    JSR ClearPpu_1F80_0F80
     LDA #$02
     JSR SwitchBank
     JSR B2_B4A7
@@ -2079,14 +2079,14 @@ F_D272:
     JSR ApplySwitch3
 F_D27F:
     JMP SetScroll
-F_D282:
+ClearPpu_1F80_0F80:
     LDA PPUSTATUS
     LDX #$1F
     LDY #$80
-    JSR F_D290
+    JSR ClearPpuRegion128
     LDX #$0F
     LDY #$80
-F_D290:
+ClearPpuRegion128:
     STX PPUADDR
     STY PPUADDR
     LDX #$7F
@@ -2096,7 +2096,7 @@ F_D29A:
     DEX
     BPL F_D29A
     RTS
-F_D2A1:
+ComputeFocusY:
     LDA player_y_lo
     SEC
     SBC zp_4B
@@ -3439,7 +3439,7 @@ Tbl_F_DBF6:
 ; Tbl_F_DC11: 16 bytes, read by F_DDE8
 Tbl_F_DC11:
     .byte $00,$00,$00,$01,$01,$01,$00,$01,$00,$00,$00,$00,$01,$01,$00,$00
-F_DC21:
+PlayerBlinkCheck:
     LDY #$FF
     STY zp_62
     LDA invuln_hi
@@ -3531,7 +3531,7 @@ F_DCA1:
     BEQ F_DCF8
     CMP #$02
     BNE F_DCC8
-    JSR F_DE75
+    JSR SpawnWaterEntity
 F_DCC8:
     LDA #$22
     JSR PlaySfxNoise
@@ -3570,8 +3570,8 @@ F_DCF8:
     STA ptr_hi
     JSR SwitchBankFromAC
     JMP (ptr_lo)
-    JSR F_F47A
-    JSR F_F088
+    JSR CheckHazardUnderPlayer
+    JSR PlayerTileInteract
     LDY player_state
     BEQ F_DD24
     LDA #$00
@@ -3769,7 +3769,7 @@ F_DE6A:
     STA player_frame
 F_DE72:
     JMP TryStartJump
-F_DE75:
+SpawnWaterEntity:
     LDA cur_bank
     PHA
     LDA #$05
@@ -5510,7 +5510,7 @@ F_EAD5:
     LDA #$01
     STA player_state
     STA zp_8C
-    JMP F_DE75
+    JMP SpawnWaterEntity
 F_EB05:
     LDA zp_BD
     SEC
@@ -5535,10 +5535,10 @@ F_EB22:
 MovePlayerKeepBank:
     LDA cur_bank
     PHA
-    JSR F_EB2F
+    JSR PlayerMoveByButtons
     PLA
     JMP SwitchBank
-F_EB2F:
+PlayerMoveByButtons:
     JSR SwitchBankFromAC
     LDA buttons
     AND #$40
@@ -6293,7 +6293,7 @@ F_F074:
 F_F083:
     LDA zp_9C
     JMP F_C6CC
-F_F088:
+PlayerTileInteract:
     LDX player_state
     LDA Tbl_F_DBF6,x
     BNE F_F090
@@ -6390,7 +6390,7 @@ F_F130:
     STA a:collected_by_kind,y
     LDA #$01
     STA tmp_c
-    JSR F_F8CE
+    JSR SubRam01AA
     LDA #$0A
     STA tmp_c
     LDA #$00
@@ -6815,7 +6815,7 @@ F_F45F:
 F_F477:
     DEC zp_5D
     RTS
-F_F47A:
+CheckHazardUnderPlayer:
     LDA player_state
     BNE F_F496
     LDA zp_16
@@ -6916,7 +6916,7 @@ F_F52A:
 F_F548:
     LDA #$01
     STA tmp_c
-    JSR F_F8C4
+    JSR SubLives
     LDA spawn_y_lo
     STA player_y_lo
     LDA spawn_y_hi
@@ -7353,7 +7353,7 @@ PlayerState1B:
     LDA #$03
     JSR SwitchBank
     JMP B3_BD8D
-F_F876:
+EntMoveYWithGroundFar:
     LDA cur_bank
     PHA
     LDA #$05
@@ -7384,7 +7384,7 @@ SpawnPickupAtPlayer:
     TAX
     PLA
     JMP SwitchBankKeepX
-F_F8B1:
+AddLives:
     LDA lives
     CLC
     ADC tmp_c
@@ -7395,19 +7395,19 @@ F_F8B1:
     STA lives
 F_F8C3:
     RTS
-F_F8C4:
+SubLives:
     LDA lives
     SEC
     SBC tmp_c
     STA lives
     RTS
-F_F8CE:
+SubRam01AA:
     LDA ram_01AA
     SEC
     SBC tmp_c
     STA ram_01AA
     RTS
-F_F8D8:
+AddRam01AA:
     LDA ram_01AA
     CLC
     ADC tmp_c
@@ -7543,7 +7543,7 @@ Tbl_F_F9D2:
 F_F9D7:
     LDA #$01
     STA tmp_c
-    JSR F_F8B1
+    JSR AddLives
     LDA #$1A
     JSR PlaySfxSq1
     LDA #$1A

@@ -5928,13 +5928,13 @@ B5_B32B:
     LDA #$02
     STA tmp_a
     JSR EntRaiseAndSnap
-    JSR B5_B3BB
+    JSR EntClampMinY
     LDA ent_angle,x
     BMI B5_B391
     LDA #$02
     STA tmp_a
     JSR Ent_MoveXLeft
-    JSR B5_B3E7
+    JSR EntClampMinX
     LDA ent_angle,x
     BMI B5_B36D
 B5_B349:
@@ -5945,13 +5945,13 @@ B5_B34F:
     LDA #$02
     STA tmp_a
     JSR EntRaiseAndSnap
-    JSR B5_B3BB
+    JSR EntClampMinY
     LDA ent_angle,x
     BMI B5_B3B5
     LDA #$02
     STA tmp_a
     JSR Ent_MoveX
-    JSR B5_B414
+    JSR EntClampMaxX
     LDA ent_angle,x
     BMI B5_B349
 B5_B36D:
@@ -5962,13 +5962,13 @@ B5_B373:
     LDA #$02
     STA tmp_a
     JSR Ent_MoveYWithGround
-    JSR B5_B440
+    JSR EntClampMaxY
     LDA ent_angle,x
     BMI B5_B349
     LDA #$02
     STA tmp_a
     JSR Ent_MoveXLeft
-    JSR B5_B3E7
+    JSR EntClampMinX
     LDA ent_angle,x
     BMI B5_B3B5
 B5_B391:
@@ -5979,13 +5979,13 @@ B5_B397:
     LDA #$02
     STA tmp_a
     JSR Ent_MoveYWithGround
-    JSR B5_B440
+    JSR EntClampMaxY
     LDA ent_angle,x
     BMI B5_B36D
     LDA #$02
     STA tmp_a
     JSR Ent_MoveX
-    JSR B5_B414
+    JSR EntClampMaxX
     LDA ent_angle,x
     BMI B5_B391
 B5_B3B5:
@@ -5993,7 +5993,7 @@ B5_B3B5:
     STA ent_radius,x
 B5_B3BA:
     RTS
-B5_B3BB:
+EntClampMinY:
     LDA focus_y_lo
     CLC
     ADC #$10
@@ -6015,7 +6015,7 @@ B5_B3BB:
     ADC #$00
     STA ent_y_hi,x
     JMP EntMarkAngleBit7
-B5_B3E7:
+EntClampMinX:
     LDA focus_x_lo
     STA tmp_a
     LDA focus_x_hi
@@ -6039,7 +6039,7 @@ EntMarkAngleBit7:
     STA ent_angle,x
 B5_B413:
     RTS
-B5_B414:
+EntClampMaxX:
     LDA focus_x_lo
     CLC
     ADC #$E0
@@ -6061,7 +6061,7 @@ B5_B414:
     SBC #$00
     STA ent_x_hi,x
     JMP EntMarkAngleBit7
-B5_B440:
+EntClampMaxY:
     LDA focus_y_lo
     CLC
     ADC #$E0

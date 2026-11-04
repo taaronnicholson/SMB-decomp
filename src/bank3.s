@@ -1184,7 +1184,7 @@ B3_BD8D:
     STA ent_y_hi,x
     LDA #$02
     STA tmp_a
-    JSR F_F876
+    JSR EntMoveYWithGroundFar
     LDA ent_x_lo,x
     STA player_x_lo
     LDA ent_x_hi,x
