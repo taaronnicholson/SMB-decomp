@@ -60,28 +60,28 @@
   "addr": 49083,
   "len": 69,
   "name": "Tbl_B0_BFBB",
-  "comment": "69 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "69 bytes, read by FadeTableStep"
  },
  {
   "bank": 1,
   "addr": 32768,
   "len": 44,
   "name": "Tbl_B1_8000",
-  "comment": "44 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "44 bytes, read by DrawEntity"
  },
  {
   "bank": 1,
   "addr": 33003,
   "len": 26,
   "name": "Tbl_B1_80EB",
-  "comment": "26 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "26 bytes, read by UpdateShots"
  },
  {
   "bank": 1,
   "addr": 33029,
   "len": 25,
   "name": "Tbl_B1_8105",
-  "comment": "25 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "25 bytes, read by UpdateShots"
  },
  {
   "bank": 1,
@@ -102,7 +102,7 @@
   "addr": 35225,
   "len": 100,
   "name": "Tbl_B1_8999",
-  "comment": "100 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "100 bytes, read by LoadArea"
  },
  {
   "bank": 1,
@@ -221,49 +221,49 @@
   "addr": 40668,
   "len": 80,
   "name": "Tbl_B2_9EDC",
-  "comment": "80 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "80 bytes, read by SetPlayerFacingBit"
  },
  {
   "bank": 2,
   "addr": 42400,
   "len": 11,
   "name": "Tbl_B2_A5A0",
-  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "11 bytes, read by WriteTileStrip_1044"
  },
  {
   "bank": 2,
   "addr": 42411,
   "len": 11,
   "name": "Tbl_B2_A5AB",
-  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "11 bytes, read by WriteTileStrip_1044"
  },
  {
   "bank": 2,
   "addr": 42422,
   "len": 11,
   "name": "Tbl_B2_A5B6",
-  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "11 bytes, read by WriteTileStrip_1044"
  },
  {
   "bank": 2,
   "addr": 42433,
   "len": 11,
   "name": "Tbl_B2_A5C1",
-  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "11 bytes, read by WriteTileStrip_1044"
  },
  {
   "bank": 2,
   "addr": 44628,
   "len": 32,
   "name": "Tbl_B2_AE54",
-  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "32 bytes, read by WriteTiles_11F0"
  },
  {
   "bank": 2,
   "addr": 44660,
   "len": 32,
   "name": "Tbl_B2_AE74",
-  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "32 bytes, read by WriteTiles_11F0"
  },
  {
   "bank": 2,
@@ -277,14 +277,14 @@
   "addr": 46266,
   "len": 79,
   "name": "Tbl_B2_B4BA",
-  "comment": "79 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "79 bytes, read by WriteTileFrame_14D0"
  },
  {
   "bank": 2,
   "addr": 46446,
   "len": 60,
   "name": "Tbl_B2_B56E",
-  "comment": "60 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "60 bytes, read by PlayerBlinkCheck"
  },
  {
   "bank": 2,
@@ -305,14 +305,14 @@
   "addr": 47024,
   "len": 34,
   "name": "Tbl_B2_B7B0",
-  "comment": "34 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "34 bytes, read by PpuJobDispatch"
  },
  {
   "bank": 2,
   "addr": 47058,
   "len": 34,
   "name": "Tbl_B2_B7D2",
-  "comment": "34 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "34 bytes, read by PpuJobDispatch"
  },
  {
   "bank": 3,
@@ -368,7 +368,7 @@
   "addr": 48654,
   "len": 4,
   "name": "Tbl_B3_BE0E",
-  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "4 bytes, read by PlayerFrameCycle4"
  },
  {
   "bank": 3,
@@ -389,7 +389,7 @@
   "addr": 48696,
   "len": 89,
   "name": "Tbl_B3_BE38",
-  "comment": "89 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "89 bytes, read by OpenBlockReward"
  },
  {
   "bank": 3,
@@ -466,7 +466,7 @@
   "addr": 45252,
   "len": 20,
   "name": "Tbl_B4_B0C4",
-  "comment": "20 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "20 bytes, read by GameState0B"
  },
  {
   "bank": 4,
@@ -627,7 +627,7 @@
   "addr": 32951,
   "len": 28,
   "name": "Tbl_B5_80B7",
-  "comment": "28 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "28 bytes, read by Ent_TryCarryPlayer"
  },
  {
   "bank": 5,
@@ -662,21 +662,21 @@
   "addr": 36406,
   "len": 18,
   "name": "Tbl_B5_8E36",
-  "comment": "18 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "18 bytes, read by Ent02_Update"
  },
  {
   "bank": 5,
   "addr": 36525,
   "len": 23,
   "name": "Tbl_B5_8EAD",
-  "comment": "23 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "23 bytes, read by Ent03_Update"
  },
  {
   "bank": 5,
   "addr": 36591,
   "len": 40,
   "name": "Tbl_B5_8EEF",
-  "comment": "40 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "40 bytes, read by Ent04_Update"
  },
  {
   "bank": 5,
@@ -697,7 +697,7 @@
   "addr": 36967,
   "len": 12,
   "name": "Tbl_B5_9067",
-  "comment": "12 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "12 bytes, read by Ent07_Update"
  },
  {
   "bank": 5,
@@ -760,21 +760,21 @@
   "addr": 38688,
   "len": 45,
   "name": "Tbl_B5_9720",
-  "comment": "45 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "45 bytes, read by Ent16_Update"
  },
  {
   "bank": 5,
   "addr": 38733,
   "len": 32,
   "name": "Tbl_B5_974D",
-  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "32 bytes, read by Ent16_Update"
  },
  {
   "bank": 5,
   "addr": 38815,
   "len": 16,
   "name": "Tbl_B5_979F",
-  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "16 bytes, read by B5_978C, Ent1F_Update"
  },
  {
   "bank": 5,
@@ -809,21 +809,21 @@
   "addr": 39377,
   "len": 16,
   "name": "Tbl_B5_99D1",
-  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "16 bytes, read by Ent20_Update"
  },
  {
   "bank": 5,
   "addr": 39612,
   "len": 23,
   "name": "Tbl_B5_9ABC",
-  "comment": "23 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "23 bytes, read by Ent21_Update"
  },
  {
   "bank": 5,
   "addr": 39984,
   "len": 18,
   "name": "Tbl_B5_9C30",
-  "comment": "18 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "18 bytes, read by Ent_TickRadius"
  },
  {
   "bank": 5,
@@ -865,7 +865,7 @@
   "addr": 40485,
   "len": 9,
   "name": "Tbl_B5_9E25",
-  "comment": "9 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "9 bytes, read by Ent32_Update"
  },
  {
   "bank": 5,
@@ -893,14 +893,14 @@
   "addr": 41073,
   "len": 37,
   "name": "Tbl_B5_A071",
-  "comment": "37 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "37 bytes, read by Ent37_Update"
  },
  {
   "bank": 5,
   "addr": 41110,
   "len": 58,
   "name": "Tbl_B5_A096",
-  "comment": "58 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "58 bytes, read by Ent37_Update"
  },
  {
   "bank": 5,
@@ -921,7 +921,7 @@
   "addr": 42164,
   "len": 35,
   "name": "Tbl_B5_A4B4",
-  "comment": "35 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "35 bytes, read by Ent8A_Update"
  },
  {
   "bank": 5,
@@ -935,7 +935,7 @@
   "addr": 42280,
   "len": 93,
   "name": "Tbl_B5_A528",
-  "comment": "93 bytes, read by B5_A5B7"
+  "comment": "93 bytes, read by Ent47_Update, B5_A5B7"
  },
  {
   "bank": 5,
@@ -963,14 +963,14 @@
   "addr": 44030,
   "len": 39,
   "name": "Tbl_B5_ABFE",
-  "comment": "39 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "39 bytes, read by Ent4F_Update"
  },
  {
   "bank": 5,
   "addr": 44314,
   "len": 5,
   "name": "Tbl_B5_AD1A",
-  "comment": "5 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "5 bytes, read by Ent50_Update"
  },
  {
   "bank": 5,
@@ -991,28 +991,28 @@
   "addr": 44686,
   "len": 21,
   "name": "Tbl_B5_AE8E",
-  "comment": "21 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "21 bytes, read by Ent5D_Update"
  },
  {
   "bank": 5,
   "addr": 44969,
   "len": 22,
   "name": "Tbl_B5_AFA9",
-  "comment": "22 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "22 bytes, read by Ent5F_Update"
  },
  {
   "bank": 5,
   "addr": 44991,
   "len": 32,
   "name": "Tbl_B5_AFBF",
-  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "32 bytes, read by Ent5E_Update"
  },
  {
   "bank": 5,
   "addr": 45023,
   "len": 16,
   "name": "Tbl_B5_AFDF",
-  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "16 bytes, read by Ent60_Update"
  },
  {
   "bank": 5,
@@ -1054,14 +1054,14 @@
   "addr": 45625,
   "len": 4,
   "name": "Tbl_B5_B239",
-  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "4 bytes, read by Ent_PatrolTail"
  },
  {
   "bank": 5,
   "addr": 45685,
   "len": 7,
   "name": "Tbl_B5_B275",
-  "comment": "7 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "7 bytes, read by Ent76_Update"
  },
  {
   "bank": 5,
@@ -1075,7 +1075,7 @@
   "addr": 46481,
   "len": 59,
   "name": "Tbl_B5_B591",
-  "comment": "59 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "59 bytes, read by Ent86_Update"
  },
  {
   "bank": 5,
@@ -1089,7 +1089,7 @@
   "addr": 47085,
   "len": 14,
   "name": "Tbl_B5_B7ED",
-  "comment": "14 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "14 bytes, read by Ent8C_Update"
  },
  {
   "bank": 5,
@@ -1110,7 +1110,7 @@
   "addr": 47181,
   "len": 37,
   "name": "Tbl_B5_B84D",
-  "comment": "37 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "37 bytes, read by Ent8F_Update"
  },
  {
   "bank": 5,
@@ -1131,7 +1131,7 @@
   "addr": 47767,
   "len": 32,
   "name": "Tbl_B5_BA97",
-  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "32 bytes, read by Ent90_Update"
  },
  {
   "bank": 5,
@@ -1159,14 +1159,14 @@
   "addr": 48179,
   "len": 19,
   "name": "Tbl_B5_BC33",
-  "comment": "19 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "19 bytes, read by Ent97_Update"
  },
  {
   "bank": 5,
   "addr": 48343,
   "len": 40,
   "name": "Tbl_B5_BCD7",
-  "comment": "40 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "40 bytes, read by Ent_Noop"
  },
  {
   "bank": 5,
@@ -1348,7 +1348,7 @@
   "addr": 49616,
   "len": 31,
   "name": "Tbl_F_C1D0",
-  "comment": "31 bytes, read by ShotMoveUp, F_E734"
+  "comment": "31 bytes, read by ShotMoveDown, F_E734"
  },
  {
   "bank": 7,
@@ -1369,14 +1369,14 @@
   "addr": 49969,
   "len": 5,
   "name": "Tbl_F_C331",
-  "comment": "5 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "5 bytes, read by UpdateTouchKind"
  },
  {
   "bank": 7,
   "addr": 49974,
   "len": 6,
   "name": "Tbl_F_C336",
-  "comment": "6 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "6 bytes, read by UpdateTouchKind"
  },
  {
   "bank": 7,
@@ -1411,14 +1411,14 @@
   "addr": 56310,
   "len": 27,
   "name": "Tbl_F_DBF6",
-  "comment": "27 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "27 bytes, read by PlayerTileInteract"
  },
  {
   "bank": 7,
   "addr": 56337,
   "len": 16,
   "name": "Tbl_F_DC11",
-  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "16 bytes, read by TryFireShot"
  },
  {
   "bank": 7,
@@ -1439,7 +1439,7 @@
   "addr": 62736,
   "len": 12,
   "name": "Tbl_F_F510",
-  "comment": "12 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "12 bytes, read by PlayerState0F"
  },
  {
   "bank": 7,
@@ -1453,7 +1453,7 @@
   "addr": 63169,
   "len": 16,
   "name": "Tbl_F_F6C1",
-  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "16 bytes, read by GetCollectibleBit"
  },
  {
   "bank": 7,
@@ -1467,7 +1467,7 @@
   "addr": 63954,
   "len": 5,
   "name": "Tbl_F_F9D2",
-  "comment": "5 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "5 bytes, read by AwardPickup"
  },
  {
   "bank": 7,

@@ -65,3 +65,20 @@ f FA32 EffectList_F_FA32 struct 1 bwwbbbbb ; effect list for SpawnEffects: recor
 4 BDD5 TextPackets_BDD5 ; PPU text packets
 4 BE06 TextPackets_BE06 ; PPU text packets
 4 BE19 TextPackets_BE19 ; PPU text packets
+5 BD0A CreditsScript_BD0A ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BD67 CreditsScript_BD67 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BD74 CreditsScript_BD74 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BD8C CreditsScript_BD8C ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BD99 CreditsScript_BD99 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BDAD CreditsScript_BDAD ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BDF4 CreditsScript_BDF4 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BE18 CreditsScript_BE18 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BE3D CreditsScript_BE3D ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BE62 CreditsScript_BE62 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BE77 CreditsScript_BE77 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BEA4 CreditsScript_BEA4 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BECF CreditsScript_BECF ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BF0A CreditsScript_BF0A ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BF48 CreditsScript_BF48 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BFA9 CreditsScript_BFA9 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BFDC CreditsScript_BFDC ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells

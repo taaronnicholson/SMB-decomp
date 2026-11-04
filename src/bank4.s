@@ -1318,11 +1318,11 @@ GameState0B:
 @B4_B0BB:
     STA zp_D1
     TAY
-    LDA Tbl_B4_B0C4,y
+    LDA GameState0B_Tbl_B0C4,y
     STA zp_47
     RTS
-; Tbl_B4_B0C4: 20 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B0C4:
+; GameState0B_Tbl_B0C4: 20 bytes, read by GameState0B
+GameState0B_Tbl_B0C4:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
 B4_B0D8:

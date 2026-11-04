@@ -2180,7 +2180,7 @@ FadeTableStep:
     BNE @B0_BF91
     TAY
 @B0_BF91:
-    CMP Tbl_B0_BFBB,y
+    CMP FadeTableStep_Tbl_BFBB,y
     BEQ @B0_BFA1
 @B0_BF96:
     STY zp_49
@@ -2200,12 +2200,12 @@ FadeTableStep:
     LDA zp_47
     BNE @B0_BFA0
     INY
-    LDA Tbl_B0_BFBB,y
+    LDA FadeTableStep_Tbl_BFBB,y
     STA zp_47
     INY
     JMP @B0_BF96
-; Tbl_B0_BFBB: 69 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B0_BFBB:
+; FadeTableStep_Tbl_BFBB: 69 bytes, read by FadeTableStep
+FadeTableStep_Tbl_BFBB:
     .byte $79,$01,$7B,$02,$7D,$03,$7F,$04,$7F,$00,$00,$00,$04,$F7,$FF,$FB
     .byte $FF,$60,$00,$88,$00,$9B,$04,$00,$21,$FF,$FF,$FF,$FF,$00,$02,$80
     .byte $00,$FF,$FD,$FF,$7E,$FF,$FF,$FF,$FD,$40,$00,$80,$00,$FD,$FF,$FF
