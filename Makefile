@@ -36,6 +36,10 @@ regen:
 	python3 -I tools/summarize_handlers.py
 	python3 -I tools/summarize_player.py
 
+tables:
+	python3 -I tools/gen_table_hints.py
+	python3 -I tools/decomp.py
+
 clean:
 	rm -rf build
-.PHONY: all verify regen clean
+.PHONY: all verify regen tables clean

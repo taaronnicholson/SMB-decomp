@@ -177,7 +177,8 @@ PPUCopy1:
     ADC ppu_buffer_idx
     TAX
     JMP F_C0B3
-F_C1D0:
+; Tbl_F_C1D0: 31 bytes, read by PlayerState02
+Tbl_F_C1D0:
     .res 10, $00
     .byte $02,$02,$01,$01,$02,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$02
     .byte $02,$01,$01,$00,$00
@@ -222,9 +223,12 @@ F_C294:
     .word F_D4D5
     .word F_D2D3
     .byte $FE,$D3,$FE,$D4,$FE,$D5,$FE,$D4,$FE,$D3,$FE,$D2,$FE,$FE,$D3,$FE
-    .byte $FE,$D4,$FE,$D3,$D2,$D3,$D2,$FF,$C0,$FE,$FE,$FE,$C1,$FE,$FE,$FE
-    .byte $C0,$FE,$FE,$C1,$FE,$C0,$C1,$00,$FF,$D3,$FE,$D2,$FE,$D3,$C0,$FE
-    .byte $FE,$C1,$FE,$CD
+    .byte $FE,$D4
+; Tbl_F_C2EF: 34 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_C2EF:
+    .byte $FE,$D3,$D2,$D3,$D2,$FF,$C0,$FE,$FE,$FE,$C1,$FE,$FE,$FE,$C0,$FE
+    .byte $FE,$C1,$FE,$C0,$C1,$00,$FF,$D3,$FE,$D2,$FE,$D3,$C0,$FE,$FE,$C1
+    .byte $FE,$CD
     .word F_D3FF
     .word F_D4FE
     .word F_D4D5
@@ -235,13 +239,16 @@ F_C294:
     .word F_D4FE
     .word F_FEC0
     .byte $FE,$C1,$FE
-F_C326:
+; Tbl_F_C326: 11 bytes, read by QueueMapTileDraw
+Tbl_F_C326:
     .byte $CD
 F_C327:
     .byte $FF,$CB,$C2,$D6,$C2,$F5,$C2,$06,$C3,$12
-F_C331:
+; Tbl_F_C331: 5 bytes, read by QueueMapTileDraw
+Tbl_F_C331:
     .byte $C3,$D2,$D2,$00,$CD
-F_C336:
+; Tbl_F_C336: 6 bytes, read by QueueMapTileDraw
+Tbl_F_C336:
     .byte $CD,$D3,$D3,$C0,$D3,$D3
 ; TileHeightProfiles: 32 profiles x 16 columns: ground surface height per pixel column of a tile ($FF = no surface)
 TileHeightProfiles:
@@ -279,9 +286,11 @@ TileHeightProfiles:
     .byte $0E, $0C, $0B, $0A, $09, $09, $08, $08, $08, $08, $09, $09, $0A, $0B, $0C, $0E
 BitMask:
     .byte $01
-F_C53D:
+; Tbl_F_C53D: 7 bytes, read by GameState0B
+Tbl_F_C53D:
     .byte $02,$04,$08,$10,$20,$40,$80
-F_C544:
+; Tbl_F_C544: 130 bytes, read by RunTileEffects
+Tbl_F_C544:
     .byte $00,$FF,$04,$C0,$06,$FF,$08,$FF,$0A,$FF,$0C,$C1,$0E,$FF,$10,$FF
     .byte $12,$FF,$14,$C0,$16,$FF,$18,$FF,$1A,$C1,$1C,$FF,$1E,$FF,$20,$C0
     .byte $22,$FF,$24,$C1,$26,$FF,$28,$C0,$2A,$00,$00,$00,$2E,$C0,$30,$FF
@@ -757,7 +766,7 @@ F_C959:
     CMP #$04
     BNE F_C96F
     LDY stage_index
-    LDA F_C988,y
+    LDA Tbl_F_C988,y
     BNE F_C98D
 F_C96F:
     LDX #$00
@@ -777,7 +786,8 @@ F_C972:
     CPX #$3C
     BNE F_C972
     RTS
-F_C988:
+; Tbl_F_C988: 5 bytes, read by ClearOAMBuffer
+Tbl_F_C988:
     .byte $00,$01,$00,$02,$03
 F_C98D:
     LDY #$00
@@ -1224,7 +1234,7 @@ F_CC6A:
     STA ptr_lo
     LDA B6_A723,y
     STA ptr_hi
-    LDA B6_A724,y
+    LDA Tbl_B6_A724,y
     STA tmp_a
     BEQ F_CCB7
     LDA zp_DB
@@ -1387,7 +1397,7 @@ F_CDDD:
     JSR SwitchBank
     JSR B0_B5FB
     LDX tileset_id
-    LDA B0_8C95,x
+    LDA Tbl_B0_8C95,x
     JSR SwitchBankKeepX
     CLC
     JSR DecompressAndFinish
@@ -1541,6 +1551,8 @@ FarCall:
     LDA #$01
     PHA
     JMP (tmp_ptr_lo)
+; Tbl_F_CF02: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_CF02:
     .byte $68,$4C,$0D,$C9
 F_CF06:
     LDA #$3E
@@ -1698,7 +1710,7 @@ UpdateCamera:
     LDA camera_mode
     ASL a
     TAY
-    LDA F_D046,y
+    LDA Tbl_F_D046,y
     STA tmp_ptr_lo
     LDA F_D047,y
     STA tmp_ptr_hi
@@ -1724,7 +1736,8 @@ UpdateCamera:
     SBC #$00
     STA cam_x_hi
     RTS
-F_D046:
+; Tbl_F_D046: 12 bytes, read by UpdateCamera
+Tbl_F_D046:
     .byte $16
 F_D047:
     .byte $BB,$5F,$BC,$5D,$BD,$DA,$BC,$5F,$BC,$54,$D0
@@ -1853,7 +1866,7 @@ F_D0D9:
 F_D139:
     STA tileset_id
     TAX
-    LDA B0_8C95,x
+    LDA Tbl_B0_8C95,x
     STA ram_01A5
     TXA
     ASL a
@@ -1877,7 +1890,7 @@ F_D139:
     JSR SwitchBankKeepX
     LDY #$63
 F_D16B:
-    LDA B1_8999,y
+    LDA Tbl_B1_8999,y
     STA ram_041C,y
     DEY
     BPL F_D16B
@@ -3363,10 +3376,12 @@ F_DBF1:
     LDX tmp_d
     LDA tmp_b
     RTS
-F_DBF6:
+; Tbl_F_DBF6: 27 bytes, read by CheckDoorTile
+Tbl_F_DBF6:
     .res 12, $01
     .byte $00,$01,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$00
-F_DC11:
+; Tbl_F_DC11: 16 bytes, read by TryStartJump
+Tbl_F_DC11:
     .byte $00,$00,$00,$01,$01,$01,$00,$01,$00,$00,$00,$00,$01,$01,$00,$00
 F_DC21:
     LDY #$FF
@@ -3437,7 +3452,7 @@ F_DC8C:
     LDA #$02
     JSR SwitchBank
     LDY player_state
-    LDX B2_B56E,y
+    LDX Tbl_B2_B56E,y
     BEQ F_DCF8
     DEX
     BEQ F_DCF2
@@ -3623,12 +3638,12 @@ F_DDE8:
     LDA shot_state_1
     BEQ F_DDFC
     LDX shot_state
-    LDA F_DC11,x
+    LDA Tbl_F_DC11,x
     BNE F_DDD7
     TXA
     CLC
     ADC shot_state_1
-    LDA F_DC11,x
+    LDA Tbl_F_DC11,x
 F_DDFA:
     BEQ F_DE09
 F_DDFC:
@@ -3963,15 +3978,15 @@ F_E066:
     STA zp_71
     LDA #$01
     JSR SwitchBank
-    LDA B1_89FD,y
+    LDA Tbl_B1_89FD,y
     INY
     CMP #$FF
     BEQ F_E08F
     STA ram_024D
-    LDA B1_89FD,y
+    LDA Tbl_B1_89FD,y
     INY
     STA zp_72
-    LDA B1_89FD,y
+    LDA Tbl_B1_89FD,y
     JMP F_E0AF
 F_E08F:
     LDA #$00
@@ -4989,7 +5004,7 @@ F_E7B6:
     LSR a
     LSR a
     TAX
-    LDA F_C1D0,x
+    LDA Tbl_F_C1D0,x
     BEQ F_E7F9
     AND #$01
     STA player_facing
@@ -6066,10 +6081,10 @@ ApplySwitch2:
     CLC
     ADC #$09
     STA zp_47
-    LDA F_EFCF,y
+    LDA Tbl_F_EFCF,y
     STA ram_0473
     INY
-    LDA F_EFCF,y
+    LDA Tbl_F_EFCF,y
     STA ram_046A
     JMP F_EFA2
 ToggleSwitch3:
@@ -6085,10 +6100,10 @@ ApplySwitch3:
     CLC
     ADC #$0D
     STA zp_47
-    LDA F_EFCF,y
+    LDA Tbl_F_EFCF,y
     STA ram_0474
     INY
-    LDA F_EFCF,y
+    LDA Tbl_F_EFCF,y
     STA ram_046B
 F_EFA2:
     LDY zp_DA
@@ -6110,13 +6125,14 @@ ApplySwitch1:
     CLC
     ADC #$05
     STA zp_47
-    LDA F_EFCF,y
+    LDA Tbl_F_EFCF,y
     STA ram_0472
     INY
-    LDA F_EFCF,y
+    LDA Tbl_F_EFCF,y
     STA ram_0469
     JMP F_EFA2
-F_EFCF:
+; Tbl_F_EFCF: 4 bytes, read by ApplySwitch2, ApplySwitch3, ApplySwitch1
+Tbl_F_EFCF:
     .byte $12,$00,$16,$05
 CheckDoorTile:
     LDA (ptr_lo),y
@@ -6223,7 +6239,7 @@ F_F083:
     JMP F_C6CC
 F_F088:
     LDX player_state
-    LDA F_DBF6,x
+    LDA Tbl_F_DBF6,x
     BNE F_F090
 F_F08F:
     RTS
@@ -6397,7 +6413,7 @@ RunTileEffects:
     CMP #$40
     BCS F_F255
     LDX ram_0720
-    LDA F_C544,x
+    LDA Tbl_F_C544,x
     STA ram_0720
     INX
     CMP #$00
@@ -6406,7 +6422,7 @@ RunTileEffects:
     STA tmp_a
     LDA ram_0722
     STA tmp_b
-    LDA F_C544,x
+    LDA Tbl_F_C544,x
     CMP #$FF
     BEQ F_F205
     JSR QueueMapTileDraw
@@ -6415,7 +6431,7 @@ F_F205:
     CMP #$40
     BCS F_F27D
     LDX ram_0723
-    LDA F_C544,x
+    LDA Tbl_F_C544,x
     STA ram_0723
     INX
     CMP #$00
@@ -6424,7 +6440,7 @@ F_F205:
     STA tmp_a
     LDA ram_0725
     STA tmp_b
-    LDA F_C544,x
+    LDA Tbl_F_C544,x
     CMP #$FF
     BEQ F_F22D
     JSR QueueMapTileDraw
@@ -6433,7 +6449,7 @@ F_F22D:
     CMP #$40
     BCS F_F27D
     LDX ram_0726
-    LDA F_C544,x
+    LDA Tbl_F_C544,x
     STA ram_0726
     INX
     CMP #$00
@@ -6442,7 +6458,7 @@ F_F22D:
     STA tmp_a
     LDA ram_0728
     STA tmp_b
-    LDA F_C544,x
+    LDA Tbl_F_C544,x
     CMP #$FF
     BEQ F_F255
     JSR QueueMapTileDraw
@@ -6451,7 +6467,7 @@ F_F255:
     CMP #$40
     BCS F_F27D
     LDX ram_0729
-    LDA F_C544,x
+    LDA Tbl_F_C544,x
     STA ram_0729
     INX
     CMP #$00
@@ -6460,7 +6476,7 @@ F_F255:
     STA tmp_a
     LDA ram_072B
     STA tmp_b
-    LDA F_C544,x
+    LDA Tbl_F_C544,x
     CMP #$FF
     BEQ F_F27D
     JSR QueueMapTileDraw
@@ -6656,7 +6672,7 @@ F_F3CC:
     STA tmp_a
     LDA zp_5C
     STA tmp_b
-    LDA F_C331,y
+    LDA Tbl_F_C331,y
     JSR QueueMapTileDraw
 F_F3DE:
     LDA touch_kind
@@ -6705,14 +6721,14 @@ F_F426:
     LDA ppu_buffer_idx
     CMP #$20
     BCS F_F43E
-    LDA F_C336,y
+    LDA Tbl_F_C336,y
     JSR QueueMapTileDraw
 F_F43E:
     LDA zp_5A
     BEQ F_F45E
     ASL a
     TAY
-    LDA F_C326,y
+    LDA Tbl_F_C326,y
     STA ptr_lo
     LDA F_C327,y
     STA ptr_hi
@@ -6765,7 +6781,7 @@ F_F497:
     ORA invuln_hi
     BNE F_F496
     LDY player_state
-    LDA F_F4D5,y
+    LDA Tbl_F_F4D5,y
     STA tmp_a
     BEQ F_F496
     LDA #$06
@@ -6787,13 +6803,14 @@ HurtPlayerKnockout:
     ORA invuln_hi
     BNE F_F4B9
     LDY player_state
-    LDA F_F4D5,y
+    LDA Tbl_F_F4D5,y
     BEQ F_F4B9
     LDA #$09
     JSR PlaySfxNoise
     LDA #$1A
     JMP F_F4AD
-F_F4D5:
+; Tbl_F_F4D5: 28 bytes, read by HurtPlayer, HurtPlayerKnockout
+Tbl_F_F4D5:
     .res 14, $01
     .res 14, $00
 PlayerState0F:
@@ -6801,7 +6818,7 @@ PlayerState0F:
     LDA death_timer
     LSR a
     TAY
-    LDA F_F510,y
+    LDA Tbl_F_F510,y
     BNE F_F507
     LDA #$10
     STA player_state
@@ -6814,7 +6831,8 @@ F_F507:
     STA zp_67
     STA zp_C1
     RTS
-F_F510:
+; Tbl_F_F510: 12 bytes, read by PlayerState0F
+Tbl_F_F510:
     .byte $46,$46,$47,$47,$48,$48,$48,$45,$45,$45,$45,$00
 PlayerState10:
     LDA death_timer
@@ -6924,7 +6942,7 @@ F_F5BA:
     STA tmp_ptr_lo
 F_F5DB:
     INX
-    LDA B3_8000,y
+    LDA Tbl_B3_8000,y
     AND #$30
     LSR a
     LSR a
@@ -6934,20 +6952,20 @@ F_F5E3:
     EOR tmp_ptr_hi
     STA ram_023C,x
     INX
-    LDA B3_8000,y
+    LDA Tbl_B3_8000,y
     AND #$C0
     STA ram_023C,x
     INX
     INX
     INX
-    LDA B3_8000,y
+    LDA Tbl_B3_8000,y
     AND #$03
     ASL a
     ADC #$F9
     EOR tmp_ptr_hi
     STA ram_023C,x
     INX
-    LDA B3_8000,y
+    LDA Tbl_B3_8000,y
     AND #$0C
     ASL a
     ASL a
@@ -7035,6 +7053,8 @@ F_F68F:
 F_F699:
     LDA F_F5E3,y
     JMP F_F68A
+; Tbl_F_F69F: 17 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_F69F:
     .byte $00,$78,$78,$78,$00,$00,$D2,$CE,$00,$00,$00,$00,$D7,$D7,$D7,$D7
     .byte $D7
 SetCollectedFlag:
@@ -7045,12 +7065,13 @@ SetCollectedFlag:
     STA collected_flags,y
     LDX zp_42
     RTS
-F_F6C1:
+; Tbl_F_F6C1: 16 bytes, read by GetCollectibleBit
+Tbl_F_F6C1:
     .byte $BC,$D1,$DB,$D6,$D9,$C8,$C9,$CA,$CB,$CC,$CD,$BD,$BE,$BF,$C2,$C3
 GetCollectibleBit:
     LDX #$0F
 F_F6D3:
-    CMP F_F6C1,x
+    CMP Tbl_F_F6C1,x
     BEQ F_F6E0
     DEX
     BPL F_F6D3
@@ -7193,7 +7214,7 @@ F_F7B8:
     LDX #$2F
 F_F7C7:
     LDY ent_type,x
-    LDA B6_A21E,y
+    LDA Tbl_B6_A21E,y
     BEQ F_F7E1
     LDA #$5D
     STA ent_type,x
@@ -7440,7 +7461,8 @@ F_F928:
 F_F99B:
     LDX zp_42
     RTS
-F_F99E:
+; Tbl_F_F99E: 24 bytes, read by AwardPickup
+Tbl_F_F99E:
     .byte $0A
 F_F99F:
     .byte $00,$14,$00,$1E,$00,$32,$00,$64,$00,$C8,$00,$2C,$01,$F4,$01,$E8
@@ -7455,11 +7477,12 @@ AwardPickup:
     LDY #$FA
     JSR SpawnEffects
     LDY stage_index
-    LDA F_F9D2,y
+    LDA Tbl_F_F9D2,y
     LDY tmp_ptr_lo
     STA ram_05C0,y
     RTS
-F_F9D2:
+; Tbl_F_F9D2: 5 bytes, read by AwardPickup
+Tbl_F_F9D2:
     .byte $29,$3F,$3E,$40,$29
 F_F9D7:
     LDA #$01
@@ -7473,7 +7496,7 @@ F_F9D7:
 F_F9EA:
     ASL a
     TAY
-    LDA F_F99E,y
+    LDA Tbl_F_F99E,y
     STA tmp_c
     LDA F_F99F,y
     STA tmp_d
@@ -7501,6 +7524,8 @@ F_F9F9:
     STA ent_radius,y
     STA ent_param2,y
     RTS
+; Tbl_F_FA32: 11 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_FA32:
     .byte $37,$00,$00,$00,$00,$00,$29,$00,$00,$00,$FF
 FindFreeEntitySlot:
     LDY #$2F
@@ -8318,11 +8343,15 @@ F_FFAB:
 F_FFB4:
     ROL tmp_08
     RTS
+; Tbl_F_FFB7: 7 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_FFB7:
     .byte $08,$60,$08,$60,$51,$85,$53
     ROL tmp_a
     JSR $FDE6
     ROL tmp_08
     RTS
+; Tbl_F_FFC6: 58 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_FFC6:
     .byte $00,$01,$FF,$FB,$FF,$BB,$00,$00,$20,$00,$00,$00,$00,$00,$00,$00
     .res 10, $00
     .byte $41,$4C,$46,$52,$45,$44,$20,$43,$48,$49,$43,$4B,$45,$4E,$00,$00

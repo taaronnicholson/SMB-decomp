@@ -3,6 +3,8 @@
 
 .segment "BANK4"
 
+; Tbl_B4_8000: 128 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_8000:
     .res 128, $D7
 ; AreaMap23: tile map for area(s) 23: 128 x 16 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap23:
@@ -138,6 +140,8 @@ AreaMap23:
     .res 23, $05
     .byte $06,$04,$05,$05,$05,$05,$05,$04,$05,$06,$05,$05,$06,$04,$05,$05
     .byte $05,$05,$05,$05,$05,$05,$05,$06,$00,$04,$05,$05,$05,$05,$06,$04
+; Tbl_B4_8880: 32 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_8880:
     .res 32, $D7
 ; AreaMap21: tile map for area(s) 21: 32 x 32 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap21:
@@ -796,7 +800,7 @@ B4_AC3F:
 B4_AC4F:
     STA zp_D1
     TAY
-    LDA B4_ADBB,y
+    LDA Tbl_B4_ADBB,y
     STA zp_47
     RTS
 B4_AC58:
@@ -960,9 +964,12 @@ B4_AD99:
     LDA #$02
     STA nmi_state
     RTS
+; Tbl_B4_ADA5: 22 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_ADA5:
     .byte $40,$E8,$FF,$04,$00,$C0,$09,$50,$00,$00,$FF,$90,$00,$00,$00,$00
     .byte $F0,$02,$00,$00,$00,$FF
-B4_ADBB:
+; Tbl_B4_ADBB: 20 bytes, read by Gfx_B4_ABB2
+Tbl_B4_ADBB:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
 DispatchGameState:
@@ -1079,14 +1086,15 @@ B4_AEA2:
     AND #$3F
     STA zp_C5
     LDY ptr_lo
-    LDA B4_AEB6,y
+    LDA Tbl_B4_AEB6,y
     BMI B4_AEB5
     CLC
     ADC #$11
     STA zp_47
 B4_AEB5:
     RTS
-B4_AEB6:
+; Tbl_B4_AEB6: 64 bytes, read by GameState02
+Tbl_B4_AEB6:
     .byte $01,$FF,$02,$FE,$01,$FF,$02,$FE,$01,$FF,$02,$01,$00,$FF,$FF,$FF
     .byte $FF,$FF,$FF,$FF,$FF,$FF,$FF,$01,$FF,$02,$FE,$01,$FF,$02,$FE,$01
     .byte $FF,$02,$01,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
@@ -1182,6 +1190,8 @@ B4_AF7B:
     STA game_state
     LDA #$4A
     JMP PlaySfxNoise
+; Tbl_B4_AFB3: 27 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_AFB3:
     .byte $21,$22,$87,$40,$44,$45,$52,$46,$4C,$41,$FF,$21,$62,$89,$4C,$4C
     .byte $49,$57,$20,$53,$49,$48,$54,$FF,$21,$82,$89
     .byte ":UOY PLEH"   ; reads: "HELP YOU:"
@@ -1261,6 +1271,8 @@ B4_B06F:
     LDA tmp_a
     STA zp_47
     RTS
+; Tbl_B4_B074: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B074:
     .byte $26,$6A,$8C,$40
     .byte "RAELC EGATS"   ; reads: "STAGE CLEAR"
     .byte $00
@@ -1298,10 +1310,11 @@ B4_B0BA:
 B4_B0BB:
     STA zp_D1
     TAY
-    LDA B4_B0C4,y
+    LDA Tbl_B4_B0C4,y
     STA zp_47
     RTS
-B4_B0C4:
+; Tbl_B4_B0C4: 20 bytes, read by GameState0B
+Tbl_B4_B0C4:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
 B4_B0D8:
@@ -1427,7 +1440,7 @@ B4_B1AC:
     JSR PPUBuffer_Append
     INC ram_072F
     LDA onetime_flags
-    AND F_C53D
+    AND Tbl_F_C53D
     BNE B4_B1D8
     LDA #$09
     STA ram_072F
@@ -1472,6 +1485,8 @@ B4_B1D9:
     INC ram_072F
 B4_B226:
     RTS
+; Tbl_B4_B227: 18 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B227:
     .byte $26,$CE,$85,$44,$4E,$55,$4F,$46,$00,$26,$CE,$85,$20,$20,$20,$20
     .byte $20,$00
 B4_B239:
@@ -1507,7 +1522,7 @@ B4_B277:
     RTS
 B4_B278:
     LDY zp_D1
-    LDA B4_B2BE,y
+    LDA Tbl_B4_B2BE,y
     BEQ B4_B277
     INC zp_D1
     CMP #$FF
@@ -1536,7 +1551,8 @@ B4_B278:
 B4_B2BB:
     STA zp_47
     RTS
-B4_B2BE:
+; Tbl_B4_B2BE: 64 bytes, read by GameState0B
+Tbl_B4_B2BE:
     .res 8, $14
     .byte $15,$15,$FF,$15,$15,$15,$15,$15,$15,$15,$15,$15,$14,$14,$15,$15
     .byte $14,$00,$60
@@ -1559,6 +1575,8 @@ B4_B2D9:
     LDA tmp_b
     STA ram_0650
     RTS
+; Tbl_B4_B31F: 24 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B31F:
     .byte $26,$EF,$84,$30,$31,$20,$58,$00,$26,$EF,$84,$30,$35,$20,$58,$00
     .byte $26,$EF,$84,$20,$20,$20,$20,$00
 GameState0D:
@@ -1754,8 +1772,12 @@ B4_B49F:
     STA zp_47
 B4_B4A8:
     RTS
+; Tbl_B4_B4A9: 14 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B4A9:
     .byte $21,$22,$87,$40,$44,$45,$52,$46,$4C,$41,$FF,$21,$62,$8A
     .byte "TSEUQ RUOY"   ; reads: "YOUR QUEST"
+; Tbl_B4_B4C1: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B4C1:
     .byte $FF,$21,$82,$88
     .byte ":REVO SI"   ; reads: "IS OVER:"
     .byte $00
@@ -1821,6 +1843,8 @@ B4_B528:
     .word B4_B71D
     .word B4_BA00
     .word B4_B767
+; Tbl_B4_B539: 7 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B539:
     .byte $A4,$93,$B9,$B4,$B7,$D0,$16
 B4_B540:
     LDA #$09
@@ -1833,6 +1857,8 @@ B4_B540:
     STA game_state
     LDA #$08
     JMP PlaySong
+; Tbl_B4_B556: 13 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B556:
     .byte $8D,$B1,$01,$A9,$06,$20,$3B,$CE,$20,$8D,$C9,$AD,$B1
     ORA (scroll_y_lo,x)
     ASL a
@@ -1862,7 +1888,7 @@ B4_B579:
     STA ram_01B4
     LDA B4_B7B7,y
     STA ram_01B5
-    LDA B4_B7B8,y
+    LDA Tbl_B4_B7B8,y
     STA ram_01B6
     LDA #$01
     STA ram_0735
@@ -2021,6 +2047,8 @@ B4_B6B6:
     LDA #$EF
     LDY #$B6
     JMP SpawnEffects
+; Tbl_B4_B6EF: 11 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B6EF:
     .byte $40,$E8,$FF,$04,$00,$C0,$09,$50,$00,$00,$FF
 B4_B6FA:
     CMP #$02
@@ -2125,7 +2153,8 @@ B4_B7B6:
     .byte $00
 B4_B7B7:
     .byte $02
-B4_B7B8:
+; Tbl_B4_B7B8: 58 bytes, read by GameState13
+Tbl_B4_B7B8:
     .byte $03,$03,$C4,$B9,$63,$B9,$3D,$3E,$46,$03,$C8,$B9,$C2,$B8,$3D,$99
     .byte $46,$02,$CF,$B9,$D1,$B7,$3D,$87,$8A,$5E,$41,$4C,$46,$52,$45,$44
     .byte $3A,$20,$20,$20,$20,$20,$20,$20,$5F,$5E,$20,$20,$20,$20,$20,$20
@@ -2134,6 +2163,8 @@ B4_B7B8:
     .byte "THE TIME HAS  "
     .byte $5F,$5E
     .byte "COME FOR OUR  "
+; Tbl_B4_B810: 50 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B810:
     .byte $5F,$5E,$46,$49,$4E,$41,$4C,$20,$42,$41,$54,$54,$4C,$45,$3A,$20
     .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
     .byte $5F,$5E,$41,$46,$54,$45,$52,$20,$49,$20,$48,$41,$56,$45,$20,$20
@@ -2143,6 +2174,8 @@ B4_B7B8:
     .byte "THE WORLD WILL"
     .byte $5F,$5E
     .byte "FALL INTO MY  "
+; Tbl_B4_B870: 131 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B870:
     .byte $5F,$5E,$45,$56,$49,$4C,$20,$47,$52,$41,$53,$50,$3C,$20,$20,$20
     .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
     .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41
@@ -2153,20 +2186,28 @@ B4_B7B8:
     .byte $20,$5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
     .byte $20,$5F,$5E
     .byte "BUT YOUR POWER"
+; Tbl_B4_B901: 18 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B901:
     .byte $5F,$5E,$49,$53,$20,$4E,$4F,$20,$4D,$41,$54,$43,$48,$20,$20,$20
     .byte $5F,$5E
     .byte "FOR THE MIGHTY"
+; Tbl_B4_B921: 67 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B921:
     .byte $5F,$5E,$4D,$45,$4B,$41,$20,$43,$48,$49,$43,$4B,$45,$4E,$53,$20
     .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
     .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41
     .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$3B,$3B,$3B,$20,$20,$20,$20,$20
     .byte $5F,$00,$5E
     .byte "THE EGGS ARE  "
+; Tbl_B4_B972: 18 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B972:
     .byte $5F,$5E,$46,$41,$52,$20,$46,$41,$52,$20,$41,$57,$41,$59,$3A,$20
     .byte $5F,$5E
     .byte "YOU WILL NEVER"
     .byte $5F,$5E
     .byte "SEE THEM AGAIN"
+; Tbl_B4_B9A2: 94 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B9A2:
     .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
     .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$3B,$3B,$3B,$20,$20
     .byte $5F,$00,$64,$D9,$B9,$00,$78,$F6,$B9,$64,$EC,$B9,$00,$50,$EC,$B9
@@ -2463,6 +2504,8 @@ B4_BC04:
     LDA #$03
     STA ram_01BE
     RTS
+; Tbl_B4_BC0A: 68 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_BC0A:
     .byte $24,$E8,$90,$AD,$AC,$AC,$AC,$AC,$AC,$AC,$AC,$AC,$AC,$AC,$AC,$AC
     .byte $AC,$AC,$AB,$00,$5E,$63,$63,$63,$63,$63,$63,$63,$63,$63,$63,$63
     .byte $63,$63,$63,$5F,$60,$61,$61,$61,$61,$61,$61,$61,$61,$61,$61,$61
@@ -2613,8 +2656,12 @@ B4_BD3D:
     RTS
     .byte $20,$A8,$8C
     .byte "DESUAP  EMAG"   ; reads: "GAME  PAUSED"
+; Tbl_B4_BD5E: 13 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_BD5E:
     .byte $FF,$21,$88,$85,$45,$52,$4F,$43,$53,$FF,$21,$C9,$88
     .byte "SNOOLLAB"   ; reads: "BALLOONS"
+; Tbl_B4_BD73: 30 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_BD73:
     .byte $FF,$22,$0A,$84,$45,$4D,$49,$54,$FF,$22,$49,$88,$53,$44,$4E,$4F
     .byte $4D,$41,$49,$44,$FF,$22,$8A,$85,$53,$45,$56,$49,$4C,$00
 B4_BD91:
@@ -2632,15 +2679,23 @@ B4_BD91:
     STA zp_74
     JSR B4_BEDF
     JMP WaitForNMI
+; Tbl_B4_BDB2: 23 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_BDB2:
     .byte $21,$28,$90,$44,$45,$52,$45,$54,$53,$49,$47,$45,$52,$20,$20,$41
     .byte $20,$53,$49,$FF,$21,$6A,$8C
     .byte "FO KRAMEDART"   ; reads: "TRADEMARK OF"
+; Tbl_B4_BDD5: 37 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_BDD5:
     .byte $FF,$21,$AC,$88,$54,$48,$47,$49,$4C,$49,$57,$54,$FF,$22,$27,$91
     .byte $54,$48,$47,$49,$4C,$49,$57,$54,$20,$33,$39,$39,$31,$20,$3E,$43
     .byte $3D,$00,$22,$AA,$8C
     .byte "YB DEHSILBUP"   ; reads: "PUBLISHED BY"
+; Tbl_B4_BE06: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_BE06:
     .byte $FF,$22,$E9,$8F
     .byte ":CNI  EPACSDNIM"   ; reads: "MINDSCAPE  INC:"
+; Tbl_B4_BE19: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_BE19:
     .byte $FF,$23,$66,$94
     .byte "ODNETNIN YB DESNECIL"   ; reads: "LICENSED BY NINTENDO"
     .byte $00
@@ -2720,6 +2775,8 @@ B4_BEB9:
     JSR RenderOffAndWait
     JSR ClearOAMBuffer
     JMP DisableNMI
+; Tbl_B4_BED7: 8 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_BED7:
     .byte $14,$00,$14,$2D,$00,$00,$00,$00
 B4_BEDF:
     INC zp_74
@@ -2859,6 +2916,8 @@ B4_BFD3:
     JMP B4_BF0B
 B4_BFD6:
     RTS
+; Tbl_B4_BFD7: 41 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_BFD7:
     .byte $FF,$04,$00,$00,$42,$FF,$FF,$FF,$7F,$FF,$FF,$FF,$FF,$1C,$00,$00
     .byte $40,$FF,$FF,$FF,$FE,$00,$00,$00,$00,$EB,$04,$00,$00,$FF,$FF,$FD
     .byte $FF,$00,$00,$C0,$00,$FF,$FF,$DF,$BE

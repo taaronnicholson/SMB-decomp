@@ -1,0 +1,1472 @@
+[
+ {
+  "bank": 0,
+  "addr": 33239,
+  "len": 5,
+  "name": "Tbl_B0_81D7",
+  "comment": "5 bytes, read by PaletteFadeStep"
+ },
+ {
+  "bank": 0,
+  "addr": 33341,
+  "len": 8,
+  "name": "Tbl_B0_823D",
+  "comment": "8 bytes, read by ReadController"
+ },
+ {
+  "bank": 0,
+  "addr": 33715,
+  "len": 6,
+  "name": "Tbl_B0_83B3",
+  "comment": "6 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 0,
+  "addr": 35989,
+  "len": 6,
+  "name": "Tbl_B0_8C95",
+  "comment": "6 bytes, read by CheckPause, LoadArea"
+ },
+ {
+  "bank": 0,
+  "addr": 46933,
+  "len": 85,
+  "name": "Tbl_B0_B755",
+  "comment": "85 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 0,
+  "addr": 47183,
+  "len": 36,
+  "name": "Tbl_B0_B84F",
+  "comment": "36 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 0,
+  "addr": 47239,
+  "len": 30,
+  "name": "Tbl_B0_B887",
+  "comment": "30 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 0,
+  "addr": 47292,
+  "len": 22,
+  "name": "Tbl_B0_B8BC",
+  "comment": "22 bytes, read by LoadFont"
+ },
+ {
+  "bank": 0,
+  "addr": 49083,
+  "len": 69,
+  "name": "Tbl_B0_BFBB",
+  "comment": "69 bytes, read by SineTable_Data"
+ },
+ {
+  "bank": 1,
+  "addr": 32768,
+  "len": 44,
+  "name": "Tbl_B1_8000",
+  "comment": "44 bytes, read by DrawEntity"
+ },
+ {
+  "bank": 1,
+  "addr": 33003,
+  "len": 26,
+  "name": "Tbl_B1_80EB",
+  "comment": "26 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 33029,
+  "len": 25,
+  "name": "Tbl_B1_8105",
+  "comment": "25 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 33388,
+  "len": 27,
+  "name": "Tbl_B1_826C",
+  "comment": "27 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 34693,
+  "len": 16,
+  "name": "Tbl_B1_8785",
+  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 35050,
+  "len": 56,
+  "name": "Tbl_B1_88EA",
+  "comment": "56 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 35225,
+  "len": 100,
+  "name": "Tbl_B1_8999",
+  "comment": "100 bytes, read by LoadArea"
+ },
+ {
+  "bank": 1,
+  "addr": 35325,
+  "len": 85,
+  "name": "Tbl_B1_89FD",
+  "comment": "85 bytes, read by PlayerState00"
+ },
+ {
+  "bank": 1,
+  "addr": 40981,
+  "len": 12,
+  "name": "Tbl_B1_A015",
+  "comment": "12 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 41558,
+  "len": 12,
+  "name": "Tbl_B1_A256",
+  "comment": "12 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 43449,
+  "len": 26,
+  "name": "Tbl_B1_A9B9",
+  "comment": "26 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 44114,
+  "len": 44,
+  "name": "Tbl_B1_AC52",
+  "comment": "44 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 44786,
+  "len": 4,
+  "name": "Tbl_B1_AEF2",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 44793,
+  "len": 4,
+  "name": "Tbl_B1_AEF9",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 44805,
+  "len": 4,
+  "name": "Tbl_B1_AF05",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 44822,
+  "len": 4,
+  "name": "Tbl_B1_AF16",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 44831,
+  "len": 4,
+  "name": "Tbl_B1_AF1F",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 45162,
+  "len": 42,
+  "name": "Tbl_B1_B06A",
+  "comment": "42 bytes, read by AreaSpawn23"
+ },
+ {
+  "bank": 1,
+  "addr": 45380,
+  "len": 13,
+  "name": "Tbl_B1_B144",
+  "comment": "13 bytes, read by AreaSpawn23"
+ },
+ {
+  "bank": 1,
+  "addr": 45393,
+  "len": 10,
+  "name": "Tbl_B1_B151",
+  "comment": "10 bytes, read by AreaSpawn23"
+ },
+ {
+  "bank": 1,
+  "addr": 45682,
+  "len": 163,
+  "name": "Tbl_B1_B272",
+  "comment": "163 bytes, read by AreaSpawn23"
+ },
+ {
+  "bank": 1,
+  "addr": 48639,
+  "len": 8,
+  "name": "Tbl_B1_BDFF",
+  "comment": "8 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 1,
+  "addr": 48878,
+  "len": 274,
+  "name": "Tbl_B1_BEEE",
+  "comment": "274 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 2,
+  "addr": 40668,
+  "len": 80,
+  "name": "Tbl_B2_9EDC",
+  "comment": "80 bytes, read by PixelTables"
+ },
+ {
+  "bank": 2,
+  "addr": 42400,
+  "len": 11,
+  "name": "Tbl_B2_A5A0",
+  "comment": "11 bytes, read by PixelTables"
+ },
+ {
+  "bank": 2,
+  "addr": 42411,
+  "len": 11,
+  "name": "Tbl_B2_A5AB",
+  "comment": "11 bytes, read by PixelTables"
+ },
+ {
+  "bank": 2,
+  "addr": 42422,
+  "len": 11,
+  "name": "Tbl_B2_A5B6",
+  "comment": "11 bytes, read by PixelTables"
+ },
+ {
+  "bank": 2,
+  "addr": 42433,
+  "len": 11,
+  "name": "Tbl_B2_A5C1",
+  "comment": "11 bytes, read by PixelTables"
+ },
+ {
+  "bank": 2,
+  "addr": 44628,
+  "len": 32,
+  "name": "Tbl_B2_AE54",
+  "comment": "32 bytes, read by TileFrameB"
+ },
+ {
+  "bank": 2,
+  "addr": 44660,
+  "len": 32,
+  "name": "Tbl_B2_AE74",
+  "comment": "32 bytes, read by TileFrameB"
+ },
+ {
+  "bank": 2,
+  "addr": 44692,
+  "len": 133,
+  "name": "Tbl_B2_AE94",
+  "comment": "133 bytes, read by TileFrameB"
+ },
+ {
+  "bank": 2,
+  "addr": 46266,
+  "len": 79,
+  "name": "Tbl_B2_B4BA",
+  "comment": "79 bytes, read by TileFrameB"
+ },
+ {
+  "bank": 2,
+  "addr": 46446,
+  "len": 60,
+  "name": "Tbl_B2_B56E",
+  "comment": "60 bytes, read by FilterCollectedTile"
+ },
+ {
+  "bank": 2,
+  "addr": 46568,
+  "len": 48,
+  "name": "Tbl_B2_B5E8",
+  "comment": "48 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 2,
+  "addr": 46969,
+  "len": 22,
+  "name": "Tbl_B2_B779",
+  "comment": "22 bytes, read by BinaryToDigits"
+ },
+ {
+  "bank": 2,
+  "addr": 47024,
+  "len": 34,
+  "name": "Tbl_B2_B7B0",
+  "comment": "34 bytes, read by BinaryToDigits"
+ },
+ {
+  "bank": 2,
+  "addr": 47058,
+  "len": 34,
+  "name": "Tbl_B2_B7D2",
+  "comment": "34 bytes, read by BinaryToDigits"
+ },
+ {
+  "bank": 3,
+  "addr": 32768,
+  "len": 747,
+  "name": "Tbl_B3_8000",
+  "comment": "747 bytes, read by PlayerState10"
+ },
+ {
+  "bank": 3,
+  "addr": 33847,
+  "len": 32,
+  "name": "Tbl_B3_8437",
+  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 3,
+  "addr": 35127,
+  "len": 32,
+  "name": "Tbl_B3_8937",
+  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 3,
+  "addr": 35639,
+  "len": 64,
+  "name": "Tbl_B3_8B37",
+  "comment": "64 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 3,
+  "addr": 36823,
+  "len": 32,
+  "name": "Tbl_B3_8FD7",
+  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 3,
+  "addr": 41751,
+  "len": 32,
+  "name": "Tbl_B3_A317",
+  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 3,
+  "addr": 44887,
+  "len": 16,
+  "name": "Tbl_B3_AF57",
+  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 3,
+  "addr": 47959,
+  "len": 16,
+  "name": "Tbl_B3_BB57",
+  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 3,
+  "addr": 48654,
+  "len": 4,
+  "name": "Tbl_B3_BE0E",
+  "comment": "4 bytes, read by AreaMap9"
+ },
+ {
+  "bank": 3,
+  "addr": 48658,
+  "len": 24,
+  "name": "Tbl_B3_BE12",
+  "comment": "24 bytes, read by AreaMap9"
+ },
+ {
+  "bank": 3,
+  "addr": 48682,
+  "len": 14,
+  "name": "Tbl_B3_BE2A",
+  "comment": "14 bytes, read by AreaMap9"
+ },
+ {
+  "bank": 3,
+  "addr": 48696,
+  "len": 89,
+  "name": "Tbl_B3_BE38",
+  "comment": "89 bytes, read by AreaMap9"
+ },
+ {
+  "bank": 3,
+  "addr": 48896,
+  "len": 5,
+  "name": "Tbl_B3_BF00",
+  "comment": "5 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 3,
+  "addr": 48995,
+  "len": 157,
+  "name": "Tbl_B3_BF63",
+  "comment": "157 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 32768,
+  "len": 128,
+  "name": "Tbl_B4_8000",
+  "comment": "128 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 34944,
+  "len": 32,
+  "name": "Tbl_B4_8880",
+  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 44453,
+  "len": 22,
+  "name": "Tbl_B4_ADA5",
+  "comment": "22 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 44475,
+  "len": 20,
+  "name": "Tbl_B4_ADBB",
+  "comment": "20 bytes, read by Gfx_B4_ABB2"
+ },
+ {
+  "bank": 4,
+  "addr": 44726,
+  "len": 64,
+  "name": "Tbl_B4_AEB6",
+  "comment": "64 bytes, read by GameState02"
+ },
+ {
+  "bank": 4,
+  "addr": 44979,
+  "len": 27,
+  "name": "Tbl_B4_AFB3",
+  "comment": "27 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 45172,
+  "len": 4,
+  "name": "Tbl_B4_B074",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 45252,
+  "len": 20,
+  "name": "Tbl_B4_B0C4",
+  "comment": "20 bytes, read by GameState0B"
+ },
+ {
+  "bank": 4,
+  "addr": 45607,
+  "len": 18,
+  "name": "Tbl_B4_B227",
+  "comment": "18 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 45758,
+  "len": 64,
+  "name": "Tbl_B4_B2BE",
+  "comment": "64 bytes, read by GameState0B"
+ },
+ {
+  "bank": 4,
+  "addr": 45855,
+  "len": 24,
+  "name": "Tbl_B4_B31F",
+  "comment": "24 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 46249,
+  "len": 14,
+  "name": "Tbl_B4_B4A9",
+  "comment": "14 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 46273,
+  "len": 4,
+  "name": "Tbl_B4_B4C1",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 46393,
+  "len": 7,
+  "name": "Tbl_B4_B539",
+  "comment": "7 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 46422,
+  "len": 13,
+  "name": "Tbl_B4_B556",
+  "comment": "13 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 46831,
+  "len": 11,
+  "name": "Tbl_B4_B6EF",
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 47032,
+  "len": 58,
+  "name": "Tbl_B4_B7B8",
+  "comment": "58 bytes, read by GameState13"
+ },
+ {
+  "bank": 4,
+  "addr": 47120,
+  "len": 50,
+  "name": "Tbl_B4_B810",
+  "comment": "50 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 47216,
+  "len": 131,
+  "name": "Tbl_B4_B870",
+  "comment": "131 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 47361,
+  "len": 18,
+  "name": "Tbl_B4_B901",
+  "comment": "18 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 47393,
+  "len": 67,
+  "name": "Tbl_B4_B921",
+  "comment": "67 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 47474,
+  "len": 18,
+  "name": "Tbl_B4_B972",
+  "comment": "18 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 47522,
+  "len": 94,
+  "name": "Tbl_B4_B9A2",
+  "comment": "94 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 48138,
+  "len": 68,
+  "name": "Tbl_B4_BC0A",
+  "comment": "68 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 48478,
+  "len": 13,
+  "name": "Tbl_B4_BD5E",
+  "comment": "13 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 48499,
+  "len": 30,
+  "name": "Tbl_B4_BD73",
+  "comment": "30 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 48562,
+  "len": 23,
+  "name": "Tbl_B4_BDB2",
+  "comment": "23 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 48597,
+  "len": 37,
+  "name": "Tbl_B4_BDD5",
+  "comment": "37 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 48646,
+  "len": 4,
+  "name": "Tbl_B4_BE06",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 48665,
+  "len": 4,
+  "name": "Tbl_B4_BE19",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 48855,
+  "len": 8,
+  "name": "Tbl_B4_BED7",
+  "comment": "8 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 4,
+  "addr": 49111,
+  "len": 41,
+  "name": "Tbl_B4_BFD7",
+  "comment": "41 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 32951,
+  "len": 28,
+  "name": "Tbl_B5_80B7",
+  "comment": "28 bytes, read by Ent18_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 33058,
+  "len": 18,
+  "name": "Tbl_B5_8122",
+  "comment": "18 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 33150,
+  "len": 15,
+  "name": "Tbl_B5_817E",
+  "comment": "15 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 35203,
+  "len": 16,
+  "name": "Tbl_B5_8983",
+  "comment": "16 bytes, read by Ent_CheckPlayerOverlap, Ent_CheckPlayerOverlapD"
+ },
+ {
+  "bank": 5,
+  "addr": 36173,
+  "len": 11,
+  "name": "Tbl_B5_8D4D",
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 36406,
+  "len": 18,
+  "name": "Tbl_B5_8E36",
+  "comment": "18 bytes, read by Ent02_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 36525,
+  "len": 23,
+  "name": "Tbl_B5_8EAD",
+  "comment": "23 bytes, read by Ent03_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 36591,
+  "len": 40,
+  "name": "Tbl_B5_8EEF",
+  "comment": "40 bytes, read by Ent04_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 36707,
+  "len": 72,
+  "name": "Tbl_B5_8F63",
+  "comment": "72 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 36890,
+  "len": 45,
+  "name": "Tbl_B5_901A",
+  "comment": "45 bytes, read by Ent06_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 36967,
+  "len": 12,
+  "name": "Tbl_B5_9067",
+  "comment": "12 bytes, read by Ent07_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 37136,
+  "len": 11,
+  "name": "Tbl_B5_9110",
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 37196,
+  "len": 9,
+  "name": "Tbl_B5_914C",
+  "comment": "9 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 37205,
+  "len": 46,
+  "name": "Tbl_B5_9155",
+  "comment": "46 bytes, read by Ent09_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 37373,
+  "len": 61,
+  "name": "Tbl_B5_91FD",
+  "comment": "61 bytes, read by Ent0A_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 37434,
+  "len": 185,
+  "name": "Tbl_B5_923A",
+  "comment": "185 bytes, read by Ent0A_Update, Ent_StartCollectAnim"
+ },
+ {
+  "bank": 5,
+  "addr": 37830,
+  "len": 139,
+  "name": "Tbl_B5_93C6",
+  "comment": "139 bytes, read by Ent0C_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 38158,
+  "len": 32,
+  "name": "Tbl_B5_950E",
+  "comment": "32 bytes, read by Ent0E_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 38548,
+  "len": 6,
+  "name": "Tbl_B5_9694",
+  "comment": "6 bytes, read by Ent16_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 38688,
+  "len": 45,
+  "name": "Tbl_B5_9720",
+  "comment": "45 bytes, read by Ent16_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 38733,
+  "len": 32,
+  "name": "Tbl_B5_974D",
+  "comment": "32 bytes, read by Ent16_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 38815,
+  "len": 16,
+  "name": "Tbl_B5_979F",
+  "comment": "16 bytes, read by Ent19_Update, Ent1F_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 38887,
+  "len": 61,
+  "name": "Tbl_B5_97E7",
+  "comment": "61 bytes, read by Ent1A_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 39042,
+  "len": 40,
+  "name": "Tbl_B5_9882",
+  "comment": "40 bytes, read by Ent1B_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 39082,
+  "len": 23,
+  "name": "Tbl_B5_98AA",
+  "comment": "23 bytes, read by Ent1B_Update, Ent1C_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 39105,
+  "len": 20,
+  "name": "Tbl_B5_98C1",
+  "comment": "20 bytes, read by Ent1E_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 39377,
+  "len": 16,
+  "name": "Tbl_B5_99D1",
+  "comment": "16 bytes, read by Ent20_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 39612,
+  "len": 23,
+  "name": "Tbl_B5_9ABC",
+  "comment": "23 bytes, read by Ent21_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 39984,
+  "len": 18,
+  "name": "Tbl_B5_9C30",
+  "comment": "18 bytes, read by Ent_TickRadius"
+ },
+ {
+  "bank": 5,
+  "addr": 40098,
+  "len": 26,
+  "name": "Tbl_B5_9CA2",
+  "comment": "26 bytes, read by Ent2E_Update, Ent4A_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 40169,
+  "len": 11,
+  "name": "Tbl_B5_9CE9",
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 40303,
+  "len": 11,
+  "name": "Tbl_B5_9D6F",
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 40347,
+  "len": 108,
+  "name": "Tbl_B5_9D9B",
+  "comment": "108 bytes, read by Ent31_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 40485,
+  "len": 9,
+  "name": "Tbl_B5_9E25",
+  "comment": "9 bytes, read by Ent32_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 40494,
+  "len": 174,
+  "name": "Tbl_B5_9E2E",
+  "comment": "174 bytes, read by Ent33_Update, Ent90_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 40800,
+  "len": 12,
+  "name": "Tbl_B5_9F60",
+  "comment": "12 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 41073,
+  "len": 37,
+  "name": "Tbl_B5_A071",
+  "comment": "37 bytes, read by Ent37_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 41110,
+  "len": 58,
+  "name": "Tbl_B5_A096",
+  "comment": "58 bytes, read by Ent37_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 41449,
+  "len": 21,
+  "name": "Tbl_B5_A1E9",
+  "comment": "21 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 41470,
+  "len": 51,
+  "name": "Tbl_B5_A1FE",
+  "comment": "51 bytes, read by Ent39_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 42164,
+  "len": 116,
+  "name": "Tbl_B5_A4B4",
+  "comment": "116 bytes, read by Ent8A_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 42280,
+  "len": 93,
+  "name": "Tbl_B5_A528",
+  "comment": "93 bytes, read by Ent47_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 42412,
+  "len": 11,
+  "name": "Tbl_B5_A5AC",
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 42666,
+  "len": 41,
+  "name": "Tbl_B5_A6AA",
+  "comment": "41 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 43969,
+  "len": 16,
+  "name": "Tbl_B5_ABC1",
+  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 44030,
+  "len": 39,
+  "name": "Tbl_B5_ABFE",
+  "comment": "39 bytes, read by Ent4F_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 44314,
+  "len": 5,
+  "name": "Tbl_B5_AD1A",
+  "comment": "5 bytes, read by Ent50_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 44459,
+  "len": 79,
+  "name": "Tbl_B5_ADAB",
+  "comment": "79 bytes, read by Ent55_Update, Ent93_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 44538,
+  "len": 39,
+  "name": "Tbl_B5_ADFA",
+  "comment": "39 bytes, read by Ent3E_Update, Ent44_Update, Ent54_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 44686,
+  "len": 21,
+  "name": "Tbl_B5_AE8E",
+  "comment": "21 bytes, read by Ent5D_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 44969,
+  "len": 22,
+  "name": "Tbl_B5_AFA9",
+  "comment": "22 bytes, read by Ent5F_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 44991,
+  "len": 32,
+  "name": "Tbl_B5_AFBF",
+  "comment": "32 bytes, read by Ent5E_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 45023,
+  "len": 38,
+  "name": "Tbl_B5_AFDF",
+  "comment": "38 bytes, read by Ent60_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 45130,
+  "len": 32,
+  "name": "Tbl_B5_B04A",
+  "comment": "32 bytes, read by Ent62_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 45275,
+  "len": 22,
+  "name": "Tbl_B5_B0DB",
+  "comment": "22 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 45625,
+  "len": 4,
+  "name": "Tbl_B5_B239",
+  "comment": "4 bytes, read by Ent74_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 45685,
+  "len": 48,
+  "name": "Tbl_B5_B275",
+  "comment": "48 bytes, read by Ent76_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 46481,
+  "len": 59,
+  "name": "Tbl_B5_B591",
+  "comment": "59 bytes, read by Ent86_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 46542,
+  "len": 30,
+  "name": "Tbl_B5_B5CE",
+  "comment": "30 bytes, read by Ent87_Update, Ent88_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 47085,
+  "len": 96,
+  "name": "Tbl_B5_B7ED",
+  "comment": "96 bytes, read by Ent8C_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 47181,
+  "len": 37,
+  "name": "Tbl_B5_B84D",
+  "comment": "37 bytes, read by Ent8F_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 47420,
+  "len": 51,
+  "name": "Tbl_B5_B93C",
+  "comment": "51 bytes, read by Ent9E_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 47654,
+  "len": 11,
+  "name": "Tbl_B5_BA26",
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 47767,
+  "len": 32,
+  "name": "Tbl_B5_BA97",
+  "comment": "32 bytes, read by Ent90_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 47838,
+  "len": 11,
+  "name": "Tbl_B5_BADE",
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48035,
+  "len": 11,
+  "name": "Tbl_B5_BBA3",
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48118,
+  "len": 21,
+  "name": "Tbl_B5_BBF6",
+  "comment": "21 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48179,
+  "len": 19,
+  "name": "Tbl_B5_BC33",
+  "comment": "19 bytes, read by Ent97_Update"
+ },
+ {
+  "bank": 5,
+  "addr": 48343,
+  "len": 107,
+  "name": "Tbl_B5_BCD7",
+  "comment": "107 bytes, read by Ent_Noop"
+ },
+ {
+  "bank": 5,
+  "addr": 48487,
+  "len": 4,
+  "name": "Tbl_B5_BD67",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48500,
+  "len": 4,
+  "name": "Tbl_B5_BD74",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48524,
+  "len": 4,
+  "name": "Tbl_B5_BD8C",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48537,
+  "len": 4,
+  "name": "Tbl_B5_BD99",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48557,
+  "len": 26,
+  "name": "Tbl_B5_BDAD",
+  "comment": "26 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48628,
+  "len": 20,
+  "name": "Tbl_B5_BDF4",
+  "comment": "20 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48664,
+  "len": 24,
+  "name": "Tbl_B5_BE18",
+  "comment": "24 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48701,
+  "len": 26,
+  "name": "Tbl_B5_BE3D",
+  "comment": "26 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48738,
+  "len": 5,
+  "name": "Tbl_B5_BE62",
+  "comment": "5 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48759,
+  "len": 28,
+  "name": "Tbl_B5_BE77",
+  "comment": "28 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48804,
+  "len": 29,
+  "name": "Tbl_B5_BEA4",
+  "comment": "29 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48847,
+  "len": 41,
+  "name": "Tbl_B5_BECF",
+  "comment": "41 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48906,
+  "len": 48,
+  "name": "Tbl_B5_BF0A",
+  "comment": "48 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 48968,
+  "len": 63,
+  "name": "Tbl_B5_BF48",
+  "comment": "63 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 49065,
+  "len": 41,
+  "name": "Tbl_B5_BFA9",
+  "comment": "41 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 5,
+  "addr": 49116,
+  "len": 36,
+  "name": "Tbl_B5_BFDC",
+  "comment": "36 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 6,
+  "addr": 35018,
+  "len": 24,
+  "name": "Tbl_B6_88CA",
+  "comment": "24 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 6,
+  "addr": 38008,
+  "len": 4,
+  "name": "Tbl_B6_9478",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 6,
+  "addr": 41022,
+  "len": 32,
+  "name": "Tbl_B6_A03E",
+  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 6,
+  "addr": 41502,
+  "len": 160,
+  "name": "Tbl_B6_A21E",
+  "comment": "160 bytes, read by PeckSwitchToggle"
+ },
+ {
+  "bank": 6,
+  "addr": 42062,
+  "len": 147,
+  "name": "Tbl_B6_A44E",
+  "comment": "147 bytes, read by AreaMap22"
+ },
+ {
+  "bank": 6,
+  "addr": 42579,
+  "len": 80,
+  "name": "Tbl_B6_A653",
+  "comment": "80 bytes, read by AreaMap22"
+ },
+ {
+  "bank": 6,
+  "addr": 42659,
+  "len": 11,
+  "name": "Tbl_B6_A6A3",
+  "comment": "11 bytes, read by AreaMap22"
+ },
+ {
+  "bank": 6,
+  "addr": 42670,
+  "len": 116,
+  "name": "Tbl_B6_A6AE",
+  "comment": "116 bytes, read by AreaMap22"
+ },
+ {
+  "bank": 6,
+  "addr": 42788,
+  "len": 122,
+  "name": "Tbl_B6_A724",
+  "comment": "122 bytes, read by ScanMapForBalloons"
+ },
+ {
+  "bank": 6,
+  "addr": 48876,
+  "len": 22,
+  "name": "Tbl_B6_BEEC",
+  "comment": "22 bytes, read by Gfx_B6_B738"
+ },
+ {
+  "bank": 6,
+  "addr": 48987,
+  "len": 165,
+  "name": "Tbl_B6_BF5B",
+  "comment": "165 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 7,
+  "addr": 49616,
+  "len": 31,
+  "name": "Tbl_F_C1D0",
+  "comment": "31 bytes, read by PlayerState02"
+ },
+ {
+  "bank": 7,
+  "addr": 49903,
+  "len": 34,
+  "name": "Tbl_F_C2EF",
+  "comment": "34 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 7,
+  "addr": 49958,
+  "len": 11,
+  "name": "Tbl_F_C326",
+  "comment": "11 bytes, read by QueueMapTileDraw"
+ },
+ {
+  "bank": 7,
+  "addr": 49969,
+  "len": 5,
+  "name": "Tbl_F_C331",
+  "comment": "5 bytes, read by QueueMapTileDraw"
+ },
+ {
+  "bank": 7,
+  "addr": 49974,
+  "len": 6,
+  "name": "Tbl_F_C336",
+  "comment": "6 bytes, read by QueueMapTileDraw"
+ },
+ {
+  "bank": 7,
+  "addr": 50493,
+  "len": 7,
+  "name": "Tbl_F_C53D",
+  "comment": "7 bytes, read by GameState0B"
+ },
+ {
+  "bank": 7,
+  "addr": 50500,
+  "len": 130,
+  "name": "Tbl_F_C544",
+  "comment": "130 bytes, read by RunTileEffects"
+ },
+ {
+  "bank": 7,
+  "addr": 51592,
+  "len": 5,
+  "name": "Tbl_F_C988",
+  "comment": "5 bytes, read by ClearOAMBuffer"
+ },
+ {
+  "bank": 7,
+  "addr": 52994,
+  "len": 4,
+  "name": "Tbl_F_CF02",
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 7,
+  "addr": 53318,
+  "len": 12,
+  "name": "Tbl_F_D046",
+  "comment": "12 bytes, read by UpdateCamera"
+ },
+ {
+  "bank": 7,
+  "addr": 56310,
+  "len": 27,
+  "name": "Tbl_F_DBF6",
+  "comment": "27 bytes, read by CheckDoorTile"
+ },
+ {
+  "bank": 7,
+  "addr": 56337,
+  "len": 16,
+  "name": "Tbl_F_DC11",
+  "comment": "16 bytes, read by TryStartJump"
+ },
+ {
+  "bank": 7,
+  "addr": 61391,
+  "len": 4,
+  "name": "Tbl_F_EFCF",
+  "comment": "4 bytes, read by ApplySwitch2, ApplySwitch3, ApplySwitch1"
+ },
+ {
+  "bank": 7,
+  "addr": 62677,
+  "len": 28,
+  "name": "Tbl_F_F4D5",
+  "comment": "28 bytes, read by HurtPlayer, HurtPlayerKnockout"
+ },
+ {
+  "bank": 7,
+  "addr": 62736,
+  "len": 12,
+  "name": "Tbl_F_F510",
+  "comment": "12 bytes, read by PlayerState0F"
+ },
+ {
+  "bank": 7,
+  "addr": 63135,
+  "len": 17,
+  "name": "Tbl_F_F69F",
+  "comment": "17 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 7,
+  "addr": 63169,
+  "len": 16,
+  "name": "Tbl_F_F6C1",
+  "comment": "16 bytes, read by GetCollectibleBit"
+ },
+ {
+  "bank": 7,
+  "addr": 63902,
+  "len": 24,
+  "name": "Tbl_F_F99E",
+  "comment": "24 bytes, read by AwardPickup"
+ },
+ {
+  "bank": 7,
+  "addr": 63954,
+  "len": 5,
+  "name": "Tbl_F_F9D2",
+  "comment": "5 bytes, read by AwardPickup"
+ },
+ {
+  "bank": 7,
+  "addr": 64050,
+  "len": 11,
+  "name": "Tbl_F_FA32",
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 7,
+  "addr": 65463,
+  "len": 7,
+  "name": "Tbl_F_FFB7",
+  "comment": "7 bytes, no direct code reference (continuation or unreferenced)"
+ },
+ {
+  "bank": 7,
+  "addr": 65478,
+  "len": 58,
+  "name": "Tbl_F_FFC6",
+  "comment": "58 bytes, no direct code reference (continuation or unreferenced)"
+ }
+]

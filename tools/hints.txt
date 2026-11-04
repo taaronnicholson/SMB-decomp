@@ -378,3 +378,8 @@ blob f C098 16 AttrRowHi high address of each attribute-table row
 blob f C1EF 256 TileKindTable_Data tile id -> kind (1 spring, 3 collectible, 4 = $CD); only ids $B4-$DB are meaningful
 blob 2 A629 30 TileFrameA 30 bytes written to PPU $1232 (CHR tile data for an animated tile, two variants of the call)
 blob 2 A696 30 TileFrameB 30 bytes written to PPU $1232 (the second frame set used by B2_A647/A65D/A673)
+
+; ---- code found hiding in table gaps ----
+entry 2 A6B4
+entry 2 A6B7
+words 5 B990 3 5                ; three sub-state entry points (Ent9E)

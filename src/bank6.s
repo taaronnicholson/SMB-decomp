@@ -1113,6 +1113,8 @@ B6_88BD:
     AND #$0F
     STA snd_out_noi_lo
     RTS
+; Tbl_B6_88CA: 24 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B6_88CA:
     .byte $1A,$03,$EC,$02,$C2,$02,$9A,$02,$75,$02,$52,$02,$30,$02,$11,$02
     .byte $E7,$03,$AF,$03,$7A,$03,$48,$03
 PeriodTable:
@@ -2098,6 +2100,8 @@ SongTable:
     .word B6_9DB2, B6_9DBC, B6_9DB8, B6_9DC6
     .byte $2E
     .word B6_9EEE, B6_9EF6, B6_9EF2, B6_9EFE
+; Tbl_B6_9478: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B6_9478:
     .byte $3E,$A0,$00,$00
 B6_947C:
     .word B6_951B
@@ -3302,6 +3306,8 @@ B6_A038:
 B6_A03B:
     .byte $FB,$03   ; song_transpose
     .byte $FF   ; next pattern
+; Tbl_B6_A03E: 32 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B6_A03E:
     .byte $7E,$F6,$00,$F8,$F5,$78,$94,$45,$6E,$64,$4D,$75,$73,$46,$58,$00
     .res 16, $D7
 ; AreaMap22: tile map for area(s) 22: 16 x 28 metatiles (rows 2..), one byte per 16x16 tile
@@ -3339,7 +3345,8 @@ AreaMap22:
     .byte $00,$00,$00,$37,$06,$37,$06,$00,$01,$02,$02,$02,$36,$02,$02,$02
     .byte $02,$36,$03,$04,$06,$07,$09,$3B,$07,$08,$08,$08,$08,$08,$08,$08
     .byte $08,$08,$09,$07,$09
-B6_A21E:
+; Tbl_B6_A21E: 160 bytes, read by PeckSwitchToggle
+Tbl_B6_A21E:
     .res 25, $00
     .res 9, $01
     .byte $00,$00,$00,$00,$00,$00,$00,$01,$01,$00,$00,$00,$00,$00,$00,$01
@@ -3520,7 +3527,7 @@ B6_A3EC:
     LDA zp_BD
     AND #$FE
     TAY
-    LDA B6_A44E,y
+    LDA Tbl_B6_A44E,y
     CMP #$FF
     BEQ B6_A41E
     CMP #$FD
@@ -3568,7 +3575,8 @@ B6_A433:
     LDX #$FF
     TXS
     JMP F_C667
-B6_A44E:
+; Tbl_B6_A44E: 147 bytes, read by AreaMap22
+Tbl_B6_A44E:
     .byte $00
 B6_A44F:
     .res 27, $00
@@ -3671,11 +3679,11 @@ B6_A572:
     RTS
 B6_A57F:
     LDY zp_4E
-    LDA B6_A653,y
+    LDA Tbl_B6_A653,y
     TAY
-    LDA B6_A6A3,y
+    LDA Tbl_B6_A6A3,y
     STA tmp_c
-    LDA B6_A6AE,y
+    LDA Tbl_B6_A6AE,y
     STA tmp_d
     LDY #$00
     LDA (tmp_c),y
@@ -3799,15 +3807,18 @@ B6_A643:
     DEC tmp_c
     BNE B6_A62A
     RTS
-B6_A653:
+; Tbl_B6_A653: 80 bytes, read by AreaMap22
+Tbl_B6_A653:
     .res 21, $00
     .byte $08,$03,$03,$01,$01,$01,$01,$01,$01,$01,$01,$01,$00,$00,$02,$02
     .byte $0A,$00,$00,$04,$00,$00,$00,$00,$05,$05,$05,$05,$00,$00,$00,$09
     .byte $09,$09,$09,$00,$00,$00,$00,$00,$00,$07,$07,$07,$07,$07,$07,$00
     .byte $00,$00,$00,$00,$06,$00,$00,$07,$07,$00,$00
-B6_A6A3:
+; Tbl_B6_A6A3: 11 bytes, read by AreaMap22
+Tbl_B6_A6A3:
     .byte $B9,$BC,$BF,$C2,$C5,$C8,$CB,$CE,$D1,$D4,$D7
-B6_A6AE:
+; Tbl_B6_A6AE: 116 bytes, read by AreaMap22
+Tbl_B6_A6AE:
     .res 11, $A6
     .byte $DA,$A6,$04,$E2,$A6,$04,$EA,$A6,$04,$F2,$A6,$03,$F8,$A6,$04,$00
     .byte $A7,$05,$98,$03,$06,$0A,$A7,$02,$0E,$A7,$04,$16,$A7,$04,$1E,$A7
@@ -3820,7 +3831,8 @@ B6_A722:
     .byte $00
 B6_A723:
     .byte $00
-B6_A724:
+; Tbl_B6_A724: 122 bytes, read by ScanMapForBalloons
+Tbl_B6_A724:
     .byte $00,$08,$22,$AC,$04,$00,$5C,$AC,$04,$00,$9C,$AC,$10,$00,$6E,$AD
     .byte $08,$00,$56,$B2,$0C,$00,$48,$B1,$0E,$00,$D4,$AD,$04,$00,$00,$00
     .byte $00,$00,$00,$00,$00,$00,$DA,$AB,$04,$00,$76,$AA,$2E,$00,$00,$00
@@ -4951,7 +4963,7 @@ B6_BDA0:
 B6_BDFC:
     LDA B6_BEE9,y
     STA ptr_lo
-    LDA B6_BEEC,y
+    LDA Tbl_B6_BEEC,y
     STA ptr_hi
     LDA PPUSTATUS
     LDA #$23
@@ -5061,7 +5073,8 @@ B6_BEE6:
     .byte $01,$02,$02
 B6_BEE9:
     .byte $FA,$EF,$EF
-B6_BEEC:
+; Tbl_B6_BEEC: 22 bytes, read by Gfx_B6_B738
+Tbl_B6_BEEC:
     .byte $BE,$BE,$BE,$0B,$47,$41,$4D,$45,$5C,$4F,$56,$45,$52,$00,$0C,$53
     .byte $54,$41,$47,$45,$5C,$00
 B6_BF02:
@@ -5109,6 +5122,8 @@ B6_BF02:
     ORA tmp_ptr_lo
     STA ram_0249
     RTS
+; Tbl_B6_BF5B: 165 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B6_BF5B:
     .byte $24,$FF,$FE,$FF,$64,$FF,$FF,$FF,$FF,$00,$00,$00,$40,$FF,$FE,$FF
     .byte $FB,$01,$00,$00,$00,$8E,$00,$00,$01,$BF,$BF,$FF,$FB,$0C,$00,$08
     .byte $20,$9B,$FF,$FF,$6F,$FF,$BF,$FB,$FF,$00,$00,$00,$00,$F5,$FF,$FE

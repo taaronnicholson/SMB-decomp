@@ -275,11 +275,13 @@ output position as scratch and reads them back for 16-bit address arithmetic.
 - `game_states.md` – the 28-entry game-state machine (level-complete flow verified).
 
 ## Status
-`make verify` rebuilds the ROM byte-for-byte. Of the 128 KB of PRG, about 36% is code (traced from the vectors, far calls,
-pointer tables and a conservative speculative decode) and about 55% more is classified data with labels, structure or comments
-(compressed graphics blocks, maps, tilesets, palettes, animation frames, spawn lists, sound data, text, tile property and
-height tables, pixel tables); **about 7% remains unclassified** (`GAPS=20 python3 -I tools/decomp.py` lists the largest
-gaps: the tail of bank 2, the start of bank 3, and assorted small tables in banks 6, 0, 1 and 5).
+`make verify` rebuilds the ROM byte-for-byte. Of the 128 KB of PRG, about 37% is code (traced from the vectors, far calls, pointer tables and a conservative
+speculative decode), and nearly all the rest is classified data. The data falls into two groups:
+- **decoded or described** (about 56%): compressed graphics (37 LZ blocks), maps, tilesets, palettes, animation frames, spawn lists, sound data, text,
+  tile property and height tables, pixel tables, state tables, and so on;
+- **labelled but not decoded** (about 7%, `Tbl_<bank>_<addr>` blobs from `tools/gen_table_hints.py`, cache `tools/tables.json`): 210 small tables, each
+  named after where it starts and annotated with the routines that read it (about 4% have a named reader); their formats have not been worked out.
+`GAPS=20 python3 -I tools/decomp.py` reports what is still unclassified (under 0.1%); `make tables` re-runs the table pass after new code is traced.
 Speculatively found code may include a few false positives (harmless for the byte-exact build; labels are provisional).
 
 Known unknowns: the meaning of most entity handlers beyond `docs/entity_handlers.md`, the 3-byte kind field of special-tile

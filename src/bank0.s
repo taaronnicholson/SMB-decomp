@@ -159,7 +159,7 @@ B0_812D:
     PHA
     LDA (jump_ptr_lo),y
     SEC
-    SBC B0_81D7,x
+    SBC Tbl_B0_81D7,x
     BCS B0_8160
     LDA #$0F
 B0_8160:
@@ -182,7 +182,7 @@ B0_8160:
 B0_8183:
     LDA (jump_ptr_lo),y
     SEC
-    SBC B0_81D7,x
+    SBC Tbl_B0_81D7,x
     BCS B0_818D
     LDA #$0F
 B0_818D:
@@ -197,7 +197,7 @@ B0_8196:
     INY
     LDA SpritePalettes,y
     SEC
-    SBC B0_81D7,x
+    SBC Tbl_B0_81D7,x
     BCS B0_81A7
     LDA #$0F
 B0_81A7:
@@ -205,7 +205,7 @@ B0_81A7:
     INY
     LDA SpritePalettes,y
     SEC
-    SBC B0_81D7,x
+    SBC Tbl_B0_81D7,x
     BCS B0_81B6
     LDA #$0F
 B0_81B6:
@@ -213,7 +213,7 @@ B0_81B6:
     INY
     LDA SpritePalettes,y
     SEC
-    SBC B0_81D7,x
+    SBC Tbl_B0_81D7,x
     BCS B0_81C5
     LDA #$0F
 B0_81C5:
@@ -227,7 +227,8 @@ B0_81CD:
     LDA #$00
     STA zp_50
     JMP SetScroll
-B0_81D7:
+; Tbl_B0_81D7: 5 bytes, read by PaletteFadeStep
+Tbl_B0_81D7:
     .byte $40,$30,$20,$10,$00
 B0_81DC:
     LDY #$00
@@ -266,7 +267,7 @@ B0_8217:
     LSR a
     BCC B0_8229
     LDA buttons
-    ORA B0_823D,y
+    ORA Tbl_B0_823D,y
     STA buttons
 B0_8229:
     DEY
@@ -280,7 +281,8 @@ B0_8229:
     AND buttons_prev
     STA buttons_released
     RTS
-B0_823D:
+; Tbl_B0_823D: 8 bytes, read by ReadController
+Tbl_B0_823D:
     .byte $10,$20,$80,$40,$08,$04,$02,$01
 ClearRAM:
     LDA #$07
@@ -421,6 +423,8 @@ StageRecord4:
 StageRecord5:
     .word $0036, $0078
     .byte $06, $0E, $00
+; Tbl_B0_83B3: 6 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B0_83B3:
     .byte $D0,$00,$19,$00,$02,$1C
 AreaHeaderPtrLo:
     .byte <(AreaHeader0)
@@ -744,7 +748,8 @@ Gfx_B0_88A7:
     .byte $2F,$DC,$2F,$17,$CC,$00,$66,$5F,$0F,$3B,$9E,$D1,$B0,$97,$45,$A1
     .byte $D0,$A8,$3C,$97,$E6,$E3,$B9,$E0,$F6,$7C,$CC,$BE,$E9,$68,$B8,$54
     .byte $2C,$1C,$CB,$E7,$67,$70,$79,$BC,$3E,$CC,$BF,$80,$00,$00
-B0_8C95:
+; Tbl_B0_8C95: 6 bytes, read by CheckPause, LoadArea
+Tbl_B0_8C95:
     .byte $00,$04,$04,$04,$04,$04
 TilesetRecord0:
     .word $AD31, $A43B, $A881, $AC41
@@ -1917,6 +1922,8 @@ B0_B726:
     DEC tmp_b
     BNE B0_B71A
     RTS
+; Tbl_B0_B755: 85 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B0_B755:
     .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8E,$8F
     .byte $6F,$90,$91,$92,$93,$94,$95,$96,$97,$98,$99,$9A,$9B,$9C,$9D,$9E
     .byte $9F,$70,$A0,$A1,$A2,$A3,$A4,$A5,$A6,$A7,$A8,$A9,$AA,$AB,$AC,$AD
@@ -2002,6 +2009,8 @@ B0_B7D7:
     LDA #$05
     STA tmp_a
     JMP B0_B71A
+; Tbl_B0_B84F: 36 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B0_B84F:
     .byte $50,$52,$45,$53,$53,$5C,$53,$54,$41,$52,$54,$00,$4C,$41,$53,$54
     .byte $5C,$53,$43,$4F,$52,$45,$5C,$00,$48,$49,$47,$48,$5C,$53,$43,$4F
     .byte $52,$45,$5C,$00
@@ -2018,6 +2027,8 @@ B0_B878:
     JMP B0_B878
 B0_B886:
     RTS
+; Tbl_B0_B887: 30 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B0_B887:
     .byte $70,$C7,$C8,$C9,$70,$CA,$CB,$CC,$CD,$70,$CE,$CF,$D0,$D1,$D2,$D3
     .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$70,$DD,$DE,$DF,$E0
 B0_B8A5:
@@ -2028,7 +2039,7 @@ B0_B8A9:
 B0_B8AB:
     LDX ppu_buffer_idx
 B0_B8AD:
-    LDA B0_B8BC,y
+    LDA Tbl_B0_B8BC,y
     STA ppu_buffer,x
     BEQ B0_B8B9
     INX
@@ -2037,7 +2048,8 @@ B0_B8AD:
 B0_B8B9:
     STX ppu_buffer_idx
     RTS
-B0_B8BC:
+; Tbl_B0_B8BC: 22 bytes, read by LoadFont
+Tbl_B0_B8BC:
     .byte $21,$0F,$82,$62,$61,$21,$2F,$82,$64,$63,$00,$21,$0F,$82,$4C,$4B
     .byte $21,$2F,$82,$50,$4F,$00
 B0_B8D2:
@@ -2168,7 +2180,7 @@ B0_BF8A:
     BNE B0_BF91
     TAY
 B0_BF91:
-    CMP B0_BFBB,y
+    CMP Tbl_B0_BFBB,y
     BEQ B0_BFA1
 B0_BF96:
     STY zp_49
@@ -2188,11 +2200,12 @@ B0_BFA1:
     LDA zp_47
     BNE B0_BFA0
     INY
-    LDA B0_BFBB,y
+    LDA Tbl_B0_BFBB,y
     STA zp_47
     INY
     JMP B0_BF96
-B0_BFBB:
+; Tbl_B0_BFBB: 69 bytes, read by SineTable_Data
+Tbl_B0_BFBB:
     .byte $79,$01,$7B,$02,$7D,$03,$7F,$04,$7F,$00,$00,$00,$04,$F7,$FF,$FB
     .byte $FF,$60,$00,$88,$00,$9B,$04,$00,$21,$FF,$FF,$FF,$FF,$00,$02,$80
     .byte $00,$FF,$FD,$FF,$7E,$FF,$FF,$FF,$FD,$40,$00,$80,$00,$FD,$FF,$FF

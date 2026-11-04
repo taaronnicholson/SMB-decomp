@@ -3,7 +3,8 @@
 
 .segment "BANK3"
 
-B3_8000:
+; Tbl_B3_8000: 747 bytes, read by PlayerState10
+Tbl_B3_8000:
     .byte $A0,$18,$13,$A0,$18,$13,$A0,$78,$80,$A3,$73,$80,$A3,$93,$3A,$A8
     .byte $93,$3A,$A8,$20,$01,$56,$20,$01,$56,$80,$A7,$3C,$8A,$A7,$3C,$3A
     .byte $19,$DC,$3A,$19,$D7,$01,$72,$27,$01,$72,$27,$91,$98,$21,$97,$98
@@ -95,6 +96,8 @@ StageTileSet4:
     .byte $14,$14,$14,$7C,$B4,$CC,$78,$00,$08,$08,$08,$08,$78,$70,$00,$00
     .byte $7E,$82,$32,$3A,$3A,$02,$7A,$8A,$00,$7C,$CC,$F4,$D4,$FC,$84,$04
     .byte $0A,$0A,$3E,$5A,$66,$3C,$00,$00,$04,$04,$04,$3C,$38,$00,$00,$00
+; Tbl_B3_8437: 32 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B3_8437:
     .res 32, $00
 ; AreaMap4: tile map for area(s) 4: 16 x 78 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap4:
@@ -178,8 +181,10 @@ AreaMap4:
     .res 9, $00
     .byte $40,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
     .res 12, $00
-    .byte $3F,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .res 12, $00
+    .byte $3F,$00,$00,$00,$00,$00,$00,$00,$00
+; Tbl_B3_8937: 32 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B3_8937:
+    .res 19, $00
     .byte $40,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$3C
 ; AreaMap2: tile map for area(s) 2,5: 32 x 15 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap2:
@@ -203,7 +208,10 @@ AreaMap2:
     .byte $12,$00,$00,$00,$00,$00,$00,$10,$00,$00,$00,$D6,$12,$00,$00,$00
     .byte $0C,$0D,$11,$37,$37,$37,$37,$37,$37,$37,$1E,$1E,$1E,$1E,$1E,$1E
     .res 19, $1E
-    .res 102, $37
+    .res 70, $37
+; Tbl_B3_8B37: 64 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B3_8B37:
+    .res 32, $37
     .res 17, $D7
     .res 14, $00
     .byte $D7
@@ -279,6 +287,8 @@ AreaMap0:
     .byte $06,$D2,$00,$00,$00,$00,$26,$00,$00,$00,$00,$AB,$00,$00,$D7,$04
     .byte $06,$D7,$D7,$D7,$00,$00,$00,$00,$C4,$00,$00,$00,$00,$D7,$D7,$04
     .byte $06,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$04
+; Tbl_B3_8FD7: 32 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B3_8FD7:
     .res 32, $D7
 ; AreaMap1: tile map for area(s) 1: 32 x 22 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap1:
@@ -602,6 +612,8 @@ AreaMap12:
     .byte $00,$2A,$29,$29,$2D,$14,$14,$2C,$29,$29,$2D,$14,$14,$2F,$14,$14
     .byte $14,$14,$14,$14,$2A,$29,$29,$2B,$14,$14,$2A,$29,$29,$2B,$14,$14
     .res 15, $14
+; Tbl_B3_A317: 32 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B3_A317:
     .res 32, $D7
 ; AreaMap10: tile map for area(s) 10: 16 x 70 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap10:
@@ -785,6 +797,8 @@ AreaMap15:
     .byte $16,$3E,$02,$3D,$00,$00,$00,$00,$00,$00,$00,$3C,$02,$01,$3F,$14
     .byte $14,$00,$00,$00,$00,$CD,$00,$14,$14,$00,$00,$00,$00,$00,$00,$14
     .byte $14,$4C,$4C,$4C,$4C,$4C,$4C,$14,$15,$4C,$4C,$4C,$4C,$4C,$4C,$15
+; Tbl_B3_AF57: 16 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B3_AF57:
     .res 16, $D7
 ; AreaMap3: tile map for area(s) 3: 16 x 70 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap3:
@@ -979,8 +993,11 @@ AreaMap8:
     .res 31, $1E
     .byte $41,$42,$42,$42,$43,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E
     .byte $1E,$1E,$44,$42,$42,$45,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E
-    .byte $1E,$1E,$1E,$1E,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$00,$00,$D7
+    .byte $1E,$1E,$1E,$1E
+; Tbl_B3_BB57: 16 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B3_BB57:
+    .res 15, $00
+    .byte $D7
 ; AreaMap9: tile map for area(s) 9: 16 x 32 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap9:
     .byte $0E,$21,$00,$00,$23,$23,$23,$21,$21,$21,$21,$BC,$BC,$BC,$BC,$23
@@ -1020,7 +1037,7 @@ B3_BD67:
     LDA zp_81
     LSR a
     TAY
-    LDA B3_BE12,y
+    LDA Tbl_B3_BE12,y
     BEQ B3_BD75
     JMP F_F507
 B3_BD75:
@@ -1036,7 +1053,7 @@ B3_BD7F:
     LSR a
     AND #$03
     TAY
-    LDA B3_BE0E,y
+    LDA Tbl_B3_BE0E,y
     STA player_frame
     RTS
 B3_BD8D:
@@ -1044,7 +1061,7 @@ B3_BD8D:
     LDA zp_81
     ASL a
     TAY
-    LDA B3_BE2A,y
+    LDA Tbl_B3_BE2A,y
     STA tmp_a
     CMP #$80
     BEQ B3_BDF4
@@ -1106,16 +1123,20 @@ B3_BE04:
     DEC fade_dir
 B3_BE0D:
     RTS
-B3_BE0E:
+; Tbl_B3_BE0E: 4 bytes, read by AreaMap9
+Tbl_B3_BE0E:
     .byte $27,$4B,$4E,$4F
-B3_BE12:
+; Tbl_B3_BE12: 24 bytes, read by AreaMap9
+Tbl_B3_BE12:
     .byte $08,$08,$4A,$4A,$08,$08,$08,$08,$4A,$4A,$4A,$08,$08,$08,$4A,$4A
     .byte $08,$08,$4A,$4A,$08,$4A,$4A,$00
-B3_BE2A:
+; Tbl_B3_BE2A: 14 bytes, read by AreaMap9
+Tbl_B3_BE2A:
     .byte $FD
 B3_BE2B:
     .byte $FF,$FE,$FF,$FE,$FF,$FE,$FF,$FE,$FF,$FE,$FF,$FF,$FF
-B3_BE38:
+; Tbl_B3_BE38: 89 bytes, read by AreaMap9
+Tbl_B3_BE38:
     .byte $FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$01,$00
     .byte $00,$00,$01,$00,$01,$00,$02,$00,$01,$00,$7F,$00,$FD,$FF,$FD,$FF
     .byte $FE,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$00,$00,$01,$00
@@ -1156,7 +1177,7 @@ B3_BEA9:
     LDA #$28
     JSR PlaySfxSq2
     LDY tmp_a
-    LDA B3_BE38,y
+    LDA Tbl_B3_BE38,y
     BEQ B3_BE9C
     PHA
     LDA ptr_lo
@@ -1183,6 +1204,8 @@ B3_BEA9:
     PLA
     STA ram_0720
     RTS
+; Tbl_B3_BF00: 5 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B3_BF00:
     .byte $00,$3C,$4A,$58,$66
     LDX #$00
     STX ram_01AA
@@ -1231,6 +1254,8 @@ B3_BF46:
     STA ram_010A
     STA ram_010B
     RTS
+; Tbl_B3_BF63: 157 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B3_BF63:
     .byte $FF,$00,$00,$00,$00,$FB,$FF,$3E,$DC,$80,$00,$00,$00,$F2,$00,$01
     .byte $04,$DF,$7F,$FF,$FF,$10,$00,$00,$00,$FE,$FF,$EF,$ED,$FF,$FF,$DF
     .byte $FE,$04,$00,$03,$10,$FF,$FD,$FF,$FE,$00,$00,$00,$00,$F2,$40,$00

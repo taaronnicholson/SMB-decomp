@@ -3,7 +3,8 @@
 
 .segment "BANK1"
 
-B1_8000:
+; Tbl_B1_8000: 44 bytes, read by DrawEntity
+Tbl_B1_8000:
     .byte $00,$FC,$F8,$F4,$F0,$EC,$E8,$E4,$E0,$DC,$D8,$D4,$D0,$CC,$C8,$C4
     .byte $C0,$BC,$B8,$B4,$B0,$AC,$A8,$A4,$A0,$9C,$98,$94,$90,$8C,$88,$84
     .byte $80,$7C,$78,$74,$70,$6C,$68,$64,$60,$5C,$58,$54
@@ -53,10 +54,10 @@ B1_8075:
 B1_807C:
     STA ram_024C
     LDX shot_frame
-    LDA B1_8105,x
+    LDA Tbl_B1_8105,x
     STA ram_024D
     LDA shot_attr
-    ORA B1_80EB,x
+    ORA Tbl_B1_80EB,x
     STA ram_024E
 B1_808F:
     LDA shot_state_1
@@ -101,16 +102,18 @@ B1_80D2:
 B1_80D7:
     STA ram_0250
     LDX shot_frame_1
-    LDA B1_8105,x
+    LDA Tbl_B1_8105,x
     STA ram_0251
     LDA shot_attr_1
-    ORA B1_80EB,x
+    ORA Tbl_B1_80EB,x
     STA ram_0252
     RTS
-B1_80EB:
+; Tbl_B1_80EB: 26 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_80EB:
     .byte $00,$00,$01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03,$00,$00,$03
     .byte $03,$00,$03,$03,$00,$00,$00,$00,$00,$02
-B1_8105:
+; Tbl_B1_8105: 25 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_8105:
     .byte $02,$00,$04,$06,$08,$0A,$16,$16,$16,$0C,$0E,$10,$12,$14,$16,$18
     .byte $1A,$1C,$1E,$20,$00,$00,$00,$22,$24
 B1_811E:
@@ -298,7 +301,8 @@ B1_8262:
     EOR #$02
     STA shot_state,x
     RTS
-B1_826C:
+; Tbl_B1_826C: 27 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_826C:
     .byte $B5,$E9,$18,$69,$08,$85,$55,$B5,$EB,$69,$00,$85,$56,$B5,$E5,$18
     .byte $69,$04,$85,$51,$B5,$E7,$69,$00,$85,$52,$20
     BIT shot_screen_x
@@ -446,7 +450,7 @@ B1_838D:
     LSR a
     LSR a
     TAY
-    LDA F_C1D0,y
+    LDA Tbl_F_C1D0,y
     CMP #$03
     BCS B1_83A0
 B1_8399:
@@ -806,12 +810,12 @@ B1_860E:
     JSR B1_814F
     RTS
 B1_8618:
-    JSR B1_826C
+    JSR Tbl_B1_826C
     JSR B1_81DA
     JSR B1_814F
     RTS
 B1_8622:
-    JSR B1_826C
+    JSR Tbl_B1_826C
     JSR B1_816F
     JSR B1_814F
     RTS
@@ -960,7 +964,7 @@ B1_871D:
     LSR a
     AND #$0E
     TAY
-    LDA B1_8785,y
+    LDA Tbl_B1_8785,y
     STA shot_frame,x
     LDA B1_8786,y
     STA shot_attr,x
@@ -1006,7 +1010,8 @@ B1_876A:
     LDA #$02
     STA ram_0720
     RTS
-B1_8785:
+; Tbl_B1_8785: 16 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_8785:
     .byte $03
 B1_8786:
     .byte $00,$04,$00,$12,$00,$13,$00,$03,$C0,$04,$C0,$12,$C0,$13,$C0
@@ -1208,6 +1213,8 @@ B1_88D0:
     LDA #$05
     STA shot_state,x
     RTS
+; Tbl_B1_88EA: 56 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_88EA:
     .byte $00,$00,$00,$00,$FF,$00,$FE,$00,$FD,$FF,$FD,$FF,$FE,$FE,$FF,$FE
     .byte $FF,$FE,$00,$FE,$01,$FF,$02,$FF,$02,$FF,$02,$00,$80,$00,$00,$00
     .byte $00,$FF,$00,$FE,$00,$FE,$01,$FE,$01,$FF,$02,$FF,$02,$00,$02,$01
@@ -1282,11 +1289,13 @@ B1_8982:
     CMP #$10
     BCC B1_8981
     JMP F_F0EA
-B1_8999:
+; Tbl_B1_8999: 100 bytes, read by LoadArea
+Tbl_B1_8999:
     .res 76, $00
     .byte $0A,$00,$00,$00,$00,$00,$00,$00,$00,$0E,$12,$12,$12,$05,$0E,$0E
     .byte $0E,$0E,$00,$05,$05,$05,$05,$05
-B1_89FD:
+; Tbl_B1_89FD: 85 bytes, read by PlayerState00
+Tbl_B1_89FD:
     .byte $00,$0E,$44,$00,$0E,$00,$00,$0E,$26,$00,$0A,$00,$00,$06,$24,$00
     .byte $14,$25,$22,$0E,$2D,$22,$0A,$2E,$24,$0A,$2F,$26,$0A,$2F,$24,$0A
     .byte $30,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$2F
@@ -1376,12 +1385,12 @@ B1_8AE7:
     STA zp_75
     LDA #$00
     STA zp_B0
-    LDA B1_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     JMP B1_8B00
 B1_8AF5:
     STA zp_B0
-    LDA B1_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
@@ -1475,12 +1484,12 @@ B1_8B8D:
     STA zp_75
     LDA #$00
     STA zp_B0
-    LDA B1_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     JMP B1_8BA6
 B1_8B9B:
     STA zp_B0
-    LDA B1_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
@@ -1586,12 +1595,12 @@ B1_8C48:
     STA zp_75
     LDA #$00
     STA zp_B0
-    LDA B1_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     JMP B1_8C61
 B1_8C56:
     STA zp_B0
-    LDA B1_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
@@ -1693,12 +1702,12 @@ B1_8CFD:
     STA zp_75
     LDA #$00
     STA zp_B0
-    LDA B1_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     JMP B1_8D16
 B1_8D0B:
     STA zp_B0
-    LDA B1_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
@@ -3619,6 +3628,8 @@ AreaSpawn0:
 AreaSpawn1:
     .byte $FF
     .byte $FF
+; Tbl_B1_A015: 12 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_A015:
     .byte $0C,$00,$FE,$01,$08,$60,$00,$B8,$00,$10,$00,$FF
 ; AreaSpawn2: spawn data for area(s) 20: 0 setup actions, 16 entities, 24 look-ahead entries, 0 one-time objects, 49 rows
 AreaSpawn2:
@@ -3765,6 +3776,8 @@ AreaSpawn3:
 AreaSpawn4:
     .byte $FF
     .byte $FF
+; Tbl_B1_A256: 12 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_A256:
     .byte $0C,$00,$FE,$01,$08,$40,$00,$60,$00,$10,$00,$FF
 ; AreaSpawn5: spawn data for area(s) 8: 0 setup actions, 12 entities, 4 look-ahead entries, 1 one-time objects, 12 rows
 AreaSpawn5:
@@ -4269,6 +4282,8 @@ AreaSpawn14:
     .byte $FE
     .byte $FF
     .word $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C, $000C
+; Tbl_B1_A9B9: 26 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_A9B9:
     .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$0C,$00,$02,$00,$0C,$00
     .byte $0C,$00,$0C,$00,$0C,$00,$0C,$00,$09,$00
 ; AreaSpawn15: spawn data for area(s) 23: 0 setup actions, 20 entities, 43 look-ahead entries, 1 one-time objects, 14 rows
@@ -4436,6 +4451,8 @@ AreaSpawn16:
     .byte $10, $00
     .byte $FF
     .word $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $0002, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $0009, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F, $000F
+; Tbl_B1_AC52: 44 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_AC52:
     .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
     .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
     .byte $0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00,$0F,$00
@@ -4604,16 +4621,22 @@ AreaSpawn19:
     .word $02D0, $00D9
     .byte $68, $00, $00, $00, $00
     .byte $FF
+; Tbl_B1_AEF2: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_AEF2:
     .byte $04,$00,$FE,$FF
 ; AreaSpawn20: spawn data for area(s) 5: 1 setup actions, 0 entities
 AreaSpawn20:
     .byte $04, $FF
     .byte $FF
+; Tbl_B1_AEF9: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_AEF9:
     .byte $00,$00,$FE,$FF
 ; AreaSpawn21: spawn data for area(s) 4: 6 setup actions, 0 entities
 AreaSpawn21:
     .byte $0F, $06, $02, $07, $18, $15, $FF
     .byte $FF
+; Tbl_B1_AF05: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_AF05:
     .byte $00,$00,$FE,$FF
 ; AreaSpawn22: spawn data for area(s) 6: 1 setup actions, 1 entities
 AreaSpawn22:
@@ -4622,11 +4645,15 @@ AreaSpawn22:
     .word $0400, $0020
     .byte $C0, $0B, $00, $00, $00
     .byte $FF
+; Tbl_B1_AF16: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_AF16:
     .byte $00,$00,$FE,$FF
 ; AreaSpawn23: spawn data for area(s) 2: 3 setup actions, 0 entities
 AreaSpawn23:
     .byte $1E, $18, $02, $FF
     .byte $FF
+; Tbl_B1_AF1F: 4 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_AF1F:
     .byte $00,$00,$FE,$FF
 B1_AF23:
     LDA #$02
@@ -4727,7 +4754,7 @@ B1_AFD2:
 B1_AFD3:
     JSR B1_B129
     LDY zp_D6
-    LDA B1_B06A,y
+    LDA Tbl_B1_B06A,y
     CMP #$14
     BNE B1_AFE4
     STA player_state
@@ -4755,7 +4782,7 @@ B1_B005:
     LDY zp_D6
     LDA player_y_lo
     CLC
-    ADC B1_B06A,y
+    ADC Tbl_B1_B06A,y
     STA player_y_lo
     LDA player_y_hi
     ADC #$00
@@ -4811,7 +4838,8 @@ B1_B05C:
     SBC #$00
     STA player_x_hi
     RTS
-B1_B06A:
+; Tbl_B1_B06A: 42 bytes, read by AreaSpawn23
+Tbl_B1_B06A:
     .res 8, $02
     .byte $01,$02,$02,$02,$01,$02,$02,$01,$02,$02,$01,$01,$01,$02,$01,$01
     .byte $01,$01,$02,$01,$01,$01,$01,$01,$00,$01,$00,$01,$00,$00,$00,$00
@@ -4820,7 +4848,7 @@ B1_B094:
     LDA zp_D6
     LSR a
     TAY
-    LDA B1_B144,y
+    LDA Tbl_B1_B144,y
     CMP #$80
     BNE B1_B0A8
     LDA #$15
@@ -4904,7 +4932,7 @@ B1_B129:
     CMP #$08
     BNE B1_B141
     LDY zp_81
-    LDA B1_B151,y
+    LDA Tbl_B1_B151,y
     CMP #$FF
     BEQ B1_B143
     STA player_frame
@@ -4914,9 +4942,11 @@ B1_B141:
     STA zp_80
 B1_B143:
     RTS
-B1_B144:
+; Tbl_B1_B144: 13 bytes, read by AreaSpawn23
+Tbl_B1_B144:
     .byte $00,$00,$00,$00,$FF,$00,$01,$01,$FF,$FF,$00,$00,$80
-B1_B151:
+; Tbl_B1_B151: 10 bytes, read by AreaSpawn23
+Tbl_B1_B151:
     .byte $3E,$3E,$3F,$40,$41,$42,$43,$4C,$4D,$FF
 B1_B15B:
     LDA ram_072D
@@ -5050,7 +5080,7 @@ B1_B241:
     LDA zp_BD
     ASL a
     TAY
-    LDA B1_B272,y
+    LDA Tbl_B1_B272,y
     INY
     CMP #$FF
     BEQ B1_B240
@@ -5062,7 +5092,7 @@ B1_B25B:
     STA player_frame
     LDA player_y_lo
     CLC
-    ADC B1_B272,y
+    ADC Tbl_B1_B272,y
     STA player_y_lo
     LDA player_y_hi
     ADC #$00
@@ -5071,7 +5101,8 @@ B1_B25B:
     LDA #$01
     STA player_facing
     RTS
-B1_B272:
+; Tbl_B1_B272: 163 bytes, read by AreaSpawn23
+Tbl_B1_B272:
     .byte $32,$00,$32,$00,$32,$00,$32,$00,$32,$00,$33,$00,$33,$00,$33,$00
     .byte $33,$00,$33,$00,$09,$00,$09,$01,$09,$00,$09,$01,$09,$01,$09,$01
     .byte $09,$02,$09,$02,$09,$02,$09,$02,$09,$02,$09,$02,$09,$02,$09,$02
@@ -5306,6 +5337,8 @@ B1_BD99:
     LDY #$BE
     JSR B1_BE3C
     JMP B1_BE85
+; Tbl_B1_BDFF: 8 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_BDFF:
     .byte $46,$4F,$55,$4E,$44,$40,$20,$00
     .byte "NOW FIND ALL 4"
     .byte $00
@@ -5399,6 +5432,8 @@ B1_BECD:
     LDX #$FF
     TXS
     JMP F_C647
+; Tbl_B1_BEEE: 274 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_BEEE:
     .byte $80,$00,$FD,$00,$01,$20,$FF,$FF,$FE,$FF,$12,$10,$00,$09,$FF,$FF
     .byte $FF,$D9,$FF,$FF,$FF,$EF,$02,$00,$40,$00,$FF,$FF,$EF,$FF,$00,$00
     .byte $00,$00,$FF,$60,$10,$00,$FF,$FF,$FF,$FF,$01,$00,$00,$24,$FF,$FF
