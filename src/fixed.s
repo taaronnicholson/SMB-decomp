@@ -6838,7 +6838,7 @@ PlayerState10:
     LDA death_timer
     CMP #$63
     BEQ F_F525
-    JMP F_F57A
+    JMP DeathAnimFrame
 F_F525:
     LDA fade_dir
     BEQ F_F52A
@@ -6882,7 +6882,7 @@ F_F548:
     LDA zp_98
     STA zp_9C
     JMP F_C6CC
-F_F57A:
+DeathAnimFrame:
     CMP #$5E
     BNE F_F580
     DEC fade_dir

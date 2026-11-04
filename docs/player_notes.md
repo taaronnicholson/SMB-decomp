@@ -41,5 +41,9 @@ Jump height depends on how long A is held [v]: a 30-frame hold peaked at Y `$40C
 `$1C`-`$1E` are scripted cutscene states in bank 5 (`$BC47`: walk right until X = `$0140` then hold a pose; `$BC70`: stand still; `$BC75`: a hop along a Y-offset table with sfx `$29` and an effect burst), entered from boss/ending code (bank 5, around `STA player_state` with `$1D`/`$1E`); read from the code, not triggered; `$0C` and `$1B`
 alone have no observable effect without their set-up variables.
 
+**Death animation** (`DeathAnimFrame`, `F_F57A`, used by states `$0F`/`$10` with `death_timer` 0-98): the figure is drawn as six sprites in OAM entries 15-20.
+`DeathAnimTiles` (bank 3 `$8000`, 49 steps of 3 bytes) packs two sprites per byte (tile index and flip bits, tile = `$F9 + 2*index`), and `DeathAnimPath`
+(`$8093`, 100 steps of 6 bytes) gives their positions; the routine copies a 12-byte window (`$8093 + 6*(death_timer+1)`) so the six sprites trail one another.
+
 **Hurt:** `HurtPlayer` does nothing while `hurt_flag` (`$C0`) or the invulnerability counter (`invuln_lo/hi`) is set, only hits in states `$00`-`$0D` (table `F_F4D5`), plays noise sfx `$06`, sets `player_state` = `$0F` and `hurt_flag` = `$0F`. It is called by hazards (tile class 3), by entity touch handlers (`Ent_HurtOnTouch`) and by some states; `HurtPlayerKnockout` (`$1A`) is the heavier variant.
 **Vulnerable enemies** (`$5E`) die when the player touches them in state `$02` with `zp_7C` set.
