@@ -677,3 +677,68 @@ ram 0751 noise_lfsr0                ; 32-bit pseudo-random register advanced by 
 ram 0752 noise_lfsr1
 ram 0753 noise_lfsr2
 ram 0754 noise_lfsr3
+
+; naming pass 18 (RAM): pulse 2 and noise SFX state, same layout as snd_sfx1_* (14 definition bytes + 6 runtime bytes)
+ram 07C9 snd_sfx2_duration
+ram 07CA snd_sfx2_pitch_interval
+ram 07CB snd_sfx2_period_lo
+ram 07CC snd_sfx2_period_hi
+ram 07CD snd_sfx2_slide_lo
+ram 07CE snd_sfx2_slide_hi
+ram 07CF snd_sfx2_duty_vol
+ram 07D0 snd_sfx2_add_pitch_offset
+ram 07D1 snd_sfx2_slide_mode
+ram 07D2 snd_sfx2_repeat
+ram 07D3 snd_sfx2_seq_index
+ram 07D4 snd_sfx2_seq_speed
+ram 07D5 snd_sfx2_sustain
+ram 07D6 snd_sfx2_slide_interval
+ram 07D7 snd_sfx2_cur_period_lo
+ram 07D8 snd_sfx2_cur_period_hi
+ram 07D9 snd_sfx2_pitch_timer
+ram 07DA snd_sfx2_slide_timer
+ram 07DB snd_sfx2_seq_pos
+ram 07DC snd_sfx2_seq_timer
+ram 07DF snd_sfxn_duration
+ram 07E0 snd_sfxn_pitch_interval
+ram 07E1 snd_sfxn_period_lo
+ram 07E2 snd_sfxn_period_hi
+ram 07E3 snd_sfxn_slide_lo
+ram 07E4 snd_sfxn_slide_hi
+ram 07E5 snd_sfxn_duty_vol
+ram 07E6 snd_sfxn_add_pitch_offset
+ram 07E7 snd_sfxn_slide_mode
+ram 07E8 snd_sfxn_repeat
+ram 07E9 snd_sfxn_seq_index
+ram 07EA snd_sfxn_seq_speed
+ram 07EB snd_sfxn_sustain
+ram 07EC snd_sfxn_slide_interval
+ram 07ED snd_sfxn_cur_period_lo
+ram 07EE snd_sfxn_cur_period_hi
+ram 07EF snd_sfxn_pitch_timer
+ram 07F0 snd_sfxn_slide_timer
+ram 07F1 snd_sfxn_seq_pos
+ram 07F2 snd_sfxn_seq_timer
+ram 07DD snd_sfx2_id            ; sound-effect number last started on pulse 2
+ram 07DE snd_sfx2_flag
+ram 07F3 snd_sfx1_seq_ptr_lo       ; current volume-sequence pointers of the three SFX channels
+ram 07F4 snd_sfx1_seq_ptr_hi
+ram 07F5 snd_sfx2_seq_ptr_lo
+ram 07F6 snd_sfx2_seq_ptr_hi
+ram 07F7 snd_sfxn_seq_ptr_lo
+ram 07F8 snd_sfxn_seq_ptr_hi
+
+; tile effect queue: four 3-byte slots (kind, map pointer lo/hi); slot 0 is pending_tile_*
+ram 0723 tile_fx1_kind
+ram 0724 tile_fx1_ptr_lo
+ram 0725 tile_fx1_ptr_hi
+ram 0726 tile_fx2_kind
+ram 0727 tile_fx2_ptr_lo
+ram 0728 tile_fx2_ptr_hi
+ram 0729 tile_fx3_kind
+ram 072A tile_fx3_ptr_lo
+ram 072B tile_fx3_ptr_hi
+ram 0739 cam_limit_a_lo            ; set by EnableCameraAtX to $00C0 / $0020
+ram 073A cam_limit_a_hi
+ram 073B cam_limit_b_lo
+ram 073C cam_limit_b_hi

@@ -1117,13 +1117,13 @@ EnableCameraAtX:
     LDA #$01
     STA camera_mode
     LDA #$00
-    STA ram_073C
+    STA cam_limit_b_hi
     LDA #$20
-    STA ram_073B
+    STA cam_limit_b_lo
     LDA #$C0
-    STA ram_0739
+    STA cam_limit_a_lo
     LDA #$00
-    STA ram_073A
+    STA cam_limit_a_hi
     RTS
 GameState04:
     LDA #$B3
@@ -1227,12 +1227,12 @@ GameState09:
     STA camera_mode
     STA ram_0737
     LDA #$08
-    STA ram_0739
+    STA cam_limit_a_lo
     LDA #$00
-    STA ram_073B
+    STA cam_limit_b_lo
     LDA #$00
-    STA ram_073A
-    STA ram_073C
+    STA cam_limit_a_hi
+    STA cam_limit_b_hi
     STA ram_0745
     LDA #$03
     STA ram_0738

@@ -6435,33 +6435,33 @@ TickPickupCounter:
     CLC
     RTS
 PushTileEffect:
-    LDA ram_072B
+    LDA tile_fx3_ptr_hi
     STA tmp_b
-    LDA ram_0728
-    STA ram_072B
-    LDA ram_072A
+    LDA tile_fx2_ptr_hi
+    STA tile_fx3_ptr_hi
+    LDA tile_fx3_ptr_lo
     STA tmp_a
-    LDA ram_0727
-    STA ram_072A
-    LDA ram_0729
+    LDA tile_fx2_ptr_lo
+    STA tile_fx3_ptr_lo
+    LDA tile_fx3_kind
     BEQ @F_F1B2
     LDA #$00
     JSR QueueMapTileDraw
 @F_F1B2:
-    LDA ram_0726
-    STA ram_0729
-    LDA ram_0725
-    STA ram_0728
-    LDA ram_0724
-    STA ram_0727
-    LDA ram_0723
-    STA ram_0726
+    LDA tile_fx2_kind
+    STA tile_fx3_kind
+    LDA tile_fx1_ptr_hi
+    STA tile_fx2_ptr_hi
+    LDA tile_fx1_ptr_lo
+    STA tile_fx2_ptr_lo
+    LDA tile_fx1_kind
+    STA tile_fx2_kind
     LDA pending_tile_ptr_hi
-    STA ram_0725
+    STA tile_fx1_ptr_hi
     LDA pending_tile_ptr_lo
-    STA ram_0724
+    STA tile_fx1_ptr_lo
     LDA pending_tile_kind
-    STA ram_0723
+    STA tile_fx1_kind
     RTS
 RunTileEffects:
     LDA ppu_buffer_idx
@@ -6485,15 +6485,15 @@ RunTileEffects:
     LDA ppu_buffer_idx
     CMP #$40
     BCS @F_F27D
-    LDX ram_0723
+    LDX tile_fx1_kind
     LDA TileEffectScript,x
-    STA ram_0723
+    STA tile_fx1_kind
     INX
     CMP #$00
     BEQ @F_F22D
-    LDA ram_0724
+    LDA tile_fx1_ptr_lo
     STA tmp_a
-    LDA ram_0725
+    LDA tile_fx1_ptr_hi
     STA tmp_b
     LDA TileEffectScript,x
     CMP #$FF
@@ -6503,15 +6503,15 @@ RunTileEffects:
     LDA ppu_buffer_idx
     CMP #$40
     BCS @F_F27D
-    LDX ram_0726
+    LDX tile_fx2_kind
     LDA TileEffectScript,x
-    STA ram_0726
+    STA tile_fx2_kind
     INX
     CMP #$00
     BEQ @F_F255
-    LDA ram_0727
+    LDA tile_fx2_ptr_lo
     STA tmp_a
-    LDA ram_0728
+    LDA tile_fx2_ptr_hi
     STA tmp_b
     LDA TileEffectScript,x
     CMP #$FF
@@ -6521,15 +6521,15 @@ RunTileEffects:
     LDA ppu_buffer_idx
     CMP #$40
     BCS @F_F27D
-    LDX ram_0729
+    LDX tile_fx3_kind
     LDA TileEffectScript,x
-    STA ram_0729
+    STA tile_fx3_kind
     INX
     CMP #$00
     BEQ @F_F27D
-    LDA ram_072A
+    LDA tile_fx3_ptr_lo
     STA tmp_a
-    LDA ram_072B
+    LDA tile_fx3_ptr_hi
     STA tmp_b
     LDA TileEffectScript,x
     CMP #$FF
