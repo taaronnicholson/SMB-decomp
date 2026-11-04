@@ -3,8 +3,8 @@
 
 .segment "BANK1"
 
-; DrawEntity_Tbl_8000: 44 bytes, read by DrawEntity
-DrawEntity_Tbl_8000:
+; Tbl_B1_8000: 44 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_8000:
     .byte $00,$FC,$F8,$F4,$F0,$EC,$E8,$E4,$E0,$DC,$D8,$D4,$D0,$CC,$C8,$C4
     .byte $C0,$BC,$B8,$B4,$B0,$AC,$A8,$A4,$A0,$9C,$98,$94,$90,$8C,$88,$84
     .byte $80,$7C,$78,$74,$70,$6C,$68,$64,$60,$5C,$58,$54
@@ -54,10 +54,10 @@ UpdateShots:
 @B1_807C:
     STA ram_024C
     LDX shot_frame
-    LDA UpdateShots_Tbl_8105,x
+    LDA Tbl_B1_8105,x
     STA ram_024D
     LDA shot_attr
-    ORA UpdateShots_Tbl_80EB,x
+    ORA Tbl_B1_80EB,x
     STA ram_024E
 @B1_808F:
     LDA shot_state_1
@@ -102,18 +102,18 @@ UpdateShots:
 @B1_80D7:
     STA ram_0250
     LDX shot_frame_1
-    LDA UpdateShots_Tbl_8105,x
+    LDA Tbl_B1_8105,x
     STA ram_0251
     LDA shot_attr_1
-    ORA UpdateShots_Tbl_80EB,x
+    ORA Tbl_B1_80EB,x
     STA ram_0252
     RTS
-; UpdateShots_Tbl_80EB: 26 bytes, read by UpdateShots
-UpdateShots_Tbl_80EB:
+; Tbl_B1_80EB: 26 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_80EB:
     .byte $00,$00,$01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03,$00,$00,$03
     .byte $03,$00,$03,$03,$00,$00,$00,$00,$00,$02
-; UpdateShots_Tbl_8105: 25 bytes, read by UpdateShots
-UpdateShots_Tbl_8105:
+; Tbl_B1_8105: 25 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_8105:
     .byte $02,$00,$04,$06,$08,$0A,$16,$16,$16,$0C,$0E,$10,$12,$14,$16,$18
     .byte $1A,$1C,$1E,$20,$00,$00,$00,$22,$24
 B1_811E:
@@ -301,11 +301,22 @@ ShotMoveUp:
     EOR #$02
     STA shot_state,x
     RTS
-; Tbl_B1_826C: 27 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_826C:
-    .byte $B5,$E9,$18,$69,$08,$85,$55,$B5,$EB,$69,$00,$85,$56,$B5,$E5,$18
-    .byte $69,$04,$85,$51,$B5,$E7,$69,$00,$85,$52,$20
-    BIT shot_screen_x
+ShotMoveDown:
+    LDA shot_y_lo,x
+    CLC
+    ADC #$08
+    STA tmp_c
+    LDA shot_y_hi,x
+    ADC #$00
+    STA tmp_d
+    LDA shot_x_lo,x
+    CLC
+    ADC #$04
+    STA ptr_lo
+    LDA shot_x_hi,x
+    ADC #$00
+    STA ptr_hi
+    JSR MapPtrFromPos
     JSR HandleSpecialTile
     JSR GetMapTile
     TAY
@@ -810,12 +821,12 @@ B1_860E:
     JSR ShotTimerStep
     RTS
 B1_8618:
-    JSR Tbl_B1_826C
+    JSR ShotMoveDown
     JSR ShotMoveLeft
     JSR ShotTimerStep
     RTS
 B1_8622:
-    JSR Tbl_B1_826C
+    JSR ShotMoveDown
     JSR ShotMoveRight
     JSR ShotTimerStep
     RTS
@@ -1289,8 +1300,8 @@ ShotOffscreenCheck:
     CMP #$10
     BCC B1_8981
     JMP F_F0EA
-; LoadArea_Tbl_8999: 100 bytes, read by LoadArea
-LoadArea_Tbl_8999:
+; Tbl_B1_8999: 100 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B1_8999:
     .res 76, $00
     .byte $0A,$00,$00,$00,$00,$00,$00,$00,$00,$0E,$12,$12,$12,$05,$0E,$0E
     .byte $0E,$0E,$00,$05,$05,$05,$05,$05
@@ -1408,12 +1419,12 @@ DrawEntity:
     STA zp_75
     LDA #$00
     STA zp_B0
-    LDA DrawEntity_Tbl_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     JMP @B1_8B00
 @B1_8AF5:
     STA zp_B0
-    LDA DrawEntity_Tbl_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
@@ -1507,12 +1518,12 @@ DrawEntity:
     STA zp_75
     LDA #$00
     STA zp_B0
-    LDA DrawEntity_Tbl_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     JMP @B1_8BA6
 @B1_8B9B:
     STA zp_B0
-    LDA DrawEntity_Tbl_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
@@ -1618,12 +1629,12 @@ DrawEntity:
     STA zp_75
     LDA #$00
     STA zp_B0
-    LDA DrawEntity_Tbl_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     JMP @B1_8C61
 @B1_8C56:
     STA zp_B0
-    LDA DrawEntity_Tbl_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
@@ -1725,12 +1736,12 @@ DrawEntity:
     STA zp_75
     LDA #$00
     STA zp_B0
-    LDA DrawEntity_Tbl_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     JMP @B1_8D16
 @B1_8D0B:
     STA zp_B0
-    LDA DrawEntity_Tbl_8000,x
+    LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY

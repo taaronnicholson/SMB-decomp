@@ -622,3 +622,13 @@ ram 00AD sprite_y_tmp               ; scratch Y while assembling a sprite into O
 ram 0043 draw_row_count             ; rows left when queueing a map row/column draw
 ram 0045 draw_x                     ; X/Y of the map draw being queued (from X/Y registers)
 ram 0046 draw_y
+
+; code reached only through stack/JSR-table tricks that the tracer did not follow
+entry 1 826C
+entry 4 B539
+entry 4 B556
+entry f CF02
+name 1 826C ShotMoveDown            ; moves a shot 2 px down, stopping on solid tiles
+name 4 B539 StoryBranchByStage      ; looks up Tbl at B4_B7B4 by stage_index; zero falls into the game_state 9 / player_state 9 setup
+name 4 B556 StartStoryScene         ; plays song 6, hides all sprites and starts the story text with ram_01B1 selecting the screen
+name f CF02 FarCallReturn           ; return target pushed by FarCall: restores the caller's bank and returns

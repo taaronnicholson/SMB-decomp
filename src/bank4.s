@@ -1318,11 +1318,11 @@ GameState0B:
 @B4_B0BB:
     STA zp_D1
     TAY
-    LDA GameState0B_Tbl_B0C4,y
+    LDA Tbl_B4_B0C4,y
     STA zp_47
     RTS
-; GameState0B_Tbl_B0C4: 20 bytes, read by GameState0B
-GameState0B_Tbl_B0C4:
+; Tbl_B4_B0C4: 20 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B4_B0C4:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
 B4_B0D8:
@@ -1836,13 +1836,11 @@ StateDispatch_0735:
     TAY
     LDA @B4_B527,y
     STA ptr_lo
-    LDA @B4_B528,y
+    LDA @B4_B527+1,y
     STA ptr_hi
     JMP (ptr_lo)
 @B4_B527:
-    .byte $39
-@B4_B528:
-    .byte $B5
+    .word StoryBranchByStage
     .word B4_B5B7
     .word B4_B63F
     .word B4_B6A4
@@ -1851,9 +1849,10 @@ StateDispatch_0735:
     .word B4_B71D
     .word B4_BA00
     .word B4_B767
-; Tbl_B4_B539: 7 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B539:
-    .byte $A4,$93,$B9,$B4,$B7,$D0,$16
+StoryBranchByStage:
+    LDY stage_index
+    LDA B4_B7B4,y
+    BNE StartStoryScene
 B4_B540:
     LDA #$09
     STA player_state
@@ -1865,10 +1864,13 @@ B4_B540:
     STA game_state
     LDA #$08
     JMP PlaySong
-; Tbl_B4_B556: 13 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B556:
-    .byte $8D,$B1,$01,$A9,$06,$20,$3B,$CE,$20,$8D,$C9,$AD,$B1
-    ORA (scroll_y_lo,x)
+StartStoryScene:
+    STA ram_01B1
+    LDA #$06
+    JSR PlaySong
+    JSR HideAllSprites
+    LDA ram_01B1
+    ASL a
     ASL a
     ASL a
     STA ptr_lo
