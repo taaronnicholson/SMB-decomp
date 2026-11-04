@@ -3152,6 +3152,8 @@ B2_B8B0:
     INC ram_01A9
 B2_B8CA:
     RTS
+; Bank2_TailData: unreferenced: mostly $00/$FF bytes with single-bit variations (period 32), no code reads it
+Bank2_TailData:
     .byte $FF,$00,$00,$00,$00,$E1,$01,$00,$00,$FF,$FF,$DF,$FF,$00,$08,$00
     .byte $00,$BF,$FF,$FF,$DF,$FF,$B5,$F3,$F7,$08,$00,$00,$40,$BE,$FF,$EF
     .byte $FF,$00,$00,$00,$00,$3B,$02,$00,$00,$FE,$FD,$DF,$FD,$00,$02,$00

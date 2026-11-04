@@ -359,3 +359,6 @@ name f E0D4 ApplyRidingMotion       ; while riding_flag: adds the platform's ent
 name f DD46 TryStartJump            ; player_state 0 and A pressed: picks the jump variant from touch_kind and starts it
 name 5 8993 Ent_CheckPlayerOverlapC
 name 5 A99A Ent_CheckPlayerOverlapD
+
+; ---- unreferenced data ----
+blob 2 B8CB 1845 Bank2_TailData unreferenced: mostly $00/$FF bytes with single-bit variations (period 32), no code reads it; probably leftover fill

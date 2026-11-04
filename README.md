@@ -259,8 +259,8 @@ and end pointer). MSB-first bit stream; the first byte only primes the bit buffe
 Flag `0` = literal byte. Flag `1` = match: next bit `0` → length 2; else 3 bits `v`: `v≠0` → length `v+2`, `v=0` → 8 bits
 `e`: `e=0` ends the stream, else length `e+9`; then a 10-bit distance-1. The routine stores the offset's high bits at the
 output position as scratch and reads them back for 16-bit address arithmetic.
-`tools/scan_lz_gaps.py` also found 6 more LZ blocks in the unclassified gaps (`tools/gfx_extra.json`; one is a second, larger font in bank 0, the rest sprite fragments in bank 6) that the emulator runs never loaded.
-`tools/extract_gfx.py` decompresses all 32 blocks to `build/gfx/*.bin` and grayscale tile sheets
+`tools/scan_lz_gaps.py` also found 11 more LZ blocks (including a chain of four in bank 6 `$B06E`-`$B2CF`) in the unclassified gaps (`tools/gfx_extra.json`; one is a second, larger font in bank 0, the rest sprite fragments in bank 6; rendered, they are real tile graphics) that the emulator runs never loaded.
+`tools/extract_gfx.py` decompresses all 37 blocks to `build/gfx/*.bin` and grayscale tile sheets
 (derived from the ROM, not committed); `tools/check_decomp.py` re-validates the port.
 
 ## Shared helpers

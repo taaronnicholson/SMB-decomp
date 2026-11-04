@@ -1,12 +1,5 @@
 [
  {
-  "bank": 6,
-  "src": 45776,
-  "end": 45924,
-  "insize": 148,
-  "outsize": 256
- },
- {
   "bank": 0,
   "src": 34633,
   "end": 34983,
@@ -15,10 +8,17 @@
  },
  {
   "bank": 6,
-  "src": 46904,
-  "end": 47170,
-  "insize": 266,
-  "outsize": 416
+  "src": 43312,
+  "end": 43388,
+  "insize": 76,
+  "outsize": 128
+ },
+ {
+  "bank": 6,
+  "src": 43994,
+  "end": 44065,
+  "insize": 71,
+  "outsize": 64
  },
  {
   "bank": 6,
@@ -36,9 +36,44 @@
  },
  {
   "bank": 6,
-  "src": 43312,
-  "end": 43388,
-  "insize": 76,
-  "outsize": 128
+  "src": 45166,
+  "end": 45383,
+  "insize": 217,
+  "outsize": 288
+ },
+ {
+  "bank": 6,
+  "src": 45384,
+  "end": 45544,
+  "insize": 160,
+  "outsize": 224
+ },
+ {
+  "bank": 6,
+  "src": 45544,
+  "end": 45653,
+  "insize": 109,
+  "outsize": 192
+ },
+ {
+  "bank": 6,
+  "src": 45654,
+  "end": 45776,
+  "insize": 122,
+  "outsize": 192
+ },
+ {
+  "bank": 6,
+  "src": 45776,
+  "end": 45924,
+  "insize": 148,
+  "outsize": 256
+ },
+ {
+  "bank": 6,
+  "src": 46904,
+  "end": 47170,
+  "insize": 266,
+  "outsize": 416
  }
 ]
