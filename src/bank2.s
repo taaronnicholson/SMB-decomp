@@ -1394,8 +1394,8 @@ SetPPUAddr_1044:
     RTS
 TileFrameA_At1252:
     LDA #$0A
-    STA zp_47
-    STA zp_DA
+    STA ppu_job
+    STA ppu_job_saved
     LDA PPUSTATUS
     LDA #$12
     STA PPUADDR
@@ -1404,8 +1404,8 @@ TileFrameA_At1252:
     JMP B2_A619
 TileFrameA_At1272:
     LDA #$0E
-    STA zp_47
-    STA zp_DA
+    STA ppu_job
+    STA ppu_job_saved
     LDA PPUSTATUS
     LDA #$12
     STA PPUADDR
@@ -1414,8 +1414,8 @@ TileFrameA_At1272:
     JMP B2_A619
 TileFrameA_At1232:
     LDA #$06
-    STA zp_47
-    STA zp_DA
+    STA ppu_job
+    STA ppu_job_saved
     LDA PPUSTATUS
     LDA #$12
     STA PPUADDR
@@ -1436,8 +1436,8 @@ TileFrameA:
     .byte $F8,$0C,$2C,$2C,$FF,$8D,$00,$00,$00,$F0,$D0,$D0,$00,$F6
 TileFrameB_At1252:
     LDA #$0C
-    STA zp_47
-    STA zp_DA
+    STA ppu_job
+    STA ppu_job_saved
     LDA PPUSTATUS
     LDA #$12
     STA PPUADDR
@@ -1446,8 +1446,8 @@ TileFrameB_At1252:
     JMP B2_A686
 TileFrameB_At1272:
     LDA #$10
-    STA zp_47
-    STA zp_DA
+    STA ppu_job
+    STA ppu_job_saved
     LDA PPUSTATUS
     LDA #$12
     STA PPUADDR
@@ -1456,8 +1456,8 @@ TileFrameB_At1272:
     JMP B2_A686
 TileFrameB_At1232:
     LDA #$08
-    STA zp_47
-    STA zp_DA
+    STA ppu_job
+    STA ppu_job_saved
     LDA PPUSTATUS
     LDA #$12
     STA PPUADDR
@@ -3010,9 +3010,9 @@ DrawScoreAndBalloons:
     JSR DrawDigitsToBuffer
     LDA #$00
     STA tmp_a
-    LDA ram_01A8
+    LDA tally_lo
     STA ptr_lo
-    LDA ram_01A9
+    LDA tally_hi
     STA ptr_hi
     JSR BinaryToDigits
     LDA #$03
@@ -3025,7 +3025,7 @@ DrawScoreAndBalloons:
     LDA #$00
     STA tmp_a
     STA ptr_hi
-    LDA ram_01AA
+    LDA tally_small
     STA ptr_lo
     JSR BinaryToDigits
     LDA #$02
@@ -3140,18 +3140,18 @@ PpuJobDispatch:
     LDA ppu_buffer_idx
     CMP #$18
     BCS B2_B776
-    LDY zp_47
+    LDY ppu_job
     BNE @B2_B79F
-    LDY zp_DA
+    LDY ppu_job_saved
     LDA #$00
-    STA zp_DA
+    STA ppu_job_saved
 @B2_B79F:
     LDA Tbl_B2_B7B0,y
     STA jump_ptr_lo
     LDA Tbl_B2_B7D2,y
     STA jump_ptr_hi
     LDA #$00
-    STA zp_47
+    STA ppu_job
     JMP (jump_ptr_lo)
 ; Tbl_B2_B7B0: 34 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B2_B7B0:
@@ -3168,7 +3168,7 @@ ResetLevelState:
     STA zp_4D
     STA ppu_buffer_idx
     STA ppu_buffer
-    STA zp_DA
+    STA ppu_job_saved
     STA dive_mode
     STA fall_ticks
     STA ram_01A5
@@ -3207,7 +3207,7 @@ ResetLevelState:
     BPL @B2_B844
     LDX #$0B
 @B2_B84C:
-    STA ram_0720,x
+    STA pending_tile_kind,x
     DEX
     BPL @B2_B84C
     STX ram_07FD
@@ -3225,8 +3225,8 @@ ResetGameState:
     LDA #$FF
     STA tileset_id
     LDA #$00
-    STA ram_01A8
-    STA ram_01A9
+    STA tally_lo
+    STA tally_hi
     STA ram_01A7
     STA pixel_page_xor
     STA zp_A5
@@ -3250,10 +3250,10 @@ ResetGameState:
 CheckRam01A8Threshold:
     LDA ram_0736
     BNE @B2_B8AF
-    LDA ram_01A8
+    LDA tally_lo
     SEC
     SBC #$57
-    LDA ram_01A9
+    LDA tally_hi
     SBC #$02
     BCC @B2_B8B0
 @B2_B8AF:
@@ -3267,9 +3267,9 @@ CheckRam01A8Threshold:
     BCC @B2_B8AF
     SBC #$64
     STA ram_01A7
-    INC ram_01A8
+    INC tally_lo
     BNE @B2_B8CA
-    INC ram_01A9
+    INC tally_hi
 @B2_B8CA:
     RTS
 ; Bank2_TailData: unreferenced: mostly $00/$FF bytes with single-bit variations (period 32), no code reads it

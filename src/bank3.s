@@ -1298,21 +1298,21 @@ OpenBlockReward:
     JSR SetCollectedFlag
     JSR PushTileEffect
     LDA ptr_lo
-    STA ram_0721
+    STA pending_tile_ptr_lo
     LDA ptr_hi
-    STA ram_0722
+    STA pending_tile_ptr_hi
     PLA
     STA ptr_hi
     PLA
     STA ptr_lo
     PLA
-    STA ram_0720
+    STA pending_tile_kind
     RTS
 ; Tbl_B3_BF00: 5 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B3_BF00:
     .byte $00,$3C,$4A,$58,$66
     LDX #$00
-    STX ram_01AA
+    STX tally_small
     INX
     STX ram_0736
     STX ram_0737

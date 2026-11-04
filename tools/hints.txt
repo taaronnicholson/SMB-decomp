@@ -632,3 +632,30 @@ name 1 826C ShotMoveDown            ; moves a shot 2 px down, stopping on solid 
 name 4 B539 StoryBranchByStage      ; looks up Tbl at B4_B7B4 by stage_index; zero falls into the game_state 9 / player_state 9 setup
 name 4 B556 StartStoryScene         ; plays song 6, hides all sprites and starts the story text with ram_01B1 selecting the screen
 name f CF02 FarCallReturn           ; return target pushed by FarCall: restores the caller's bank and returns
+
+; naming pass 16 (RAM): tileset pointers and map sizes
+ram 0027 meta_attr_ptr_lo           ; pointer to the tileset's attribute plane (index = map byte, low 2 bits = palette)
+ram 0028 meta_attr_ptr_hi
+ram 0029 meta_tl_ptr_lo             ; pointers to the four 240-entry metatile planes (top-left, top-right, bottom-left, bottom-right)
+ram 002A meta_tl_ptr_hi
+ram 002B meta_tr_ptr_lo
+ram 002C meta_tr_ptr_hi
+ram 002D meta_bl_ptr_lo
+ram 002E meta_bl_ptr_hi
+ram 002F meta_br_ptr_lo
+ram 0030 meta_br_ptr_hi
+ram 0034 map_width_px_lo            ; map width in pixels (map_width * 16)
+ram 0035 map_width_px_hi
+ram 0036 map_height_px_lo           ; map height in pixels (map_height * 16)
+ram 0037 map_height_px_hi
+ram 0038 map_cells15_lo             ; map_width * 15 (cells in a 15-row map)
+ram 0039 map_cells15_hi
+ram 0047 ppu_job                    ; job number for PpuJobDispatch (0 = none)
+ram 00DA ppu_job_saved              ; copy of the last job number
+ram 0720 pending_tile_kind          ; kind of the tile effect recorded for the tile at ram_0721/0722
+ram 0721 pending_tile_ptr_lo
+ram 0722 pending_tile_ptr_hi
+ram 01A8 tally_lo                   ; 16-bit tally shown on the results screen (>= $96 earns a pickup; compared with $0257 elsewhere)
+ram 01A9 tally_hi
+ram 01AA tally_small                ; second, 8-bit tally shown on the results screen
+ram 0735 story_step                 ; index into the StateDispatch_0735 word table

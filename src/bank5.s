@@ -333,11 +333,11 @@ B5_8262:
     LDA ent_x_hi,x
     ADC #$00
     STA ptr_hi
-    LDA zp_34
+    LDA map_width_px_lo
     SEC
     SBC #$11
     STA tmp_a
-    LDA zp_35
+    LDA map_width_px_hi
     SBC #$00
     STA tmp_b
     LDA tmp_a
@@ -400,11 +400,11 @@ B5_8262:
 CollectTileItem:
     JSR PushTileEffect
     LDA ptr_lo
-    STA ram_0721
+    STA pending_tile_ptr_lo
     LDA ptr_hi
-    STA ram_0722
+    STA pending_tile_ptr_hi
     LDA #$02
-    STA ram_0720
+    STA pending_tile_kind
     JSR SetCollectedFlag
     LDA #$05
     JMP PlaySfxNoise
@@ -484,11 +484,11 @@ B5_8392:
     LDA ent_y_hi,x
     ADC #$00
     STA tmp_d
-    LDA zp_36
+    LDA map_height_px_lo
     SEC
     SBC #$11
     STA tmp_a
-    LDA zp_37
+    LDA map_height_px_hi
     SBC #$00
     STA tmp_b
     LDA tmp_a
@@ -1023,11 +1023,11 @@ Ent_MoveX:
     LDA ent_x_hi,x
     ADC #$00
     STA ptr_hi
-    LDA zp_34
+    LDA map_width_px_lo
     SEC
     SBC #$11
     STA tmp_a
-    LDA zp_35
+    LDA map_width_px_hi
     SBC #$00
     STA tmp_b
     LDA tmp_a
@@ -1820,11 +1820,11 @@ Ent02_Update:
     LDA ent_x_hi,x
     ADC #$00
     STA ptr_hi
-    LDA zp_34
+    LDA map_width_px_lo
     SEC
     SBC #$10
     STA tmp_a
-    LDA zp_35
+    LDA map_width_px_hi
     SBC #$00
     STA tmp_b
     LDA ptr_lo
@@ -2706,17 +2706,17 @@ Ent10_Update:
     BCC @B5_95B0
     LDA #$00
     STA ram_01A7
-    LDA ram_01A8
+    LDA tally_lo
     SEC
     SBC #$96
-    STA ram_01A8
-    LDA ram_01A9
+    STA tally_lo
+    LDA tally_hi
     SBC #$00
-    STA ram_01A9
+    STA tally_hi
     BCS @B5_95A5
     LDA #$00
-    STA ram_01A8
-    STA ram_01A9
+    STA tally_lo
+    STA tally_hi
 @B5_95A5:
     JSR SetOneTimeFlag
     LDA #$19
@@ -3361,11 +3361,11 @@ B5_9B6C:
     ADC #$00
     STA ent_x_hi,x
     STA ptr_hi
-    LDA zp_34
+    LDA map_width_px_lo
     SEC
     SBC #$09
     STA tmp_a
-    LDA zp_35
+    LDA map_width_px_hi
     SBC #$00
     STA tmp_b
     LDA tmp_a
@@ -4466,7 +4466,7 @@ Ent48_Update:
     LDA #$0B
     STA ent_param2,x
     LDA #$08
-    STA ram_0735
+    STA story_step
     LDA #$28
     STA ram_01B2
     RTS
@@ -4475,7 +4475,7 @@ Ent48_Update:
     STA tmp_c
     JMP Ent_TickRadius
 Ent49_Update:
-    LDA ram_0735
+    LDA story_step
     CMP #$08
     BEQ @B5_A610
     DEC ent_angle,x
@@ -6849,13 +6849,13 @@ Ent92_Update:
     CLC
     ADC #$0D
     STA ptr_lo
-    STA ram_0721
+    STA pending_tile_ptr_lo
     LDA map_ptr_hi
     ADC #$04
     STA ptr_hi
-    STA ram_0722
+    STA pending_tile_ptr_hi
     LDA #$3C
-    STA ram_0720
+    STA pending_tile_kind
     JSR SetCollectedFlag
     LDX saved_x
 @B5_BA7D:
@@ -7034,7 +7034,7 @@ Ent96_Update:
     JMP B5_8F3D
 @B5_BBDF:
     LDA #$16
-    STA zp_47
+    STA ppu_job
     LDA #$1E
     STA player_state
     LDA #$34

@@ -473,7 +473,7 @@ F_C66C:
     STA zp_99
     INY
     LDA #$3C
-    STA ram_01AA
+    STA tally_small
     JSR InitBalloonRoom
     LDA ptr_lo
     CLC
@@ -1817,7 +1817,7 @@ LoadArea:
     STY scroll_x
     STY ppu_buffer_idx
     STY ppu_buffer
-    STY zp_47
+    STY ppu_job
     STY zp_49
     STY zp_48
     DEY
@@ -1858,41 +1858,41 @@ LoadArea:
     LDA (tmp_ptr_lo),y
     STA map_height
     LDA #$00
-    STA zp_38
-    STA zp_39
-    STA zp_35
-    STA zp_37
+    STA map_cells15_lo
+    STA map_cells15_hi
+    STA map_width_px_hi
+    STA map_height_px_hi
     LDX #$0E
 @F_D0D9:
-    LDA zp_38
+    LDA map_cells15_lo
     CLC
     ADC map_width
-    STA zp_38
-    LDA zp_39
+    STA map_cells15_lo
+    LDA map_cells15_hi
     ADC #$00
-    STA zp_39
+    STA map_cells15_hi
     DEX
     BPL @F_D0D9
     LDA map_height
     ASL a
-    ROL zp_37
+    ROL map_height_px_hi
     ASL a
-    ROL zp_37
+    ROL map_height_px_hi
     ASL a
-    ROL zp_37
+    ROL map_height_px_hi
     ASL a
-    ROL zp_37
-    STA zp_36
+    ROL map_height_px_hi
+    STA map_height_px_lo
     LDA map_width
     ASL a
-    ROL zp_35
+    ROL map_width_px_hi
     ASL a
-    ROL zp_35
+    ROL map_width_px_hi
     ASL a
-    ROL zp_35
+    ROL map_width_px_hi
     ASL a
-    ROL zp_35
-    STA zp_34
+    ROL map_width_px_hi
+    STA map_width_px_lo
     INY
     LDA (tmp_ptr_lo),y
     STA palette_set
@@ -2003,34 +2003,34 @@ LoadArea:
     PLA
     TAX
     LDA $8C9F,x
-    STA zp_29
+    STA meta_tl_ptr_lo
     LDA $8CA0,x
-    STA zp_2A
-    LDA zp_29
+    STA meta_tl_ptr_hi
+    LDA meta_tl_ptr_lo
     CLC
     ADC #$F0
-    STA zp_2B
-    LDA zp_2A
+    STA meta_tr_ptr_lo
+    LDA meta_tl_ptr_hi
     ADC #$00
-    STA zp_2C
-    LDA zp_2B
+    STA meta_tr_ptr_hi
+    LDA meta_tr_ptr_lo
     CLC
     ADC #$F0
-    STA zp_2D
-    LDA zp_2C
+    STA meta_bl_ptr_lo
+    LDA meta_tr_ptr_hi
     ADC #$00
-    STA zp_2E
-    LDA zp_2D
+    STA meta_bl_ptr_hi
+    LDA meta_bl_ptr_lo
     CLC
     ADC #$F0
-    STA zp_2F
-    LDA zp_2E
+    STA meta_br_ptr_lo
+    LDA meta_bl_ptr_hi
     ADC #$00
-    STA zp_30
+    STA meta_br_ptr_hi
     LDA $8CA1,x
-    STA zp_27
+    STA meta_attr_ptr_lo
     LDA $8CA2,x
-    STA zp_28
+    STA meta_attr_ptr_hi
     LDA #$03
     JSR SwitchBank
     LDA PPUSTATUS
@@ -2116,11 +2116,11 @@ ComputeFocusY:
     LDA #$00
     STA focus_y_hi
 @F_D2C3:
-    LDA zp_36
+    LDA map_height_px_lo
     SEC
     SBC #$F0
     STA tmp_a
-    LDA zp_37
+    LDA map_height_px_hi
     SBC #$00
     STA tmp_b
     LDA focus_y_lo
@@ -2147,11 +2147,11 @@ F_D2D3:
     STA focus_x_lo
     STA focus_x_hi
 @F_D2F8:
-    LDA zp_34
+    LDA map_width_px_lo
     SEC
     SBC #$F0
     STA tmp_a
-    LDA zp_35
+    LDA map_width_px_hi
     SBC #$00
     STA tmp_b
     LDA focus_x_lo
@@ -2235,9 +2235,9 @@ F_D2D3:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_29),y
+    LDA (meta_tl_ptr_lo),y
     STA PPUDATA
-    LDA (zp_2B),y
+    LDA (meta_tr_ptr_lo),y
     STA PPUDATA
     INC map_read_lo
     BNE @F_D3A3
@@ -2263,9 +2263,9 @@ F_D2D3:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_2D),y
+    LDA (meta_bl_ptr_lo),y
     STA PPUDATA
-    LDA (zp_2F),y
+    LDA (meta_br_ptr_lo),y
     STA PPUDATA
     INC map_read_lo
     BNE @F_D3D9
@@ -2306,9 +2306,9 @@ F_D3FF:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_29),y
+    LDA (meta_tl_ptr_lo),y
     STA PPUDATA
-    LDA (zp_2B),y
+    LDA (meta_tr_ptr_lo),y
     STA PPUDATA
     INC map_read_lo
     BNE @F_D42D
@@ -2345,7 +2345,7 @@ F_D44C:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$03
     STA tmp_ptr_lo
     LDY #$01
@@ -2355,7 +2355,7 @@ F_D44C:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$0C
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
@@ -2366,7 +2366,7 @@ F_D44C:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$30
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
@@ -2378,7 +2378,7 @@ F_D44C:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$C0
     ORA tmp_ptr_lo
     STA PPUDATA
@@ -2435,7 +2435,7 @@ F_D4FE:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$03
     STA tmp_ptr_lo
     LDA map_bank
@@ -2445,7 +2445,7 @@ F_D4FE:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$0C
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
@@ -2456,7 +2456,7 @@ F_D4FE:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$30
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
@@ -2468,7 +2468,7 @@ F_D4FE:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$C0
     ORA tmp_ptr_lo
     STA PPUDATA
@@ -2764,10 +2764,10 @@ ScrollY:
     PHA
     LDA map_read_lo
     CLC
-    ADC zp_38
+    ADC map_cells15_lo
     STA map_read_lo
     LDA map_read_hi
-    ADC zp_39
+    ADC map_cells15_hi
     STA map_read_hi
     JSR F_D9BD
     LDA draw_y
@@ -2869,23 +2869,23 @@ F_D7C7:
     INX
     AND #$01
     BNE @F_D801
-    LDA zp_29
+    LDA meta_tl_ptr_lo
     STA zp_3E
-    LDA zp_2A
+    LDA meta_tl_ptr_hi
     STA zp_3F
-    LDA zp_2D
+    LDA meta_bl_ptr_lo
     STA zp_40
-    LDA zp_2E
+    LDA meta_bl_ptr_hi
     STA zp_41
     JMP @F_D811
 @F_D801:
-    LDA zp_2B
+    LDA meta_tr_ptr_lo
     STA zp_3E
-    LDA zp_2C
+    LDA meta_tr_ptr_hi
     STA zp_3F
-    LDA zp_2F
+    LDA meta_br_ptr_lo
     STA zp_40
-    LDA zp_30
+    LDA meta_br_ptr_hi
     STA zp_41
 @F_D811:
     LDA tmp_ptr_lo
@@ -3074,22 +3074,22 @@ F_D8F7:
     JSR SwitchBankKeepX
     LDX tmp_ptr_hi
     LDY ram_0370,x
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$03
     STA tmp_ptr_lo
     LDY ram_0381,x
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$0C
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
     INX
     LDY ram_0370,x
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$30
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
     LDY ram_0381,x
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$C0
     ORA tmp_ptr_lo
     INX
@@ -3123,23 +3123,23 @@ F_D9BD:
     TYA
     AND #$01
     BNE @F_D9DB
-    LDA zp_29
+    LDA meta_tl_ptr_lo
     STA zp_3E
-    LDA zp_2A
+    LDA meta_tl_ptr_hi
     STA zp_3F
-    LDA zp_2B
+    LDA meta_tr_ptr_lo
     STA zp_40
-    LDA zp_2C
+    LDA meta_tr_ptr_hi
     STA zp_41
     JMP @F_D9EB
 @F_D9DB:
-    LDA zp_2D
+    LDA meta_bl_ptr_lo
     STA zp_3E
-    LDA zp_2E
+    LDA meta_bl_ptr_hi
     STA zp_3F
-    LDA zp_2F
+    LDA meta_br_ptr_lo
     STA zp_40
-    LDA zp_30
+    LDA meta_br_ptr_hi
     STA zp_41
 @F_D9EB:
     LDA NametableRowHi,y
@@ -3359,11 +3359,11 @@ F_DAE3:
     JSR SwitchBankKeepX
 @F_DB6F:
     LDY ram_0370,x
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$03
     STA tmp_ptr_lo
     LDY ram_0380,x
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$30
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
@@ -3372,12 +3372,12 @@ F_DAE3:
     AND #$0F
     TAX
     LDY ram_0370,x
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$0C
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
     LDY ram_0380,x
-    LDA (zp_27),y
+    LDA (meta_attr_ptr_lo),y
     AND #$C0
     ORA tmp_ptr_lo
     LDY draw_row_count
@@ -3908,11 +3908,11 @@ PlayerState00:
     LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_34
+    LDA map_width_px_lo
     SEC
     SBC #$11
     STA tmp_a
-    LDA zp_35
+    LDA map_width_px_hi
     SBC #$00
     STA tmp_b
     LDA tmp_a
@@ -4900,11 +4900,11 @@ PlayerState02:
     JSR PlaySfxNoise
     JSR PushTileEffect
     LDA ptr_lo
-    STA ram_0721
+    STA pending_tile_ptr_lo
     LDA ptr_hi
-    STA ram_0722
+    STA pending_tile_ptr_hi
     LDA #$02
-    STA ram_0720
+    STA pending_tile_kind
     LDA dive_mode
     CMP #$80
     BEQ F_E734
@@ -5632,11 +5632,11 @@ F_EBC9:
     LDA player_y_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_36
+    LDA map_height_px_lo
     SEC
     SBC #$11
     STA tmp_a
-    LDA zp_37
+    LDA map_height_px_hi
     SBC #$00
     STA tmp_b
     LDA tmp_a
@@ -5815,11 +5815,11 @@ PlayerMoveRight:
     LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_34
+    LDA map_width_px_lo
     SEC
     SBC #$11
     STA tmp_a
-    LDA zp_35
+    LDA map_width_px_hi
     SBC #$00
     STA tmp_b
     LDA tmp_a
@@ -6135,7 +6135,7 @@ ApplySwitch2:
     TAY
     CLC
     ADC #$09
-    STA zp_47
+    STA ppu_job
     LDA Tbl_F_EFCF,y
     STA ram_0473
     INY
@@ -6154,17 +6154,17 @@ ApplySwitch3:
     TAY
     CLC
     ADC #$0D
-    STA zp_47
+    STA ppu_job
     LDA Tbl_F_EFCF,y
     STA ram_0474
     INY
     LDA Tbl_F_EFCF,y
     STA ram_046B
 F_EFA2:
-    LDY zp_DA
+    LDY ppu_job_saved
     BNE @F_EFAA
-    LDA zp_47
-    STA zp_DA
+    LDA ppu_job
+    STA ppu_job_saved
 @F_EFAA:
     RTS
 ToggleSwitch1:
@@ -6179,7 +6179,7 @@ ApplySwitch1:
     TAY
     CLC
     ADC #$05
-    STA zp_47
+    STA ppu_job
     LDA Tbl_F_EFCF,y
     STA ram_0472
     INY
@@ -6404,11 +6404,11 @@ F_F14F:
     STA ptr_hi
     JSR PushTileEffect
     LDA ptr_lo
-    STA ram_0721
+    STA pending_tile_ptr_lo
     LDA ptr_hi
-    STA ram_0722
+    STA pending_tile_ptr_hi
     LDA #$2C
-    STA ram_0720
+    STA pending_tile_kind
     LDA #$17
     JSR PlaySfxSq2
     RTS
@@ -6456,26 +6456,26 @@ PushTileEffect:
     STA ram_0727
     LDA ram_0723
     STA ram_0726
-    LDA ram_0722
+    LDA pending_tile_ptr_hi
     STA ram_0725
-    LDA ram_0721
+    LDA pending_tile_ptr_lo
     STA ram_0724
-    LDA ram_0720
+    LDA pending_tile_kind
     STA ram_0723
     RTS
 RunTileEffects:
     LDA ppu_buffer_idx
     CMP #$40
     BCS @F_F255
-    LDX ram_0720
+    LDX pending_tile_kind
     LDA TileEffectScript,x
-    STA ram_0720
+    STA pending_tile_kind
     INX
     CMP #$00
     BEQ @F_F205
-    LDA ram_0721
+    LDA pending_tile_ptr_lo
     STA tmp_a
-    LDA ram_0722
+    LDA pending_tile_ptr_hi
     STA tmp_b
     LDA TileEffectScript,x
     CMP #$FF
@@ -6640,9 +6640,9 @@ QueueMapTileDraw:
     STA ram_0302,x
     STA ram_0307,x
     LDY zp_3E
-    LDA (zp_2D),y
+    LDA (meta_bl_ptr_lo),y
     STA ram_0303,x
-    LDA (zp_29),y
+    LDA (meta_tl_ptr_lo),y
     STA ram_0304,x
     LDA ram_0301,x
     CLC
@@ -6651,9 +6651,9 @@ QueueMapTileDraw:
     LDA tmp_ptr_hi
     ADC #$00
     STA ram_0305,x
-    LDA (zp_2F),y
+    LDA (meta_br_ptr_lo),y
     STA ram_0308,x
-    LDA (zp_2B),y
+    LDA (meta_tr_ptr_lo),y
     STA ram_0309,x
     LDA #$00
     STA ram_030A,x
@@ -7236,7 +7236,7 @@ PeckSwitchPhase:
     LDA switch_phase
     CLC
     ADC #$17
-    STA zp_DA
+    STA ppu_job_saved
     PLA
     RTS
 @F_F793:
@@ -7256,7 +7256,7 @@ PeckSwitchToggle:
     STA switch_flag
     CLC
     ADC #$1E
-    STA zp_DA
+    STA ppu_job_saved
     PLA
     RTS
 ShockwaveKillEnemies:
@@ -7401,16 +7401,16 @@ SubLives:
     STA lives
     RTS
 SubRam01AA:
-    LDA ram_01AA
+    LDA tally_small
     SEC
     SBC tmp_c
-    STA ram_01AA
+    STA tally_small
     RTS
 AddRam01AA:
-    LDA ram_01AA
+    LDA tally_small
     CLC
     ADC tmp_c
-    STA ram_01AA
+    STA tally_small
     RTS
 AddScore:
     LDA score_lo

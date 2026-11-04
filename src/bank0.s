@@ -2197,11 +2197,11 @@ FadeTableStep:
     LDA ppu_buffer_idx
     CMP #$18
     BCS @B0_BFA0
-    LDA zp_47
+    LDA ppu_job
     BNE @B0_BFA0
     INY
     LDA Tbl_B0_BFBB,y
-    STA zp_47
+    STA ppu_job
     INY
     JMP @B0_BF96
 ; Tbl_B0_BFBB: 69 bytes, no direct code reference (continuation or unreferenced)

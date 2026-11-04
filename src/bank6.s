@@ -3487,11 +3487,11 @@ B6_A38F:
     JSR SetCollectedFlag
     JSR PushTileEffect
     LDA ptr_lo
-    STA ram_0721
+    STA pending_tile_ptr_lo
     LDA ptr_hi
-    STA ram_0722
+    STA pending_tile_ptr_hi
     LDA #$02
-    STA ram_0720
+    STA pending_tile_kind
     LDA riding_flag
     BNE B6_A3CF
     LDA #$03
@@ -3564,7 +3564,7 @@ B6_A41D:
     RTS
 AdvanceStage:
     LDA #$16
-    STA zp_47
+    STA ppu_job
     LDA #$00
     STA zp_62
     DEC zp_D3
@@ -4581,11 +4581,11 @@ B6_B953:
     JSR PlaySfxNoise
     JSR PushTileEffect
     LDA ptr_lo
-    STA ram_0721
+    STA pending_tile_ptr_lo
     LDA ptr_hi
-    STA ram_0722
+    STA pending_tile_ptr_hi
     LDA #$02
-    STA ram_0720
+    STA pending_tile_kind
     JMP PlayerAttackInput
 @B6_B9C0:
     JSR GetTilePropsAtPos
@@ -4726,11 +4726,11 @@ PlayerAttackInput:
     LDA player_x_hi
     ADC #$00
     STA ptr_hi
-    LDA zp_34
+    LDA map_width_px_lo
     SEC
     SBC #$11
     STA tmp_a
-    LDA zp_35
+    LDA map_width_px_hi
     SBC #$00
     STA tmp_b
     LDA tmp_a
@@ -4862,11 +4862,11 @@ PlayerAttackInput:
     STA focus_y_hi
     JMP @B6_BBC6
 @B6_BB9E:
-    LDA zp_36
+    LDA map_height_px_lo
     SEC
     SBC #$F0
     STA tmp_c
-    LDA zp_37
+    LDA map_height_px_hi
     SBC #$00
     STA tmp_d
     LDA ptr_lo
@@ -4949,11 +4949,11 @@ B6_BC0D:
     LDA focus_x_hi
     ADC ptr_hi
     STA tmp_d
-    LDA zp_34
+    LDA map_width_px_lo
     SEC
     SBC #$F0
     STA ptr_lo
-    LDA zp_35
+    LDA map_width_px_hi
     SBC #$00
     STA ptr_hi
     LDA ptr_lo

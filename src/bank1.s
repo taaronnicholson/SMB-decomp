@@ -195,11 +195,11 @@ ShotMoveRight:
     LDA shot_x_hi,x
     ADC #$00
     STA shot_x_hi,x
-    LDA zp_34
+    LDA map_width_px_lo
     SEC
     SBC #$09
     STA tmp_a
-    LDA zp_35
+    LDA map_width_px_hi
     SBC #$00
     STA tmp_b
     LDA tmp_a
@@ -495,11 +495,11 @@ ShotMoveDown:
     LDA shot_y_hi,x
     ADC #$00
     STA shot_y_hi,x
-    LDA zp_36
+    LDA map_height_px_lo
     SEC
     SBC #$09
     STA tmp_a
-    LDA zp_37
+    LDA map_height_px_hi
     SBC #$00
     STA tmp_b
     LDA tmp_a
@@ -717,11 +717,11 @@ B1_846D:
     JSR SetCollectedFlag
     JSR PushTileEffect
     LDA ptr_lo
-    STA ram_0721
+    STA pending_tile_ptr_lo
     LDA ptr_hi
-    STA ram_0722
+    STA pending_tile_ptr_hi
     LDA #$02
-    STA ram_0720
+    STA pending_tile_kind
 ShotStartImpact:
     LDA #$03
     STA shot_state,x
@@ -742,11 +742,11 @@ B1_8574:
     ADC #$00
     STA ptr_hi
     STA shot_x_hi,x
-    LDA zp_34
+    LDA map_width_px_lo
     CLC
     ADC #$08
     STA tmp_a
-    LDA zp_35
+    LDA map_width_px_hi
     ADC #$00
     STA tmp_b
     LDA tmp_a
@@ -1015,11 +1015,11 @@ B1_8679:
     JSR PlaySfxNoise
     JSR PushTileEffect
     LDA ptr_lo
-    STA ram_0721
+    STA pending_tile_ptr_lo
     LDA ptr_hi
-    STA ram_0722
+    STA pending_tile_ptr_hi
     LDA #$02
-    STA ram_0720
+    STA pending_tile_kind
     RTS
 ; Tbl_B1_8785: 16 bytes, read by B1_8679
 Tbl_B1_8785:

@@ -801,7 +801,7 @@ Gfx_B4_ABB2:
     STA zp_D1
     TAY
     LDA Tbl_B4_ADBB,y
-    STA zp_47
+    STA ppu_job
     RTS
 @B4_AC58:
     JSR SilenceSound
@@ -1043,7 +1043,7 @@ GameState01:
     LDA #$07
     STA collected_flags
     LDA #$16
-    STA zp_47
+    STA ppu_job
     RTS
 @B4_AE4C:
     LDA #$02
@@ -1098,7 +1098,7 @@ GameState02:
     BMI B4_AEB5
     CLC
     ADC #$11
-    STA zp_47
+    STA ppu_job
 B4_AEB5:
     RTS
 ; GameState02_FrameTable: indexed by the frame counter
@@ -1173,7 +1173,7 @@ GameState05:
     INC tmp_a
 @B4_AF76:
     LDA tmp_a
-    STA zp_47
+    STA ppu_job
     RTS
 @B4_AF7B:
     JSR FindFreeEntitySlot
@@ -1209,7 +1209,7 @@ GameState06:
     STA tmp_a
     JSR SetSpawnAbovePlayer
     LDA #$00
-    STA ram_0735
+    STA story_step
     LDA #$0C
     STA game_state
     STA ram_0736
@@ -1277,7 +1277,7 @@ GameState0A:
     INC tmp_a
 @B4_B06F:
     LDA tmp_a
-    STA zp_47
+    STA ppu_job
     RTS
 ; TextPackets_B074: PPU text packets
 TextPackets_B074:
@@ -1319,7 +1319,7 @@ GameState0B:
     STA zp_D1
     TAY
     LDA Tbl_B4_B0C4,y
-    STA zp_47
+    STA ppu_job
     RTS
 ; Tbl_B4_B0C4: 20 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B4_B0C4:
@@ -1328,10 +1328,10 @@ Tbl_B4_B0C4:
 B4_B0D8:
     LDA #$01
     STA ram_072F
-    LDA ram_01A8
+    LDA tally_lo
     SEC
     SBC #$96
-    LDA ram_01A9
+    LDA tally_hi
     SBC #$00
     BCS @B4_B0F1
     LDA #$0C
@@ -1353,10 +1353,10 @@ B4_B109:
     LDA #$0A
     STA tmp_b
 @B4_B10D:
-    LDA ram_01A8
+    LDA tally_lo
     CMP #$57
     BNE @B4_B11B
-    LDA ram_01A9
+    LDA tally_hi
     CMP #$02
     BEQ @B4_B132
 @B4_B11B:
@@ -1380,7 +1380,7 @@ B4_B109:
     STA zp_D2
     RTS
 B4_B140:
-    LDA ram_01AA
+    LDA tally_small
     CMP #$3C
     BNE @B4_B14D
     LDA #$06
@@ -1404,7 +1404,7 @@ B4_B140:
     STA tmp_b
     JSR SpawnEffect33
 B4_B170:
-    LDA ram_01AA
+    LDA tally_small
     CMP #$3C
     BEQ @B4_B195
     LDA zp_D1
@@ -1557,7 +1557,7 @@ B4_B278:
     LDA #$36
     JMP PlaySfxNoise
 @B4_B2BB:
-    STA zp_47
+    STA ppu_job
     RTS
 ; GameState0B_Sequence: indexed by zp_D1
 GameState0B_Sequence:
@@ -1777,7 +1777,7 @@ GameState10:
     AND #$01
     CLC
     ADC tmp_a
-    STA zp_47
+    STA ppu_job
 B4_B4A8:
     RTS
 ; TextPackets_B4A9: PPU text packets
@@ -1831,7 +1831,7 @@ SetSpawnAbovePlayer:
     STA zp_99
     RTS
 StateDispatch_0735:
-    LDA ram_0735
+    LDA story_step
     ASL a
     TAY
     LDA @B4_B527,y
@@ -1880,7 +1880,7 @@ B4_B56B:
     LDA ram_01B3
     BEQ @B4_B579
     LDA #$06
-    STA ram_0735
+    STA story_step
     RTS
 @B4_B579:
     LDY ptr_lo
@@ -1901,7 +1901,7 @@ B4_B56B:
     LDA Tbl_B4_B7B8,y
     STA ram_01B6
     LDA #$01
-    STA ram_0735
+    STA story_step
     LDA #$06
     STA ram_01BA
     LDA #$00
@@ -1915,7 +1915,7 @@ B4_B5B7:
     LDA (zp_CF),y
     BNE @B4_B5C8
     LDA #$02
-    STA ram_0735
+    STA story_step
     RTS
 @B4_B5C8:
     INY
@@ -2021,7 +2021,7 @@ B4_B63F:
     LDA #$0D
     STA ram_0638
     LDA #$03
-    STA ram_0735
+    STA story_step
     STA ram_01B2
 B4_B6A3:
     RTS
@@ -2031,7 +2031,7 @@ B4_B6A4:
     LDA ram_01B3
     BEQ @B4_B6B6
     LDA #$05
-    STA ram_0735
+    STA story_step
     JMP B4_B74B
 @B4_B6B6:
     JSR StepDispatch_01BE
@@ -2039,7 +2039,7 @@ B4_B6A4:
     CMP #$03
     BNE B4_B6FA
     LDA #$04
-    STA ram_0735
+    STA story_step
     LDA #$32
     STA ram_01B7
     LDA #$29
@@ -2088,7 +2088,7 @@ B4_B71D:
     DEC ram_01B2
     BNE B4_B71C
     LDA #$02
-    STA ram_0735
+    STA story_step
     RTS
 B4_B728:
     LDA #$07
@@ -2104,7 +2104,7 @@ B4_B728:
     LDA ram_01BA
     BNE B4_B71C
     LDA #$05
-    STA ram_0735
+    STA story_step
     STA ram_01B3
 B4_B74B:
     LDA ram_01B4
@@ -2114,7 +2114,7 @@ B4_B74B:
     LDA #$00
     STA ram_0732
     LDA #$07
-    STA ram_0735
+    STA story_step
     LDA #$63
     STA ram_01B8
     RTS
@@ -2574,7 +2574,7 @@ B4_BCB9:
     LDA zp_48
     AND #$03
     BNE @B4_BCD0
-    LDA zp_47
+    LDA ppu_job
     BNE @B4_BCD0
     LDA zp_48
     LSR a
@@ -2582,7 +2582,7 @@ B4_BCB9:
     AND #$01
     CLC
     ADC tmp_08
-    STA zp_47
+    STA ppu_job
 @B4_BCD0:
     LDY #$07
 B4_BCD2:
@@ -2639,13 +2639,13 @@ B4_BD39:
     BPL B4_BCD2
     RTS
 AddToRam01A8:
-    LDA ram_01A8
+    LDA tally_lo
     CLC
     ADC tmp_c
-    STA ram_01A8
-    LDA ram_01A9
+    STA tally_lo
+    LDA tally_hi
     ADC #$00
-    STA ram_01A9
+    STA tally_hi
     RTS
     .byte $20,$A8,$8C
     .byte "DESUAP  EMAG"   ; reads: "GAME  PAUSED"
@@ -2735,7 +2735,7 @@ InitEndScreen:
     JSR DrawTileBlockBank0
     JSR EnableRendering
     LDA #$00
-    STA ram_01A8
+    STA tally_lo
     INC fade_dir
     LDA #$01
     STA nmi_state
@@ -2746,7 +2746,7 @@ InitEndScreen:
     LDA entity_tick
     LSR a
     STA cutscene_fade_b
-    DEC ram_01A8
+    DEC tally_lo
     BEQ @B4_BEB7
     BMI @B4_BE99
     JSR ReadControllerBank0
