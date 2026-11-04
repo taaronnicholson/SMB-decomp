@@ -230,7 +230,7 @@ B0_81CD:
 ; Tbl_B0_81D7: 5 bytes, read by B0_812D, B0_8183, B0_8196 ...
 Tbl_B0_81D7:
     .byte $40,$30,$20,$10,$00
-B0_81DC:
+ClearPalettesBlack:
     LDY #$00
     STY fade_step
     STY palette_set
@@ -1688,7 +1688,7 @@ LoadFont:
     STA ptr_hi
     CLC
     JMP DecompressAndFinish
-B0_B577:
+SaveScrollAndClearScreen:
     LDA scroll_y_hi
     STA ram_0392
     LDA scroll_y_lo
@@ -1784,19 +1784,19 @@ B0_B636:
     LDA #$15
     STA tmp_d
     RTS
-B0_B63F:
+InitIntroScreen:
     LDA ppumask_shadow
     ORA #$06
     JSR SetPPUMask
     LDA #$F0
     JSR ClearNametables
     JSR LoadFont
-    JSR B0_B8D2
+    JSR LoadBank0Gfx
     LDA #$08
     STA ptr_lo
     LDA #$22
     STA ptr_hi
-    JSR B0_B7AA
+    JSR DrawBlockAndAttributes
     LDA #$FF
     STA ram_0389
     LDA #$00
@@ -1833,7 +1833,7 @@ B0_B6A1:
     BNE B0_B6A8
     JSR QueuePpuStringB
 B0_B6A8:
-    JSR B0_B6CF
+    JSR IntroScreenStep
     LDA buttons_pressed
     AND #$08
     BEQ B0_B68F
@@ -1850,7 +1850,7 @@ B0_B6B3:
     JSR RenderOffAndWait
     JSR ClearOAMBuffer
     JMP DisableNMI
-B0_B6CF:
+IntroScreenStep:
     LDA #$0F
     STA tmp_b
     LDA #$DB
@@ -1930,7 +1930,7 @@ Tbl_B0_B755:
     .byte $AE,$AF,$B0,$B1,$B2,$B3,$B4,$B5,$B6,$B7,$B8,$B9,$BA,$BB,$BC,$BD
     .byte $BE,$BF,$C0,$C1,$70,$70,$C2,$C3,$70,$70,$70,$70,$C4,$C5,$C6,$70
     .byte $70,$70,$70,$70,$70
-B0_B7AA:
+DrawBlockAndAttributes:
     JSR DrawTileBlock17x5
     LDA #$23
     LDY #$C0
@@ -2052,7 +2052,7 @@ B0_B8B9:
 Tbl_B0_B8BC:
     .byte $21,$0F,$82,$62,$61,$21,$2F,$82,$64,$63,$00,$21,$0F,$82,$4C,$4B
     .byte $21,$2F,$82,$50,$4F,$00
-B0_B8D2:
+LoadBank0Gfx:
     LDA #$00
     STA tmp_c
     LDA #$10

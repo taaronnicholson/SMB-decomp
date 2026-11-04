@@ -399,7 +399,7 @@ F_C5E1:
     JSR ClearNametables
     JSR LoadFont
     JSR InitBalloonRoom
-    JSR B0_B8D2
+    JSR LoadBank0Gfx
     LDA #$04
     JSR SwitchBank
     JSR B4_BE32
@@ -419,7 +419,7 @@ StartNewGame:
     JSR SilenceSound
     LDA #$00
     JSR SwitchBank
-    JSR B0_B63F
+    JSR InitIntroScreen
     LDA #$00
     LDX #$02
     STX lives
@@ -699,7 +699,7 @@ F_C882:
     JSR PaletteFadeStep
     LDA #$02
     JSR SwitchBank
-    JSR B2_B78F
+    JSR PpuJobDispatch
     LDA #$00
     JSR SwitchBank
     JSR FlushPPUBuffer
@@ -720,7 +720,7 @@ ClearNametables:
     PHA
     LDA #$00
     JSR SwitchBank
-    JSR B0_81DC
+    JSR ClearPalettesBlack
     PLA
     JSR SwitchBank
     LDA tmp_08
@@ -1406,13 +1406,13 @@ F_CD74:
     STA palette_set
     LDA #$00
     JSR SwitchBank
-    JSR B0_B577
+    JSR SaveScrollAndClearScreen
     LDA #$04
     JSR SwitchBank
     JSR B4_BD91
     LDA #$02
     JSR SwitchBank
-    JSR B2_B64F
+    JSR DrawScoreAndBalloons
 F_CD9A:
     JSR WaitForNMI
     LDA #$04
@@ -1918,7 +1918,7 @@ F_D0D9:
     BNE F_D139
     LDA #$02
     JSR SwitchBank
-    JMP B2_A554
+    JMP WriteTileStrip_1044
 F_D139:
     STA tileset_id
     TAX
@@ -2053,29 +2053,29 @@ F_D237:
     BNE F_D237
     LDA #$02
     JSR SwitchBank
-    JSR B2_A554
+    JSR WriteTileStrip_1044
     LDA current_area
     CMP #$04
     BEQ F_D27F
-    JSR B2_A606
-    JSR B2_A5DA
-    JSR B2_A5F0
+    JSR TileFrameA_At1232
+    JSR TileFrameA_At1252
+    JSR TileFrameA_At1272
     LDA switch_1
     BEQ F_D265
-    JSR B2_A673
-    JSR B2_A7EF
+    JSR TileFrameB_At1232
+    JSR WriteTiles_1170
     JSR ApplySwitch1
 F_D265:
     LDA switch_2
     BEQ F_D272
-    JSR B2_A647
-    JSR B2_AA65
+    JSR TileFrameB_At1252
+    JSR WriteTiles_11B0
     JSR ApplySwitch2
 F_D272:
     LDA switch_3
     BEQ F_D27F
-    JSR B2_A65D
-    JSR B2_ACD7
+    JSR TileFrameB_At1272
+    JSR WriteTiles_11F0
     JSR ApplySwitch3
 F_D27F:
     JMP SetScroll

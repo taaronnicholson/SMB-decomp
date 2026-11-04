@@ -1045,7 +1045,7 @@ B4_AE4C:
 GameState03:
     RTS
 GameState02:
-    JSR B4_AEF6
+    JSR EnableCameraAtX
     LDA zp_A6
     BEQ B4_AE8F
     JSR FindFreeEntitySlot
@@ -1099,7 +1099,7 @@ GameState02_FrameTable:
     .byte $FF,$FF,$FF,$FF,$FF,$FF,$FF,$01,$FF,$02,$FE,$01,$FF,$02,$FE,$01
     .byte $FF,$02,$01,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
     .res 16, $FF
-B4_AEF6:
+EnableCameraAtX:
     LDA player_x_lo
     SEC
     SBC #$C0
@@ -1723,7 +1723,7 @@ GameState0E:
     LDA #$BF
     JMP FarCall
 GameState0F:
-    JSR B4_AEF6
+    JSR EnableCameraAtX
     LDA #$01
     STA ram_0736
     STA player_facing
@@ -2314,7 +2314,7 @@ B4_BACA:
     BEQ B4_BB40
     CMP ram_01BA
     BEQ B4_BB4F
-B4_BAD9:
+QueueTextRowDefault:
     PHA
     LDA #$11
     STA ptr_lo
@@ -2323,7 +2323,7 @@ B4_BAD9:
     LDA #$BC
     STA tmp_d
     PLA
-B4_BAE7:
+QueueTextRow:
     LDY #$00
     STY tmp_b
     ASL a
@@ -2392,7 +2392,7 @@ B4_BB4F:
     LDA #$11
     STA ptr_lo
     PLA
-    JMP B4_BAE7
+    JMP QueueTextRow
 B4_BB60:
     LDA credits_ptr_lo
     STA tmp_c
@@ -2410,7 +2410,7 @@ B4_BB60:
     LDA ram_01BA
     SEC
     SBC #$01
-    JSR B4_BAE7
+    JSR QueueTextRow
     CMP #$20
     BEQ B4_BB98
 B4_BB89:
@@ -2451,7 +2451,7 @@ B4_BB9E:
     SEC
     SBC #$01
     STA tmp_ptr_lo
-    JSR B4_BAD9
+    JSR QueueTextRowDefault
     INC ram_01BF
     PLA
     STA tmp_d
@@ -2472,7 +2472,7 @@ B4_BBD6:
     DEC ram_01BF
     BEQ B4_BBF8
     LDA tmp_ptr_lo
-    JSR B4_BAE7
+    JSR QueueTextRow
     JMP B4_BBD6
 B4_BBF8:
     PLA

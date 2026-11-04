@@ -629,10 +629,10 @@ B2_9E3F:
     LDX Tbl_B2_9EDC,y
     CPX #$60
     BCS B2_9E5A
-    JSR B2_9F2C
+    JSR ClearPixelTilesA
     JMP B2_9E5D
 B2_9E5A:
-    JSR B2_A219
+    JSR PixelDispatch_A22C
 B2_9E5D:
     STX zp_4C
     INC zp_4D
@@ -641,10 +641,10 @@ B2_9E62:
     LDX zp_4C
     CPX #$60
     BCS B2_9E6E
-    JSR B2_9FD0
+    JSR ClearPixelTilesB
     JMP B2_9E71
 B2_9E6E:
-    JSR B2_A25C
+    JSR PixelDispatch_A26F
 B2_9E71:
     STX zp_4C
     INC zp_4D
@@ -653,10 +653,10 @@ B2_9E76:
     LDX zp_4C
     CPX #$60
     BCS B2_9E82
-    JSR B2_A075
+    JSR UploadPixelTilesC
     JMP B2_9E85
 B2_9E82:
-    JSR B2_A29F
+    JSR PixelDispatch_A2B2
 B2_9E85:
     STX zp_4C
     INC zp_4D
@@ -665,7 +665,7 @@ B2_9E8A:
     LDX zp_4C
     CPX #$60
     BCS B2_9E96
-    JSR B2_A147
+    JSR UploadPixelTilesD
     JMP B2_9E99
 B2_9E96:
     JSR PixelUploadDispatch
@@ -708,7 +708,7 @@ Tbl_B2_9EDC:
     .byte $26,$28,$2A,$5A,$5C,$5E,$34,$48,$58,$2C,$2E,$30,$32,$50,$52,$54
     .byte $56,$42,$44,$46,$70,$72,$74,$76,$FF,$FF,$FF,$FF,$FF,$FF,$64,$65
     .byte $66,$67,$68,$69,$36,$3A,$3C,$3E,$40,$6E,$38,$4A,$6A,$6B,$4C,$4E
-B2_9F2C:
+ClearPixelTilesA:
     LDA PPUSTATUS
     LDA #$1F
     EOR zp_FC
@@ -765,7 +765,7 @@ B2_9F2C:
     LDA B2_8E88,x
     STA PPUDATA
     JMP SetScroll
-B2_9FD0:
+ClearPixelTilesB:
     LDA PPUSTATUS
     LDA #$1F
     EOR zp_FC
@@ -823,7 +823,7 @@ B2_9FD0:
     STA PPUDATA
     INX
     JMP SetScroll
-B2_A075:
+UploadPixelTilesC:
     LDA PPUSTATUS
     LDA #$1F
     EOR zp_FC
@@ -896,7 +896,7 @@ PixelTileUploadA:
     LDA B2_8E88,x
     STA PPUDATA
     JMP SetScroll
-B2_A147:
+UploadPixelTilesD:
     LDA PPUSTATUS
     LDA #$1F
     EOR zp_FC
@@ -969,7 +969,7 @@ PixelTileUploadB:
     LDA B2_9D88,x
     STA PPUDATA
     JMP SetScroll
-B2_A219:
+PixelDispatch_A22C:
     TXA
     SEC
     SBC #$60
@@ -1005,7 +1005,7 @@ B2_A22C:
     .word B2_A542
     .word B2_A542
     .word B2_A542
-B2_A25C:
+PixelDispatch_A26F:
     TXA
     SEC
     SBC #$60
@@ -1033,15 +1033,15 @@ B2_A26F:
     .word B2_A39D
     .word B2_A50A
     .word B2_A50A
-    .word B2_9FD0
-    .word B2_9FD0
-    .word B2_9FD0
-    .word B2_9FD0
-    .word B2_9FD0
-    .word B2_9FD0
-    .word B2_9FD0
-    .word B2_9FD0
-B2_A29F:
+    .word ClearPixelTilesB
+    .word ClearPixelTilesB
+    .word ClearPixelTilesB
+    .word ClearPixelTilesB
+    .word ClearPixelTilesB
+    .word ClearPixelTilesB
+    .word ClearPixelTilesB
+    .word ClearPixelTilesB
+PixelDispatch_A2B2:
     TXA
     SEC
     SBC #$60
@@ -1105,14 +1105,14 @@ B2_A2F5:
     .word B2_A454
     .word B2_A530
     .word B2_A530
-    .word B2_A147
-    .word B2_A147
-    .word B2_A147
-    .word B2_A147
-    .word B2_A147
-    .word B2_A147
-    .word B2_A147
-    .word B2_A147
+    .word UploadPixelTilesD
+    .word UploadPixelTilesD
+    .word UploadPixelTilesD
+    .word UploadPixelTilesD
+    .word UploadPixelTilesD
+    .word UploadPixelTilesD
+    .word UploadPixelTilesD
+    .word UploadPixelTilesD
 B2_A325:
     LDA PPUSTATUS
     LDA #$1F
@@ -1243,7 +1243,7 @@ B2_A454:
     STA PPUADDR
     LDA #$E0
     STA PPUADDR
-B2_A463:
+PixelTileUploadC:
     LDA B2_8F00,x
     STA PPUDATA
     LDA B2_8FF0,x
@@ -1309,7 +1309,7 @@ B2_A50A:
     STA PPUADDR
     LDA #$A0
     STA PPUADDR
-    JSR B2_A463
+    JSR PixelTileUploadC
     INX
     RTS
 B2_A51E:
@@ -1327,7 +1327,7 @@ B2_A530:
     STA PPUADDR
     LDA #$E0
     STA PPUADDR
-    JMP B2_A463
+    JMP PixelTileUploadC
 B2_A542:
     LDA PPUSTATUS
     LDA #$1F
@@ -1336,7 +1336,7 @@ B2_A542:
     LDA #$80
     STA PPUADDR
     JMP PixelTileUploadA
-B2_A554:
+WriteTileStrip_1044:
     JSR SetPPUAddr_1044
     LDX #$00
 B2_A559:
@@ -1392,7 +1392,7 @@ SetPPUAddr_1044:
     LDA #$44
     STA PPUADDR
     RTS
-B2_A5DA:
+TileFrameA_At1252:
     LDA #$0A
     STA zp_47
     STA zp_DA
@@ -1402,7 +1402,7 @@ B2_A5DA:
     LDA #$52
     STA PPUADDR
     JMP B2_A619
-B2_A5F0:
+TileFrameA_At1272:
     LDA #$0E
     STA zp_47
     STA zp_DA
@@ -1412,7 +1412,7 @@ B2_A5F0:
     LDA #$72
     STA PPUADDR
     JMP B2_A619
-B2_A606:
+TileFrameA_At1232:
     LDA #$06
     STA zp_47
     STA zp_DA
@@ -1434,7 +1434,7 @@ B2_A61B:
 TileFrameA:
     .byte $1F,$26,$20,$20,$FF,$9C,$00,$00,$00,$1F,$1F,$1F,$00,$7F,$00,$00
     .byte $F8,$0C,$2C,$2C,$FF,$8D,$00,$00,$00,$F0,$D0,$D0,$00,$F6
-B2_A647:
+TileFrameB_At1252:
     LDA #$0C
     STA zp_47
     STA zp_DA
@@ -1444,7 +1444,7 @@ B2_A647:
     LDA #$52
     STA PPUADDR
     JMP B2_A686
-B2_A65D:
+TileFrameB_At1272:
     LDA #$10
     STA zp_47
     STA zp_DA
@@ -1454,7 +1454,7 @@ B2_A65D:
     LDA #$72
     STA PPUADDR
     JMP B2_A686
-B2_A673:
+TileFrameB_At1232:
     LDA #$08
     STA zp_47
     STA zp_DA
@@ -1599,7 +1599,7 @@ TileFrameB:
     STA PPUDATA
     STA PPUDATA
     JMP SetScroll
-B2_A7EF:
+WriteTiles_1170:
     LDA PPUSTATUS
     LDA #$11
     STA PPUADDR
@@ -1847,7 +1847,7 @@ B2_A7EF:
     STA PPUDATA
     STA PPUDATA
     JMP SetScroll
-B2_AA65:
+WriteTiles_11B0:
     LDA PPUSTATUS
     LDA #$11
     STA PPUADDR
@@ -2093,7 +2093,7 @@ B2_AA65:
     STA PPUDATA
     STA PPUDATA
     JMP SetScroll
-B2_ACD7:
+WriteTiles_11F0:
     LDA PPUSTATUS
     LDA #$11
     STA PPUADDR
@@ -2980,7 +2980,7 @@ B2_B641:
     ADC tmp_d
     STA focus_y_hi
     RTS
-B2_B64F:
+DrawScoreAndBalloons:
     LDA score_lo
     STA ptr_lo
     LDA score_mid
@@ -3136,7 +3136,7 @@ B2_B778:
 Tbl_B2_B779:
     .byte $01,$00,$10,$27,$00,$00,$E8,$03,$00,$00,$64,$00,$00,$00,$0A,$00
     .byte $00,$00,$01,$00,$00,$00
-B2_B78F:
+PpuJobDispatch:
     LDA ppu_buffer_idx
     CMP #$18
     BCS B2_B776

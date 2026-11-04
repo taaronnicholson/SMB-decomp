@@ -524,3 +524,36 @@ name f F8FC DivideByTmpA             ; 8-step long division: (tmp_b:ptr_lo) by t
 name f F16F TickPickupCounter        ; counts zp_A7 to $64, then spawns a pickup at the player (kind in tmp_a: 8, or $0C while zp_A5 is below 4) and returns carry set
 name 4 BA94 StepDispatch_01BE      ; jumps through the word table at B4_BA8C indexed by ram_01BE
 name 2 A2E2 PixelUploadDispatch      ; jumps through a word table indexed by X-$60 to the tile upload routines
+
+; naming pass 12 (JSR targets)
+name 0 81DC ClearPalettesBlack       ; fade_step = palette_set = 0 and fills the 32 palette bytes with $0F
+name 0 B577 SaveScrollAndClearScreen ; saves the scroll registers to ram_0392..0394, zeroes the scroll and clears the screen
+name 0 B63F InitIntroScreen          ; render off, clears nametables, loads the font and the bank 0 graphics, draws the block and attribute table, palette set 8
+name 0 B6CF IntroScreenStep          ; one step of the intro animation driven by entity_tick
+name 0 B7AA DrawBlockAndAttributes   ; DrawTileBlock17x5, then fills the attribute table ($23C0/$23E8)
+name 0 B8D2 LoadBank0Gfx             ; decompresses Gfx_B0_B8E6 to PPU $1000
+name 2 9F2C ClearPixelTilesA         ; zeroes a run of PPU bytes at $1F80 (xor zp_FC)
+name 2 9FD0 ClearPixelTilesB         ; zeroes a run of PPU bytes at $1FA0 (xor zp_FC)
+name 2 A075 UploadPixelTilesC        ; sets PPU address $1FC0 (xor zp_FC) and uploads the pixel tile column for X
+name 2 A147 UploadPixelTilesD        ; sets PPU address $1FE0 (xor zp_FC) and falls into PixelTileUploadB
+name 2 A219 PixelDispatch_A22C       ; jumps through a word table indexed by X-$60 (one of three near-identical dispatchers with A25C and A29F)
+name 2 A25C PixelDispatch_A26F
+name 2 A29F PixelDispatch_A2B2
+name 2 A463 PixelTileUploadC         ; writes one byte from each of the pixel tables at X to PPUDATA
+name 2 A554 WriteTileStrip_1044      ; writes 11 tiles from Tbl_B2_A5A0 to PPU $1044, then a second strip, then resets the scroll
+name 2 A5DA TileFrameA_At1252        ; zp_47 = zp_DA = $0A and PPU address $1252, then the TileFrameA upload (A5F0: $0E/$1272, A606: $06/$1232)
+name 2 A5F0 TileFrameA_At1272
+name 2 A606 TileFrameA_At1232
+name 2 A647 TileFrameB_At1252        ; same with TileFrameB: $0C/$1252 (A65D: $10/$1272, A673: $08/$1232)
+name 2 A65D TileFrameB_At1272
+name 2 A673 TileFrameB_At1232
+name 2 A7EF WriteTiles_1170          ; writes a fixed tile strip to PPU $1170
+name 2 AA65 WriteTiles_11B0          ; writes a fixed tile strip to PPU $11B0
+name 2 ACD7 WriteTiles_11F0          ; writes a fixed tile strip to PPU $11F0
+name 2 B64F DrawScoreAndBalloons     ; converts the score to digits and queues them at PPU $218E, then the balloon counters
+name 2 B78F PpuJobDispatch           ; when the PPU buffer is under $18 bytes: runs the job number in zp_47 (or zp_DA) through the Tbl_B2_B7B0/B7D2 pointer table
+name 4 AEF6 EnableCameraAtX          ; once the player passes X $C0: camera_mode = 1 and sets the camera limits ram_0739..073C
+name 4 BAD9 QueueTextRowDefault      ; as QueueTextRow with the default text pointer $BC1E
+name 4 BAE7 QueueTextRow             ; A = row index: address = $24C8 + A*32; queues the text at (tmp_c) into the PPU buffer
+name 5 8E48 SpawnDebrisEntity        ; spawns an entity of type 5 12 px below the caller, with a random $0-$F horizontal offset
+name 5 9D55 EntPeriodicEffects       ; every $40 frames of ent_param2 runs SpawnEffectsFromList on the list at $9D6F

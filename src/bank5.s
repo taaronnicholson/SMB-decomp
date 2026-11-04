@@ -1765,7 +1765,7 @@ B5_8D80:
     SEC
     SBC #$01
     BNE B5_8D98
-    JSR B5_8E48
+    JSR SpawnDebrisEntity
     LDA #$0A
     STA tmp_c
     LDA #$00
@@ -1863,7 +1863,7 @@ B5_8E2B:
 Tbl_B5_8E36:
     .byte $00,$01,$00,$00,$01,$00,$01,$00,$01,$01,$02,$01,$01,$02,$01,$02
     .byte $02,$03
-B5_8E48:
+SpawnDebrisEntity:
     JSR FindFreeEntitySlot
     LDA #$05
     STA ent_type,y
@@ -3552,22 +3552,22 @@ B5_9D2F:
     SEC
     SBC #$06
     CMP tmp_c
-    BCS B5_9D55
+    BCS EntPeriodicEffects
     ADC #$28
     CMP tmp_c
-    BCC B5_9D55
+    BCC EntPeriodicEffects
     LDA player_box_x
     SEC
     SBC #$08
     CMP tmp_d
-    BCS B5_9D55
+    BCS EntPeriodicEffects
     ADC #$22
     CMP tmp_d
-    BCC B5_9D55
+    BCC EntPeriodicEffects
     LDA #$43
     JSR PlaySfxSq2
     JMP B5_9D7A
-B5_9D55:
+EntPeriodicEffects:
     LDA #$6F
     STA ptr_lo
     LDA #$9D
@@ -4494,7 +4494,7 @@ B5_A699:
     SEC
     SBC #$01
     BNE B5_A6A6
-    JSR B5_8E48
+    JSR SpawnDebrisEntity
     LDA #$08
 B5_A6A6:
     STA ent_param2,x
@@ -5742,7 +5742,7 @@ Ent_PatrolTail:
     BNE B5_B1CB
     JSR Ent_CheckPlayerOverlapB
     JSR Ent_CheckPlayerOverlap
-    JSR B5_9D55
+    JSR EntPeriodicEffects
     LDA player_box_y
     SEC
     SBC tmp_c
