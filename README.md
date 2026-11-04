@@ -287,8 +287,8 @@ output position as scratch and reads them back for 16-bit address arithmetic.
 speculative decode), and nearly all the rest is classified data. The data falls into two groups:
 - **decoded or described** (about 56%): compressed graphics (37 LZ blocks), maps, tilesets, palettes, animation frames, spawn lists, sound data, text,
   tile property and height tables, pixel tables, state tables, and so on;
-- **labelled but not decoded** (about 7%, `Tbl_<bank>_<addr>` blobs from `tools/gen_table_hints.py`, cache `tools/tables.json`): 210 small tables, each
-  named after where it starts and annotated with the routines that read it (about 4% have a named reader); their formats have not been worked out.
+- **labelled but not decoded** (about 6%, blobs from `tools/gen_table_hints.py`, cache `tools/tables.json`; overrides in `tools/table_names.txt`): 213 small tables. About 100 now have
+  real names or decoded formats (23 `EffectList_*` spawn lists, credits/story/text packets, arcs); the other 114 remain `Tbl_<bank>_<addr>` (or `<Reader>_Tbl_<addr>`), annotated with the routines that read them.
 `GAPS=20 python3 -I tools/decomp.py` reports what is still unclassified (under 0.1%); `make tables` re-runs the table pass after new code is traced.
 Branch targets that are only used inside their own routine are emitted as ca65 local labels (`@B5_8F4A`); about 100 routines and 360 RAM symbols still have address-based names (`python3 -I tools/rank_unnamed.py` ranks them by use for the next naming pass).
 Speculatively found code may include a few false positives (harmless for the byte-exact build; labels are provisional).
