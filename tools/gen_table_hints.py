@@ -83,6 +83,10 @@ with open(os.path.join(HERE, 'hints_tables.txt'), 'w') as f:
     for r in cache:
         bk = "f" if r["bank"] == 7 else r["bank"]
         nm, cm, st = over.get((r["bank"], r["addr"]), (r["name"], r["comment"], None))
+        who = readers(r["bank"], r["addr"], r["len"])
+        ents = [w for w in who if re.match(r'^Ent[0-9A-F]{2}_Update$', w)]
+        if nm == r["name"] and len(ents) == 1 and len(set(who)) <= 2:           # read by one entity handler: name it after the handler
+            nm = f'{ents[0][:-7]}_Tbl_{r["addr"]:04X}'
         f.write(f'blob {bk} {r["addr"]:X} {r["len"]} {nm} {cm}\n')
         if st: f.write(f'struct {bk} {r["addr"]:X} {st[0]} {st[1]}\n')
 print(len(new), 'new table blobs;', len(cache), 'total')

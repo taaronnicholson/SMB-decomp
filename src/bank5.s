@@ -1903,15 +1903,15 @@ B5_8E48:
 Ent03_Update:
     LDY ent_angle,x
     INC ent_angle,x
-    LDA Tbl_B5_8EAD,y
+    LDA Ent03_Tbl_8EAD,y
     BNE B5_8EA9
     STA ent_type,x
     RTS
 B5_8EA9:
     STA ent_param,x
     RTS
-; Tbl_B5_8EAD: 23 bytes, read by Ent03_Update
-Tbl_B5_8EAD:
+; Ent03_Tbl_8EAD: 23 bytes, read by Ent03_Update
+Ent03_Tbl_8EAD:
     .byte $0F,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$1A,$1B,$1C,$1C,$1C
     .byte $1C,$1C,$1C,$1C,$1C,$1C,$00
 Ent04_Update:
@@ -1920,7 +1920,7 @@ Ent04_Update:
     LSR a
     BCS B5_8EEE
     TAY
-    LDA Tbl_B5_8EEF,y
+    LDA Ent04_Tbl_8EEF,y
     CMP #$FF
     BNE B5_8EDB
     LDA #$00
@@ -1937,8 +1937,8 @@ B5_8EDB:
     STA ent_y_hi,x
 B5_8EEE:
     RTS
-; Tbl_B5_8EEF: 40 bytes, read by Ent04_Update
-Tbl_B5_8EEF:
+; Ent04_Tbl_8EEF: 40 bytes, read by Ent04_Update
+Ent04_Tbl_8EEF:
     .res 12, $01
     .byte $00,$01,$01,$00,$01,$00,$01,$00,$01,$00,$00,$01,$00,$00,$01,$00
     .res 11, $00
@@ -2058,7 +2058,7 @@ Ent07_Update:
     LDA ent_radius,x
     LSR a
     TAY
-    LDA Tbl_B5_9067,y
+    LDA Ent07_Tbl_9067,y
     BNE B5_9063
     STA ent_type,x
     LDA ent_param2,x
@@ -2070,8 +2070,8 @@ B5_9063:
     STA ent_param,x
 B5_9066:
     RTS
-; Tbl_B5_9067: 12 bytes, read by Ent07_Update
-Tbl_B5_9067:
+; Ent07_Tbl_9067: 12 bytes, read by Ent07_Update
+Ent07_Tbl_9067:
     .byte $1E,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$00
 Ent08_Update:
     LDA #$02
@@ -2197,9 +2197,9 @@ Ent0A_Update:
     ADC #$02
     STA ent_param,x
     LDY ent_radius,x
-    LDA Tbl_B5_91FD,y
+    LDA Ent0A_FrameSeq,y
     CMP #$80
-    BEQ B5_91B0
+    BEQ Ent_FloatStep
     STA tmp_a
     LDA ent_y_lo,x
     SEC
@@ -2210,12 +2210,12 @@ Ent0A_Update:
     STA ent_y_hi,x
     INC ent_radius,x
     RTS
-B5_91B0:
+Ent_FloatStep:
     LDA ent_angle,x
     INC ent_angle,x
     ASL a
     TAY
-    LDA Tbl_B5_923A,y
+    LDA FloatPathDx,y
     STA tmp_a
     CMP #$80
     BNE B5_91D9
@@ -2243,33 +2243,110 @@ B5_91D9:
     ADC tmp_a
     STA ent_x_lo,x
     LDA ent_x_hi,x
-    ADC B5_923B,y
+    ADC $923B,y
     STA ent_x_hi,x
     RTS
-; Tbl_B5_91FD: 61 bytes, read by Ent0A_Update
-Tbl_B5_91FD:
+; Ent0A_FrameSeq: frame (0/1) sequence read by Ent0A_Update, $80 ends
+Ent0A_FrameSeq:
     .byte $00,$01,$01,$01,$01,$01,$01,$01,$00,$01,$00,$01,$00,$01,$00,$01
     .byte $00,$01,$00,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00,$00,$01,$00
     .byte $00,$00,$00,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00
     .byte $00,$01,$00,$00,$01,$00,$01,$00,$01,$00,$01,$01,$80
-; Tbl_B5_923A: 185 bytes, read by B5_91B0, B5_91D9
-Tbl_B5_923A:
-    .byte $FF
-B5_923B:
-    .byte $FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00
-    .byte $00,$01,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00,$00,$00,$00,$00
-    .byte $00,$FF,$FF,$00,$00,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$01,$00,$00,$00,$01,$00,$01,$00,$00,$00,$01
-    .res 9, $00
-    .byte $FF,$FF,$00,$00,$FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00
-    .res 8, $00
-    .byte $01,$00,$00,$00,$01,$00,$01,$00,$01,$00,$01,$00,$00,$00,$01,$00
-    .res 10, $00
-    .byte $FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF
-    .res 10, $00
-    .byte $01,$00,$00,$00,$01,$00,$01,$00,$01,$00,$01,$00,$00,$00,$01,$00
-    .res 10, $00
-    .byte $FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$80
+; FloatPathDx: signed 16-bit X offsets per tick for a pickup floating upward (Ent_FloatStep: Y -= 1, X += word)
+FloatPathDx:
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0001
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0001
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .byte $80
 Ent0B_Update:
     LDA ent_x_lo,x
     SEC
@@ -2712,13 +2789,13 @@ Ent16_Update:
     LDA ent_angle,x
     ASL a
     TAY
-    LDA Tbl_B5_9694,y
+    LDA Ent16_Tbl_9694,y
     STA ptr_lo
     LDA B5_9695,y
     STA ptr_hi
     JMP (ptr_lo)
-; Tbl_B5_9694: 6 bytes, read by Ent16_Update
-Tbl_B5_9694:
+; Ent16_Tbl_9694: 6 bytes, read by Ent16_Update
+Ent16_Tbl_9694:
     .byte $AD
 B5_9695:
     .byte $96,$CC,$96,$9A,$96
@@ -2836,7 +2913,7 @@ Ent1A_Update:
     INC ent_param2,x
     ASL a
     TAY
-    LDA Tbl_B5_97E7,y
+    LDA Ent1A_Tbl_97E7,y
     CMP #$80
     BNE B5_97D2
     LDA #$1E
@@ -2855,8 +2932,8 @@ B5_97D2:
     ADC B5_97E8,y
     STA ent_y_hi,x
     RTS
-; Tbl_B5_97E7: 61 bytes, read by Ent1A_Update, B5_97D2
-Tbl_B5_97E7:
+; Ent1A_Tbl_97E7: 61 bytes, read by Ent1A_Update, B5_97D2
+Ent1A_Tbl_97E7:
     .byte $FD
 B5_97E8:
     .byte $FF,$FD,$FF,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$00
@@ -2878,7 +2955,7 @@ Ent1B_Update:
     LSR a
     AND #$1F
     TAY
-    LDA Tbl_B5_98AA,y
+    LDA Ent1B_Tbl_98AA,y
     STA ent_param,x
     JMP B5_985B
 B5_9849:
@@ -2917,8 +2994,8 @@ B5_9883:
     .byte $00,$02,$00,$02,$00,$02,$00,$02,$00,$02,$01,$02,$00,$02,$01,$02
     .byte $01,$03,$00,$03,$01,$03,$01,$03,$02,$03,$01,$03,$02,$03,$02,$03
     .byte $02,$03,$02,$03,$02,$03,$02
-; Tbl_B5_98AA: 23 bytes, read by Ent1B_Update, B5_98F9
-Tbl_B5_98AA:
+; Ent1B_Tbl_98AA: 23 bytes, read by Ent1B_Update, B5_98F9
+Ent1B_Tbl_98AA:
     .res 8, $03
     .byte $04,$04,$04,$04,$03,$03,$03,$04,$04,$04,$03,$03,$03,$03,$03
 ; Tbl_B5_98C1: 20 bytes, read by B5_993C
@@ -2950,7 +3027,7 @@ B5_98F9:
     CMP #$20
     BCS B5_990A
     TAY
-    LDA Tbl_B5_98AA,y
+    LDA Ent1B_Tbl_98AA,y
     STA ent_param,x
 B5_990A:
     JSR Ent_GroundCheck
@@ -3082,7 +3159,7 @@ Ent21_Update:
     LDA ent_param2,x
     TAY
     INC ent_param2,x
-    LDA Tbl_B5_9ABC,y
+    LDA Ent21_Tbl_9ABC,y
     CMP #$FF
     BNE B5_9A81
     LDA ent_flags,x
@@ -3156,8 +3233,8 @@ B5_9AA3:
     LDA #$09
     STA ent_param2,x
     RTS
-; Tbl_B5_9ABC: 23 bytes, read by Ent21_Update
-Tbl_B5_9ABC:
+; Ent21_Tbl_9ABC: 23 bytes, read by Ent21_Update
+Ent21_Tbl_9ABC:
     .byte $0E,$0E,$0E,$0E,$0E,$0E,$0E,$FF,$0E,$0E,$0E,$0E,$0E,$0D,$0D,$0D
     .byte $0D,$0D,$0D,$0D,$0D,$0D,$00
 Ent22_Update:
@@ -3351,7 +3428,7 @@ Ent2E_Update:
     JSR Ent_TickParam2
     LDY ent_radius,x
     INC ent_radius,x
-    LDA Tbl_B5_9CA2,y
+    LDA Ent2E_Tbl_9CA2,y
     CMP #$FF
     BNE B5_9C6A
     LDA #$00
@@ -3382,8 +3459,8 @@ B5_9C97:
     ADC #$07
     STA ent_param,x
     JMP EntityDeltaFromCentre
-; Tbl_B5_9CA2: 26 bytes, read by Ent2E_Update, B5_AA94
-Tbl_B5_9CA2:
+; Ent2E_Tbl_9CA2: 26 bytes, read by Ent2E_Update, B5_AA94
+Ent2E_Tbl_9CA2:
     .byte $00,$00,$00,$00,$00,$01,$01,$01,$01,$01,$02,$02,$02,$03,$03,$03
     .byte $04,$04,$04,$05,$05,$05,$06,$06,$06,$FF
 Ent2F_Update:
@@ -3503,7 +3580,7 @@ Ent32_Update:
     LDA ent_angle,x
     LSR a
     TAY
-    LDA Tbl_B5_9E25,y
+    LDA Ent32_Tbl_9E25,y
     BNE B5_9E1E
     LDA ent_radius,x
     STA ent_flags,x
@@ -3514,11 +3591,11 @@ B5_9E1E:
     STA ent_param,x
     INC ent_angle,x
     RTS
-; Tbl_B5_9E25: 9 bytes, read by Ent32_Update
-Tbl_B5_9E25:
+; Ent32_Tbl_9E25: 9 bytes, read by Ent32_Update
+Ent32_Tbl_9E25:
     .byte $1F,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$00
-; Tbl_B5_9E2E: 174 bytes, read by Ent33_Update, B5_BAF5
-Tbl_B5_9E2E:
+; Ent33_Sequence: per-tick sequence for type $33
+Ent33_Sequence:
     .res 20, $0F
     .byte $1F,$0F,$0F,$1F,$0F,$0F,$1F,$0F,$1F,$0F,$0F,$0F,$0F,$FF,$0F,$FF
     .byte $FF,$FF,$EF,$FF,$EF,$FF,$EF,$EF,$EF,$EF,$EF,$E0,$FF,$E0,$F0,$E1
@@ -3534,7 +3611,7 @@ Tbl_B5_9E2E:
 Ent33_Update:
     LDY ent_angle,x
     INC ent_angle,x
-    LDA Tbl_B5_9E2E,y
+    LDA Ent33_Sequence,y
     CMP #$80
     BNE B5_9F0B
     LDA #$19
@@ -3776,7 +3853,7 @@ Ent39_Update:
     LDA ent_angle,x
     ASL a
     TAY
-    LDA Tbl_B5_A1FE,y
+    LDA Ent39_Tbl_A1FE,y
     CMP #$3A
     BNE B5_A118
     STA ent_type,x
@@ -3891,8 +3968,8 @@ B5_A1E0:
 Tbl_B5_A1E9:
     .byte $22,$05,$00,$FD,$FF,$00,$24,$00,$25,$3C,$22,$05,$00,$0C,$00,$00
     .byte $24,$00,$26,$3C,$FF
-; Tbl_B5_A1FE: 51 bytes, read by Ent39_Update, B5_A118
-Tbl_B5_A1FE:
+; Ent39_Tbl_A1FE: 51 bytes, read by Ent39_Update, B5_A118
+Ent39_Tbl_A1FE:
     .byte $01
 B5_A1FF:
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$02,$00,$02,$00,$02,$00,$02
@@ -4224,8 +4301,8 @@ B5_A4A0:
     LDA #$D7
     LDY #$A4
     JMP SpawnEffects
-; Tbl_B5_A4B4: 116 bytes, read by Ent8A_Update
-Tbl_B5_A4B4:
+; Ent8A_Tbl_A4B4: 116 bytes, read by Ent8A_Update
+Ent8A_Tbl_A4B4:
     .byte $11,$11,$11,$11,$0A,$0A,$11,$11,$11,$11,$0A,$0A,$11,$11,$11,$0A
     .byte $0A,$11,$11,$11,$0A,$0A,$11,$11,$0A,$0A,$11,$11,$0A,$0A,$11,$0A
     .byte $11,$0A,$00,$47,$00,$00,$00,$00,$C0,$0B,$00,$01,$00,$07,$00,$00
@@ -4234,8 +4311,8 @@ Tbl_B5_A4B4:
     .byte $00,$1F,$00,$04,$FF,$07,$0A,$00,$0A,$00,$00,$1E,$00,$00,$FF,$07
     .byte $07,$00,$FD,$FF,$00,$1E,$00,$00,$FF,$07,$0F,$00,$F7,$FF,$00,$1F
     .byte $00,$0C,$FF,$FF
-; Tbl_B5_A528: 93 bytes, read by Ent47_Update, B5_A5B7
-Tbl_B5_A528:
+; Ent47_Tbl_A528: 93 bytes, read by Ent47_Update, B5_A5B7
+Ent47_Tbl_A528:
     .byte $03
 B5_A529:
     .byte $00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$02
@@ -4251,7 +4328,7 @@ Ent47_Update:
     LDA ent_angle,x
     ASL a
     TAY
-    LDA Tbl_B5_A528,y
+    LDA Ent47_Tbl_A528,y
     STA tmp_a
     CMP #$48
     BNE B5_A5B7
@@ -4862,7 +4939,7 @@ B5_AA94:
     LDA ent_param2,x
     TAY
     INC ent_param2,x
-    LDA Tbl_B5_9CA2,y
+    LDA Ent2E_Tbl_9CA2,y
     CMP #$FF
     BNE B5_AAA7
     LDA #$00
@@ -5025,7 +5102,7 @@ Ent4F_Update:
     LDA ent_radius,x
     LSR a
     TAY
-    LDA Tbl_B5_ABFE,y
+    LDA Ent4F_Tbl_ABFE,y
     BNE B5_ABFA
     LDA #$4E
     STA ent_type,x
@@ -5039,8 +5116,8 @@ Ent4F_Update:
 B5_ABFA:
     STA ent_param,x
     RTS
-; Tbl_B5_ABFE: 39 bytes, read by Ent4F_Update
-Tbl_B5_ABFE:
+; Ent4F_Tbl_ABFE: 39 bytes, read by Ent4F_Update
+Ent4F_Tbl_ABFE:
     .byte $04,$04,$04,$04,$04,$05,$05,$05,$05,$04,$04,$04,$04,$05,$05,$05
     .byte $04,$04,$04,$05,$05,$05,$04,$04,$04,$05,$05,$05,$04,$04,$04,$05
     .byte $05,$05,$05,$05,$05,$05,$00
@@ -5161,12 +5238,12 @@ Ent50_Update:
     AND #$0F
     BNE B5_AD17
     LDY switch_phase
-    LDA Tbl_B5_AD1A,y
+    LDA Ent50_Tbl_AD1A,y
     STA ent_angle,x
 B5_AD17:
     JMP Ent_TickParam2
-; Tbl_B5_AD1A: 5 bytes, read by Ent50_Update
-Tbl_B5_AD1A:
+; Ent50_Tbl_AD1A: 5 bytes, read by Ent50_Update
+Ent50_Tbl_AD1A:
     .byte $00,$03,$02,$04,$01
 Ent51_Update:
     LDA #$52
@@ -5279,7 +5356,7 @@ Ent56_Update:
 Ent5D_Update:
     LDY ent_angle,x
     INC ent_angle,x
-    LDA Tbl_B5_AE8E,y
+    LDA Ent5D_Tbl_AE8E,y
     STA tmp_a
     CMP #$80
     BNE B5_AE72
@@ -5302,8 +5379,8 @@ B5_AE7C:
     ADC tmp_d
     STA ent_y_hi,x
     RTS
-; Tbl_B5_AE8E: 21 bytes, read by Ent5D_Update
-Tbl_B5_AE8E:
+; Ent5D_Tbl_AE8E: 21 bytes, read by Ent5D_Update
+Ent5D_Tbl_AE8E:
     .byte $FE,$FE,$FE,$FF,$FE,$FF,$00,$FF,$00,$00,$00,$01,$00,$01,$01,$02
     .byte $01,$02,$02,$02,$80
 Ent5E_Update:
@@ -5405,7 +5482,7 @@ Ent5F_Update:
     SBC #$50
     BCC B5_AF39
     TAY
-    LDA Tbl_B5_AFA9,y
+    LDA Ent5F_Tbl_AFA9,y
     BNE B5_AF7E
     STA ent_radius,x
     LDA #$5E
@@ -5428,20 +5505,20 @@ Ent60_Update:
     LDA ent_angle,x
     TAY
     INC ent_angle,x
-    LDA Tbl_B5_AFDF,y
+    LDA Ent60_Tbl_AFDF,y
     BNE B5_AF7E
     STA ent_type,x
     RTS
-; Tbl_B5_AFA9: 22 bytes, read by Ent5F_Update
-Tbl_B5_AFA9:
+; Ent5F_Tbl_AFA9: 22 bytes, read by Ent5F_Update
+Ent5F_Tbl_AFA9:
     .byte $01,$01,$01,$01,$01,$01,$01,$03,$03,$03,$03,$03,$03,$01,$01,$01
     .byte $01,$03,$03,$03,$01,$00
 ; Tbl_B5_AFBF: 32 bytes, read by B5_AF0A
 Tbl_B5_AFBF:
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$02,$02,$01,$00,$02,$02,$01
-; Tbl_B5_AFDF: 38 bytes, read by Ent60_Update
-Tbl_B5_AFDF:
+; Ent60_Tbl_AFDF: 38 bytes, read by Ent60_Update
+Ent60_Tbl_AFDF:
     .res 9, $04
     .byte $05,$05,$05,$05,$05,$05,$00,$60,$00,$00,$FB,$FF,$B0,$04,$00,$00
     .byte $00,$FF,$60,$00,$00,$0D,$00,$B0,$04,$00,$00,$00,$FF
@@ -5476,15 +5553,15 @@ Ent62_Update:
     TAY
     LDA ent_y_lo,x
     CLC
-    ADC Tbl_B5_B04A,y
+    ADC Ent62_Tbl_B04A,y
     STA ent_y_lo,x
     LDA ent_y_hi,x
     ADC B5_B04B,y
     STA ent_y_hi,x
 B5_B049:
     RTS
-; Tbl_B5_B04A: 32 bytes, read by Ent62_Update
-Tbl_B5_B04A:
+; Ent62_Tbl_B04A: 32 bytes, read by Ent62_Update
+Ent62_Tbl_B04A:
     .byte $00
 B5_B04B:
     .byte $00,$01,$00,$00,$00,$01,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00
@@ -5730,7 +5807,7 @@ Ent76_Update:
     LSR a
     LSR a
     TAY
-    LDA Tbl_B5_B275,y
+    LDA Ent76_Tbl_B275,y
     CMP #$FF
     BNE B5_B26E
     LDA #$02
@@ -5749,8 +5826,8 @@ B5_B26E:
     STA ent_param,x
     INC ent_angle,x
     RTS
-; Tbl_B5_B275: 48 bytes, read by Ent76_Update
-Tbl_B5_B275:
+; Ent76_Tbl_B275: 48 bytes, read by Ent76_Update
+Ent76_Tbl_B275:
     .byte $0D,$0C,$0B,$0A,$08,$09,$FF,$77,$04,$00,$04,$00,$00,$26,$00,$00
     .byte $00,$77,$04,$00,$04,$00,$00,$26,$40,$00,$00,$77,$04,$00,$04,$00
     .byte $00,$26,$80,$00,$00,$77,$04,$00,$04,$00,$00,$26,$C0,$00,$00,$FF
@@ -6090,7 +6167,7 @@ B5_B549:
 Ent86_Update:
     JSR Ent_CheckPlayerOverlapB
     LDY ent_radius,x
-    LDA Tbl_B5_B591,y
+    LDA Ent86_Tbl_B591,y
     CMP #$81
     BNE B5_B567
     LDA #$83
@@ -6122,8 +6199,8 @@ B5_B587:
     ADC #$01
     STA tmp_a
     JMP B5_8A9F
-; Tbl_B5_B591: 59 bytes, read by Ent86_Update
-Tbl_B5_B591:
+; Ent86_Tbl_B591: 59 bytes, read by Ent86_Update
+Ent86_Tbl_B591:
     .byte $FE,$FE,$FF,$FF,$FF,$00,$FF,$FF,$00,$FF,$00,$FF,$00,$00,$00,$01
     .byte $00,$01,$00,$01,$01,$00,$01,$01,$01,$02,$02,$80,$FE,$FF,$FF,$00
     .byte $FF,$00,$FF,$00,$00,$00,$01,$00,$01,$00,$01,$01,$02,$80,$FF,$FF
@@ -6132,8 +6209,8 @@ B5_B5CC:
     .byte $FF
 B5_B5CD:
     .byte $03
-; Tbl_B5_B5CE: 30 bytes, read by Ent87_Update, B5_B652
-Tbl_B5_B5CE:
+; Ent87_Tbl_B5CE: 30 bytes, read by Ent87_Update, B5_B652
+Ent87_Tbl_B5CE:
     .byte $78
 B5_B5CF:
     .byte $00,$D6,$03,$B8,$00,$99,$03,$1A,$00,$99,$03,$98,$00,$14,$04,$3A
@@ -6148,7 +6225,7 @@ Ent87_Update:
     STA tmp_a
     LDA B5_B5CD,y
     STA tmp_b
-    LDA Tbl_B5_B5CE,y
+    LDA Ent87_Tbl_B5CE,y
     STA tmp_c
     LDA B5_B5CF,y
     STA tmp_d
@@ -6196,7 +6273,7 @@ B5_B652:
     LDA B5_B5CD,y
     SBC #$00
     STA ram_04EA
-    LDA Tbl_B5_B5CE,y
+    LDA Ent87_Tbl_B5CE,y
     STA ram_051A
     LDA B5_B5CF,y
     STA ram_054A
@@ -6230,7 +6307,7 @@ Ent8A_Update:
     LDA ent_angle,x
     LSR a
     TAY
-    LDA Tbl_B5_A4B4,y
+    LDA Ent8A_Tbl_A4B4,y
     BEQ B5_B6CB
     STA ent_param,x
     LDA ram_01B8
@@ -6373,7 +6450,7 @@ Ent8F_Update:
     TAY
     LDA #$00
     STA tmp_c
-    LDA Tbl_B5_B84D,y
+    LDA Ent8F_Tbl_B84D,y
     BNE B5_B7DC
     STA ent_type,x
     RTS
@@ -6395,8 +6472,8 @@ Tbl_B5_B7ED:
     .byte $00,$00,$24,$00,$26,$64,$FF,$0E,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E
     .byte $0E,$0A,$0A,$0E,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$0E
     .byte $0E,$0A,$0A,$0E,$0E,$0A,$0A,$0E,$0E,$0A,$0A,$0E,$0A,$0E,$0A,$00
-; Tbl_B5_B84D: 37 bytes, read by Ent8F_Update
-Tbl_B5_B84D:
+; Ent8F_Tbl_B84D: 37 bytes, read by Ent8F_Update
+Ent8F_Tbl_B84D:
     .byte $1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1E,$0F,$0F,$0F,$0F,$0F
     .res 9, $0F
     .byte $1E,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$00
@@ -6684,7 +6761,7 @@ B5_BAF1:
 B5_BAF5:
     TAY
     INC ent_angle,x
-    LDA Tbl_B5_9E2E,y
+    LDA Ent33_Sequence,y
     STA ptr_lo
     AND #$F0
     STA ptr_hi
@@ -6821,7 +6898,7 @@ Ent97_Update:
     AND #$03
     BNE B5_BC32
     LDY ent_angle,x
-    LDA Tbl_B5_BC33,y
+    LDA Ent97_Tbl_BC33,y
     CMP #$FF
     BNE B5_BC2C
     DEC ent_radius,x
@@ -6837,8 +6914,8 @@ B5_BC2C:
     INC ent_angle,x
 B5_BC32:
     RTS
-; Tbl_B5_BC33: 19 bytes, read by Ent97_Update
-Tbl_B5_BC33:
+; Ent97_Tbl_BC33: 19 bytes, read by Ent97_Update
+Ent97_Tbl_BC33:
     .byte $00,$00,$00,$00,$01,$01,$03,$03,$02,$02,$03,$03,$01,$01,$03,$03
     .byte $00,$03,$FF
 Ent_Noop:

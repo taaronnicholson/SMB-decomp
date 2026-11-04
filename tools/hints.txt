@@ -437,3 +437,4 @@ name 1 83FB Shot_TileHit            ; projectile hit a tile: tile $DA (the peck 
 name 5 B181 Ent_PatrolTail          ; shared tail of types $74/$75: restores tmp_c/tmp_d, overlap tests and the player-touch check
 name 6 A3EC ExitWalkStep            ; PlayerState19: steps ExitWalkAnim (player_frame, player_x -= offset)
 name 6 A41E AdvanceStage            ; end of the exit walk: fade out, silence, INC stage_index, restart at StageSetup
+name 5 91B0 Ent_FloatStep          ; ent_angle steps through FloatPathDx: Y -= 1, X += dx; word $80 -> Ent_StartCollectAnim

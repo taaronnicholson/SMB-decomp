@@ -3,3 +3,6 @@
 f C544 TileEffectScript struct 65 bb ; (next index, tile) pairs forming chains: RunTileEffects follows next (0 = end) and redraws the tile ($FF = none); chains start at index $02 (peck-broken tile) or $3C
 1 B272 BonusAscentEndAnim struct 81 bb ; (player_frame, Y offset) pairs for the end of the bonus ascent (PlayerState18): frame, player_y += offset, player faces right; frame $44 switches game_state to $0A (tally), $FF ends
 6 A44E ExitWalkAnim struct 73 bb ; (player_frame, X offset subtracted) pairs for the walk to the NEXT sign (PlayerState19); $FD = noise sfx 8 + frame $4A, $FE = face left, $FF = end
+5 923A FloatPathDx struct 92 w ; signed 16-bit X offsets per tick for a pickup floating upward (Ent_FloatStep: Y -= 1, X += word); a low byte of $80 ends it with the collect animation
+5 91FD Ent0A_FrameSeq ; frame (0/1) sequence read by Ent0A_Update, $80 ends
+5 9E2E Ent33_Sequence ; per-tick sequence for type $33; at the end ($80) it sets player_state $19 (the exit walk), plays sfx $22 and bursts: type $33 starts the exit

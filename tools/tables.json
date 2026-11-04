@@ -207,7 +207,7 @@
   "addr": 45682,
   "len": 163,
   "name": "Tbl_B1_B272",
-  "comment": "163 bytes, read by B1_B241, B1_B25B"
+  "comment": "163 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 1,
@@ -746,7 +746,7 @@
   "addr": 37434,
   "len": 185,
   "name": "Tbl_B5_923A",
-  "comment": "185 bytes, read by B5_91B0, B5_91D9"
+  "comment": "185 bytes, read by Ent_FloatStep, B5_91D9"
  },
  {
   "bank": 5,
@@ -1264,7 +1264,7 @@
   "addr": 42062,
   "len": 147,
   "name": "Tbl_B6_A44E",
-  "comment": "147 bytes, read by ExitWalkStep, B6_A40B"
+  "comment": "147 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 6,
