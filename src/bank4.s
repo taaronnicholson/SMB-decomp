@@ -964,11 +964,19 @@ Gfx_B4_ABB2:
     LDA #$02
     STA nmi_state
     RTS
-; Tbl_B4_ADA5: 22 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_ADA5:
-    .byte $40,$E8,$FF,$04,$00,$C0,$09,$50,$00,$00,$FF,$90,$00,$00,$00,$00
-    .byte $F0,$02,$00,$00,$00,$FF
-; Tbl_B4_ADBB: 20 bytes, read by B4_AC4F
+; EffectList_B4_ADA5: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B4_ADA5:
+    .byte $40
+    .word $FFE8, $0004
+    .byte $C0, $09, $50, $00, $00
+    .byte $FF
+; EffectList_B4_ADB0: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B4_ADB0:
+    .byte $90
+    .word $0000, $0000
+    .byte $F0, $02, $00, $00, $00
+    .byte $FF
+; Tbl_B4_ADBB: 20 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B4_ADBB:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
@@ -1313,7 +1321,7 @@ GameState0B:
     LDA Tbl_B4_B0C4,y
     STA zp_47
     RTS
-; Tbl_B4_B0C4: 20 bytes, read by B4_B0BB
+; Tbl_B4_B0C4: 20 bytes, read by GameState0B
 Tbl_B4_B0C4:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
@@ -2047,9 +2055,12 @@ B4_B6A4:
     LDA #$EF
     LDY #$B6
     JMP SpawnEffects
-; Tbl_B4_B6EF: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B6EF:
-    .byte $40,$E8,$FF,$04,$00,$C0,$09,$50,$00,$00,$FF
+; EffectList_B4_B6EF: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B4_B6EF:
+    .byte $40
+    .word $FFE8, $0004
+    .byte $C0, $09, $50, $00, $00
+    .byte $FF
 B4_B6FA:
     CMP #$02
     BNE B4_B71C
@@ -2153,7 +2164,7 @@ B4_B7B6:
     .byte $00
 B4_B7B7:
     .byte $02
-; Tbl_B4_B7B8: 58 bytes, read by B4_B579
+; Tbl_B4_B7B8: 58 bytes, read by B4_B56B
 Tbl_B4_B7B8:
     .byte $03,$03,$C4,$B9,$63,$B9,$3D,$3E,$46,$03,$C8,$B9,$C2,$B8,$3D,$99
     .byte $46,$02,$CF,$B9,$D1,$B7,$3D,$87,$8A

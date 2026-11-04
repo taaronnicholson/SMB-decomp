@@ -701,7 +701,7 @@ B2_9E99:
     LDA #$00
     STA zp_4D
     RTS
-; Tbl_B2_9EDC: 80 bytes, read by B2_9E3F
+; Tbl_B2_9EDC: 80 bytes, read by SetPlayerFacingBit
 Tbl_B2_9EDC:
     .byte $00,$02,$04,$06,$08,$0A,$0C,$0E,$10,$12,$14,$FF,$FF,$FF,$FF,$FF
     .byte $FF,$FF,$FF,$FF,$FF,$6C,$60,$62,$16,$18,$1A,$1C,$1E,$20,$22,$24
@@ -1373,16 +1373,16 @@ WriteTileStrip_1044:
     CPX #$0B
     BNE @B2_A592
     JMP SetScroll
-; Tbl_B2_A5A0: 11 bytes, read by B2_A559
+; Tbl_B2_A5A0: 11 bytes, read by WriteTileStrip_1044
 Tbl_B2_A5A0:
     .byte $00,$0F,$16,$2C,$00,$00,$00,$00,$00,$00,$0F
-; Tbl_B2_A5AB: 11 bytes, read by B2_A56C
+; Tbl_B2_A5AB: 11 bytes, read by WriteTileStrip_1044
 Tbl_B2_A5AB:
     .byte $10,$3B,$16,$2C,$00,$00,$00,$10,$10,$7C,$1F
-; Tbl_B2_A5B6: 11 bytes, read by B2_A57F
+; Tbl_B2_A5B6: 11 bytes, read by WriteTileStrip_1044
 Tbl_B2_A5B6:
     .byte $00,$17,$06,$2C,$00,$00,$00,$00,$10,$38,$1F
-; Tbl_B2_A5C1: 11 bytes, read by B2_A592
+; Tbl_B2_A5C1: 11 bytes, read by WriteTileStrip_1044
 Tbl_B2_A5C1:
     .byte $00,$0F,$16,$2C,$00,$00,$00,$00,$00,$10,$0F
 SetPPUAddr_1044:
@@ -2249,11 +2249,11 @@ SetPPUAddr_13B0:
     LDA #$B0
     STA PPUADDR
     RTS
-; Tbl_B2_AE54: 32 bytes, read by B2_AE12
+; Tbl_B2_AE54: 32 bytes, read by WriteTiles_11F0
 Tbl_B2_AE54:
     .byte $1F,$67,$80,$68,$57,$93,$67,$47,$00,$1F,$7F,$F7,$E8,$6F,$1D,$3F
     .byte $F8,$A6,$01,$10,$E8,$C9,$E6,$E2,$00,$F8,$FE,$EF,$17,$F6,$B8,$FC
-; Tbl_B2_AE74: 32 bytes, read by B2_AE25
+; Tbl_B2_AE74: 32 bytes, read by WriteTiles_11F0
 Tbl_B2_AE74:
     .byte $03,$3D,$48,$A0,$8F,$93,$67,$47,$00,$03,$3F,$7F,$70,$6F,$1D,$3F
     .byte $C6,$81,$00,$70,$E9,$CE,$E4,$E2,$38,$FE,$FF,$8F,$16,$F0,$B8,$FC
@@ -2846,7 +2846,7 @@ WriteTileFrame_14D0:
     CPY #$1E
     BNE @B2_B4AC
     JMP SetScroll
-; Tbl_B2_B4BA: 79 bytes, read by B2_B4AC
+; Tbl_B2_B4BA: 79 bytes, read by WriteTileFrame_14D0
 Tbl_B2_B4BA:
     .byte $8F,$98,$A7,$A8,$A3,$9C,$C0,$7F,$70,$6F,$58,$57,$5C,$63,$3F,$00
     .byte $F1,$09,$E5,$15,$CD,$39,$03,$FE,$0E,$F6,$1A,$EA,$3A,$C6,$20,$09
@@ -2909,7 +2909,7 @@ B2_B53A:
     STA invuln_lo
 @B2_B56B:
     JMP PlayerState00
-; Tbl_B2_B56E: 60 bytes, read by F_DC8C
+; Tbl_B2_B56E: 60 bytes, read by PlayerBlinkCheck
 Tbl_B2_B56E:
     .byte $01,$01,$02,$00,$01,$01,$01,$01,$01,$00,$01,$01,$00,$01,$00,$00
     .res 14, $00
@@ -3132,7 +3132,7 @@ B2_B777:
     .byte $A0
 B2_B778:
     .byte $86
-; Tbl_B2_B779: 22 bytes, read by B2_B73D
+; Tbl_B2_B779: 22 bytes, read by BinaryToDigits
 Tbl_B2_B779:
     .byte $01,$00,$10,$27,$00,$00,$E8,$03,$00,$00,$64,$00,$00,$00,$0A,$00
     .byte $00,$00,$01,$00,$00,$00
@@ -3153,12 +3153,12 @@ PpuJobDispatch:
     LDA #$00
     STA zp_47
     JMP (jump_ptr_lo)
-; Tbl_B2_B7B0: 34 bytes, read by B2_B79F
+; Tbl_B2_B7B0: 34 bytes, read by PpuJobDispatch
 Tbl_B2_B7B0:
     .byte $00,$67,$7A,$8D,$54,$06,$B7,$73,$EF,$DA,$35,$47,$65,$F0,$B5,$5D
     .byte $D7,$0D,$20,$33,$B4,$C7,$DA,$27,$77,$5B,$8B,$71,$91,$9C,$A7,$D8
     .byte $4F,$5B
-; Tbl_B2_B7D2: 34 bytes, read by B2_B79F
+; Tbl_B2_B7D2: 34 bytes, read by PpuJobDispatch
 Tbl_B2_B7D2:
     .byte $9E,$A5,$A5,$A5,$A5,$A6,$A6,$A6,$A7,$A5,$A9,$A6,$AA,$A5,$AB,$A6
     .byte $AC,$AE,$AE,$AE,$AE,$AE,$AE,$AF,$B0,$B1,$B2,$B3,$B4,$B4,$B4,$B4

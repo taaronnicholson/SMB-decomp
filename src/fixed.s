@@ -177,7 +177,7 @@ PPUCopy1:
     ADC ppu_buffer_idx
     TAX
     JMP F_C0B3
-; Tbl_F_C1D0: 31 bytes, read by B1_838D, F_E7B6
+; Tbl_F_C1D0: 31 bytes, read by ShotMoveUp, F_E734
 Tbl_F_C1D0:
     .res 10, $00
     .byte $02,$02,$01,$01,$02,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$02
@@ -239,15 +239,15 @@ Tbl_F_C2EF:
     .word F_D4FE
     .word F_FEC0
     .byte $FE,$C1,$FE
-; Tbl_F_C326: 11 bytes, read by F_F43E
+; Tbl_F_C326: 11 bytes, read by UpdateTouchKind
 Tbl_F_C326:
     .byte $CD
 F_C327:
     .byte $FF,$CB,$C2,$D6,$C2,$F5,$C2,$06,$C3,$12
-; Tbl_F_C331: 5 bytes, read by F_F3CC
+; Tbl_F_C331: 5 bytes, read by UpdateTouchKind
 Tbl_F_C331:
     .byte $C3,$D2,$D2,$00,$CD
-; Tbl_F_C336: 6 bytes, read by F_F426
+; Tbl_F_C336: 6 bytes, read by UpdateTouchKind
 Tbl_F_C336:
     .byte $CD,$D3,$D3,$C0,$D3,$D3
 ; TileHeightProfiles: 32 profiles x 16 columns: ground surface height per pixel column of a tile ($FF = no surface)
@@ -3432,11 +3432,11 @@ FilterCollectedTile:
     LDX tmp_d
     LDA tmp_b
     RTS
-; Tbl_F_DBF6: 27 bytes, read by F_F088
+; Tbl_F_DBF6: 27 bytes, read by PlayerTileInteract
 Tbl_F_DBF6:
     .res 12, $01
     .byte $00,$01,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$00
-; Tbl_F_DC11: 16 bytes, read by F_DDE8
+; Tbl_F_DC11: 16 bytes, read by TryFireShot
 Tbl_F_DC11:
     .byte $00,$00,$00,$01,$01,$01,$00,$01,$00,$00,$00,$00,$01,$01,$00,$00
 PlayerBlinkCheck:
@@ -7121,7 +7121,7 @@ SetCollectedFlag:
     STA collected_flags,y
     LDX saved_x
     RTS
-; Tbl_F_F6C1: 16 bytes, read by F_F6D3
+; Tbl_F_F6C1: 16 bytes, read by GetCollectibleBit
 Tbl_F_F6C1:
     .byte $BC,$D1,$DB,$D6,$D9,$C8,$C9,$CA,$CB,$CC,$CD,$BD,$BE,$BF,$C2,$C3
 GetCollectibleBit:
@@ -7580,9 +7580,12 @@ F_F9F9:
     STA ent_radius,y
     STA ent_param2,y
     RTS
-; Tbl_F_FA32: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_F_FA32:
-    .byte $37,$00,$00,$00,$00,$00,$29,$00,$00,$00,$FF
+; EffectList_F_FA32: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_F_FA32:
+    .byte $37
+    .word $0000, $0000
+    .byte $00, $29, $00, $00, $00
+    .byte $FF
 FindFreeEntitySlot:
     LDY #$2F
 @F_FA3F:

@@ -16,3 +16,26 @@ f C544 TileEffectScript struct 65 bb ; (next index, tile) pairs forming chains: 
 4 AEB6 GameState02_FrameTable ; indexed by the frame counter; $80+ entries skip, otherwise value+$11 goes to zp_47
 4 B2BE GameState0B_Sequence ; indexed by zp_D1; $FF spawns effect type $33 at a fixed position
 5 8F63 WobbleDxTable struct 36 w ; signed 16-bit X deltas, 36 steps of a wobble; B5_8F3D steps ent_radius through the first 18 (wraps at $12) and adds the word to ent_x
+4 ADB0 EffectList_B4_ADB0 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+4 ADA5 EffectList_B4_ADA5 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+4 B6EF EffectList_B4_B6EF struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 8D4D EffectList_B5_8D4D struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 9110 EffectList_B5_9110 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 9CE9 EffectList_B5_9CE9 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 9D6F EffectList_B5_9D6F struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 9DD4 EffectList_B5_9DD4 struct 5 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 9F60 EffectList_B5_9F60 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 A1E9 EffectList_B5_A1E9 struct 2 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 A4D7 EffectList_B5_A4D7 struct 8 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 A5AC EffectList_B5_A5AC struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 A6AA EffectList_B5_A6AA struct 4 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 AFEF EffectList_B5_AFEF struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 B0E6 EffectList_B5_B0E6 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 B27C EffectList_B5_B27C struct 4 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 B7FB EffectList_B5_B7FB struct 4 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 BA26 EffectList_B5_BA26 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 BADE EffectList_B5_BADE struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 BBA3 EffectList_B5_BBA3 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 BBF6 EffectList_B5_BBF6 struct 2 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 BCFF EffectList_B5_BCFF struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+f FA32 EffectList_F_FA32 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF

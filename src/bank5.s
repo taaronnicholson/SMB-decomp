@@ -103,7 +103,7 @@ EntityDeltaFromCentre:
     STA ent_dx,x
 Ent18_Update:
     RTS
-; Tbl_B5_80B7: 28 bytes, read by B5_80D8
+; Tbl_B5_80B7: 28 bytes, read by Ent_TryCarryPlayer
 Tbl_B5_80B7:
     .byte $01,$00,$01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00
     .res 12, $00
@@ -1259,7 +1259,7 @@ Ent_CheckPlayerOverlap:
     STA shot_E3_1
 B5_8982:
     RTS
-; Tbl_B5_8983: 16 bytes, read by Ent_CheckPlayerOverlap, B5_8949, Ent_CheckPlayerOverlapD ...
+; Tbl_B5_8983: 16 bytes, read by Ent_CheckPlayerOverlap, Ent_CheckPlayerOverlapD
 Tbl_B5_8983:
     .byte $00,$00,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$02
 Ent_CheckPlayerOverlapC:
@@ -1738,9 +1738,12 @@ Ent01_Update:
     ADC #$03
     STA tmp_a
     JMP AwardPickup
-; Tbl_B5_8D4D: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_8D4D:
-    .byte $03,$00,$00,$00,$00,$00,$0F,$00,$00,$00,$FF
+; EffectList_B5_8D4D: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_8D4D:
+    .byte $03
+    .word $0000, $0000
+    .byte $00, $0F, $00, $00, $00
+    .byte $FF
 Ent02_Update:
     LDY ent_radius,x
     CPY #$11
@@ -1859,7 +1862,7 @@ Ent02_Update:
     LDA ptr_hi
     STA ent_x_hi,x
     RTS
-; Tbl_B5_8E36: 18 bytes, read by B5_8D62
+; Tbl_B5_8E36: 18 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_8E36:
     .byte $00,$01,$00,$00,$01,$00,$01,$00,$01,$01,$02,$01,$01,$02,$01,$02
     .byte $02,$03
@@ -2060,7 +2063,7 @@ Ent06_Update:
     LDA ent_radius,x
     ASL a
     TAY
-    LDA Tbl_B5_901A,y
+    LDA Ent06_Tbl_901A,y
     STA tmp_a
     CMP #$80
     BNE @B5_9004
@@ -2077,8 +2080,8 @@ Ent06_Update:
     STA ent_y_hi,x
     INC ent_radius,x
     RTS
-; Tbl_B5_901A: 45 bytes, read by B5_8FF0, B5_9004
-Tbl_B5_901A:
+; Ent06_Tbl_901A: 45 bytes, read by Ent06_Update
+Ent06_Tbl_901A:
     .byte $FE
 B5_901B:
     .byte $FF,$FE,$FF,$FE,$FF,$FF,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF
@@ -2181,9 +2184,12 @@ Ent09_Update:
     LDA #$10
     LDY #$91
     JMP SpawnEffects
-; Tbl_B5_9110: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_9110:
-    .byte $0A,$FA,$FF,$00,$00,$18,$02,$00,$00,$00,$FF
+; EffectList_B5_9110: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_9110:
+    .byte $0A
+    .word $FFFA, $0000
+    .byte $18, $02, $00, $00, $00
+    .byte $FF
 B5_911B:
     JSR Ent_MoveYWithGround
     LDA ent_param2,x
@@ -2212,7 +2218,7 @@ B5_911B:
 ; Tbl_B5_914C: 9 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_914C:
     .byte $04,$FC,$FF,$00,$00,$18,$01,$00,$00
-; Tbl_B5_9155: 46 bytes, read by B5_912F
+; Tbl_B5_9155: 46 bytes, read by B5_911B
 Tbl_B5_9155:
     .byte $00
 B5_9156:
@@ -2640,14 +2646,14 @@ Ent0E_Update:
     TAY
     LDA ent_y_lo,x
     CLC
-    ADC Tbl_B5_950E,y
+    ADC Ent0E_Tbl_950E,y
     STA ent_y_lo,x
     LDA ent_y_hi,x
     ADC B5_950F,y
     STA ent_y_hi,x
     RTS
-; Tbl_B5_950E: 32 bytes, read by B5_94ED
-Tbl_B5_950E:
+; Ent0E_Tbl_950E: 32 bytes, read by Ent0E_Update
+Ent0E_Tbl_950E:
     .byte $FE
 B5_950F:
     .byte $FF,$FE,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00
@@ -2900,12 +2906,12 @@ B5_9695:
     ADC tmp_d
     STA ent_y_hi,x
     JMP EntityDeltaFromCentre
-; Tbl_B5_9720: 45 bytes, read by B5_96AC
+; Tbl_B5_9720: 45 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_9720:
     .byte $02,$04,$06,$07,$09,$0A,$0B,$0B,$0C,$0C,$0C,$0C,$0B,$0B,$0A,$09
     .byte $07,$06,$04,$02,$00,$FE,$FD,$FD,$FC,$FC,$FD,$FD,$FE,$00,$01,$02
     .byte $03,$03,$04,$04,$04,$03,$03,$02,$02,$01,$01,$00,$80
-; Tbl_B5_974D: 32 bytes, read by B5_96E0
+; Tbl_B5_974D: 32 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_974D:
     .byte $FF,$FE,$FE,$FD,$FD,$FD,$FD,$FD,$FD,$FD,$FE,$FE,$FF,$00,$00,$00
     .byte $01,$02,$02,$03,$03,$03,$03,$03,$03,$03,$02,$02,$01,$00,$00,$00
@@ -2933,7 +2939,7 @@ B5_978C:
     LDA Tbl_B5_979F,y
     STA ent_param,x
     RTS
-; Tbl_B5_979F: 16 bytes, read by B5_978C, B5_9993
+; Tbl_B5_979F: 16 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_979F:
     .res 10, $00
     .byte $01,$01,$01,$01,$01,$01
@@ -2944,7 +2950,7 @@ Ent1A_Update:
     INC ent_param2,x
     ASL a
     TAY
-    LDA Tbl_B5_97E7,y
+    LDA Ent1A_Tbl_97E7,y
     CMP #$80
     BNE @B5_97D2
     LDA #$1E
@@ -2963,8 +2969,8 @@ Ent1A_Update:
     ADC B5_97E8,y
     STA ent_y_hi,x
     RTS
-; Tbl_B5_97E7: 61 bytes, read by B5_97D2
-Tbl_B5_97E7:
+; Ent1A_Tbl_97E7: 61 bytes, read by Ent1A_Update
+Ent1A_Tbl_97E7:
     .byte $FD
 B5_97E8:
     .byte $FF,$FD,$FF,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$00
@@ -2994,7 +3000,7 @@ Ent1B_Update:
     LDA ptr_lo
     ASL a
     TAY
-    LDA Tbl_B5_9882,y
+    LDA Ent1B_Tbl_9882,y
     STA ent_param,x
     LDA B5_9883,y
     STA tmp_a
@@ -3018,14 +3024,14 @@ Ent1B_Update:
     STA ent_param2,x
 @B5_9881:
     RTS
-; Tbl_B5_9882: 40 bytes, read by B5_9849
-Tbl_B5_9882:
+; Ent1B_Tbl_9882: 40 bytes, read by Ent1B_Update
+Ent1B_Tbl_9882:
     .byte $02
 B5_9883:
     .byte $00,$02,$00,$02,$00,$02,$00,$02,$00,$02,$01,$02,$00,$02,$01,$02
     .byte $01,$03,$00,$03,$01,$03,$01,$03,$02,$03,$01,$03,$02,$03,$02,$03
     .byte $02,$03,$02,$03,$02,$03,$02
-; Tbl_B5_98AA: 23 bytes, no direct code reference (continuation or unreferenced)
+; Tbl_B5_98AA: 23 bytes, read by Ent1B_Update, Ent1C_Update
 Tbl_B5_98AA:
     .res 8, $03
     .byte $04,$04,$04,$04,$03,$03,$03,$04,$04,$04,$03,$03,$03,$03,$03
@@ -3158,7 +3164,7 @@ Ent20_Update:
     LDA Tbl_B5_99D1,y
     STA ent_param,x
     RTS
-; Tbl_B5_99D1: 16 bytes, read by B5_99C4
+; Tbl_B5_99D1: 16 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_99D1:
     .res 10, $0C
     .byte $0D,$0D,$0D,$0D,$0D,$0D
@@ -3442,7 +3448,7 @@ Ent_TickRadius:
 B5_9C2C:
     STA ent_param,x
     RTS
-; Tbl_B5_9C30: 18 bytes, read by B5_9C0C
+; Tbl_B5_9C30: 18 bytes, read by Ent_TickRadius
 Tbl_B5_9C30:
     .byte $01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$01
     .byte $00,$FF
@@ -3490,7 +3496,7 @@ Ent2E_Update:
     ADC #$07
     STA ent_param,x
     JMP EntityDeltaFromCentre
-; Tbl_B5_9CA2: 26 bytes, no direct code reference (continuation or unreferenced)
+; Tbl_B5_9CA2: 26 bytes, read by Ent2E_Update, Ent4A_Update
 Tbl_B5_9CA2:
     .byte $00,$00,$00,$00,$00,$01,$01,$01,$01,$01,$02,$02,$02,$03,$03,$03
     .byte $04,$04,$04,$05,$05,$05,$06,$06,$06,$FF
@@ -3514,9 +3520,12 @@ Ent2F_Update:
     LDA #$00
     STA tmp_c
     JMP Ent_TickRadius
-; Tbl_B5_9CE9: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_9CE9:
-    .byte $30,$0E,$00,$04,$00,$88,$03,$00,$00,$00,$FF
+; EffectList_B5_9CE9: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_9CE9:
+    .byte $30
+    .word $000E, $0004
+    .byte $88, $03, $00, $00, $00
+    .byte $FF
 Ent30_Update:
     JSR Ent_HurtOnTouchKnockout
     LDA entity_tick
@@ -3579,9 +3588,12 @@ EntPeriodicEffects:
     LDA #$40
     STA ent_param2,x
     JMP SpawnEffectsFromList
-; Tbl_B5_9D6F: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_9D6F:
-    .byte $0F,$FC,$FF,$00,$00,$68,$06,$30,$00,$00,$FF
+; EffectList_B5_9D6F: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_9D6F:
+    .byte $0F
+    .word $FFFC, $0000
+    .byte $68, $06, $30, $00, $00
+    .byte $FF
 B5_9D7A:
     LDA ent_radius,x
     INC ent_radius,x
@@ -3598,15 +3610,30 @@ B5_9D7A:
     LDA #$D4
     LDY #$9D
     JMP SpawnEffects
-; Tbl_B5_9D9B: 108 bytes, read by B5_9D7A
+; Tbl_B5_9D9B: 57 bytes, read by B5_9D7A
 Tbl_B5_9D9B:
     .byte $01,$01,$01,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$01,$01,$01
     .byte $01,$01,$00,$00,$01,$01,$01,$01,$01,$01,$01,$01,$02,$02,$02,$03
     .byte $03,$03,$03,$04,$04,$04,$05,$05,$05,$05,$07,$07,$07,$07,$08,$08
-    .byte $08,$08,$09,$09,$09,$09,$09,$09,$FF,$22,$FC,$FF,$04,$00,$00,$24
-    .byte $00,$24,$30,$22,$0A,$00,$FD,$FF,$00,$24,$00,$25,$30,$22,$0A,$00
-    .byte $0C,$00,$00,$24,$00,$26,$30,$22,$00,$00,$FF,$FF,$00,$24,$00,$27
-    .byte $30,$22,$00,$00,$0A,$00,$00,$24,$00,$28,$30,$FF
+    .byte $08,$08,$09,$09,$09,$09,$09,$09,$FF
+; EffectList_B5_9DD4: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_9DD4:
+    .byte $22
+    .word $FFFC, $0004
+    .byte $00, $24, $00, $24, $30
+    .byte $22
+    .word $000A, $FFFD
+    .byte $00, $24, $00, $25, $30
+    .byte $22
+    .word $000A, $000C
+    .byte $00, $24, $00, $26, $30
+    .byte $22
+    .word $0000, $FFFF
+    .byte $00, $24, $00, $27, $30
+    .byte $22
+    .word $0000, $000A
+    .byte $00, $24, $00, $28, $30
+    .byte $FF
 Ent32_Update:
     LDA ent_angle,x
     LSR a
@@ -3708,9 +3735,15 @@ Ent33_Update:
     ADC #$1E
     STA ent_param,x
     RTS
-; Tbl_B5_9F60: 12 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_9F60:
-    .byte $34,$04,$00,$04,$00,$00,$02,$19,$00,$00,$FF,$60
+; EffectList_B5_9F60: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_9F60:
+    .byte $34
+    .word $0004, $0004
+    .byte $00, $02, $19, $00, $00
+    .byte $FF
+; Tbl_B5_9F6B: 1 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B5_9F6B:
+    .byte $60
 Ent34_Update:
     DEC ent_angle,x
     BNE @B5_9F76
@@ -3843,12 +3876,12 @@ Ent37_Update:
     STA ent_radius,x
 @B5_A070:
     RTS
-; Tbl_B5_A071: 37 bytes, read by B5_A04E
+; Tbl_B5_A071: 37 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_A071:
     .byte $FD,$FD,$FE,$FE,$FE,$FE,$FF,$FE,$FF,$FF,$FE,$FF,$FF,$FF,$00,$FF
     .byte $FF,$00,$FF,$00,$FF,$00,$00,$00,$01,$00,$01,$01,$00,$01,$01,$01
     .byte $02,$01,$01,$02,$80
-; Tbl_B5_A096: 58 bytes, read by B5_A01E
+; Tbl_B5_A096: 58 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_A096:
     .byte $FD,$FE,$FE,$FE,$FF,$FE,$FF,$FF,$00,$FF,$00,$00,$00,$01,$00,$01
     .byte $01,$02,$01,$02,$02,$02,$03,$FE,$FE,$FE,$FF,$FF,$00,$FF,$00,$00
@@ -3884,7 +3917,7 @@ Ent39_Update:
     LDA ent_angle,x
     ASL a
     TAY
-    LDA Tbl_B5_A1FE,y
+    LDA Ent39_Tbl_A1FE,y
     CMP #$3A
     BNE @B5_A118
     STA ent_type,x
@@ -3995,12 +4028,17 @@ B5_A158:
     AND #$01
     STA ent_param,x
     RTS
-; Tbl_B5_A1E9: 21 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_A1E9:
-    .byte $22,$05,$00,$FD,$FF,$00,$24,$00,$25,$3C,$22,$05,$00,$0C,$00,$00
-    .byte $24,$00,$26,$3C,$FF
-; Tbl_B5_A1FE: 51 bytes, read by B5_A118
-Tbl_B5_A1FE:
+; EffectList_B5_A1E9: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_A1E9:
+    .byte $22
+    .word $0005, $FFFD
+    .byte $00, $24, $00, $25, $3C
+    .byte $22
+    .word $0005, $000C
+    .byte $00, $24, $00, $26, $3C
+    .byte $FF
+; Ent39_Tbl_A1FE: 51 bytes, read by Ent39_Update
+Ent39_Tbl_A1FE:
     .byte $01
 B5_A1FF:
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$02,$00,$02,$00,$02,$00,$02
@@ -4332,16 +4370,38 @@ B5_A48D:
     LDA #$D7
     LDY #$A4
     JMP SpawnEffects
-; Tbl_B5_A4B4: 116 bytes, no direct code reference (continuation or unreferenced)
+; Tbl_B5_A4B4: 35 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_A4B4:
     .byte $11,$11,$11,$11,$0A,$0A,$11,$11,$11,$11,$0A,$0A,$11,$11,$11,$0A
     .byte $0A,$11,$11,$11,$0A,$0A,$11,$11,$0A,$0A,$11,$11,$0A,$0A,$11,$0A
-    .byte $11,$0A,$00,$47,$00,$00,$00,$00,$C0,$0B,$00,$01,$00,$07,$00,$00
-    .byte $00,$00,$00,$1E,$00,$00,$FF,$07,$F4,$FF,$FD,$FF,$00,$1F,$00,$08
-    .byte $FF,$07,$FB,$FF,$0E,$00,$00,$1E,$00,$00,$FF,$07,$FE,$FF,$F4,$FF
-    .byte $00,$1F,$00,$04,$FF,$07,$0A,$00,$0A,$00,$00,$1E,$00,$00,$FF,$07
-    .byte $07,$00,$FD,$FF,$00,$1E,$00,$00,$FF,$07,$0F,$00,$F7,$FF,$00,$1F
-    .byte $00,$0C,$FF,$FF
+    .byte $11,$0A,$00
+; EffectList_B5_A4D7: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_A4D7:
+    .byte $47
+    .word $0000, $0000
+    .byte $C0, $0B, $00, $01, $00
+    .byte $07
+    .word $0000, $0000
+    .byte $00, $1E, $00, $00, $FF
+    .byte $07
+    .word $FFF4, $FFFD
+    .byte $00, $1F, $00, $08, $FF
+    .byte $07
+    .word $FFFB, $000E
+    .byte $00, $1E, $00, $00, $FF
+    .byte $07
+    .word $FFFE, $FFF4
+    .byte $00, $1F, $00, $04, $FF
+    .byte $07
+    .word $000A, $000A
+    .byte $00, $1E, $00, $00, $FF
+    .byte $07
+    .word $0007, $FFFD
+    .byte $00, $1E, $00, $00, $FF
+    .byte $07
+    .word $000F, $FFF7
+    .byte $00, $1F, $00, $0C, $FF
+    .byte $FF
 ; Tbl_B5_A528: 93 bytes, read by B5_A5B7
 Tbl_B5_A528:
     .byte $03
@@ -4371,9 +4431,12 @@ Ent47_Update:
     LDA #$AC
     LDY #$A5
     JMP SpawnEffects
-; Tbl_B5_A5AC: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_A5AC:
-    .byte $49,$E8,$FF,$02,$00,$C0,$0D,$96,$00,$00,$FF
+; EffectList_B5_A5AC: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_A5AC:
+    .byte $49
+    .word $FFE8, $0002
+    .byte $C0, $0D, $96, $00, $00
+    .byte $FF
 B5_A5B7:
     LDA ent_y_lo,x
     SEC
@@ -4499,11 +4562,21 @@ Ent44_Update:
 @B5_A6A6:
     STA ent_param2,x
     RTS
-; Tbl_B5_A6AA: 41 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_A6AA:
-    .byte $07,$FC,$FF,$FA,$FF,$00,$1F,$00,$04,$FF,$07,$F8,$FF,$00,$00,$00
-    .byte $1F,$00,$00,$FF,$9E,$00,$00,$00,$00,$78,$00,$00,$06,$80,$07,$FC
-    .byte $FF,$0A,$00,$00,$1F,$00,$0C,$FF,$FF
+; EffectList_B5_A6AA: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_A6AA:
+    .byte $07
+    .word $FFFC, $FFFA
+    .byte $00, $1F, $00, $04, $FF
+    .byte $07
+    .word $FFF8, $0000
+    .byte $00, $1F, $00, $00, $FF
+    .byte $9E
+    .word $0000, $0000
+    .byte $78, $00, $00, $06, $80
+    .byte $07
+    .word $FFFC, $000A
+    .byte $00, $1F, $00, $0C, $FF
+    .byte $FF
 Ent3F_Update:
     JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
@@ -5352,7 +5425,7 @@ B5_ADAC:
     .byte $00,$01,$00,$00,$00,$01,$00,$01,$00,$02,$00,$01,$00,$02,$00,$FF
     .byte $FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$00,$00,$01,$00,$00
     .byte $00,$01,$00,$01,$00,$FF,$FF,$00,$00,$00,$00,$01,$00,$80
-; Tbl_B5_ADFA: 39 bytes, read by B5_A37C, B5_A64F, B5_AD68
+; Tbl_B5_ADFA: 39 bytes, read by Ent3E_Update, Ent44_Update, Ent54_Update
 Tbl_B5_ADFA:
     .byte $00,$00,$00,$01,$00,$00,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00
     .byte $01,$00,$01,$00,$01,$00,$01,$00,$01,$01,$01,$01,$01,$01,$01,$02
@@ -5544,15 +5617,23 @@ Ent60_Update:
 Tbl_B5_AFA9:
     .byte $01,$01,$01,$01,$01,$01,$01,$03,$03,$03,$03,$03,$03,$01,$01,$01
     .byte $01,$03,$03,$03,$01,$00
-; Tbl_B5_AFBF: 32 bytes, read by B5_AF0A
+; Tbl_B5_AFBF: 32 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_AFBF:
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$02,$02,$01,$00,$02,$02,$01
-; Tbl_B5_AFDF: 38 bytes, no direct code reference (continuation or unreferenced)
+; Tbl_B5_AFDF: 16 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_AFDF:
     .res 9, $04
-    .byte $05,$05,$05,$05,$05,$05,$00,$60,$00,$00,$FB,$FF,$B0,$04,$00,$00
-    .byte $00,$FF,$60,$00,$00,$0D,$00,$B0,$04,$00,$00,$00,$FF
+    .byte $05,$05,$05,$05,$05,$05,$00
+; EffectList_B5_AFEF: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_AFEF:
+    .byte $60
+    .word $0000, $FFFB
+    .byte $B0, $04, $00, $00, $00
+    .byte $FF
+; Tbl_B5_AFFA: 11 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B5_AFFA:
+    .byte $60,$00,$00,$0D,$00,$B0,$04,$00,$00,$00,$FF
 Ent61_Update:
     DEC ent_angle,x
     BNE @B5_B022
@@ -5654,10 +5735,15 @@ Ent67_Update:
     STA ent_radius,x
 B5_B0DA:
     RTS
-; Tbl_B5_B0DB: 22 bytes, no direct code reference (continuation or unreferenced)
+; Tbl_B5_B0DB: 11 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_B0DB:
-    .byte $68,$00,$00,$F2,$FF,$D8,$03,$00,$00,$00,$FF,$69,$00,$00,$0E,$00
-    .byte $DA,$03,$00,$00,$00,$FF
+    .byte $68,$00,$00,$F2,$FF,$D8,$03,$00,$00,$00,$FF
+; EffectList_B5_B0E6: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_B0E6:
+    .byte $69
+    .word $0000, $000E
+    .byte $DA, $03, $00, $00, $00
+    .byte $FF
 Ent68_Update:
     JSR Ent_CheckPlayerOverlapB
     LDA entity_tick
@@ -5826,7 +5912,7 @@ Ent75_Update:
     BEQ @B5_B1F8
 @B5_B236:
     JMP Ent_PatrolTail
-; Tbl_B5_B239: 4 bytes, read by B5_B1CB
+; Tbl_B5_B239: 4 bytes, read by Ent_PatrolTail
 Tbl_B5_B239:
     .byte $00,$01,$02,$01
 Ent76_Update:
@@ -5857,11 +5943,24 @@ Ent76_Update:
     STA ent_param,x
     INC ent_angle,x
     RTS
-; Tbl_B5_B275: 48 bytes, no direct code reference (continuation or unreferenced)
+; Tbl_B5_B275: 7 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_B275:
-    .byte $0D,$0C,$0B,$0A,$08,$09,$FF,$77,$04,$00,$04,$00,$00,$26,$00,$00
-    .byte $00,$77,$04,$00,$04,$00,$00,$26,$40,$00,$00,$77,$04,$00,$04,$00
-    .byte $00,$26,$80,$00,$00,$77,$04,$00,$04,$00,$00,$26,$C0,$00,$00,$FF
+    .byte $0D,$0C,$0B,$0A,$08,$09,$FF
+; EffectList_B5_B27C: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_B27C:
+    .byte $77
+    .word $0004, $0004
+    .byte $00, $26, $00, $00, $00
+    .byte $77
+    .word $0004, $0004
+    .byte $00, $26, $40, $00, $00
+    .byte $77
+    .word $0004, $0004
+    .byte $00, $26, $80, $00, $00
+    .byte $77
+    .word $0004, $0004
+    .byte $00, $26, $C0, $00, $00
+    .byte $FF
 Ent77_Update:
     LDA ent_y_lo,x
     STA ent_dy,x
@@ -6240,8 +6339,8 @@ B5_B5CC:
     .byte $FF
 B5_B5CD:
     .byte $03
-; Ent87_Tbl_B5CE: 30 bytes, read by Ent87_Update, B5_B652
-Ent87_Tbl_B5CE:
+; Tbl_B5_B5CE: 30 bytes, read by Ent87_Update, Ent88_Update
+Tbl_B5_B5CE:
     .byte $78
 B5_B5CF:
     .byte $00,$D6,$03,$B8,$00,$99,$03,$1A,$00,$99,$03,$98,$00,$14,$04,$3A
@@ -6256,7 +6355,7 @@ Ent87_Update:
     STA tmp_a
     LDA B5_B5CD,y
     STA tmp_b
-    LDA Ent87_Tbl_B5CE,y
+    LDA Tbl_B5_B5CE,y
     STA tmp_c
     LDA B5_B5CF,y
     STA tmp_d
@@ -6304,7 +6403,7 @@ Ent88_Update:
     LDA B5_B5CD,y
     SBC #$00
     STA ram_04EA
-    LDA Ent87_Tbl_B5CE,y
+    LDA Tbl_B5_B5CE,y
     STA ram_051A
     LDA B5_B5CF,y
     STA ram_054A
@@ -6495,14 +6594,29 @@ Ent8F_Update:
     LDA tmp_c
     STA ent_flags,x
     RTS
-; Tbl_B5_B7ED: 96 bytes, read by B5_B758
+; Tbl_B5_B7ED: 14 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_B7ED:
-    .byte $0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$00,$22,$F4
-    .byte $FF,$04,$00,$00,$24,$00,$24,$64,$22,$14,$00,$04,$00,$00,$24,$00
-    .byte $3F,$64,$22,$04,$00,$F4,$FF,$00,$24,$00,$25,$64,$22,$04,$00,$14
-    .byte $00,$00,$24,$00,$26,$64,$FF,$0E,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E
-    .byte $0E,$0A,$0A,$0E,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$0E
-    .byte $0E,$0A,$0A,$0E,$0E,$0A,$0A,$0E,$0E,$0A,$0A,$0E,$0A,$0E,$0A,$00
+    .byte $0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$00
+; EffectList_B5_B7FB: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_B7FB:
+    .byte $22
+    .word $FFF4, $0004
+    .byte $00, $24, $00, $24, $64
+    .byte $22
+    .word $0014, $0004
+    .byte $00, $24, $00, $3F, $64
+    .byte $22
+    .word $0004, $FFF4
+    .byte $00, $24, $00, $25, $64
+    .byte $22
+    .word $0004, $0014
+    .byte $00, $24, $00, $26, $64
+    .byte $FF
+; Tbl_B5_B824: 41 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B5_B824:
+    .byte $0E,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E,$0E
+    .byte $0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0A,$0A
+    .byte $0E,$0E,$0A,$0A,$0E,$0A,$0E,$0A,$00
 ; Tbl_B5_B84D: 37 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_B84D:
     .byte $1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1E,$0F,$0F,$0F,$0F,$0F
@@ -6703,9 +6817,12 @@ Ent9B_Update:
     LDA #$26
     LDY #$BA
     JMP SpawnEffects
-; Tbl_B5_BA26: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_BA26:
-    .byte $19,$08,$00,$00,$00,$58,$00,$00,$00,$00,$FF
+; EffectList_B5_BA26: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_BA26:
+    .byte $19
+    .word $0008, $0000
+    .byte $58, $00, $00, $00, $00
+    .byte $FF
 Ent92_Update:
     LDA ent_flags,x
     AND #$04
@@ -6755,7 +6872,7 @@ Ent92_Update:
     LDA #$4C
     LDY #$91
     JMP SpawnEffects
-; Tbl_B5_BA97: 32 bytes, read by B5_BAC5
+; Tbl_B5_BA97: 32 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_BA97:
     .byte $02,$02,$02,$02,$02,$02,$03,$02,$02,$03,$02,$02,$03,$02,$03,$02
     .byte $03,$02,$03,$03,$03,$04,$04,$FF,$05,$06,$07,$08,$09,$0A,$0B,$00
@@ -6778,9 +6895,12 @@ Ent90_Update:
     LDA #$DE
     LDY #$BA
     JMP SpawnEffects
-; Tbl_B5_BADE: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_BADE:
-    .byte $91,$00,$00,$00,$00,$F0,$00,$14,$00,$00,$FF
+; EffectList_B5_BADE: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_BADE:
+    .byte $91
+    .word $0000, $0000
+    .byte $F0, $00, $14, $00, $00
+    .byte $FF
 B5_BAE9:
     AND #$FF
     BNE @B5_BAF1
@@ -6882,9 +7002,12 @@ Ent94_Update:
     LDA #$A3
     LDY #$BB
     JMP SpawnEffects
-; Tbl_B5_BBA3: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_BBA3:
-    .byte $0F,$F6,$FF,$FE,$FF,$F0,$02,$30,$00,$00,$FF
+; EffectList_B5_BBA3: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_BBA3:
+    .byte $0F
+    .word $FFF6, $FFFE
+    .byte $F0, $02, $30, $00, $00
+    .byte $FF
 Ent95_Update:
     DEC ent_angle,x
     BEQ @B5_BBBA
@@ -6920,10 +7043,15 @@ Ent96_Update:
     LDA #$F6
     LDY #$BB
     JMP SpawnEffects
-; Tbl_B5_BBF6: 21 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_BBF6:
-    .byte $97,$E0,$FF,$00,$00,$C0,$00,$00,$0C,$00,$18,$F8,$FF,$00,$00,$C0
-    .byte $08,$00,$00,$00,$FF
+; EffectList_B5_BBF6: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_BBF6:
+    .byte $97
+    .word $FFE0, $0000
+    .byte $C0, $00, $00, $0C, $00
+    .byte $18
+    .word $FFF8, $0000
+    .byte $C0, $08, $00, $00, $00
+    .byte $FF
 Ent97_Update:
     LDA entity_tick
     AND #$03
@@ -7028,15 +7156,23 @@ Ent_Noop:
     SBC #$00
     STA player_x_hi
     RTS
-; Tbl_B5_BCD7: 107 bytes, read by B5_BC5B, B5_BCAE
+; Tbl_B5_BCD7: 40 bytes, read by Ent_Noop
 Tbl_B5_BCD7:
     .byte $FE,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$00,$FF,$00,$FF,$00,$00,$00,$01
     .byte $00,$01,$00,$01,$01,$01,$01,$02,$01,$02,$02,$FE,$FF,$FF,$00,$FF
-    .byte $00,$00,$01,$00,$01,$01,$02,$80,$40,$E8,$FF,$04,$00,$C0,$09,$50
-    .byte $00,$00,$FF,$0E,$43,$41,$53,$54,$00,$FF,$FF,$09,$41,$4C,$46,$52
-    .byte $45,$44,$20,$43,$48,$49,$43,$4B,$45,$4E,$00,$FF,$0B,$4D,$52,$20
-    .byte $20,$50,$45,$4B,$4C,$45,$53,$00,$FF,$09,$4D,$45,$4B,$41,$20,$20
-    .byte $43,$48,$49,$43,$4B,$45,$4E,$53,$00,$FF,$07
+    .byte $00,$00,$01,$00,$01,$01,$02,$80
+; EffectList_B5_BCFF: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_BCFF:
+    .byte $40
+    .word $FFE8, $0004
+    .byte $C0, $09, $50, $00, $00
+    .byte $FF
+; Tbl_B5_BD0A: 56 bytes, no direct code reference (continuation or unreferenced)
+Tbl_B5_BD0A:
+    .byte $0E,$43,$41,$53,$54,$00,$FF,$FF,$09,$41,$4C,$46,$52,$45,$44,$20
+    .byte $43,$48,$49,$43,$4B,$45,$4E,$00,$FF,$0B,$4D,$52,$20,$20,$50,$45
+    .byte $4B,$4C,$45,$53,$00,$FF,$09,$4D,$45,$4B,$41,$20,$20,$43,$48,$49
+    .byte $43,$4B,$45,$4E,$53,$00,$FF,$07
     .byte "BILLY EGG AND BROS"
     .byte $00,$FF,$08
     .byte "FLOELLA  CHICKEN"   ; reads: "NEKCIHC  ALLEOLF"

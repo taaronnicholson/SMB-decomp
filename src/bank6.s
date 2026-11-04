@@ -5284,7 +5284,7 @@ B6_BCD1:
     .byte $01,$02,$02
 @B6_BEE9:
     .byte $FA,$EF,$EF
-; Tbl_B6_BEEC: 22 bytes, read by B6_BDFC
+; Tbl_B6_BEEC: 22 bytes, read by B6_BCD1
 Tbl_B6_BEEC:
     .byte $BE,$BE,$BE,$0B,$47,$41,$4D,$45,$5C,$4F,$56,$45,$52,$00,$0C,$53
     .byte $54,$41,$47,$45,$5C,$00
