@@ -309,7 +309,7 @@ B5_823E:
     LDA tmp_08
     CMP #$D9
     BNE B5_824E
-    JMP B5_82F2
+    JMP CollectTileItem
 B5_824E:
     LDA ent_x_lo,x
     AND #$F0
@@ -397,7 +397,7 @@ B5_82E5:
     LDA tmp_08
     CMP #$D9
     BNE B5_830C
-B5_82F2:
+CollectTileItem:
     JSR PushTileEffect
     LDA ptr_lo
     STA ram_0721
@@ -465,7 +465,7 @@ B5_836E:
     LDA tmp_08
     CMP #$D9
     BNE B5_837E
-    JMP B5_82F2
+    JMP CollectTileItem
 B5_837E:
     LDA ent_y_lo,x
     AND #$F0
@@ -554,7 +554,7 @@ B5_841B:
     LDA tmp_08
     CMP #$D9
     BNE B5_842B
-    JMP B5_82F2
+    JMP CollectTileItem
 B5_842B:
     LDA ent_y_lo,x
     AND #$F0
@@ -6014,7 +6014,7 @@ B5_B3BB:
     LDA tmp_b
     ADC #$00
     STA ent_y_hi,x
-    JMP B5_B40B
+    JMP EntMarkAngleBit7
 B5_B3E7:
     LDA focus_x_lo
     STA tmp_a
@@ -6033,7 +6033,7 @@ B5_B3E7:
     LDA tmp_b
     ADC #$00
     STA ent_x_hi,x
-B5_B40B:
+EntMarkAngleBit7:
     LDA ent_angle,x
     ORA #$80
     STA ent_angle,x
@@ -6060,7 +6060,7 @@ B5_B414:
     LDA tmp_b
     SBC #$00
     STA ent_x_hi,x
-    JMP B5_B40B
+    JMP EntMarkAngleBit7
 B5_B440:
     LDA focus_y_lo
     CLC
@@ -6082,7 +6082,7 @@ B5_B440:
     LDA tmp_b
     SBC #$00
     STA ent_y_hi,x
-    JMP B5_B40B
+    JMP EntMarkAngleBit7
 Ent83_Update:
     JSR Ent_CheckPlayerOverlapB
     LDA #$00
@@ -6640,7 +6640,7 @@ B5_B996:
     STA ent_param2,x
     LDA #$02
     STA ent_angle,x
-    JMP B5_BA00
+    JMP EntRiseWobble
 B5_B9B2:
     SEC
     SBC #$01
@@ -6649,14 +6649,14 @@ B5_B9B8:
     LDA #$06
 B5_B9BA:
     STA ent_param2,x
-    JMP B5_BA00
+    JMP EntRiseWobble
 B5_B9C0:
     DEC ent_param2,x
-    BNE B5_BA00
+    BNE EntRiseWobble
     LDA #$04
     STA ent_angle,x
     STA ent_param2,x
-    JMP B5_BA00
+    JMP EntRiseWobble
 B5_B9D0:
     LDA ent_param2,x
     SEC
@@ -6684,7 +6684,7 @@ B5_B9F7:
     ADC #$01
     STA ent_param,x
     JMP B5_B9B8
-B5_BA00:
+EntRiseWobble:
     LDA entity_tick
     LSR a
     BCS B5_BA19

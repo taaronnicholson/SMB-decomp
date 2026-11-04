@@ -485,3 +485,7 @@ name 1 814F ShotTimerStep            ; per-frame shot countdown on zp_E0: at zer
 name f E2EB RidingCheckX             ; compares player X+9 with the ridden entity's X (riding_slot); within $12 keeps riding, otherwise leaves F_E310
 name f F91B SpawnEffectsFromList     ; finds a free effect slot (16) and spawns effects from the list at ptr, positioned relative to the entity in saved_x; $FF ends the list
 name f EB25 MovePlayerKeepBank       ; saves the current bank around F_EB2F (the buttons-driven player move), then restores it
+name 1 8568 ShotStartImpact          ; shot_state 3 (impact), shot_E3 = 6, frame 0
+name 5 BA00 EntRiseWobble            ; every other tick: moves up 1 pixel and wobbles X (EntWobbleX), then recomputes the delta from the centre
+name 5 B40B EntMarkAngleBit7         ; sets bit 7 of ent_angle (flag consumed elsewhere)
+name 5 82F2 CollectTileItem          ; pushes a tile effect, records the tile pointer in ram_0720..0722, sets the collected flag and plays noise sfx 5

@@ -147,7 +147,7 @@ ShotDispatch:
 ShotTimerStep:
     DEC zp_E0
     BNE B1_8156
-    JMP B1_8568
+    JMP ShotStartImpact
 B1_8156:
     LDA shot_E3,x
     BEQ B1_815D
@@ -702,7 +702,7 @@ B1_8548:
     JSR ToggleSwitch2
 B1_854F:
     CMP #$D1
-    BNE B1_8568
+    BNE ShotStartImpact
     JSR SetCollectedFlag
     JSR PushTileEffect
     LDA ptr_lo
@@ -711,7 +711,7 @@ B1_854F:
     STA ram_0722
     LDA #$02
     STA ram_0720
-B1_8568:
+ShotStartImpact:
     LDA #$03
     STA shot_state,x
     ASL a
@@ -753,7 +753,7 @@ B1_8574:
     ADC #$00
     STA shot_x_hi,x
     STA tmp_b
-    JMP B1_8568
+    JMP ShotStartImpact
 B1_85B5:
     RTS
 B1_85B6:
@@ -768,7 +768,7 @@ B1_85B6:
     LDA #$00
     STA shot_x_lo,x
     STA shot_x_hi,x
-    JMP B1_8568
+    JMP ShotStartImpact
 B1_85CE:
     LDA player_y_lo
     CLC
