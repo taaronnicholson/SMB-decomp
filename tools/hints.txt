@@ -467,3 +467,11 @@ name f E066 PlayerIdleAnim          ; once idle_timer passes $258 (600 frames) s
 ram 0070 idle_timer_lo              ; frames the player has been standing still (reset by input); an idle animation starts at $258
 ram 0071 idle_timer_hi
 ram 0072 idle_anim_timer
+
+; ---- naming pass 5 ----
+name 2 A084 PixelTileUploadA        ; X = index: writes one 16-byte tile to PPUDATA, byte n taken from table n of PixelTables (set A)
+name 2 A156 PixelTileUploadB        ; same for the second set of 16 tables ($8F00...)
+name 2 A5CC SetPPUAddr_1044         ; PPUADDR = $1044 (tile data for the animated tiles) and return
+name 2 AF19 SetPPUAddr_1432
+name f E0C6 ResetIdleTimer          ; clears idle_timer and idle_anim_timer, then continues with the normal frame setup
+name f E6DC PlayerLand              ; landing: dive_mode 0 = normal landing (state 4), otherwise the dive landing (state 3)

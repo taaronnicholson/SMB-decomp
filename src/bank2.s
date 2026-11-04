@@ -830,7 +830,7 @@ B2_A075:
     STA PPUADDR
     LDA #$C0
     STA PPUADDR
-B2_A084:
+PixelTileUploadA:
     LDA PixelTables,x
     STA PPUDATA
     LDA B2_80F0,x
@@ -903,7 +903,7 @@ B2_A147:
     STA PPUADDR
     LDA #$E0
     STA PPUADDR
-B2_A156:
+PixelTileUploadB:
     LDA B2_8F00,x
     STA PPUDATA
     LDA B2_8FF0,x
@@ -1120,7 +1120,7 @@ B2_A325:
     STA PPUADDR
     LDA #$80
     STA PPUADDR
-    JSR B2_A156
+    JSR PixelTileUploadB
     INX
     RTS
 B2_A339:
@@ -1130,7 +1130,7 @@ B2_A339:
     STA PPUADDR
     LDA #$A0
     STA PPUADDR
-    JMP B2_A084
+    JMP PixelTileUploadA
 B2_A34B:
     LDA PPUSTATUS
     LDA #$1F
@@ -1138,7 +1138,7 @@ B2_A34B:
     STA PPUADDR
     LDA #$C0
     STA PPUADDR
-    JSR B2_A156
+    JSR PixelTileUploadB
     PLA
     PLA
     JMP B2_9E99
@@ -1149,7 +1149,7 @@ B2_A362:
     STA PPUADDR
     LDA #$80
     STA PPUADDR
-    JMP B2_A084
+    JMP PixelTileUploadA
 B2_A374:
     LDA PPUSTATUS
     LDA #$1F
@@ -1157,7 +1157,7 @@ B2_A374:
     STA PPUADDR
     LDA #$A0
     STA PPUADDR
-    JSR B2_A156
+    JSR PixelTileUploadB
     PLA
     PLA
     JMP B2_9E99
@@ -1168,7 +1168,7 @@ B2_A38B:
     STA PPUADDR
     LDA #$80
     STA PPUADDR
-    JMP B2_A084
+    JMP PixelTileUploadA
 B2_A39D:
     LDA PPUSTATUS
     LDA #$1F
@@ -1176,7 +1176,7 @@ B2_A39D:
     STA PPUADDR
     LDA #$A0
     STA PPUADDR
-    JMP B2_A156
+    JMP PixelTileUploadB
 B2_A3AF:
     LDA PPUSTATUS
     LDA #$1F
@@ -1335,9 +1335,9 @@ B2_A542:
     STA PPUADDR
     LDA #$80
     STA PPUADDR
-    JMP B2_A084
+    JMP PixelTileUploadA
 B2_A554:
-    JSR B2_A5CC
+    JSR SetPPUAddr_1044
     LDX #$00
 B2_A559:
     LDA Tbl_B2_A5A0,x
@@ -1346,7 +1346,7 @@ B2_A559:
     CPX #$0B
     BNE B2_A559
     JMP SetScroll
-    JSR B2_A5CC
+    JSR SetPPUAddr_1044
     LDX #$00
 B2_A56C:
     LDA Tbl_B2_A5AB,x
@@ -1355,7 +1355,7 @@ B2_A56C:
     CPX #$0B
     BNE B2_A56C
     JMP SetScroll
-    JSR B2_A5CC
+    JSR SetPPUAddr_1044
     LDX #$00
 B2_A57F:
     LDA Tbl_B2_A5B6,x
@@ -1364,7 +1364,7 @@ B2_A57F:
     CPX #$0B
     BNE B2_A57F
     JMP SetScroll
-    JSR B2_A5CC
+    JSR SetPPUAddr_1044
     LDX #$00
 B2_A592:
     LDA Tbl_B2_A5C1,x
@@ -1385,7 +1385,7 @@ Tbl_B2_A5B6:
 ; Tbl_B2_A5C1: 11 bytes, read by B2_A592
 Tbl_B2_A5C1:
     .byte $00,$0F,$16,$2C,$00,$00,$00,$00,$00,$10,$0F
-B2_A5CC:
+SetPPUAddr_1044:
     LDA PPUSTATUS
     LDA #$10
     STA PPUADDR
@@ -2268,7 +2268,7 @@ Tbl_B2_AE94:
     .byte $20,$A9,$B5,$8D,$06,$20,$60,$B1,$AE,$5F,$B6,$AD,$64,$64,$7F,$6E
     .byte $71,$B6,$B6,$5F,$B6,$AD,$64,$64,$7F,$79,$79,$BE,$B1,$5F,$B6,$AD
     .byte $64,$64,$7F,$71,$6E
-B2_AF19:
+SetPPUAddr_1432:
     LDA PPUSTATUS
     LDA #$14
     STA PPUADDR
@@ -2276,7 +2276,7 @@ B2_AF19:
     STA PPUADDR
     RTS
 B2_AF27:
-    JSR B2_AF19
+    JSR SetPPUAddr_1432
     LDA #$B0
     STA PPUDATA
     LDA #$AF
@@ -2377,7 +2377,7 @@ B2_AF27:
     STA PPUDATA
     JMP SetScroll
 B2_B02D:
-    JSR B2_AF19
+    JSR SetPPUAddr_1432
     LDA #$B0
     STA PPUDATA
     LDA #$B1
@@ -2497,7 +2497,7 @@ B2_B02D:
     LDA #$FE
     STA PPUDATA
     JMP SetScroll
-    JSR B2_AF19
+    JSR SetPPUAddr_1432
     LDA #$B7
     STA PPUDATA
     STA PPUDATA
@@ -2619,7 +2619,7 @@ B2_B238:
     LDA #$00
     STA PPUDATA
     JMP SetScroll
-    JSR B2_AF19
+    JSR SetPPUAddr_1432
     LDA #$B0
     STA PPUDATA
     LDA #$B7

@@ -3819,7 +3819,7 @@ F_DED4:
     STA player_facing
     STA zp_6D
     STA player_frame
-    JMP F_E0C6
+    JMP ResetIdleTimer
 F_DEE3:
     LDA player_x_lo
     SEC
@@ -3887,7 +3887,7 @@ F_DF54:
     JMP PlayerVerticalStep
 F_DF60:
     JSR PlayerWalkAnimStep
-    JMP F_E0C6
+    JMP ResetIdleTimer
 F_DF66:
     LDA buttons
     AND #$10
@@ -3900,7 +3900,7 @@ F_DF6F:
     STA zp_6D
     LDA #$01
     STA player_facing
-    JMP F_E0C6
+    JMP ResetIdleTimer
 F_DF7E:
     LDA player_x_lo
     CLC
@@ -3996,7 +3996,7 @@ F_E023:
     JMP PlayerVerticalStep
 F_E02F:
     JSR PlayerWalkAnimStep
-    JMP F_E0C6
+    JMP ResetIdleTimer
 PlayerVerticalStep:
     LDA #$00
     STA player_state
@@ -4076,7 +4076,7 @@ F_E0B4:
     BNE F_E0AF
     LDA #$00
     JMP F_E0CE
-F_E0C6:
+ResetIdleTimer:
     LDA #$00
     STA idle_timer_lo
     STA idle_timer_hi
@@ -4687,7 +4687,7 @@ PlayerState02:
 F_E52B:
     LDA riding_flag
     BEQ F_E532
-    JMP F_E6DC
+    JMP PlayerLand
 F_E532:
     LDA #$00
     STA zp_87
@@ -4923,7 +4923,7 @@ F_E6D6:
     LDA player_y_lo
     AND #$F0
     STA player_y_lo
-F_E6DC:
+PlayerLand:
     LDA dive_mode
     BEQ F_E722
     LDA zp_7F
@@ -5089,7 +5089,7 @@ F_E7F9:
     JSR GetMapTile
     CMP #$B4
     BCS F_E80B
-    JMP F_E6DC
+    JMP PlayerLand
 F_E80B:
     CMP #$CE
     BNE F_E812
@@ -5111,7 +5111,7 @@ F_E820:
     BEQ F_E837
     CMP #$04
     BEQ F_E833
-    JMP F_E6DC
+    JMP PlayerLand
 F_E833:
     LDA #$05
     STA tmp_a
@@ -5123,7 +5123,7 @@ F_E837:
     BEQ F_E848
     LDA #$FF
     STA zp_87
-    JMP F_E6DC
+    JMP PlayerLand
 F_E848:
     LDA #$34
     STA zp_8F
