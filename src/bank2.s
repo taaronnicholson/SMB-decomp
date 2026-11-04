@@ -1419,13 +1419,14 @@ B2_A606:
 B2_A619:
     LDX #$00
 B2_A61B:
-    LDA B2_A629,x
+    LDA TileFrameA,x
     STA PPUDATA
     INX
     CPX #$1E
     BNE B2_A61B
     JMP SetScroll
-B2_A629:
+; TileFrameA: 30 bytes written to PPU $1232 (CHR tile data for an animated tile, two variants of the call)
+TileFrameA:
     .byte $1F,$26,$20,$20,$FF,$9C,$00,$00,$00,$1F,$1F,$1F,$00,$7F,$00,$00
     .byte $F8,$0C,$2C,$2C,$FF,$8D,$00,$00,$00,$F0,$D0,$D0,$00,$F6
 B2_A647:
@@ -1460,13 +1461,14 @@ B2_A673:
 B2_A686:
     LDX #$00
 B2_A688:
-    LDA B2_A696,x
+    LDA TileFrameB,x
     STA PPUDATA
     INX
     CPX #$1E
     BNE B2_A688
     JMP SetScroll
-B2_A696:
+; TileFrameB: 30 bytes written to PPU $1232 (the second frame set used by B2_A647/A65D/A673)
+TileFrameB:
     .byte $00,$00,$1F,$26,$FF,$9C,$00,$00,$00,$00,$00,$1F,$00,$7F,$00,$00
     .byte $00,$00,$F8,$0C,$FF,$8D,$00,$00,$00,$00,$00,$F0,$00,$F6,$4C,$D4
     .byte $C7,$AD,$02,$20,$A9,$11,$8D,$06,$20,$A9,$70,$8D,$06,$20,$A9,$66
