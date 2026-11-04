@@ -3,7 +3,7 @@
 
 .segment "BANK1"
 
-; Tbl_B1_8000: 44 bytes, read by DrawEntity
+; Tbl_B1_8000: 44 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B1_8000:
     .byte $00,$FC,$F8,$F4,$F0,$EC,$E8,$E4,$E0,$DC,$D8,$D4,$D0,$CC,$C8,$C4
     .byte $C0,$BC,$B8,$B4,$B0,$AC,$A8,$A4,$A0,$9C,$98,$94,$90,$8C,$88,$84
@@ -108,11 +108,11 @@ UpdateShots:
     ORA Tbl_B1_80EB,x
     STA ram_0252
     RTS
-; Tbl_B1_80EB: 26 bytes, read by UpdateShots
+; Tbl_B1_80EB: 26 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B1_80EB:
     .byte $00,$00,$01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03,$00,$00,$03
     .byte $03,$00,$03,$03,$00,$00,$00,$00,$00,$02
-; Tbl_B1_8105: 25 bytes, read by UpdateShots
+; Tbl_B1_8105: 25 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B1_8105:
     .byte $02,$00,$04,$06,$08,$0A,$16,$16,$16,$0C,$0E,$10,$12,$14,$16,$18
     .byte $1A,$1C,$1E,$20,$00,$00,$00,$22,$24
@@ -1289,7 +1289,7 @@ ShotOffscreenCheck:
     CMP #$10
     BCC B1_8981
     JMP F_F0EA
-; Tbl_B1_8999: 100 bytes, read by LoadArea
+; Tbl_B1_8999: 100 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B1_8999:
     .res 76, $00
     .byte $0A,$00,$00,$00,$00,$00,$00,$00,$00,$0E,$12,$12,$12,$05,$0E,$0E
@@ -4955,7 +4955,7 @@ PlayerAnimAdvance:
     CMP #$08
     BNE @B1_B141
     LDY zp_81
-    LDA Tbl_B1_B151,y
+    LDA PlayerAnimFrames,y
     CMP #$FF
     BEQ @B1_B143
     STA player_frame
@@ -4968,8 +4968,8 @@ PlayerAnimAdvance:
 ; Tbl_B1_B144: 13 bytes, read by B1_B094
 Tbl_B1_B144:
     .byte $00,$00,$00,$00,$FF,$00,$01,$01,$FF,$FF,$00,$00,$80
-; Tbl_B1_B151: 10 bytes, read by PlayerAnimAdvance
-Tbl_B1_B151:
+; PlayerAnimFrames: $FF-terminated player_frame list walked by PlayerAnimAdvance
+PlayerAnimFrames:
     .byte $3E,$3E,$3F,$40,$41,$42,$43,$4C,$4D,$FF
 B1_B15B:
     LDA ram_072D

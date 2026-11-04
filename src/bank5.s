@@ -103,7 +103,7 @@ EntityDeltaFromCentre:
     STA ent_dx,x
 Ent18_Update:
     RTS
-; Tbl_B5_80B7: 28 bytes, read by Ent_TryCarryPlayer
+; Tbl_B5_80B7: 28 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_80B7:
     .byte $01,$00,$01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00
     .res 12, $00
@@ -3448,7 +3448,7 @@ Ent_TickRadius:
 B5_9C2C:
     STA ent_param,x
     RTS
-; Tbl_B5_9C30: 18 bytes, read by Ent_TickRadius
+; Tbl_B5_9C30: 18 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_9C30:
     .byte $01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$01
     .byte $00,$FF
@@ -5912,7 +5912,7 @@ Ent75_Update:
     BEQ @B5_B1F8
 @B5_B236:
     JMP Ent_PatrolTail
-; Tbl_B5_B239: 4 bytes, read by Ent_PatrolTail
+; Tbl_B5_B239: 4 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_B239:
     .byte $00,$01,$02,$01
 Ent76_Update:
@@ -7156,7 +7156,7 @@ Ent_Noop:
     SBC #$00
     STA player_x_hi
     RTS
-; Tbl_B5_BCD7: 40 bytes, read by Ent_Noop
+; Tbl_B5_BCD7: 40 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_BCD7:
     .byte $FE,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$00,$FF,$00,$FF,$00,$00,$00,$01
     .byte $00,$01,$00,$01,$01,$01,$01,$02,$01,$02,$02,$FE,$FF,$FF,$00,$FF

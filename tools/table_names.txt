@@ -39,3 +39,7 @@ f C544 TileEffectScript struct 65 bb ; (next index, tile) pairs forming chains: 
 5 BBF6 EffectList_B5_BBF6 struct 2 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 5 BCFF EffectList_B5_BCFF struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 f FA32 EffectList_F_FA32 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+0 81D7 PaletteFadeAmounts ; fade-step subtrahends $40,$30,$20,$10,$00 applied to each palette byte
+0 823D ButtonBitMasks ; button bit order used by ReadController
+1 B151 PlayerAnimFrames ; $FF-terminated player_frame list walked by PlayerAnimAdvance
+2 B779 DecimalPlaceValues ; third (high) byte of the 24-bit place values read at stride 4 from B2_B777 by BinaryToDigits (100000, 10000, 1000, 100, 10, 1)

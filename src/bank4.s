@@ -1321,7 +1321,7 @@ GameState0B:
     LDA Tbl_B4_B0C4,y
     STA zp_47
     RTS
-; Tbl_B4_B0C4: 20 bytes, read by GameState0B
+; Tbl_B4_B0C4: 20 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B4_B0C4:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15

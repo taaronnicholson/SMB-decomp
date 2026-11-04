@@ -87,6 +87,9 @@ with open(os.path.join(HERE, 'hints_tables.txt'), 'w') as f:
         ents = [w for w in who if re.match(r'^Ent[0-9A-F]{2}_Update$', w)]
         if nm == r["name"] and len(ents) == 1 and len(set(who)) <= 2:           # read by one entity handler: name it after the handler
             nm = f'{ents[0][:-7]}_Tbl_{r["addr"]:04X}'
+        named_readers = sorted({w for w in who if not re.match(r'^(?:F|B\d)_[0-9A-F]{4}$', w) and w != '?'})
+        if nm == r["name"] and len(named_readers) == 1 and len(set(who)) == 1:      # one reader that already has a real name
+            nm = f'{named_readers[0]}_Tbl_{r["addr"]:04X}'
         f.write(f'blob {bk} {r["addr"]:X} {r["len"]} {nm} {cm}\n')
         if st: f.write(f'struct {bk} {r["addr"]:X} {st[0]} {st[1]}\n')
 print(len(new), 'new table blobs;', len(cache), 'total')

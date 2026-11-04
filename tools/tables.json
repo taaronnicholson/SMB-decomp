@@ -4,14 +4,14 @@
   "addr": 33239,
   "len": 5,
   "name": "Tbl_B0_81D7",
-  "comment": "5 bytes, read by PaletteFadeStep, PaletteRowFadeToPPU, B0_8196"
+  "comment": "5 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 0,
   "addr": 33341,
   "len": 8,
   "name": "Tbl_B0_823D",
-  "comment": "8 bytes, read by ReadController"
+  "comment": "8 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 0,
@@ -60,28 +60,28 @@
   "addr": 49083,
   "len": 69,
   "name": "Tbl_B0_BFBB",
-  "comment": "69 bytes, read by FadeTableStep"
+  "comment": "69 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 1,
   "addr": 32768,
   "len": 44,
   "name": "Tbl_B1_8000",
-  "comment": "44 bytes, read by DrawEntity"
+  "comment": "44 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 1,
   "addr": 33003,
   "len": 26,
   "name": "Tbl_B1_80EB",
-  "comment": "26 bytes, read by UpdateShots"
+  "comment": "26 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 1,
   "addr": 33029,
   "len": 25,
   "name": "Tbl_B1_8105",
-  "comment": "25 bytes, read by UpdateShots"
+  "comment": "25 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 1,
@@ -109,7 +109,7 @@
   "addr": 35225,
   "len": 100,
   "name": "Tbl_B1_8999",
-  "comment": "100 bytes, read by LoadArea"
+  "comment": "100 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 1,
@@ -200,7 +200,7 @@
   "addr": 45393,
   "len": 10,
   "name": "Tbl_B1_B151",
-  "comment": "10 bytes, read by PlayerAnimAdvance"
+  "comment": "10 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 1,
@@ -228,49 +228,49 @@
   "addr": 40668,
   "len": 80,
   "name": "Tbl_B2_9EDC",
-  "comment": "80 bytes, read by SetPlayerFacingBit"
+  "comment": "80 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
   "addr": 42400,
   "len": 11,
   "name": "Tbl_B2_A5A0",
-  "comment": "11 bytes, read by WriteTileStrip_1044"
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
   "addr": 42411,
   "len": 11,
   "name": "Tbl_B2_A5AB",
-  "comment": "11 bytes, read by WriteTileStrip_1044"
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
   "addr": 42422,
   "len": 11,
   "name": "Tbl_B2_A5B6",
-  "comment": "11 bytes, read by WriteTileStrip_1044"
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
   "addr": 42433,
   "len": 11,
   "name": "Tbl_B2_A5C1",
-  "comment": "11 bytes, read by WriteTileStrip_1044"
+  "comment": "11 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
   "addr": 44628,
   "len": 32,
   "name": "Tbl_B2_AE54",
-  "comment": "32 bytes, read by WriteTiles_11F0"
+  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
   "addr": 44660,
   "len": 32,
   "name": "Tbl_B2_AE74",
-  "comment": "32 bytes, read by WriteTiles_11F0"
+  "comment": "32 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
@@ -284,14 +284,14 @@
   "addr": 46266,
   "len": 79,
   "name": "Tbl_B2_B4BA",
-  "comment": "79 bytes, read by WriteTileFrame_14D0"
+  "comment": "79 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
   "addr": 46446,
   "len": 60,
   "name": "Tbl_B2_B56E",
-  "comment": "60 bytes, read by PlayerBlinkCheck"
+  "comment": "60 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
@@ -305,21 +305,21 @@
   "addr": 46969,
   "len": 22,
   "name": "Tbl_B2_B779",
-  "comment": "22 bytes, read by BinaryToDigits"
+  "comment": "22 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
   "addr": 47024,
   "len": 34,
   "name": "Tbl_B2_B7B0",
-  "comment": "34 bytes, read by PpuJobDispatch"
+  "comment": "34 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 2,
   "addr": 47058,
   "len": 34,
   "name": "Tbl_B2_B7D2",
-  "comment": "34 bytes, read by PpuJobDispatch"
+  "comment": "34 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 3,
@@ -375,7 +375,7 @@
   "addr": 48654,
   "len": 4,
   "name": "Tbl_B3_BE0E",
-  "comment": "4 bytes, read by PlayerFrameCycle4"
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 3,
@@ -396,7 +396,7 @@
   "addr": 48696,
   "len": 89,
   "name": "Tbl_B3_BE38",
-  "comment": "89 bytes, read by OpenBlockReward"
+  "comment": "89 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 3,
@@ -473,7 +473,7 @@
   "addr": 45252,
   "len": 20,
   "name": "Tbl_B4_B0C4",
-  "comment": "20 bytes, read by GameState0B"
+  "comment": "20 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 4,
@@ -648,7 +648,7 @@
   "addr": 32951,
   "len": 28,
   "name": "Tbl_B5_80B7",
-  "comment": "28 bytes, read by Ent_TryCarryPlayer"
+  "comment": "28 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 5,
@@ -844,7 +844,7 @@
   "addr": 39984,
   "len": 18,
   "name": "Tbl_B5_9C30",
-  "comment": "18 bytes, read by Ent_TickRadius"
+  "comment": "18 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 5,
@@ -1075,7 +1075,7 @@
   "addr": 45625,
   "len": 4,
   "name": "Tbl_B5_B239",
-  "comment": "4 bytes, read by Ent_PatrolTail"
+  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 5,
@@ -1187,7 +1187,7 @@
   "addr": 48343,
   "len": 40,
   "name": "Tbl_B5_BCD7",
-  "comment": "40 bytes, read by Ent_Noop"
+  "comment": "40 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 5,
@@ -1390,14 +1390,14 @@
   "addr": 49969,
   "len": 5,
   "name": "Tbl_F_C331",
-  "comment": "5 bytes, read by UpdateTouchKind"
+  "comment": "5 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,
   "addr": 49974,
   "len": 6,
   "name": "Tbl_F_C336",
-  "comment": "6 bytes, read by UpdateTouchKind"
+  "comment": "6 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,
@@ -1439,14 +1439,14 @@
   "addr": 56310,
   "len": 27,
   "name": "Tbl_F_DBF6",
-  "comment": "27 bytes, read by PlayerTileInteract"
+  "comment": "27 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,
   "addr": 56337,
   "len": 16,
   "name": "Tbl_F_DC11",
-  "comment": "16 bytes, read by TryFireShot"
+  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,
@@ -1467,7 +1467,7 @@
   "addr": 62736,
   "len": 12,
   "name": "Tbl_F_F510",
-  "comment": "12 bytes, read by PlayerState0F"
+  "comment": "12 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,
@@ -1481,7 +1481,7 @@
   "addr": 63169,
   "len": 16,
   "name": "Tbl_F_F6C1",
-  "comment": "16 bytes, read by GetCollectibleBit"
+  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,
@@ -1495,7 +1495,7 @@
   "addr": 63954,
   "len": 5,
   "name": "Tbl_F_F9D2",
-  "comment": "5 bytes, read by AwardPickup"
+  "comment": "5 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,

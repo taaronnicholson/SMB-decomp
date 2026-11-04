@@ -239,15 +239,15 @@ Tbl_F_C2EF:
     .word F_D4FE
     .word F_FEC0
     .byte $FE,$C1,$FE
-; Tbl_F_C326: 11 bytes, read by UpdateTouchKind
-Tbl_F_C326:
+; UpdateTouchKind_Tbl_C326: 11 bytes, read by UpdateTouchKind
+UpdateTouchKind_Tbl_C326:
     .byte $CD
 F_C327:
     .byte $FF,$CB,$C2,$D6,$C2,$F5,$C2,$06,$C3,$12
-; Tbl_F_C331: 5 bytes, read by UpdateTouchKind
+; Tbl_F_C331: 5 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_C331:
     .byte $C3,$D2,$D2,$00,$CD
-; Tbl_F_C336: 6 bytes, read by UpdateTouchKind
+; Tbl_F_C336: 6 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_C336:
     .byte $CD,$D3,$D3,$C0,$D3,$D3
 ; TileHeightProfiles: 32 profiles x 16 columns: ground surface height per pixel column of a tile ($FF = no surface)
@@ -1766,7 +1766,7 @@ UpdateCamera:
     LDA camera_mode
     ASL a
     TAY
-    LDA Tbl_F_D046,y
+    LDA UpdateCamera_Tbl_D046,y
     STA tmp_ptr_lo
     LDA F_D047,y
     STA tmp_ptr_hi
@@ -1792,8 +1792,8 @@ UpdateCamera:
     SBC #$00
     STA cam_x_hi
     RTS
-; Tbl_F_D046: 12 bytes, read by UpdateCamera
-Tbl_F_D046:
+; UpdateCamera_Tbl_D046: 12 bytes, read by UpdateCamera
+UpdateCamera_Tbl_D046:
     .byte $16
 F_D047:
     .byte $BB,$5F,$BC,$5D,$BD,$DA,$BC,$5F,$BC,$54,$D0
@@ -3432,11 +3432,11 @@ FilterCollectedTile:
     LDX tmp_d
     LDA tmp_b
     RTS
-; Tbl_F_DBF6: 27 bytes, read by PlayerTileInteract
+; Tbl_F_DBF6: 27 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_DBF6:
     .res 12, $01
     .byte $00,$01,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$00
-; Tbl_F_DC11: 16 bytes, read by TryFireShot
+; Tbl_F_DC11: 16 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_DC11:
     .byte $00,$00,$00,$01,$01,$01,$00,$01,$00,$00,$00,$00,$01,$01,$00,$00
 PlayerBlinkCheck:
@@ -6784,7 +6784,7 @@ UpdateTouchKind:
     BEQ @F_F45E
     ASL a
     TAY
-    LDA Tbl_F_C326,y
+    LDA UpdateTouchKind_Tbl_C326,y
     STA ptr_lo
     LDA F_C327,y
     STA ptr_hi
@@ -6887,7 +6887,7 @@ F_F507:
     STA zp_67
     STA zp_C1
     RTS
-; Tbl_F_F510: 12 bytes, read by PlayerState0F
+; Tbl_F_F510: 12 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_F510:
     .byte $46,$46,$47,$47,$48,$48,$48,$45,$45,$45,$45,$00
 PlayerState10:
@@ -7121,7 +7121,7 @@ SetCollectedFlag:
     STA collected_flags,y
     LDX saved_x
     RTS
-; Tbl_F_F6C1: 16 bytes, read by GetCollectibleBit
+; Tbl_F_F6C1: 16 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_F6C1:
     .byte $BC,$D1,$DB,$D6,$D9,$C8,$C9,$CA,$CB,$CC,$CD,$BD,$BE,$BF,$C2,$C3
 GetCollectibleBit:
@@ -7537,7 +7537,7 @@ AwardPickup:
     LDY tmp_ptr_lo
     STA ram_05C0,y
     RTS
-; Tbl_F_F9D2: 5 bytes, read by AwardPickup
+; Tbl_F_F9D2: 5 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_F9D2:
     .byte $29,$3F,$3E,$40,$29
 F_F9D7:

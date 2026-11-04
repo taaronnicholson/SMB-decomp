@@ -159,7 +159,7 @@ PaletteFadeStep:
     PHA
     LDA (jump_ptr_lo),y
     SEC
-    SBC Tbl_B0_81D7,x
+    SBC PaletteFadeAmounts,x
     BCS @B0_8160
     LDA #$0F
 @B0_8160:
@@ -182,7 +182,7 @@ PaletteFadeStep:
 PaletteRowFadeToPPU:
     LDA (jump_ptr_lo),y
     SEC
-    SBC Tbl_B0_81D7,x
+    SBC PaletteFadeAmounts,x
     BCS @B0_818D
     LDA #$0F
 @B0_818D:
@@ -197,7 +197,7 @@ B0_8196:
     INY
     LDA SpritePalettes,y
     SEC
-    SBC Tbl_B0_81D7,x
+    SBC PaletteFadeAmounts,x
     BCS @B0_81A7
     LDA #$0F
 @B0_81A7:
@@ -205,7 +205,7 @@ B0_8196:
     INY
     LDA SpritePalettes,y
     SEC
-    SBC Tbl_B0_81D7,x
+    SBC PaletteFadeAmounts,x
     BCS @B0_81B6
     LDA #$0F
 @B0_81B6:
@@ -213,7 +213,7 @@ B0_8196:
     INY
     LDA SpritePalettes,y
     SEC
-    SBC Tbl_B0_81D7,x
+    SBC PaletteFadeAmounts,x
     BCS @B0_81C5
     LDA #$0F
 @B0_81C5:
@@ -227,8 +227,8 @@ B0_81CD:
     LDA #$00
     STA zp_50
     JMP SetScroll
-; Tbl_B0_81D7: 5 bytes, read by PaletteFadeStep, PaletteRowFadeToPPU, B0_8196
-Tbl_B0_81D7:
+; PaletteFadeAmounts: fade-step subtrahends $40,$30,$20,$10,$00 applied to each palette byte
+PaletteFadeAmounts:
     .byte $40,$30,$20,$10,$00
 ClearPalettesBlack:
     LDY #$00
@@ -267,7 +267,7 @@ ReadController:
     LSR a
     BCC @B0_8229
     LDA buttons
-    ORA Tbl_B0_823D,y
+    ORA ButtonBitMasks,y
     STA buttons
 @B0_8229:
     DEY
@@ -281,8 +281,8 @@ ReadController:
     AND buttons_prev
     STA buttons_released
     RTS
-; Tbl_B0_823D: 8 bytes, read by ReadController
-Tbl_B0_823D:
+; ButtonBitMasks: button bit order used by ReadController
+ButtonBitMasks:
     .byte $10,$20,$80,$40,$08,$04,$02,$01
 ClearRAM:
     LDA #$07
@@ -2204,7 +2204,7 @@ FadeTableStep:
     STA zp_47
     INY
     JMP @B0_BF96
-; Tbl_B0_BFBB: 69 bytes, read by FadeTableStep
+; Tbl_B0_BFBB: 69 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B0_BFBB:
     .byte $79,$01,$7B,$02,$7D,$03,$7F,$04,$7F,$00,$00,$00,$04,$F7,$FF,$FB
     .byte $FF,$60,$00,$88,$00,$9B,$04,$00,$21,$FF,$FF,$FF,$FF,$00,$02,$80

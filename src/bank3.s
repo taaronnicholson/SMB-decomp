@@ -1227,7 +1227,7 @@ B3_BD8D:
     DEC fade_dir
 @B3_BE0D:
     RTS
-; Tbl_B3_BE0E: 4 bytes, read by PlayerFrameCycle4
+; Tbl_B3_BE0E: 4 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B3_BE0E:
     .byte $27,$4B,$4E,$4F
 ; Tbl_B3_BE12: 24 bytes, read by B3_BD67
@@ -1239,7 +1239,7 @@ Tbl_B3_BE2A:
     .byte $FD
 B3_BE2B:
     .byte $FF,$FE,$FF,$FE,$FF,$FE,$FF,$FE,$FF,$FE,$FF,$FF,$FF
-; Tbl_B3_BE38: 89 bytes, read by OpenBlockReward
+; Tbl_B3_BE38: 89 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B3_BE38:
     .byte $FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$01,$00
     .byte $00,$00,$01,$00,$01,$00,$02,$00,$01,$00,$7F,$00,$FD,$FF,$FD,$FF
