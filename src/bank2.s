@@ -3174,9 +3174,9 @@ ResetLevelState:
     STA ram_01A5
     STA zp_84
     STA zp_A6
-    STA zp_70
-    STA zp_71
-    STA zp_72
+    STA idle_timer_lo
+    STA idle_timer_hi
+    STA idle_anim_timer
     STA zp_67
     STA player_frame
     STA zp_4F

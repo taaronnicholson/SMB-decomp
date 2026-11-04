@@ -54,3 +54,8 @@ alone have no observable effect without their set-up variables.
 to one of 11 **shapes**; `PlayerShapeRecordLo/Hi` point to 3-byte `PlayerShapeRecords` (offset-list pointer, sprite count), and each list holds signed `(dy, dx)` offsets that are added
 to the screen position to fill OAM entries 15 and up (`$023C`...). Facing left (`zp_67`) mirrors X (`8 - dx`) and sets the horizontal-flip attribute, and `zp_4F` mirrors Y. The shapes are mostly
 2x2 or 2x3 metasprites; shape 6 points at RAM `$0398`, the six trailing positions written by `DeathAnimFrame`. This loop does not write the tile-number bytes (OAM byte 1); where they are set has not been traced.
+
+## Idle animation
+`idle_timer` (`zp_70`/`zp_71`) counts the frames the player stands still and is reset by input. Once it passes `$258` (600 frames, about 10 seconds), `PlayerIdleAnim` steps `IdleAnim`
+(bank 1 `$89FD`, 28 triples of OAM tile for the sprite at `$024D`, duration in `idle_anim_timer` (`zp_72`) and `player_frame`, ended by `$FF`): the character plays a looping pose sequence
+(frames `$24`-`$2F`) while waiting. [read from the code; not run for 10 seconds in the emulator]

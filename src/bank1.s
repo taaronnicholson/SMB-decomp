@@ -1294,14 +1294,37 @@ Tbl_B1_8999:
     .res 76, $00
     .byte $0A,$00,$00,$00,$00,$00,$00,$00,$00,$0E,$12,$12,$12,$05,$0E,$0E
     .byte $0E,$0E,$00,$05,$05,$05,$05,$05
-; Tbl_B1_89FD: 85 bytes, read by F_E066
-Tbl_B1_89FD:
-    .byte $00,$0E,$44,$00,$0E,$00,$00,$0E,$26,$00,$0A,$00,$00,$06,$24,$00
-    .byte $14,$25,$22,$0E,$2D,$22,$0A,$2E,$24,$0A,$2F,$26,$0A,$2F,$24,$0A
-    .byte $30,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$2F,$24,$0A,$2F,$26,$0A,$2F
-    .byte $24,$0A,$2F,$26,$0A,$30,$24,$0A,$2F,$26,$0A,$2F,$24,$0A,$2F,$26
-    .byte $0A,$2F,$24,$0A,$2F,$26,$0A,$2F,$22,$0A,$2E,$22,$0A,$2D,$22,$0F
-    .byte $25,$00,$07,$24,$FF
+; IdleAnim: the idle animation after 600 idle frames: (OAM tile for the sprite at ram_024D, duration in zp_72, player_frame) triples, $FF ends
+IdleAnim:
+    .byte $00, $0E, $44
+    .byte $00, $0E, $00
+    .byte $00, $0E, $26
+    .byte $00, $0A, $00
+    .byte $00, $06, $24
+    .byte $00, $14, $25
+    .byte $22, $0E, $2D
+    .byte $22, $0A, $2E
+    .byte $24, $0A, $2F
+    .byte $26, $0A, $2F
+    .byte $24, $0A, $30
+    .byte $26, $0A, $2F
+    .byte $24, $0A, $2F
+    .byte $26, $0A, $2F
+    .byte $24, $0A, $2F
+    .byte $26, $0A, $2F
+    .byte $24, $0A, $2F
+    .byte $26, $0A, $30
+    .byte $24, $0A, $2F
+    .byte $26, $0A, $2F
+    .byte $24, $0A, $2F
+    .byte $26, $0A, $2F
+    .byte $24, $0A, $2F
+    .byte $26, $0A, $2F
+    .byte $22, $0A, $2E
+    .byte $22, $0A, $2D
+    .byte $22, $0F, $25
+    .byte $00, $07, $24
+    .byte $FF
 MarkEntityOffscreen:
     LDA ent_flags,x
     ORA #$04

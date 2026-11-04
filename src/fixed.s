@@ -3575,9 +3575,9 @@ F_DCF8:
     LDY player_state
     BEQ F_DD24
     LDA #$00
-    STA zp_70
-    STA zp_71
-    STA zp_72
+    STA idle_timer_lo
+    STA idle_timer_hi
+    STA idle_anim_timer
 F_DD24:
     LDA #$02
     JSR SwitchBank
@@ -4006,12 +4006,12 @@ PlayerVerticalStep:
     BNE F_E08F
     LDA shot_state
     BNE F_E08F
-    LDA zp_70
+    LDA idle_timer_lo
     STA tmp_c
     SEC
     SBC #$58
     STA ptr_lo
-    LDA zp_71
+    LDA idle_timer_hi
     STA tmp_d
     SBC #$02
     BCC F_E09A
@@ -4020,44 +4020,44 @@ PlayerVerticalStep:
     CLC
     ADC ptr_lo
     TAY
-    LDA zp_72
-    BEQ F_E066
-    DEC zp_72
+    LDA idle_anim_timer
+    BEQ PlayerIdleAnim
+    DEC idle_anim_timer
     JMP ApplyRidingMotion
-F_E066:
+PlayerIdleAnim:
     LDA tmp_c
     CLC
     ADC #$01
-    STA zp_70
+    STA idle_timer_lo
     LDA tmp_d
     ADC #$00
-    STA zp_71
+    STA idle_timer_hi
     LDA #$01
     JSR SwitchBank
-    LDA Tbl_B1_89FD,y
+    LDA IdleAnim,y
     INY
     CMP #$FF
     BEQ F_E08F
     STA ram_024D
-    LDA Tbl_B1_89FD,y
+    LDA IdleAnim,y
     INY
-    STA zp_72
-    LDA Tbl_B1_89FD,y
+    STA idle_anim_timer
+    LDA IdleAnim,y
     JMP F_E0AF
 F_E08F:
     LDA #$00
-    STA zp_70
-    STA zp_71
-    STA zp_72
+    STA idle_timer_lo
+    STA idle_timer_hi
+    STA idle_anim_timer
     JMP F_E0A7
 F_E09A:
     LDA tmp_c
     CLC
     ADC #$01
-    STA zp_70
+    STA idle_timer_lo
     LDA tmp_d
     ADC #$00
-    STA zp_71
+    STA idle_timer_hi
 F_E0A7:
     LDA zp_6E
     BEQ F_E0B4
@@ -4078,9 +4078,9 @@ F_E0B4:
     JMP F_E0CE
 F_E0C6:
     LDA #$00
-    STA zp_70
-    STA zp_71
-    STA zp_72
+    STA idle_timer_lo
+    STA idle_timer_hi
+    STA idle_anim_timer
 F_E0CE:
     STA zp_6F
     LDA #$96

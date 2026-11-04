@@ -11,3 +11,4 @@ f C544 TileEffectScript struct 65 bb ; (next index, tile) pairs forming chains: 
 3 BF63 Bank3_TailData ; unreferenced leftover fill at the end of bank 3
 4 8000 AreaMap23_PhantomRow ; the second phantom row of area 23's map (its base $7F80 + 128): 128 bytes of $D7 (ceiling); the first phantom row lies before the bank
 6 A21E KillableTypeTable ; indexed by ent_type: non-zero = turned into $5D by the dive shockwave (ShockwaveKillEnemies)
+1 89FD IdleAnim struct 28 bbb ; the idle animation after 600 idle frames: (OAM tile for the sprite at ram_024D, duration in zp_72, player_frame) triples, $FF ends

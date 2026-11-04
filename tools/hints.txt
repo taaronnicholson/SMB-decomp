@@ -463,3 +463,7 @@ struct 6 A70A 2 bb
 struct 6 A70E 4 bb
 struct 6 A716 4 bb
 struct 6 A71E 2 bb
+name f E066 PlayerIdleAnim          ; once idle_timer passes $258 (600 frames) steps IdleAnim: tile, duration and player_frame
+ram 0070 idle_timer_lo              ; frames the player has been standing still (reset by input); an idle animation starts at $258
+ram 0071 idle_timer_hi
+ram 0072 idle_anim_timer
