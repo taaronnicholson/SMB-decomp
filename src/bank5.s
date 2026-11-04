@@ -2283,7 +2283,7 @@ Ent0C_Update:
     INC ent_angle,x
     ASL a
     TAY
-    LDA Tbl_B5_93C6,y
+    LDA ItemHopArc,y
     STA tmp_a
     CMP #$7F
     BNE B5_931E
@@ -2308,7 +2308,7 @@ B5_9331:
     ADC tmp_a
     STA ent_y_lo,x
     LDA ent_y_hi,x
-    ADC B5_93C7,y
+    ADC $93C7,y
     STA ent_y_hi,x
 B5_9343:
     RTS
@@ -2373,19 +2373,78 @@ B5_939C:
     LDA #$04
     STA game_state
     RTS
-; Tbl_B5_93C6: 139 bytes, read by Ent0C_Update, B5_9331
-Tbl_B5_93C6:
-    .byte $FE
-B5_93C7:
-    .byte $FF,$FE,$FF,$FE,$FF,$FF,$FF,$FE,$FF,$FF,$FF,$FE,$FF,$FF,$FF,$FF
-    .byte $FF,$00,$00,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00
-    .byte $00,$00,$00,$00,$00,$01,$00,$00,$00,$00,$00,$01,$00,$00,$00,$01
-    .byte $00,$00,$00,$01,$00,$00,$00,$01,$00,$01,$00,$02,$00,$01,$00,$02
-    .byte $00,$01,$00,$02,$00,$02,$00,$02,$00,$80,$00,$02,$00,$03,$00,$02
-    .byte $00,$02,$00,$03,$00,$02,$00,$03,$00,$02,$00,$03,$00,$02,$00,$03
-    .byte $00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03
-    .byte $00,$7E,$00,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$01,$00,$01
-    .byte $00,$02,$00,$FF,$FF,$00,$00,$01,$00,$7F
+; ItemHopArc: signed 16-bit Y offsets per tick for the weapon item hopping out ($0B/$0C)
+ItemHopArc:
+    .word $FFFE
+    .word $FFFE
+    .word $FFFE
+    .word $FFFF
+    .word $FFFE
+    .word $FFFF
+    .word $FFFE
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0002
+    .word $0001
+    .word $0002
+    .word $0001
+    .word $0002
+    .word $0002
+    .word $0002
+    .word $0080
+    .word $0002
+    .word $0003
+    .word $0002
+    .word $0002
+    .word $0003
+    .word $0002
+    .word $0003
+    .word $0002
+    .word $0003
+    .word $0002
+    .word $0003
+    .word $0003
+    .word $0003
+    .word $0003
+    .word $0003
+    .word $0003
+    .word $0003
+    .word $0003
+    .word $0003
+    .word $007E
+    .word $FFFE
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0002
+    .word $FFFF
+    .word $0000
+    .word $0001
+    .byte $7F
 Ent0E_Update:
     LDA ent_flags,x
     AND #$04

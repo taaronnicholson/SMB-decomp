@@ -1,0 +1,5 @@
+# Decoded tables: <bank|f> <addr> <Name> [struct <rows> <fmt>] ; comment      (used by gen_table_hints.py)
+5 93C6 ItemHopArc struct 69 w ; signed 16-bit Y offsets per tick for the weapon item hopping out ($0B/$0C); word $7E = play a sound, $80 = switch $0B/$0C, $7F = settle as $0D (read by Ent0C_Update)
+f C544 TileEffectScript struct 65 bb ; (next index, tile) pairs forming chains: RunTileEffects follows next (0 = end) and redraws the tile ($FF = none); chains start at index $02 (peck-broken tile) or $3C
+1 B272 BonusAscentEndAnim struct 81 bb ; (player_frame, Y offset) pairs for the end of the bonus ascent (PlayerState18): frame, player_y += offset, player faces right; frame $44 switches game_state to $0A (tally), $FF ends
+6 A44E ExitWalkAnim struct 73 bb ; (player_frame, X offset subtracted) pairs for the walk to the NEXT sign (PlayerState19); $FD = noise sfx 8 + frame $4A, $FE = face left, $FF = end

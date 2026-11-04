@@ -3,8 +3,8 @@
 
 .segment "BANK3"
 
-; Tbl_B3_8000: 747 bytes, read by F_F5DB, F_F5E3
-Tbl_B3_8000:
+; DeathAnimTiles: 49 steps x 3 bytes: each byte packs two sprites: bits 5-4 / 1-0 = tile index (tile = $F9 + 2*index), bits 7-6 / 3-2 = flip/attribute bits
+DeathAnimTiles:
     .byte $A0, $18, $13
     .byte $A0, $18, $13
     .byte $A0, $78, $80

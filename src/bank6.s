@@ -3523,13 +3523,13 @@ B6_A3E1:
     LDA #$01
     STA zp_86
     JMP ApplyRidingMotion
-B6_A3EC:
+ExitWalkStep:
     LDA zp_BD
     AND #$FE
     TAY
-    LDA Tbl_B6_A44E,y
+    LDA ExitWalkAnim,y
     CMP #$FF
-    BEQ B6_A41E
+    BEQ AdvanceStage
     CMP #$FD
     BNE B6_A403
     LDA #$08
@@ -3544,7 +3544,7 @@ B6_A40B:
     STA player_frame
     LDA player_x_lo
     SEC
-    SBC B6_A44F,y
+    SBC $A44F,y
     STA player_x_lo
     LDA player_x_hi
     SBC #$00
@@ -3552,7 +3552,7 @@ B6_A40B:
     INC zp_BD
 B6_A41D:
     RTS
-B6_A41E:
+AdvanceStage:
     LDA #$16
     STA zp_47
     LDA #$00
@@ -3575,19 +3575,82 @@ B6_A433:
     LDX #$FF
     TXS
     JMP StageSetup
-; Tbl_B6_A44E: 147 bytes, read by B6_A3EC, B6_A40B
-Tbl_B6_A44E:
-    .byte $00
-B6_A44F:
-    .res 27, $00
-    .byte $FE,$00,$00,$00,$00,$00,$00,$00,$00,$00,$02,$01,$02,$01,$02,$01
-    .byte $03,$01,$03,$01,$03,$01,$04,$01,$04,$01,$04,$01,$05,$01,$05,$01
-    .byte $05,$01,$02,$01,$02,$01,$02,$01,$03,$01,$03,$01,$03,$01,$04,$01
-    .byte $04,$01,$00,$00,$00,$00,$00,$00,$00,$00,$08,$00,$08,$00,$08,$00
-    .byte $4A,$00,$4A,$00,$FD,$00,$08,$00,$08,$00,$08,$00,$4A,$00,$4A,$00
-    .byte $4A,$00,$08,$00,$08,$00,$08,$00,$4A,$00,$4A,$00,$4A,$00,$08,$00
-    .byte $08,$00,$08,$00,$4A,$00,$4A,$00,$4A,$00,$08,$00,$08,$00,$08,$00
-    .byte $4A,$00,$4A,$00,$4A,$00,$FF
+; ExitWalkAnim: (player_frame, X offset subtracted) pairs for the walk to the NEXT sign (PlayerState19)
+ExitWalkAnim:
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $FE, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $02, $01
+    .byte $02, $01
+    .byte $02, $01
+    .byte $03, $01
+    .byte $03, $01
+    .byte $03, $01
+    .byte $04, $01
+    .byte $04, $01
+    .byte $04, $01
+    .byte $05, $01
+    .byte $05, $01
+    .byte $05, $01
+    .byte $02, $01
+    .byte $02, $01
+    .byte $02, $01
+    .byte $03, $01
+    .byte $03, $01
+    .byte $03, $01
+    .byte $04, $01
+    .byte $04, $01
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $08, $00
+    .byte $08, $00
+    .byte $08, $00
+    .byte $4A, $00
+    .byte $4A, $00
+    .byte $FD, $00
+    .byte $08, $00
+    .byte $08, $00
+    .byte $08, $00
+    .byte $4A, $00
+    .byte $4A, $00
+    .byte $4A, $00
+    .byte $08, $00
+    .byte $08, $00
+    .byte $08, $00
+    .byte $4A, $00
+    .byte $4A, $00
+    .byte $4A, $00
+    .byte $08, $00
+    .byte $08, $00
+    .byte $08, $00
+    .byte $4A, $00
+    .byte $4A, $00
+    .byte $4A, $00
+    .byte $08, $00
+    .byte $08, $00
+    .byte $08, $00
+    .byte $4A, $00
+    .byte $4A, $00
+    .byte $4A, $00
+    .byte $FF
 DrawPlayer:
     JSR PlayerToScreen
     LDA player_draw_frame

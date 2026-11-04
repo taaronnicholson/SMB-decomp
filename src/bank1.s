@@ -5080,7 +5080,7 @@ B1_B241:
     LDA zp_BD
     ASL a
     TAY
-    LDA Tbl_B1_B272,y
+    LDA BonusAscentEndAnim,y
     INY
     CMP #$FF
     BEQ B1_B240
@@ -5092,7 +5092,7 @@ B1_B25B:
     STA player_frame
     LDA player_y_lo
     CLC
-    ADC Tbl_B1_B272,y
+    ADC BonusAscentEndAnim,y
     STA player_y_lo
     LDA player_y_hi
     ADC #$00
@@ -5101,19 +5101,90 @@ B1_B25B:
     LDA #$01
     STA player_facing
     RTS
-; Tbl_B1_B272: 163 bytes, read by B1_B241, B1_B25B
-Tbl_B1_B272:
-    .byte $32,$00,$32,$00,$32,$00,$32,$00,$32,$00,$33,$00,$33,$00,$33,$00
-    .byte $33,$00,$33,$00,$09,$00,$09,$01,$09,$00,$09,$01,$09,$01,$09,$01
-    .byte $09,$02,$09,$02,$09,$02,$09,$02,$09,$02,$09,$02,$09,$02,$09,$02
-    .byte $09,$02,$09,$02,$09,$02,$09,$02,$09,$02,$09,$02,$09,$02,$09,$02
-    .byte $09,$02,$09,$02,$09,$02,$09,$02,$09,$02,$09,$01,$09,$01,$0A,$01
-    .byte $0A,$01,$0A,$00,$0A,$01,$09,$01,$09,$01,$09,$00,$09,$01,$0A,$01
-    .byte $0A,$00,$0A,$01,$0A,$00,$09,$01,$09,$00,$09,$00,$09,$01,$0A,$00
-    .byte $0A,$00,$0A,$01,$0A,$00,$09,$00,$09,$01,$09,$00,$09,$01,$00,$00
-    .byte $00,$00,$00,$00,$21,$00,$21,$00,$21,$00,$21,$00,$22,$00,$22,$00
-    .byte $22,$00,$22,$00,$21,$00,$21,$00,$21,$00,$00,$00,$00,$00,$00,$00
-    .byte $44,$00,$FF
+; BonusAscentEndAnim: (player_frame, Y offset) pairs for the end of the bonus ascent (PlayerState18): frame, player_y += offset, player faces right
+BonusAscentEndAnim:
+    .byte $32, $00
+    .byte $32, $00
+    .byte $32, $00
+    .byte $32, $00
+    .byte $32, $00
+    .byte $33, $00
+    .byte $33, $00
+    .byte $33, $00
+    .byte $33, $00
+    .byte $33, $00
+    .byte $09, $00
+    .byte $09, $01
+    .byte $09, $00
+    .byte $09, $01
+    .byte $09, $01
+    .byte $09, $01
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $02
+    .byte $09, $01
+    .byte $09, $01
+    .byte $0A, $01
+    .byte $0A, $01
+    .byte $0A, $00
+    .byte $0A, $01
+    .byte $09, $01
+    .byte $09, $01
+    .byte $09, $00
+    .byte $09, $01
+    .byte $0A, $01
+    .byte $0A, $00
+    .byte $0A, $01
+    .byte $0A, $00
+    .byte $09, $01
+    .byte $09, $00
+    .byte $09, $00
+    .byte $09, $01
+    .byte $0A, $00
+    .byte $0A, $00
+    .byte $0A, $01
+    .byte $0A, $00
+    .byte $09, $00
+    .byte $09, $01
+    .byte $09, $00
+    .byte $09, $01
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $21, $00
+    .byte $21, $00
+    .byte $21, $00
+    .byte $21, $00
+    .byte $22, $00
+    .byte $22, $00
+    .byte $22, $00
+    .byte $22, $00
+    .byte $21, $00
+    .byte $21, $00
+    .byte $21, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $00, $00
+    .byte $44, $00
+    .byte $FF
 ; AreaMap11: tile map for area(s) 11: 32 x 30 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap11:
     .res 33, $14

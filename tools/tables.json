@@ -753,7 +753,7 @@
   "addr": 37830,
   "len": 139,
   "name": "Tbl_B5_93C6",
-  "comment": "139 bytes, read by Ent0C_Update, B5_9331"
+  "comment": "139 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 5,
@@ -1264,7 +1264,7 @@
   "addr": 42062,
   "len": 147,
   "name": "Tbl_B6_A44E",
-  "comment": "147 bytes, read by B6_A3EC, B6_A40B"
+  "comment": "147 bytes, read by ExitWalkStep, B6_A40B"
  },
  {
   "bank": 6,
@@ -1355,7 +1355,7 @@
   "addr": 50500,
   "len": 130,
   "name": "Tbl_F_C544",
-  "comment": "130 bytes, read by RunTileEffects, F_F205, F_F22D ..."
+  "comment": "130 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,

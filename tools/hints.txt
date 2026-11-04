@@ -435,3 +435,5 @@ ram 004E player_draw_frame          ; frame index tested by DrawPlayer
 ram 0065 player_frame               ; sprite frame set by the player states
 name 1 83FB Shot_TileHit            ; projectile hit a tile: tile $DA (the peck switch) toggles via PeckSwitchToggle and the projectile ends
 name 5 B181 Ent_PatrolTail          ; shared tail of types $74/$75: restores tmp_c/tmp_d, overlap tests and the player-touch check
+name 6 A3EC ExitWalkStep            ; PlayerState19: steps ExitWalkAnim (player_frame, player_x -= offset)
+name 6 A41E AdvanceStage            ; end of the exit walk: fade out, silence, INC stage_index, restart at StageSetup

@@ -28,7 +28,8 @@ blob 1 AF1F 4 Tbl_B1_AF1F 4 bytes, no direct code reference (continuation or unr
 blob 1 B06A 42 Tbl_B1_B06A 42 bytes, read by B1_AFD3, B1_B005
 blob 1 B144 13 Tbl_B1_B144 13 bytes, read by B1_B094
 blob 1 B151 10 Tbl_B1_B151 10 bytes, read by B1_B129
-blob 1 B272 163 Tbl_B1_B272 163 bytes, read by B1_B241, B1_B25B
+blob 1 B272 163 BonusAscentEndAnim (player_frame, Y offset) pairs for the end of the bonus ascent (PlayerState18): frame, player_y += offset, player faces right; frame $44 switches game_state to $0A (tally), $FF ends
+struct 1 B272 81 bb
 blob 1 BDFF 8 Tbl_B1_BDFF 8 bytes, no direct code reference (continuation or unreferenced)
 blob 1 BEEE 274 Tbl_B1_BEEE 274 bytes, no direct code reference (continuation or unreferenced)
 blob 2 9EDC 80 Tbl_B2_9EDC 80 bytes, read by B2_9E3F
@@ -45,7 +46,6 @@ blob 2 B5E8 48 Tbl_B2_B5E8 48 bytes, no direct code reference (continuation or u
 blob 2 B779 22 Tbl_B2_B779 22 bytes, read by B2_B73D
 blob 2 B7B0 34 Tbl_B2_B7B0 34 bytes, read by B2_B79F
 blob 2 B7D2 34 Tbl_B2_B7D2 34 bytes, read by B2_B79F
-blob 3 8000 747 Tbl_B3_8000 747 bytes, read by F_F5DB, F_F5E3
 blob 3 8437 32 Tbl_B3_8437 32 bytes, no direct code reference (continuation or unreferenced)
 blob 3 8937 32 Tbl_B3_8937 32 bytes, no direct code reference (continuation or unreferenced)
 blob 3 8B37 64 Tbl_B3_8B37 64 bytes, no direct code reference (continuation or unreferenced)
@@ -107,7 +107,8 @@ blob 5 914C 9 Tbl_B5_914C 9 bytes, no direct code reference (continuation or unr
 blob 5 9155 46 Tbl_B5_9155 46 bytes, read by B5_912F
 blob 5 91FD 61 Tbl_B5_91FD 61 bytes, read by Ent0A_Update
 blob 5 923A 185 Tbl_B5_923A 185 bytes, read by B5_91B0, B5_91D9
-blob 5 93C6 139 Tbl_B5_93C6 139 bytes, read by Ent0C_Update, B5_9331
+blob 5 93C6 139 ItemHopArc signed 16-bit Y offsets per tick for the weapon item hopping out ($0B/$0C); word $7E = play a sound, $80 = switch $0B/$0C, $7F = settle as $0D (read by Ent0C_Update)
+struct 5 93C6 69 w
 blob 5 950E 32 Tbl_B5_950E 32 bytes, read by B5_94ED
 blob 5 9694 6 Tbl_B5_9694 6 bytes, read by Ent16_Update
 blob 5 9720 45 Tbl_B5_9720 45 bytes, read by B5_96AC
@@ -180,7 +181,8 @@ blob 6 88CA 24 Tbl_B6_88CA 24 bytes, no direct code reference (continuation or u
 blob 6 9478 4 Tbl_B6_9478 4 bytes, no direct code reference (continuation or unreferenced)
 blob 6 A03E 32 Tbl_B6_A03E 32 bytes, no direct code reference (continuation or unreferenced)
 blob 6 A21E 160 Tbl_B6_A21E 160 bytes, read by F_F7C7
-blob 6 A44E 147 Tbl_B6_A44E 147 bytes, read by B6_A3EC, B6_A40B
+blob 6 A44E 147 ExitWalkAnim (player_frame, X offset subtracted) pairs for the walk to the NEXT sign (PlayerState19); $FD = noise sfx 8 + frame $4A, $FE = face left, $FF = end
+struct 6 A44E 73 bb
 blob 6 A653 80 Tbl_B6_A653 80 bytes, read by B6_A57F
 blob 6 A6A3 11 Tbl_B6_A6A3 11 bytes, read by B6_A57F
 blob 6 A6AE 116 Tbl_B6_A6AE 116 bytes, read by B6_A57F
@@ -193,7 +195,8 @@ blob f C326 11 Tbl_F_C326 11 bytes, read by F_F43E
 blob f C331 5 Tbl_F_C331 5 bytes, read by F_F3CC
 blob f C336 6 Tbl_F_C336 6 bytes, read by F_F426
 blob f C53D 7 Tbl_F_C53D 7 bytes, read by B4_B1AC
-blob f C544 130 Tbl_F_C544 130 bytes, read by RunTileEffects, F_F205, F_F22D ...
+blob f C544 130 TileEffectScript (next index, tile) pairs forming chains: RunTileEffects follows next (0 = end) and redraws the tile ($FF = none); chains start at index $02 (peck-broken tile) or $3C
+struct f C544 65 bb
 blob f C988 5 Tbl_F_C988 5 bytes, read by F_C959
 blob f CF02 4 Tbl_F_CF02 4 bytes, no direct code reference (continuation or unreferenced)
 blob f D046 12 Tbl_F_D046 12 bytes, read by UpdateCamera

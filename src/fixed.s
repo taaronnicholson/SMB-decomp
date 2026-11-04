@@ -289,17 +289,73 @@ BitMask:
 ; Tbl_F_C53D: 7 bytes, read by B4_B1AC
 Tbl_F_C53D:
     .byte $02,$04,$08,$10,$20,$40,$80
-; Tbl_F_C544: 130 bytes, read by RunTileEffects, F_F205, F_F22D ...
-Tbl_F_C544:
-    .byte $00,$FF,$04,$C0,$06,$FF,$08,$FF,$0A,$FF,$0C,$C1,$0E,$FF,$10,$FF
-    .byte $12,$FF,$14,$C0,$16,$FF,$18,$FF,$1A,$C1,$1C,$FF,$1E,$FF,$20,$C0
-    .byte $22,$FF,$24,$C1,$26,$FF,$28,$C0,$2A,$00,$00,$00,$2E,$C0,$30,$FF
-    .byte $32,$FF,$34,$C1,$36,$FF,$38,$FF,$3A,$FF,$2A,$00,$3E,$C1,$40,$FF
-    .byte $42,$C0,$44,$FF,$46,$FF,$48,$78,$00,$00,$4C,$C1,$4E,$FF,$50,$C0
-    .byte $52,$FF,$54,$FF,$56,$78,$00,$00,$5A,$C1,$5C,$FF,$5E,$C0,$60,$FF
-    .byte $62,$FF,$64,$D2,$00,$00,$68,$C1,$6A,$FF,$6C,$C0,$6E,$FF,$70,$FF
-    .byte $72,$CE,$00,$00,$76,$C1,$78,$FF,$7A,$C0,$7C,$FF,$7E,$FF,$80,$78
-    .byte $00,$00
+; TileEffectScript: (next index, tile) pairs forming chains: RunTileEffects follows next (0 = end) and redraws the tile ($FF = none)
+TileEffectScript:
+    .byte $00, $FF
+    .byte $04, $C0
+    .byte $06, $FF
+    .byte $08, $FF
+    .byte $0A, $FF
+    .byte $0C, $C1
+    .byte $0E, $FF
+    .byte $10, $FF
+    .byte $12, $FF
+    .byte $14, $C0
+    .byte $16, $FF
+    .byte $18, $FF
+    .byte $1A, $C1
+    .byte $1C, $FF
+    .byte $1E, $FF
+    .byte $20, $C0
+    .byte $22, $FF
+    .byte $24, $C1
+    .byte $26, $FF
+    .byte $28, $C0
+    .byte $2A, $00
+    .byte $00, $00
+    .byte $2E, $C0
+    .byte $30, $FF
+    .byte $32, $FF
+    .byte $34, $C1
+    .byte $36, $FF
+    .byte $38, $FF
+    .byte $3A, $FF
+    .byte $2A, $00
+    .byte $3E, $C1
+    .byte $40, $FF
+    .byte $42, $C0
+    .byte $44, $FF
+    .byte $46, $FF
+    .byte $48, $78
+    .byte $00, $00
+    .byte $4C, $C1
+    .byte $4E, $FF
+    .byte $50, $C0
+    .byte $52, $FF
+    .byte $54, $FF
+    .byte $56, $78
+    .byte $00, $00
+    .byte $5A, $C1
+    .byte $5C, $FF
+    .byte $5E, $C0
+    .byte $60, $FF
+    .byte $62, $FF
+    .byte $64, $D2
+    .byte $00, $00
+    .byte $68, $C1
+    .byte $6A, $FF
+    .byte $6C, $C0
+    .byte $6E, $FF
+    .byte $70, $FF
+    .byte $72, $CE
+    .byte $00, $00
+    .byte $76, $C1
+    .byte $78, $FF
+    .byte $7A, $C0
+    .byte $7C, $FF
+    .byte $7E, $FF
+    .byte $80, $78
+    .byte $00, $00
 Reset:
     SEI
     LDX #$00
@@ -6413,7 +6469,7 @@ RunTileEffects:
     CMP #$40
     BCS F_F255
     LDX ram_0720
-    LDA Tbl_F_C544,x
+    LDA TileEffectScript,x
     STA ram_0720
     INX
     CMP #$00
@@ -6422,7 +6478,7 @@ RunTileEffects:
     STA tmp_a
     LDA ram_0722
     STA tmp_b
-    LDA Tbl_F_C544,x
+    LDA TileEffectScript,x
     CMP #$FF
     BEQ F_F205
     JSR QueueMapTileDraw
@@ -6431,7 +6487,7 @@ F_F205:
     CMP #$40
     BCS F_F27D
     LDX ram_0723
-    LDA Tbl_F_C544,x
+    LDA TileEffectScript,x
     STA ram_0723
     INX
     CMP #$00
@@ -6440,7 +6496,7 @@ F_F205:
     STA tmp_a
     LDA ram_0725
     STA tmp_b
-    LDA Tbl_F_C544,x
+    LDA TileEffectScript,x
     CMP #$FF
     BEQ F_F22D
     JSR QueueMapTileDraw
@@ -6449,7 +6505,7 @@ F_F22D:
     CMP #$40
     BCS F_F27D
     LDX ram_0726
-    LDA Tbl_F_C544,x
+    LDA TileEffectScript,x
     STA ram_0726
     INX
     CMP #$00
@@ -6458,7 +6514,7 @@ F_F22D:
     STA tmp_a
     LDA ram_0728
     STA tmp_b
-    LDA Tbl_F_C544,x
+    LDA TileEffectScript,x
     CMP #$FF
     BEQ F_F255
     JSR QueueMapTileDraw
@@ -6467,7 +6523,7 @@ F_F255:
     CMP #$40
     BCS F_F27D
     LDX ram_0729
-    LDA Tbl_F_C544,x
+    LDA TileEffectScript,x
     STA ram_0729
     INX
     CMP #$00
@@ -6476,7 +6532,7 @@ F_F255:
     STA tmp_a
     LDA ram_072B
     STA tmp_b
-    LDA Tbl_F_C544,x
+    LDA TileEffectScript,x
     CMP #$FF
     BEQ F_F27D
     JSR QueueMapTileDraw
@@ -6942,7 +6998,7 @@ F_F5BA:
     STA tmp_ptr_lo
 F_F5DB:
     INX
-    LDA Tbl_B3_8000,y
+    LDA DeathAnimTiles,y
     AND #$30
     LSR a
     LSR a
@@ -6952,20 +7008,20 @@ F_F5E3:
     EOR tmp_ptr_hi
     STA ram_023C,x
     INX
-    LDA Tbl_B3_8000,y
+    LDA DeathAnimTiles,y
     AND #$C0
     STA ram_023C,x
     INX
     INX
     INX
-    LDA Tbl_B3_8000,y
+    LDA DeathAnimTiles,y
     AND #$03
     ASL a
     ADC #$F9
     EOR tmp_ptr_hi
     STA ram_023C,x
     INX
-    LDA Tbl_B3_8000,y
+    LDA DeathAnimTiles,y
     AND #$0C
     ASL a
     ASL a
@@ -7288,7 +7344,7 @@ F_F843:
 PlayerState19:
     LDA #$06
     JSR SwitchBank
-    JMP B6_A3EC
+    JMP ExitWalkStep
 PlayerState1A:
     LDA #$03
     JSR SwitchBank

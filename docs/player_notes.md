@@ -27,6 +27,7 @@ uses read order instead: A, B, Select, Start, Up, Down, Left, Right = bits 0-7):
 upward; at the top of the area `ride_timer` counts to `$30`, the player is moved to area 4 (Y `$03CD`, X `$78`) and `game_state` goes `$08` → `$09` → `$0D`.
 `$17` is the **bonus ascent**: a night-sky area with stars and "50" score popups through which the player rises steadily (the score grew by 50 about every 200 frames);
 at the top `$18` (`game_state` `$0A`/`$0B`) tallies the bonus (6120 points in the test and `lives` went 2 → 3, i.e. an extra life), `$19` walks to a "NEXT" sign and the next stage starts.
+The exit walk (`ExitWalkStep`, table `ExitWalkAnim`) ends in `AdvanceStage`: fade out, `INC stage_index`, `JMP StageSetup` [code-read; the stage restart seen in the run was the emulator hook forcing stage 0]. `BonusAscentEndAnim` (bank 1 `$B272`) animates the end of the ascent.
 (The emulator hook that forced stage 0 each load restarted stage 0 afterwards; the real game advances `stage_index`.)
 
 **Dive attack** [v]: pressing Down while in the air sets `dive_mode` (`zp_7C`) to 4; landing then enters `$03` instead of `$04`. If the fall lasted at least `$8C` ticks (`fall_ticks`, `zp_85`)
