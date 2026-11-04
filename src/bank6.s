@@ -145,8 +145,8 @@ B6_8115:
     STX ram_0755
     JMP B6_817A
 B6_812C:
-    JSR B6_817B
-    JSR B6_8AD7
+    JSR SoundTickIfPlaying
+    JSR SoundUpdateChannels
     LDA snd_playing
     BEQ B6_817A
     LDA snd_sfx_sq1
@@ -177,7 +177,7 @@ B6_8163:
     STA NOISE_LO
 B6_817A:
     RTS
-B6_817B:
+SoundTickIfPlaying:
     LDA snd_playing
     BNE B6_8181
     RTS
@@ -1345,7 +1345,7 @@ B6_8A82:
     STA NOISE_HI
     DEC snd_sfx_noise
     RTS
-B6_8AD7:
+SoundUpdateChannels:
     JSR SoundNoiseLFSR
     JSR SndUpdateSfxSq1
     JSR SndUpdateSfxSq2
@@ -3569,7 +3569,7 @@ B6_A433:
     BNE B6_A433
     JSR RenderOffAndWait
     JSR DisableNMI
-    JSR F_C956
+    JSR ClearOAMAndLoadSprites
     JSR ReturnStub
     INC stage_index
     LDX #$FF
@@ -4458,7 +4458,7 @@ B6_B876:
     STA ptr_hi
     PLA
     STA ptr_lo
-    JMP B6_BA04
+    JMP PlayerAttackInput
 B6_B8DF:
     PLA
     STA ptr_hi
@@ -4499,7 +4499,7 @@ B6_B8DF:
     ADC tmp_a
     STA player_y_lo
 B6_B927:
-    JMP B6_BA04
+    JMP PlayerAttackInput
 B6_B92A:
     LDA #$02
     STA player_state
@@ -4559,7 +4559,7 @@ B6_B953:
     JSR MapPtrFromPos
     JSR GetTilePropsAtPos
     AND #$01
-    BEQ B6_BA04
+    BEQ PlayerAttackInput
 B6_B998:
     LDA dive_mode
     BEQ B6_B9C0
@@ -4576,7 +4576,7 @@ B6_B998:
     STA ram_0722
     LDA #$02
     STA ram_0720
-    JMP B6_BA04
+    JMP PlayerAttackInput
 B6_B9C0:
     JSR GetTilePropsAtPos
     AND #$03
@@ -4612,11 +4612,11 @@ B6_B9D1:
 B6_B9FA:
     LDA zp_7D
     CMP #$0E
-    BCS B6_BA04
+    BCS PlayerAttackInput
 B6_BA00:
     LDA #$0E
     STA zp_7D
-B6_BA04:
+PlayerAttackInput:
     LDA buttons
     AND #$20
     BNE B6_BA0D
@@ -5165,7 +5165,7 @@ B6_BDA0:
     STA ram_038A
     STA scroll_y_hi
     STA scroll_y_lo
-    JSR F_CEE1
+    JSR CutsceneScrollCall
     LDA #$5A
     STA zp_8C
     LDY ram_0745
@@ -5229,7 +5229,7 @@ B6_BE63:
     ADC #$04
     STA ram_0389
     DEC ram_038A
-    JSR F_CEE1
+    JSR CutsceneScrollCall
     LDA fade_dir
     BNE B6_BE63
 B6_BE79:
@@ -5243,7 +5243,7 @@ B6_BE79:
     STA ram_0389
 B6_BE8C:
     DEC ram_038A
-    JSR F_CEE1
+    JSR CutsceneScrollCall
     LDA snd_playing
     BNE B6_BE9B
     DEC zp_8C

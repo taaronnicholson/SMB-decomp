@@ -1262,7 +1262,7 @@ Bank3_SpecialTileAction:
     BEQ B3_BE9C
     CMP #$02
     BEQ B3_BE9C
-B3_BEA9:
+OpenBlockReward:
     LDA tmp_a
     PHA
     LDA tmp_b

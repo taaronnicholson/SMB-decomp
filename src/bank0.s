@@ -1704,8 +1704,8 @@ SaveScrollAndClearScreen:
     STA ptr_lo
     LDA #$20
     STA ptr_hi
-    JSR B0_B636
-    JSR B0_B5B3
+    JSR SetBlockSource_1530
+    JSR CopyPpuTileVia2007
     LDA #$F0
     STA tmp_08
     LDA #$20
@@ -1714,7 +1714,7 @@ SaveScrollAndClearScreen:
     JSR LoadFont
     JSR EnableNMI
     JMP WaitForNMI
-B0_B5B3:
+CopyPpuTileVia2007:
     LDA #$01
     STA tmp_a
     LDA #$05
@@ -1750,7 +1750,7 @@ B0_B5F0:
     DEC tmp_b
     BNE B0_B5C5
     JMP SetScroll
-B0_B5FB:
+RestoreScrollAndRedraw:
     JSR RenderOffAndWait
     JSR DisableNMI
     LDA ram_0392
@@ -1767,8 +1767,8 @@ B0_B5FB:
     STA ptr_lo
     LDA #$15
     STA ptr_hi
-    JSR B0_B5B3
-    JSR F_C956
+    JSR CopyPpuTileVia2007
+    JSR ClearOAMAndLoadSprites
     LDA tileset_id
     ASL a
     ASL a
@@ -1778,7 +1778,7 @@ B0_B5FB:
     STA ptr_lo
     LDA $8C9E,x
     STA ptr_hi
-B0_B636:
+SetBlockSource_1530:
     LDA #$30
     STA tmp_c
     LDA #$15
@@ -2174,7 +2174,7 @@ SineTable_Data:
     .byte $C5,$C6,$C6,$C7,$C8,$C8,$C9,$CA,$CB,$CC,$CD,$CE,$CF,$D0,$D1,$D2
     .byte $D3,$D4,$D5,$D6,$D8,$D9,$DA,$DB,$DD,$DE,$DF,$E1,$E2,$E3,$E5,$E6
     .byte $E8,$E9,$EB,$EC,$EE,$EF,$F1,$F2,$F4,$F5,$F7,$F8,$FA,$FB,$FD,$FF
-B0_BF8A:
+FadeTableStep:
     LDY zp_49
     LDA zp_48
     BNE B0_BF91

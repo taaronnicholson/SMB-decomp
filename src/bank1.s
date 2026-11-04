@@ -863,7 +863,7 @@ B1_865F:
     LDA #$13
     STA shot_frame,x
 B1_8679:
-    JSR B1_8795
+    JSR ShotPosByAngle
     LDA zp_C1
     BEQ B1_8688
     LDA zp_C9
@@ -1015,7 +1015,7 @@ Tbl_B1_8785:
     .byte $03
 B1_8786:
     .byte $00,$04,$00,$12,$00,$13,$00,$03,$C0,$04,$C0,$12,$C0,$13,$C0
-B1_8795:
+ShotPosByAngle:
     LDY zp_C7
     JSR SinLookup
     STA tmp_a
@@ -5497,7 +5497,7 @@ B1_BE98:
     STA scroll_y_lo
     STA scroll_y_hi
     STA ram_038A
-    JSR F_CEE1
+    JSR CutsceneScrollCall
     LDA #$01
     STA nmi_state
     JSR EnableNMI
@@ -5508,13 +5508,13 @@ B1_BE98:
 B1_BEC0:
     JSR WaitForNMI
     DEC ram_038A
-    JSR F_CEE1
+    JSR CutsceneScrollCall
     LDA fade_dir
     BNE B1_BEC0
 B1_BECD:
     JSR WaitForNMI
     DEC ram_038A
-    JSR F_CEE1
+    JSR CutsceneScrollCall
     JSR ReadControllerBank0
     LDA buttons_pressed
     AND #$0B

@@ -4065,7 +4065,7 @@ B5_A295:
     BNE B5_A2B1
     LDA ram_01B9
     STA tmp_a
-    JSR B5_AA15
+    JSR SubClamp01B8
     LDA #$38
     JSR PlaySfxNoise
     LDA #$1E
@@ -4902,7 +4902,7 @@ B5_A9DB:
     STA shot_state_1
     STA shot_E3_1
     RTS
-B5_AA15:
+SubClamp01B8:
     LDA ram_01B8
     SEC
     SBC tmp_a
@@ -5027,9 +5027,9 @@ Ent4D_Update:
     LSR a
     LSR a
     STA ent_param,x
-    JSR B5_AB0E
+    JSR EntUnpackNibbles
     JMP EntityDeltaFromCentre
-B5_AB0E:
+EntUnpackNibbles:
     LDA ram_06C0,x
     ASL a
     ASL a
@@ -5288,7 +5288,7 @@ Ent52_Update:
     CLC
     ADC ptr_lo
     STA ent_angle,x
-    JMP B5_AB0E
+    JMP EntUnpackNibbles
 Ent53_Update:
     JSR Ent_CheckPlayerOverlap
     JSR Ent_HurtOnTouch
@@ -6380,7 +6380,7 @@ B5_B701:
     JSR PlaySfxSq2
     LDA #$0A
     STA tmp_a
-    JSR B5_AA15
+    JSR SubClamp01B8
     LDA #$8C
     STA ent_type,x
     LDA #$00

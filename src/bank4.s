@@ -835,7 +835,7 @@ B4_AC61:
     STA ram_0389
     LDA #$07
     STA palette_set
-    JSR F_CEE1
+    JSR CutsceneScrollCall
     LDY #$00
 B4_ACA1:
     LDA #$78
@@ -867,7 +867,7 @@ B4_ACD8:
     JSR WaitForNMI
     INC ram_0389
     INC ram_038A
-    JSR F_CEE1
+    JSR CutsceneScrollCall
     LDA fade_dir
     BNE B4_ACD8
 B4_ACE8:
@@ -879,7 +879,7 @@ B4_ACE8:
     STA ram_0389
 B4_ACF5:
     INC ram_038A
-    JSR F_CEE1
+    JSR CutsceneScrollCall
     LDX #$00
     LDA frame_counter
     AND #$78
@@ -918,7 +918,7 @@ B4_AD30:
 B4_AD39:
     JSR WaitForNMI
     INC ram_038A
-    JSR F_CEE1
+    JSR CutsceneScrollCall
     LDA fade_dir
     BNE B4_AD39
     JSR RenderOffAndWait
@@ -1208,7 +1208,7 @@ GameState06:
 GameState0C:
     LDA #$03
     STA camera_mode
-    JSR B4_B515
+    JSR StateDispatch_0735
 B4_AFF4:
     RTS
 GameState09:
@@ -1340,7 +1340,7 @@ B4_B0F1:
     STA tmp_a
     LDA #$00
     STA tmp_b
-    JMP B4_B2D9
+    JMP SpawnEffect33
 B4_B109:
     LDA #$0A
     STA tmp_b
@@ -1354,7 +1354,7 @@ B4_B10D:
 B4_B11B:
     LDA #$01
     STA tmp_c
-    JSR B4_BD3D
+    JSR AddToRam01A8
     LDA #$0A
     STA tmp_c
     LDA #$00
@@ -1394,7 +1394,7 @@ B4_B14D:
     STA tmp_a
     LDA #$28
     STA tmp_b
-    JSR B4_B2D9
+    JSR SpawnEffect33
 B4_B170:
     LDA ram_01AA
     CMP #$3C
@@ -1556,7 +1556,7 @@ GameState0B_Sequence:
     .res 8, $14
     .byte $15,$15,$FF,$15,$15,$15,$15,$15,$15,$15,$15,$15,$14,$14,$15,$15
     .byte $14,$00,$60
-B4_B2D9:
+SpawnEffect33:
     .byte $A5,$53,$48,$A5,$54,$48,$A9,$04,$85,$54,$20,$4E,$BC,$A9,$32,$8D
     .byte $A0,$04,$A9,$52,$8D,$D0,$04,$A9,$00,$8D,$00,$05,$A9,$65,$8D,$30
     .byte $05,$A9,$00,$8D,$60
@@ -1619,7 +1619,7 @@ B4_B36B:
     STA ent_y_hi,y
 B4_B37F:
     LDA #$06
-    JSR B4_B40E
+    JSR AimedRandomEffect
     ASL a
     ASL a
     ASL a
@@ -1665,7 +1665,7 @@ B4_B3C3:
     SBC #$00
     STA ent_y_hi,y
     LDA #$04
-    JSR B4_B40E
+    JSR AimedRandomEffect
     ASL a
     ASL a
     CLC
@@ -1691,7 +1691,7 @@ B4_B408:
 B4_B40A:
     STA ram_073E
     RTS
-B4_B40E:
+AimedRandomEffect:
     STA zp_73
     LDA ptr_lo
     PHA
@@ -1822,7 +1822,7 @@ SetSpawnAbovePlayer:
     LDA zp_92
     STA zp_99
     RTS
-B4_B515:
+StateDispatch_0735:
     LDA ram_0735
     ASL a
     TAY
@@ -2087,7 +2087,7 @@ B4_B728:
     STA ram_01B7
     JMP B4_B71C
 B4_B73B:
-    JSR F_CF06
+    JSR DrawQueuedBlock
     LDA ram_01BA
     BNE B4_B71C
     LDA #$05
@@ -2121,7 +2121,7 @@ B4_B77C:
     LDA fade_dir
     BNE B4_B77C
     JSR RenderOffAndWait
-    JSR F_C956
+    JSR ClearOAMAndLoadSprites
     JSR DisableNMI
     JSR SilenceSound
     LDA #$09
@@ -2625,7 +2625,7 @@ B4_BD39:
     DEY
     BPL B4_BCD2
     RTS
-B4_BD3D:
+AddToRam01A8:
     LDA ram_01A8
     CLC
     ADC tmp_c
@@ -2644,7 +2644,7 @@ Tbl_B4_BD5E:
 Tbl_B4_BD73:
     .byte $FF,$22,$0A,$84,$45,$4D,$49,$54,$FF,$22,$49,$88,$53,$44,$4E,$4F
     .byte $4D,$41,$49,$44,$FF,$22,$8A,$85,$53,$45,$56,$49,$4C,$00
-B4_BD91:
+QueueTextAndStartFade:
     LDA #$4F
     STA tmp_c
     LDA #$BD
@@ -2657,7 +2657,7 @@ B4_BD91:
     LDA #$00
     STA ram_038A
     STA zp_74
-    JSR B4_BEDF
+    JSR FadeStepBEDF
     JMP WaitForNMI
 ; Tbl_B4_BDB2: 23 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B4_BDB2:
@@ -2679,7 +2679,7 @@ Tbl_B4_BE19:
     .byte $FF,$23,$66,$94
     .byte "ODNETNIN YB DESNECIL"   ; reads: "LICENSED BY NINTENDO"
     .byte $00
-B4_BE32:
+InitEndScreen:
     JSR SilenceSound
     LDA #$08
     STA palette_set
@@ -2728,7 +2728,7 @@ B4_BE47:
     STA nmi_state
 B4_BE99:
     JSR WaitForNMI
-    JSR B4_BEE7
+    JSR FadeStepBEE7
     DEC entity_tick
     LDA entity_tick
     LSR a
@@ -2745,7 +2745,7 @@ B4_BEB7:
 B4_BEB9:
     JSR WaitForNMI
     JSR ReadControllerBank0
-    JSR B4_BEE7
+    JSR FadeStepBEE7
     DEC entity_tick
     LDA entity_tick
     LSR a
@@ -2758,12 +2758,12 @@ B4_BEB9:
 ; Tbl_B4_BED7: 8 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B4_BED7:
     .byte $14,$00,$14,$2D,$00,$00,$00,$00
-B4_BEDF:
+FadeStepBEDF:
     INC zp_74
     LDA zp_74
     LSR a
     STA ram_038A
-B4_BEE7:
+FadeStepBEE7:
     LDA #$7F
     STA zp_75
     LDA #$7C

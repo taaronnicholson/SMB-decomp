@@ -402,7 +402,7 @@ F_C5E1:
     JSR LoadBank0Gfx
     LDA #$04
     JSR SwitchBank
-    JSR B4_BE32
+    JSR InitEndScreen
     LDA #$E8
     STA ram_0746
     LDA #$03
@@ -488,7 +488,7 @@ F_C66C:
 F_C6CC:
     JSR LoadArea
     JSR InitAnimTileState
-    JSR F_C956
+    JSR ClearOAMAndLoadSprites
     LDA #$02
     JSR SwitchBank
     JSR ResetLevelState
@@ -534,7 +534,7 @@ F_C710:
     JSR UpdateTouchKind
     LDA #$02
     JSR SwitchBank
-    JSR B2_B89D
+    JSR CheckRam01A8Threshold
     LDA #$01
     JSR SwitchBank
     JSR UpdateShots
@@ -544,7 +544,7 @@ F_C710:
     JSR Sound_Update
     LDA #$00
     JSR SwitchBank
-    JSR B0_BF8A
+    JSR FadeTableStep
     JSR F_FA6B
     JMP MainLoop
 F_C763:
@@ -708,7 +708,7 @@ F_C882:
 F_C89F:
     LDA #$02
     JSR SwitchBank
-    JSR B2_9E00
+    JSR SetPlayerFacingBit
     LDA #$00
     JSR SwitchBank
     JSR FlushPPUBuffer
@@ -811,7 +811,7 @@ F_C93F:
     INX
     BNE F_C93F
     RTS
-F_C956:
+ClearOAMAndLoadSprites:
     JSR ClearOAMBuffer
 F_C959:
     LDY #$06
@@ -1409,7 +1409,7 @@ F_CD74:
     JSR SaveScrollAndClearScreen
     LDA #$04
     JSR SwitchBank
-    JSR B4_BD91
+    JSR QueueTextAndStartFade
     LDA #$02
     JSR SwitchBank
     JSR DrawScoreAndBalloons
@@ -1417,7 +1417,7 @@ F_CD9A:
     JSR WaitForNMI
     LDA #$04
     JSR SwitchBank
-    JSR B4_BEDF
+    JSR FadeStepBEDF
     LDA #$00
     JSR SwitchBank
     JSR ReadController
@@ -1435,7 +1435,7 @@ F_CDC2:
     JSR WaitForNMI
     LDA #$04
     JSR SwitchBank
-    JSR B4_BEDF
+    JSR FadeStepBEDF
     LDA #$00
     JSR SwitchBank
     JSR ReadController
@@ -1446,12 +1446,12 @@ F_CDC2:
 F_CDDD:
     LDA #$04
     JSR SwitchBank
-    JSR B4_BEDF
+    JSR FadeStepBEDF
     LDA fade_dir
     BNE F_CDDD
     LDA #$00
     JSR SwitchBank
-    JSR B0_B5FB
+    JSR RestoreScrollAndRedraw
     LDX tileset_id
     LDA Tbl_B0_8C95,x
     JSR SwitchBankKeepX
@@ -1588,7 +1588,7 @@ F_CED8:
     LDX #$03
     LDA #$BF
     JMP FarCall
-F_CEE1:
+CutsceneScrollCall:
     LDA #$78
     STA zp_75
     LDY #$04
@@ -1610,7 +1610,7 @@ FarCall:
 ; Tbl_F_CF02: 4 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_CF02:
     .byte $68,$4C,$0D,$C9
-F_CF06:
+DrawQueuedBlock:
     LDA #$3E
     STA tmp_c
     LDA #$BC
@@ -1826,11 +1826,11 @@ LoadArea:
     JSR ClearPpu_1F80_0F80
     LDA #$02
     JSR SwitchBank
-    JSR B2_B4A7
+    JSR WriteTileFrame_14D0
     LDA current_area
     CMP #$04
     BEQ F_D09F
-    JSR B2_AF27
+    JSR WriteTiles_1432
 F_D09F:
     LDA #$00
     JSR SwitchBank
@@ -4973,7 +4973,7 @@ F_E731:
 F_E734:
     LDA #$06
     JSR SwitchBank
-    JSR B6_BA04
+    JSR PlayerAttackInput
     LDA player_y_lo
     STA tmp_c
     LDA player_y_hi
@@ -6267,7 +6267,7 @@ F_F04C:
     BNE F_F04C
     JSR RenderOffAndWait
     JSR DisableNMI
-    JSR F_C956
+    JSR ClearOAMAndLoadSprites
     LDA #$09
     STA player_state
     LDA shot_state
@@ -7115,7 +7115,7 @@ Tbl_F_F69F:
     .byte $D7
 SetCollectedFlag:
     STX saved_x
-    JSR F_F6E0
+    JSR MapPtrToTileCoords
     LDA BitMask,x
     ORA collected_flags,y
     STA collected_flags,y
@@ -7128,13 +7128,13 @@ GetCollectibleBit:
     LDX #$0F
 F_F6D3:
     CMP Tbl_F_F6C1,x
-    BEQ F_F6E0
+    BEQ MapPtrToTileCoords
     DEX
     BPL F_F6D3
     PLA
     PLA
     JMP F_F688
-F_F6E0:
+MapPtrToTileCoords:
     LDA tmp_c
     PHA
     LDA tmp_d
@@ -7338,7 +7338,7 @@ F_F843:
     STA ptr_hi
     LDA #$C9
     STA tmp_a
-    JSR B3_BEA9
+    JSR OpenBlockReward
     PLA
     JMP SwitchBankKeepX
 PlayerState19:
@@ -8158,7 +8158,7 @@ Decompress:
     STA tmp_08
     STA tmp_a
 F_FE03:
-    JSR F_FF26
+    JSR Decomp_ReadBitsB
     LDA tmp_08
     JSR Decomp_PutByte
     JSR Decomp_NextDst
@@ -8192,7 +8192,7 @@ F_FE3C:
     BCS F_FE41
     JMP F_FE4E
 F_FE41:
-    JSR F_FF80
+    JSR Decomp_ReadBitsC
     CLC
     LDA tmp_08
     CMP #$00
@@ -8204,7 +8204,7 @@ F_FE4E:
 F_FE52:
     LDA tmp_08
     STA tmp_b
-    JSR F_FEF5
+    JSR Decomp_ReadBitsA
     LDA ptr_lo
     PHA
     LDA ptr_hi
@@ -8242,7 +8242,7 @@ F_FE96:
     STA ptr_lo
     JMP F_FE0E
 F_FE9F:
-    JSR F_FF26
+    JSR Decomp_ReadBitsB
     CLC
     LDA tmp_08
     CMP #$00
@@ -8258,7 +8258,7 @@ F_FEAA:
 F_FEB6:
     LDA tmp_08
     STA tmp_b
-    JSR F_FEF5
+    JSR Decomp_ReadBitsA
     LDA ptr_lo
     PHA
 F_FEC0:
@@ -8289,7 +8289,7 @@ F_FEDB:
     JMP F_FEDB
 F_FEF2:
     JMP F_FE7F
-F_FEF5:
+Decomp_ReadBitsA:
     LDA #$00
     STA tmp_08
     ASL tmp_a
@@ -8316,7 +8316,7 @@ F_FF1B:
     EOR #$FF
     STA tmp_08
     JSR Decomp_PutByte
-F_FF26:
+Decomp_ReadBitsB:
     ASL tmp_a
     BEQ F_FF2D
     JMP F_FF36
@@ -8367,7 +8367,7 @@ F_FF75:
     JSR Decomp_NextSrc
 F_FF7E:
     ROL tmp_08
-F_FF80:
+Decomp_ReadBitsC:
     ASL tmp_a
     BEQ F_FF87
     JMP F_FF90

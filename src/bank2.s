@@ -583,7 +583,7 @@ B2_9D88:
     .byte $80,$00,$80,$00,$80,$00,$80,$00,$A2,$00,$00,$00,$00,$00,$00,$00
     .byte $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$F4,$00,$00,$00
     .byte $80,$00,$80,$00,$80,$00,$80,$00
-B2_9E00:
+SetPlayerFacingBit:
     LDA player_facing
     AND #$01
     STA jump_ptr_lo
@@ -2275,7 +2275,7 @@ SetPPUAddr_1432:
     LDA #$32
     STA PPUADDR
     RTS
-B2_AF27:
+WriteTiles_1432:
     JSR SetPPUAddr_1432
     LDA #$B0
     STA PPUDATA
@@ -2802,9 +2802,9 @@ B2_B238:
     JSR SetPPUAddr_1D70
     JMP B2_B494
     JSR SetPPUAddr_1D20
-    JSR B2_B49F
+    JSR WriteTile69AndScroll
     JSR SetPPUAddr_1D70
-    JMP B2_B49F
+    JMP WriteTile69AndScroll
 SetPPUAddr_1D20:
     LDA PPUSTATUS
     LDA #$1D
@@ -2832,11 +2832,11 @@ B2_B494:
     STA PPUDATA
     JMP SetScroll
     JSR SetPPUAddr_1E40
-B2_B49F:
+WriteTile69AndScroll:
     LDA #$69
     STA PPUDATA
     JMP SetScroll
-B2_B4A7:
+WriteTileFrame_14D0:
     JSR SetPPUAddr_14D0
     LDY #$00
 B2_B4AC:
@@ -3247,7 +3247,7 @@ B2_B88F:
     STA onetime_flags
     STA ram_0734
     RTS
-B2_B89D:
+CheckRam01A8Threshold:
     LDA ram_0736
     BNE B2_B8AF
     LDA ram_01A8

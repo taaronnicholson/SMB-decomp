@@ -578,3 +578,36 @@ name f F8B1 AddLives                 ; lives += tmp_c, capped at 99
 name f F8C4 SubLives                 ; lives -= tmp_c
 name f F8CE SubRam01AA               ; ram_01AA -= tmp_c
 name f F8D8 AddRam01AA               ; ram_01AA += tmp_c
+
+; naming pass 14 (remaining JSR targets; neutral names where the purpose is not yet clear)
+name 0 B5B3 CopyPpuTileVia2007      ; reads a PPU tile at ptr and rewrites it at (tmp_c) (read-modify-write through PPUDATA), looping tmp_b rows
+name 0 B5FB RestoreScrollAndRedraw  ; render off, restores the scroll saved by SaveScrollAndClearScreen and redraws the screen
+name 0 B636 SetBlockSource_1530     ; tmp_c/tmp_d = $1530
+name 0 BF8A FadeTableStep           ; steps through Tbl_B0_BFBB with zp_48/zp_49 (7-bit counter) while the PPU buffer has room
+name 1 8795 ShotPosByAngle          ; places a shot from the player using SinLookup/CosLookup of zp_C7 scaled by zp_CC
+name 2 9E00 SetPlayerFacingBit      ; copies player_facing bit 0 into zp_4F bit 0, returns early while zp_50 is set and the PPU buffer is busy
+name 2 AF27 WriteTiles_1432         ; writes a fixed tile strip at PPU $1432
+name 2 B49F WriteTile69AndScroll    ; writes tile $69 to PPUDATA and resets the scroll
+name 2 B4A7 WriteTileFrame_14D0     ; writes the 30-byte frame Tbl_B2_B4BA to PPU $14D0
+name 2 B89D CheckRam01A8Threshold   ; compares ram_01A8/01A9 with $0257 unless ram_0736 is set
+name 3 BEA9 OpenBlockReward         ; redraws the block as tile $D7, sets the collected flag, plays sfx $28 and records the reward from Tbl_B3_BE38
+name 4 B2D9 SpawnEffect33           ; spawns the type $33 effect at the fixed screen position used by GameState0B
+name 4 B40E AimedRandomEffect       ; multiplies/divides random values to place an effect (uses ScaledMultiply and DivideByTmpA)
+name 4 B515 StateDispatch_0735      ; jumps through a word table indexed by ram_0735
+name 4 BD3D AddToRam01A8            ; 16-bit ram_01A8/01A9 += tmp_c
+name 4 BD91 QueueTextAndStartFade   ; queues a text block, sets the fade counters and runs B4_BEDF
+name 4 BE32 InitEndScreen           ; silences sound, palette set 8, fills attribute bytes at $23D0 with $55, enables NMI
+name 4 BEDF FadeStepBEDF            ; zp_74 counts up; ram_038A = zp_74/2, then falls into BEE7
+name 4 BEE7 FadeStepBEE7            ; sets zp_75..zp_78 and tmp_b..tmp_d for a screen-fade effect and runs it
+name 5 AA15 SubClamp01B8            ; ram_01B8 = max(0, ram_01B8 - tmp_a)
+name 5 AB0E EntUnpackNibbles        ; splits ram_06C0/06F0 into high/low nibbles in tmp_a..tmp_d
+name 6 817B SoundTickIfPlaying      ; returns at once unless snd_playing is set
+name 6 8AD7 SoundUpdateChannels     ; updates the noise generator, then the sfx square 1 and 2 channels
+name 6 BA04 PlayerAttackInput       ; tests the B button (buttons & $20): dive/peck handling for the player
+name f C956 ClearOAMAndLoadSprites  ; clears OAM, far-calls bank 6 $BF32, then fills OAM with a fixed sprite column
+name f CEE1 CutsceneScrollCall      ; sets zp_75 = $78 and far-calls bank 4 $BEEB
+name f CF06 DrawQueuedBlock         ; sets tmp_c/d = $BC3E, ptr_lo = $11 and, if ram_01BA is set, runs bank 4 B4_BAE7 and decrements ram_01BA
+name f F6E0 MapPtrToTileCoords      ; converts a map pointer in ptr to tile X/Y using map_ptr and map_log2_width, preserving tmp/ptr
+name f FEF5 Decomp_ReadBitsA        ; decompressor helper: pulls bits from tmp_a/(ptr) into tmp_08
+name f FF26 Decomp_ReadBitsB
+name f FF80 Decomp_ReadBitsC
