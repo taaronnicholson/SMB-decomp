@@ -218,7 +218,7 @@ B1_81C3:
     ADC #$00
     STA shot_x_hi,x
 B1_81D0:
-    JSR B1_83FB
+    JSR Shot_TileHit
     LDA shot_state,x
     EOR #$01
     STA shot_state,x
@@ -257,7 +257,7 @@ B1_8213:
     STA shot_x_lo,x
     STA shot_x_hi,x
 B1_8219:
-    JSR B1_83FB
+    JSR Shot_TileHit
     LDA shot_state,x
     EOR #$01
     STA shot_state,x
@@ -296,7 +296,7 @@ B1_825C:
     STA shot_y_lo,x
     STA shot_y_hi,x
 B1_8262:
-    JSR B1_83FB
+    JSR Shot_TileHit
     LDA shot_state,x
     EOR #$02
     STA shot_state,x
@@ -507,12 +507,12 @@ B1_83E4:
     ADC #$00
     STA shot_y_hi,x
 B1_83F1:
-    JSR B1_83FB
+    JSR Shot_TileHit
     LDA shot_state,x
     EOR #$02
     STA shot_state,x
     RTS
-B1_83FB:
+Shot_TileHit:
     JSR GetMapTile
     CMP #$DA
     BNE B1_8416

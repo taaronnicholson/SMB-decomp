@@ -106,7 +106,7 @@ out += ['ram 074A snd_playing', 'ram 074B snd_sfx_sq1', 'ram 074C snd_sfx_sq2', 
         'entry 6 8000', 'entry 6 800C', 'entry 6 800F', 'entry 6 8012',
         'name 6 8000 Sound_PlaySong      ; jump-table entry: A = song number (0-8), 9-byte header per song in SongTable',
         'name 6 8015 Sound_PlaySongImpl',
-        'name 6 80EA Sound_Silence', 'name 6 80DC Sound_Resume',
+        'name 6 8006 Sound_Silence', 'name 6 80EA Sound_SilenceImpl', 'name 6 8009 Sound_Resume', 'name 6 80DC Sound_ResumeImpl',
         'name 6 81A5 Snd_Sq1_Step', 'name 6 83A0 Snd_Sq2_Step', 'name 6 859B Snd_Tri_Step', 'name 6 8733 Snd_Noise_Step',
         'name 6 8342 Snd_Sq1_Effects', 'name 6 853D Snd_Sq2_Effects', 'name 6 86FC Snd_Tri_Effects', 'name 6 886B Snd_Noise_Effects']
 open(os.path.join(ROOT, 'tools/hints_sound.txt'), 'w').write('\n'.join(out) + '\n')

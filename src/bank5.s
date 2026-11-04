@@ -5530,7 +5530,7 @@ Ent74_Update:
     PHA
     LDA entity_tick
     AND #$03
-    BNE B5_B181
+    BNE Ent_PatrolTail
     LDA #$01
     STA tmp_a
     JSR Ent_MoveXLeft
@@ -5539,7 +5539,7 @@ Ent74_Update:
 B5_B147:
     LDA #$75
     STA ent_type,x
-    JMP B5_B181
+    JMP Ent_PatrolTail
 B5_B14F:
     LDA zp_77
     STA ptr_lo
@@ -5552,7 +5552,7 @@ B5_B14F:
     BEQ B5_B147
     LDA ent_x_lo,x
     AND #$0F
-    BEQ B5_B181
+    BEQ Ent_PatrolTail
     LDA ptr_lo
     CLC
     ADC map_width
@@ -5565,7 +5565,7 @@ B5_B14F:
     BEQ B5_B147
     CMP #$06
     BEQ B5_B147
-B5_B181:
+Ent_PatrolTail:
     PLA
     STA tmp_d
     PLA
@@ -5619,7 +5619,7 @@ Ent75_Update:
     LDA entity_tick
     AND #$03
     BEQ B5_B1EC
-    JMP B5_B181
+    JMP Ent_PatrolTail
 B5_B1EC:
     LDA #$01
     STA tmp_a
@@ -5629,7 +5629,7 @@ B5_B1EC:
 B5_B1F8:
     LDA #$74
     STA ent_type,x
-    JMP B5_B181
+    JMP Ent_PatrolTail
 B5_B200:
     LDA zp_77
     STA ptr_lo
@@ -5658,7 +5658,7 @@ B5_B200:
     CMP #$04
     BEQ B5_B1F8
 B5_B236:
-    JMP B5_B181
+    JMP Ent_PatrolTail
 ; Tbl_B5_B239: 4 bytes, read by B5_B1CB
 Tbl_B5_B239:
     .byte $00,$01,$02,$01

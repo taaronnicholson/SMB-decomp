@@ -7,10 +7,10 @@ Sound_PlaySong:
     JMP Sound_PlaySongImpl
 Sound_Update:
     JMP B6_8115
-B6_8006:
-    JMP Sound_Silence
-B6_8009:
-    JMP Sound_Resume
+Sound_Silence:
+    JMP Sound_SilenceImpl
+Sound_Resume:
+    JMP Sound_ResumeImpl
 Sound_PlaySfxSq1:
     JMP Sound_PlaySfxSq1Impl
 Sound_PlaySfxSq2:
@@ -19,7 +19,7 @@ Sound_PlaySfxNoise:
     JMP Sound_PlaySfxNoiseImpl
 Sound_PlaySongImpl:
     TAY
-    JSR Sound_Silence
+    JSR Sound_SilenceImpl
     LDA #$00
     CLC
 B6_801C:
@@ -106,7 +106,7 @@ B6_8028:
     STX snd_song_ended
     INC snd_playing
     RTS
-Sound_Resume:
+Sound_ResumeImpl:
     LDA snd_song_ended
     BEQ B6_80E9
     LDA snd_playing
@@ -114,7 +114,7 @@ Sound_Resume:
     INC snd_playing
 B6_80E9:
     RTS
-Sound_Silence:
+Sound_SilenceImpl:
     LDA #$00
     STA snd_playing
     STA snd_sfx_sq1
@@ -405,7 +405,7 @@ B6_8334:
     STY snd_song_ended
     PLA
     PLA
-    JMP B6_8006
+    JMP Sound_Silence
 B6_8340:
     BEQ B6_8340
 Snd_Sq1_Effects:
@@ -659,7 +659,7 @@ B6_852F:
     STY snd_song_ended
     PLA
     PLA
-    JMP B6_8006
+    JMP Sound_Silence
 B6_853B:
     BEQ B6_853B
 Snd_Sq2_Effects:
@@ -882,7 +882,7 @@ B6_86EE:
     STY snd_song_ended
     PLA
     PLA
-    JMP B6_8006
+    JMP Sound_Silence
 B6_86FA:
     BEQ B6_86FA
 Snd_Tri_Effects:
@@ -1067,7 +1067,7 @@ B6_885D:
     STY snd_song_ended
     PLA
     PLA
-    JMP B6_8006
+    JMP Sound_Silence
 B6_8869:
     BEQ B6_8869
 Snd_Noise_Effects:

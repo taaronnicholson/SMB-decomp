@@ -433,3 +433,5 @@ name 1 813E ShotDispatch            ; X = slot: jumps through the 15-entry handl
 name 1 8982 ShotOffscreenCheck      ; ends the projectile when it leaves the screen window
 ram 004E player_draw_frame          ; frame index tested by DrawPlayer
 ram 0065 player_frame               ; sprite frame set by the player states
+name 1 83FB Shot_TileHit            ; projectile hit a tile: tile $DA (the peck switch) toggles via PeckSwitchToggle and the projectile ends
+name 5 B181 Ent_PatrolTail          ; shared tail of types $74/$75: restores tmp_c/tmp_d, overlap tests and the player-touch check

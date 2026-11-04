@@ -1410,7 +1410,7 @@ F_CE05:
     STA palette_set
     LDA #$06
     JSR SwitchBank
-    JSR B6_8009
+    JSR Sound_Resume
     JSR EnableNMI
     JSR WaitForNMI
     INC fade_dir
@@ -1452,7 +1452,7 @@ SilenceSound:
     PHA
     LDA #$06
     JSR SwitchBank
-    JSR B6_8006
+    JSR Sound_Silence
     PLA
     JMP SwitchBank
 PlaySfxSq1:

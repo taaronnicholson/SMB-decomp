@@ -282,6 +282,7 @@ speculative decode), and nearly all the rest is classified data. The data falls 
 - **labelled but not decoded** (about 7%, `Tbl_<bank>_<addr>` blobs from `tools/gen_table_hints.py`, cache `tools/tables.json`): 210 small tables, each
   named after where it starts and annotated with the routines that read it (about 4% have a named reader); their formats have not been worked out.
 `GAPS=20 python3 -I tools/decomp.py` reports what is still unclassified (under 0.1%); `make tables` re-runs the table pass after new code is traced.
+About 360 routines and 370 RAM symbols still have address-based names (`python3 -I tools/rank_unnamed.py` ranks them by use for the next naming pass).
 Speculatively found code may include a few false positives (harmless for the byte-exact build; labels are provisional).
 
 Known unknowns: the meaning of most entity handlers beyond `docs/entity_handlers.md`, the 3-byte kind field of special-tile
