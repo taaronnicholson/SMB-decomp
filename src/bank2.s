@@ -2236,7 +2236,7 @@ B2_AE25:
     JSR B2_AE46
     LDX #$00
 B2_AE38:
-    LDA Tbl_B2_AE94,x
+    LDA Anim_TileFrames,x
     STA PPUDATA
     INX
     CPX #$20
@@ -2257,8 +2257,8 @@ Tbl_B2_AE54:
 Tbl_B2_AE74:
     .byte $03,$3D,$48,$A0,$8F,$93,$67,$47,$00,$03,$3F,$7F,$70,$6F,$1D,$3F
     .byte $C6,$81,$00,$70,$E9,$CE,$E4,$E2,$38,$FE,$FF,$8F,$16,$F0,$B8,$FC
-; Tbl_B2_AE94: 133 bytes, read by B2_AE38
-Tbl_B2_AE94:
+; Anim_TileFrames: 32-byte tile frames copied to PPUDATA by B2_AE38 (animated background tiles)
+Anim_TileFrames:
     .byte $63,$B9,$60,$0E,$97,$73,$27,$47,$1C,$7F,$FF,$F1,$68,$0F,$1D,$3F
     .byte $C0,$BC,$02,$01,$F1,$C9,$E6,$E2,$00,$C0,$FC,$FE,$0E,$F6,$B8,$FC
     .byte $20,$ED,$AE,$A2,$00,$BD,$FB,$AE,$8D,$07,$20,$E8,$E0,$0A,$D0,$F5

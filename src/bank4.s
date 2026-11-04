@@ -1086,15 +1086,15 @@ B4_AEA2:
     AND #$3F
     STA zp_C5
     LDY ptr_lo
-    LDA Tbl_B4_AEB6,y
+    LDA GameState02_FrameTable,y
     BMI B4_AEB5
     CLC
     ADC #$11
     STA zp_47
 B4_AEB5:
     RTS
-; Tbl_B4_AEB6: 64 bytes, read by B4_AEA2
-Tbl_B4_AEB6:
+; GameState02_FrameTable: indexed by the frame counter
+GameState02_FrameTable:
     .byte $01,$FF,$02,$FE,$01,$FF,$02,$FE,$01,$FF,$02,$01,$00,$FF,$FF,$FF
     .byte $FF,$FF,$FF,$FF,$FF,$FF,$FF,$01,$FF,$02,$FE,$01,$FF,$02,$FE,$01
     .byte $FF,$02,$01,$00,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
@@ -1522,7 +1522,7 @@ B4_B277:
     RTS
 B4_B278:
     LDY zp_D1
-    LDA Tbl_B4_B2BE,y
+    LDA GameState0B_Sequence,y
     BEQ B4_B277
     INC zp_D1
     CMP #$FF
@@ -1551,8 +1551,8 @@ B4_B278:
 B4_B2BB:
     STA zp_47
     RTS
-; Tbl_B4_B2BE: 64 bytes, read by B4_B278
-Tbl_B4_B2BE:
+; GameState0B_Sequence: indexed by zp_D1
+GameState0B_Sequence:
     .res 8, $14
     .byte $15,$15,$FF,$15,$15,$15,$15,$15,$15,$15,$15,$15,$14,$14,$15,$15
     .byte $14,$00,$60
