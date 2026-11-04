@@ -3066,7 +3066,7 @@ DrawDigitsToBuffer:
     INX
     LDY #$05
 @B2_B707:
-    LDA ram_038C,y
+    LDA digit_buffer,y
     CLC
     ADC #$C4
     STA ppu_buffer,x
@@ -3081,7 +3081,7 @@ DrawDigitsToBuffer:
     JSR BinaryToDigits
     LDY #$00
 @B2_B723:
-    LDA ram_038C,y
+    LDA digit_buffer,y
     CLC
     ADC #$C4
     STA PPUDATA
@@ -3093,7 +3093,7 @@ BinaryToDigits:
     LDY #$00
 @B2_B734:
     LDA #$00
-    STA ram_038C,y
+    STA digit_buffer,y
     TYA
     ASL a
     ASL a
@@ -3117,10 +3117,10 @@ BinaryToDigits:
     LDA tmp_a
     SBC DecimalPlaceValues,x
     STA tmp_a
-    LDA ram_038C,y
+    LDA digit_buffer,y
     CLC
     ADC #$01
-    STA ram_038C,y
+    STA digit_buffer,y
     JMP @B2_B73D
 @B2_B771:
     INY

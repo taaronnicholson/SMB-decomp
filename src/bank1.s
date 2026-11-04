@@ -929,10 +929,10 @@ B1_8679:
     BCS @B1_86DC
     INC tmp_a
 @B1_86DC:
-    LDA zp_C7
+    LDA shot_angle
     CLC
     ADC tmp_a
-    STA zp_C7
+    STA shot_angle
     JMP @B1_870D
 @B1_86E6:
     LDA tmp_b
@@ -953,10 +953,10 @@ B1_8679:
     BCS @B1_8706
     INC tmp_a
 @B1_8706:
-    LDA zp_C7
+    LDA shot_angle
     SEC
     SBC tmp_a
-    STA zp_C7
+    STA shot_angle
 @B1_870D:
     LDA tmp_a
     STA zp_C8
@@ -1027,7 +1027,7 @@ Tbl_B1_8785:
 B1_8786:
     .byte $00,$04,$00,$12,$00,$13,$00,$03,$C0,$04,$C0,$12,$C0,$13,$C0
 ShotPosByAngle:
-    LDY zp_C7
+    LDY shot_angle
     JSR SinLookup
     STA tmp_a
     JSR CosLookup
@@ -1440,7 +1440,7 @@ DrawEntity:
     ADC tmp_d
     BNE @B1_8B40
     LDA sprite_y_tmp
-    STA ram_0203,x
+    STA oam_x,x
     LDA (ptr_lo),y
     INY
     CLC
@@ -1454,10 +1454,10 @@ DrawEntity:
     CLC
     ADC (ptr_lo),y
     INY
-    STA ram_0201,x
+    STA oam_tile,x
     LDA (ptr_lo),y
     INY
-    STA ram_0202,x
+    STA oam_attr,x
     LDA sprite_y_tmp
     STA oam_buffer,x
     INX
@@ -1546,7 +1546,7 @@ DrawEntity:
     ADC tmp_d
     BNE @B1_8BF5
     LDA sprite_y_tmp
-    STA ram_0203,x
+    STA oam_x,x
     LDA (ptr_lo),y
     INY
     CLC
@@ -1560,11 +1560,11 @@ DrawEntity:
     CLC
     ADC (ptr_lo),y
     INY
-    STA ram_0201,x
+    STA oam_tile,x
     LDA (ptr_lo),y
     INY
     EOR #$40
-    STA ram_0202,x
+    STA oam_attr,x
     LDA sprite_y_tmp
     STA oam_buffer,x
     INX
@@ -1650,7 +1650,7 @@ DrawEntity:
     ADC tmp_d
     BNE @B1_8CB0
     LDA sprite_y_tmp
-    STA ram_0203,x
+    STA oam_x,x
     LDA #$00
     SEC
     SBC (ptr_lo),y
@@ -1671,11 +1671,11 @@ DrawEntity:
     CLC
     ADC (ptr_lo),y
     INY
-    STA ram_0201,x
+    STA oam_tile,x
     LDA (ptr_lo),y
     INY
     EOR #$80
-    STA ram_0202,x
+    STA oam_attr,x
     LDA sprite_y_tmp
     STA oam_buffer,x
     INX
@@ -1764,7 +1764,7 @@ DrawEntity:
     ADC tmp_d
     BNE @B1_8D72
     LDA sprite_y_tmp
-    STA ram_0203,x
+    STA oam_x,x
     LDA #$00
     SEC
     SBC (ptr_lo),y
@@ -1785,11 +1785,11 @@ DrawEntity:
     CLC
     ADC (ptr_lo),y
     INY
-    STA ram_0201,x
+    STA oam_tile,x
     LDA (ptr_lo),y
     INY
     EOR #$C0
-    STA ram_0202,x
+    STA oam_attr,x
     LDA sprite_y_tmp
     STA oam_buffer,x
     INX
@@ -5408,14 +5408,14 @@ HideSprites:
     STA oam_buffer
     STA ram_0204
     LDA #$76
-    STA ram_0203
+    STA oam_x
     LDA #$7E
     STA ram_0207
     LDA #$00
-    STA ram_0202
+    STA oam_attr
     STA ram_0206
     LDA #$D6
-    STA ram_0201
+    STA oam_tile
     LDA #$D8
     STA ram_0205
     LDA PPUSTATUS

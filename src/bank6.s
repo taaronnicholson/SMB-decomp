@@ -1421,7 +1421,7 @@ SndUpdateSfxSq1:
     LDA snd_sfx1_period_lo
     LDX snd_sfx1_add_pitch_offset
     BEQ @B6_8B6C
-    ADC ram_0751
+    ADC noise_lfsr0
 @B6_8B6C:
     STA snd_sfx1_cur_period_lo
     STA SQ1_LO
@@ -1540,7 +1540,7 @@ SndUpdateSfxSq2:
     LDA ram_07CB
     LDX ram_07D0
     BEQ @B6_8C76
-    ADC ram_0751
+    ADC noise_lfsr0
 @B6_8C76:
     STA ram_07D7
     STA SQ2_LO
@@ -1649,7 +1649,7 @@ B6_8CE5:
     LDA ram_07E1
     LDX ram_07E6
     BEQ @B6_8D68
-    ADC ram_0751
+    ADC noise_lfsr0
 @B6_8D68:
     STA ram_07ED
     AND #$0F
@@ -1682,15 +1682,15 @@ B6_8CE5:
 @B6_8DA6:
     RTS
 SoundNoiseLFSR:
-    LDA ram_0751
+    LDA noise_lfsr0
     AND #$48
     ADC #$38
     ASL a
     ASL a
-    ROL ram_0754
-    ROL ram_0753
-    ROL ram_0752
-    ROL ram_0751
+    ROL noise_lfsr3
+    ROL noise_lfsr2
+    ROL noise_lfsr1
+    ROL noise_lfsr0
     RTS
 SfxDefPtrs:
     .word SfxDef0
@@ -5309,13 +5309,13 @@ RngStep:
     EOR rng_b
     ADC rng_b
     STA rng_b
-    LDA ram_0752
-    EOR ram_0751
+    LDA noise_lfsr1
+    EOR noise_lfsr0
     ADC rng_b
     STA rng_a
-    LDA ram_0754
-    EOR ram_0753
-    ADC ram_0751
+    LDA noise_lfsr3
+    EOR noise_lfsr2
+    ADC noise_lfsr0
     EOR rng_a
     STA rng_b
     ADC rng_a

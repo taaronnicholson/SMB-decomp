@@ -408,13 +408,13 @@ Reset:
     LDA #$03
     STA ram_0747
     LDA #$FF
-    STA ram_0751
+    STA noise_lfsr0
     LDA #$80
-    STA ram_0752
+    STA noise_lfsr1
     LDA #$1B
-    STA ram_0753
+    STA noise_lfsr2
     LDA #$34
-    STA ram_0754
+    STA noise_lfsr3
 StartNewGame:
     JSR SilenceSound
     LDA #$00
@@ -3558,8 +3558,8 @@ PlayerBlinkCheck:
     BNE @F_DCA1
 @F_DCF8:
     LDA #$00
-    STA zp_16
-    STA zp_17
+    STA feet_tile_ptr_lo
+    STA feet_tile_ptr_hi
     LDA player_state
     ASL a
     TAY
@@ -4413,9 +4413,9 @@ F_E313:
     CMP #$02
     BEQ @F_E359
     LDA ptr_lo
-    STA zp_16
+    STA feet_tile_ptr_lo
     LDA ptr_hi
-    STA zp_17
+    STA feet_tile_ptr_hi
     LDA player_y_lo
     AND #$F0
     SEC
@@ -4452,9 +4452,9 @@ F_E313:
     CMP #$04
     BCS @F_E3A4
     LDA zp_73
-    STA zp_16
+    STA feet_tile_ptr_lo
     LDA zp_74
-    STA zp_17
+    STA feet_tile_ptr_hi
     LDA player_y_lo
     AND #$F0
     CLC
@@ -4482,9 +4482,9 @@ F_E313:
     AND #$01
     BEQ @F_E3CF
     LDA ptr_lo
-    STA zp_16
+    STA feet_tile_ptr_lo
     LDA ptr_hi
-    STA zp_17
+    STA feet_tile_ptr_hi
     LDA player_y_lo
     AND #$F0
     STA player_y_lo
@@ -4536,9 +4536,9 @@ F_E313:
     CMP #$04
     BCS @F_E436
     LDA zp_75
-    STA zp_16
+    STA feet_tile_ptr_lo
     LDA zp_76
-    STA zp_17
+    STA feet_tile_ptr_hi
     LDA player_y_lo
     AND #$F0
     ADC tmp_a
@@ -4601,9 +4601,9 @@ F_E313:
     CMP #$04
     BCS @F_E4B4
     LDA zp_73
-    STA zp_16
+    STA feet_tile_ptr_lo
     LDA zp_74
-    STA zp_17
+    STA feet_tile_ptr_hi
     LDA player_y_lo
     AND #$F0
     CLC
@@ -5042,9 +5042,9 @@ F_E734:
     STA ptr_lo
 @F_E7B6:
     LDA ptr_lo
-    STA zp_16
+    STA feet_tile_ptr_lo
     LDA ptr_hi
-    STA zp_17
+    STA feet_tile_ptr_hi
     LDA ptr_lo
     PHA
     LDA ptr_hi
@@ -6710,9 +6710,9 @@ F_F392:
     RTS
 UpdateTouchKind:
     JSR SwitchBankFromAC
-    LDA zp_16
+    LDA feet_tile_ptr_lo
     STA tmp_c
-    LDA zp_17
+    LDA feet_tile_ptr_hi
     STA tmp_d
     LDA zp_58
     CMP tmp_c
@@ -6817,9 +6817,9 @@ UpdateTouchKind:
 CheckHazardUnderPlayer:
     LDA player_state
     BNE F_F496
-    LDA zp_16
+    LDA feet_tile_ptr_lo
     STA ptr_lo
-    LDA zp_17
+    LDA feet_tile_ptr_hi
     STA ptr_hi
     JSR SwitchBankFromAC
     JSR GetTilePropsAtPosY
@@ -7489,19 +7489,19 @@ SpawnEffectsFromList:
     STA effect_y_lo,x
     LDA (ptr_lo),y
     INY
-    STA ram_0590,x
+    STA effect_param0,x
     LDA (ptr_lo),y
     INY
-    STA ram_05C0,x
+    STA effect_param1,x
     LDA (ptr_lo),y
     INY
-    STA ram_05F0,x
+    STA effect_param2,x
     LDA (ptr_lo),y
     INY
-    STA ram_0620,x
+    STA effect_param3,x
     LDA (ptr_lo),y
     INY
-    STA ram_0650,x
+    STA effect_param4,x
     LDA #$FF
     STA ram_0160,x
     STA ram_0190,x
@@ -7534,7 +7534,7 @@ AwardPickup:
     LDY stage_index
     LDA Tbl_F_F9D2,y
     LDY tmp_ptr_lo
-    STA ram_05C0,y
+    STA effect_param1,y
     RTS
 ; Tbl_F_F9D2: 5 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_F9D2:

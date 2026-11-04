@@ -839,11 +839,11 @@ Gfx_B4_ABB2:
     LDY #$00
 @B4_ACA1:
     LDA #$78
-    STA ram_0203,y
+    STA oam_x,y
     LDA #$80
     STA ram_0207,y
     LDA #$02
-    STA ram_0202,y
+    STA oam_attr,y
     STA ram_0206,y
     TYA
     CLC
@@ -896,7 +896,7 @@ Gfx_B4_ABB2:
     CMP #$FF
     BEQ @B4_AD1F
     LDA zp_D6
-    STA ram_0201,x
+    STA oam_tile,x
     CLC
     ADC #$02
     STA ram_0205,x
@@ -1481,15 +1481,15 @@ B4_B1D9:
     LDA #$00
     STA effect_x_hi
     LDA #$00
-    STA ram_0590
+    STA effect_param0
     LDA #$1F
-    STA ram_05C0
+    STA effect_param1
     LDA #$00
-    STA ram_05F0
+    STA effect_param2
     LDA #$10
-    STA ram_0620
+    STA effect_param3
     LDA #$00
-    STA ram_0650
+    STA effect_param4
     INC ram_072F
 B4_B226:
     RTS
@@ -1513,12 +1513,12 @@ B4_B239:
     STA effect_type
     STA zp_D2
     LDA #$00
-    STA ram_05F0
-    STA ram_0590
+    STA effect_param2
+    STA effect_param0
     LDA #$1E
-    STA ram_05C0
+    STA effect_param1
     LDA #$FF
-    STA ram_0650
+    STA effect_param4
     LDA #$30
     STA tmp_c
     LDA #$B2
@@ -1545,15 +1545,15 @@ B4_B278:
     STA effect_x_lo
     LDA #$00
     STA effect_x_hi
-    STA ram_0590
+    STA effect_param0
     LDA #$1E
-    STA ram_05C0
+    STA effect_param1
     LDA #$00
     STA ram_0745
     STA ram_01B1
-    STA ram_05F0
+    STA effect_param2
     LDA #$10
-    STA ram_0620
+    STA effect_param3
     LDA #$36
     JMP PlaySfxNoise
 @B4_B2BB:
@@ -1573,15 +1573,15 @@ SpawnEffect33:
     PLA
     STA tmp_a
     LDA #$00
-    STA ram_0590
+    STA effect_param0
     LDA #$1F
-    STA ram_05C0
+    STA effect_param1
     LDA #$00
-    STA ram_05F0
+    STA effect_param2
     LDA tmp_a
-    STA ram_0620
+    STA effect_param3
     LDA tmp_b
-    STA ram_0650
+    STA effect_param4
     RTS
 ; TextPackets_B31F: PPU text packets
 TextPackets_B31F:
@@ -2619,7 +2619,7 @@ B4_BCE4:
 @B4_BD15:
     JSR RandomByteFar
     LDA #$00
-    STA ram_0590,y
+    STA effect_param0,y
     LDA rng_b
     AND #$03
     BNE @B4_BD25
@@ -2627,13 +2627,13 @@ B4_BCE4:
 @B4_BD25:
     CLC
     ADC #$3A
-    STA ram_05C0,y
+    STA effect_param1,y
     LDA rng_a
     AND #$0F
-    STA ram_0620,y
+    STA effect_param3,y
     LDA rng_b
     AND #$07
-    STA ram_05F0,y
+    STA effect_param2,y
 B4_BD39:
     DEY
     BPL B4_BCD2
@@ -2869,17 +2869,17 @@ FadeStepBEE7:
     BPL @B4_BF96
     SEC
     SBC ptr_hi
-    STA ram_0203,x
+    STA oam_x,x
     JMP @B4_BF9C
 @B4_BF96:
     CLC
     ADC ptr_hi
-    STA ram_0203,x
+    STA oam_x,x
 @B4_BF9C:
     LDA #$28
-    STA ram_0201,x
+    STA oam_tile,x
     LDA zp_78
-    STA ram_0202,x
+    STA oam_attr,x
     LDA zp_73
     CLC
     ADC #$04

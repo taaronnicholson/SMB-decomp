@@ -659,3 +659,21 @@ ram 01A8 tally_lo                   ; 16-bit tally shown on the results screen (
 ram 01A9 tally_hi
 ram 01AA tally_small                ; second, 8-bit tally shown on the results screen
 ram 0735 story_step                 ; index into the StateDispatch_0735 word table
+
+; naming pass 17 (RAM)
+ram 0590 effect_param0              ; five per-effect parameter arrays filled from the effect list records (SpawnEffectsFromList)
+ram 05C0 effect_param1
+ram 05F0 effect_param2
+ram 0620 effect_param3
+ram 0650 effect_param4
+ram 0016 feet_tile_ptr_lo           ; map pointer of the tile under the player's feet (CheckHazardUnderPlayer, UpdateTouchKind)
+ram 0017 feet_tile_ptr_hi
+ram 0201 oam_tile                   ; bytes 1..3 of OAM entry 0; code indexes them with x = entry*4
+ram 0202 oam_attr
+ram 0203 oam_x
+ram 038C digit_buffer               ; digits produced by BinaryToDigits, most significant first
+ram 00C7 shot_angle                 ; angle (0..255) used by ShotPosByAngle
+ram 0751 noise_lfsr0                ; 32-bit pseudo-random register advanced by SoundNoiseLFSR; also mixed into RngStep
+ram 0752 noise_lfsr1
+ram 0753 noise_lfsr2
+ram 0754 noise_lfsr3
