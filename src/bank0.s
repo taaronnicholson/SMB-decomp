@@ -164,7 +164,7 @@ B0_812D:
     LDA #$0F
 B0_8160:
     STA tmp_08
-    JSR B0_8183
+    JSR PaletteRowFadeToPPU
     LDA jump_ptr_lo
     CLC
     ADC #$10
@@ -175,11 +175,11 @@ B0_8160:
     LDY #$00
     LDA (jump_ptr_lo),y
     BEQ B0_8196
-    JSR B0_8183
+    JSR PaletteRowFadeToPPU
     BEQ B0_81CD
-    JSR B0_8183
+    JSR PaletteRowFadeToPPU
     JMP B0_81CD
-B0_8183:
+PaletteRowFadeToPPU:
     LDA (jump_ptr_lo),y
     SEC
     SBC Tbl_B0_81D7,x
@@ -189,7 +189,7 @@ B0_818D:
     STA PPUDATA
     INY
     CPY #$10
-    BNE B0_8183
+    BNE PaletteRowFadeToPPU
     RTS
 B0_8196:
     LDA tmp_08
@@ -1826,12 +1826,12 @@ B0_B68F:
     LDA player_frame
     CMP #$40
     BNE B0_B6A1
-    JSR B0_B8A5
+    JSR QueuePpuStringA
     JMP B0_B6A8
 B0_B6A1:
     CMP #$50
     BNE B0_B6A8
-    JSR B0_B8A9
+    JSR QueuePpuStringB
 B0_B6A8:
     JSR B0_B6CF
     LDA buttons_pressed
@@ -1961,14 +1961,14 @@ B0_B7D7:
     STA tmp_d
     LDA #$22
     LDY #$CB
-    JSR B0_B873
+    JSR WriteBiasedText
     LDA #$5B
     STA tmp_c
     LDA #$B8
     STA tmp_d
     LDA #$23
     LDY #$28
-    JSR B0_B873
+    JSR WriteBiasedText
     LDA score_lo
     STA ptr_lo
     LDA score_mid
@@ -1985,7 +1985,7 @@ B0_B7D7:
     STA tmp_d
     LDA #$23
     LDY #$68
-    JSR B0_B873
+    JSR WriteBiasedText
     LDA ram_0746
     STA ptr_lo
     LDA ram_0747
@@ -2014,7 +2014,7 @@ Tbl_B0_B84F:
     .byte $50,$52,$45,$53,$53,$5C,$53,$54,$41,$52,$54,$00,$4C,$41,$53,$54
     .byte $5C,$53,$43,$4F,$52,$45,$5C,$00,$48,$49,$47,$48,$5C,$53,$43,$4F
     .byte $52,$45,$5C,$00
-B0_B873:
+WriteBiasedText:
     JSR SetPPUAddr
     LDY #$00
 B0_B878:
@@ -2031,10 +2031,10 @@ B0_B886:
 Tbl_B0_B887:
     .byte $70,$C7,$C8,$C9,$70,$CA,$CB,$CC,$CD,$70,$CE,$CF,$D0,$D1,$D2,$D3
     .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$70,$DD,$DE,$DF,$E0
-B0_B8A5:
+QueuePpuStringA:
     LDY #$00
     BEQ B0_B8AB
-B0_B8A9:
+QueuePpuStringB:
     LDY #$0B
 B0_B8AB:
     LDX ppu_buffer_idx

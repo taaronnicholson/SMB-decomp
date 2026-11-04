@@ -1150,7 +1150,7 @@ B3_BD75:
     STA zp_D4
     LDA #$1B
     STA player_state
-B3_BD7F:
+PlayerFrameCycle4:
     LDA entity_tick
     LSR a
     LSR a
@@ -1161,7 +1161,7 @@ B3_BD7F:
     STA player_frame
     RTS
 B3_BD8D:
-    JSR B3_BD7F
+    JSR PlayerFrameCycle4
     LDA zp_81
     ASL a
     TAY
@@ -1212,7 +1212,7 @@ B3_BDF1:
     INC zp_81
     RTS
 B3_BDF4:
-    JSR B3_BD7F
+    JSR PlayerFrameCycle4
     LDA zp_D4
     CMP #$FF
     BCC B3_BE04

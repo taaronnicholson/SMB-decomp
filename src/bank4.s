@@ -1199,7 +1199,7 @@ Tbl_B4_AFB3:
 GameState06:
     LDA #$00
     STA tmp_a
-    JSR B4_B4F7
+    JSR SetSpawnAbovePlayer
     LDA #$00
     STA ram_0735
     LDA #$0C
@@ -1805,7 +1805,7 @@ GameState14:
     JMP FarCall
 GameState13:
     RTS
-B4_B4F7:
+SetSpawnAbovePlayer:
     LDA player_y_lo
     SEC
     SBC tmp_a
@@ -2140,7 +2140,7 @@ B4_B79D:
 B4_B7A7:
     LDX #$FF
     TXS
-    JSR F_C9B2
+    JSR ReturnStub
     LDA #$05
     STA stage_index
 B4_B7B1:
@@ -2585,7 +2585,7 @@ B4_BCE4:
     LDA focus_x_hi
     ADC #$00
     STA effect_x_hi,y
-    JSR F_C929
+    JSR RandomByteFar
     LDA rng_a
     CLC
     ADC focus_y_lo
@@ -2604,7 +2604,7 @@ B4_BCE4:
     ADC #$01
     STA effect_y_hi,y
 B4_BD15:
-    JSR F_C929
+    JSR RandomByteFar
     LDA #$00
     STA ram_0590,y
     LDA rng_b

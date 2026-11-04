@@ -489,3 +489,25 @@ name 1 8568 ShotStartImpact          ; shot_state 3 (impact), shot_E3 = 6, frame
 name 5 BA00 EntRiseWobble            ; every other tick: moves up 1 pixel and wobbles X (EntWobbleX), then recomputes the delta from the centre
 name 5 B40B EntMarkAngleBit7         ; sets bit 7 of ent_angle (flag consumed elsewhere)
 name 5 82F2 CollectTileItem          ; pushes a tile effect, records the tile pointer in ram_0720..0722, sets the collected flag and plays noise sfx 5
+
+; naming pass 10 (small subroutines)
+name 0 8183 PaletteRowFadeToPPU       ; writes 16 palette bytes to PPUDATA, each reduced by the fade table value (floor $0F)
+name 0 B873 WriteBiasedText           ; sets the PPU address, then writes the 0-terminated string at (tmp_c) with $94 added to each tile
+name 2 AE46 SetPPUAddr_13B0
+name 2 B467 SetPPUAddr_1D20
+name 2 B475 SetPPUAddr_1D70
+name 2 B483 SetPPUAddr_1E40
+name 2 B509 SetPPUAddr_14D0
+name 1 B129 PlayerAnimAdvance        ; counts zp_80 to 8, then takes the next player_frame from a $FF-terminated list indexed by zp_81
+name 3 BD7F PlayerFrameCycle4        ; player_frame cycles through a 4-entry table every 8 ticks
+name 5 90BF SetOneTimeFlag           ; sets bit (ent_dy & 7) of onetime_flags[ent_dy >> 3] (entity already handled), restores X
+name f C929 RandomByteFar            ; far-calls the bank 6 RNG routine, preserving X and Y, returns rng_a
+name f C9B2 ReturnStub               ; bare RTS
+name 0 B8A5 QueuePpuStringA          ; copies the 0-terminated string at the table start into ppu_buffer
+name 0 B8A9 QueuePpuStringB          ; as above, starting at table offset $0B
+name 4 B4F7 SetSpawnAbovePlayer      ; spawn position = player position, Y reduced by tmp_a; also copies current_area and zp_92 to zp_98/zp_99
+name 6 8DA7 SoundNoiseLFSR           ; shifts a 32-bit pseudo-random register in ram_0751..0754
+name 6 8AE3 SndUpdateSfxSq1
+name 6 8BDB SndUpdateSfxSq2
+name f C98D HideAllSprites           ; sets the Y of 15 OAM entries to $FF
+name f CFF5 NudgeSpritesUp           ; for each 8-byte group in OAM$0000..$002F, decrements the Y of both sprites unless the first is $FF (hidden)

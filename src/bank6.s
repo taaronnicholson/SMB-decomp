@@ -1346,11 +1346,11 @@ B6_8A82:
     DEC snd_sfx_noise
     RTS
 B6_8AD7:
-    JSR B6_8DA7
-    JSR B6_8AE3
-    JSR B6_8BDB
+    JSR SoundNoiseLFSR
+    JSR SndUpdateSfxSq1
+    JSR SndUpdateSfxSq2
     JMP B6_8CE5
-B6_8AE3:
+SndUpdateSfxSq1:
     LDA snd_sfx_sq1
     BNE B6_8AE9
     RTS
@@ -1461,7 +1461,7 @@ B6_8BBA:
     STA SQ1_HI
 B6_8BDA:
     RTS
-B6_8BDB:
+SndUpdateSfxSq2:
     LDA snd_sfx_sq2
     BNE B6_8BE1
     RTS
@@ -1671,7 +1671,7 @@ B6_8D97:
     STA NOISE_LO
 B6_8DA6:
     RTS
-B6_8DA7:
+SoundNoiseLFSR:
     LDA ram_0751
     AND #$48
     ADC #$38
@@ -3570,7 +3570,7 @@ B6_A433:
     JSR RenderOffAndWait
     JSR DisableNMI
     JSR F_C956
-    JSR F_C9B2
+    JSR ReturnStub
     INC stage_index
     LDX #$FF
     TXS

@@ -781,7 +781,7 @@ SwitchBankKeepX:
     PLA
     TAX
     RTS
-F_C929:
+RandomByteFar:
     TYA
     PHA
     TXA
@@ -823,7 +823,7 @@ F_C959:
     BNE F_C96F
     LDY stage_index
     LDA Tbl_F_C988,y
-    BNE F_C98D
+    BNE HideAllSprites
 F_C96F:
     LDX #$00
     TXA
@@ -845,7 +845,7 @@ F_C972:
 ; Tbl_F_C988: 5 bytes, read by F_C959
 Tbl_F_C988:
     .byte $00,$01,$00,$02,$03
-F_C98D:
+HideAllSprites:
     LDY #$00
     LDX #$0E
     LDA #$FF
@@ -871,7 +871,7 @@ WaitForNMI:
 F_C9AE:
     CMP frame_counter
     BEQ F_C9AE
-F_C9B2:
+ReturnStub:
     RTS
 ReadControllerBank0:
     LDA cur_bank
@@ -1460,7 +1460,7 @@ F_CDDD:
     LDA ram_01B1
 F_CE00:
     BEQ F_CE05
-    JSR F_C98D
+    JSR HideAllSprites
 F_CE05:
     PLA
     STA palette_set
@@ -1643,7 +1643,7 @@ F_CF3A:
     BPL F_CF39
     LDA #$02
     STA ram_0395
-    JSR F_CFF5
+    JSR NudgeSpritesUp
     LDA scroll_y_lo
     CLC
     ADC #$01
@@ -1746,7 +1746,7 @@ F_CFEC:
     STA oam_buffer,x
     STA ram_0204,x
     RTS
-F_CFF5:
+NudgeSpritesUp:
     LDX #$00
 F_CFF7:
     LDA oam_buffer,x

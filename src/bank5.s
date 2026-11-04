@@ -2140,7 +2140,7 @@ B5_9081:
     LDA #$08
     STA ent_param2,x
     INC items_found
-B5_90BF:
+SetOneTimeFlag:
     LDA ent_dy,x
     LSR a
     LSR a
@@ -2175,7 +2175,7 @@ B5_90E6:
     CMP tmp_d
     BCC B5_911B
     JSR Ent_StartCollectAnim
-    JSR B5_90BF
+    JSR SetOneTimeFlag
     LDA #$0C
     STA ent_param2,x
     LDA #$10
@@ -2712,7 +2712,7 @@ B5_956D:
     STA ram_01A8
     STA ram_01A9
 B5_95A5:
-    JSR B5_90BF
+    JSR SetOneTimeFlag
     LDA #$19
     JSR PlaySfxSq2
     JMP Ent_StartCollectAnim

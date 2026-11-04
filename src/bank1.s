@@ -4754,7 +4754,7 @@ B1_AF90:
     STA player_state
     RTS
 B1_AFAF:
-    JSR B1_B129
+    JSR PlayerAnimAdvance
     LDA player_y_lo
     SEC
     SBC #$02
@@ -4775,7 +4775,7 @@ B1_AFAF:
 B1_AFD2:
     RTS
 B1_AFD3:
-    JSR B1_B129
+    JSR PlayerAnimAdvance
     LDY zp_D6
     LDA Tbl_B1_B06A,y
     CMP #$14
@@ -4948,7 +4948,7 @@ B1_B0C6:
     ADC #$00
     STA shot_x_hi_1
     RTS
-B1_B129:
+PlayerAnimAdvance:
     LDA zp_80
     CLC
     ADC #$01
