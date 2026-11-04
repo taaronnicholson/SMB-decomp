@@ -241,6 +241,9 @@ fixed bank through `PPUCopyLo/Hi` (`PPUCopy1`…`PPUCopy32`).
 Text appears as ASCII strings (44 found by `tools/gen_text_hints.py`, rendered as `.byte "…"`).
 Bank 4's title/credits strings are stored **reversed** (a trailing comment shows the readable form); bank 1's
 messages are forward and printed with tile = char + `$94`. `PaletteFadeStep` (bank 0) fades the palette.
+The boss's dialogue (bank 4 `$B7D0`-`$B9C2`, 16-byte lines of two border tiles and 14 characters) reads: "ALFRED: THE TIME HAS COME FOR OUR FINAL BATTLE. AFTER I HAVE DEFEATED YOU
+THE WORLD WILL FALL INTO MY EVIL GRASP. HA HA HA HA HA …", "SO ALFRED WE MEET AGAIN. BUT YOUR POWER IS NO MATCH FOR THE MIGHTY MEKA CHICKENS. HA HA HA …" and
+"THE EGGS ARE FAR FAR AWAY. YOU WILL NEVER SEE THEM AGAIN. HA HA HA …".
 
 ## Emulator and graphics tooling
 `tools/emu.py` is a small (not cycle-accurate) 6502+PPU emulator used to inspect graphics:

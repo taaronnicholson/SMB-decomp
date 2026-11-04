@@ -2156,64 +2156,44 @@ B4_B7B7:
 ; Tbl_B4_B7B8: 58 bytes, read by B4_B579
 Tbl_B4_B7B8:
     .byte $03,$03,$C4,$B9,$63,$B9,$3D,$3E,$46,$03,$C8,$B9,$C2,$B8,$3D,$99
-    .byte $46,$02,$CF,$B9,$D1,$B7,$3D,$87,$8A,$5E,$41,$4C,$46,$52,$45,$44
-    .byte $3A,$20,$20,$20,$20,$20,$20,$20,$5F,$5E,$20,$20,$20,$20,$20,$20
-    .res 8, $20
-    .byte $5F,$5E
-    .byte "THE TIME HAS  "
-    .byte $5F,$5E
-    .byte "COME FOR OUR  "
-; Tbl_B4_B810: 50 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B810:
-    .byte $5F,$5E,$46,$49,$4E,$41,$4C,$20,$42,$41,$54,$54,$4C,$45,$3A,$20
-    .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
-    .byte $5F,$5E,$41,$46,$54,$45,$52,$20,$49,$20,$48,$41,$56,$45,$20,$20
-    .byte $5F,$5E
-    .byte "DEFEATED YOU  "
-    .byte $5F,$5E
-    .byte "THE WORLD WILL"
-    .byte $5F,$5E
-    .byte "FALL INTO MY  "
-; Tbl_B4_B870: 131 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B870:
-    .byte $5F,$5E,$45,$56,$49,$4C,$20,$47,$52,$41,$53,$50,$3C,$20,$20,$20
-    .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
-    .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41
-    .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41
-    .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$3B,$3B,$3B,$20,$20
-    .byte $5F,$00,$5E,$53,$4F,$20,$41,$4C,$46,$52,$45,$44,$20,$57,$45,$20
-    .byte $20,$5F,$5E,$4D,$45,$45,$54,$20,$41,$47,$41,$49,$4E,$3A,$20,$20
-    .byte $20,$5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
-    .byte $20,$5F,$5E
-    .byte "BUT YOUR POWER"
-; Tbl_B4_B901: 18 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B901:
-    .byte $5F,$5E,$49,$53,$20,$4E,$4F,$20,$4D,$41,$54,$43,$48,$20,$20,$20
-    .byte $5F,$5E
-    .byte "FOR THE MIGHTY"
-; Tbl_B4_B921: 67 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B921:
-    .byte $5F,$5E,$4D,$45,$4B,$41,$20,$43,$48,$49,$43,$4B,$45,$4E,$53,$20
-    .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
-    .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41,$20,$48,$41
-    .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$3B,$3B,$3B,$20,$20,$20,$20,$20
-    .byte $5F,$00,$5E
-    .byte "THE EGGS ARE  "
-; Tbl_B4_B972: 18 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B972:
-    .byte $5F,$5E,$46,$41,$52,$20,$46,$41,$52,$20,$41,$57,$41,$59,$3A,$20
-    .byte $5F,$5E
-    .byte "YOU WILL NEVER"
-    .byte $5F,$5E
-    .byte "SEE THEM AGAIN"
-; Tbl_B4_B9A2: 94 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B9A2:
-    .byte $5F,$5E,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
-    .byte $5F,$5E,$48,$41,$20,$48,$41,$20,$48,$41,$20,$3B,$3B,$3B,$20,$20
-    .byte $5F,$00,$64,$D9,$B9,$00,$78,$F6,$B9,$64,$EC,$B9,$00,$50,$EC,$B9
-    .byte $50,$D9,$B9,$78,$F6,$B9,$00,$06,$3A,$FE,$14,$5C,$FF,$00,$96,$FF
-    .byte $00,$B8,$FE,$14,$48,$FE,$32,$A8,$FE,$32,$03,$38,$FE,$14,$B8,$FE
-    .byte $14,$78,$FF,$00,$03,$42,$FE,$00,$AE,$FE,$28,$78,$FE,$50
+    .byte $46,$02,$CF,$B9,$D1,$B7,$3D,$87,$8A
+    .byte "^ALFRED:       _"
+    .byte "^              _"
+    .byte "^THE TIME HAS  _"
+    .byte "^COME FOR OUR  _"
+    .byte "^FINAL BATTLE: _"
+    .byte "^              _"
+    .byte "^AFTER I HAVE  _"
+    .byte "^DEFEATED YOU  _"
+    .byte "^THE WORLD WILL_"
+    .byte "^FALL INTO MY  _"
+    .byte "^EVIL GRASP<   _"
+    .byte "^              _"
+    .byte "^HA HA HA HA HA_"
+    .byte "^HA HA HA HA HA_"
+    .byte "^HA HA HA ;;;  _"
+    .byte $00
+    .byte "^SO ALFRED WE  _"
+    .byte "^MEET AGAIN:   _"
+    .byte "^              _"
+    .byte "^BUT YOUR POWER_"
+    .byte "^IS NO MATCH   _"
+    .byte "^FOR THE MIGHTY_"
+    .byte "^MEKA CHICKENS _"
+    .byte "^              _"
+    .byte "^HA HA HA HA HA_"
+    .byte "^HA HA ;;;     _"
+    .byte $00
+    .byte "^THE EGGS ARE  _"
+    .byte "^FAR FAR AWAY: _"
+    .byte "^YOU WILL NEVER_"
+    .byte "^SEE THEM AGAIN_"
+    .byte "^              _"
+    .byte "^HA HA HA ;;;  _"
+    .byte $00,$64,$D9,$B9,$00,$78,$F6,$B9,$64,$EC,$B9,$00,$50,$EC,$B9,$50
+    .byte $D9,$B9,$78,$F6,$B9,$00,$06,$3A,$FE,$14,$5C,$FF,$00,$96,$FF,$00
+    .byte $B8,$FE,$14,$48,$FE,$32,$A8,$FE,$32,$03,$38,$FE,$14,$B8,$FE,$14
+    .byte $78,$FF,$00,$03,$42,$FE,$00,$AE,$FE,$28,$78,$FE,$50
 B4_BA00:
     LDA ram_0732
     BNE B4_BA65
