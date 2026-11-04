@@ -3742,11 +3742,11 @@ B6_A572:
     RTS
 B6_A57F:
     LDY player_draw_frame
-    LDA Tbl_B6_A653,y
+    LDA PlayerFrameShape,y
     TAY
-    LDA Tbl_B6_A6A3,y
+    LDA PlayerShapeRecordLo,y
     STA tmp_c
-    LDA Tbl_B6_A6AE,y
+    LDA PlayerShapeRecordHi,y
     STA tmp_d
     LDY #$00
     LDA (tmp_c),y
@@ -3870,30 +3870,128 @@ B6_A643:
     DEC tmp_c
     BNE B6_A62A
     RTS
-; Tbl_B6_A653: 80 bytes, read by B6_A57F
-Tbl_B6_A653:
+; PlayerFrameShape: player_draw_frame -> shape index (0-10)
+PlayerFrameShape:
     .res 21, $00
     .byte $08,$03,$03,$01,$01,$01,$01,$01,$01,$01,$01,$01,$00,$00,$02,$02
     .byte $0A,$00,$00,$04,$00,$00,$00,$00,$05,$05,$05,$05,$00,$00,$00,$09
     .byte $09,$09,$09,$00,$00,$00,$00,$00,$00,$07,$07,$07,$07,$07,$07,$00
     .byte $00,$00,$00,$00,$06,$00,$00,$07,$07,$00,$00
-; Tbl_B6_A6A3: 11 bytes, read by B6_A57F
-Tbl_B6_A6A3:
-    .byte $B9,$BC,$BF,$C2,$C5,$C8,$CB,$CE,$D1,$D4,$D7
-; Tbl_B6_A6AE: 116 bytes, read by B6_A57F
-Tbl_B6_A6AE:
-    .res 11, $A6
-    .byte $DA,$A6,$04,$E2,$A6,$04,$EA,$A6,$04,$F2,$A6,$03,$F8,$A6,$04,$00
-    .byte $A7,$05,$98,$03,$06,$0A,$A7,$02,$0E,$A7,$04,$16,$A7,$04,$1E,$A7
-    .byte $04,$F0,$00,$F0,$08,$00,$00,$00,$08,$F4,$00,$F4,$08,$04,$00,$04
-    .byte $08,$F0,$00,$F8,$F8,$00,$00,$00,$08,$00,$F8,$00,$00,$00,$08,$F4
-    .byte $FF,$F4,$07,$04,$FF,$04,$07,$F0,$00,$F0,$08,$00,$00,$00,$08,$00
-    .byte $F8,$00,$00,$00,$08,$FB,$00,$FB,$08,$08,$00,$08,$08,$F8,$00,$F0
-    .byte $08,$08,$00,$00,$08,$F0,$00,$00,$F8
-; GroupGfxTable: 31 entries of 4 bytes indexed by animation group: compressed block pointer (word), tile count, 0. A pointer of 0 means the group shares another group's tiles (8,9,12,16,18-20,26) or has none (0). Read by LoadGroupGfx
-GroupGfxTable:
-    .word $0000
+; PlayerShapeRecordLo: low bytes of the shape record pointers
+PlayerShapeRecordLo:
+    .byte <(PlayerShapeRecords)
+    .byte <(B6_A6BC)
+    .byte <(B6_A6BF)
+    .byte <(B6_A6C2)
+    .byte <(B6_A6C5)
+    .byte <(B6_A6C8)
+    .byte <(B6_A6CB)
+    .byte <(B6_A6CE)
+    .byte <(B6_A6D1)
+    .byte <(B6_A6D4)
+    .byte <(B6_A6D7)
+; PlayerShapeRecordHi: high bytes of the shape record pointers
+PlayerShapeRecordHi:
+    .byte >(PlayerShapeRecords)
+    .byte >(B6_A6BC)
+    .byte >(B6_A6BF)
+    .byte >(B6_A6C2)
+    .byte >(B6_A6C5)
+    .byte >(B6_A6C8)
+    .byte >(B6_A6CB)
+    .byte >(B6_A6CE)
+    .byte >(B6_A6D1)
+    .byte >(B6_A6D4)
+    .byte >(B6_A6D7)
+; PlayerShapeRecords: 11 records of (offset list pointer, sprite count)
+PlayerShapeRecords:
+    .word PlayerShapeOffsets
+    .byte $04
+B6_A6BC:
+    .word B6_A6E2
+    .byte $04
+B6_A6BF:
+    .word B6_A6EA
+    .byte $04
+B6_A6C2:
+    .word B6_A6F2
+    .byte $03
+B6_A6C5:
+    .word B6_A6F8
+    .byte $04
+B6_A6C8:
+    .word B6_A700
+    .byte $05
+B6_A6CB:
+    .word $0398
+    .byte $06
+B6_A6CE:
+    .word B6_A70A
+    .byte $02
+B6_A6D1:
+    .word B6_A70E
+    .byte $04
+B6_A6D4:
+    .word B6_A716
+    .byte $04
+B6_A6D7:
+    .word B6_A71E
+    .byte $04
+; PlayerShapeOffsets: signed (dy, dx) pairs per shape, back to back (the last list's final 4 bytes overlap the unused group-0 entry of GroupGfxTable)
+PlayerShapeOffsets:
+    .byte $F0, $00
+    .byte $F0, $08
+    .byte $00, $00
     .byte $00, $08
+B6_A6E2:
+    .byte $F4, $00
+    .byte $F4, $08
+    .byte $04, $00
+    .byte $04, $08
+B6_A6EA:
+    .byte $F0, $00
+    .byte $F8, $F8
+    .byte $00, $00
+    .byte $00, $08
+B6_A6F2:
+    .byte $00, $F8
+    .byte $00, $00
+    .byte $00, $08
+B6_A6F8:
+    .byte $F4, $FF
+    .byte $F4, $07
+    .byte $04, $FF
+    .byte $04, $07
+B6_A700:
+    .byte $F0, $00
+    .byte $F0, $08
+    .byte $00, $00
+    .byte $00, $08
+    .byte $00, $F8
+B6_A70A:
+    .byte $00, $00
+    .byte $00, $08
+B6_A70E:
+    .byte $FB, $00
+    .byte $FB, $08
+    .byte $08, $00
+    .byte $08, $08
+B6_A716:
+    .byte $F8, $00
+    .byte $F0, $08
+    .byte $08, $00
+    .byte $00, $08
+B6_A71E:
+    .byte $F0, $00
+    .byte $00, $F8
+B6_A722:
+    .byte $00
+B6_A723:
+    .byte $00
+B6_A724:
+    .byte $00,$08
+; GroupGfxTable: 30 entries of 4 bytes for animation groups 1-30 (group 0 would be at $A722 but its 4 bytes are the tail of the last PlayerShape offset list and are never read): compressed block pointer (word), tile count, 0. A pointer of 0 = shares another group's tiles (8,9,12,16,18-20,26). Read by LoadGroupGfx
+GroupGfxTable:
     .word Gfx_B6_AC22
     .byte $04, $00
     .word Gfx_B6_AC5C

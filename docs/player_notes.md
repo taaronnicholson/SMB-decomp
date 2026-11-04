@@ -48,3 +48,9 @@ alone have no observable effect without their set-up variables.
 
 **Hurt:** `HurtPlayer` does nothing while `hurt_flag` (`$C0`) or the invulnerability counter (`invuln_lo/hi`) is set, only hits in states `$00`-`$0D` (table `F_F4D5`), plays noise sfx `$06`, sets `player_state` = `$0F` and `hurt_flag` = `$0F`. It is called by hazards (tile class 3), by entity touch handlers (`Ent_HurtOnTouch`) and by some states; `HurtPlayerKnockout` (`$1A`) is the heavier variant.
 **Vulnerable enemies** (`$5E`) die when the player touches them in state `$02` with `zp_7C` set.
+
+## Player sprite assembly (`DrawPlayer`, bank 6 `$A4E1`)
+`PlayerToScreen` converts the player position to screen coordinates (`player_box_x/y`). `DrawPlayer` then maps `player_draw_frame` through `PlayerFrameShape` (80 bytes, bank 6 `$A653`)
+to one of 11 **shapes**; `PlayerShapeRecordLo/Hi` point to 3-byte `PlayerShapeRecords` (offset-list pointer, sprite count), and each list holds signed `(dy, dx)` offsets that are added
+to the screen position to fill OAM entries 15 and up (`$023C`...). Facing left (`zp_67`) mirrors X (`8 - dx`) and sets the horizontal-flip attribute, and `zp_4F` mirrors Y. The shapes are mostly
+2x2 or 2x3 metasprites; shape 6 points at RAM `$0398`, the six trailing positions written by `DeathAnimFrame`. The tile numbers come from the frame, not from these tables.

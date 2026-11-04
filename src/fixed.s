@@ -1286,11 +1286,11 @@ F_CC6A:
     ASL a
     ASL a
     TAY
-    LDA GroupGfxTable,y
+    LDA B6_A722,y
     STA ptr_lo
-    LDA $A723,y
+    LDA B6_A723,y
     STA ptr_hi
-    LDA $A724,y
+    LDA B6_A724,y
     STA tmp_a
     BEQ F_CCB7
     LDA sprite_tile_next

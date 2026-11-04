@@ -440,8 +440,27 @@ name 6 A41E AdvanceStage            ; end of the exit walk: fade out, silence, I
 name 5 91B0 Ent_FloatStep          ; ent_angle steps through FloatPathDx: Y -= 1, X += dx; word $80 -> Ent_StartCollectAnim
 
 ; ---- per-group sprite graphics loader ----
-blob 6 A722 124 GroupGfxTable 31 entries of 4 bytes indexed by animation group: compressed block pointer (word), tile count, 0. A pointer of 0 means the group shares another group's tiles (8,9,12,16,18-20,26) or has none (0). Read by LoadGroupGfx
-struct 6 A722 31 pbb
+blob 6 A726 120 GroupGfxTable 30 entries of 4 bytes for animation groups 1-30 (group 0 would be at $A722 but its 4 bytes are the tail of the last PlayerShape offset list and are never read): compressed block pointer (word), tile count, 0. A pointer of 0 = shares another group's tiles (8,9,12,16,18-20,26). Read by LoadGroupGfx
+struct 6 A726 30 pbb
 name f CC51 LoadGroupGfxFromFlags   ; A = ent_flags: group = (flags >> 3) & $3F; loads its graphics if anim_tile_base[group] is 0
 name f CC65 LoadGroupGfx            ; A = animation group: allocates tiles (anim_tile_base = 0 - sprite_tile_next), decompresses the block from GroupGfxTable to PPU $0000 + base*16
 ram 00DB sprite_tile_next           ; counts down from $A8: each loaded group lowers it by its tile count, so bases rise from $58
+
+; ---- player sprite shapes (DrawPlayer, B6_A57F) ----
+blob 6 A653 80 PlayerFrameShape player_draw_frame -> shape index (0-10)
+blob 6 A6A3 11 PlayerShapeRecordLo low bytes of the shape record pointers
+dlohi 6 A6A3 A6AE 11
+blob 6 A6AE 11 PlayerShapeRecordHi high bytes of the shape record pointers
+blob 6 A6B9 33 PlayerShapeRecords 11 records of (offset list pointer, sprite count); shape 6 points at RAM $0398 (the death-animation positions)
+struct 6 A6B9 11 pb
+blob 6 A6DA 72 PlayerShapeOffsets signed (dy, dx) pairs per shape, back to back (the last list's final 4 bytes overlap the unused group-0 entry of GroupGfxTable)
+struct 6 A6DA 4 bb
+struct 6 A6E2 4 bb
+struct 6 A6EA 4 bb
+struct 6 A6F2 3 bb
+struct 6 A6F8 4 bb
+struct 6 A700 5 bb
+struct 6 A70A 2 bb
+struct 6 A70E 4 bb
+struct 6 A716 4 bb
+struct 6 A71E 2 bb
