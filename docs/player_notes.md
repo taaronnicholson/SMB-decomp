@@ -53,4 +53,4 @@ alone have no observable effect without their set-up variables.
 `PlayerToScreen` converts the player position to screen coordinates (`player_box_x/y`). `DrawPlayer` then maps `player_draw_frame` through `PlayerFrameShape` (80 bytes, bank 6 `$A653`)
 to one of 11 **shapes**; `PlayerShapeRecordLo/Hi` point to 3-byte `PlayerShapeRecords` (offset-list pointer, sprite count), and each list holds signed `(dy, dx)` offsets that are added
 to the screen position to fill OAM entries 15 and up (`$023C`...). Facing left (`zp_67`) mirrors X (`8 - dx`) and sets the horizontal-flip attribute, and `zp_4F` mirrors Y. The shapes are mostly
-2x2 or 2x3 metasprites; shape 6 points at RAM `$0398`, the six trailing positions written by `DeathAnimFrame`. The tile numbers come from the frame, not from these tables.
+2x2 or 2x3 metasprites; shape 6 points at RAM `$0398`, the six trailing positions written by `DeathAnimFrame`. This loop does not write the tile-number bytes (OAM byte 1); where they are set has not been traced.
