@@ -62,5 +62,10 @@ projectile 12 px above itself, offset by facing, which plays an appearance table
 **Switch tiles** (pecked by the player in `PlayerState05`): `$D8` steps `switch_phase` (0-4, backwards if facing left) and `$DA` toggles `switch_flag`;
 the track movers (`$50`) pick their direction from `switch_phase` and the falling weights (`$83`-`$85`) from `switch_flag`.
 
+## Killing creatures
+- **Stomp** [verified]: a falling player (state `$02`) that overlaps a patrol creature such as `$4E` kills it (it becomes `$07`, the sparkle) and the player bounces into
+  state `$01`. `Ent_DieIfHit` also reacts to the projectile (`shot_*`), which needs the weapon pickup.
+- Whether pecking kills ordinary creatures was not established (the emulator test was disturbed by teleporting the player). Pecking does pop balloons.
+
 ## Open questions
 Types `$86` and `$5D` (collect animation after a table, `ent_param2` = `$0D`), and every type not used by the six stages' door-reachable areas.
