@@ -58,4 +58,4 @@ to the screen position to fill OAM entries 15 and up (`$023C`...). Facing left (
 ## Idle animation
 `idle_timer` (`zp_70`/`zp_71`) counts the frames the player stands still and is reset by input. Once it passes `$258` (600 frames, about 10 seconds), `PlayerIdleAnim` steps `IdleAnim`
 (bank 1 `$89FD`, 28 triples of OAM tile for the sprite at `$024D`, duration in `idle_anim_timer` (`zp_72`) and `player_frame`, ended by `$FF`): the character plays a looping pose sequence
-(frames `$24`-`$2F`) while waiting. [read from the code; not run for 10 seconds in the emulator]
+(frames `$24`-`$2F`) while waiting. [verified in the emulator: the counter passed `$258` and `player_frame` then followed `$44`, `$00`, `$26` with durations 14, 15, 14, exactly the first `IdleAnim` entries; being invulnerable resets the counter]
