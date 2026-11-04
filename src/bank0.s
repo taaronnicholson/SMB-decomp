@@ -1881,7 +1881,7 @@ B0_B702:
 B0_B704:
     STA ram_0389
     JMP F_CED8
-B0_B70A:
+DrawTileBlock17x5:
     LDA #$55
     STA tmp_c
     LDA #$B7
@@ -1931,7 +1931,7 @@ Tbl_B0_B755:
     .byte $BE,$BF,$C0,$C1,$70,$70,$C2,$C3,$70,$70,$70,$70,$C4,$C5,$C6,$70
     .byte $70,$70,$70,$70,$70
 B0_B7AA:
-    JSR B0_B70A
+    JSR DrawTileBlock17x5
     LDA #$23
     LDY #$C0
     JSR SetPPUAddr

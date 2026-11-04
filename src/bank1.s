@@ -165,7 +165,7 @@ B1_815D:
     STA shot_state,x
 B1_816E:
     RTS
-B1_816F:
+ShotMoveRight:
     LDA shot_y_lo,x
     CLC
     ADC #$04
@@ -223,7 +223,7 @@ B1_81D0:
     EOR #$01
     STA shot_state,x
     RTS
-B1_81DA:
+ShotMoveLeft:
     .byte $B5,$E9
     CLC
     ADC #$04
@@ -262,7 +262,7 @@ B1_8219:
     EOR #$01
     STA shot_state,x
     RTS
-B1_8223:
+ShotMoveUp:
     LDA shot_y_lo,x
     STA tmp_c
     LDA shot_y_hi,x
@@ -800,23 +800,23 @@ B1_85FA:
     JSR PlaySfxNoise
     RTS
 B1_8604:
-    JSR B1_81DA
-    JSR B1_8223
+    JSR ShotMoveLeft
+    JSR ShotMoveUp
     JSR ShotTimerStep
     RTS
 B1_860E:
-    JSR B1_816F
-    JSR B1_8223
+    JSR ShotMoveRight
+    JSR ShotMoveUp
     JSR ShotTimerStep
     RTS
 B1_8618:
     JSR Tbl_B1_826C
-    JSR B1_81DA
+    JSR ShotMoveLeft
     JSR ShotTimerStep
     RTS
 B1_8622:
     JSR Tbl_B1_826C
-    JSR B1_816F
+    JSR ShotMoveRight
     JSR ShotTimerStep
     RTS
 B1_862C:

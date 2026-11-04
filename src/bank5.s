@@ -1400,7 +1400,7 @@ B5_8A91:
     LDA #$00
     STA invuln_hi
     JMP Ent_SpawnBurst
-B5_8A9F:
+EntRaiseAndSnap:
     LDA ent_y_lo,x
     SEC
     SBC tmp_a
@@ -3791,7 +3791,7 @@ Ent37_Update:
     BCC B5_A01E
     LDA #$17
     JSR PlaySfxSq2
-    JSR F_F16F
+    JSR TickPickupCounter
     BCC B5_A015
     LDA #$00
     STA ent_type,x
@@ -3936,7 +3936,7 @@ B5_A161:
     PHA
     LDA tmp_d
     PHA
-    JSR B5_8A9F
+    JSR EntRaiseAndSnap
     PLA
     STA tmp_d
     PLA
@@ -4270,7 +4270,7 @@ Ent42_Update:
     STA tmp_c
     LDA #$00
     STA tmp_d
-    JSR B5_A6F2
+    JSR EntAimAtTarget
     LDA #$50
     STA ent_angle,x
     LDA #$43
@@ -4518,7 +4518,7 @@ B5_A6DE:
     ADC #$00
     STA ent_y_hi,x
     JMP B5_9B32
-B5_A6F2:
+EntAimAtTarget:
     LDA ent_y_lo,x
     SEC
     SBC tmp_a
@@ -5927,7 +5927,7 @@ B5_B316:
 B5_B32B:
     LDA #$02
     STA tmp_a
-    JSR B5_8A9F
+    JSR EntRaiseAndSnap
     JSR B5_B3BB
     LDA ent_angle,x
     BMI B5_B391
@@ -5944,7 +5944,7 @@ B5_B349:
 B5_B34F:
     LDA #$02
     STA tmp_a
-    JSR B5_8A9F
+    JSR EntRaiseAndSnap
     JSR B5_B3BB
     LDA ent_angle,x
     BMI B5_B3B5
@@ -6141,7 +6141,7 @@ B5_B4A8:
 B5_B4D8:
     LDA tmp_c
     BEQ B5_B485
-    JMP B5_8A9F
+    JMP EntRaiseAndSnap
     LDA player_x_lo
     STA tmp_c
     LDA player_x_hi
@@ -6229,7 +6229,7 @@ B5_B587:
     CLC
     ADC #$01
     STA tmp_a
-    JMP B5_8A9F
+    JMP EntRaiseAndSnap
 ; Tbl_B5_B591: 59 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_B591:
     .byte $FE,$FE,$FF,$FF,$FF,$00,$FF,$FF,$00,$FF,$00,$FF,$00,$00,$00,$01
@@ -6260,7 +6260,7 @@ Ent87_Update:
     STA tmp_c
     LDA B5_B5CF,y
     STA tmp_d
-    JSR B5_A6F2
+    JSR EntAimAtTarget
     LDA #$88
     STA ent_type,x
 B5_B616:
@@ -6406,7 +6406,7 @@ B5_B728:
     LDA entity_tick
     AND #$0F
     BNE B5_B741
-    JSR B5_A6F2
+    JSR EntAimAtTarget
 B5_B741:
     LDA entity_tick
     AND #$01
@@ -6451,7 +6451,7 @@ B5_B783:
     STA tmp_a
     LDA #$03
     STA tmp_b
-    JSR B5_A6F2
+    JSR EntAimAtTarget
     LDA #$1E
     STA ent_angle,x
     LDA #$8D

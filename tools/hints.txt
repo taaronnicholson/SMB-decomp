@@ -511,3 +511,16 @@ name 6 8AE3 SndUpdateSfxSq1
 name 6 8BDB SndUpdateSfxSq2
 name f C98D HideAllSprites           ; sets the Y of 15 OAM entries to $FF
 name f CFF5 NudgeSpritesUp           ; for each 8-byte group in OAM$0000..$002F, decrements the Y of both sprites unless the first is $FF (hidden)
+name 5 A6F2 EntAimAtTarget           ; builds a direction/distance vector from the entity to (tmp_c,tmp_a): sign bits in tmp_b, major axis in ent_dy/ent_dx, divisor in ram_06C0
+name 5 8A9F EntRaiseAndSnap          ; raises the entity by tmp_a; if the tile above (x+8) is solid, snaps to the tile boundary and sets ent_angle bit 7
+name 0 B70A DrawTileBlock17x5        ; writes 5 rows of 17 tiles (source bytes minus $80) to the nametable at ptr, advancing 32 per row
+name 1 816F ShotMoveRight            ; moves a shot 2 px right, stopping on solid tiles or past the screen edge
+name 1 81DA ShotMoveLeft             ; moves a shot 2 px left, stopping on solid tiles
+name 1 8223 ShotMoveUp               ; moves a shot 2 px up, stopping on solid tiles
+name 2 B02D WriteFixedTiles_1432     ; sets PPU address $1432 and writes 14 fixed tile values
+name f C9D7 InitBalloonRoom          ; advances ptr by Y, decompresses the bank 1 data at $BAD5, clears 8 entity slots (angle $FF), then reads balloons_left from (ptr) and zeroes balloons_popped
+name f EEDF MapPtrToCoords           ; inverse of MapPtrFromPos: converts a map pointer back to pixel Y (tmp_a/b) and X (tmp_d) using map_width
+name f F8FC DivideByTmpA             ; 8-step long division: (tmp_b:ptr_lo) by tmp_a, quotient in tmp_c, remainder in ptr_lo
+name f F16F TickPickupCounter        ; counts zp_A7 to $64, then spawns a pickup at the player (kind in tmp_a: 8, or $0C while zp_A5 is below 4) and returns carry set
+name 4 BA94 CreditsStepDispatch      ; jumps through the word table at B4_BA8C indexed by ram_01BE
+name 2 A2E2 PixelUploadDispatch      ; jumps through a word table indexed by X-$60 to the tile upload routines

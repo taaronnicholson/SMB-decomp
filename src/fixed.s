@@ -398,7 +398,7 @@ F_C5E1:
     LDA #$F0
     JSR ClearNametables
     JSR LoadFont
-    JSR F_C9D7
+    JSR InitBalloonRoom
     JSR B0_B8D2
     LDA #$04
     JSR SwitchBank
@@ -474,7 +474,7 @@ F_C66C:
     INY
     LDA #$3C
     STA ram_01AA
-    JSR F_C9D7
+    JSR InitBalloonRoom
     LDA ptr_lo
     CLC
     ADC #$01
@@ -891,7 +891,7 @@ F_C9C2:
     LDX #$C7
     LDA #$BD
     JMP FarCall
-F_C9D7:
+InitBalloonRoom:
     TYA
     CLC
     ADC ptr_lo
@@ -999,7 +999,7 @@ F_CA7A:
     PHA
     LDA #$0D
     STA tmp_d
-    JSR F_EEDF
+    JSR MapPtrToCoords
     LDX zp_77
     INC zp_77
     LDA #$62
@@ -1315,7 +1315,7 @@ SpawnBalloon:
     PHA
     LDA #$05
     STA tmp_d
-    JSR F_EEDF
+    JSR MapPtrToCoords
     LDX #$00
 F_CCD6:
     LDA current_area
@@ -1486,7 +1486,7 @@ F_CE2C:
     PHA
     LDA #$00
     JSR SwitchBank
-    JSR B0_B70A
+    JSR DrawTileBlock17x5
     PLA
     JMP SwitchBank
 PlaySong:
@@ -6047,7 +6047,7 @@ F_EED5:
     LDA F_C210,x
     STA player_frame
     RTS
-F_EEDF:
+MapPtrToCoords:
     LDA ptr_lo
     SEC
     SBC map_ptr_lo
@@ -6366,7 +6366,7 @@ F_F0F7:
     LDA #$00
     STA tmp_d
     JSR AddScore
-    JSR F_F16F
+    JSR TickPickupCounter
     JSR SetCollectedFlag
     JMP F_F14F
 F_F118:
@@ -6413,7 +6413,7 @@ F_F14F:
     LDA #$17
     JSR PlaySfxSq2
     RTS
-F_F16F:
+TickPickupCounter:
     INC zp_A7
     LDA zp_A7
     CMP #$64
@@ -7425,7 +7425,7 @@ AddScore:
     ADC #$00
     STA score_hi
     RTS
-F_F8FC:
+DivideByTmpA:
     LDA #$00
     STA ptr_lo
     STA tmp_c

@@ -668,7 +668,7 @@ B2_9E8A:
     JSR B2_A147
     JMP B2_9E99
 B2_9E96:
-    JSR B2_A2E2
+    JSR PixelUploadDispatch
 B2_9E99:
     LDA zp_FC
     LSR a
@@ -1077,7 +1077,7 @@ B2_A2B2:
     .word B2_A51E
     .word B2_A51E
     .word B2_A51E
-B2_A2E2:
+PixelUploadDispatch:
     TXA
     SEC
     SBC #$60
@@ -2376,7 +2376,7 @@ B2_AF27:
     LDA #$FE
     STA PPUDATA
     JMP SetScroll
-B2_B02D:
+WriteFixedTiles_1432:
     JSR SetPPUAddr_1432
     LDA #$B0
     STA PPUDATA
@@ -2407,7 +2407,7 @@ B2_B02D:
     LDA #$6F
     STA PPUDATA
     RTS
-    JSR B2_B02D
+    JSR WriteFixedTiles_1432
     LDA #$FE
     STA PPUDATA
     LDA #$03
@@ -2710,7 +2710,7 @@ B2_B238:
     LDA #$00
     STA PPUDATA
     JMP B2_B238
-    JSR B2_B02D
+    JSR WriteFixedTiles_1432
     LDA #$FE
     STA PPUDATA
     LDA #$03

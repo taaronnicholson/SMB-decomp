@@ -1709,7 +1709,7 @@ B4_B40E:
     STA tmp_b
     LDA zp_73
     STA tmp_a
-    JSR F_F8FC
+    JSR DivideByTmpA
     PLA
     STA ptr_hi
     PLA
@@ -2024,7 +2024,7 @@ B4_B6A4:
     STA ram_0735
     JMP B4_B74B
 B4_B6B6:
-    JSR B4_BA94
+    JSR CreditsStepDispatch
     LDA ram_01BE
     CMP #$03
     BNE B4_B6FA
@@ -2213,7 +2213,7 @@ B4_BA1B:
 B4_BA1D:
     LDA #$0A
     STA tmp_a
-    JSR F_F8FC
+    JSR DivideByTmpA
     INC tmp_c
 B4_BA26:
     LDA #$0A
@@ -2279,7 +2279,7 @@ B4_BA8C:
     .word B4_BABC
     .word B4_BB60
     .word B4_BABB
-B4_BA94:
+CreditsStepDispatch:
     LDA ram_01BE
     ASL a
     TAY
