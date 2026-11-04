@@ -1198,8 +1198,8 @@ GameState05:
     STA game_state
     LDA #$4A
     JMP PlaySfxNoise
-; Tbl_B4_AFB3: 27 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_AFB3:
+; TextPackets_AFB3: PPU text packets (address hi/lo, $80|length, characters stored reversed), $FF between packets
+TextPackets_AFB3:
     .byte $21,$22,$87,$40,$44,$45,$52,$46,$4C,$41,$FF,$21,$62,$89,$4C,$4C
     .byte $49,$57,$20,$53,$49,$48,$54,$FF,$21,$82,$89
     .byte ":UOY PLEH"   ; reads: "HELP YOU:"
@@ -1279,8 +1279,8 @@ GameState0A:
     LDA tmp_a
     STA zp_47
     RTS
-; Tbl_B4_B074: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B074:
+; TextPackets_B074: PPU text packets
+TextPackets_B074:
     .byte $26,$6A,$8C,$40
     .byte "RAELC EGATS"   ; reads: "STAGE CLEAR"
     .byte $00
@@ -1318,11 +1318,11 @@ GameState0B:
 @B4_B0BB:
     STA zp_D1
     TAY
-    LDA Tbl_B4_B0C4,y
+    LDA GameState0B_Tbl_B0C4,y
     STA zp_47
     RTS
-; Tbl_B4_B0C4: 20 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B0C4:
+; GameState0B_Tbl_B0C4: 20 bytes, read by GameState0B
+GameState0B_Tbl_B0C4:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
 B4_B0D8:
@@ -1493,8 +1493,8 @@ B4_B1D9:
     INC ram_072F
 B4_B226:
     RTS
-; Tbl_B4_B227: 18 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B227:
+; TextPackets_B227: PPU text packets
+TextPackets_B227:
     .byte $26,$CE,$85,$44,$4E,$55,$4F,$46,$00,$26,$CE,$85,$20,$20,$20,$20
     .byte $20,$00
 B4_B239:
@@ -1583,8 +1583,8 @@ SpawnEffect33:
     LDA tmp_b
     STA ram_0650
     RTS
-; Tbl_B4_B31F: 24 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B31F:
+; TextPackets_B31F: PPU text packets
+TextPackets_B31F:
     .byte $26,$EF,$84,$30,$31,$20,$58,$00,$26,$EF,$84,$30,$35,$20,$58,$00
     .byte $26,$EF,$84,$20,$20,$20,$20,$00
 GameState0D:
@@ -1780,12 +1780,12 @@ GameState10:
     STA zp_47
 B4_B4A8:
     RTS
-; Tbl_B4_B4A9: 14 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B4A9:
+; TextPackets_B4A9: PPU text packets
+TextPackets_B4A9:
     .byte $21,$22,$87,$40,$44,$45,$52,$46,$4C,$41,$FF,$21,$62,$8A
     .byte "TSEUQ RUOY"   ; reads: "YOUR QUEST"
-; Tbl_B4_B4C1: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B4C1:
+; TextPackets_B4C1: PPU text packets
+TextPackets_B4C1:
     .byte $FF,$21,$82,$88
     .byte ":REVO SI"   ; reads: "IS OVER:"
     .byte $00
@@ -2647,12 +2647,12 @@ AddToRam01A8:
     RTS
     .byte $20,$A8,$8C
     .byte "DESUAP  EMAG"   ; reads: "GAME  PAUSED"
-; Tbl_B4_BD5E: 13 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_BD5E:
+; TextPackets_BD5E: PPU text packets
+TextPackets_BD5E:
     .byte $FF,$21,$88,$85,$45,$52,$4F,$43,$53,$FF,$21,$C9,$88
     .byte "SNOOLLAB"   ; reads: "BALLOONS"
-; Tbl_B4_BD73: 30 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_BD73:
+; TextPackets_BD73: PPU text packets
+TextPackets_BD73:
     .byte $FF,$22,$0A,$84,$45,$4D,$49,$54,$FF,$22,$49,$88,$53,$44,$4E,$4F
     .byte $4D,$41,$49,$44,$FF,$22,$8A,$85,$53,$45,$56,$49,$4C,$00
 QueueTextAndStartFade:
@@ -2670,23 +2670,23 @@ QueueTextAndStartFade:
     STA zp_74
     JSR FadeStepBEDF
     JMP WaitForNMI
-; Tbl_B4_BDB2: 23 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_BDB2:
+; TextPackets_BDB2: PPU text packets
+TextPackets_BDB2:
     .byte $21,$28,$90,$44,$45,$52,$45,$54,$53,$49,$47,$45,$52,$20,$20,$41
     .byte $20,$53,$49,$FF,$21,$6A,$8C
     .byte "FO KRAMEDART"   ; reads: "TRADEMARK OF"
-; Tbl_B4_BDD5: 37 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_BDD5:
+; TextPackets_BDD5: PPU text packets
+TextPackets_BDD5:
     .byte $FF,$21,$AC,$88,$54,$48,$47,$49,$4C,$49,$57,$54,$FF,$22,$27,$91
     .byte $54,$48,$47,$49,$4C,$49,$57,$54,$20,$33,$39,$39,$31,$20,$3E,$43
     .byte $3D,$00,$22,$AA,$8C
     .byte "YB DEHSILBUP"   ; reads: "PUBLISHED BY"
-; Tbl_B4_BE06: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_BE06:
+; TextPackets_BE06: PPU text packets
+TextPackets_BE06:
     .byte $FF,$22,$E9,$8F
     .byte ":CNI  EPACSDNIM"   ; reads: "MINDSCAPE  INC:"
-; Tbl_B4_BE19: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_BE19:
+; TextPackets_BE19: PPU text packets
+TextPackets_BE19:
     .byte $FF,$23,$66,$94
     .byte "ODNETNIN YB DESNECIL"   ; reads: "LICENSED BY NINTENDO"
     .byte $00

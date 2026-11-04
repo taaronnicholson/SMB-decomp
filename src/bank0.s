@@ -1922,8 +1922,8 @@ B0_B71A:
     DEC tmp_b
     BNE B0_B71A
     RTS
-; Tbl_B0_B755: 85 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B0_B755:
+; IntroBlockTiles: 5 rows x 17 source bytes for DrawTileBlock17x5 (each minus $80 gives the tile
+IntroBlockTiles:
     .byte $80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8A,$8B,$8C,$8D,$8E,$8F
     .byte $6F,$90,$91,$92,$93,$94,$95,$96,$97,$98,$99,$9A,$9B,$9C,$9D,$9E
     .byte $9F,$70,$A0,$A1,$A2,$A3,$A4,$A5,$A6,$A7,$A8,$A9,$AA,$AB,$AC,$AD
@@ -2009,8 +2009,8 @@ DrawBlockAndAttributes:
     LDA #$05
     STA tmp_a
     JMP B0_B71A
-; Tbl_B0_B84F: 36 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B0_B84F:
+; PressStartText: 0-terminated tile string "PRESS START" (written by the title screen)
+PressStartText:
     .byte $50,$52,$45,$53,$53,$5C,$53,$54,$41,$52,$54,$00,$4C,$41,$53,$54
     .byte $5C,$53,$43,$4F,$52,$45,$5C,$00,$48,$49,$47,$48,$5C,$53,$43,$4F
     .byte $52,$45,$5C,$00
@@ -2027,8 +2027,8 @@ WriteBiasedText:
     JMP @B0_B878
 @B0_B886:
     RTS
-; Tbl_B0_B887: 30 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B0_B887:
+; TitleLogoTilemap: tile rows of the title logo ($70 separates rows)
+TitleLogoTilemap:
     .byte $70,$C7,$C8,$C9,$70,$CA,$CB,$CC,$CD,$70,$CE,$CF,$D0,$D1,$D2,$D3
     .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$70,$DD,$DE,$DF,$E0
 QueuePpuStringA:
@@ -2180,7 +2180,7 @@ FadeTableStep:
     BNE @B0_BF91
     TAY
 @B0_BF91:
-    CMP Tbl_B0_BFBB,y
+    CMP FadeTableStep_Tbl_BFBB,y
     BEQ @B0_BFA1
 @B0_BF96:
     STY zp_49
@@ -2200,12 +2200,12 @@ FadeTableStep:
     LDA zp_47
     BNE @B0_BFA0
     INY
-    LDA Tbl_B0_BFBB,y
+    LDA FadeTableStep_Tbl_BFBB,y
     STA zp_47
     INY
     JMP @B0_BF96
-; Tbl_B0_BFBB: 69 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B0_BFBB:
+; FadeTableStep_Tbl_BFBB: 69 bytes, read by FadeTableStep
+FadeTableStep_Tbl_BFBB:
     .byte $79,$01,$7B,$02,$7D,$03,$7F,$04,$7F,$00,$00,$00,$04,$F7,$FF,$FB
     .byte $FF,$60,$00,$88,$00,$9B,$04,$00,$21,$FF,$FF,$FF,$FF,$00,$02,$80
     .byte $00,$FF,$FD,$FF,$7E,$FF,$FF,$FF,$FD,$40,$00,$80,$00,$FD,$FF,$FF

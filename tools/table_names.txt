@@ -43,3 +43,25 @@ f FA32 EffectList_F_FA32 struct 1 bwwbbbbb ; effect list for SpawnEffects: recor
 0 823D ButtonBitMasks ; button bit order used by ReadController
 1 B151 PlayerAnimFrames ; $FF-terminated player_frame list walked by PlayerAnimAdvance
 2 B779 DecimalPlaceValues ; third (high) byte of the 24-bit place values read at stride 4 from B2_B777 by BinaryToDigits (100000, 10000, 1000, 100, 10, 1)
+0 B755 IntroBlockTiles ; 5 rows x 17 source bytes for DrawTileBlock17x5 (each minus $80 gives the tile; counts up from $80)
+0 B84F PressStartText ; 0-terminated tile string "PRESS START" (written by the title screen)
+0 B887 TitleLogoTilemap ; tile rows of the title logo ($70 separates rows)
+1 BDFF FoundText ; "FOUND" / "NOW" text
+4 B810 StoryText_B810 ; story dialogue lines (16 bytes each: 2 border tiles + 14 characters)
+4 B870 StoryText_B870 ; story dialogue lines
+4 B901 StoryText_B901 ; story dialogue lines
+4 B921 StoryText_B921 ; story dialogue lines
+4 B972 StoryText_B972 ; story dialogue lines
+4 B9A2 StoryText_B9A2 ; story dialogue lines
+4 AFB3 TextPackets_AFB3 ; PPU text packets (address hi/lo, $80|length, characters stored reversed), $FF between packets
+4 B074 TextPackets_B074 ; PPU text packets
+4 B227 TextPackets_B227 ; PPU text packets
+4 B31F TextPackets_B31F ; PPU text packets
+4 B4A9 TextPackets_B4A9 ; PPU text packets
+4 B4C1 TextPackets_B4C1 ; PPU text packets
+4 BD5E TextPackets_BD5E ; PPU text packets
+4 BD73 TextPackets_BD73 ; PPU text packets
+4 BDB2 TextPackets_BDB2 ; PPU text packets
+4 BDD5 TextPackets_BDD5 ; PPU text packets
+4 BE06 TextPackets_BE06 ; PPU text packets
+4 BE19 TextPackets_BE19 ; PPU text packets
