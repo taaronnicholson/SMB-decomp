@@ -4294,7 +4294,7 @@ B6_B92A:
     STA player_state
     LDA #$00
     STA zp_7D
-    STA zp_7C
+    STA dive_mode
     JMP PlayerState02
 B6_B937:
     LDA player_y_lo
@@ -4350,7 +4350,7 @@ B6_B953:
     AND #$01
     BEQ B6_BA04
 B6_B998:
-    LDA zp_7C
+    LDA dive_mode
     BEQ B6_B9C0
     JSR GetMapTile
     CMP #$D1
@@ -4389,7 +4389,7 @@ B6_B9D1:
     BEQ B6_B9FA
     LDX #$00
     STX zp_8F
-    STX zp_7C
+    STX dive_mode
     STX zp_67
     INX
     STX player_state
@@ -4411,7 +4411,7 @@ B6_BA04:
     BNE B6_BA0D
     JMP B6_BA81
 B6_BA0D:
-    LDA zp_7C
+    LDA dive_mode
     BEQ B6_BA1A
     LDA zp_7F
     BEQ B6_BA23
@@ -4484,7 +4484,7 @@ B6_BA81:
     BNE B6_BA88
     RTS
 B6_BA88:
-    LDA zp_7C
+    LDA dive_mode
     BEQ B6_BA94
     LDX zp_7F
     BNE B6_BA9C

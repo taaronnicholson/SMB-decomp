@@ -33,6 +33,6 @@ Left `$20`, Up `$40`, Down `$80` (`*` = tested on a fresh press, `buttons_presse
 | $19 | `PlayerState19` | 4 | - | - | - | - |
 | $1A | `PlayerState1A` | 4 | - | - | - | - |
 | $1B | `PlayerState1B` | 4 | - | - | - | - |
-| $1C | `PlayerState1C` | 31 | - | - | - | - |
-| $1D | `PlayerState1D` | 31 | - | - | - | - |
-| $1E | `PlayerState1E` | 31 | - | - | - | - |
+| $1C | `PlayerState1C` | 33 | - | - | - | - |
+| $1D | `PlayerState1D` | 33 | - | - | - | - |
+| $1E | `PlayerState1E` | 33 | - | - | - | - |

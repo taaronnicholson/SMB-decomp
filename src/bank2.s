@@ -2874,8 +2874,8 @@ B2_B517:
 B2_B52A:
     LDA #$00
     STA player_state
-    STA zp_7C
-    STA zp_85
+    STA dive_mode
+    STA fall_ticks
     JMP PlayerState00
 B2_B535:
     STA player_frame
@@ -2898,8 +2898,8 @@ B2_B548:
     BNE B2_B535
     LDA #$00
     STA player_state
-    STA zp_7C
-    STA zp_85
+    STA dive_mode
+    STA fall_ticks
     LDA invuln_hi
     BNE B2_B56B
     LDA invuln_lo
@@ -3169,8 +3169,8 @@ ResetLevelState:
     STA ppu_buffer_idx
     STA ppu_buffer
     STA zp_DA
-    STA zp_7C
-    STA zp_85
+    STA dive_mode
+    STA fall_ticks
     STA ram_01A5
     STA zp_84
     STA zp_A6

@@ -29,7 +29,11 @@ upward; at the top of the area `ride_timer` counts to `$30`, the player is moved
 at the top `$18` (`game_state` `$0A`/`$0B`) tallies the bonus (6120 points in the test and `lives` went 2 → 3, i.e. an extra life), `$19` walks to a "NEXT" sign and the next stage starts.
 (The emulator hook that forced stage 0 each load restarted stage 0 afterwards; the real game advances `stage_index`.)
 
-**Other states:** `$0D` in water (`water_level`, splash sfx `$22`, Up leaves it); `$03` is a 17-tick state back to `$00` (bank 2 `$B53A`); `$0A` returns to `$00` immediately;
+**Dive attack** [v]: pressing Down while in the air sets `dive_mode` (`zp_7C`) to 4; landing then enters `$03` instead of `$04`. If the fall lasted at least `$8C` ticks (`fall_ticks`, `zp_85`)
+the landing also sets `camera_mode` 5 (screen shake) and calls `ShockwaveKillEnemies`, which turns every entity whose type is flagged in `KillableTypeTable` (bank 6 `$A21E`) into `$5D` and removes it
+(tested by holding `zp_85` at `$A0`: all five `$4E` creatures in area 0 vanished). `$5E` is also vulnerable to a diving player.
+
+**Other states:** `$0D` in water (`water_level`, splash sfx `$22`, Up leaves it); `$03` is the **dive landing** [v] (a 17-tick state back to `$00`, bank 2 `$B53A`); `$0A` returns to `$00` immediately;
 `$08` is the **spring bounce** [v]: landing on a spring tile (tile `$D2`; in area 0's map it is the coil at the bottom-left) enters `$08` automatically (sfx `$27` on pulse 1); it rises 19 ticks at 3 px per tick
 (`zp_8F`/`zp_8B`) and then continues as `$01`/`$02`, so the player bounces repeatedly, higher (peak Y `$3FD`) than a normal jump (`$40C`). Jumping with A while `touch_kind` (`zp_57`) is 1 or 4 also starts `$08` (a boosted jump).
 `touch_kind` is set every frame from the tile at the player's position (`F_F3B5`: tiles below `$B4` give 0, others are mapped through `TileKindTable`, `$C1EF`: kind 4 = tile `$CD`, kind 1 = `$D2`-`$D5`, kind 3 = `$DB`, a collectible).

@@ -891,7 +891,7 @@ B1_8693:
     BEQ B1_86B2
     CMP #$02
     BNE B1_86B6
-    LDA zp_7C
+    LDA dive_mode
     BEQ B1_86B6
 B1_86B2:
     LDA zp_7F

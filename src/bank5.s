@@ -1163,7 +1163,7 @@ Ent_CheckPlayerOverlapB:
     BCC B5_8903
     LDA hurt_flag
     BNE B5_8903
-    LDA zp_7C
+    LDA dive_mode
     BNE B5_88D8
     JMP HurtPlayer
 B5_88D8:
@@ -1178,8 +1178,8 @@ B5_88D8:
     STA invuln_lo
     LDA #$00
     STA invuln_hi
-    STA zp_85
-    STA zp_7C
+    STA fall_ticks
+    STA dive_mode
     STA zp_7D
     STA zp_86
     STA riding_flag
@@ -1341,7 +1341,7 @@ Ent_CheckPlayerTouch:
     BCC B5_8A30
     LDA hurt_flag
     BNE B5_8A30
-    LDA zp_7C
+    LDA dive_mode
     BNE B5_8A31
     JMP HurtPlayer
 B5_8A30:
@@ -1375,8 +1375,8 @@ B5_8A5C:
     LDA #$00
     STA ent_radius,x
     STA ent_flags,x
-    STA zp_85
-    STA zp_7C
+    STA fall_ticks
+    STA dive_mode
     STA zp_7D
     STA zp_86
     STA riding_flag
@@ -5265,7 +5265,7 @@ Ent5E_Update:
     ADC #$16
     CMP tmp_d
     BCC B5_AF0A
-    LDA zp_7C
+    LDA dive_mode
     BEQ B5_AEEF
     LDA player_state
     CMP #$02

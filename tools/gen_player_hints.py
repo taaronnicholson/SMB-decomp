@@ -7,7 +7,7 @@ b2 = d[16 + 2 * 16384:16 + 3 * 16384]
 def wd(a): return b2[a - 0x8000] | b2[a - 0x7FFF] << 8
 T, N = 0xB5AA, 31
 # meaning of each state ([v] = verified by driving the emulator, others read from the code)
-DESCR = {0x00: 'on the ground (walk, start jump, peck)', 0x01: 'rising in a jump [v]', 0x02: 'falling [v]', 0x03: 'landing variant when zp_7C is non-zero: sfx $11, a 17-tick animation (bank 2 $B53A), camera shake after long falls, brief invulnerability; code-read, not triggered',
+DESCR = {0x00: 'on the ground (walk, start jump, peck)', 0x01: 'rising in a jump [v]', 0x02: 'falling [v]', 0x03: 'dive landing (landing with dive_mode set): sfx $11, a 17-tick animation (bank 2 $B53A), brief invulnerability; with fall_ticks >= $8C also the shockwave and camera shake [v]',
          0x04: 'landing recovery [v]', 0x05: 'peck: inspects the tile in front of the beak [v]', 0x06: 'peck swing (nothing solid) [v]', 0x07: 'peck hit (solid tile) [v]',
          0x08: 'spring bounce: 19 ticks at 3 px (zp_8F/zp_8B), then continues as $01; entered by landing on a spring tile (sfx $27) or jumping while touching one [v]', 0x09: 'start of life: drops in via $0E, falls, lands [v]',
          0x0A: 'returns to $00 immediately', 0x0D: 'in water (below water_level)', 0x0E: 'one-tick hand-over to falling after a spawn [v]',

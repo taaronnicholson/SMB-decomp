@@ -3481,10 +3481,10 @@ F_DCC8:
     JSR PlaySfxNoise
     LDA #$0D
     STA player_state
-    LDA zp_7C
+    LDA dive_mode
     BEQ F_DCF8
     LDA #$00
-    STA zp_7C
+    STA dive_mode
     LDA zp_7F
     STA player_facing
     JMP F_DCF8
@@ -3498,7 +3498,7 @@ F_DCE0:
     JSR PlaySfxNoise
     JMP F_DCF8
 F_DCF2:
-    LDA zp_7C
+    LDA dive_mode
     CMP #$80
     BNE F_DCA1
 F_DCF8:
@@ -3556,7 +3556,7 @@ F_DD4B:
     STA zp_8C
     STA zp_7D
     STA zp_86
-    STA zp_7C
+    STA dive_mode
     STA riding_flag
     LDA #$02
     STA tmp_a
@@ -3580,7 +3580,7 @@ F_DD72:
     STA zp_8B
     LDA #$08
     STA player_state
-    STA zp_7C
+    STA dive_mode
     LDA #$27
     JMP PlaySfxSq1
 F_DD8F:
@@ -3657,12 +3657,12 @@ F_DDFC:
 F_DE09:
     JMP TryStartJump
 F_DE0C:
-    LDA zp_7C
+    LDA dive_mode
     CMP #$80
     BEQ F_DE15
     JMP TryFireShot
 F_DE15:
-    LDA zp_85
+    LDA fall_ticks
     CMP #$10
     BCC F_DE09
     LDA shot_state
@@ -4611,7 +4611,7 @@ PlayerState0E:
     STA zp_86
     STA riding_flag
     STA zp_7D
-    STA zp_7C
+    STA dive_mode
     RTS
 GetTilePropsAtPos:
     JSR GetMapTile
@@ -4653,7 +4653,7 @@ F_E53D:
     LDA buttons
     AND #$01
     BEQ F_E579
-    LDA zp_7C
+    LDA dive_mode
     BEQ F_E562
     STA zp_86
     LDA zp_7F
@@ -4662,7 +4662,7 @@ F_E562:
     LDA #$04
     STA zp_7D
     LDA #$00
-    STA zp_7C
+    STA dive_mode
     INC zp_80
     LDA zp_80
     AND #$04
@@ -4672,7 +4672,7 @@ F_E562:
     STA player_frame
     JMP F_E650
 F_E579:
-    LDA zp_7C
+    LDA dive_mode
     BNE F_E5AD
     LDA buttons
     AND #$80
@@ -4696,7 +4696,7 @@ F_E598:
     LDA #$06
     STA zp_82
     LDA #$04
-    STA zp_7C
+    STA dive_mode
     LDA #$78
     STA zp_83
     JMP F_E650
@@ -4704,11 +4704,11 @@ F_E5AD:
     CMP #$80
     BNE F_E5F5
 F_E5B1:
-    LDX zp_85
+    LDX fall_ticks
     CPX #$FF
     BEQ F_E5BA
     INX
-    STX zp_85
+    STX fall_ticks
 F_E5BA:
     CPX #$05
     BCS F_E5C5
@@ -4746,9 +4746,9 @@ F_E5F5:
     DEC zp_83
     BNE F_E604
     LDA #$00
-    STA zp_85
+    STA fall_ticks
     LDA #$80
-    STA zp_7C
+    STA dive_mode
     JMP F_E5B1
 F_E604:
     LDA zp_82
@@ -4759,10 +4759,10 @@ F_E604:
     LDA zp_80
     CMP #$10
     BNE F_E61D
-    LDA zp_7C
+    LDA dive_mode
     CMP #$02
     BEQ F_E61B
-    DEC zp_7C
+    DEC dive_mode
 F_E61B:
     LDA #$00
 F_E61D:
@@ -4783,7 +4783,7 @@ F_E62E:
     STA player_frame
     LDA F_C294,y
     STA player_facing
-    LDA zp_7C
+    LDA dive_mode
 F_E63F:
     STA zp_82
 F_E641:
@@ -4835,7 +4835,7 @@ F_E650:
     BNE F_E69A
     JMP F_E734
 F_E69A:
-    LDA zp_7C
+    LDA dive_mode
     BEQ F_E6C5
     JSR GetMapTile
     CMP #$D1
@@ -4850,7 +4850,7 @@ F_E69A:
     STA ram_0722
     LDA #$02
     STA ram_0720
-    LDA zp_7C
+    LDA dive_mode
     CMP #$80
     BEQ F_E734
 F_E6C5:
@@ -4868,7 +4868,7 @@ F_E6D6:
     AND #$F0
     STA player_y_lo
 F_E6DC:
-    LDA zp_7C
+    LDA dive_mode
     BEQ F_E722
     LDA zp_7F
     STA player_facing
@@ -4879,10 +4879,10 @@ F_E6DC:
     STX zp_86
     LDA riding_flag
     BNE F_E70B
-    LDA zp_85
+    LDA fall_ticks
     CMP #$8C
     BCC F_E70B
-    JSR F_F7B8
+    JSR ShockwaveKillEnemies
     LDA camera_mode
     STA ram_01A4
     LDA #$01
@@ -4893,7 +4893,7 @@ F_E70B:
     LDA #$03
     STA player_state
     LDA #$00
-    BIT zp_7C
+    BIT dive_mode
     BMI F_E718
     CLC
     ADC #$14
@@ -4996,7 +4996,7 @@ F_E7B6:
     PHA
     LDA #$00
     STA zp_84
-    LDA zp_7C
+    LDA dive_mode
     BEQ F_E7F9
     LDY #$00
     JSR GetTilePropsAtPos
@@ -5016,7 +5016,7 @@ F_E7B6:
     STX zp_89
     INX
     STX zp_8D
-    STX zp_7C
+    STX dive_mode
     INX
     STX zp_8A
     LDA #$10
@@ -5073,16 +5073,16 @@ F_E848:
     STA zp_8F
     LDA #$03
     STA zp_8B
-    LDA zp_7C
+    LDA dive_mode
     BEQ F_E858
     LDA zp_7F
     STA player_facing
 F_E858:
     LDA #$08
     STA player_state
-    STA zp_7C
+    STA dive_mode
     LDA #$00
-    STA zp_85
+    STA fall_ticks
     LDA player_facing
     STA zp_7F
     JSR UpdateTouchKind
@@ -5179,7 +5179,7 @@ PlayerState08:
     LDX zp_8F
     STX zp_67
     BNE F_E922
-    STX zp_7C
+    STX dive_mode
     INX
     STX player_state
     LDA zp_7F
@@ -7204,7 +7204,7 @@ PeckSwitchToggle:
     STA zp_DA
     PLA
     RTS
-F_F7B8:
+ShockwaveKillEnemies:
     LDA cur_bank
     PHA
     LDA #$04
