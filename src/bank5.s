@@ -1222,7 +1222,7 @@ Ent_CheckPlayerOverlap:
     SBC #$01
     BNE B5_8903
     STA shot_frame
-    STA zp_E0
+    STA shot_timer
     LDA #$03
     STA shot_state
     STA shot_E3
@@ -1253,7 +1253,7 @@ Ent_CheckPlayerOverlap:
     SBC #$01
     BNE B5_8982
     STA shot_frame_1
-    STA zp_E0
+    STA shot_timer
     LDA #$03
     STA shot_state_1
     STA shot_E3_1
@@ -2053,7 +2053,7 @@ Ent06_Update:
     LDA #$00
     STA ent_radius,x
     STA ent_flags,x
-    STA zp_E0
+    STA shot_timer
     LDA #$1E
     STA ent_param,x
     LDA #$04
@@ -4938,7 +4938,7 @@ Ent_CheckPlayerOverlapD:
     SBC #$01
     BNE @B5_A9DA
     STA shot_frame
-    STA zp_E0
+    STA shot_timer
     LDA #$03
     STA shot_state
     STA shot_E3
@@ -4970,7 +4970,7 @@ Ent_CheckPlayerOverlapD:
     SBC #$01
     BNE @B5_A9DA
     STA shot_frame_1
-    STA zp_E0
+    STA shot_timer
     LDA #$03
     STA shot_state_1
     STA shot_E3_1

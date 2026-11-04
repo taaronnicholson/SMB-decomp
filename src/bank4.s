@@ -1859,7 +1859,7 @@ B4_B540:
     LDA #$17
     STA zp_92
     LDA #$00
-    STA zp_80
+    STA anim_tick
     LDA #$09
     STA game_state
     LDA #$08
@@ -2571,12 +2571,12 @@ GameState17:
     LDA #$1C
 B4_BCB9:
     STA tmp_08
-    LDA zp_48
+    LDA fade_tbl_pos
     AND #$03
     BNE @B4_BCD0
     LDA ppu_job
     BNE @B4_BCD0
-    LDA zp_48
+    LDA fade_tbl_pos
     LSR a
     LSR a
     AND #$01

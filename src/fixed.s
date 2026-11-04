@@ -429,7 +429,7 @@ StartNewGame:
     BPL @F_C659
     STA items_found
     STA balloons_left
-    STA zp_A7
+    STA pickup_timer
     STA stage_index
 StageSetup:
     LDA #$00
@@ -1818,8 +1818,8 @@ LoadArea:
     STY ppu_buffer_idx
     STY ppu_buffer
     STY ppu_job
-    STY zp_49
-    STY zp_48
+    STY fade_tbl_idx
+    STY fade_tbl_pos
     DEY
     STY ram_0749
     JSR ClearPpu_1F80_0F80
@@ -2098,7 +2098,7 @@ ClearPpuRegion128:
 ComputeFocusY:
     LDA player_y_lo
     SEC
-    SBC zp_4B
+    SBC focus_offset_y
     STA focus_y_lo
     LDA player_y_hi
     SBC #$00
@@ -2137,7 +2137,7 @@ F_D2D3:
 @F_D2E3:
     LDA player_x_lo
     SEC
-    SBC zp_4A
+    SBC focus_offset_x
     STA focus_x_lo
     LDA player_x_hi
     SBC #$00
@@ -3440,7 +3440,7 @@ Tbl_F_DC11:
     .byte $00,$00,$00,$01,$01,$01,$00,$01,$00,$00,$00,$00,$01,$01,$00,$00
 PlayerBlinkCheck:
     LDY #$FF
-    STY zp_62
+    STY blink_state
     LDA invuln_hi
     BNE @F_DC36
     ORA invuln_lo
@@ -3455,7 +3455,7 @@ PlayerBlinkCheck:
     BNE @F_DC3D
     INY
 @F_DC3D:
-    STY zp_62
+    STY blink_state
     LDA invuln_lo
     SEC
     SBC #$01
@@ -3624,7 +3624,7 @@ TryStartJump:
     LDX #$05
     STX tmp_a
 @F_DD72:
-    STA zp_80
+    STA anim_tick
     LDA player_facing
     STA zp_7F
     LDA tmp_a
@@ -3673,7 +3673,7 @@ TryFireShot:
     BEQ F_DD9B
     LDA shot_cooldown
     BNE F_DD9B
-    LDA zp_E0
+    LDA shot_timer
     BNE F_DD9B
     LDA buttons
     AND #$02
@@ -3687,7 +3687,7 @@ TryFireShot:
     LDA #$03
     STA shot_E3
     LDA #$82
-    STA zp_E0
+    STA shot_timer
     JMP TryStartJump
 @F_DDE8:
     LDA shot_state_1
@@ -3708,7 +3708,7 @@ F_DDFC:
     LSR a
     STA shot_E3_1
     LDA #$82
-    STA zp_E0
+    STA shot_timer
 F_DE09:
     JMP TryStartJump
 F_DE0C:
@@ -3741,7 +3741,7 @@ F_DE0C:
 F_DE3F:
     LDA shot_cooldown
     BNE @F_DE72
-    LDA zp_E0
+    LDA shot_timer
     BNE @F_DE72
     LDA buttons
     AND #$02
@@ -3763,7 +3763,7 @@ F_DE3F:
     STA shot_E3_1
 @F_DE6A:
     LDA #$10
-    STA zp_E0
+    STA shot_timer
     LDA #$37
     STA player_frame
 @F_DE72:
@@ -4718,8 +4718,8 @@ PlayerState02:
     STA zp_7D
     LDA #$00
     STA dive_mode
-    INC zp_80
-    LDA zp_80
+    INC anim_tick
+    LDA anim_tick
     AND #$04
     LSR a
     LSR a
@@ -4741,11 +4741,11 @@ PlayerState02:
     LDX #$FF
     LDA player_facing
     STA zp_7F
-    STA zp_81
+    STA anim_index
     BEQ @F_E598
     LDX #$06
 @F_E598:
-    STX zp_80
+    STX anim_tick
     LDA #$17
     STA player_frame
     LDA #$06
@@ -4810,8 +4810,8 @@ PlayerState02:
     SEC
     SBC #$01
     BNE @F_E63F
-    INC zp_80
-    LDA zp_80
+    INC anim_tick
+    LDA anim_tick
     CMP #$10
     BNE @F_E61D
     LDA dive_mode
@@ -4821,9 +4821,9 @@ PlayerState02:
 @F_E61B:
     LDA #$00
 @F_E61D:
-    STA zp_80
+    STA anim_tick
     STA tmp_a
-    LDA zp_81
+    LDA anim_index
     BEQ @F_E62E
     LDA tmp_a
     EOR #$FF
@@ -4953,7 +4953,7 @@ PlayerLand:
     CLC
     ADC #$14
 @F_E718:
-    STA zp_80
+    STA anim_tick
     LDA #$11
     JSR PlaySfxSq1
     JMP @F_E72C
@@ -4961,7 +4961,7 @@ PlayerLand:
     LDA #$04
     STA player_state
     LDA #$00
-    STA zp_80
+    STA anim_tick
     STA zp_84
 @F_E72C:
     LDA riding_flag
@@ -5142,7 +5142,7 @@ F_E734:
     STA zp_7F
     JSR UpdateTouchKind
     LDA #$00
-    STA zp_80
+    STA anim_tick
     STA zp_7D
     STA zp_8C
     LDA zp_77
@@ -5261,13 +5261,13 @@ PlayerState08:
     LDX #$FF
 @F_E943:
     STX tmp_a
-    LDA zp_80
+    LDA anim_tick
     CLC
     ADC tmp_a
     AND #$0F
-    STA zp_80
+    STA anim_tick
 @F_E94E:
-    LDA zp_80
+    LDA anim_tick
     AND #$0E
     TAY
     LDA F_C293,y
@@ -5282,8 +5282,8 @@ PlayerState01:
     JSR SwitchBank
     JMP B6_B842
 PlayerState09:
-    INC zp_80
-    LDA zp_80
+    INC anim_tick
+    LDA anim_tick
     AND #$1E
     LSR a
     TAX
@@ -5315,7 +5315,7 @@ PlayerState16:
     LDA #$00
     STA player_x_hi
     LDA #$04
-    STA zp_9C
+    STA door_id
     LDA #$0C
     STA zp_92
     LDA #$00
@@ -5447,9 +5447,9 @@ PlayerState0C:
     LDA #$01
     STA walk_speed
     JSR MovePlayerKeepBank
-    LDA zp_E0
+    LDA shot_timer
     BEQ @F_EA9F
-    DEC zp_E0
+    DEC shot_timer
     LDA #$37
     STA player_frame
     RTS
@@ -6245,7 +6245,7 @@ CheckDoorTile:
     STA player_x_hi
     INY
     LDA (ptr_lo),y
-    STA zp_9C
+    STA door_id
     INY
     CMP #$E0
     BCC @F_F03E
@@ -6283,14 +6283,14 @@ F_F043:
 @F_F074:
     LDX #$FF
     TXS
-    LDA zp_9C
+    LDA door_id
     SEC
     SBC #$E0
     BCC @F_F083
     STA stage_index
     JMP StageSetup
 @F_F083:
-    LDA zp_9C
+    LDA door_id
     JMP F_C6CC
 PlayerTileInteract:
     LDX player_state
@@ -6413,22 +6413,22 @@ F_F14F:
     JSR PlaySfxSq2
     RTS
 TickPickupCounter:
-    INC zp_A7
-    LDA zp_A7
+    INC pickup_timer
+    LDA pickup_timer
     CMP #$64
     BNE @F_F190
     LDA #$08
     STA tmp_a
-    LDA zp_A5
+    LDA pickup_tier
     CMP #$04
     BEQ @F_F187
-    INC zp_A5
+    INC pickup_tier
     LDA #$0C
     STA tmp_a
 @F_F187:
     JSR SpawnPickupAtPlayer
     LDA #$00
-    STA zp_A7
+    STA pickup_timer
     SEC
     RTS
 @F_F190:
@@ -6935,7 +6935,7 @@ F_F52A:
     LDX #$FF
     TXS
     LDA zp_98
-    STA zp_9C
+    STA door_id
     JMP F_C6CC
 DeathAnimFrame:
     CMP #$5E

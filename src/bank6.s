@@ -3566,7 +3566,7 @@ AdvanceStage:
     LDA #$16
     STA ppu_job
     LDA #$00
-    STA zp_62
+    STA blink_state
     DEC zp_D3
     BNE B6_A41D
     LDA #$01
@@ -3735,7 +3735,7 @@ PlayerToScreen:
     LDA #$00
 @B6_A568:
     STA player_box_x
-    LDA zp_62
+    LDA blink_state
     BNE @B6_A57F
 @B6_A56E:
     LDX #$3C
@@ -4789,7 +4789,7 @@ PlayerAttackInput:
     RTS
     LDA focus_y_lo
     CLC
-    ADC zp_4B
+    ADC focus_offset_y
     STA ptr_lo
     LDA focus_y_hi
     ADC #$00
@@ -4889,7 +4889,7 @@ PlayerAttackInput:
     BMI B6_BC06
     LDA focus_x_lo
     CLC
-    ADC zp_4A
+    ADC focus_offset_x
     STA ptr_lo
     LDA focus_x_hi
     ADC #$00

@@ -2864,8 +2864,8 @@ B2_B517:
     LDA buttons
     AND #$B1
     BNE @B2_B52A
-    INC zp_80
-    LDA zp_80
+    INC anim_tick
+    LDA anim_tick
     LSR a
     TAY
     LDA F_C266,y
@@ -2889,8 +2889,8 @@ B2_B53A:
     STA player_frame
     RTS
 @B2_B548:
-    INC zp_80
-    LDA zp_80
+    INC anim_tick
+    LDA anim_tick
     LSR a
     TAX
     LDA F_C249,x
@@ -3188,10 +3188,10 @@ ResetLevelState:
     STA player_box_x
     STA player_box_y
     STA hurt_flag
-    STA zp_E0
+    STA shot_timer
     STA invuln_lo
     STA invuln_hi
-    STA zp_80
+    STA anim_tick
     STA zp_6D
     STA zp_BE
     STA focus_x_lo
@@ -3215,11 +3215,11 @@ ResetLevelState:
     LDA #$01
     STA zp_6C
     STA zp_BD
-    STA zp_62
+    STA blink_state
     LDA #$70
-    STA zp_4A
+    STA focus_offset_x
     LDA #$63
-    STA zp_4B
+    STA focus_offset_y
     RTS
 ResetGameState:
     LDA #$FF
@@ -3229,7 +3229,7 @@ ResetGameState:
     STA tally_hi
     STA ram_01A7
     STA pixel_page_xor
-    STA zp_A5
+    STA pickup_tier
     STA shot_state
     STA shot_state_1
     STA powerup_shot

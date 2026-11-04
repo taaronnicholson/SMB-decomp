@@ -2175,19 +2175,19 @@ SineTable_Data:
     .byte $D3,$D4,$D5,$D6,$D8,$D9,$DA,$DB,$DD,$DE,$DF,$E1,$E2,$E3,$E5,$E6
     .byte $E8,$E9,$EB,$EC,$EE,$EF,$F1,$F2,$F4,$F5,$F7,$F8,$FA,$FB,$FD,$FF
 FadeTableStep:
-    LDY zp_49
-    LDA zp_48
+    LDY fade_tbl_idx
+    LDA fade_tbl_pos
     BNE @B0_BF91
     TAY
 @B0_BF91:
     CMP Tbl_B0_BFBB,y
     BEQ @B0_BFA1
 @B0_BF96:
-    STY zp_49
-    INC zp_48
-    LDA zp_48
+    STY fade_tbl_idx
+    INC fade_tbl_pos
+    LDA fade_tbl_pos
     AND #$7F
-    STA zp_48
+    STA fade_tbl_pos
 @B0_BFA0:
     RTS
 @B0_BFA1:

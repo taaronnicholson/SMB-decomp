@@ -827,3 +827,16 @@ ram 030E ppu_copy_buf_0E
 ram 030D ppu_copy_buf_0D
 ram 030C ppu_copy_buf_0C
 ram 030B ppu_copy_buf_0B
+
+; naming pass 20 (RAM): zero-page variables with a single clear role
+ram 00E0 shot_timer                 ; frames until the current shot ends (ShotTimerStep)
+ram 0048 fade_tbl_pos               ; 7-bit position and table index used by FadeTableStep
+ram 0049 fade_tbl_idx
+ram 004A focus_offset_x             ; camera focus offsets from the player position (set by ResetLevelState and the dive/attack code)
+ram 004B focus_offset_y
+ram 00A5 pickup_tier                ; counts up to 4 each time TickPickupCounter spawns a pickup
+ram 00A7 pickup_timer               ; counts frames to $64 in TickPickupCounter
+ram 009C door_id                    ; door index being entered (written before the door loader runs)
+ram 0062 blink_state                ; PlayerBlinkCheck result: $FF when not invulnerable
+ram 0080 anim_tick                  ; frame counter (to 8) of the current player animation
+ram 0081 anim_index                 ; position in the current player animation list

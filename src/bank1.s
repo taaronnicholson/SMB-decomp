@@ -145,7 +145,7 @@ ShotDispatch:
     STA ptr_hi
     JMP (ptr_lo)
 ShotTimerStep:
-    DEC zp_E0
+    DEC shot_timer
     BNE @B1_8156
     JMP ShotStartImpact
 @B1_8156:
@@ -161,7 +161,7 @@ ShotTimerStep:
     STA shot_frame,x
     LDA shot_onscreen,x
     BNE @B1_816E
-    STA zp_E0
+    STA shot_timer
     STA shot_state,x
 @B1_816E:
     RTS
@@ -538,7 +538,7 @@ Shot_TileHit:
     STA shot_E3,x
     LDA #$00
     STA shot_frame,x
-    STA zp_E0
+    STA shot_timer
 @B1_8416:
     RTS
 B1_8417:
@@ -4758,8 +4758,8 @@ B1_AF23:
     STA player_frame
     LDA #$00
     STA zp_D5
-    STA zp_81
-    STA zp_80
+    STA anim_index
+    STA anim_tick
     STA zp_D6
     LDA #$12
     STA player_state
@@ -4810,7 +4810,7 @@ B1_AFF8:
     LDA #$15
     STA player_state
     LDA #$07
-    STA zp_80
+    STA anim_tick
     RTS
 @B1_B005:
     LDY zp_D6
@@ -4887,7 +4887,7 @@ B1_B094:
     BNE @B1_B0A8
     LDA #$15
     STA player_frame
-    DEC zp_80
+    DEC anim_tick
     BEQ @B1_B0C6
     RTS
 @B1_B0A8:
@@ -4960,20 +4960,20 @@ B1_B094:
     STA shot_x_hi_1
     RTS
 PlayerAnimAdvance:
-    LDA zp_80
+    LDA anim_tick
     CLC
     ADC #$01
     CMP #$08
     BNE @B1_B141
-    LDY zp_81
+    LDY anim_index
     LDA PlayerAnimFrames,y
     CMP #$FF
     BEQ @B1_B143
     STA player_frame
-    INC zp_81
+    INC anim_index
     LDA #$00
 @B1_B141:
-    STA zp_80
+    STA anim_tick
 @B1_B143:
     RTS
 ; Tbl_B1_B144: 13 bytes, read by B1_B094

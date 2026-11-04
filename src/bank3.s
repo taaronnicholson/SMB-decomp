@@ -1137,15 +1137,15 @@ AreaMap9:
     .byte $1F,$21,$00,$BB,$46,$1E,$1E,$00,$C4,$00,$00,$00,$00,$00,$7F,$22
     .byte $22,$22,$23,$23,$22,$22,$22,$23,$23,$23,$23,$23,$23,$23,$23,$23
 B3_BD67:
-    INC zp_81
-    LDA zp_81
+    INC anim_index
+    LDA anim_index
     LSR a
     TAY
     LDA Tbl_B3_BE12,y
     BEQ @B3_BD75
     JMP F_F507
 @B3_BD75:
-    STA zp_81
+    STA anim_index
     LDA #$64
     STA zp_D4
     LDA #$1B
@@ -1162,7 +1162,7 @@ PlayerFrameCycle4:
     RTS
 B3_BD8D:
     JSR PlayerFrameCycle4
-    LDA zp_81
+    LDA anim_index
     ASL a
     TAY
     LDA Tbl_B3_BE2A,y
@@ -1209,7 +1209,7 @@ B3_BD8D:
     ADC B3_BE2B,y
     STA player_y_hi
 @B3_BDF1:
-    INC zp_81
+    INC anim_index
     RTS
 @B3_BDF4:
     JSR PlayerFrameCycle4
