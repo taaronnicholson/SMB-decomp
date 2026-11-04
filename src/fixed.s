@@ -4270,7 +4270,7 @@ F_E20B:
     LDA player_y_lo
     AND #$0F
     BNE F_E233
-    JMP F_E2EB
+    JMP RidingCheckX
 F_E233:
     LDA ptr_lo
     CLC
@@ -4282,7 +4282,7 @@ F_E233:
     JSR GetTilePropsAtPos
     AND #$01
     BNE F_E24A
-    JMP F_E2EB
+    JMP RidingCheckX
 F_E24A:
     INC ptr_lo
     BNE F_E250
@@ -4298,14 +4298,14 @@ F_E250:
     LDA #$04
     CMP (ptr_lo),y
     BCC F_E269
-    JMP F_E2EB
+    JMP RidingCheckX
 F_E269:
     LDA player_x_lo
     AND #$F0
     CLC
     ADC #$0A
     STA player_x_lo
-    JMP F_E2EB
+    JMP RidingCheckX
 F_E275:
     LDA player_x_lo
     CLC
@@ -4324,7 +4324,7 @@ F_E275:
     BNE F_E2E2
     LDA player_y_lo
     AND #$0F
-    BEQ F_E2EB
+    BEQ RidingCheckX
     LDA ptr_lo
     CLC
     ADC map_width
@@ -4334,7 +4334,7 @@ F_E275:
     STA ptr_hi
     JSR GetTilePropsAtPos
     AND #$01
-    BEQ F_E2EB
+    BEQ RidingCheckX
     LDA ptr_lo
     SEC
     SBC #$01
@@ -4361,14 +4361,14 @@ F_E275:
     STA ptr_hi
     LDA #$04
     CMP (ptr_lo),y
-    BCS F_E2EB
+    BCS RidingCheckX
 F_E2E2:
     LDA player_x_lo
     AND #$F0
     CLC
     ADC #$05
     STA player_x_lo
-F_E2EB:
+RidingCheckX:
     LDX riding_slot
     LDA player_x_lo
     CLC
@@ -5447,7 +5447,7 @@ F_EA81:
 PlayerState0C:
     LDA #$01
     STA walk_speed
-    JSR F_EB25
+    JSR MovePlayerKeepBank
     LDA zp_E0
     BEQ F_EA9F
     DEC zp_E0
@@ -5482,7 +5482,7 @@ PlayerState0D:
     EOR #$01
     STA zp_90
     STA walk_speed
-    JSR F_EB25
+    JSR MovePlayerKeepBank
     LDA buttons
     AND #$40
     BNE F_EAD5
@@ -5532,7 +5532,7 @@ F_EB1F:
 F_EB22:
     STA zp_BD
     RTS
-F_EB25:
+MovePlayerKeepBank:
     LDA cur_bank
     PHA
     JSR F_EB2F
@@ -7446,7 +7446,7 @@ F_F911:
 SpawnEffects:
     STA ptr_lo
     STY ptr_hi
-F_F91B:
+SpawnEffectsFromList:
     LDX #$0F
 F_F91D:
     LDA effect_type,x
@@ -7513,7 +7513,7 @@ F_F928:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JMP F_F91B
+    JMP SpawnEffectsFromList
 F_F99B:
     LDX saved_x
     RTS

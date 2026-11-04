@@ -482,3 +482,6 @@ name 5 A785 EntStateJump             ; jumps through a word table indexed by ent
 name 4 BEEB CutsceneScrollEffect     ; far-called by F_CEE1 after zp_75 is set to $78
 name 5 8F35 EntWobbleX               ; sets tmp_a/b to WobbleDxTable then falls into B5_8F3D: advances ent_radius (0..17) and adds the table word to ent_x
 name 1 814F ShotTimerStep            ; per-frame shot countdown on zp_E0: at zero ends the shot (B1_8568), otherwise animates shot_frame from shot_E3
+name f E2EB RidingCheckX             ; compares player X+9 with the ridden entity's X (riding_slot); within $12 keeps riding, otherwise leaves F_E310
+name f F91B SpawnEffectsFromList     ; finds a free effect slot (16) and spawns effects from the list at ptr, positioned relative to the entity in saved_x; $FF ends the list
+name f EB25 MovePlayerKeepBank       ; saves the current bank around F_EB2F (the buttons-driven player move), then restores it

@@ -3578,7 +3578,7 @@ B5_9D55:
     BNE B5_9D2E
     LDA #$40
     STA ent_param2,x
-    JMP F_F91B
+    JMP SpawnEffectsFromList
 ; Tbl_B5_9D6F: 11 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_9D6F:
     .byte $0F,$FC,$FF,$00,$00,$68,$06,$30,$00,$00,$FF
@@ -5503,7 +5503,7 @@ B5_AF3A:
     LDA #$AF
     STA ptr_hi
 B5_AF5B:
-    JMP F_F91B
+    JMP SpawnEffectsFromList
 Ent5F_Update:
     JSR Ent_CheckPlayerOverlap
     JSR Ent_DieIfHit
@@ -5641,7 +5641,7 @@ Ent67_Update:
     LDA #$B0
     STA ptr_hi
 B5_B0C3:
-    JMP F_F91B
+    JMP SpawnEffectsFromList
 B5_B0C6:
     SEC
     SBC #$01

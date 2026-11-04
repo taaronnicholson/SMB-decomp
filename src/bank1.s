@@ -5086,7 +5086,7 @@ B1_B21A:
 B1_B22E:
     LDA #$02
     STA walk_speed
-    JSR F_EB25
+    JSR MovePlayerKeepBank
 B1_B235:
     LDA entity_tick
     LSR a
