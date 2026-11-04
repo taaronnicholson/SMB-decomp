@@ -480,3 +480,5 @@ name f E6DC PlayerLand              ; landing: dive_mode 0 = normal landing (sta
 name f F885 SpawnPickupAtPlayer      ; saves bank and X, switches to bank 5, puts a free entity at the player's position and runs AwardPickup
 name 5 A785 EntStateJump             ; jumps through a word table indexed by ent_param2 (a sub-state dispatcher)
 name 4 BEEB CutsceneScrollEffect     ; far-called by F_CEE1 after zp_75 is set to $78
+name 5 8F35 EntWobbleX               ; sets tmp_a/b to WobbleDxTable then falls into B5_8F3D: advances ent_radius (0..17) and adds the table word to ent_x
+name 1 814F ShotTimerStep            ; per-frame shot countdown on zp_E0: at zero ends the shot (B1_8568), otherwise animates shot_frame from shot_E3

@@ -15,3 +15,4 @@ f C544 TileEffectScript struct 65 bb ; (next index, tile) pairs forming chains: 
 2 AE94 Anim_TileFrames ; 32-byte tile frames copied to PPUDATA by B2_AE38 (animated background tiles); the 133-byte span holds several frames
 4 AEB6 GameState02_FrameTable ; indexed by the frame counter; $80+ entries skip, otherwise value+$11 goes to zp_47
 4 B2BE GameState0B_Sequence ; indexed by zp_D1; $FF spawns effect type $33 at a fixed position
+5 8F63 WobbleDxTable struct 36 w ; signed 16-bit X deltas, 36 steps of a wobble; B5_8F3D steps ent_radius through the first 18 (wraps at $12) and adds the word to ent_x

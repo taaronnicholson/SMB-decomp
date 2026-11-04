@@ -144,7 +144,7 @@ ShotDispatch:
     LDA B1_811F,y
     STA ptr_hi
     JMP (ptr_lo)
-B1_814F:
+ShotTimerStep:
     DEC zp_E0
     BNE B1_8156
     JMP B1_8568
@@ -802,22 +802,22 @@ B1_85FA:
 B1_8604:
     JSR B1_81DA
     JSR B1_8223
-    JSR B1_814F
+    JSR ShotTimerStep
     RTS
 B1_860E:
     JSR B1_816F
     JSR B1_8223
-    JSR B1_814F
+    JSR ShotTimerStep
     RTS
 B1_8618:
     JSR Tbl_B1_826C
     JSR B1_81DA
-    JSR B1_814F
+    JSR ShotTimerStep
     RTS
 B1_8622:
     JSR Tbl_B1_826C
     JSR B1_816F
-    JSR B1_814F
+    JSR ShotTimerStep
     RTS
 B1_862C:
     LDA player_y_lo
