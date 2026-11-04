@@ -3,7 +3,7 @@ name 5 8AF5 EntityHandlerTable
 struct 5 8AF5 1 w   ; type 0 (unused)
 words 5 8AF7 160 5
 name 5 BC46 Ent_Noop
-name 5 8CB3 Ent01_Update   ; handler for ent_type $01 - balloon (goal): on touch sets the respawn point, becomes $02, decrements balloons_left; at 0 the level ends
+name 5 8CB3 Ent01_Update   ; handler for ent_type $01 - balloon (goal): popped by pecking (player state $07 overlapping), sets the respawn point, becomes $02, decrements balloons_left; at 0 the level ends
 name 5 8D58 Ent02_Update   ; handler for ent_type $02 - popped balloon: rises along a displacement table
 name 5 8E9A Ent03_Update   ; handler for ent_type $03
 name 5 8EC4 Ent04_Update   ; handler for ent_type $04

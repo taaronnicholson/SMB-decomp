@@ -17,13 +17,13 @@ uses read order instead: A, B, Select, Start, Up, Down, Left, Right = bits 0-7):
 | Sequence | Meaning |
 |----------|---------|
 | `$00` → `$01` → `$02` → `$04` → `$00` [v] | jump (A): rising about 36 frames, falling, landing recovery |
-| `$00` → `$05` → `$06` → `$07` → `$00` [v] | peck (Down): `$05` inspects the tile at the beak, `$06` swings, `$07` = hit a solid tile |
+| `$00` → `$05` → `$06` → `$07` → `$00` [v] | peck (Down): `$05` inspects the tile at the beak (pecking in state `$07` also pops balloons [v]), `$06` swings, `$07` = hit a solid tile |
 | `$0F` → `$10` → `$11`..`$15` → `$0E` → `$02` → `$04` → `$00` [v] | hurt: death animation (~21 ticks), dead (~100 ticks, `lives--`), a ~150-frame respawn arc in bank 1 that returns to the spawn point, then a drop |
 | `$1A` → `$1B` → `$11` [v] | knocked-out death (`HurtPlayerKnockout`, e.g. type `$30`), then the same respawn |
 | `$09` → `$0E` → `$02` → `$04` → `$00` [v] | start of a life: drops in and lands |
 | `$16` → `$17` → `$18` → `$19` [v] | level complete: balloon ride up, bonus ascent in area 4, tally, walk off |
 
-**Level completion in detail** [v]: touching the last balloon (`balloons_left` reaches 0) sets `$16`; the player follows the popped balloon (type `$02`, `ride_balloon_slot`)
+**Level completion in detail** [v]: pecking the last balloon (`balloons_left` reaches 0) sets `$16`; the player follows the popped balloon (type `$02`, `ride_balloon_slot`)
 upward; at the top of the area `ride_timer` counts to `$30`, the player is moved to area 4 (Y `$03CD`, X `$78`) and `game_state` goes `$08` → `$09` → `$0D`.
 `$17` is the **bonus ascent**: a night-sky area with stars and "50" score popups through which the player rises steadily (the score grew by 50 about every 200 frames);
 at the top `$18` (`game_state` `$0A`/`$0B`) tallies the bonus (6120 points in the test and `lives` went 2 → 3, i.e. an extra life), `$19` walks to a "NEXT" sign and the next stage starts.

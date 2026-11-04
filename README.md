@@ -154,7 +154,7 @@ Example, type `$4E` (the seven red propeller creatures of area 0, group 14): aft
 walks one pixel along X every `((ent_angle >> 3) & 7) + 1` frames (direction = `ent_flags` bit 1), turns when `Ent_PatrolStep` reports a wall or ledge, counts
 `ent_radius` down as a timer and changes into type `$4F` when it expires. Hit detection and the player-hurt routine are shared
 helpers (`Ent_CheckPlayerOverlap`, `Ent_CheckPlayerTouch`). Other handlers read so far (stage 0 types):
-- `$01` **balloon** (inferred, the level goal): on touching the player it stores the respawn point (`spawn_y/x`, area), becomes `$02`
+- `$01` **balloon** (the level goal): popped by **pecking** it (player in state `$07` overlapping it; merely touching does nothing) [verified in the emulator: `$01` -> `$02`, `balloons_left` 4 -> 3, `balloons_popped` 0 -> 1], it stores the respawn point (`spawn_y/x`, area), becomes `$02`
   (a popped balloon that rises along a displacement table) and decrements `balloons_left` (`$A8`, set from the stage data at level
   load and drawn on the HUD; `balloons_popped` is `$A9`); at 0 the level-end state (`$16`) starts. Slots 0-7 are reserved for
   balloons. **Balloons are map tile `$C4`**: at level load `ScanMapForBalloons` walks the whole map and `SpawnBalloon` creates a

@@ -9,7 +9,7 @@ b5 = d[16 + 5 * 16384:16 + 6 * 16384]
 def wd(a): return b5[a - 0x8000] | b5[a - 0x7FFF] << 8
 T, N = 0x8AF5, 160
 # what the handler does, as read from the code (stage 0 types); others are undescribed
-DESCR = {0x01: 'balloon (goal): on touch sets the respawn point, becomes $02, decrements balloons_left; at 0 the level ends',
+DESCR = {0x01: 'balloon (goal): popped by pecking (player state $07 overlapping), sets the respawn point, becomes $02, decrements balloons_left; at 0 the level ends',
          0x02: 'popped balloon: rises along a displacement table',
          0x08: 'hidden bonus item: on touch plays sfx $19, becomes $07 and increments items_found',
          0x2E: 'follows a scripted displacement path (table at $9CA2, ent_radius = step; $FF loops)',

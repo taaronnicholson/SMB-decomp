@@ -16,7 +16,7 @@ this file explains the ones that have been read. Names such as "snail-like" desc
 ## Families
 | Types | Picture | Behaviour |
 |-------|---------|-----------|
-| `$01` → `$02` | balloon | on touch: respawn point stored, becomes `$02` (rises along a table), `balloons_left--`; level ends at 0 |
+| `$01` → `$02` | balloon | popped by pecking (player in state `$07` overlapping it; touching does nothing) [verified]: respawn point stored, becomes `$02` (rises along a table and then removes itself), `balloons_left--`; level ends at 0 |
 | `$06`, `$08`, `$11` → `$07` | pickups | sfx `$19`, then `$07` plays a 2-frame sparkle (`$1E`/`$1F`) and spawns a score popup; `$08` also `items_found++` |
 | `$4E` ↔ `$4F` | red propeller creature | `$4E` walks 1 px in X every `((ent_angle >> 3) & 7) + 1` frames [verified: the three samples in area 0 moved every 4, 2 and 3 frames], turns at walls/ledges (`Ent_PatrolStep`); on its timer it becomes `$4F`, a pause animation, then back with a random timer |
 | `$74` ↔ `$75` | purple dome blob | slow patroller (moves every 4th tick) that turns at special-tile markers; `$74`/`$75` are its two directions |
