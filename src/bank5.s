@@ -118,7 +118,7 @@ B5_80D8:
     LDY player_state
     LDA B5_80B7,y
     BEQ B5_80D7
-    LDA zp_19
+    LDA player_box_y
     CLC
     ADC #$18
     CMP tmp_c
@@ -126,7 +126,7 @@ B5_80D8:
     ADC #$06
     CMP tmp_c
     BCC B5_80D7
-    LDA zp_18
+    LDA player_box_x
     CLC
     ADC #$02
     CMP tmp_d
@@ -382,7 +382,7 @@ B5_82E5:
     CMP #$D9
     BNE B5_830C
 B5_82F2:
-    JSR F_F192
+    JSR PushTileEffect
     LDA ptr_lo
     STA ram_0721
     LDA ptr_hi
@@ -1108,7 +1108,7 @@ B5_8872:
     ORA #$80
     STA ent_angle,x
     RTS
-B5_8886:
+Ent_DieIfHit:
     LDA tmp_a
     BNE B5_888B
     RTS
@@ -1127,19 +1127,19 @@ B5_888B:
     PLA
     PLA
     RTS
-B5_88AA:
+Ent_CheckPlayerOverlapB:
     LDA #$00
     STA tmp_a
     LDA ent_flags,x
     AND #$04
     BNE B5_8903
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_8903
     ADC #$1A
     CMP tmp_c
     BCC B5_8903
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_8903
     ADC #$16
@@ -1157,7 +1157,7 @@ B5_88D8:
     LDA #$0C
     JSR PlaySfxSq2
     LDA zp_7F
-    STA zp_66
+    STA player_facing
     LDA #$14
     STA invuln_lo
     LDA #$00
@@ -1245,11 +1245,11 @@ B5_8982:
     RTS
 B5_8983:
     .byte $00,$00,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$02
-B5_8993:
+Ent_CheckPlayerOverlapC:
     LDA ent_flags,x
     AND #$04
     BNE B5_8982
-    LDA zp_19
+    LDA player_box_y
     CLC
     ADC #$08
     CMP tmp_c
@@ -1257,7 +1257,7 @@ B5_8993:
     ADC #$12
     CMP tmp_c
     BCC B5_8982
-    LDA zp_18
+    LDA player_box_x
     CLC
     ADC #$06
     CMP tmp_d
@@ -1270,7 +1270,7 @@ Ent_HurtOnTouchKnockout:
     LDA ent_flags,x
     AND #$04
     BNE B5_8982
-    LDA zp_19
+    LDA player_box_y
     CLC
     ADC #$08
     CMP tmp_c
@@ -1278,7 +1278,7 @@ Ent_HurtOnTouchKnockout:
     ADC #$12
     CMP tmp_c
     BCC B5_8982
-    LDA zp_18
+    LDA player_box_x
     CLC
     ADC #$06
     CMP tmp_d
@@ -1291,13 +1291,13 @@ Ent_HurtOnTouch:
     LDA ent_flags,x
     AND #$04
     BNE B5_8A05
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_8A05
     ADC #$1A
     CMP tmp_c
     BCC B5_8A05
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_8A05
     ADC #$16
@@ -1310,13 +1310,13 @@ Ent_CheckPlayerTouch:
     LDA ent_flags,x
     AND #$04
     BNE B5_8A30
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_8A30
     ADC #$1A
     CMP tmp_c
     BCC B5_8A30
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_8A30
     ADC #$16
@@ -1352,7 +1352,7 @@ Ent_SpawnBurst:
     JMP SpawnEffects
 B5_8A5C:
     LDA zp_7F
-    STA zp_66
+    STA player_facing
     LDA #$07
     STA ent_type,x
     LDA #$00
@@ -1625,21 +1625,21 @@ B5_8C81:
     LDA ent_y_hi,x
     ADC #$00
     STA ent_y_hi,x
-    LDA zp_BC
+    LDA rng_b
     CLC
     ADC focus_x_lo
     STA ent_x_lo,x
     LDA focus_x_hi
     ADC #$00
     STA ent_x_hi,x
-    LDA zp_BB
+    LDA rng_a
     AND #$1F
     CMP #$12
     BCC B5_8CA8
     SBC #$12
 B5_8CA8:
     STA ent_radius,x
-    LDA zp_BC
+    LDA rng_b
     AND #$07
     STA ent_angle,x
     RTS
@@ -1657,13 +1657,13 @@ B5_8CBB:
     LSR a
     AND #$01
     STA ent_param,x
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_8CBA
     ADC #$1A
     CMP tmp_c
     BCC B5_8CBA
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_8CBA
     ADC #$16
@@ -1720,7 +1720,7 @@ B5_8D45:
     CLC
     ADC #$03
     STA tmp_a
-    JMP F_F9B6
+    JMP AwardPickup
     .byte $03,$00,$00,$00,$00,$00,$0F,$00,$00,$00,$FF
 Ent02_Update:
     LDY ent_radius,x
@@ -1854,7 +1854,7 @@ B5_8E48:
     LDA ent_y_hi,x
     ADC #$00
     STA ent_y_hi,y
-    LDA zp_BB
+    LDA rng_a
     AND #$0F
     STA tmp_a
     LDA ent_x_lo,x
@@ -1974,13 +1974,13 @@ Ent06_Update:
     BEQ B5_8FB3
     RTS
 B5_8FB3:
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_8FF0
     ADC #$1A
     CMP tmp_c
     BCC B5_8FF0
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_8FF0
     ADC #$16
@@ -2040,7 +2040,7 @@ Ent07_Update:
     STA tmp_a
     CMP #$FF
     BEQ B5_9066
-    JMP F_F9B6
+    JMP AwardPickup
 B5_9063:
     STA ent_param,x
 B5_9066:
@@ -2056,13 +2056,13 @@ Ent08_Update:
 B5_907E:
     JMP Ent_MoveYWithGround
 B5_9081:
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_907E
     ADC #$1A
     CMP tmp_c
     BCC B5_907E
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_907E
     ADC #$16
@@ -2105,13 +2105,13 @@ Ent09_Update:
     BEQ B5_90E6
     JMP Ent_MoveYWithGround
 B5_90E6:
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_911B
     ADC #$1A
     CMP tmp_c
     BCC B5_911B
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_911B
     ADC #$16
@@ -2288,13 +2288,13 @@ Ent0D_Update:
     LDA #$12
 B5_9351:
     STA ent_angle,x
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_9343
     ADC #$1A
     CMP tmp_c
     BCC B5_9343
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_9343
     ADC #$16
@@ -2316,7 +2316,7 @@ B5_9351:
     STA tmp_a
     LDA #$FF
     STA tmp_b
-    LDA zp_66
+    LDA player_facing
     BEQ B5_939C
     LDA #$08
     STA tmp_a
@@ -2362,7 +2362,7 @@ B5_9459:
     LDA ent_angle,x
     BNE B5_9493
     STA ent_param,x
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCC B5_946F
 B5_9467:
@@ -2373,7 +2373,7 @@ B5_946F:
     ADC #$1A
     CMP tmp_c
     BCC B5_9467
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_9467
     ADC #$16
@@ -2412,7 +2412,7 @@ B5_9493:
     STA ent_x_hi,y
     LDA #$28
     STA ent_flags,y
-    LDA zp_BC
+    LDA rng_b
     STA tmp_a
     AND #$03
     CLC
@@ -2423,7 +2423,7 @@ B5_9493:
     LDA tmp_a
     AND #$0F
     STA ent_radius,y
-    LDA zp_BB
+    LDA rng_a
     AND #$07
     CLC
     ADC #$26
@@ -2484,13 +2484,13 @@ Ent10_Update:
     BEQ B5_956D
     RTS
 B5_956D:
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_95B0
     ADC #$1A
     CMP tmp_c
     BCC B5_95B0
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_95B0
     ADC #$16
@@ -2573,13 +2573,13 @@ Ent11_Update:
     LDA ent_flags,x
     AND #$04
     BNE B5_9622
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_9622
     ADC #$1A
     CMP tmp_c
     BCC B5_9622
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_9622
     ADC #$16
@@ -2706,7 +2706,7 @@ B5_974D:
     .byte $01,$02,$02,$03,$03,$03,$03,$03,$03,$03,$02,$02,$01,$00,$00,$00
 Ent19_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     JSR Ent_CheckPlayerTouch
     JSR Ent_PatrolStep
     BEQ B5_978C
@@ -2834,12 +2834,12 @@ Ent1C_Update:
     STA ent_param2,x
     LDA #$1E
     STA ent_type,x
-    LDA zp_BC
+    LDA rng_b
     ORA #$80
     STA ent_radius,x
-    LDA zp_BB
-    EOR zp_BC
-    STA zp_BC
+    LDA rng_a
+    EOR rng_b
+    STA rng_b
     RTS
 B5_98F9:
     STA ent_param2,x
@@ -2898,7 +2898,7 @@ B5_9963:
     RTS
 Ent1F_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     JSR Ent_CheckPlayerTouch
     JSR Ent_PatrolStep
     BEQ B5_9975
@@ -2926,7 +2926,7 @@ B5_9993:
     RTS
 Ent20_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     JSR Ent_CheckPlayerTouch
     JSR Ent_PatrolStep
     BEQ B5_99B1
@@ -2953,7 +2953,7 @@ B5_99D1:
     .byte $0D,$0D,$0D,$0D,$0D,$0D
 Ent9C_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     JSR Ent_CheckPlayerTouch
     JSR Ent_GroundCheck
     LDA ent_angle,x
@@ -2966,7 +2966,7 @@ B5_99F5:
     STA ent_type,x
     LDA #$00
     STA ent_param2,x
-    LDA zp_BC
+    LDA rng_b
     AND #$03
     CLC
     ADC #$01
@@ -2975,7 +2975,7 @@ B5_9A0E:
     RTS
 Ent21_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     LDA ent_param2,x
     TAY
     INC ent_param2,x
@@ -3034,12 +3034,12 @@ B5_9A81:
 B5_9A90:
     LDA #$20
     STA ent_type,x
-    LDA zp_BC
+    LDA rng_b
     ORA #$80
     STA ent_radius,x
-    LDA zp_BB
-    EOR zp_BC
-    STA zp_BC
+    LDA rng_a
+    EOR rng_b
+    STA rng_b
 B5_9AA2:
     RTS
 B5_9AA3:
@@ -3082,7 +3082,7 @@ B5_9AF7:
     AND map_ptr_lo
     ROL nmi_state
 Ent24_Update:
-    JSR B5_8993
+    JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
     BNE B5_9B14
 B5_9B09:
@@ -3113,7 +3113,7 @@ B5_9B32:
     STA ent_param,x
     RTS
 Ent25_Update:
-    JSR B5_8993
+    JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
     BEQ B5_9B09
 B5_9B46:
@@ -3130,7 +3130,7 @@ B5_9B46:
     STA ent_x_hi,x
     JMP B5_9B09
 Ent26_Update:
-    JSR B5_8993
+    JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
     BEQ B5_9B09
 B5_9B6C:
@@ -3165,7 +3165,7 @@ B5_9B6C:
     STA ent_x_hi,x
     JMP B5_9B09
 Ent27_Update:
-    JSR B5_8993
+    JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
     BNE B5_9BB6
     JMP B5_9B09
@@ -3185,7 +3185,7 @@ B5_9BCC:
     STA ent_y_hi,x
     JMP B5_9B09
 Ent28_Update:
-    JSR B5_8993
+    JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
     BNE B5_9BE2
     JMP B5_9B09
@@ -3218,7 +3218,7 @@ B5_9C0C:
     CMP #$FF
     BNE B5_9C29
     STA ent_param2,x
-    LDA zp_BB
+    LDA rng_a
     AND #$3F
     CLC
     ADC #$20
@@ -3332,7 +3332,7 @@ Ent31_Update:
 B5_9D2E:
     RTS
 B5_9D2F:
-    LDA zp_19
+    LDA player_box_y
     SEC
     SBC #$06
     CMP tmp_c
@@ -3340,7 +3340,7 @@ B5_9D2F:
     ADC #$28
     CMP tmp_c
     BCC B5_9D55
-    LDA zp_18
+    LDA player_box_x
     SEC
     SBC #$08
     CMP tmp_d
@@ -3496,13 +3496,13 @@ Ent34_Update:
 B5_9F76:
     RTS
 Ent35_Update:
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_9FAE
     ADC #$1A
     CMP tmp_c
     BCC B5_9FAE
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_9FAE
     ADC #$16
@@ -3554,13 +3554,13 @@ B5_9FD0:
 B5_9FEC:
     RTS
 Ent37_Update:
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_A01E
     ADC #$1A
     CMP tmp_c
     BCC B5_A01E
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_A01E
     ADC #$16
@@ -3634,12 +3634,12 @@ Ent38_Update:
     AND #$04
     BNE B5_A0F7
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     JSR Ent_HurtOnTouch
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_A0F7
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_A0F7
     ADC #$16
@@ -3654,7 +3654,7 @@ Ent39_Update:
     AND #$04
     BNE B5_A138
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     JSR Ent_HurtOnTouch
     LDA ent_angle,x
     ASL a
@@ -3703,7 +3703,7 @@ B5_A158:
     RTS
 B5_A161:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     JSR Ent_HurtOnTouch
     LDA #$02
     STA tmp_a
@@ -3785,7 +3785,7 @@ Ent3B_Update:
     JMP B5_A302
 Ent3C_Update:
     JSR B5_A96E
-    JSR B5_A99A
+    JSR Ent_CheckPlayerOverlapD
     LDA ent_flags,x
     AND #$04
     BNE B5_A24C
@@ -3904,7 +3904,7 @@ B5_A322:
     RTS
 Ent3E_Update:
     JSR B5_A96E
-    JSR B5_A99A
+    JSR Ent_CheckPlayerOverlapD
     LDA #$01
     STA tmp_c
     LDA ram_01B8
@@ -4153,13 +4153,13 @@ B5_A5B7:
     INC ent_angle,x
     RTS
 Ent48_Update:
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_A5FD
     ADC #$1A
     CMP tmp_c
     BCC B5_A5FD
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_A5FD
     ADC #$16
@@ -4271,7 +4271,7 @@ B5_A6A6:
     .byte $1F,$00,$00,$FF,$9E,$00,$00,$00,$00,$78,$00,$00,$06,$80,$07,$FC
     .byte $FF,$0A,$00,$00,$1F,$00,$0C,$FF,$FF
 Ent3F_Update:
-    JSR B5_8993
+    JSR Ent_CheckPlayerOverlapC
     DEC ent_param2,x
     BNE B5_A6DE
     JMP B5_9B09
@@ -4583,7 +4583,7 @@ B5_A96E:
 B5_A975:
     RTS
 B5_A976:
-    LDA zp_19
+    LDA player_box_y
     SEC
     SBC #$06
     CMP tmp_c
@@ -4591,7 +4591,7 @@ B5_A976:
     ADC #$28
     CMP tmp_c
     BCC B5_A975
-    LDA zp_18
+    LDA player_box_x
     SBC #$08
     BCS B5_A98D
     LDA #$00
@@ -4602,7 +4602,7 @@ B5_A98D:
     CMP tmp_d
     BCC B5_A975
     JMP HurtPlayer
-B5_A99A:
+Ent_CheckPlayerOverlapD:
     LDA ent_flags,x
     AND #$04
     BNE B5_A975
@@ -4823,7 +4823,7 @@ B5_AB0E:
     JMP SetEntityPolarPos
 Ent4E_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     JSR Ent_CheckPlayerTouch
     JSR Ent_PatrolStep
     BEQ B5_AB77
@@ -4853,7 +4853,7 @@ B5_AB6F:
 B5_AB77:
     DEC ent_radius,x
     BNE B5_AB8E
-    LDA zp_BB
+    LDA rng_a
     BMI B5_AB88
     ORA #$80
     STA ent_radius,x
@@ -4891,7 +4891,7 @@ B5_ABBB:
     .byte $01,$02,$03,$02,$01,$02,$03,$02,$01,$02,$03,$02,$00,$02,$03,$02
 Ent4F_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     JSR Ent_CheckPlayerTouch
     INC ent_radius,x
     LDA ent_radius,x
@@ -4901,12 +4901,12 @@ Ent4F_Update:
     BNE B5_ABFA
     LDA #$4E
     STA ent_type,x
-    LDA zp_BC
+    LDA rng_b
     ORA #$80
     STA ent_radius,x
-    LDA zp_BB
-    EOR zp_BC
-    STA zp_BC
+    LDA rng_a
+    EOR rng_b
+    STA rng_b
     RTS
 B5_ABFA:
     STA ent_param,x
@@ -5015,7 +5015,7 @@ B5_ACE3:
     RTS
 Ent50_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     LDA entity_tick
     LSR a
     LSR a
@@ -5175,17 +5175,17 @@ B5_AE8E:
     .byte $01,$02,$02,$02,$80
 Ent5E_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     LDA ent_flags,x
     AND #$04
     BNE B5_AF0A
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_AF0A
     ADC #$1A
     CMP tmp_c
     BCC B5_AF0A
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_AF0A
     ADC #$16
@@ -5245,9 +5245,9 @@ B5_AF0A:
 B5_AF39:
     RTS
 B5_AF3A:
-    LDA zp_BB
-    EOR zp_BC
-    STA zp_BC
+    LDA rng_a
+    EOR rng_b
+    STA rng_b
     AND #$01
     BEQ B5_AF39
     LDA #$FA
@@ -5265,7 +5265,7 @@ B5_AF5B:
     JMP F_F91B
 Ent5F_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     INC ent_radius,x
     LDA ent_radius,x
     SEC
@@ -5353,7 +5353,7 @@ B5_B04B:
     .byte $00,$01,$00,$00,$00,$01,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00
     .byte $00,$FF,$FF,$00,$00,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00
 Ent66_Update:
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     JSR Ent_CheckPlayerOverlap
     JSR Ent_TickParam2
     LDA entity_tick
@@ -5371,7 +5371,7 @@ Ent66_Update:
 B5_B08C:
     RTS
 Ent67_Update:
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     JSR Ent_CheckPlayerOverlap
     LDA ent_radius,x
     CMP #$0F
@@ -5404,7 +5404,7 @@ B5_B0C6:
     BNE B5_B08C
     LDA #$66
     STA ent_type,x
-    LDA zp_BC
+    LDA rng_b
     ORA #$80
     STA ent_radius,x
 B5_B0DA:
@@ -5412,7 +5412,7 @@ B5_B0DA:
     .byte $68,$00,$00,$F2,$FF,$D8,$03,$00,$00,$00,$FF,$69,$00,$00,$0E,$00
     .byte $DA,$03,$00,$00,$00,$FF
 Ent68_Update:
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     LDA entity_tick
     LSR a
     LSR a
@@ -5428,7 +5428,7 @@ Ent68_Update:
     BPL B5_B0DA
     JMP Ent_StartCollectAnim
 Ent69_Update:
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     LDA entity_tick
     LSR a
     LSR a
@@ -5493,15 +5493,15 @@ B5_B181:
     LDA ent_flags,x
     AND #$04
     BNE B5_B1CB
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     JSR Ent_CheckPlayerOverlap
     JSR B5_9D55
-    LDA zp_19
+    LDA player_box_y
     SEC
     SBC tmp_c
     BCC B5_B1CB
     STA tmp_a
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_B1CB
     ADC #$16
@@ -5583,7 +5583,7 @@ B5_B239:
     .byte $00,$01,$02,$01
 Ent76_Update:
     JSR Ent_HurtOnTouch
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     LDA ent_angle,x
     AND #$78
     LSR a
@@ -5626,7 +5626,7 @@ Ent77_Update:
     STA ent_type,x
     RTS
 Ent78_Update:
-    JSR B5_8993
+    JSR Ent_CheckPlayerOverlapC
     LDA ent_dy,x
     STA tmp_a
     LDA ent_dx,x
@@ -5835,7 +5835,7 @@ B5_B440:
     STA ent_y_hi,x
     JMP B5_B40B
 Ent83_Update:
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     LDA #$00
     STA tmp_c
     JSR Ent_TickRadius
@@ -5857,7 +5857,7 @@ B5_B486:
     STA ent_param,x
     JMP B5_B4A2
 Ent84_Update:
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     LDA switch_flag
     BNE B5_B4A8
 B5_B4A2:
@@ -5912,7 +5912,7 @@ B5_B4FD:
     BEQ B5_B485
     JMP Ent_MoveXLeft
 Ent85_Update:
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     LDA #$02
     STA tmp_c
     JSR Ent_TickRadius
@@ -5947,7 +5947,7 @@ B5_B53A:
 B5_B549:
     RTS
 Ent86_Update:
-    JSR B5_88AA
+    JSR Ent_CheckPlayerOverlapB
     LDY ent_radius,x
     LDA B5_B591,y
     CMP #$81
@@ -5997,7 +5997,7 @@ B5_B5CF:
     .byte $00,$B8,$03,$D8,$00,$37,$04,$5A,$00,$F5,$03,$B8,$00
 Ent87_Update:
     JSR B5_A96E
-    JSR B5_A99A
+    JSR Ent_CheckPlayerOverlapD
     DEC ent_param2,x
     BNE B5_B616
     LDY ent_angle,x
@@ -6016,7 +6016,7 @@ B5_B616:
     RTS
 Ent88_Update:
     JSR B5_A96E
-    JSR B5_A99A
+    JSR Ent_CheckPlayerOverlapD
     JSR B5_A785
     LDA ram_01B8
     CMP #$4B
@@ -6034,7 +6034,7 @@ B5_B62A:
     STA ent_radius,x
     LDA ent_angle,x
     STA tmp_a
-    LDA zp_BC
+    LDA rng_b
     AND #$1C
     CMP tmp_a
     BNE B5_B652
@@ -6067,7 +6067,7 @@ B5_B652:
     JMP PlaySfxSq2
 Ent89_Update:
     JSR B5_A96E
-    JSR B5_A99A
+    JSR Ent_CheckPlayerOverlapD
     LDA #$87
     STA tmp_a
     LDA #$8F
@@ -6115,7 +6115,7 @@ B5_B6CB:
     RTS
 Ent8B_Update:
     JSR B5_A96E
-    JSR B5_A99A
+    JSR Ent_CheckPlayerOverlapD
     LDA ent_angle,x
     SEC
     SBC #$01
@@ -6163,7 +6163,7 @@ B5_B741:
     JMP B5_A785
 Ent8C_Update:
     JSR B5_A96E
-    JSR B5_A99A
+    JSR Ent_CheckPlayerOverlapD
     LDA ram_01B8
     BNE B5_B758
     JMP B5_B783
@@ -6257,7 +6257,7 @@ B5_B84D:
     .byte $1E,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$1F,$1F,$1F,$00
 Ent99_Update:
     JSR B5_A96E
-    JSR B5_A99A
+    JSR Ent_CheckPlayerOverlapD
     LDA #$98
     STA ent_type,x
     LDY #$1F
@@ -6305,7 +6305,7 @@ B5_B8C0:
     JMP SetEntityPolarPos
 Ent9D_Update:
     JSR Ent_CheckPlayerOverlap
-    JSR B5_8886
+    JSR Ent_DieIfHit
     JSR Ent_CheckPlayerTouch
     JSR Ent_GroundCheck
     LDA ent_angle,x
@@ -6390,13 +6390,13 @@ Ent92_Update:
     LDA ent_flags,x
     AND #$04
     BNE B5_BA7D
-    LDA zp_19
+    LDA player_box_y
     CMP tmp_c
     BCS B5_BA7E
     ADC #$1A
     CMP tmp_c
     BCC B5_BA7E
-    LDA zp_18
+    LDA player_box_x
     CMP tmp_d
     BCS B5_BA7E
     ADC #$16
@@ -6407,7 +6407,7 @@ Ent92_Update:
     JSR PlaySfxSq2
     LDA #$0B
     STA ent_param2,x
-    JSR F_F192
+    JSR PushTileEffect
     LDA map_ptr_lo
     CLC
     ADC #$0D
@@ -6632,7 +6632,7 @@ Ent_Noop:
     ORA ptr_lo
     BNE B5_BC5B
     LDA #$44
-    STA zp_65
+    STA player_frame
     RTS
 B5_BC5B:
     LDA player_x_lo
@@ -6646,7 +6646,7 @@ B5_BC5B:
     STA decomp_to_ram
     JMP F_EEBB
     LDA #$00
-    STA zp_65
+    STA player_frame
     RTS
     LDY zp_D8
     LDA B5_BCD7,y
@@ -6672,7 +6672,7 @@ B5_BC5B:
     JSR SpawnEffects
 B5_BCA9:
     LDA #$44
-    STA zp_65
+    STA player_frame
 B5_BCAD:
     RTS
 B5_BCAE:
@@ -6683,7 +6683,7 @@ B5_BCAE:
     AND #$01
     CLC
     ADC #$07
-    STA zp_65
+    STA player_frame
     LDA player_y_lo
     CLC
     ADC B5_BCD7,y

@@ -836,7 +836,7 @@ B4_AD39:
     JSR RenderOffAndWait
     JSR DisableNMI
     LDA #$F0
-    JSR F_C8B4
+    JSR ClearNametables
     LDA items_found
     CMP #$04
     BEQ B4_AD60
@@ -968,7 +968,7 @@ GameState02:
     TAX
     LDA #$08
     STA tmp_a
-    JSR F_F9B6
+    JSR AwardPickup
     LDA #$05
     STA game_state
     LDA #$05
@@ -1137,7 +1137,7 @@ GameState09:
     LDA #$0A
     STA ram_073D
     STA ram_073E
-    LDA zp_BB
+    LDA rng_a
     STA ram_073F
     STA ram_0740
     RTS
@@ -1622,7 +1622,7 @@ GameState0F:
     JSR B4_AEF6
     LDA #$01
     STA ram_0736
-    STA zp_66
+    STA player_facing
     STA ram_0737
     LDA #$04
     STA collected_flags
@@ -2468,7 +2468,7 @@ B4_BCD2:
     BNE B4_BD39
     LDA #$A0
     STA effect_type,y
-    LDA zp_BB
+    LDA rng_a
     CLC
     ADC focus_x_lo
     STA effect_x_lo,y
@@ -2477,7 +2477,7 @@ B4_BCE4:
     ADC #$00
     STA effect_x_hi,y
     JSR F_C929
-    LDA zp_BB
+    LDA rng_a
     CLC
     ADC focus_y_lo
     STA effect_y_lo,y
@@ -2498,7 +2498,7 @@ B4_BD15:
     JSR F_C929
     LDA #$00
     STA ram_0590,y
-    LDA zp_BC
+    LDA rng_b
     AND #$03
     BNE B4_BD25
     LDA #$01
@@ -2506,10 +2506,10 @@ B4_BD25:
     CLC
     ADC #$3A
     STA ram_05C0,y
-    LDA zp_BB
+    LDA rng_a
     AND #$0F
     STA ram_0620,y
-    LDA zp_BC
+    LDA rng_b
     AND #$07
     STA ram_05F0,y
 B4_BD39:

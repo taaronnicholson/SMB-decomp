@@ -584,7 +584,7 @@ B2_9D88:
     .byte $01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$F4,$00,$00,$00
     .byte $80,$00,$80,$00,$80,$00,$80,$00
 B2_9E00:
-    LDA zp_66
+    LDA player_facing
     AND #$01
     STA jump_ptr_lo
     LDA zp_4F
@@ -615,13 +615,13 @@ B2_9E2F:
     .word B2_9E76
     .word B2_9E8A
 B2_9E37:
-    LDY zp_65
+    LDY player_frame
     CPY ram_07FD
     BNE B2_9E3F
     RTS
 B2_9E3F:
     STY ram_07FD
-    LDA zp_66
+    LDA player_facing
     STA ram_07FE
     LDA zp_FC
     EOR #$10
@@ -2764,15 +2764,15 @@ B2_B52A:
     STA zp_85
     JMP PlayerState00
 B2_B535:
-    STA zp_65
-    JMP F_E0D4
+    STA player_frame
+    JMP ApplyRidingMotion
 B2_B53A:
     LDA ram_01A5
     BEQ B2_B548
     AND #$07
     TAX
     LDA F_C249,x
-    STA zp_65
+    STA player_frame
     RTS
 B2_B548:
     INC zp_80
@@ -2870,72 +2870,72 @@ B2_B64F:
     STA ptr_hi
     LDA score_hi
     STA tmp_a
-    JSR B2_B732
+    JSR BinaryToDigits
     LDA #$06
     STA tmp_a
     LDA #$21
     STA ptr_hi
     LDA #$8E
     STA ptr_lo
-    JSR B2_B6EF
+    JSR DrawDigitsToBuffer
     LDA #$00
     STA tmp_a
     STA ptr_hi
     LDA balloons_left
     STA ptr_lo
-    JSR B2_B732
+    JSR BinaryToDigits
     LDA #$01
     STA tmp_a
     LDA #$21
     STA ptr_hi
     LDA #$D2
     STA ptr_lo
-    JSR B2_B6EF
+    JSR DrawDigitsToBuffer
     LDA #$00
     STA tmp_a
     LDA ram_01A8
     STA ptr_lo
     LDA ram_01A9
     STA ptr_hi
-    JSR B2_B732
+    JSR BinaryToDigits
     LDA #$03
     STA tmp_a
     LDA #$22
     STA ptr_hi
     LDA #$0F
     STA ptr_lo
-    JSR B2_B6EF
+    JSR DrawDigitsToBuffer
     LDA #$00
     STA tmp_a
     STA ptr_hi
     LDA ram_01AA
     STA ptr_lo
-    JSR B2_B732
+    JSR BinaryToDigits
     LDA #$02
     STA tmp_a
     LDA #$22
     STA ptr_hi
     LDA #$52
     STA ptr_lo
-    JSR B2_B6EF
+    JSR DrawDigitsToBuffer
     LDA #$00
     STA tmp_a
     STA ptr_hi
     LDA lives
     STA ptr_lo
-    JSR B2_B732
+    JSR BinaryToDigits
     LDA #$02
     STA tmp_a
     LDA #$22
     STA ptr_hi
     LDA #$90
     STA ptr_lo
-    JSR B2_B6EF
+    JSR DrawDigitsToBuffer
     INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
     RTS
-B2_B6EF:
+DrawDigitsToBuffer:
     LDX ppu_buffer_idx
     LDA ptr_hi
     STA ppu_buffer,x
@@ -2961,7 +2961,7 @@ B2_B707:
     STA ppu_buffer,x
     STX ppu_buffer_idx
     RTS
-    JSR B2_B732
+    JSR BinaryToDigits
     LDY #$00
 B2_B723:
     LDA ram_038C,y
@@ -2972,7 +2972,7 @@ B2_B723:
     CPY #$06
     BNE B2_B723
     RTS
-B2_B732:
+BinaryToDigits:
     LDY #$00
 B2_B734:
     LDA #$00
@@ -3058,15 +3058,15 @@ ResetLevelState:
     STA zp_71
     STA zp_72
     STA zp_67
-    STA zp_65
+    STA player_frame
     STA zp_4F
     STA zp_4E
     STA camera_mode
     STA ram_0736
     STA riding_flag
     STA zp_7E
-    STA zp_18
-    STA zp_19
+    STA player_box_x
+    STA player_box_y
     STA hurt_flag
     STA zp_E0
     STA invuln_lo

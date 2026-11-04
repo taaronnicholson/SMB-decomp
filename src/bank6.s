@@ -3352,7 +3352,7 @@ B6_A21E:
     .res 21, $00
     .byte $01,$01,$00,$00
 B6_A2BE:
-    LDA zp_66
+    LDA player_facing
     BNE B6_A2D2
     LDA player_x_lo
     SEC
@@ -3399,18 +3399,18 @@ B6_A30B:
     AND #$01
     BEQ B6_A323
     LDA #$23
-    STA zp_65
+    STA player_frame
     LDA #$07
     STA player_state
     LDA #$0B
     JSR PlaySfxNoise
-    JMP F_E0D4
+    JMP ApplyRidingMotion
 B6_A323:
     LDA #$24
-    STA zp_65
+    STA player_frame
     LDA #$06
     STA player_state
-    JMP F_E0D4
+    JMP ApplyRidingMotion
 B6_A32E:
     LDA zp_91
     BEQ B6_A335
@@ -3418,7 +3418,7 @@ B6_A32E:
 B6_A335:
     LDA #$0F
     STA tmp_a
-    LDA zp_66
+    LDA player_facing
     BNE B6_A33F
     STA tmp_a
 B6_A33F:
@@ -3466,9 +3466,9 @@ B6_A383:
     JSR PlaySfxNoise
     LDA #$17
 B6_A38F:
-    STA zp_65
+    STA player_frame
     JSR SetCollectedFlag
-    JSR F_F192
+    JSR PushTileEffect
     LDA ptr_lo
     STA ram_0721
     LDA ptr_hi
@@ -3490,7 +3490,7 @@ B6_A3AF:
     JSR PlaySfxNoise
     LDX #$16
 B6_A3C0:
-    STX zp_65
+    STX player_frame
     LDA riding_flag
     BNE B6_A3CF
     LDA #$03
@@ -3503,19 +3503,19 @@ B6_A3CB:
 B6_A3CF:
     LDA #$07
     STA player_state
-    JMP F_E0D4
+    JMP ApplyRidingMotion
 B6_A3D6:
     LDA buttons
     AND #$B1
     CMP #$80
     BNE B6_A3E1
-    JMP F_E0D4
+    JMP ApplyRidingMotion
 B6_A3E1:
     LDA #$00
     STA player_state
     LDA #$01
     STA zp_86
-    JMP F_E0D4
+    JMP ApplyRidingMotion
 B6_A3EC:
     LDA zp_BD
     AND #$FE
@@ -3532,9 +3532,9 @@ B6_A403:
     CMP #$FE
     BNE B6_A40B
     LDA #$00
-    STA zp_66
+    STA player_facing
 B6_A40B:
-    STA zp_65
+    STA player_frame
     LDA player_x_lo
     SEC
     SBC B6_A44F,y
@@ -3633,7 +3633,7 @@ B6_A535:
     LDA tmp_a
     SEC
     SBC #$0E
-    STA zp_19
+    STA player_box_y
     BCS B6_A54D
     LDA #$00
 B6_A54D:
@@ -3653,7 +3653,7 @@ B6_A54D:
     BCS B6_A568
     LDA #$00
 B6_A568:
-    STA zp_18
+    STA player_box_x
     LDA zp_62
     BNE B6_A57F
 B6_A56E:
@@ -4288,7 +4288,7 @@ B6_B948:
     LSR a
     TAX
     LDA F_C235,x
-    STA zp_65
+    STA player_frame
 B6_B953:
     LDA player_y_lo
     STA tmp_c
@@ -4334,7 +4334,7 @@ B6_B998:
     JSR SetCollectedFlag
     LDA #$39
     JSR PlaySfxNoise
-    JSR F_F192
+    JSR PushTileEffect
     LDA ptr_lo
     STA ram_0721
     LDA ptr_hi
@@ -4370,9 +4370,9 @@ B6_B9D1:
     INX
     STX player_state
     LDA #$07
-    STA zp_65
+    STA player_frame
     LDA zp_7F
-    STA zp_66
+    STA player_facing
     JMP B6_BA00
 B6_B9FA:
     LDA zp_7D
@@ -4395,10 +4395,10 @@ B6_BA0D:
     STA zp_7F
     RTS
 B6_BA1A:
-    LDA zp_66
+    LDA player_facing
     BEQ B6_BA23
     LDA #$00
-    STA zp_66
+    STA player_facing
     RTS
 B6_BA23:
     LDA player_x_lo
@@ -4468,10 +4468,10 @@ B6_BA88:
     STX zp_7F
     RTS
 B6_BA94:
-    LDX zp_66
+    LDX player_facing
     BNE B6_BA9C
     INX
-    STX zp_66
+    STX player_facing
     RTS
 B6_BA9C:
     LDA player_x_lo
@@ -4918,7 +4918,7 @@ B6_BDA0:
     ORA #$06
     JSR SetPPUMask
     LDA #$F0
-    JSR F_C8B4
+    JSR ClearNametables
     LDY ram_0745
     LDA B6_BEE6,y
     JSR PlaySong
@@ -5053,28 +5053,28 @@ B6_BEEC:
     .byte $BE,$BE,$BE,$0B,$47,$41,$4D,$45,$5C,$4F,$56,$45,$52,$00,$0C,$53
     .byte $54,$41,$47,$45,$5C,$00
 B6_BF02:
-    LDA zp_BB
+    LDA rng_a
     ASL a
-    ROL zp_BC
+    ROL rng_b
     ASL a
-    ROL zp_BC
-    ADC zp_BB
-    STA zp_BB
-    EOR zp_BC
-    ADC zp_BC
-    STA zp_BC
+    ROL rng_b
+    ADC rng_a
+    STA rng_a
+    EOR rng_b
+    ADC rng_b
+    STA rng_b
     LDA ram_0752
     EOR ram_0751
-    ADC zp_BC
-    STA zp_BB
+    ADC rng_b
+    STA rng_a
     LDA ram_0754
     EOR ram_0753
     ADC ram_0751
-    EOR zp_BB
-    STA zp_BC
-    ADC zp_BB
+    EOR rng_a
+    STA rng_b
+    ADC rng_a
     ADC stage_index
-    STA zp_BB
+    STA rng_a
     RTS
     LDA zp_FC
     LSR a

@@ -1037,7 +1037,7 @@ B3_BD7F:
     AND #$03
     TAY
     LDA B3_BE0E,y
-    STA zp_65
+    STA player_frame
     RTS
 B3_BD8D:
     JSR B3_BD7F
@@ -1147,7 +1147,7 @@ B3_BEA9:
     LDA ptr_hi
     STA tmp_b
     LDA #$D7
-    JSR F_F28D
+    JSR QueueMapTileDraw
     PLA
     STA tmp_b
     PLA
@@ -1171,7 +1171,7 @@ B3_BEA9:
     SBC #$00
     STA ptr_hi
     JSR SetCollectedFlag
-    JSR F_F192
+    JSR PushTileEffect
     LDA ptr_lo
     STA ram_0721
     LDA ptr_hi

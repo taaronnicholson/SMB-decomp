@@ -331,3 +331,31 @@ name f EF8C ApplySwitch3
 ; ---- tile kinds under the player ----
 name f C1EF TileKindTable         ; indexed by tile id (>= $B4): 1 = spring ($D2-$D5), 3 = collectible ($DB), 4 = $CD
 ram 0057 touch_kind               ; kind of the special tile at the player (set by F_F3B5), also reused as the bounce strength
+
+; ---- naming pass 2 ----
+name 5 8886 Ent_DieIfHit            ; if tmp_a (player attack hit) != 0: becomes $07 (sparkle), noise sfx $03, and returns from the CALLER (pops two return addresses)
+name 5 88AA Ent_CheckPlayerOverlapB ; overlap-box variant used by $50/$66/$83/$85
+name f EFD3 CheckDoorTile           ; tile at (ptr) $78-$7F = door 0-7, $BD-$BF = 8-10; on Up loads the matching stage-record entry
+name f EDE8 CheckPlayerDoor         ; door check at the player's position (+8, +8)
+name f F9B6 AwardPickup             ; tmp_a = pickup kind: popups, score and special effects (kind $0C/$0D spawn effects)
+name f F81C HandleSpecialTile       ; map tiles $C8-$CC: calls bank 3 $BE9D
+name f C8B4 ClearNametables         ; A = tile: clears OAM and fills nametables $2000 and $2800
+name f C8DD FillNametable           ; A = high address byte of the nametable to fill with tmp_08
+name 2 B732 BinaryToDigits          ; ptr_lo/hi/tmp_a (24-bit) -> decimal digits in ram_038C.. (powers table at $B777)
+name 2 B6EF DrawDigitsToBuffer      ; appends the digits as tiles ($C4 = '0') to ppu_buffer at address ptr_hi/ptr_lo
+name 0 B563 LoadFont                ; decompresses the font block (bank 0 $8521) into PPU $1C40
+ram 0066 player_facing              ; 0/1 (peck and projectile direction)
+ram 0065 player_frame               ; sprite frame of the player
+ram 00BB rng_a                      ; pseudo-random generator state (rng_b ^= rng_a ...)
+ram 00BC rng_b
+ram 0019 player_box_y               ; low bytes of the player's position used by the overlap tests
+ram 0018 player_box_x
+ram 0021 map_read_lo                ; working map pointer while drawing columns/rows
+ram 0022 map_read_hi
+name f F28D QueueMapTileDraw        ; A = tile id, tmp_a/tmp_b = map address: converts it to nametable coordinates and queues a 2x2 redraw in ppu_buffer
+name f F192 PushTileEffect          ; shifts the 3-entry delayed tile-effect queue (ram_0720-0728)
+name f F1DD RunTileEffects          ; per frame: advances the queued tile effects through the table at F_C544
+name f E0D4 ApplyRidingMotion       ; while riding_flag: adds the platform's ent_dx/ent_dy to the player
+name f DD46 TryStartJump            ; player_state 0 and A pressed: picks the jump variant from touch_kind and starts it
+name 5 8993 Ent_CheckPlayerOverlapC
+name 5 A99A Ent_CheckPlayerOverlapD

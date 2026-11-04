@@ -178,7 +178,7 @@ B1_816F:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_F81C
+    JSR HandleSpecialTile
     JSR GetMapTile
     TAY
     LDA tile_props,y
@@ -233,7 +233,7 @@ B1_81DA:
     LDA shot_x_hi,x
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_F81C
+    JSR HandleSpecialTile
     JSR GetMapTile
     TAY
     LDA tile_props,y
@@ -272,7 +272,7 @@ B1_8223:
     ADC #$00
     STA ptr_hi
     JSR MapPtrFromPos
-    JSR F_F81C
+    JSR HandleSpecialTile
     JSR GetMapTile
     TAY
     LDA tile_props,y
@@ -302,7 +302,7 @@ B1_826C:
     .byte $B5,$E9,$18,$69,$08,$85,$55,$B5,$EB,$69,$00,$85,$56,$B5,$E5,$18
     .byte $69,$04,$85,$51,$B5,$E7,$69,$00,$85,$52,$20
     BIT shot_screen_x
-    JSR F_F81C
+    JSR HandleSpecialTile
     JSR GetMapTile
     TAY
     LDA tile_props,y
@@ -542,7 +542,7 @@ B1_8422:
     STA tmp_b
     LDA #$40
     STA ptr_lo
-    LDA zp_66
+    LDA player_facing
     BNE B1_8440
     LDA #$F8
     STA tmp_a
@@ -700,7 +700,7 @@ B1_854F:
     CMP #$D1
     BNE B1_8568
     JSR SetCollectedFlag
-    JSR F_F192
+    JSR PushTileEffect
     LDA ptr_lo
     STA ram_0721
     LDA ptr_hi
@@ -786,7 +786,7 @@ B1_85CE:
     STA shot_attr,x
     LDA #$0A
     STA tmp_a
-    LDA zp_66
+    LDA player_facing
     BEQ B1_85FA
     INC tmp_a
 B1_85FA:
@@ -880,7 +880,7 @@ B1_8693:
     LDA zp_CA
     SBC #$00
     STA zp_CA
-    LDA zp_66
+    LDA player_facing
     STA tmp_b
     LDA player_state
     CMP #$08
@@ -998,7 +998,7 @@ B1_876A:
     JSR SetCollectedFlag
     LDA #$39
     JSR PlaySfxNoise
-    JSR F_F192
+    JSR PushTileEffect
     LDA ptr_lo
     STA ram_0721
     LDA ptr_hi
@@ -1187,7 +1187,7 @@ B1_88AF:
     STA tmp_a
     LDA #$FF
     STA tmp_b
-    LDA zp_66
+    LDA player_facing
     BEQ B1_88D0
     LDA #$0C
     STA tmp_a
@@ -4694,7 +4694,7 @@ B1_AF90:
     LDA tmp_c
     STA zp_D4
     LDA #$3E
-    STA zp_65
+    STA player_frame
     LDA #$00
     STA zp_D5
     STA zp_81
@@ -4824,7 +4824,7 @@ B1_B094:
     CMP #$80
     BNE B1_B0A8
     LDA #$15
-    STA zp_65
+    STA player_frame
     DEC zp_80
     BEQ B1_B0C6
     RTS
@@ -4907,7 +4907,7 @@ B1_B129:
     LDA B1_B151,y
     CMP #$FF
     BEQ B1_B143
-    STA zp_65
+    STA player_frame
     INC zp_81
     LDA #$00
 B1_B141:
@@ -5011,7 +5011,7 @@ B1_B205:
     ORA ptr_lo
     BEQ B1_B21A
     LDA tmp_a
-    STA zp_66
+    STA player_facing
     LDA player_x_lo
     CLC
     ADC tmp_c
@@ -5041,7 +5041,7 @@ B1_B235:
     AND #$01
     CLC
     ADC #$07
-    STA zp_65
+    STA player_frame
 B1_B240:
     RTS
 B1_B241:
@@ -5059,7 +5059,7 @@ B1_B241:
     LDX #$0A
     STX game_state
 B1_B25B:
-    STA zp_65
+    STA player_frame
     LDA player_y_lo
     CLC
     ADC B1_B272,y
@@ -5069,7 +5069,7 @@ B1_B25B:
     STA player_y_hi
     INC zp_BD
     LDA #$01
-    STA zp_66
+    STA player_facing
     RTS
 B1_B272:
     .byte $32,$00,$32,$00,$32,$00,$32,$00,$32,$00,$33,$00,$33,$00,$33,$00
@@ -5343,7 +5343,7 @@ B1_BE62:
     JSR RenderOffAndWait
     JSR DisableNMI
     LDA #$F0
-    JSR F_C8B4
+    JSR ClearNametables
     LDA PPUSTATUS
     LDA #$22
     LDY #$06

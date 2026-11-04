@@ -1672,7 +1672,7 @@ CollectTable16:
     .byte $0D, $5C
     .byte $0E, $5D
     .byte $0D, $00
-B0_B563:
+LoadFont:
     LDA #$40
     STA tmp_c
     LDA #$1C
@@ -1704,9 +1704,9 @@ B0_B577:
     LDA #$F0
     STA tmp_08
     LDA #$20
-    JSR F_C8DD
+    JSR FillNametable
     JSR ClearOAMBuffer
-    JSR B0_B563
+    JSR LoadFont
     JSR EnableNMI
     JMP WaitForNMI
 B0_B5B3:
@@ -1784,8 +1784,8 @@ B0_B63F:
     ORA #$06
     JSR SetPPUMask
     LDA #$F0
-    JSR F_C8B4
-    JSR B0_B563
+    JSR ClearNametables
+    JSR LoadFont
     JSR B0_B8D2
     LDA #$08
     STA ptr_lo
@@ -1797,7 +1797,7 @@ B0_B63F:
     LDA #$00
     STA ram_038A
     STA entity_tick
-    STA zp_65
+    STA player_frame
     LDA #$08
     STA palette_set
     LDA #$00
@@ -1818,7 +1818,7 @@ B0_B68B:
 B0_B68F:
     JSR WaitForNMI
     JSR ReadController
-    LDA zp_65
+    LDA player_frame
     CMP #$40
     BNE B0_B6A1
     JSR B0_B8A5
@@ -1868,9 +1868,9 @@ B0_B6CF:
     SBC #$02
     CMP #$3A
     BCS B0_B704
-    INC zp_65
+    INC player_frame
     BNE B0_B702
-    DEC zp_65
+    DEC player_frame
 B0_B702:
     LDA #$3A
 B0_B704:
