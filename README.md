@@ -52,9 +52,13 @@ applies the `ppuctrl_shadow`/`ppumask_shadow` values and calls one of 6 state ha
 | 4 | 1 | starting area number (≥ `$E0` = go to stage `code-$E0`) |
 | 5 | 1 | parameter (`$0E` in every entry) |
 | 6 | 1 | unknown per-record byte (skipped by the loader) |
-| 7… | 6 each | door entries: Y, X (16-bit), destination area, parameter — indexed as `6*n` from `entry_list` |
+| 7… | 6 each | door entries: **destination** Y, X (16-bit), destination area, parameter — entry `n` is used by door `n` (`6*n` from `entry_list`) |
 
 Records 0–3 have 11 entries, record 4 has 3, record 5 has none. The six starting areas are 0, 16, 3, 10, 21 and 6.
+
+**Doors** [verified in the emulator]: a map tile `$78`-`$7F` is door 0-7 and `$BD`-`$BF` is door 8-10. Pressing Up on one loads entry `n` of the current stage record:
+the player arrives in the entry's destination area at the entry's (Y, X) in state `$09` (the arrival drop). Area 0's door (tile `$78` at row 32, column 9) leads
+to area 1 at (Y `$10A`, X `$25`). Destination codes `$E1`+ switch stage instead. The respawn point (`spawn_*`) is not changed by doors, only by balloons.
 
 **Areas** (`LoadArea` = `F_D05C`, A = area number): `AreaHeaderPtrLo/Hi` (`$83B9`/`$83D1`) point to a 6-byte
 12-byte `AreaHeaderN` (song number, map address, log2 width, height, palette set, collectible-table pointer, **water level**, initial `game_state`, tileset id) and `AreaMapBank` (`$83E9`) gives the PRG

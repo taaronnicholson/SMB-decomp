@@ -12,19 +12,20 @@ are intro/transition sequences that were not triggered in the runs; several stat
 `camera_mode` (`$01A6`) is set by these states (`GameState0C` sets 3, `GameState09` sets 1).
 
 ## Initial `game_state` per area (area header byte 10)
-Most areas start in `$00`. The special areas start in a sequence state:
+Most areas start in `$00`. The special areas start in a sequence state. All of the arrivals below were verified by loading each area through the door loader
+in the emulator (writing the destination into RAM and jumping to `F_F040`); the "looks like" column is the rendered picture, not behaviour.
 
-| Area | Stage(s) | Initial state | What the handler does (read from the code; none of these was triggered in the emulator) |
-|------|----------|---------------|------------------------------------------------------------------------------------------|
-| 2 | 0 | `$0F` | sets facing/timers and `collected_flags`, then waits until the camera has scrolled to `focus_x` = `$C0` and moves on to `$10` |
-| 4 | all (balloon ride target) | `$08` | the bonus ascent sequence (verified above) |
-| 5 | 0-4 | `$01` | start of a sequence that checks `powerup_shot` and then switches to `$03`/`$04`/`$05` |
-| 6 | 5 | `$0E` | calls bank 3 `$BF05` through `FarCall` |
-| 10 | 3 | `$1A` | calls bank 6 `$BD5E` through `FarCall` |
-| 14 | 3 | `$19` | sets bit 3 of `$0101` (a persistent flag) and returns to `$00` |
-| 20 | 1 | `$17` | animates frame `$1C`/`$1D` (blinks with `zp_48`) |
-| 22 | 4 | `$1B` | calls bank 6 `$BD99` through `FarCall` |
-| 23 | 4 | `$18` | animates frame `$20`/`$21` like `$17` |
+| Area | Initial state | Verified progression | What the handler does (code) | Looks like |
+|------|---------------|----------------------|------------------------------|------------|
+| 2 | `$0F` | stays `$0F` | sets facing/timers and `collected_flags`; waits until the camera reaches `focus_x` = `$C0`, then `$10` | underwater cave (olive blocks, blue water, a star) |
+| 4 | `$08` | `$08` -> `$09` -> `$0D` | the bonus ascent | night sky |
+| 5 | `$01` | `$01` -> `$02` after about 47 frames | checks `powerup_shot` and continues to `$02`-`$05` | the same underwater cave as area 2 |
+| 6 | `$0E` | stays `$0E` | calls bank 3 `$BF05` through `FarCall` | purple tiled wall |
+| 10 | `$1A` | stays `$1A` | calls bank 6 `$BD5E` through `FarCall` | a workshop with shelves and hanging lamps |
+| 14 | `$19` | `$19` -> `$00` after about 58 frames | sets bit 3 of `$0101` (a persistent flag) and returns to `$00` | a dark cave |
+| 20 | `$17` | stays `$17`; the player starts in water (state `$0D`, water level 108) | blinks frame `$1C`/`$1D` with `zp_48` | the toy-block level with a clock face |
+| 22 | `$1B` | stays `$1B` | calls bank 6 `$BD99` through `FarCall` | green factory with a "MONSTER MASHER" machine |
+| 23 | `$18` | stays `$18`; the player starts in water (water level 156) | blinks frame `$20`/`$21` like `$17` | wide green factory section |
 
 The set-up states `$01`-`$07` and `$0C` write their own timers (`ram_0735`-`ram_073E`) and `camera_mode`; `GameState06` falls into `GameState0C`
 (`camera_mode` 3, then a bank 4 routine at `$B515`).
