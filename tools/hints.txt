@@ -414,7 +414,6 @@ ram 0200 oam_buffer                 ; sprite DMA source page ($0200-$02FF)
 
 ; ---- dive attack (Down in the air) ----
 name f F7B8 ShockwaveKillEnemies    ; noise sfx 4; every entity whose type is flagged in KillableTypeTable becomes $5D (collect/death), then is removed
-name 6 A21E KillableTypeTable       ; indexed by ent_type: non-zero = killed by the dive shockwave
 ram 007C dive_mode                  ; 0 normally; 4 while diving (Down held in the air); bounce/dive flag read by landing and enemy code
 ram 0085 fall_ticks                 ; counts fall time while diving; at landing >= $8C triggers the shockwave and camera shake
 

@@ -3345,8 +3345,8 @@ AreaMap22:
     .byte $00,$00,$00,$37,$06,$37,$06,$00,$01,$02,$02,$02,$36,$02,$02,$02
     .byte $02,$36,$03,$04,$06,$07,$09,$3B,$07,$08,$08,$08,$08,$08,$08,$08
     .byte $08,$08,$09,$07,$09
-; Tbl_B6_A21E: 160 bytes, read by F_F7C7
-Tbl_B6_A21E:
+; KillableTypeTable: indexed by ent_type: non-zero = turned into $5D by the dive shockwave (ShockwaveKillEnemies)
+KillableTypeTable:
     .res 25, $00
     .res 9, $01
     .byte $00,$00,$00,$00,$00,$00,$00,$01,$01,$00,$00,$00,$00,$00,$00,$01
@@ -5333,8 +5333,8 @@ B6_BF02:
     ORA tmp_ptr_lo
     STA ram_0249
     RTS
-; Tbl_B6_BF5B: 165 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B6_BF5B:
+; Bank6_TailData: unreferenced leftover fill at the end of bank 6
+Bank6_TailData:
     .byte $24,$FF,$FE,$FF,$64,$FF,$FF,$FF,$FF,$00,$00,$00,$40,$FF,$FE,$FF
     .byte $FB,$01,$00,$00,$00,$8E,$00,$00,$01,$BF,$BF,$FF,$FB,$0C,$00,$08
     .byte $20,$9B,$FF,$FF,$6F,$FF,$BF,$FB,$FF,$00,$00,$00,$00,$F5,$FF,$FE

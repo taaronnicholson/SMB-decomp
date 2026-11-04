@@ -5503,8 +5503,8 @@ B1_BECD:
     LDX #$FF
     TXS
     JMP StartNewGame
-; Tbl_B1_BEEE: 274 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_BEEE:
+; Bank1_TailData: unreferenced leftover fill at the end of bank 1 (mostly $00/$FF with single-bit variations, like Bank2_TailData)
+Bank1_TailData:
     .byte $80,$00,$FD,$00,$01,$20,$FF,$FF,$FE,$FF,$12,$10,$00,$09,$FF,$FF
     .byte $FF,$D9,$FF,$FF,$FF,$EF,$02,$00,$40,$00,$FF,$FF,$EF,$FF,$00,$00
     .byte $00,$00,$FF,$60,$10,$00,$FF,$FF,$FF,$FF,$01,$00,$00,$24,$FF,$FF

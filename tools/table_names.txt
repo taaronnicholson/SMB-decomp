@@ -6,3 +6,8 @@ f C544 TileEffectScript struct 65 bb ; (next index, tile) pairs forming chains: 
 5 923A FloatPathDx struct 92 w ; signed 16-bit X offsets per tick for a pickup floating upward (Ent_FloatStep: Y -= 1, X += word); a low byte of $80 ends it with the collect animation
 5 91FD Ent0A_FrameSeq ; frame (0/1) sequence read by Ent0A_Update, $80 ends
 5 9E2E Ent33_Sequence ; per-tick sequence for type $33; at the end ($80) it sets player_state $19 (the exit walk), plays sfx $22 and bursts: type $33 starts the exit
+1 BEEE Bank1_TailData ; unreferenced leftover fill at the end of bank 1 (mostly $00/$FF with single-bit variations, like Bank2_TailData)
+6 BF5B Bank6_TailData ; unreferenced leftover fill at the end of bank 6
+3 BF63 Bank3_TailData ; unreferenced leftover fill at the end of bank 3
+4 8000 AreaMap23_PhantomRow ; the second phantom row of area 23's map (its base $7F80 + 128): 128 bytes of $D7 (ceiling); the first phantom row lies before the bank
+6 A21E KillableTypeTable ; indexed by ent_type: non-zero = turned into $5D by the dive shockwave (ShockwaveKillEnemies)

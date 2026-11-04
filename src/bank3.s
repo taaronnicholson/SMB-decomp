@@ -1358,8 +1358,8 @@ B3_BF46:
     STA ram_010A
     STA ram_010B
     RTS
-; Tbl_B3_BF63: 157 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B3_BF63:
+; Bank3_TailData: unreferenced leftover fill at the end of bank 3
+Bank3_TailData:
     .byte $FF,$00,$00,$00,$00,$FB,$FF,$3E,$DC,$80,$00,$00,$00,$F2,$00,$01
     .byte $04,$DF,$7F,$FF,$FF,$10,$00,$00,$00,$FE,$FF,$EF,$ED,$FF,$FF,$DF
     .byte $FE,$04,$00,$03,$10,$FF,$FD,$FF,$FE,$00,$00,$00,$00,$F2,$40,$00

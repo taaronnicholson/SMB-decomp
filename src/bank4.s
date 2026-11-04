@@ -3,8 +3,8 @@
 
 .segment "BANK4"
 
-; Tbl_B4_8000: 128 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_8000:
+; AreaMap23_PhantomRow: the second phantom row of area 23's map (its base $7F80 + 128): 128 bytes of $D7 (ceiling)
+AreaMap23_PhantomRow:
     .res 128, $D7
 ; AreaMap23: tile map for area(s) 23: 128 x 16 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap23:

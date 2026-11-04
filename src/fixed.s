@@ -7270,7 +7270,7 @@ ShockwaveKillEnemies:
     LDX #$2F
 F_F7C7:
     LDY ent_type,x
-    LDA Tbl_B6_A21E,y
+    LDA KillableTypeTable,y
     BEQ F_F7E1
     LDA #$5D
     STA ent_type,x
