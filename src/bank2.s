@@ -695,7 +695,7 @@ B2_9E99:
     ORA jump_ptr_lo
     STA ram_0249
     LDA ram_07FD
-    STA zp_4E
+    STA player_draw_frame
     LDA ram_07FE
     STA zp_4F
     LDA #$00
@@ -3180,7 +3180,7 @@ ResetLevelState:
     STA zp_67
     STA player_frame
     STA zp_4F
-    STA zp_4E
+    STA player_draw_frame
     STA camera_mode
     STA ram_0736
     STA riding_flag

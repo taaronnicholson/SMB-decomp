@@ -3588,9 +3588,9 @@ B6_A44F:
     .byte $4A,$00,$08,$00,$08,$00,$08,$00,$4A,$00,$4A,$00,$4A,$00,$08,$00
     .byte $08,$00,$08,$00,$4A,$00,$4A,$00,$4A,$00,$08,$00,$08,$00,$08,$00
     .byte $4A,$00,$4A,$00,$4A,$00,$FF
-B6_A4E1:
-    JSR B6_A535
-    LDA zp_4E
+DrawPlayer:
+    JSR PlayerToScreen
+    LDA player_draw_frame
     CMP #$15
     BEQ B6_A524
     CMP #$3E
@@ -3630,7 +3630,7 @@ B6_A524:
     ORA #$03
     STA ram_024A
     RTS
-B6_A535:
+PlayerToScreen:
     LDA player_y_lo
     SEC
     SBC cam_y_lo
@@ -3678,7 +3678,7 @@ B6_A572:
     BNE B6_A572
     RTS
 B6_A57F:
-    LDY zp_4E
+    LDY player_draw_frame
     LDA Tbl_B6_A653,y
     TAY
     LDA Tbl_B6_A6A3,y

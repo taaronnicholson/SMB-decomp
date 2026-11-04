@@ -8,7 +8,7 @@ Tbl_B1_8000:
     .byte $00,$FC,$F8,$F4,$F0,$EC,$E8,$E4,$E0,$DC,$D8,$D4,$D0,$CC,$C8,$C4
     .byte $C0,$BC,$B8,$B4,$B0,$AC,$A8,$A4,$A0,$9C,$98,$94,$90,$8C,$88,$84
     .byte $80,$7C,$78,$74,$70,$6C,$68,$64,$60,$5C,$58,$54
-B1_802C:
+UpdateShots:
     LDA player_state
     CMP #$10
     BNE B1_8033
@@ -17,7 +17,7 @@ B1_8033:
     LDA shot_state
     BEQ B1_808F
     LDX #$00
-    JSR B1_813E
+    JSR ShotDispatch
     LDA #$01
     STA shot_onscreen
     LDA shot_x_lo
@@ -65,7 +65,7 @@ B1_808F:
     RTS
 B1_8094:
     LDX #$01
-    JSR B1_813E
+    JSR ShotDispatch
     LDA #$01
     STA shot_onscreen_1
     LDA shot_x_lo_1
@@ -135,7 +135,7 @@ B1_811F:
     .word B1_8922
     .word B1_865F
     .word B1_8679
-B1_813E:
+ShotDispatch:
     LDA shot_state,x
     ASL a
     TAY
@@ -187,7 +187,7 @@ B1_816F:
     LDA tile_props,y
     AND #$01
     BNE B1_81D0
-    JSR B1_8982
+    JSR ShotOffscreenCheck
     LDA shot_x_lo,x
     CLC
     ADC #$02
@@ -242,7 +242,7 @@ B1_81DA:
     LDA tile_props,y
     AND #$01
     BNE B1_8219
-    JSR B1_8982
+    JSR ShotOffscreenCheck
     LDA shot_x_lo,x
     SEC
     SBC #$02
@@ -281,7 +281,7 @@ B1_8223:
     LDA tile_props,y
     AND #$01
     BNE B1_8262
-    JSR B1_8982
+    JSR ShotOffscreenCheck
     LDA shot_y_lo,x
     SEC
     SBC #$02
@@ -314,7 +314,7 @@ Tbl_B1_826C:
     BEQ B1_829A
     JMP B1_83F1
 B1_829A:
-    JSR B1_8982
+    JSR ShotOffscreenCheck
     LDA shot_y_lo,x
     STA tmp_c
     LDA shot_y_hi,x
@@ -1277,7 +1277,7 @@ B1_8974:
     STA shot_x_hi,x
 B1_8981:
     RTS
-B1_8982:
+ShotOffscreenCheck:
     LDA shot_screen_x,x
     CMP #$EC
     BCS B1_8981

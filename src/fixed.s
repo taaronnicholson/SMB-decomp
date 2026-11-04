@@ -481,10 +481,10 @@ F_C710:
     JSR B2_B89D
     LDA #$01
     JSR SwitchBank
-    JSR B1_802C
+    JSR UpdateShots
     LDA #$06
     JSR SwitchBank
-    JSR B6_A4E1
+    JSR DrawPlayer
     JSR Sound_Update
     LDA #$00
     JSR SwitchBank
@@ -507,10 +507,10 @@ F_C763:
     JSR RunTileEffects
     LDA #$01
     JSR SwitchBank
-    JSR B1_802C
+    JSR UpdateShots
     LDA #$06
     JSR SwitchBank
-    JSR B6_A4E1
+    JSR DrawPlayer
     JSR Sound_Update
     JSR F_FABC
     JMP MainLoop

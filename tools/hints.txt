@@ -424,3 +424,12 @@ struct 3 8000 49 bbb
 blob 3 8093 600 DeathAnimPath sprite positions: 6 bytes per tick; the routine copies 12 bytes (a 2-tick window) at $8093 + 6*(death_timer+1) into ram_0398 so the six sprites trail each other (100 steps; the last frames' windows read a few bytes into the pointer table that follows)
 struct 3 8093 100 bbbbbb
 name f F57A DeathAnimFrame          ; A = death_timer: builds the six death-animation sprites in OAM entries 15-20 from DeathAnimTiles/DeathAnimPath
+
+; ---- player and projectile drawing ----
+name 6 A4E1 DrawPlayer              ; per frame: PlayerToScreen, then frame-dependent sprite flip fix-ups ($34-$37, $3E-$43, $4C, $4D, $15)
+name 6 A535 PlayerToScreen          ; player_box_y/x = player position minus the camera (minus the sprite offsets); hides the sprites when off-screen
+name 1 802C UpdateShots             ; per frame: for each of the 2 projectile slots, dispatch on shot_state and write OAM entries 19-20
+name 1 813E ShotDispatch            ; X = slot: jumps through the 15-entry handler table at B1_811E by shot_state
+name 1 8982 ShotOffscreenCheck      ; ends the projectile when it leaves the screen window
+ram 004E player_draw_frame          ; frame index tested by DrawPlayer
+ram 0065 player_frame               ; sprite frame set by the player states
