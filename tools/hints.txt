@@ -522,5 +522,5 @@ name f C9D7 InitBalloonRoom          ; advances ptr by Y, decompresses the bank 
 name f EEDF MapPtrToCoords           ; inverse of MapPtrFromPos: converts a map pointer back to pixel Y (tmp_a/b) and X (tmp_d) using map_width
 name f F8FC DivideByTmpA             ; 8-step long division: (tmp_b:ptr_lo) by tmp_a, quotient in tmp_c, remainder in ptr_lo
 name f F16F TickPickupCounter        ; counts zp_A7 to $64, then spawns a pickup at the player (kind in tmp_a: 8, or $0C while zp_A5 is below 4) and returns carry set
-name 4 BA94 CreditsStepDispatch      ; jumps through the word table at B4_BA8C indexed by ram_01BE
+name 4 BA94 StepDispatch_01BE      ; jumps through the word table at B4_BA8C indexed by ram_01BE
 name 2 A2E2 PixelUploadDispatch      ; jumps through a word table indexed by X-$60 to the tile upload routines

@@ -2024,7 +2024,7 @@ B4_B6A4:
     STA ram_0735
     JMP B4_B74B
 B4_B6B6:
-    JSR CreditsStepDispatch
+    JSR StepDispatch_01BE
     LDA ram_01BE
     CMP #$03
     BNE B4_B6FA
@@ -2279,7 +2279,7 @@ B4_BA8C:
     .word B4_BABC
     .word B4_BB60
     .word B4_BABB
-CreditsStepDispatch:
+StepDispatch_01BE:
     LDA ram_01BE
     ASL a
     TAY
