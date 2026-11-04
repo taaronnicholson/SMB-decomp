@@ -592,34 +592,34 @@ SetPlayerFacingBit:
     ORA jump_ptr_lo
     STA zp_4F
     LDA zp_50
-    BEQ B2_9E1D
+    BEQ @B2_9E1D
     LDA ram_0749
-    BNE B2_9E1E
+    BNE @B2_9E1E
     LDA ppu_buffer_idx
     CMP #$18
-    BCC B2_9E1E
-B2_9E1D:
+    BCC @B2_9E1E
+@B2_9E1D:
     RTS
-B2_9E1E:
+@B2_9E1E:
     LDA zp_4D
     ASL a
     TAY
-    LDA B2_9E2F,y
+    LDA @B2_9E2F,y
     STA jump_ptr_lo
-    LDA B2_9E2F+1,y
+    LDA @B2_9E2F+1,y
     STA jump_ptr_hi
     JMP (jump_ptr_lo)
-B2_9E2F:
-    .word B2_9E37
-    .word B2_9E62
-    .word B2_9E76
-    .word B2_9E8A
-B2_9E37:
+@B2_9E2F:
+    .word @B2_9E37
+    .word @B2_9E62
+    .word @B2_9E76
+    .word @B2_9E8A
+@B2_9E37:
     LDY player_frame
     CPY ram_07FD
-    BNE B2_9E3F
+    BNE @B2_9E3F
     RTS
-B2_9E3F:
+@B2_9E3F:
     STY ram_07FD
     LDA player_facing
     STA ram_07FE
@@ -628,46 +628,46 @@ B2_9E3F:
     STA pixel_page_xor
     LDX Tbl_B2_9EDC,y
     CPX #$60
-    BCS B2_9E5A
+    BCS @B2_9E5A
     JSR ClearPixelTilesA
-    JMP B2_9E5D
-B2_9E5A:
+    JMP @B2_9E5D
+@B2_9E5A:
     JSR PixelDispatch_A22C
-B2_9E5D:
+@B2_9E5D:
     STX zp_4C
     INC zp_4D
     RTS
-B2_9E62:
+@B2_9E62:
     LDX zp_4C
     CPX #$60
-    BCS B2_9E6E
+    BCS @B2_9E6E
     JSR ClearPixelTilesB
-    JMP B2_9E71
-B2_9E6E:
+    JMP @B2_9E71
+@B2_9E6E:
     JSR PixelDispatch_A26F
-B2_9E71:
+@B2_9E71:
     STX zp_4C
     INC zp_4D
     RTS
-B2_9E76:
+@B2_9E76:
     LDX zp_4C
     CPX #$60
-    BCS B2_9E82
+    BCS @B2_9E82
     JSR UploadPixelTilesC
-    JMP B2_9E85
-B2_9E82:
+    JMP @B2_9E85
+@B2_9E82:
     JSR PixelDispatch_A2B2
-B2_9E85:
+@B2_9E85:
     STX zp_4C
     INC zp_4D
     RTS
-B2_9E8A:
+@B2_9E8A:
     LDX zp_4C
     CPX #$60
-    BCS B2_9E96
+    BCS @B2_9E96
     JSR UploadPixelTilesD
     JMP B2_9E99
-B2_9E96:
+@B2_9E96:
     JSR PixelUploadDispatch
 B2_9E99:
     LDA pixel_page_xor
@@ -975,12 +975,12 @@ PixelDispatch_A22C:
     SBC #$60
     ASL a
     TAY
-    LDA B2_A22C,y
+    LDA @B2_A22C,y
     STA jump_ptr_lo
-    LDA B2_A22C+1,y
+    LDA @B2_A22C+1,y
     STA jump_ptr_hi
     JMP (jump_ptr_lo)
-B2_A22C:
+@B2_A22C:
     .word B2_A325
     .word B2_A325
     .word B2_A325
@@ -1011,12 +1011,12 @@ PixelDispatch_A26F:
     SBC #$60
     ASL a
     TAY
-    LDA B2_A26F,y
+    LDA @B2_A26F,y
     STA jump_ptr_lo
-    LDA B2_A26F+1,y
+    LDA @B2_A26F+1,y
     STA jump_ptr_hi
     JMP (jump_ptr_lo)
-B2_A26F:
+@B2_A26F:
     .word B2_A339
     .word B2_A339
     .word B2_A339
@@ -1047,12 +1047,12 @@ PixelDispatch_A2B2:
     SBC #$60
     ASL a
     TAY
-    LDA B2_A2B2,y
+    LDA @B2_A2B2,y
     STA jump_ptr_lo
-    LDA B2_A2B2+1,y
+    LDA @B2_A2B2+1,y
     STA jump_ptr_hi
     JMP (jump_ptr_lo)
-B2_A2B2:
+@B2_A2B2:
     .word B2_A34B
     .word B2_A34B
     .word B2_A34B
@@ -1083,12 +1083,12 @@ PixelUploadDispatch:
     SBC #$60
     ASL a
     TAY
-    LDA B2_A2F5,y
+    LDA @B2_A2F5,y
     STA jump_ptr_lo
-    LDA B2_A2F5+1,y
+    LDA @B2_A2F5+1,y
     STA jump_ptr_hi
     JMP (jump_ptr_lo)
-B2_A2F5:
+@B2_A2F5:
     .word B2_A325
     .word B2_A325
     .word B2_A325
@@ -1339,39 +1339,39 @@ B2_A542:
 WriteTileStrip_1044:
     JSR SetPPUAddr_1044
     LDX #$00
-B2_A559:
+@B2_A559:
     LDA Tbl_B2_A5A0,x
     STA PPUDATA
     INX
     CPX #$0B
-    BNE B2_A559
+    BNE @B2_A559
     JMP SetScroll
     JSR SetPPUAddr_1044
     LDX #$00
-B2_A56C:
+@B2_A56C:
     LDA Tbl_B2_A5AB,x
     STA PPUDATA
     INX
     CPX #$0B
-    BNE B2_A56C
+    BNE @B2_A56C
     JMP SetScroll
     JSR SetPPUAddr_1044
     LDX #$00
-B2_A57F:
+@B2_A57F:
     LDA Tbl_B2_A5B6,x
     STA PPUDATA
     INX
     CPX #$0B
-    BNE B2_A57F
+    BNE @B2_A57F
     JMP SetScroll
     JSR SetPPUAddr_1044
     LDX #$00
-B2_A592:
+@B2_A592:
     LDA Tbl_B2_A5C1,x
     STA PPUDATA
     INX
     CPX #$0B
-    BNE B2_A592
+    BNE @B2_A592
     JMP SetScroll
 ; Tbl_B2_A5A0: 11 bytes, read by B2_A559
 Tbl_B2_A5A0:
@@ -1423,12 +1423,12 @@ TileFrameA_At1232:
     STA PPUADDR
 B2_A619:
     LDX #$00
-B2_A61B:
+@B2_A61B:
     LDA TileFrameA,x
     STA PPUDATA
     INX
     CPX #$1E
-    BNE B2_A61B
+    BNE @B2_A61B
     JMP SetScroll
 ; TileFrameA: 30 bytes written to PPU $1232 (CHR tile data for an animated tile, two variants of the call)
 TileFrameA:
@@ -1465,12 +1465,12 @@ TileFrameB_At1232:
     STA PPUADDR
 B2_A686:
     LDX #$00
-B2_A688:
+@B2_A688:
     LDA TileFrameB,x
     STA PPUDATA
     INX
     CPX #$1E
-    BNE B2_A688
+    BNE @B2_A688
     JMP SetScroll
 ; TileFrameB: 30 bytes written to PPU $1232 (the second frame set used by B2_A647/A65D/A673)
 TileFrameB:
@@ -2217,30 +2217,30 @@ WriteTiles_11F0:
     JMP SetScroll
     JSR SetPPUAddr_13B0
     LDX #$00
-B2_AE12:
+@B2_AE12:
     LDA Tbl_B2_AE54,x
     STA PPUDATA
     INX
     CPX #$20
-    BNE B2_AE12
+    BNE @B2_AE12
     JMP SetScroll
     JSR SetPPUAddr_13B0
     LDX #$00
-B2_AE25:
+@B2_AE25:
     LDA Tbl_B2_AE74,x
     STA PPUDATA
     INX
     CPX #$20
-    BNE B2_AE25
+    BNE @B2_AE25
     JMP SetScroll
     JSR SetPPUAddr_13B0
     LDX #$00
-B2_AE38:
+@B2_AE38:
     LDA Anim_TileFrames,x
     STA PPUDATA
     INX
     CPX #$20
-    BNE B2_AE38
+    BNE @B2_AE38
     JMP SetScroll
 SetPPUAddr_13B0:
     LDA PPUSTATUS
@@ -2585,7 +2585,7 @@ B2_B200:
     STA PPUDATA
     LDA #$00
     STA PPUDATA
-B2_B238:
+@B2_B238:
     LDA #$09
     STA PPUDATA
     LDA #$11
@@ -2709,7 +2709,7 @@ B2_B238:
     STA PPUDATA
     LDA #$00
     STA PPUDATA
-    JMP B2_B238
+    JMP @B2_B238
     JSR WriteFixedTiles_1432
     LDA #$FE
     STA PPUDATA
@@ -2839,12 +2839,12 @@ WriteTile69AndScroll:
 WriteTileFrame_14D0:
     JSR SetPPUAddr_14D0
     LDY #$00
-B2_B4AC:
+@B2_B4AC:
     LDA Tbl_B2_B4BA,y
     STA PPUDATA
     INY
     CPY #$1E
-    BNE B2_B4AC
+    BNE @B2_B4AC
     JMP SetScroll
 ; Tbl_B2_B4BA: 79 bytes, read by B2_B4AC
 Tbl_B2_B4BA:
@@ -2863,7 +2863,7 @@ SetPPUAddr_14D0:
 B2_B517:
     LDA buttons
     AND #$B1
-    BNE B2_B52A
+    BNE @B2_B52A
     INC zp_80
     LDA zp_80
     LSR a
@@ -2871,7 +2871,7 @@ B2_B517:
     LDA F_C266,y
     CMP #$FF
     BNE B2_B535
-B2_B52A:
+@B2_B52A:
     LDA #$00
     STA player_state
     STA dive_mode
@@ -2882,13 +2882,13 @@ B2_B535:
     JMP ApplyRidingMotion
 B2_B53A:
     LDA ram_01A5
-    BEQ B2_B548
+    BEQ @B2_B548
     AND #$07
     TAX
     LDA F_C249,x
     STA player_frame
     RTS
-B2_B548:
+@B2_B548:
     INC zp_80
     LDA zp_80
     LSR a
@@ -2901,13 +2901,13 @@ B2_B548:
     STA dive_mode
     STA fall_ticks
     LDA invuln_hi
-    BNE B2_B56B
+    BNE @B2_B56B
     LDA invuln_lo
     CMP #$08
-    BCS B2_B56B
+    BCS @B2_B56B
     LDA #$08
     STA invuln_lo
-B2_B56B:
+@B2_B56B:
     JMP PlayerState00
 ; Tbl_B2_B56E: 60 bytes, read by F_DC8C
 Tbl_B2_B56E:
@@ -2960,18 +2960,18 @@ Tbl_B2_B5E8:
     LDA B2_B5E6+1,x
     STA tmp_a
     CMP #$80
-    BNE B2_B639
+    BNE @B2_B639
     LDA #$00
     STA ram_01A5
     LDA ram_01A4
     STA camera_mode
     JMP UpdateCamera
-B2_B639:
+@B2_B639:
     LDA tmp_a
     AND #$80
-    BEQ B2_B641
+    BEQ @B2_B641
     DEC tmp_d
-B2_B641:
+@B2_B641:
     LDA focus_y_lo
     CLC
     ADC tmp_a
@@ -3065,7 +3065,7 @@ DrawDigitsToBuffer:
     STA ppu_buffer,x
     INX
     LDY #$05
-B2_B707:
+@B2_B707:
     LDA ram_038C,y
     CLC
     ADC #$C4
@@ -3073,32 +3073,32 @@ B2_B707:
     INX
     DEY
     DEC tmp_a
-    BNE B2_B707
+    BNE @B2_B707
     LDA #$00
     STA ppu_buffer,x
     STX ppu_buffer_idx
     RTS
     JSR BinaryToDigits
     LDY #$00
-B2_B723:
+@B2_B723:
     LDA ram_038C,y
     CLC
     ADC #$C4
     STA PPUDATA
     INY
     CPY #$06
-    BNE B2_B723
+    BNE @B2_B723
     RTS
 BinaryToDigits:
     LDY #$00
-B2_B734:
+@B2_B734:
     LDA #$00
     STA ram_038C,y
     TYA
     ASL a
     ASL a
     TAX
-B2_B73D:
+@B2_B73D:
     LDA ptr_lo
     SEC
     SBC B2_B777,x
@@ -3106,7 +3106,7 @@ B2_B73D:
     SBC B2_B778,x
     LDA tmp_a
     SBC Tbl_B2_B779,x
-    BCC B2_B771
+    BCC @B2_B771
     LDA ptr_lo
     SEC
     SBC B2_B777,x
@@ -3121,11 +3121,11 @@ B2_B73D:
     CLC
     ADC #$01
     STA ram_038C,y
-    JMP B2_B73D
-B2_B771:
+    JMP @B2_B73D
+@B2_B771:
     INY
     CPY #$06
-    BNE B2_B734
+    BNE @B2_B734
 B2_B776:
     RTS
 B2_B777:
@@ -3141,11 +3141,11 @@ PpuJobDispatch:
     CMP #$18
     BCS B2_B776
     LDY zp_47
-    BNE B2_B79F
+    BNE @B2_B79F
     LDY zp_DA
     LDA #$00
     STA zp_DA
-B2_B79F:
+@B2_B79F:
     LDA Tbl_B2_B7B0,y
     STA jump_ptr_lo
     LDA Tbl_B2_B7D2,y
@@ -3201,15 +3201,15 @@ ResetLevelState:
     STA switch_flag
     STA switch_phase
     LDX #$1F
-B2_B844:
+@B2_B844:
     STA collected_flags,x
     DEX
-    BPL B2_B844
+    BPL @B2_B844
     LDX #$0B
-B2_B84C:
+@B2_B84C:
     STA ram_0720,x
     DEX
-    BPL B2_B84C
+    BPL @B2_B84C
     STX ram_07FD
     STX zp_C4
     LDA #$01
@@ -3239,38 +3239,38 @@ ResetGameState:
     STA ram_01B3
     STA ram_01B1
     LDX #$07
-B2_B88F:
+@B2_B88F:
     STA collected_by_kind,x
     DEX
-    BPL B2_B88F
+    BPL @B2_B88F
     LDA #$00
     STA onetime_flags
     STA ram_0734
     RTS
 CheckRam01A8Threshold:
     LDA ram_0736
-    BNE B2_B8AF
+    BNE @B2_B8AF
     LDA ram_01A8
     SEC
     SBC #$57
     LDA ram_01A9
     SBC #$02
-    BCC B2_B8B0
-B2_B8AF:
+    BCC @B2_B8B0
+@B2_B8AF:
     RTS
-B2_B8B0:
+@B2_B8B0:
     LDA ram_01A7
     CLC
     ADC #$03
     STA ram_01A7
     CMP #$64
-    BCC B2_B8AF
+    BCC @B2_B8AF
     SBC #$64
     STA ram_01A7
     INC ram_01A8
-    BNE B2_B8CA
+    BNE @B2_B8CA
     INC ram_01A9
-B2_B8CA:
+@B2_B8CA:
     RTS
 ; Bank2_TailData: unreferenced: mostly $00/$FF bytes with single-bit variations (period 32), no code reads it
 Bank2_TailData:

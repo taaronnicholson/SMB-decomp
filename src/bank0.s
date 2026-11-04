@@ -118,27 +118,27 @@ PaletteSet8:
     .byte $17, $0F, $07, $28, $17, $0F, $10, $20, $17, $0F, $16, $28, $17, $0F, $06, $26, $17, $0F, $1A, $2A, $17, $00, $00, $00, $17, $0F, $20, $00, $17, $0F, $06, $00
 PaletteFadeStep:
     LDA fade_dir
-    BNE B0_810F
+    BNE @B0_810F
     JMP SetScroll
-B0_810F:
-    BPL B0_811E
+@B0_810F:
+    BPL @B0_811E
     LDA fade_step
     SEC
     SBC #$01
-    BCS B0_812D
+    BCS @B0_812D
     LDA #$00
     STA fade_dir
-    BEQ B0_812D
-B0_811E:
+    BEQ @B0_812D
+@B0_811E:
     LDA fade_step
     CLC
     ADC #$01
     CMP #$05
-    BCC B0_812D
+    BCC @B0_812D
     LDA #$00
     STA fade_dir
     LDA #$04
-B0_812D:
+@B0_812D:
     STA fade_step
     LDY palette_set
     LDA PaletteSetPtrLo,y
@@ -160,9 +160,9 @@ B0_812D:
     LDA (jump_ptr_lo),y
     SEC
     SBC Tbl_B0_81D7,x
-    BCS B0_8160
+    BCS @B0_8160
     LDA #$0F
-B0_8160:
+@B0_8160:
     STA tmp_08
     JSR PaletteRowFadeToPPU
     LDA jump_ptr_lo
@@ -183,9 +183,9 @@ PaletteRowFadeToPPU:
     LDA (jump_ptr_lo),y
     SEC
     SBC Tbl_B0_81D7,x
-    BCS B0_818D
+    BCS @B0_818D
     LDA #$0F
-B0_818D:
+@B0_818D:
     STA PPUDATA
     INY
     CPY #$10
@@ -198,25 +198,25 @@ B0_8196:
     LDA SpritePalettes,y
     SEC
     SBC Tbl_B0_81D7,x
-    BCS B0_81A7
+    BCS @B0_81A7
     LDA #$0F
-B0_81A7:
+@B0_81A7:
     STA PPUDATA
     INY
     LDA SpritePalettes,y
     SEC
     SBC Tbl_B0_81D7,x
-    BCS B0_81B6
+    BCS @B0_81B6
     LDA #$0F
-B0_81B6:
+@B0_81B6:
     STA PPUDATA
     INY
     LDA SpritePalettes,y
     SEC
     SBC Tbl_B0_81D7,x
-    BCS B0_81C5
+    BCS @B0_81C5
     LDA #$0F
-B0_81C5:
+@B0_81C5:
     STA PPUDATA
     INY
     CPY #$10
@@ -244,11 +244,11 @@ ClearPalettesBlack:
     STA PPUADDR
     LDY #$00
     LDA #$0F
-B0_81FA:
+@B0_81FA:
     STA PPUDATA
     INY
     CPY #$20
-    BNE B0_81FA
+    BNE @B0_81FA
     JMP SetScroll
 ReadController:
     LDA buttons
@@ -259,19 +259,19 @@ ReadController:
     STA JOY1
     STA buttons
     LDY #$07
-B0_8217:
+@B0_8217:
     LDA JOY1
     STA tmp_ptr_lo
     LSR a
     ORA tmp_ptr_lo
     LSR a
-    BCC B0_8229
+    BCC @B0_8229
     LDA buttons
     ORA Tbl_B0_823D,y
     STA buttons
-B0_8229:
+@B0_8229:
     DEY
-    BPL B0_8217
+    BPL @B0_8217
     LDA buttons
     EOR buttons_prev
     AND buttons
@@ -290,19 +290,19 @@ ClearRAM:
     LDA #$00
     STA tmp_ptr_lo
     TAY
-B0_824E:
+@B0_824E:
     LDA #$00
     STA (tmp_ptr_lo),y
     DEY
-    BNE B0_824E
-B0_8255:
+    BNE @B0_824E
+@B0_8255:
     DEC tmp_ptr_hi
-    BMI B0_8262
+    BMI @B0_8262
     LDA tmp_ptr_hi
     CMP #$01
-    BNE B0_824E
-    JMP B0_8255
-B0_8262:
+    BNE @B0_824E
+    JMP @B0_8255
+@B0_8262:
     RTS
 B0_8263:
     .word StageRecord0
@@ -1723,7 +1723,7 @@ CopyPpuTileVia2007:
     LDA ppuctrl_shadow
     AND #$FB
     JSR SetPPUCtrl
-B0_B5C5:
+@B0_B5C5:
     LDA ptr_hi
     STA PPUADDR
     LDA ptr_lo
@@ -1738,17 +1738,17 @@ B0_B5C5:
     PLA
     STA PPUDATA
     INC ptr_lo
-    BNE B0_B5EA
+    BNE @B0_B5EA
     INC ptr_hi
-B0_B5EA:
+@B0_B5EA:
     INC tmp_c
-    BNE B0_B5F0
+    BNE @B0_B5F0
     INC tmp_d
-B0_B5F0:
+@B0_B5F0:
     DEC tmp_a
-    BNE B0_B5C5
+    BNE @B0_B5C5
     DEC tmp_b
-    BNE B0_B5C5
+    BNE @B0_B5C5
     JMP SetScroll
 RestoreScrollAndRedraw:
     JSR RenderOffAndWait
@@ -1817,35 +1817,35 @@ InitIntroScreen:
     INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
-B0_B68B:
+@B0_B68B:
     LDA fade_dir
-    BNE B0_B68B
-B0_B68F:
+    BNE @B0_B68B
+@B0_B68F:
     JSR WaitForNMI
     JSR ReadController
     LDA player_frame
     CMP #$40
-    BNE B0_B6A1
+    BNE @B0_B6A1
     JSR QueuePpuStringA
-    JMP B0_B6A8
-B0_B6A1:
+    JMP @B0_B6A8
+@B0_B6A1:
     CMP #$50
-    BNE B0_B6A8
+    BNE @B0_B6A8
     JSR QueuePpuStringB
-B0_B6A8:
+@B0_B6A8:
     JSR IntroScreenStep
     LDA buttons_pressed
     AND #$08
-    BEQ B0_B68F
+    BEQ @B0_B68F
     DEC fade_dir
-B0_B6B3:
+@B0_B6B3:
     JSR WaitForNMI
     LDY #$06
     LDX #$03
     LDA #$80
     JSR FarCall
     LDA fade_dir
-    BNE B0_B6B3
+    BNE @B0_B6B3
     JSR SilenceSound
     JSR RenderOffAndWait
     JSR ClearOAMBuffer
@@ -1872,13 +1872,13 @@ IntroScreenStep:
     SEC
     SBC #$02
     CMP #$3A
-    BCS B0_B704
+    BCS @B0_B704
     INC player_frame
-    BNE B0_B702
+    BNE @B0_B702
     DEC player_frame
-B0_B702:
+@B0_B702:
     LDA #$3A
-B0_B704:
+@B0_B704:
     STA cutscene_fade_a
     JMP F_CED8
 DrawTileBlock17x5:
@@ -1896,14 +1896,14 @@ B0_B71A:
     LDY ptr_lo
     JSR SetPPUAddr
     LDY #$00
-B0_B726:
+@B0_B726:
     LDA (tmp_c),y
     SEC
     SBC #$80
     STA PPUDATA
     INY
     CPY tmp_a
-    BNE B0_B726
+    BNE @B0_B726
     JSR SetScroll
     LDA ptr_lo
     CLC
@@ -1937,24 +1937,24 @@ DrawBlockAndAttributes:
     JSR SetPPUAddr
     LDX #$1F
     LDA #$AA
-B0_B7B8:
+@B0_B7B8:
     STA PPUDATA
     DEX
-    BPL B0_B7B8
+    BPL @B0_B7B8
     LDA #$23
     LDY #$E8
     JSR SetPPUAddr
     LDX #$0F
     LDA #$5A
-B0_B7C9:
+@B0_B7C9:
     STA PPUDATA
     DEX
-    BMI B0_B7D7
+    BMI @B0_B7D7
     CPX #$08
-    BNE B0_B7C9
+    BNE @B0_B7C9
     LDA #$55
-    BNE B0_B7C9
-B0_B7D7:
+    BNE @B0_B7C9
+@B0_B7D7:
     LDA #$4F
     STA tmp_c
     LDA #$B8
@@ -2017,15 +2017,15 @@ Tbl_B0_B84F:
 WriteBiasedText:
     JSR SetPPUAddr
     LDY #$00
-B0_B878:
+@B0_B878:
     LDA (tmp_c),y
-    BEQ B0_B886
+    BEQ @B0_B886
     CLC
     ADC #$94
     STA PPUDATA
     INY
-    JMP B0_B878
-B0_B886:
+    JMP @B0_B878
+@B0_B886:
     RTS
 ; Tbl_B0_B887: 30 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B0_B887:
@@ -2038,14 +2038,14 @@ QueuePpuStringB:
     LDY #$0B
 B0_B8AB:
     LDX ppu_buffer_idx
-B0_B8AD:
+@B0_B8AD:
     LDA Tbl_B0_B8BC,y
     STA ppu_buffer,x
-    BEQ B0_B8B9
+    BEQ @B0_B8B9
     INX
     INY
-    BNE B0_B8AD
-B0_B8B9:
+    BNE @B0_B8AD
+@B0_B8B9:
     STX ppu_buffer_idx
     RTS
 ; Tbl_B0_B8BC: 22 bytes, read by B0_B8AD
@@ -2177,33 +2177,33 @@ SineTable_Data:
 FadeTableStep:
     LDY zp_49
     LDA zp_48
-    BNE B0_BF91
+    BNE @B0_BF91
     TAY
-B0_BF91:
+@B0_BF91:
     CMP Tbl_B0_BFBB,y
-    BEQ B0_BFA1
-B0_BF96:
+    BEQ @B0_BFA1
+@B0_BF96:
     STY zp_49
     INC zp_48
     LDA zp_48
     AND #$7F
     STA zp_48
-B0_BFA0:
+@B0_BFA0:
     RTS
-B0_BFA1:
+@B0_BFA1:
     LDA fade_step
     CMP #$04
-    BNE B0_BFA0
+    BNE @B0_BFA0
     LDA ppu_buffer_idx
     CMP #$18
-    BCS B0_BFA0
+    BCS @B0_BFA0
     LDA zp_47
-    BNE B0_BFA0
+    BNE @B0_BFA0
     INY
     LDA Tbl_B0_BFBB,y
     STA zp_47
     INY
-    JMP B0_BF96
+    JMP @B0_BF96
 ; Tbl_B0_BFBB: 69 bytes, read by B0_BF91, B0_BFA1
 Tbl_B0_BFBB:
     .byte $79,$01,$7B,$02,$7D,$03,$7F,$04,$7F,$00,$00,$00,$04,$F7,$FF,$FB

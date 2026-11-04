@@ -743,7 +743,7 @@ Gfx_B4_ABB2:
     .byte $C1,$5E,$08,$F0,$0E,$24,$74,$65,$C0,$00
     LDA zp_D1
     CMP #$0F
-    BNE B4_AC09
+    BNE @B4_AC09
     PHA
     JSR FindFreeEntitySlot
     LDA #$96
@@ -761,15 +761,15 @@ Gfx_B4_ABB2:
     LDA #$36
     JSR PlaySfxNoise
     PLA
-B4_AC09:
+@B4_AC09:
     SEC
     SBC #$01
-    BNE B4_AC4F
+    BNE @B4_AC4F
     LDA credits_ptr_lo
     CMP #$DC
-    BNE B4_AC3F
+    BNE @B4_AC3F
     LDA credits_ptr_hi
-    BNE B4_AC3D
+    BNE @B4_AC3D
     JSR FindFreeEntitySlot
     LDA player_x_lo
     STA ent_x_lo,y
@@ -785,9 +785,9 @@ B4_AC09:
     JSR SpawnEffects
     LDA #$29
     JSR PlaySfxSq2
-B4_AC3D:
+@B4_AC3D:
     LDA credits_ptr_lo
-B4_AC3F:
+@B4_AC3F:
     SEC
     SBC #$01
     STA credits_ptr_lo
@@ -795,22 +795,22 @@ B4_AC3F:
     SBC #$00
     STA credits_ptr_hi
     ORA credits_ptr_lo
-    BEQ B4_AC58
+    BEQ @B4_AC58
     RTS
-B4_AC4F:
+@B4_AC4F:
     STA zp_D1
     TAY
     LDA Tbl_B4_ADBB,y
     STA zp_47
     RTS
-B4_AC58:
+@B4_AC58:
     JSR SilenceSound
     LDA #$01
     STA nmi_state
     DEC fade_dir
-B4_AC61:
+@B4_AC61:
     LDA fade_dir
-    BNE B4_AC61
+    BNE @B4_AC61
     JSR RenderOffAndWait
     JSR DisableNMI
     LDA #$F0
@@ -837,7 +837,7 @@ B4_AC61:
     STA palette_set
     JSR CutsceneScrollCall
     LDY #$00
-B4_ACA1:
+@B4_ACA1:
     LDA #$78
     STA ram_0203,y
     LDA #$80
@@ -850,7 +850,7 @@ B4_ACA1:
     ADC #$08
     TAY
     CMP #$30
-    BNE B4_ACA1
+    BNE @B4_ACA1
     LDA #$C4
     STA zp_D6
     LDA #$02
@@ -863,76 +863,76 @@ B4_ACA1:
     INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
-B4_ACD8:
+@B4_ACD8:
     JSR WaitForNMI
     INC cutscene_fade_a
     INC cutscene_fade_b
     JSR CutsceneScrollCall
     LDA fade_dir
-    BNE B4_ACD8
-B4_ACE8:
+    BNE @B4_ACD8
+@B4_ACE8:
     LDA cutscene_fade_a
     CLC
     ADC #$01
     CMP #$88
-    BEQ B4_ACF5
+    BEQ @B4_ACF5
     STA cutscene_fade_a
-B4_ACF5:
+@B4_ACF5:
     INC cutscene_fade_b
     JSR CutsceneScrollCall
     LDX #$00
     LDA frame_counter
     AND #$78
-    BNE B4_AD05
+    BNE @B4_AD05
     LDX #$04
-B4_AD05:
+@B4_AD05:
     TXA
     CLC
     ADC #$C4
     STA zp_D6
     LDX #$00
-B4_AD0D:
+@B4_AD0D:
     LDA oam_buffer,x
     CMP #$FF
-    BEQ B4_AD1F
+    BEQ @B4_AD1F
     LDA zp_D6
     STA ram_0201,x
     CLC
     ADC #$02
     STA ram_0205,x
-B4_AD1F:
+@B4_AD1F:
     TXA
     CLC
     ADC #$08
     TAX
     CMP #$30
-    BNE B4_AD0D
+    BNE @B4_AD0D
     LDA ram_01B2
-    BEQ B4_AD30
-    JMP B4_ACE8
-B4_AD30:
+    BEQ @B4_AD30
+    JMP @B4_ACE8
+@B4_AD30:
     JSR SilenceSound
     LDA #$01
     STA nmi_state
     DEC fade_dir
-B4_AD39:
+@B4_AD39:
     JSR WaitForNMI
     INC cutscene_fade_b
     JSR CutsceneScrollCall
     LDA fade_dir
-    BNE B4_AD39
+    BNE @B4_AD39
     JSR RenderOffAndWait
     JSR DisableNMI
     LDA #$F0
     JSR ClearNametables
     LDA items_found
     CMP #$04
-    BEQ B4_AD60
+    BEQ @B4_AD60
     LDY #$01
     LDX #$A3
     LDA #$BD
     JMP FarCall
-B4_AD60:
+@B4_AD60:
     LDA #$13
     STA game_state
     LDA ppumask_shadow
@@ -957,10 +957,10 @@ B4_AD60:
     INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
-B4_AD99:
+@B4_AD99:
     JSR WaitForNMI
     LDA fade_dir
-    BNE B4_AD99
+    BNE @B4_AD99
     LDA #$02
     STA nmi_state
     RTS
@@ -1029,7 +1029,7 @@ GameState19:
     RTS
 GameState01:
     LDA powerup_shot
-    BEQ B4_AE4C
+    BEQ @B4_AE4C
     LDA #$03
     STA game_state
     LDA #$07
@@ -1037,7 +1037,7 @@ GameState01:
     LDA #$16
     STA zp_47
     RTS
-B4_AE4C:
+@B4_AE4C:
     LDA #$02
     STA game_state
     LDA #$00
@@ -1047,7 +1047,7 @@ GameState03:
 GameState02:
     JSR EnableCameraAtX
     LDA zp_A6
-    BEQ B4_AE8F
+    BEQ @B4_AE8F
     JSR FindFreeEntitySlot
     LDA #$D0
     STA ent_y_lo,y
@@ -1069,18 +1069,18 @@ GameState02:
     LDA #$01
     STA ram_0737
     JMP GameState05
-B4_AE8F:
+@B4_AE8F:
     LDA zp_C5
     STA ptr_lo
     CMP #$17
-    BEQ B4_AE9B
+    BEQ @B4_AE9B
     AND #$FF
-    BNE B4_AEA2
-B4_AE9B:
+    BNE @B4_AEA2
+@B4_AE9B:
     LDA #$13
     JSR PlaySfxSq2
     LDA ptr_lo
-B4_AEA2:
+@B4_AEA2:
     CLC
     ADC #$01
     AND #$3F
@@ -1134,23 +1134,23 @@ GameState05:
     LDA #$AF
     STA tmp_d
     LDA ram_072D
-    BEQ B4_AF40
+    BEQ @B4_AF40
     RTS
-B4_AF40:
+@B4_AF40:
     LDA ram_0738
     SEC
     SBC #$01
-    BNE B4_AF5A
+    BNE @B4_AF5A
     LDA ram_0737
     CMP #$1F
-    BNE B4_AF52
-    JMP B4_AF7B
-B4_AF52:
+    BNE @B4_AF52
+    JMP @B4_AF7B
+@B4_AF52:
     CLC
     ADC #$01
     STA ram_0737
     LDA #$05
-B4_AF5A:
+@B4_AF5A:
     STA ram_0738
     LDA ram_0737
     STA tmp_b
@@ -1159,15 +1159,15 @@ B4_AF5A:
     STA tmp_a
     LDA ram_0737
     CMP #$19
-    BCS B4_AF76
+    BCS @B4_AF76
     AND #$01
-    BNE B4_AF76
+    BNE @B4_AF76
     INC tmp_a
-B4_AF76:
+@B4_AF76:
     LDA tmp_a
     STA zp_47
     RTS
-B4_AF7B:
+@B4_AF7B:
     JSR FindFreeEntitySlot
     LDA #$0B
     STA ent_type,y
@@ -1245,10 +1245,10 @@ GameState0A:
     LDA ram_0738
     SEC
     SBC #$01
-    BNE B4_B048
+    BNE @B4_B048
     INC ram_0737
     LDA #$05
-B4_B048:
+@B4_B048:
     STA ram_0738
     LDA ram_0737
     STA tmp_b
@@ -1257,17 +1257,17 @@ B4_B048:
     STA tmp_a
     LDA ram_0737
     CMP #$0E
-    BNE B4_B069
+    BNE @B4_B069
     LDA #$0B
     STA game_state
     LDA #$00
     STA ram_072F
     RTS
-B4_B069:
+@B4_B069:
     AND #$01
-    BNE B4_B06F
+    BNE @B4_B06F
     INC tmp_a
-B4_B06F:
+@B4_B06F:
     LDA tmp_a
     STA zp_47
     RTS
@@ -1280,34 +1280,34 @@ GameState0B:
     LDA ram_072F
     ASL a
     TAY
-    LDA B4_B096,y
+    LDA @B4_B096,y
     STA ptr_lo
-    LDA B4_B096+1,y
+    LDA @B4_B096+1,y
     STA ptr_hi
     JMP (ptr_lo)
-B4_B096:
+@B4_B096:
     .word B4_B0D8
     .word B4_B109
-    .word B4_B0AC
+    .word @B4_B0AC
     .word B4_B140
     .word B4_B170
-    .word B4_B0AC
+    .word @B4_B0AC
     .word B4_B1AC
     .word B4_B1D9
     .word B4_B239
     .word B4_B278
     .byte $D8,$B2
-B4_B0AC:
+@B4_B0AC:
     LDA zp_D1
     SEC
     SBC #$01
-    BNE B4_B0BB
+    BNE @B4_B0BB
     DEC zp_D2
-    BNE B4_B0BA
+    BNE @B4_B0BA
     INC ram_072F
-B4_B0BA:
+@B4_B0BA:
     RTS
-B4_B0BB:
+@B4_B0BB:
     STA zp_D1
     TAY
     LDA Tbl_B4_B0C4,y
@@ -1325,11 +1325,11 @@ B4_B0D8:
     SBC #$96
     LDA ram_01A9
     SBC #$00
-    BCS B4_B0F1
+    BCS @B4_B0F1
     LDA #$0C
     STA tmp_a
     JSR SpawnPickupAtPlayer
-B4_B0F1:
+@B4_B0F1:
     LDA #$28
     JSR PlaySfxNoise
     LDA #$1F
@@ -1344,14 +1344,14 @@ B4_B0F1:
 B4_B109:
     LDA #$0A
     STA tmp_b
-B4_B10D:
+@B4_B10D:
     LDA ram_01A8
     CMP #$57
-    BNE B4_B11B
+    BNE @B4_B11B
     LDA ram_01A9
     CMP #$02
-    BEQ B4_B132
-B4_B11B:
+    BEQ @B4_B132
+@B4_B11B:
     LDA #$01
     STA tmp_c
     JSR AddToRam01A8
@@ -1361,9 +1361,9 @@ B4_B11B:
     STA tmp_d
     JSR AddScore
     DEC tmp_b
-    BNE B4_B10D
+    BNE @B4_B10D
     RTS
-B4_B132:
+@B4_B132:
     LDA #$02
     STA ram_072F
     LDA #$13
@@ -1374,11 +1374,11 @@ B4_B132:
 B4_B140:
     LDA ram_01AA
     CMP #$3C
-    BNE B4_B14D
+    BNE @B4_B14D
     LDA #$06
     STA ram_072F
     RTS
-B4_B14D:
+@B4_B14D:
     STA zp_D3
     LDA #$04
     STA ram_072F
@@ -1398,11 +1398,11 @@ B4_B14D:
 B4_B170:
     LDA ram_01AA
     CMP #$3C
-    BEQ B4_B195
+    BEQ @B4_B195
     LDA zp_D1
     SEC
     SBC #$01
-    BNE B4_B192
+    BNE @B4_B192
     LDA #$32
     STA tmp_c
     LDA #$00
@@ -1412,16 +1412,16 @@ B4_B170:
     STA tmp_c
     JSR AddRam01AA
     LDA tmp_c
-B4_B192:
+@B4_B192:
     STA zp_D1
     RTS
-B4_B195:
+@B4_B195:
     LDA #$0C
     STA tmp_a
     LDA zp_D3
-    BNE B4_B1A0
+    BNE @B4_B1A0
     JSR SpawnPickupAtPlayer
-B4_B1A0:
+@B4_B1A0:
     INC ram_072F
     LDA #$13
     STA zp_D1
@@ -1441,14 +1441,14 @@ B4_B1AC:
     INC ram_072F
     LDA onetime_flags
     AND Tbl_F_C53D
-    BNE B4_B1D8
+    BNE @B4_B1D8
     LDA #$09
     STA ram_072F
     LDA #$00
     STA zp_D1
     LDA #$07
     STA zp_D2
-B4_B1D8:
+@B4_B1D8:
     RTS
 B4_B1D9:
     LDA #$5A
@@ -1493,11 +1493,11 @@ B4_B239:
     DEC zp_D1
     LDA zp_D1
     CMP #$4B
-    BNE B4_B248
+    BNE @B4_B248
     LDA #$0C
     STA tmp_a
     JSR SpawnPickupAtPlayer
-B4_B248:
+@B4_B248:
     CMP #$00
     BNE B4_B226
     INC ram_072F
@@ -1526,7 +1526,7 @@ B4_B278:
     BEQ B4_B277
     INC zp_D1
     CMP #$FF
-    BNE B4_B2BB
+    BNE @B4_B2BB
     LDA #$33
     STA effect_type
     LDA #$5F
@@ -1548,7 +1548,7 @@ B4_B278:
     STA ram_0620
     LDA #$36
     JMP PlaySfxNoise
-B4_B2BB:
+@B4_B2BB:
     STA zp_47
     RTS
 ; GameState0B_Sequence: indexed by zp_D1
@@ -1585,29 +1585,29 @@ GameState0D:
     SBC #$18
     LDA focus_y_hi
     SBC #$01
-    BCS B4_B354
+    BCS @B4_B354
     LDA ram_0745
-    BNE B4_B351
+    BNE @B4_B351
     INC ram_0745
     LDA #$0C
     STA tmp_a
     JSR SpawnPickupAtPlayer
-B4_B351:
-    JMP B4_B3AC
-B4_B354:
+@B4_B351:
+    JMP @B4_B3AC
+@B4_B354:
     LDA ram_073D
     SEC
     SBC #$01
-    BNE B4_B3A9
+    BNE @B4_B3A9
     LDY #$08
-B4_B35E:
+@B4_B35E:
     LDA ent_type,y
-    BEQ B4_B36B
+    BEQ @B4_B36B
     INY
     CPY #$20
-    BNE B4_B35E
-    JMP B4_B3A7
-B4_B36B:
+    BNE @B4_B35E
+    JMP @B4_B3A7
+@B4_B36B:
     LDA #$35
     STA ent_type,y
     LDA focus_y_lo
@@ -1617,7 +1617,7 @@ B4_B36B:
     LDA focus_y_hi
     SBC #$00
     STA ent_y_hi,y
-B4_B37F:
+@B4_B37F:
     LDA #$06
     JSR AimedRandomEffect
     ASL a
@@ -1626,9 +1626,9 @@ B4_B37F:
     CLC
     ADC #$10
     CMP #$E8
-    BCS B4_B37F
+    BCS @B4_B37F
     CMP #$08
-    BCC B4_B37F
+    BCC @B4_B37F
     STA ent_x_lo,y
     LDA #$00
     STA ent_x_hi,y
@@ -1637,24 +1637,24 @@ B4_B37F:
     LDA #$00
     STA ent_param,y
     INC ram_0745
-B4_B3A7:
+@B4_B3A7:
     LDA #$0C
-B4_B3A9:
+@B4_B3A9:
     STA ram_073D
-B4_B3AC:
+@B4_B3AC:
     LDA ram_073E
     SEC
     SBC #$01
-    BNE B4_B40A
+    BNE @B4_B40A
     LDY #$08
-B4_B3B6:
+@B4_B3B6:
     LDA ent_type,y
-    BEQ B4_B3C3
+    BEQ @B4_B3C3
     INY
     CPY #$20
-    BNE B4_B3B6
-    JMP B4_B408
-B4_B3C3:
+    BNE @B4_B3B6
+    JMP @B4_B408
+@B4_B3C3:
     LDA #$36
     STA ent_type,y
     LDA focus_y_lo
@@ -1686,9 +1686,9 @@ B4_B3C3:
     CLC
     ADC #$01
     STA ent_radius,y
-B4_B408:
+@B4_B408:
     LDA #$06
-B4_B40A:
+@B4_B40A:
     STA ram_073E
     RTS
 AimedRandomEffect:
@@ -1747,10 +1747,10 @@ GameState10:
     LDA ram_0738
     SEC
     SBC #$01
-    BNE B4_B480
+    BNE @B4_B480
     INC ram_0737
     LDA #$05
-B4_B480:
+@B4_B480:
     STA ram_0738
     LDA ram_0737
     STA tmp_b
@@ -1759,12 +1759,12 @@ B4_B480:
     STA tmp_a
     LDA ram_0737
     CMP #$1A
-    BNE B4_B49F
+    BNE @B4_B49F
     LDA #$23
     STA ram_0737
     INC game_state
     RTS
-B4_B49F:
+@B4_B49F:
     EOR #$01
     AND #$01
     CLC
@@ -1826,14 +1826,14 @@ StateDispatch_0735:
     LDA ram_0735
     ASL a
     TAY
-    LDA B4_B527,y
+    LDA @B4_B527,y
     STA ptr_lo
-    LDA B4_B528,y
+    LDA @B4_B528,y
     STA ptr_hi
     JMP (ptr_lo)
-B4_B527:
+@B4_B527:
     .byte $39
-B4_B528:
+@B4_B528:
     .byte $B5
     .word B4_B5B7
     .word B4_B63F
@@ -1868,11 +1868,11 @@ Tbl_B4_B556:
 B4_B56B:
     STA ram_01B2
     LDA ram_01B3
-    BEQ B4_B579
+    BEQ @B4_B579
     LDA #$06
     STA ram_0735
     RTS
-B4_B579:
+@B4_B579:
     LDY ptr_lo
     LDA B4_B7B1,y
     STA ram_01B9
@@ -1903,11 +1903,11 @@ B4_B5B7:
     BNE B4_B5B6
     LDY #$00
     LDA (zp_CF),y
-    BNE B4_B5C8
+    BNE @B4_B5C8
     LDA #$02
     STA ram_0735
     RTS
-B4_B5C8:
+@B4_B5C8:
     INY
     STA ram_01B2
     LDA (zp_CF),y
@@ -1925,17 +1925,17 @@ B4_B5C8:
     LDY #$00
     LDA (tmp_c),y
     INC tmp_c
-    BNE B4_B5EC
+    BNE @B4_B5EC
     INC tmp_d
-B4_B5EC:
+@B4_B5EC:
     PHA
     LDY #$09
-B4_B5EF:
+@B4_B5EF:
     LDA ent_type,y
-    BEQ B4_B5F7
+    BEQ @B4_B5F7
     INY
-    BNE B4_B5EF
-B4_B5F7:
+    BNE @B4_B5EF
+@B4_B5F7:
     LDA #$3A
     STA ent_type,y
     LDA #$94
@@ -1971,7 +1971,7 @@ B4_B5F7:
     PLA
     SEC
     SBC #$01
-    BNE B4_B5EC
+    BNE @B4_B5EC
     RTS
 B4_B63F:
     LDA #$3B
@@ -2019,11 +2019,11 @@ B4_B6A4:
     LDA ram_01B2
     BNE B4_B6A3
     LDA ram_01B3
-    BEQ B4_B6B6
+    BEQ @B4_B6B6
     LDA #$05
     STA ram_0735
     JMP B4_B74B
-B4_B6B6:
+@B4_B6B6:
     JSR StepDispatch_01BE
     LDA ram_01BE
     CMP #$03
@@ -2056,17 +2056,17 @@ B4_B6FA:
     LDA ram_01BC
     SEC
     SBC #$01
-    BEQ B4_B713
+    BEQ @B4_B713
     AND #$01
     BEQ B4_B71C
     LDA #$03
     STA tmp_a
     LDA ram_05A9
-    BEQ B4_B717
-B4_B713:
+    BEQ @B4_B717
+@B4_B713:
     LDA #$00
     STA tmp_a
-B4_B717:
+@B4_B717:
     LDA tmp_a
     STA ram_05A9
 B4_B71C:
@@ -2081,12 +2081,12 @@ B4_B728:
     LDA #$07
     STA ram_05A9
     LDA ram_01B7
-    BEQ B4_B73B
+    BEQ @B4_B73B
     SEC
     SBC #$01
     STA ram_01B7
     JMP B4_B71C
-B4_B73B:
+@B4_B73B:
     JSR DrawQueuedBlock
     LDA ram_01BA
     BNE B4_B71C
@@ -2110,16 +2110,16 @@ B4_B767:
     BNE B4_B71C
     LDA ram_01B1
     CMP #$03
-    BEQ B4_B776
+    BEQ @B4_B776
     JMP B4_B540
-B4_B776:
+@B4_B776:
     LDA #$01
     STA nmi_state
     DEC fade_dir
-B4_B77C:
+@B4_B77C:
     JSR WaitForNMI
     LDA fade_dir
-    BNE B4_B77C
+    BNE @B4_B77C
     JSR RenderOffAndWait
     JSR ClearOAMAndLoadSprites
     JSR DisableNMI
@@ -2128,16 +2128,16 @@ B4_B77C:
     STA player_state
     LDA shot_state
     CMP #$0F
-    BEQ B4_B79D
+    BEQ @B4_B79D
     LDA #$00
     STA shot_state
-B4_B79D:
+@B4_B79D:
     LDA shot_state_1
     CMP #$0F
-    BEQ B4_B7A7
+    BEQ @B4_B7A7
     LDA #$00
     STA shot_state_1
-B4_B7A7:
+@B4_B7A7:
     LDX #$FF
     TXS
     JSR ReturnStub
@@ -2198,17 +2198,17 @@ B4_BA00:
     LDA ram_0732
     BNE B4_BA65
     LDY #$0F
-B4_BA07:
+@B4_BA07:
     LDA effect_type,y
     CMP #$47
     BEQ B4_BA65
     DEY
-    BPL B4_BA07
+    BPL @B4_BA07
     LDA ram_01B8
-    BNE B4_BA1B
+    BNE @B4_BA1B
     STA tmp_c
     JMP B4_BA26
-B4_BA1B:
+@B4_BA1B:
     STA tmp_b
 B4_BA1D:
     LDA #$0A
@@ -2232,22 +2232,22 @@ B4_BA26:
     LDA #$8A
     STA ppu_buffer,x
     INX
-B4_BA45:
+@B4_BA45:
     LDA tmp_c
-    BEQ B4_BA4D
+    BEQ @B4_BA4D
     LDA #$22
-    BNE B4_BA4F
-B4_BA4D:
+    BNE @B4_BA4F
+@B4_BA4D:
     LDA #$23
-B4_BA4F:
+@B4_BA4F:
     STA ppu_buffer,x
     INX
     LDA tmp_c
-    BEQ B4_BA59
+    BEQ @B4_BA59
     DEC tmp_c
-B4_BA59:
+@B4_BA59:
     DEC tmp_a
-    BNE B4_BA45
+    BNE @B4_BA45
 B4_BA5D:
     LDA #$00
     STA ppu_buffer,x
@@ -2268,11 +2268,11 @@ B4_BA65:
     INX
     LDY #$09
     LDA #$53
-B4_BA82:
+@B4_BA82:
     STA ppu_buffer,x
     INX
     DEY
-    BPL B4_BA82
+    BPL @B4_BA82
     JMP B4_BA5D
 B4_BA8C:
     .word B4_BAA6
@@ -2302,11 +2302,11 @@ B4_BABB:
 B4_BABC:
     LDA ram_01BB
     CMP ram_01BA
-    BNE B4_BACA
+    BNE @B4_BACA
     LDA #$02
     STA ram_01BE
     RTS
-B4_BACA:
+@B4_BACA:
     CLC
     ADC #$01
     STA ram_01BB
@@ -2352,23 +2352,23 @@ QueueTextRow:
     STA ppu_buffer,x
     INX
     LDY #$0F
-B4_BB1A:
+@B4_BB1A:
     LDA (tmp_c),y
     CPY #$0F
-    BEQ B4_BB2A
+    BEQ @B4_BB2A
     CPY ptr_lo
-    BCS B4_BB28
+    BCS @B4_BB28
     CMP #$20
-    BNE B4_BB2A
-B4_BB28:
+    BNE @B4_BB2A
+@B4_BB28:
     LDA #$63
-B4_BB2A:
+@B4_BB2A:
     CLC
     ADC #$E4
     STA ppu_buffer,x
     INX
     DEY
-    BPL B4_BB1A
+    BPL @B4_BB1A
     LDA #$00
     STA ppu_buffer,x
     STX ppu_buffer_idx
@@ -2401,33 +2401,33 @@ B4_BB60:
     LDA ram_01BC
     SEC
     SBC #$01
-    BNE B4_BB9A
+    BNE @B4_BB9A
     INC ram_01BD
     LDA ram_01BD
     STA ptr_lo
     CMP #$10
-    BEQ B4_BB9E
+    BEQ @B4_BB9E
     LDA ram_01BA
     SEC
     SBC #$01
     JSR QueueTextRow
     CMP #$20
-    BEQ B4_BB98
-B4_BB89:
+    BEQ @B4_BB98
+@B4_BB89:
     LDA #$05
     STA ram_01BC
     LDA buttons
     AND #$01
-    BEQ B4_BB9D
+    BEQ @B4_BB9D
     LDA #$02
-    BNE B4_BB9A
-B4_BB98:
+    BNE @B4_BB9A
+@B4_BB98:
     LDA #$01
-B4_BB9A:
+@B4_BB9A:
     STA ram_01BC
-B4_BB9D:
+@B4_BB9D:
     RTS
-B4_BB9E:
+@B4_BB9E:
     LDA credits_ptr_lo
     CLC
     ADC #$10
@@ -2439,7 +2439,7 @@ B4_BB9E:
     STA tmp_d
     LDY #$00
     LDA (tmp_c),y
-    BEQ B4_BC04
+    BEQ @B4_BC04
     INC ram_01BF
     LDA ram_01BF
     PHA
@@ -2457,10 +2457,10 @@ B4_BB9E:
     STA tmp_d
     PLA
     STA tmp_c
-B4_BBD6:
+@B4_BBD6:
     LDA tmp_ptr_lo
     CMP #$02
-    BEQ B4_BBF8
+    BEQ @B4_BBF8
     DEC tmp_ptr_lo
     LDA tmp_c
     SEC
@@ -2470,17 +2470,17 @@ B4_BBD6:
     SBC #$00
     STA tmp_d
     DEC ram_01BF
-    BEQ B4_BBF8
+    BEQ @B4_BBF8
     LDA tmp_ptr_lo
     JSR QueueTextRow
-    JMP B4_BBD6
-B4_BBF8:
+    JMP @B4_BBD6
+@B4_BBF8:
     PLA
     STA ram_01BF
     LDA #$01
     STA ram_01BD
-    JMP B4_BB89
-B4_BC04:
+    JMP @B4_BB89
+@B4_BC04:
     LDA #$03
     STA ram_01BE
     RTS
@@ -2496,7 +2496,7 @@ PPUBuffer_Append:
     STA tmp_ptr_lo
     LDY #$FF
     LDX ppu_buffer_idx
-B4_BC56:
+@B4_BC56:
     INY
     LDA (tmp_c),y
     STA ppu_buffer,x
@@ -2513,40 +2513,40 @@ B4_BC56:
     STA tmp_ptr_hi
     SEC
     SBC tmp_ptr_lo
-    BCS B4_BC76
+    BCS @B4_BC76
     LDA #$00
-B4_BC76:
+@B4_BC76:
     STA tmp_a
     LDA tmp_ptr_lo
     SEC
     SBC tmp_ptr_hi
-    BCS B4_BC81
+    BCS @B4_BC81
     LDA #$00
-B4_BC81:
+@B4_BC81:
     STA tmp_ptr_lo
-B4_BC83:
+@B4_BC83:
     INY
     LDA (tmp_c),y
     STA ppu_buffer,x
-    BEQ B4_BCAA
+    BEQ @B4_BCAA
     CMP #$FF
-    BEQ B4_BC56
+    BEQ @B4_BC56
     CMP #$20
-    BNE B4_BC95
+    BNE @B4_BC95
     LDA #$5C
-B4_BC95:
+@B4_BC95:
     CLC
     ADC #$94
     STA ppu_buffer,x
     LDA tmp_a
-    BEQ B4_BCA6
+    BEQ @B4_BCA6
     DEC tmp_a
     LDA #$F0
     STA ppu_buffer,x
-B4_BCA6:
+@B4_BCA6:
     INX
-    JMP B4_BC83
-B4_BCAA:
+    JMP @B4_BC83
+@B4_BCAA:
     LDA #$00
     STA ppu_buffer,x
     STX ppu_buffer_idx
@@ -2560,9 +2560,9 @@ B4_BCB9:
     STA tmp_08
     LDA zp_48
     AND #$03
-    BNE B4_BCD0
+    BNE @B4_BCD0
     LDA zp_47
-    BNE B4_BCD0
+    BNE @B4_BCD0
     LDA zp_48
     LSR a
     LSR a
@@ -2570,7 +2570,7 @@ B4_BCB9:
     CLC
     ADC tmp_08
     STA zp_47
-B4_BCD0:
+@B4_BCD0:
     LDY #$07
 B4_BCD2:
     LDA effect_type,y
@@ -2598,20 +2598,20 @@ B4_BCE4:
     SBC water_level_lo
     LDA effect_y_hi,y
     SBC water_level_hi
-    BCS B4_BD15
+    BCS @B4_BD15
     LDA effect_y_hi,y
     CLC
     ADC #$01
     STA effect_y_hi,y
-B4_BD15:
+@B4_BD15:
     JSR RandomByteFar
     LDA #$00
     STA ram_0590,y
     LDA rng_b
     AND #$03
-    BNE B4_BD25
+    BNE @B4_BD25
     LDA #$01
-B4_BD25:
+@B4_BD25:
     CLC
     ADC #$3A
     STA ram_05C0,y
@@ -2689,10 +2689,10 @@ InitEndScreen:
     STA PPUADDR
     LDX #$2F
     LDA #$55
-B4_BE47:
+@B4_BE47:
     STA PPUDATA
     DEX
-    BPL B4_BE47
+    BPL @B4_BE47
     JSR EnableNMI
     JSR WaitForNMI
     LDA #$5F
@@ -2726,7 +2726,7 @@ B4_BE47:
     INC fade_dir
     LDA #$01
     STA nmi_state
-B4_BE99:
+@B4_BE99:
     JSR WaitForNMI
     JSR FadeStepBEE7
     DEC entity_tick
@@ -2734,15 +2734,15 @@ B4_BE99:
     LSR a
     STA cutscene_fade_b
     DEC ram_01A8
-    BEQ B4_BEB7
-    BMI B4_BE99
+    BEQ @B4_BEB7
+    BMI @B4_BE99
     JSR ReadControllerBank0
     LDA buttons
     AND #$0B
-    BEQ B4_BE99
-B4_BEB7:
+    BEQ @B4_BE99
+@B4_BEB7:
     DEC fade_dir
-B4_BEB9:
+@B4_BEB9:
     JSR WaitForNMI
     JSR ReadControllerBank0
     JSR FadeStepBEE7
@@ -2751,7 +2751,7 @@ B4_BEB9:
     LSR a
     STA cutscene_fade_b
     LDA fade_step
-    BNE B4_BEB9
+    BNE @B4_BEB9
     JSR RenderOffAndWait
     JSR ClearOAMBuffer
     JMP DisableNMI
@@ -2782,7 +2782,7 @@ FadeStepBEE7:
     STA zp_73
     LDA #$00
     STA tmp_a
-B4_BF0B:
+@B4_BF0B:
     LDA tmp_a
     PHA
     LDA tmp_b
@@ -2807,12 +2807,12 @@ B4_BF0B:
     JSR CosLookup
     STA tmp_b
     STA ptr_hi
-    BPL B4_BF41
+    BPL @B4_BF41
     EOR #$FF
     CLC
     ADC #$01
     STA ptr_hi
-B4_BF41:
+@B4_BF41:
     LDA ram_038B
     STA tmp_c
     ASL ptr_hi
@@ -2821,30 +2821,30 @@ B4_BF41:
     LDX zp_73
     LDA zp_75
     BIT tmp_b
-    BPL B4_BF62
+    BPL @B4_BF62
     SEC
     SBC ptr_hi
-    BCS B4_BF5C
+    BCS @B4_BF5C
     LDA #$FF
-B4_BF5C:
+@B4_BF5C:
     STA oam_buffer,x
-    JMP B4_BF6C
-B4_BF62:
+    JMP @B4_BF6C
+@B4_BF62:
     CLC
     ADC ptr_hi
-    BCC B4_BF69
+    BCC @B4_BF69
     LDA #$FF
-B4_BF69:
+@B4_BF69:
     STA oam_buffer,x
-B4_BF6C:
+@B4_BF6C:
     LDA tmp_a
     STA ptr_hi
-    BPL B4_BF79
+    BPL @B4_BF79
     EOR #$FF
     CLC
     ADC #$01
     STA ptr_hi
-B4_BF79:
+@B4_BF79:
     LDA ram_038B
     STA tmp_c
     ASL ptr_hi
@@ -2853,16 +2853,16 @@ B4_BF79:
     LDX zp_73
     LDA zp_76
     BIT tmp_a
-    BPL B4_BF96
+    BPL @B4_BF96
     SEC
     SBC ptr_hi
     STA ram_0203,x
-    JMP B4_BF9C
-B4_BF96:
+    JMP @B4_BF9C
+@B4_BF96:
     CLC
     ADC ptr_hi
     STA ram_0203,x
-B4_BF9C:
+@B4_BF9C:
     LDA #$28
     STA ram_0201,x
     LDA zp_78
@@ -2884,17 +2884,17 @@ B4_BF9C:
     ADC zp_77
     STA tmp_a
     DEC tmp_b
-    BMI B4_BFD6
+    BMI @B4_BFD6
     LDA zp_01
-    BNE B4_BFD3
+    BNE @B4_BFD3
     DEC zp_01
     LDY #$06
     LDX #$03
     LDA #$80
     JSR FarCall
-B4_BFD3:
-    JMP B4_BF0B
-B4_BFD6:
+@B4_BFD3:
+    JMP @B4_BF0B
+@B4_BFD6:
     RTS
 ; Tbl_B4_BFD7: 41 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B4_BFD7:

@@ -1142,9 +1142,9 @@ B3_BD67:
     LSR a
     TAY
     LDA Tbl_B3_BE12,y
-    BEQ B3_BD75
+    BEQ @B3_BD75
     JMP F_F507
-B3_BD75:
+@B3_BD75:
     STA zp_81
     LDA #$64
     STA zp_D4
@@ -1168,9 +1168,9 @@ B3_BD8D:
     LDA Tbl_B3_BE2A,y
     STA tmp_a
     CMP #$80
-    BEQ B3_BDF4
+    BEQ @B3_BDF4
     CMP #$7F
-    BNE B3_BDE3
+    BNE @B3_BDE3
     JSR FindFreeEntitySlot
     TYA
     TAX
@@ -1194,13 +1194,13 @@ B3_BD8D:
     LDA ent_y_hi,x
     STA player_y_hi
     LDA ent_angle,x
-    BMI B3_BDDB
+    BMI @B3_BDDB
     RTS
-B3_BDDB:
+@B3_BDDB:
     LDA #$00
     JSR PlaySfxSq1
-    JMP B3_BDF1
-B3_BDE3:
+    JMP @B3_BDF1
+@B3_BDE3:
     LDA player_y_lo
     CLC
     ADC tmp_a
@@ -1208,24 +1208,24 @@ B3_BDE3:
     LDA player_y_hi
     ADC B3_BE2B,y
     STA player_y_hi
-B3_BDF1:
+@B3_BDF1:
     INC zp_81
     RTS
-B3_BDF4:
+@B3_BDF4:
     JSR PlayerFrameCycle4
     LDA zp_D4
     CMP #$FF
-    BCC B3_BE04
+    BCC @B3_BE04
     LDA fade_step
-    BNE B3_BE0D
+    BNE @B3_BE0D
     JMP F_F52A
-B3_BE04:
+@B3_BE04:
     SEC
     SBC #$01
     STA zp_D4
-    BNE B3_BE0D
+    BNE @B3_BE0D
     DEC fade_dir
-B3_BE0D:
+@B3_BE0D:
     RTS
 ; Tbl_B3_BE0E: 4 bytes, read by B3_BD7F
 Tbl_B3_BE0E:
@@ -1331,12 +1331,12 @@ Tbl_B3_BF00:
     ROR ptr_lo
     LDA ptr_lo
     CMP #$3B
-    BCS B3_BF45
+    BCS @B3_BF45
     CMP #$3A
-    BEQ B3_BF46
+    BEQ @B3_BF46
     SEC
     SBC #$05
-    BCC B3_BF45
+    BCC @B3_BF45
     SBC #$03
     AND #$03
     ASL a
@@ -1344,12 +1344,12 @@ Tbl_B3_BF00:
     LDA #$00
     STA ram_0104,y
     STA ram_0105,y
-B3_BF45:
+@B3_BF45:
     RTS
-B3_BF46:
+@B3_BF46:
     LDA #$00
     CMP ram_01B3
-    BNE B3_BF45
+    BNE @B3_BF45
     DEC ram_01B3
     STA ram_0104
     STA ram_0105

@@ -11,11 +11,11 @@ Tbl_B1_8000:
 UpdateShots:
     LDA player_state
     CMP #$10
-    BNE B1_8033
+    BNE @B1_8033
     RTS
-B1_8033:
+@B1_8033:
     LDA shot_state
-    BEQ B1_808F
+    BEQ @B1_808F
     LDX #$00
     JSR ShotDispatch
     LDA #$01
@@ -34,7 +34,7 @@ B1_8033:
     STA shot_screen_x
     LDA tmp_a
     SBC #$00
-    BNE B1_8075
+    BNE @B1_8075
     LDA tmp_b
     STA ram_024F
     LDA shot_y_lo
@@ -43,15 +43,15 @@ B1_8033:
     STA tmp_a
     LDA shot_y_hi
     SBC cam_y_hi
-    BNE B1_8075
+    BNE @B1_8075
     LDA tmp_a
     STA shot_screen_y
-    JMP B1_807C
-B1_8075:
+    JMP @B1_807C
+@B1_8075:
     LDA #$00
     STA shot_onscreen
-    JMP B1_808F
-B1_807C:
+    JMP @B1_808F
+@B1_807C:
     STA ram_024C
     LDX shot_frame
     LDA Tbl_B1_8105,x
@@ -59,11 +59,11 @@ B1_807C:
     LDA shot_attr
     ORA Tbl_B1_80EB,x
     STA ram_024E
-B1_808F:
+@B1_808F:
     LDA shot_state_1
-    BNE B1_8094
+    BNE @B1_8094
     RTS
-B1_8094:
+@B1_8094:
     LDX #$01
     JSR ShotDispatch
     LDA #$01
@@ -82,7 +82,7 @@ B1_8094:
     STA shot_screen_x_1
     LDA tmp_a
     SBC #$00
-    BNE B1_80D2
+    BNE @B1_80D2
     LDA tmp_b
     STA ram_0253
     LDA shot_y_lo_1
@@ -91,15 +91,15 @@ B1_8094:
     STA tmp_a
     LDA shot_y_hi_1
     SBC cam_y_hi
-    BNE B1_80D2
+    BNE @B1_80D2
     LDA tmp_a
     STA shot_screen_y_1
-    JMP B1_80D7
-B1_80D2:
+    JMP @B1_80D7
+@B1_80D2:
     LDA #$00
     STA shot_onscreen_1
     RTS
-B1_80D7:
+@B1_80D7:
     STA ram_0250
     LDX shot_frame_1
     LDA Tbl_B1_8105,x
@@ -146,24 +146,24 @@ ShotDispatch:
     JMP (ptr_lo)
 ShotTimerStep:
     DEC zp_E0
-    BNE B1_8156
+    BNE @B1_8156
     JMP ShotStartImpact
-B1_8156:
+@B1_8156:
     LDA shot_E3,x
-    BEQ B1_815D
+    BEQ @B1_815D
     SEC
     SBC #$01
-B1_815D:
+@B1_815D:
     STA shot_E3,x
     AND #$03
     CLC
     ADC #$05
     STA shot_frame,x
     LDA shot_onscreen,x
-    BNE B1_816E
+    BNE @B1_816E
     STA zp_E0
     STA shot_state,x
-B1_816E:
+@B1_816E:
     RTS
 ShotMoveRight:
     LDA shot_y_lo,x
@@ -186,7 +186,7 @@ ShotMoveRight:
     TAY
     LDA tile_props,y
     AND #$01
-    BNE B1_81D0
+    BNE @B1_81D0
     JSR ShotOffscreenCheck
     LDA shot_x_lo,x
     CLC
@@ -207,9 +207,9 @@ ShotMoveRight:
     SBC shot_x_lo,x
     LDA tmp_b
     SBC shot_x_hi,x
-    BCC B1_81C3
+    BCC @B1_81C3
     RTS
-B1_81C3:
+@B1_81C3:
     LDA tmp_a
     CLC
     ADC #$01
@@ -217,7 +217,7 @@ B1_81C3:
     LDA tmp_b
     ADC #$00
     STA shot_x_hi,x
-B1_81D0:
+@B1_81D0:
     JSR Shot_TileHit
     LDA shot_state,x
     EOR #$01
@@ -241,7 +241,7 @@ ShotMoveLeft:
     TAY
     LDA tile_props,y
     AND #$01
-    BNE B1_8219
+    BNE @B1_8219
     JSR ShotOffscreenCheck
     LDA shot_x_lo,x
     SEC
@@ -250,13 +250,13 @@ ShotMoveLeft:
     LDA shot_x_hi,x
     SBC #$00
     STA shot_x_hi,x
-    BCC B1_8213
+    BCC @B1_8213
     RTS
-B1_8213:
+@B1_8213:
     LDA #$00
     STA shot_x_lo,x
     STA shot_x_hi,x
-B1_8219:
+@B1_8219:
     JSR Shot_TileHit
     LDA shot_state,x
     EOR #$01
@@ -280,7 +280,7 @@ ShotMoveUp:
     TAY
     LDA tile_props,y
     AND #$01
-    BNE B1_8262
+    BNE @B1_8262
     JSR ShotOffscreenCheck
     LDA shot_y_lo,x
     SEC
@@ -289,13 +289,13 @@ ShotMoveUp:
     LDA shot_y_hi,x
     SBC #$00
     STA shot_y_hi,x
-    BCC B1_825C
+    BCC @B1_825C
     RTS
-B1_825C:
+@B1_825C:
     LDA #$00
     STA shot_y_lo,x
     STA shot_y_hi,x
-B1_8262:
+@B1_8262:
     JSR Shot_TileHit
     LDA shot_state,x
     EOR #$02
@@ -311,9 +311,9 @@ Tbl_B1_826C:
     TAY
     LDA tile_props,y
     AND #$01
-    BEQ B1_829A
-    JMP B1_83F1
-B1_829A:
+    BEQ @B1_829A
+    JMP @B1_83F1
+@B1_829A:
     JSR ShotOffscreenCheck
     LDA shot_y_lo,x
     STA tmp_c
@@ -360,11 +360,11 @@ B1_829A:
     LDA (ptr_lo),y
     STA tmp_a
     CMP #$FF
-    BEQ B1_8317
+    BEQ @B1_8317
     LDA shot_y_lo,x
     AND #$0F
     CMP tmp_a
-    BCS B1_8317
+    BCS @B1_8317
     LDA shot_y_lo,x
     AND #$F0
     CLC
@@ -379,8 +379,8 @@ B1_829A:
     STA ptr_hi
     PLA
     STA ptr_lo
-    JMP B1_838D
-B1_8317:
+    JMP @B1_838D
+@B1_8317:
     PLA
     STA ptr_hi
     PLA
@@ -422,7 +422,7 @@ B1_8317:
     LDA (ptr_lo),y
     STA tmp_a
     CMP #$FF
-    BEQ B1_83BE
+    BEQ @B1_83BE
     LDA tmp_a
     CLC
     ADC #$10
@@ -432,7 +432,7 @@ B1_8317:
     CLC
     ADC #$08
     CMP tmp_a
-    BCC B1_83BE
+    BCC @B1_83BE
     LDA tmp_a
     SEC
     SBC #$08
@@ -445,38 +445,38 @@ B1_8317:
     LDA shot_y_hi,x
     ADC #$00
     STA shot_y_hi,x
-B1_838D:
+@B1_838D:
     LDA zp_75
     LSR a
     LSR a
     TAY
     LDA Tbl_F_C1D0,y
     CMP #$03
-    BCS B1_83A0
-B1_8399:
+    BCS @B1_83A0
+@B1_8399:
     LDA shot_state,x
     EOR #$02
     STA shot_state,x
     RTS
-B1_83A0:
+@B1_83A0:
     AND #$01
-    BNE B1_83B1
+    BNE @B1_83B1
     LDA shot_state,x
     AND #$01
-    BEQ B1_8399
+    BEQ @B1_8399
     LDA shot_state,x
     EOR #$03
     STA shot_state,x
     RTS
-B1_83B1:
+@B1_83B1:
     LDA shot_state,x
     AND #$01
-    BNE B1_8399
+    BNE @B1_8399
     LDA shot_state,x
     EOR #$03
     STA shot_state,x
     RTS
-B1_83BE:
+@B1_83BE:
     LDA shot_y_lo,x
     CLC
     ADC #$02
@@ -496,9 +496,9 @@ B1_83BE:
     SBC shot_y_lo,x
     LDA tmp_b
     SBC shot_y_hi,x
-    BCC B1_83E4
+    BCC @B1_83E4
     RTS
-B1_83E4:
+@B1_83E4:
     LDA tmp_a
     CLC
     ADC #$01
@@ -506,7 +506,7 @@ B1_83E4:
     LDA tmp_b
     ADC #$00
     STA shot_y_hi,x
-B1_83F1:
+@B1_83F1:
     JSR Shot_TileHit
     LDA shot_state,x
     EOR #$02
@@ -515,7 +515,7 @@ B1_83F1:
 Shot_TileHit:
     JSR GetMapTile
     CMP #$DA
-    BNE B1_8416
+    BNE @B1_8416
     JSR PeckSwitchToggle
     PLA
     PLA
@@ -528,7 +528,7 @@ Shot_TileHit:
     LDA #$00
     STA shot_frame,x
     STA zp_E0
-B1_8416:
+@B1_8416:
     RTS
 B1_8417:
     LDA #$00
@@ -547,13 +547,13 @@ B1_8422:
     LDA #$40
     STA ptr_lo
     LDA player_facing
-    BNE B1_8440
+    BNE @B1_8440
     LDA #$F8
     STA tmp_a
     DEC tmp_b
     LDA #$00
     STA ptr_lo
-B1_8440:
+@B1_8440:
     LDA ptr_lo
     STA shot_attr,x
     LDA player_y_lo
@@ -580,10 +580,10 @@ B1_846C:
     RTS
 B1_846D:
     LDA shot_onscreen,x
-    BNE B1_8474
+    BNE @B1_8474
     STA shot_state,x
     RTS
-B1_8474:
+@B1_8474:
     LDA shot_y_lo,x
     CLC
     ADC #$02
@@ -617,7 +617,7 @@ B1_8474:
     LDA tile_props,y
     STA tmp_a
     AND #$03
-    BNE B1_84DE
+    BNE @B1_84DE
     LDA shot_y_lo,x
     CLC
     ADC #$04
@@ -636,11 +636,11 @@ B1_8474:
     LDA tile_props,y
     STA tmp_a
     AND #$03
-    BNE B1_84DE
+    BNE @B1_84DE
     JMP B1_8574
-B1_84DE:
+@B1_84DE:
     CMP #$02
-    BNE B1_8528
+    BNE @B1_8528
     LDY #$00
     LDA tmp_a
     AND #$FC
@@ -672,35 +672,35 @@ B1_84DE:
     AND #$0F
     SEC
     SBC tmp_a
-    BCS B1_8528
+    BCS @B1_8528
     LDA zp_77
     ADC #$04
     AND #$0F
     SEC
     SBC tmp_a
     BCC B1_8574
-B1_8528:
+@B1_8528:
     LDA zp_75
     STA ptr_lo
     LDA zp_76
     STA ptr_hi
     JSR GetMapTile
     CMP #$DA
-    BNE B1_853A
+    BNE @B1_853A
     JSR PeckSwitchToggle
-B1_853A:
+@B1_853A:
     CMP #$D8
-    BNE B1_8541
+    BNE @B1_8541
     JSR PeckSwitchPhase
-B1_8541:
+@B1_8541:
     CMP #$CE
-    BNE B1_8548
+    BNE @B1_8548
     JSR ToggleSwitch1
-B1_8548:
+@B1_8548:
     CMP #$CF
-    BNE B1_854F
+    BNE @B1_854F
     JSR ToggleSwitch2
-B1_854F:
+@B1_854F:
     CMP #$D1
     BNE ShotStartImpact
     JSR SetCollectedFlag
@@ -721,7 +721,7 @@ ShotStartImpact:
     RTS
 B1_8574:
     LDA shot_attr,x
-    BEQ B1_85B6
+    BEQ @B1_85B6
     LDA shot_x_lo,x
     CLC
     ADC #$02
@@ -743,7 +743,7 @@ B1_8574:
     SBC ptr_lo
     LDA tmp_b
     SBC ptr_hi
-    BCS B1_85B5
+    BCS @B1_85B5
     LDA tmp_a
     CLC
     ADC #$01
@@ -754,9 +754,9 @@ B1_8574:
     STA shot_x_hi,x
     STA tmp_b
     JMP ShotStartImpact
-B1_85B5:
+@B1_85B5:
     RTS
-B1_85B6:
+@B1_85B6:
     LDA shot_x_lo,x
     SEC
     SBC #$02
@@ -764,7 +764,7 @@ B1_85B6:
     LDA shot_x_hi,x
     SBC #$00
     STA shot_x_hi,x
-    BCS B1_85B5
+    BCS @B1_85B5
     LDA #$00
     STA shot_x_lo,x
     STA shot_x_hi,x
@@ -791,9 +791,9 @@ B1_85CE:
     LDA #$0A
     STA tmp_a
     LDA player_facing
-    BEQ B1_85FA
+    BEQ @B1_85FA
     INC tmp_a
-B1_85FA:
+@B1_85FA:
     LDA tmp_a
     STA shot_state,x
     LDA #$0A
@@ -837,11 +837,11 @@ B1_862C:
     INC shot_E3,x
     LDA shot_E3,x
     AND #$02
-    BEQ B1_8654
+    BEQ @B1_8654
     LDA #$00
     STA shot_y_lo,x
     STA shot_y_hi,x
-B1_8654:
+@B1_8654:
     LDA #$11
     STA shot_frame,x
     LDA #$00
@@ -865,18 +865,18 @@ B1_865F:
 B1_8679:
     JSR ShotPosByAngle
     LDA zp_C1
-    BEQ B1_8688
+    BEQ @B1_8688
     LDA zp_C9
     ORA zp_CA
-    BNE B1_8693
+    BNE @B1_8693
     STA zp_C1
-B1_8688:
+@B1_8688:
     LDA #$0A
     STA shot_E3,x
     LDA #$03
     STA shot_state,x
-    JMP B1_8711
-B1_8693:
+    JMP @B1_8711
+@B1_8693:
     LDA zp_C9
     SEC
     SBC #$01
@@ -888,75 +888,75 @@ B1_8693:
     STA tmp_b
     LDA player_state
     CMP #$08
-    BEQ B1_86B2
+    BEQ @B1_86B2
     CMP #$02
-    BNE B1_86B6
+    BNE @B1_86B6
     LDA dive_mode
-    BEQ B1_86B6
-B1_86B2:
+    BEQ @B1_86B6
+@B1_86B2:
     LDA zp_7F
     STA tmp_b
-B1_86B6:
+@B1_86B6:
     LDA zp_C8
     STA tmp_a
     LDA zp_CB
-    BEQ B1_86E6
+    BEQ @B1_86E6
     LDA tmp_b
-    BNE B1_86D4
+    BNE @B1_86D4
     LDA tmp_a
     SEC
     SBC #$02
     STA tmp_a
-    BCS B1_86DC
+    BCS @B1_86DC
     LDA #$00
     STA zp_CB
     STA tmp_a
-    JMP B1_86DC
-B1_86D4:
+    JMP @B1_86DC
+@B1_86D4:
     LDA tmp_a
     CMP #$04
-    BCS B1_86DC
+    BCS @B1_86DC
     INC tmp_a
-B1_86DC:
+@B1_86DC:
     LDA zp_C7
     CLC
     ADC tmp_a
     STA zp_C7
-    JMP B1_870D
-B1_86E6:
+    JMP @B1_870D
+@B1_86E6:
     LDA tmp_b
-    BEQ B1_86FE
+    BEQ @B1_86FE
     LDA tmp_a
     SEC
     SBC #$02
     STA tmp_a
-    BCS B1_8706
+    BCS @B1_8706
     ADC #$01
     STA zp_CB
     LDA #$00
     STA tmp_a
-    JMP B1_8706
-B1_86FE:
+    JMP @B1_8706
+@B1_86FE:
     LDA tmp_a
     CMP #$04
-    BCS B1_8706
+    BCS @B1_8706
     INC tmp_a
-B1_8706:
+@B1_8706:
     LDA zp_C7
     SEC
     SBC tmp_a
     STA zp_C7
-B1_870D:
+@B1_870D:
     LDA tmp_a
     STA zp_C8
-B1_8711:
+@B1_8711:
     LDA #$01
     STA tmp_a
     LDA zp_CB
-    BNE B1_871D
+    BNE @B1_871D
     LDA #$FF
     STA tmp_a
-B1_871D:
+@B1_871D:
     LDA shot_E3,x
     CLC
     ADC tmp_a
@@ -984,7 +984,7 @@ B1_871D:
     STA ptr_hi
     LDA shot_attr,x
     AND #$80
-    BEQ B1_875F
+    BEQ @B1_875F
     LDA shot_y_lo,x
     SEC
     SBC #$08
@@ -992,13 +992,13 @@ B1_871D:
     LDA shot_y_hi,x
     SBC #$00
     STA shot_y_hi,x
-B1_875F:
+@B1_875F:
     JSR MapPtrFromPos
     JSR GetMapTile
     CMP #$D1
-    BEQ B1_876A
+    BEQ @B1_876A
     RTS
-B1_876A:
+@B1_876A:
     JSR SetCollectedFlag
     LDA #$39
     JSR PlaySfxNoise
@@ -1022,19 +1022,19 @@ ShotPosByAngle:
     JSR CosLookup
     STA tmp_b
     STA ptr_hi
-    BPL B1_87AE
+    BPL @B1_87AE
     LDA ptr_hi
     EOR #$FF
     CLC
     ADC #$01
     STA ptr_hi
-B1_87AE:
+@B1_87AE:
     LDA zp_CC
     STA tmp_c
     JSR ScaledMultiply
     INC ptr_hi
     LDA tmp_b
-    BPL B1_87CB
+    BPL @B1_87CB
     LDA player_x_lo
     SEC
     SBC ptr_hi
@@ -1042,8 +1042,8 @@ B1_87AE:
     LDA player_x_hi
     SBC #$00
     STA ptr_hi
-    JMP B1_87D8
-B1_87CB:
+    JMP @B1_87D8
+@B1_87CB:
     LDA player_x_lo
     CLC
     ADC ptr_hi
@@ -1051,7 +1051,7 @@ B1_87CB:
     LDA player_x_hi
     ADC #$00
     STA ptr_hi
-B1_87D8:
+@B1_87D8:
     LDA ptr_lo
     CLC
     ADC #$04
@@ -1061,19 +1061,19 @@ B1_87D8:
     STA shot_x_hi,x
     LDA tmp_a
     STA ptr_hi
-    BPL B1_87F4
+    BPL @B1_87F4
     LDA ptr_hi
     EOR #$FF
     CLC
     ADC #$01
     STA ptr_hi
-B1_87F4:
+@B1_87F4:
     LDA zp_CC
     STA tmp_c
     JSR ScaledMultiply
     INC ptr_hi
     LDA tmp_a
-    BPL B1_880F
+    BPL @B1_880F
     LDA player_y_lo
     SEC
     SBC ptr_hi
@@ -1082,7 +1082,7 @@ B1_87F4:
     SBC #$00
     STA shot_y_hi,x
     RTS
-B1_880F:
+@B1_880F:
     LDA player_y_lo
     CLC
     ADC ptr_hi
@@ -1104,24 +1104,24 @@ B1_881D:
     SBC ptr_lo
     LDA shot_y_hi,x
     SBC ptr_hi
-    BCS B1_883C
+    BCS @B1_883C
     LDA #$00
     STA shot_state,x
     RTS
-B1_883C:
+@B1_883C:
     LDY shot_E3,x
     INC shot_E3,x
-    LDA B1_8889,y
+    LDA @B1_8889,y
     STA tmp_d
     LSR a
     LSR a
     STA tmp_a
     LSR a
     LSR a
-    BNE B1_8850
+    BNE @B1_8850
     STA shot_state,x
     RTS
-B1_8850:
+@B1_8850:
     STA shot_frame,x
     LDA tmp_a
     AND #$03
@@ -1140,11 +1140,11 @@ B1_8850:
     STA tmp_b
     LDA tmp_d
     AND #$02
-    BEQ B1_887B
+    BEQ @B1_887B
     LDA #$FF
     STA tmp_b
     STA tmp_a
-B1_887B:
+@B1_887B:
     LDA shot_x_lo,x
     CLC
     ADC tmp_a
@@ -1153,7 +1153,7 @@ B1_887B:
     ADC tmp_b
     STA shot_x_hi,x
     RTS
-B1_8889:
+@B1_8889:
     CPY #$C0
     LDY area_extra_ptr_lo,x
     LDY zp_A4
@@ -1193,12 +1193,12 @@ B1_88AF:
     LDA #$FF
     STA tmp_b
     LDA player_facing
-    BEQ B1_88D0
+    BEQ @B1_88D0
     LDA #$0C
     STA tmp_a
     LDA #$00
     STA tmp_b
-B1_88D0:
+@B1_88D0:
     LDA player_x_lo
     CLC
     ADC tmp_a
@@ -1243,16 +1243,16 @@ B1_893D:
     INY
     STA ptr_lo
     CMP #$80
-    BNE B1_8951
+    BNE @B1_8951
     LDA #$00
     STA shot_state,x
     RTS
-B1_8951:
+@B1_8951:
     LDA #$00
     STA ptr_hi
-    BCC B1_8959
+    BCC @B1_8959
     DEC ptr_hi
-B1_8959:
+@B1_8959:
     LDA shot_y_lo,x
     CLC
     ADC ptr_lo
@@ -1265,9 +1265,9 @@ B1_8959:
     LDA (tmp_a),y
     STA ptr_lo
     CMP #$80
-    BCC B1_8974
+    BCC @B1_8974
     DEC ptr_hi
-B1_8974:
+@B1_8974:
     LDA shot_x_lo,x
     CLC
     ADC ptr_lo
@@ -1361,13 +1361,13 @@ DrawEntity:
     AND #$FB
     STA ent_flags,x
     LSR a
-    BCC B1_8A9F
-    JMP B1_8C00
-B1_8A9F:
+    BCC @B1_8A9F
+    JMP @B1_8C00
+@B1_8A9F:
     LSR a
-    BCC B1_8AA5
-    JMP B1_8B4B
-B1_8AA5:
+    BCC @B1_8AA5
+    JMP @B1_8B4B
+@B1_8AA5:
     AND #$3E
     TAY
     LDA tmp_a
@@ -1399,26 +1399,26 @@ B1_8AA5:
     TAX
     SEC
     SBC (ptr_lo),y
-    BCS B1_8AF5
+    BCS @B1_8AF5
     ADC (ptr_lo),y
-    BNE B1_8AE7
+    BNE @B1_8AE7
     RTS
-B1_8AE7:
+@B1_8AE7:
     INY
     STA zp_75
     LDA #$00
     STA zp_B0
     LDA Tbl_B1_8000,x
     TAX
-    JMP B1_8B00
-B1_8AF5:
+    JMP @B1_8B00
+@B1_8AF5:
     STA zp_B0
     LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
     STA zp_75
-B1_8B00:
+@B1_8B00:
     LDA (ptr_lo),y
     INY
     CLC
@@ -1427,7 +1427,7 @@ B1_8B00:
     LDA (ptr_lo),y
     INY
     ADC tmp_d
-    BNE B1_8B40
+    BNE @B1_8B40
     LDA sprite_y_tmp
     STA ram_0203,x
     LDA (ptr_lo),y
@@ -1438,7 +1438,7 @@ B1_8B00:
     LDA (ptr_lo),y
     INY
     ADC #$00
-    BNE B1_8B42
+    BNE @B1_8B42
     LDA zp_AF
     CLC
     ADC (ptr_lo),y
@@ -1454,19 +1454,19 @@ B1_8B00:
     INX
     INX
     DEC zp_75
-    BNE B1_8B00
+    BNE @B1_8B00
     RTS
-B1_8B40:
+@B1_8B40:
     INY
     INY
-B1_8B42:
+@B1_8B42:
     INY
     INY
     INC zp_B0
     DEC zp_75
-    BNE B1_8B00
+    BNE @B1_8B00
     RTS
-B1_8B4B:
+@B1_8B4B:
     AND #$3E
     TAY
     LDA tmp_a
@@ -1498,26 +1498,26 @@ B1_8B4B:
     TAX
     SEC
     SBC (ptr_lo),y
-    BCS B1_8B9B
+    BCS @B1_8B9B
     ADC (ptr_lo),y
-    BNE B1_8B8D
+    BNE @B1_8B8D
     RTS
-B1_8B8D:
+@B1_8B8D:
     INY
     STA zp_75
     LDA #$00
     STA zp_B0
     LDA Tbl_B1_8000,x
     TAX
-    JMP B1_8BA6
-B1_8B9B:
+    JMP @B1_8BA6
+@B1_8B9B:
     STA zp_B0
     LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
     STA zp_75
-B1_8BA6:
+@B1_8BA6:
     LDA #$08
     SEC
     SBC (ptr_lo),y
@@ -1533,7 +1533,7 @@ B1_8BA6:
     STA sprite_y_tmp
     LDA zp_AE
     ADC tmp_d
-    BNE B1_8BF5
+    BNE @B1_8BF5
     LDA sprite_y_tmp
     STA ram_0203,x
     LDA (ptr_lo),y
@@ -1544,7 +1544,7 @@ B1_8BA6:
     LDA (ptr_lo),y
     INY
     ADC #$00
-    BNE B1_8BF7
+    BNE @B1_8BF7
     LDA zp_AF
     CLC
     ADC (ptr_lo),y
@@ -1561,23 +1561,23 @@ B1_8BA6:
     INX
     INX
     DEC zp_75
-    BNE B1_8BA6
+    BNE @B1_8BA6
     RTS
-B1_8BF5:
+@B1_8BF5:
     INY
     INY
-B1_8BF7:
+@B1_8BF7:
     INY
     INY
     INC zp_B0
     DEC zp_75
-    BNE B1_8BA6
+    BNE @B1_8BA6
     RTS
-B1_8C00:
+@B1_8C00:
     LSR a
-    BCC B1_8C06
-    JMP B1_8CBB
-B1_8C06:
+    BCC @B1_8C06
+    JMP @B1_8CBB
+@B1_8C06:
     AND #$3E
     TAY
     LDA tmp_a
@@ -1609,26 +1609,26 @@ B1_8C06:
     TAX
     SEC
     SBC (ptr_lo),y
-    BCS B1_8C56
+    BCS @B1_8C56
     ADC (ptr_lo),y
-    BNE B1_8C48
+    BNE @B1_8C48
     RTS
-B1_8C48:
+@B1_8C48:
     INY
     STA zp_75
     LDA #$00
     STA zp_B0
     LDA Tbl_B1_8000,x
     TAX
-    JMP B1_8C61
-B1_8C56:
+    JMP @B1_8C61
+@B1_8C56:
     STA zp_B0
     LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
     STA zp_75
-B1_8C61:
+@B1_8C61:
     LDA (ptr_lo),y
     INY
     CLC
@@ -1637,7 +1637,7 @@ B1_8C61:
     LDA (ptr_lo),y
     INY
     ADC tmp_d
-    BNE B1_8CB0
+    BNE @B1_8CB0
     LDA sprite_y_tmp
     STA ram_0203,x
     LDA #$00
@@ -1655,7 +1655,7 @@ B1_8C61:
     STA sprite_y_tmp
     LDA zp_AE
     ADC #$00
-    BNE B1_8CB2
+    BNE @B1_8CB2
     LDA zp_AF
     CLC
     ADC (ptr_lo),y
@@ -1672,19 +1672,19 @@ B1_8C61:
     INX
     INX
     DEC zp_75
-    BNE B1_8C61
+    BNE @B1_8C61
     RTS
-B1_8CB0:
+@B1_8CB0:
     INY
     INY
-B1_8CB2:
+@B1_8CB2:
     INY
     INY
     INC zp_B0
     DEC zp_75
-    BNE B1_8C61
+    BNE @B1_8C61
     RTS
-B1_8CBB:
+@B1_8CBB:
     AND #$3E
     TAY
     LDA tmp_a
@@ -1716,26 +1716,26 @@ B1_8CBB:
     TAX
     SEC
     SBC (ptr_lo),y
-    BCS B1_8D0B
+    BCS @B1_8D0B
     ADC (ptr_lo),y
-    BNE B1_8CFD
+    BNE @B1_8CFD
     RTS
-B1_8CFD:
+@B1_8CFD:
     INY
     STA zp_75
     LDA #$00
     STA zp_B0
     LDA Tbl_B1_8000,x
     TAX
-    JMP B1_8D16
-B1_8D0B:
+    JMP @B1_8D16
+@B1_8D0B:
     STA zp_B0
     LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
     STA zp_75
-B1_8D16:
+@B1_8D16:
     LDA #$08
     SEC
     SBC (ptr_lo),y
@@ -1751,7 +1751,7 @@ B1_8D16:
     STA sprite_y_tmp
     LDA zp_AE
     ADC tmp_d
-    BNE B1_8D72
+    BNE @B1_8D72
     LDA sprite_y_tmp
     STA ram_0203,x
     LDA #$00
@@ -1769,7 +1769,7 @@ B1_8D16:
     STA sprite_y_tmp
     LDA zp_AE
     ADC #$00
-    BNE B1_8D74
+    BNE @B1_8D74
     LDA zp_AF
     CLC
     ADC (ptr_lo),y
@@ -1786,17 +1786,17 @@ B1_8D16:
     INX
     INX
     DEC zp_75
-    BNE B1_8D16
+    BNE @B1_8D16
     RTS
-B1_8D72:
+@B1_8D72:
     INY
     INY
-B1_8D74:
+@B1_8D74:
     INY
     INY
     INC zp_B0
     DEC zp_75
-    BNE B1_8D16
+    BNE @B1_8D16
     RTS
 AnimGroupPtrs:
     .word AnimGroup0
@@ -4714,14 +4714,14 @@ B1_AF23:
     LDA player_x_hi
     SBC tmp_b
     STA tmp_b
-    BCS B1_AF74
+    BCS @B1_AF74
     LDA tmp_a
     EOR #$FF
     CLC
     ADC #$01
     STA tmp_a
     INC tmp_c
-B1_AF74:
+@B1_AF74:
     LDA tmp_c
     STA zp_D1
     LDA #$00
@@ -4730,13 +4730,13 @@ B1_AF74:
     STA tmp_b
     LDA tmp_a
     CMP tmp_b
-    BCC B1_AF90
+    BCC @B1_AF90
     INC tmp_c
     LDY tmp_a
     LDA tmp_b
     STA tmp_a
     STY tmp_b
-B1_AF90:
+@B1_AF90:
     LDA tmp_a
     STA zp_D2
     LDA tmp_b
@@ -4769,20 +4769,20 @@ B1_AFAF:
     SBC tmp_a
     LDA zp_F9
     SBC tmp_b
-    BCC B1_AFD2
+    BCC @B1_AFD2
     LDA #$13
     STA player_state
-B1_AFD2:
+@B1_AFD2:
     RTS
 B1_AFD3:
     JSR PlayerAnimAdvance
     LDY zp_D6
     LDA Tbl_B1_B06A,y
     CMP #$14
-    BNE B1_AFE4
+    BNE @B1_AFE4
     STA player_state
     JMP B1_AFF8
-B1_AFE4:
+@B1_AFE4:
     STA tmp_a
     LDA player_y_lo
     SEC
@@ -4795,13 +4795,13 @@ B1_AFE4:
     JMP B1_B015
 B1_AFF8:
     DEC zp_D6
-    BNE B1_B005
+    BNE @B1_B005
     LDA #$15
     STA player_state
     LDA #$07
     STA zp_80
     RTS
-B1_B005:
+@B1_B005:
     LDY zp_D6
     LDA player_y_lo
     CLC
@@ -4820,30 +4820,30 @@ B1_B015:
     STA tmp_c
     INC tmp_c
     LDA zp_D4
-    BNE B1_B03A
+    BNE @B1_B03A
     LDA zp_D5
     CLC
     ADC tmp_a
     CMP tmp_c
-    BCS B1_B048
+    BCS @B1_B048
     INC tmp_d
     SEC
     SBC tmp_b
-    JMP B1_B048
-B1_B03A:
+    JMP @B1_B048
+@B1_B03A:
     LDA zp_D5
-B1_B03C:
+@B1_B03C:
     INC tmp_d
     CLC
     ADC tmp_a
     CMP tmp_c
-    BCS B1_B03C
+    BCS @B1_B03C
     SEC
     SBC tmp_b
-B1_B048:
+@B1_B048:
     STA zp_D5
     LDA zp_D1
-    BEQ B1_B05C
+    BEQ @B1_B05C
     LDA player_x_lo
     CLC
     ADC tmp_d
@@ -4852,7 +4852,7 @@ B1_B048:
     ADC #$00
     STA player_x_hi
     RTS
-B1_B05C:
+@B1_B05C:
     LDA player_x_lo
     SEC
     SBC tmp_d
@@ -4873,21 +4873,21 @@ B1_B094:
     TAY
     LDA Tbl_B1_B144,y
     CMP #$80
-    BNE B1_B0A8
+    BNE @B1_B0A8
     LDA #$15
     STA player_frame
     DEC zp_80
-    BEQ B1_B0C6
+    BEQ @B1_B0C6
     RTS
-B1_B0A8:
+@B1_B0A8:
     STA tmp_a
     LDA #$00
     STA tmp_b
     LDA tmp_a
     CMP #$FF
-    BNE B1_B0B6
+    BNE @B1_B0B6
     DEC tmp_b
-B1_B0B6:
+@B1_B0B6:
     LDA player_y_lo
     CLC
     ADC tmp_a
@@ -4897,7 +4897,7 @@ B1_B0B6:
     STA player_y_hi
     INC zp_D6
     RTS
-B1_B0C6:
+@B1_B0C6:
     LDA #$4A
     JSR PlaySfxNoise
     LDA zp_F8
@@ -4953,17 +4953,17 @@ PlayerAnimAdvance:
     CLC
     ADC #$01
     CMP #$08
-    BNE B1_B141
+    BNE @B1_B141
     LDY zp_81
     LDA Tbl_B1_B151,y
     CMP #$FF
-    BEQ B1_B143
+    BEQ @B1_B143
     STA player_frame
     INC zp_81
     LDA #$00
-B1_B141:
+@B1_B141:
     STA zp_80
-B1_B143:
+@B1_B143:
     RTS
 ; Tbl_B1_B144: 13 bytes, read by B1_B094
 Tbl_B1_B144:
@@ -4973,7 +4973,7 @@ Tbl_B1_B151:
     .byte $3E,$3E,$3F,$40,$41,$42,$43,$4C,$4D,$FF
 B1_B15B:
     LDA ram_072D
-    BEQ B1_B193
+    BEQ @B1_B193
     LDA player_y_lo
     CLC
     ADC ram_0741
@@ -4997,15 +4997,15 @@ B1_B15B:
     STA player_x_hi
     LDA #$00
     STA ram_0744
-B1_B193:
+@B1_B193:
     LDA focus_y_lo
     SEC
     SBC #$30
     LDA focus_y_hi
     SBC #$00
-    BCC B1_B1A1
-    JMP B1_B22E
-B1_B1A1:
+    BCC @B1_B1A1
+    JMP @B1_B22E
+@B1_B1A1:
     LDA #$04
     STA camera_mode
     LDA #$FF
@@ -5017,17 +5017,17 @@ B1_B1A1:
     STA tmp_a
     LDA player_y_hi
     SBC #$00
-    BCS B1_B1C3
+    BCS @B1_B1C3
     PHA
     LDA #$01
     STA tmp_c
     LDA #$00
     STA tmp_d
     PLA
-B1_B1C3:
+@B1_B1C3:
     ORA tmp_a
     STA zp_73
-    BEQ B1_B1E0
+    BEQ @B1_B1E0
     LDA tmp_c
     STA ram_0741
     LDA tmp_d
@@ -5039,7 +5039,7 @@ B1_B1C3:
     LDA player_y_hi
     ADC tmp_d
     STA player_y_hi
-B1_B1E0:
+@B1_B1E0:
     LDA #$01
     STA tmp_c
     STA tmp_a
@@ -5052,7 +5052,7 @@ B1_B1E0:
     LDA player_x_hi
     SBC #$00
     STA ptr_hi
-    BCC B1_B205
+    BCC @B1_B205
     PHA
     LDA tmp_d
     STA tmp_a
@@ -5060,9 +5060,9 @@ B1_B1E0:
     STA tmp_c
     STA tmp_d
     PLA
-B1_B205:
+@B1_B205:
     ORA ptr_lo
-    BEQ B1_B21A
+    BEQ @B1_B21A
     LDA tmp_a
     STA player_facing
     LDA player_x_lo
@@ -5072,7 +5072,7 @@ B1_B205:
     LDA player_x_hi
     ADC tmp_d
     STA player_x_hi
-B1_B21A:
+@B1_B21A:
     LDA zp_73
     ORA ptr_lo
     ORA ptr_hi
@@ -5083,7 +5083,7 @@ B1_B21A:
     LDA #$43
     JMP PlaySfxSq1
     .byte $60
-B1_B22E:
+@B1_B22E:
     LDA #$02
     STA walk_speed
     JSR MovePlayerKeepBank
@@ -5108,10 +5108,10 @@ B1_B241:
     CMP #$FF
     BEQ B1_B240
     CMP #$44
-    BNE B1_B25B
+    BNE @B1_B25B
     LDX #$0A
     STX game_state
-B1_B25B:
+@B1_B25B:
     STA player_frame
     LDA player_y_lo
     CLC
@@ -5385,13 +5385,13 @@ Gfx_B1_BAD5:
 HideSprites:
     LDY #$3C
     LDA #$FF
-B1_BD99:
+@B1_BD99:
     STA oam_buffer,y
     INY
     INY
     INY
     INY
-    BNE B1_BD99
+    BNE @B1_BD99
     RTS
     LDA #$6E
     STA oam_buffer
@@ -5444,29 +5444,29 @@ PrintString:
     STA ptr_lo
     STY ptr_hi
     LDY #$00
-B1_BE42:
+@B1_BE42:
     LDA (ptr_lo),y
-    BEQ B1_BE56
+    BEQ @B1_BE56
     CMP #$20
-    BNE B1_BE4C
+    BNE @B1_BE4C
     LDA #$5C
-B1_BE4C:
+@B1_BE4C:
     CLC
     ADC #$94
     STA PPUDATA
     INY
-    JMP B1_BE42
-B1_BE56:
+    JMP @B1_BE42
+@B1_BE56:
     RTS
     DEC fade_dir
     JSR SilenceSound
     LDA #$01
     STA nmi_state
     DEC fade_dir
-B1_BE62:
+@B1_BE62:
     JSR WaitForNMI
     LDA fade_dir
-    BNE B1_BE62
+    BNE @B1_BE62
     JSR RenderOffAndWait
     JSR DisableNMI
     LDA #$F0
@@ -5487,10 +5487,10 @@ B1_BE85:
     JSR SetPPUAddr
     LDY #$3F
     LDA #$55
-B1_BE98:
+@B1_BE98:
     STA PPUDATA
     DEY
-    BPL B1_BE98
+    BPL @B1_BE98
     LDA #$08
     STA palette_set
     LDA #$00
@@ -5505,20 +5505,20 @@ B1_BE98:
     INC fade_dir
     JSR WaitForNMI
     JSR EnableRendering
-B1_BEC0:
+@B1_BEC0:
     JSR WaitForNMI
     DEC cutscene_fade_b
     JSR CutsceneScrollCall
     LDA fade_dir
-    BNE B1_BEC0
-B1_BECD:
+    BNE @B1_BEC0
+@B1_BECD:
     JSR WaitForNMI
     DEC cutscene_fade_b
     JSR CutsceneScrollCall
     JSR ReadControllerBank0
     LDA buttons_pressed
     AND #$0B
-    BEQ B1_BECD
+    BEQ @B1_BECD
     LDY #$06
     LDX #$A1
     LDA #$BE

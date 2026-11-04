@@ -4,7 +4,7 @@
 Run from anywhere:  python3 -I tools/decomp.py
 Reads rom/game.nes + tools/hints.txt, writes src/bankN.s and src/fixed.s
 """
-import os, sys, collections
+import os, re, sys, collections
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 from dis6502 import OPS, LEN
@@ -470,6 +470,46 @@ for _ in range(12):         # then drop labels that could not be emitted (inside
     if not missing: break
     badlabels |= missing
     for k in missing: labels.pop(k, None)
+# --- demote auto-named labels that are only used inside their own scope to ca65 cheap-local labels (@name) ---
+AUTO = re.compile(r'^((?:F|B\d)_[0-9A-F]{4}):$')
+LABEL = re.compile(r'^([A-Za-z_@][\w@]*):')
+def localize(banks):
+    cand = {}
+    for p in range(NB):
+        for i, l in enumerate(banks[p]):
+            m = AUTO.match(l)
+            if m: cand[m.group(1)] = (p, i)
+    tok = re.compile(r'\b((?:F|B\d)_[0-9A-F]{4})\b')
+    refs = {c: [] for c in cand}
+    for p in range(NB):
+        for i, l in enumerate(banks[p]):
+            if AUTO.match(l): continue
+            for n in tok.findall(l.split(';')[0]):
+                if n in refs: refs[n].append((p, i))
+    local = set(cand)
+    while True:
+        # scope id of every line = index of the last non-local label line before it
+        scope = {}
+        for p in range(NB):
+            cur = -1
+            for i, l in enumerate(banks[p]):
+                m = LABEL.match(l)
+                if m and not (AUTO.match(l) and m.group(1) in local): cur = i
+                scope[(p, i)] = cur
+        bad = {c for c in local if any(scope[r] != scope[cand[c]] or r[0] != cand[c][0] for r in refs[c])}
+        if not bad: break
+        local -= bad
+    ren = {c: '@' + c for c in local}
+    for p in range(NB):
+        out = []
+        for l in banks[p]:
+            code, sep, cm = l.partition(';')
+            code = tok.sub(lambda m: ren.get(m.group(1), m.group(1)), code)
+            out.append(code + sep + cm)
+        banks[p] = out
+    return len(local), len(cand)
+nloc, ncand = localize(banks)
+print(f'local labels: {nloc} of {ncand} auto labels')
 for p in range(NB):
     name = 'fixed' if p == FIXED else f'bank{p}'
     seg = 'FIXED' if p == FIXED else f'BANK{p}'

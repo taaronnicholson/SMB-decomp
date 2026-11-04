@@ -38,7 +38,7 @@ F_C0B3:
     LDA ppuctrl_shadow
     STA PPUCTRL
     LDA ppu_buffer,x
-    BEQ F_C0F7
+    BEQ @F_C0F7
     STA PPUADDR
     INX
     LDA ppu_buffer,x
@@ -46,21 +46,21 @@ F_C0B3:
     INX
     LDY ppu_buffer,x
     CPY #$01
-    BNE F_C0DA
+    BNE @F_C0DA
     INX
     LDA ppu_buffer,x
     STA PPUDATA
     INX
     JMP F_C0B3
-F_C0DA:
-    BPL F_C0E7
+@F_C0DA:
+    BPL @F_C0E7
     TYA
     AND #$7F
     TAY
     LDA ppuctrl_shadow
     AND #$FB
     STA PPUCTRL
-F_C0E7:
+@F_C0E7:
     INX
     LDA PPUCopyLo-1,y
     STA jump_ptr_lo
@@ -68,7 +68,7 @@ F_C0E7:
     STA jump_ptr_hi
     STY ppu_buffer_idx
     JMP (jump_ptr_lo)
-F_C0F7:
+@F_C0F7:
     STA ppu_buffer_idx
     STA ppu_buffer
     LDA ppuctrl_shadow
@@ -364,19 +364,19 @@ Reset:
     DEX
     TXS
     LDX #$02
-F_C5D3:
+@F_C5D3:
     BIT PPUSTATUS
-    BPL F_C5D3
-F_C5D8:
+    BPL @F_C5D3
+@F_C5D8:
     BIT PPUSTATUS
-    BPL F_C5D8
+    BPL @F_C5D8
     DEX
-    BNE F_C5D3
+    BNE @F_C5D3
     TXA
-F_C5E1:
+@F_C5E1:
     PHA
     DEX
-    BNE F_C5E1
+    BNE @F_C5E1
     LDA #$00
     JSR SwitchBank
     JSR ClearRAM
@@ -423,10 +423,10 @@ StartNewGame:
     LDA #$00
     LDX #$02
     STX lives
-F_C659:
+@F_C659:
     STA score_lo,x
     DEX
-    BPL F_C659
+    BPL @F_C659
     STA items_found
     STA balloons_left
     STA zp_A7
@@ -500,10 +500,10 @@ F_C6CC:
     JSR WaitForNMI
     JSR EnableRendering
     INC fade_dir
-F_C6F2:
+@F_C6F2:
     JSR WaitForNMI
     LDA fade_dir
-    BNE F_C6F2
+    BNE @F_C6F2
     LDA #$02
     STA nmi_state
 MainLoop:
@@ -514,9 +514,9 @@ MainLoopBody:
     STA zp_01
     LDA nmi_state
     CMP #$03
-    BEQ F_C710
-    JMP F_C763
-F_C710:
+    BEQ @F_C710
+    JMP @F_C763
+@F_C710:
     LDA #$01
     JSR SwitchBank
     JSR HideSprites
@@ -547,7 +547,7 @@ F_C710:
     JSR FadeTableStep
     JSR F_FA6B
     JMP MainLoop
-F_C763:
+@F_C763:
     LDA #$01
     JSR SwitchBank
     JSR HideSprites
@@ -579,9 +579,9 @@ ApplyScroll:
     LDX #$F8
     LDA ppumask_shadow
     AND #$06
-    BEQ F_C7B5
+    BEQ @F_C7B5
     LDX #$00
-F_C7B5:
+@F_C7B5:
     TXA
     CLC
     ADC scroll_x_px
@@ -625,9 +625,9 @@ NMI:
 F_C800:
     ORA #$18
     LDY render_enable
-    BNE F_C808
+    BNE @F_C808
     AND #$E7
-F_C808:
+@F_C808:
     STA ppumask_shadow
     STA PPUMASK
     LDA cur_bank
@@ -637,12 +637,12 @@ F_C808:
     LDA nmi_state
     ASL a
     TAY
-    LDA F_C825,y
+    LDA @F_C825,y
     STA jump_ptr_lo
-    LDA F_C825+1,y
+    LDA @F_C825+1,y
     STA jump_ptr_hi
     JMP (jump_ptr_lo)
-F_C825:
+@F_C825:
     .word F_C82F
     .word F_C863
     .word F_C882
@@ -668,9 +668,9 @@ IRQ:
     RTI
 F_C84B:
     LDA fade_dir
-    BNE F_C852
+    BNE @F_C852
     JSR CreditsStep
-F_C852:
+@F_C852:
     LDA frame_counter
     AND #$01
     BEQ NMI_EndOfFrame
@@ -683,9 +683,9 @@ F_C863:
     JSR SwitchBank
     LDA frame_counter
     AND #$01
-    BEQ F_C871
+    BEQ @F_C871
     JSR PaletteFadeStep
-F_C871:
+@F_C871:
     JSR FlushPPUBuffer
 NMI_EndOfFrame:
     JSR ApplyScroll
@@ -740,18 +740,18 @@ FillNametable:
     LDY #$04
     LDX #$C0
     LDA tmp_08
-F_C8EB:
+@F_C8EB:
     STA PPUDATA
     DEX
-    BNE F_C8EB
+    BNE @F_C8EB
     DEY
-    BNE F_C8EB
+    BNE @F_C8EB
     LDX #$40
     LDA #$00
-F_C8F8:
+@F_C8F8:
     STA PPUDATA
     DEX
-    BNE F_C8F8
+    BNE @F_C8F8
     JMP SetScroll
 SetPPUCtrl:
     STA ppuctrl_shadow
@@ -798,7 +798,7 @@ RandomByteFar:
     RTS
 ClearOAMBuffer:
     LDX #$00
-F_C93F:
+@F_C93F:
     LDA #$FF
     STA oam_buffer,x
     INX
@@ -809,7 +809,7 @@ F_C93F:
     INX
     STA oam_buffer,x
     INX
-    BNE F_C93F
+    BNE @F_C93F
     RTS
 ClearOAMAndLoadSprites:
     JSR ClearOAMBuffer
@@ -820,14 +820,14 @@ F_C959:
     JSR FarCall
     LDA current_area
     CMP #$04
-    BNE F_C96F
+    BNE @F_C96F
     LDY stage_index
     LDA Tbl_F_C988,y
     BNE HideAllSprites
-F_C96F:
+@F_C96F:
     LDX #$00
     TXA
-F_C972:
+@F_C972:
     STA oam_buffer,x
     CLC
     ADC #$10
@@ -840,7 +840,7 @@ F_C972:
     PLA
     INX
     CPX #$3C
-    BNE F_C972
+    BNE @F_C972
     RTS
 ; Tbl_F_C988: 5 bytes, read by F_C959
 Tbl_F_C988:
@@ -849,14 +849,14 @@ HideAllSprites:
     LDY #$00
     LDX #$0E
     LDA #$FF
-F_C993:
+@F_C993:
     STA oam_buffer,y
     INY
     INY
     INY
     INY
     DEX
-    BPL F_C993
+    BPL @F_C993
     RTS
 EnableNMI:
     LDA ppuctrl_shadow
@@ -868,9 +868,9 @@ DisableNMI:
     JMP SetPPUCtrl
 WaitForNMI:
     LDA frame_counter
-F_C9AE:
+@F_C9AE:
     CMP frame_counter
-    BEQ F_C9AE
+    BEQ @F_C9AE
 ReturnStub:
     RTS
 ReadControllerBank0:
@@ -919,7 +919,7 @@ InitBalloonRoom:
     PLA
     JSR SwitchBank
     LDX #$07
-F_CA09:
+@F_CA09:
     LDA #$00
     STA ent_type,x
     STA ent_y_lo,x
@@ -929,7 +929,7 @@ F_CA09:
     LDA #$FF
     STA ent_angle,x
     DEX
-    BPL F_CA09
+    BPL @F_CA09
     LDY #$00
     PLA
     STA ptr_hi
@@ -942,15 +942,15 @@ F_CA09:
 InitAnimTileState:
     LDX #$27
     LDA #$00
-F_CA35:
+@F_CA35:
     STA ram_0488,x
     DEX
-    BPL F_CA35
+    BPL @F_CA35
     LDX #$1F
-F_CA3D:
+@F_CA3D:
     STA anim_tile_base,x
     DEX
-    BPL F_CA3D
+    BPL @F_CA3D
     LDA #$2A
     STA anim_tile_base
     LDA #$08
@@ -978,9 +978,9 @@ ScanMapForBalloons:
     LDY #$00
     LDA (ptr_lo),y
     CMP #$C4
-    BNE F_CA7A
+    BNE @F_CA7A
     JMP SpawnBalloon
-F_CA7A:
+@F_CA7A:
     SEC
     SBC #$CE
     BCC F_CAD3
@@ -1028,9 +1028,9 @@ F_CA7A:
     STA tmp_c
 F_CAD3:
     INC ptr_lo
-    BNE F_CAD9
+    BNE @F_CAD9
     INC ptr_hi
-F_CAD9:
+@F_CAD9:
     DEC tmp_d
     BNE ScanMapForBalloons
     DEC tmp_c
@@ -1047,14 +1047,14 @@ F_CAD9:
     LDA #$A8
     STA sprite_tile_next
     LDY #$00
-F_CAFA:
+@F_CAFA:
     LDA (ptr_lo),y
     INC ptr_lo
-    BNE F_CB02
+    BNE @F_CB02
     INC ptr_hi
-F_CB02:
+@F_CB02:
     CMP #$FF
-    BEQ F_CB1C
+    BEQ @F_CB1C
     STA tmp_ptr_lo
     LDA ptr_lo
     PHA
@@ -1066,15 +1066,15 @@ F_CB02:
     STA ptr_hi
     PLA
     STA ptr_lo
-    JMP F_CAFA
-F_CB1C:
+    JMP @F_CAFA
+@F_CB1C:
     LDX zp_77
-F_CB1E:
+@F_CB1E:
     LDY #$00
     LDA (ptr_lo),y
     INY
     CMP #$FF
-    BEQ F_CB81
+    BEQ @F_CB81
     STA ent_type,x
     LDA (ptr_lo),y
     INY
@@ -1121,8 +1121,8 @@ F_CB1E:
     ADC #$00
     STA ptr_hi
     INX
-    JMP F_CB1E
-F_CB81:
+    JMP @F_CB1E
+@F_CB81:
     TYA
     CLC
     ADC ptr_lo
@@ -1140,18 +1140,18 @@ F_CB81:
     ADC #$00
     STA ptr_hi
     LDY #$00
-F_CBA0:
+@F_CBA0:
     LDA (ptr_lo),y
     CMP #$FE
-    BEQ F_CBB0
+    BEQ @F_CBB0
     CMP #$FF
-    BEQ F_CBAC
+    BEQ @F_CBAC
     INY
     INY
-F_CBAC:
+@F_CBAC:
     INY
-    JMP F_CBA0
-F_CBB0:
+    JMP @F_CBA0
+@F_CBB0:
     INY
     TYA
     CLC
@@ -1160,16 +1160,16 @@ F_CBB0:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-F_CBBD:
+@F_CBBD:
     LDY #$00
     LDA (ptr_lo),y
     STA tmp_a
     CMP #$FF
-    BNE F_CBCD
+    BNE @F_CBCD
     LDA #$00
     JSR SwitchBank
     RTS
-F_CBCD:
+@F_CBCD:
     STX saved_x
     LSR a
     LSR a
@@ -1180,7 +1180,7 @@ F_CBCD:
     TAX
     LDA onetime_flags,y
     AND BitMask,x
-    BEQ F_CBF2
+    BEQ @F_CBF2
     LDX saved_x
     LDA ptr_lo
     CLC
@@ -1189,8 +1189,8 @@ F_CBCD:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JMP F_CBBD
-F_CBF2:
+    JMP @F_CBBD
+@F_CBF2:
     LDX saved_x
     LDY #$01
     LDA (ptr_lo),y
@@ -1238,19 +1238,19 @@ F_CBF2:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    JMP F_CBBD
+    JMP @F_CBBD
 LoadGroupGfxFromFlags:
     STY saved_x
     LSR a
     LSR a
     LSR a
     AND #$3F
-    BEQ F_CC62
+    BEQ @F_CC62
     STA tmp_a
     TAY
     LDA anim_tile_base,y
     BEQ F_CC6A
-F_CC62:
+@F_CC62:
     LDY saved_x
     RTS
 LoadGroupGfx:
@@ -1292,14 +1292,14 @@ F_CC6A:
     STA ptr_hi
     LDA B6_A724,y
     STA tmp_a
-    BEQ F_CCB7
+    BEQ @F_CCB7
     LDA sprite_tile_next
     SEC
     SBC tmp_a
     STA sprite_tile_next
     CLC
     JSR DecompressAndFinish
-F_CCB7:
+@F_CCB7:
     LDA #$01
     JSR SwitchBankKeepX
     LDY saved_x
@@ -1317,32 +1317,32 @@ SpawnBalloon:
     STA tmp_d
     JSR MapPtrToCoords
     LDX #$00
-F_CCD6:
+@F_CCD6:
     LDA current_area
     CMP ent_angle,x
-    BNE F_CCFC
+    BNE @F_CCFC
     LDA ent_dy,x
     CMP tmp_a
-    BNE F_CCFC
+    BNE @F_CCFC
     LDA ent_dx,x
     CMP tmp_b
-    BNE F_CCFC
+    BNE @F_CCFC
     LDA ent_line_len,x
     CMP tmp_c
-    BNE F_CCFC
+    BNE @F_CCFC
     LDA ent_line_acc,x
     CMP tmp_d
-    BNE F_CCFC
-    JMP F_CD44
-F_CCFC:
+    BNE @F_CCFC
+    JMP @F_CD44
+@F_CCFC:
     INX
     CPX #$08
-    BNE F_CCD6
+    BNE @F_CCD6
     LDX #$00
-F_CD03:
+@F_CD03:
     LDA ent_angle,x
     CMP #$FF
-    BNE F_CD3F
+    BNE @F_CD3F
     LDA #$01
     STA ent_type,x
     LDA tmp_a
@@ -1362,12 +1362,12 @@ F_CD03:
     STA ent_param,x
     LDA current_area
     STA ent_angle,x
-    JMP F_CD44
-F_CD3F:
+    JMP @F_CD44
+@F_CD3F:
     INX
     CPX #$08
-    BNE F_CD03
-F_CD44:
+    BNE @F_CD03
+@F_CD44:
     PLA
     STA ptr_hi
     PLA
@@ -1380,13 +1380,13 @@ F_CD44:
 CheckPause:
     LDA fade_step
     CMP #$04
-    BNE F_CD5F
+    BNE @F_CD5F
     LDA buttons_pressed
     AND #$08
-    BNE F_CD60
-F_CD5F:
+    BNE @F_CD60
+@F_CD5F:
     RTS
-F_CD60:
+@F_CD60:
     LDA nmi_state
     PHA
     LDA #$01
@@ -1397,9 +1397,9 @@ F_CD60:
     LDA palette_set
     PHA
     DEC fade_dir
-F_CD74:
+@F_CD74:
     LDA fade_dir
-    BNE F_CD74
+    BNE @F_CD74
     JSR RenderOffAndWait
     JSR DisableNMI
     LDA #$07
@@ -1413,7 +1413,7 @@ F_CD74:
     LDA #$02
     JSR SwitchBank
     JSR DrawScoreAndBalloons
-F_CD9A:
+@F_CD9A:
     JSR WaitForNMI
     LDA #$04
     JSR SwitchBank
@@ -1422,16 +1422,16 @@ F_CD9A:
     JSR SwitchBank
     JSR ReadController
     LDA fade_dir
-    BNE F_CD9A
+    BNE @F_CD9A
     LDA #$00
     JSR SwitchBank
-F_CDB6:
+@F_CDB6:
     JSR WaitForNMI
     JSR ReadController
     LDA buttons_pressed
     AND #$08
-    BNE F_CDB6
-F_CDC2:
+    BNE @F_CDB6
+@F_CDC2:
     JSR WaitForNMI
     LDA #$04
     JSR SwitchBank
@@ -1441,14 +1441,14 @@ F_CDC2:
     JSR ReadController
     LDA buttons_pressed
     AND #$08
-    BEQ F_CDC2
+    BEQ @F_CDC2
     DEC fade_dir
-F_CDDD:
+@F_CDDD:
     LDA #$04
     JSR SwitchBank
     JSR FadeStepBEDF
     LDA fade_dir
-    BNE F_CDDD
+    BNE @F_CDDD
     LDA #$00
     JSR SwitchBank
     JSR RestoreScrollAndRedraw
@@ -1459,9 +1459,9 @@ F_CDDD:
     JSR DecompressAndFinish
     LDA ram_01B1
 F_CE00:
-    BEQ F_CE05
+    BEQ @F_CE05
     JSR HideAllSprites
-F_CE05:
+@F_CE05:
     PLA
     STA palette_set
     LDA #$06
@@ -1471,9 +1471,9 @@ F_CE05:
     JSR WaitForNMI
     INC fade_dir
     JSR EnableRendering
-F_CE1B:
+@F_CE1B:
     LDA fade_dir
-    BNE F_CE1B
+    BNE @F_CE1B
     PLA
     STA nmi_state
     LDA zp_FD
@@ -1618,10 +1618,10 @@ DrawQueuedBlock:
     LDA #$11
     STA ptr_lo
     LDA ram_01BA
-    BEQ F_CF1D
+    BEQ @F_CF1D
     JSR $BAE7
     DEC ram_01BA
-F_CF1D:
+@F_CF1D:
     RTS
 CreditsStep:
     LDA #$05
@@ -1629,18 +1629,18 @@ CreditsStep:
     LDY #$00
     LDA (credits_ptr_lo),y
     CMP #$FE
-    BNE F_CF3A
+    BNE @F_CF3A
     LDA frame_counter
     AND #$01
-    BNE F_CF39
+    BNE @F_CF39
     LDA ram_01B2
-    BEQ F_CF39
+    BEQ @F_CF39
     DEC ram_01B2
-F_CF39:
+@F_CF39:
     RTS
-F_CF3A:
+@F_CF3A:
     DEC ram_0395
-    BPL F_CF39
+    BPL @F_CF39
     LDA #$02
     STA ram_0395
     JSR NudgeSpritesUp
@@ -1648,18 +1648,18 @@ F_CF3A:
     CLC
     ADC #$01
     CMP #$F0
-    BCC F_CF52
+    BCC @F_CF52
     LDA #$00
-F_CF52:
+@F_CF52:
     STA scroll_y_lo
     LDA scroll_y_hi
     ADC #$00
     STA scroll_y_hi
     DEC zp_3D
-    BEQ F_CF61
-    BMI F_CF7D
+    BEQ @F_CF61
+    BMI @F_CF7D
     RTS
-F_CF61:
+@F_CF61:
     LDX sprite_y_tmp
     LDA PPUSTATUS
     LDA NametableRowHi,x
@@ -1668,12 +1668,12 @@ F_CF61:
     STA PPUADDR
     LDY #$1F
     LDA #$F0
-F_CF76:
+@F_CF76:
     STA PPUDATA
     DEY
-    BPL F_CF76
+    BPL @F_CF76
     RTS
-F_CF7D:
+@F_CF7D:
     LDA #$07
     STA zp_3D
     LDA PPUSTATUS
@@ -1681,7 +1681,7 @@ F_CF7D:
     LDY #$00
     LDA (credits_ptr_lo),y
     CMP #$FF
-    BEQ F_CFB4
+    BEQ @F_CFB4
     CLC
     ADC NametableRowLo,x
     PHA
@@ -1691,19 +1691,19 @@ F_CF7D:
     PLA
     STA PPUADDR
     INY
-F_CFA0:
+@F_CFA0:
     LDA (credits_ptr_lo),y
-    BEQ F_CFB4
+    BEQ @F_CFB4
     INY
     CMP #$20
-    BNE F_CFAB
+    BNE @F_CFAB
     LDA #$5C
-F_CFAB:
+@F_CFAB:
     CLC
     ADC #$94
     STA PPUDATA
-    JMP F_CFA0
-F_CFB4:
+    JMP @F_CFA0
+@F_CFB4:
     INY
     TYA
     CLC
@@ -1718,49 +1718,49 @@ F_CFB4:
     STA sprite_y_tmp
     AND #$1F
     CMP #$1E
-    BNE F_CFD4
+    BNE @F_CFD4
     INX
     INX
     TXA
     AND #$3F
     STA sprite_y_tmp
-F_CFD4:
+@F_CFD4:
     CPY #$02
-    BEQ F_CFD9
+    BEQ @F_CFD9
     RTS
-F_CFD9:
+@F_CFD9:
     LDX #$00
-F_CFDB:
+@F_CFDB:
     LDA oam_buffer,x
     CMP #$FF
-    BEQ F_CFEC
+    BEQ @F_CFEC
     TXA
     CLC
     ADC #$08
     TAX
     CMP #$30
-    BNE F_CFDB
+    BNE @F_CFDB
     RTS
-F_CFEC:
+@F_CFEC:
     LDA #$F8
     STA oam_buffer,x
     STA ram_0204,x
     RTS
 NudgeSpritesUp:
     LDX #$00
-F_CFF7:
+@F_CFF7:
     LDA oam_buffer,x
     CMP #$FF
-    BEQ F_D004
+    BEQ @F_D004
     DEC oam_buffer,x
     DEC ram_0204,x
-F_D004:
+@F_D004:
     TXA
     CLC
     ADC #$08
     TAX
     CMP #$30
-    BNE F_CFF7
+    BNE @F_CFF7
     RTS
 UpdateCamera:
     LDA camera_mode
@@ -1829,9 +1829,9 @@ LoadArea:
     JSR WriteTileFrame_14D0
     LDA current_area
     CMP #$04
-    BEQ F_D09F
+    BEQ @F_D09F
     JSR WriteTiles_1432
-F_D09F:
+@F_D09F:
     LDA #$00
     JSR SwitchBank
     LDA #$2B
@@ -1851,10 +1851,10 @@ F_D09F:
     TAX
     LDA #$08
     STA map_width
-F_D0C3:
+@F_D0C3:
     ASL map_width
     DEX
-    BNE F_D0C3
+    BNE @F_D0C3
     INY
     LDA (tmp_ptr_lo),y
     STA map_height
@@ -1864,7 +1864,7 @@ F_D0C3:
     STA zp_35
     STA zp_37
     LDX #$0E
-F_D0D9:
+@F_D0D9:
     LDA zp_38
     CLC
     ADC map_width
@@ -1873,7 +1873,7 @@ F_D0D9:
     ADC #$00
     STA zp_39
     DEX
-    BPL F_D0D9
+    BPL @F_D0D9
     LDA map_height
     ASL a
     ROL zp_37
@@ -1915,11 +1915,11 @@ F_D0D9:
     INY
     LDA (tmp_ptr_lo),y
     CMP tileset_id
-    BNE F_D139
+    BNE @F_D139
     LDA #$02
     JSR SwitchBank
     JMP WriteTileStrip_1044
-F_D139:
+@F_D139:
     STA tileset_id
     TAX
     LDA Tbl_B0_8C95,x
@@ -1945,11 +1945,11 @@ F_D139:
     LDA #$01
     JSR SwitchBankKeepX
     LDY #$63
-F_D16B:
+@F_D16B:
     LDA Tbl_B1_8999,y
     STA ram_041C,y
     DEY
-    BPL F_D16B
+    BPL @F_D16B
     LDA #$00
     JSR SwitchBank
     PLA
@@ -1985,11 +1985,11 @@ F_D16B:
     JSR SwitchBank
     PLA
     PHA
-    BNE F_D1DA
+    BNE @F_D1DA
     JSR LoadFont
     LDA current_area
     CMP #$04
-    BNE F_D1DA
+    BNE @F_D1DA
     LDA #$40
     STA tmp_c
     LDA #$11
@@ -2000,7 +2000,7 @@ F_D16B:
     STA ptr_hi
     CLC
     JSR DecompressAndFinish
-F_D1DA:
+@F_D1DA:
     PLA
     TAX
     LDA $8C9F,x
@@ -2045,39 +2045,39 @@ F_D1DA:
     LDA StageTileSetPtrHi,x
     STA ptr_hi
     LDY #$00
-F_D237:
+@F_D237:
     LDA (ptr_lo),y
     STA PPUDATA
     INY
     CPY #$40
-    BNE F_D237
+    BNE @F_D237
     LDA #$02
     JSR SwitchBank
     JSR WriteTileStrip_1044
     LDA current_area
     CMP #$04
-    BEQ F_D27F
+    BEQ @F_D27F
     JSR TileFrameA_At1232
     JSR TileFrameA_At1252
     JSR TileFrameA_At1272
     LDA switch_1
-    BEQ F_D265
+    BEQ @F_D265
     JSR TileFrameB_At1232
     JSR WriteTiles_1170
     JSR ApplySwitch1
-F_D265:
+@F_D265:
     LDA switch_2
-    BEQ F_D272
+    BEQ @F_D272
     JSR TileFrameB_At1252
     JSR WriteTiles_11B0
     JSR ApplySwitch2
-F_D272:
+@F_D272:
     LDA switch_3
-    BEQ F_D27F
+    BEQ @F_D27F
     JSR TileFrameB_At1272
     JSR WriteTiles_11F0
     JSR ApplySwitch3
-F_D27F:
+@F_D27F:
     JMP SetScroll
 ClearPpu_1F80_0F80:
     LDA PPUSTATUS
@@ -2091,10 +2091,10 @@ ClearPpuRegion128:
     STY PPUADDR
     LDX #$7F
     LDA #$00
-F_D29A:
+@F_D29A:
     STA PPUDATA
     DEX
-    BPL F_D29A
+    BPL @F_D29A
     RTS
 ComputeFocusY:
     LDA player_y_lo
@@ -2104,19 +2104,19 @@ ComputeFocusY:
     LDA player_y_hi
     SBC #$00
     STA focus_y_hi
-    BCC F_D2BB
+    BCC @F_D2BB
     LDA focus_y_lo
     SEC
     SBC #$20
     LDA focus_y_hi
     SBC #$00
-    BCS F_D2C3
-F_D2BB:
+    BCS @F_D2C3
+@F_D2BB:
     LDA #$20
     STA focus_y_lo
     LDA #$00
     STA focus_y_hi
-F_D2C3:
+@F_D2C3:
     LDA zp_36
     SEC
     SBC #$F0
@@ -2130,12 +2130,12 @@ F_D2D3:
     SBC tmp_a
     LDA focus_y_hi
     SBC tmp_b
-    BCC F_D2E3
+    BCC @F_D2E3
     LDA tmp_a
     STA focus_y_lo
     LDA tmp_b
     STA focus_y_hi
-F_D2E3:
+@F_D2E3:
     LDA player_x_lo
     SEC
     SBC zp_4A
@@ -2143,11 +2143,11 @@ F_D2E3:
     LDA player_x_hi
     SBC #$00
     STA focus_x_hi
-    BCS F_D2F8
+    BCS @F_D2F8
     LDA #$00
     STA focus_x_lo
     STA focus_x_hi
-F_D2F8:
+@F_D2F8:
     LDA zp_34
     SEC
     SBC #$F0
@@ -2160,12 +2160,12 @@ F_D2F8:
     SBC tmp_a
     LDA focus_x_hi
     SBC tmp_b
-    BCC F_D318
+    BCC @F_D318
     LDA tmp_a
     STA focus_x_lo
     LDA tmp_b
     STA focus_x_hi
-F_D318:
+@F_D318:
     LDA focus_x_hi
     LSR a
     STA tmp_ptr_lo
@@ -2199,8 +2199,8 @@ F_D318:
     STA map_read_hi
     LDX zp_32
     CPX #$00
-    BEQ F_D361
-F_D351:
+    BEQ @F_D361
+@F_D351:
     LDA map_read_lo
     CLC
     ADC map_width
@@ -2209,8 +2209,8 @@ F_D351:
     ADC #$00
     STA map_read_hi
     DEX
-    BNE F_D351
-F_D361:
+    BNE @F_D351
+@F_D361:
     LDA map_read_lo
     PHA
     LDA map_read_hi
@@ -2225,9 +2225,9 @@ F_D361:
     STA PPUADDR
     LDA #$0F
     STA tmp_ptr_hi
-F_D37F:
+@F_D37F:
     LDX #$00
-F_D381:
+@F_D381:
     LDA map_bank
     JSR SwitchBankKeepX
     LDY #$00
@@ -2241,12 +2241,12 @@ F_D381:
     LDA (zp_2B),y
     STA PPUDATA
     INC map_read_lo
-    BNE F_D3A3
+    BNE @F_D3A3
     INC map_read_hi
-F_D3A3:
+@F_D3A3:
     INX
     CPX #$10
-    BNE F_D381
+    BNE @F_D381
     LDA map_read_lo
     SEC
     SBC #$10
@@ -2255,7 +2255,7 @@ F_D3A3:
     SBC #$00
     STA map_read_hi
     LDX #$00
-F_D3B7:
+@F_D3B7:
     LDA map_bank
     JSR SwitchBankKeepX
     LDY #$00
@@ -2269,12 +2269,12 @@ F_D3B7:
     LDA (zp_2F),y
     STA PPUDATA
     INC map_read_lo
-    BNE F_D3D9
+    BNE @F_D3D9
     INC map_read_hi
-F_D3D9:
+@F_D3D9:
     INX
     CPX #$10
-    BNE F_D3B7
+    BNE @F_D3B7
     LDA map_read_lo
     SEC
     SBC #$10
@@ -2291,14 +2291,14 @@ F_D3D9:
     STA map_read_hi
     DEC tmp_ptr_hi
     BEQ F_D3FF
-    JMP F_D37F
+    JMP @F_D37F
 F_D3FF:
     LDA #$28
     STA PPUADDR
     LDA #$00
     STA PPUADDR
     LDX #$00
-F_D40B:
+@F_D40B:
     LDA map_bank
     JSR SwitchBankKeepX
     LDY #$00
@@ -2312,12 +2312,12 @@ F_D40B:
     LDA (zp_2B),y
     STA PPUDATA
     INC map_read_lo
-    BNE F_D42D
+    BNE @F_D42D
     INC map_read_hi
-F_D42D:
+@F_D42D:
     INX
     CPX #$10
-    BNE F_D40B
+    BNE @F_D40B
     PLA
     STA map_read_hi
     PLA
@@ -2338,7 +2338,7 @@ F_D44C:
     PHA
     LDA map_read_hi
     PHA
-F_D454:
+@F_D454:
     LDY #$00
     LDA map_bank
     JSR SwitchBankKeepX
@@ -2391,7 +2391,7 @@ F_D454:
     ADC #$00
     STA map_read_hi
     DEX
-    BNE F_D454
+    BNE @F_D454
     PLA
     STA map_read_hi
     PLA
@@ -2412,9 +2412,9 @@ F_D4D5:
     ADC #$00
     STA map_read_hi
     DEC tmp_ptr_hi
-    BMI F_D4E7
+    BMI @F_D4E7
     JMP F_D44C
-F_D4E7:
+@F_D4E7:
     LDA map_read_lo
     SEC
     SBC map_width
@@ -2428,7 +2428,7 @@ F_D4E7:
     STA PPUADDR
 F_D4FE:
     LDX #$08
-F_D500:
+@F_D500:
     LDA map_bank
     JSR SwitchBankKeepX
     LDY #$00
@@ -2481,7 +2481,7 @@ F_D500:
     ADC #$00
     STA map_read_hi
     DEX
-    BNE F_D500
+    BNE @F_D500
     PLA
     STA map_read_hi
     PLA
@@ -2552,12 +2552,12 @@ ScrollX:
     SEC
     SBC prev_focus_x_lo
     STA zp_3A
-    BMI F_D5F2
-    BNE F_D5F5
+    BMI @F_D5F2
+    BNE @F_D5F5
     JMP ScrollY
-F_D5F2:
+@F_D5F2:
     JMP F_D677
-F_D5F5:
+@F_D5F5:
     LDA zp_3A
     CLC
     ADC scroll_x_px
@@ -2568,9 +2568,9 @@ F_D5FE:
     ADC zp_3A
     STA zp_3C
     CMP #$08
-    BCS F_D60A
+    BCS @F_D60A
     JMP ScrollY
-F_D60A:
+@F_D60A:
     AND #$07
     STA zp_3C
     LDA scroll_y_hi
@@ -2610,33 +2610,33 @@ F_D60A:
     PHA
     LDA draw_x
     LSR a
-    BCC F_D662
+    BCC @F_D662
     LSR a
-    BCS F_D657
+    BCS @F_D657
     LDA #$10
     STA tmp_ptr_lo
     LDA #$01
     STA tmp_ptr_hi
-    JMP F_D65F
-F_D657:
+    JMP @F_D65F
+@F_D657:
     LDA #$0F
     STA tmp_ptr_lo
     LDA #$10
     STA tmp_ptr_hi
-F_D65F:
+@F_D65F:
     JSR F_D8F7
-F_D662:
+@F_D662:
     PLA
     STA map_read_hi
     PLA
     STA map_read_lo
     LDA scroll_x_px
     AND #$08
-    BNE F_D674
+    BNE @F_D674
     INC map_read_lo
-    BNE F_D674
+    BNE @F_D674
     INC map_read_hi
-F_D674:
+@F_D674:
     JMP ScrollY
 F_D677:
     LDA zp_3A
@@ -2664,7 +2664,7 @@ F_D677:
     LSR a
     TAX
     AND #$01
-    BEQ F_D6AD
+    BEQ @F_D6AD
     LDA map_read_lo
     SEC
     SBC #$01
@@ -2672,50 +2672,50 @@ F_D677:
     LDA map_read_hi
     SBC #$00
     STA map_read_hi
-F_D6AD:
+@F_D6AD:
     JSR F_D7C7
     LDA draw_x
     LSR a
     BCC ScrollY
     LSR a
-    BCS F_D6C3
+    BCS @F_D6C3
     LDA #$00
     STA tmp_ptr_lo
     LDA #$01
     STA tmp_ptr_hi
-    JMP F_D6CB
-F_D6C3:
+    JMP @F_D6CB
+@F_D6C3:
     LDA #$0F
     STA tmp_ptr_lo
     LDA #$00
     STA tmp_ptr_hi
-F_D6CB:
+@F_D6CB:
     JSR F_D8F7
 ScrollY:
     LDA focus_y_lo
     SEC
     SBC prev_focus_y_lo
     STA zp_3B
-    BMI F_D6E5
-    BNE F_D6E8
+    BMI @F_D6E5
+    BNE @F_D6E8
     LDA zp_3D
-    BMI F_D6E2
+    BMI @F_D6E2
     CMP #$08
-    BCS F_D708
+    BCS @F_D708
     RTS
-F_D6E2:
-    JMP F_D77B
-F_D6E5:
-    JMP F_D75E
-F_D6E8:
+@F_D6E2:
+    JMP @F_D77B
+@F_D6E5:
+    JMP @F_D75E
+@F_D6E8:
     LDA zp_3B
     CLC
     ADC scroll_y_lo
     CMP #$F0
-    BCC F_D6F4
+    BCC @F_D6F4
     CLC
     ADC #$10
-F_D6F4:
+@F_D6F4:
     STA scroll_y_lo
     LDA scroll_y_hi
     ADC #$00
@@ -2725,12 +2725,12 @@ F_D6F4:
     ADC zp_3B
     STA zp_3D
     CMP #$08
-    BCS F_D708
-F_D707:
+    BCS @F_D708
+@F_D707:
     RTS
-F_D708:
+@F_D708:
     LDA ram_0749
-    BEQ F_D707
+    BEQ @F_D707
     LDA zp_3D
     AND #$07
     STA zp_3D
@@ -2745,7 +2745,7 @@ F_D708:
     AND #$3F
     TAY
     AND #$01
-    BNE F_D732
+    BNE @F_D732
     LDA map_read_lo
     CLC
     ADC map_width
@@ -2753,7 +2753,7 @@ F_D708:
     LDA map_read_hi
     ADC #$00
     STA map_read_hi
-F_D732:
+@F_D732:
     LDA scroll_x_px
     LSR a
     LSR a
@@ -2773,23 +2773,23 @@ F_D732:
     JSR F_D9BD
     LDA draw_y
     AND #$03
-    BNE F_D757
+    BNE @F_D757
     JSR F_DAE3
-F_D757:
+@F_D757:
     PLA
     STA map_read_hi
     PLA
     STA map_read_lo
     RTS
-F_D75E:
+@F_D75E:
     LDA zp_3B
     CLC
     ADC scroll_y_lo
-    BCS F_D769
+    BCS @F_D769
     SEC
     SBC #$10
     CLC
-F_D769:
+@F_D769:
     STA scroll_y_lo
     LDA scroll_y_hi
     ADC #$FF
@@ -2798,12 +2798,12 @@ F_D769:
     CLC
     ADC zp_3B
     STA zp_3D
-    BMI F_D77B
-F_D77A:
+    BMI @F_D77B
+@F_D77A:
     RTS
-F_D77B:
+@F_D77B:
     LDA ram_0749
-    BEQ F_D77A
+    BEQ @F_D77A
     LDA zp_3D
     AND #$07
     STA zp_3D
@@ -2815,7 +2815,7 @@ F_D77B:
     LSR a
     TAY
     AND #$01
-    BEQ F_D7A0
+    BEQ @F_D7A0
     LDA map_read_lo
     SEC
     SBC map_width
@@ -2823,7 +2823,7 @@ F_D77B:
     LDA map_read_hi
     SBC #$00
     STA map_read_hi
-F_D7A0:
+@F_D7A0:
     LDA scroll_x_px
     LSR a
     LSR a
@@ -2833,11 +2833,11 @@ F_D7A0:
     LDA draw_y
     AND #$1F
     CMP #$1D
-    BEQ F_D7B7
+    BEQ @F_D7B7
     AND #$03
     CMP #$03
-    BNE F_D7C6
-F_D7B7:
+    BNE @F_D7C6
+@F_D7B7:
     LDA map_read_lo
     PHA
     LDA map_read_hi
@@ -2847,7 +2847,7 @@ F_D7B7:
     STA map_read_hi
     PLA
     STA map_read_lo
-F_D7C6:
+@F_D7C6:
     RTS
 F_D7C7:
     STX draw_x
@@ -2869,7 +2869,7 @@ F_D7C7:
     STA ppu_buffer,x
     INX
     AND #$01
-    BNE F_D801
+    BNE @F_D801
     LDA zp_29
     STA zp_3E
     LDA zp_2A
@@ -2878,8 +2878,8 @@ F_D7C7:
     STA zp_40
     LDA zp_2E
     STA zp_41
-    JMP F_D811
-F_D801:
+    JMP @F_D811
+@F_D801:
     LDA zp_2B
     STA zp_3E
     LDA zp_2C
@@ -2888,7 +2888,7 @@ F_D801:
     STA zp_40
     LDA zp_30
     STA zp_41
-F_D811:
+@F_D811:
     LDA tmp_ptr_lo
     STA ppu_buffer,x
     INX
@@ -2904,7 +2904,7 @@ F_D811:
     PHA
     LDA draw_row_count
     AND #$01
-    BEQ F_D854
+    BEQ @F_D854
     LDA map_bank
     JSR SwitchBankKeepX
     LDY #$00
@@ -2924,8 +2924,8 @@ F_D811:
     ADC #$00
     STA map_read_hi
     DEC tmp_ptr_lo
-    BEQ F_D885
-F_D854:
+    BEQ @F_D885
+@F_D854:
     LDY #$00
     LDA map_bank
     JSR SwitchBankKeepX
@@ -2949,8 +2949,8 @@ F_D854:
     STA map_read_hi
     DEC tmp_ptr_lo
     DEC tmp_ptr_lo
-    BNE F_D854
-F_D885:
+    BNE @F_D854
+@F_D885:
     LDA #$1F
     SEC
     SBC draw_row_count
@@ -2959,9 +2959,9 @@ F_D885:
     LDY #$00
     LDA scroll_y_hi
     AND #$01
-    BNE F_D898
+    BNE @F_D898
     LDY #$20
-F_D898:
+@F_D898:
     LDA NametableRowHi,y
     STA ppu_buffer,x
     INX
@@ -2977,7 +2977,7 @@ F_D898:
     STA ppu_buffer_idx
     TAX
     DEX
-F_D8B3:
+@F_D8B3:
     LDY #$00
     LDA map_bank
     JSR SwitchBankKeepX
@@ -2990,7 +2990,7 @@ F_D8B3:
     STA ppu_buffer,x
     DEX
     DEC draw_row_count
-    BEQ F_D8E6
+    BEQ @F_D8E6
     LDA (zp_40),y
     STA ppu_buffer,x
     DEX
@@ -3002,8 +3002,8 @@ F_D8B3:
     ADC #$00
     STA map_read_hi
     DEC draw_row_count
-    BNE F_D8B3
-F_D8E6:
+    BNE @F_D8B3
+@F_D8E6:
     LDX ppu_buffer_idx
     LDA #$00
     STA ppu_buffer,x
@@ -3020,7 +3020,7 @@ F_D8F7:
     PHA
     LSR draw_y
     LSR draw_y
-    BCC F_D910
+    BCC @F_D910
     LDA map_read_lo
     SEC
     SBC map_width
@@ -3028,11 +3028,11 @@ F_D8F7:
     LDA map_read_hi
     SBC #$00
     STA map_read_hi
-F_D910:
+@F_D910:
     LSR draw_x
     LSR draw_x
     LDX #$00
-F_D916:
+@F_D916:
     LDY tmp_ptr_lo
     LDA map_bank
     JSR SwitchBankKeepX
@@ -3050,12 +3050,12 @@ F_D916:
     STA map_read_hi
     INX
     CPX #$11
-    BNE F_D916
+    BNE @F_D916
     LDA #$00
     STA tmp_ptr_hi
     LDA #$08
     STA draw_row_count
-F_D943:
+@F_D943:
     LDY ppu_buffer_idx
     LDX draw_y
     LDA AttrRowLo,x
@@ -3103,12 +3103,12 @@ F_D943:
     AND #$0F
     STA draw_y
     AND #$07
-    BNE F_D9A8
+    BNE @F_D9A8
     DEX
-F_D9A8:
+@F_D9A8:
     STX tmp_ptr_hi
     DEC draw_row_count
-    BPL F_D943
+    BPL @F_D943
     LDA #$00
     STA ppu_buffer,y
     STA ram_0749
@@ -3123,7 +3123,7 @@ F_D9BD:
     LDX ppu_buffer_idx
     TYA
     AND #$01
-    BNE F_D9DB
+    BNE @F_D9DB
     LDA zp_29
     STA zp_3E
     LDA zp_2A
@@ -3132,8 +3132,8 @@ F_D9BD:
     STA zp_40
     LDA zp_2C
     STA zp_41
-    JMP F_D9EB
-F_D9DB:
+    JMP @F_D9EB
+@F_D9DB:
     LDA zp_2D
     STA zp_3E
     LDA zp_2E
@@ -3142,7 +3142,7 @@ F_D9DB:
     STA zp_40
     LDA zp_30
     STA zp_41
-F_D9EB:
+@F_D9EB:
     LDA NametableRowHi,y
     STA ppu_buffer,x
     INX
@@ -3172,7 +3172,7 @@ F_D9EB:
     PHA
     LDA draw_row_count
     AND #$01
-    BEQ F_DA43
+    BEQ @F_DA43
     LDY #$00
     LDA map_bank
     JSR SwitchBankKeepX
@@ -3185,12 +3185,12 @@ F_D9EB:
     STA ppu_buffer,x
     DEX
     INC map_read_lo
-    BNE F_DA3F
+    BNE @F_DA3F
     INC map_read_hi
-F_DA3F:
+@F_DA3F:
     DEC tmp_ptr_lo
-    BEQ F_DA6D
-F_DA43:
+    BEQ @F_DA6D
+@F_DA43:
     LDY #$00
     LDA map_bank
     JSR SwitchBankKeepX
@@ -3206,26 +3206,26 @@ F_DA43:
     STA ppu_buffer,x
     DEX
     INC map_read_lo
-    BNE F_DA67
+    BNE @F_DA67
     INC map_read_hi
-F_DA67:
+@F_DA67:
     DEC tmp_ptr_lo
     DEC tmp_ptr_lo
-    BNE F_DA43
-F_DA6D:
+    BNE @F_DA43
+@F_DA6D:
     LDX ppu_buffer_idx
     LDA #$00
     STA ppu_buffer,x
     LDA #$20
     SEC
     SBC draw_row_count
-    BNE F_DA82
+    BNE @F_DA82
     PLA
     STA map_read_hi
     PLA
     STA map_read_lo
     RTS
-F_DA82:
+@F_DA82:
     STA draw_row_count
     STA tmp_ptr_lo
     LDY draw_y
@@ -3245,7 +3245,7 @@ F_DA82:
     STA ppu_buffer_idx
     TAX
     DEX
-F_DAA6:
+@F_DAA6:
     LDY #$00
     LDA map_bank
     JSR SwitchBankKeepX
@@ -3258,17 +3258,17 @@ F_DAA6:
     STA ppu_buffer,x
     DEX
     DEC tmp_ptr_lo
-    BEQ F_DAD2
+    BEQ @F_DAD2
     LDA (zp_40),y
     STA ppu_buffer,x
     DEX
     INC map_read_lo
-    BNE F_DACE
+    BNE @F_DACE
     INC map_read_hi
-F_DACE:
+@F_DACE:
     DEC tmp_ptr_lo
-    BNE F_DAA6
-F_DAD2:
+    BNE @F_DAA6
+@F_DAD2:
     LDX ppu_buffer_idx
     LDA #$00
     STA ppu_buffer,x
@@ -3286,7 +3286,7 @@ F_DAE3:
     TAX
     LDA draw_y
     AND #$02
-    BEQ F_DAFE
+    BEQ @F_DAFE
     LDA map_read_lo
     SEC
     SBC map_width
@@ -3294,13 +3294,13 @@ F_DAE3:
     LDA map_read_hi
     SBC #$00
     STA map_read_hi
-F_DAFE:
+@F_DAFE:
     LDY ppu_buffer_idx
     LDA draw_y
     AND #$FC
     ASL a
     CMP #$40
-    BCS F_DB1B
+    BCS @F_DB1B
     CLC
     ADC #$C0
     STA ram_0301,y
@@ -3309,8 +3309,8 @@ F_DAFE:
     STA ppu_buffer,y
     INY
     INY
-    JMP F_DB2C
-F_DB1B:
+    JMP @F_DB2C
+@F_DB1B:
     AND #$3F
     CLC
     ADC #$C0
@@ -3320,7 +3320,7 @@ F_DB1B:
     STA ppu_buffer,y
     INY
     INY
-F_DB2C:
+@F_DB2C:
     LDA #$08
     STA tmp_ptr_hi
     ORA #$80
@@ -3335,11 +3335,11 @@ F_DB2C:
     LDY #$0F
     LDA map_bank
     JSR SwitchBankKeepX
-F_DB47:
+@F_DB47:
     LDA (map_read_lo),y
     STA ram_0370,y
     DEY
-    BPL F_DB47
+    BPL @F_DB47
     LDA map_read_lo
     CLC
     ADC map_width
@@ -3348,17 +3348,17 @@ F_DB47:
     ADC #$00
     STA map_read_hi
     LDY #$0F
-F_DB5E:
+@F_DB5E:
     LDA (map_read_lo),y
     STA ram_0380,y
     DEY
-    BPL F_DB5E
+    BPL @F_DB5E
     TXA
     AND #$0F
     TAX
     LDA #$00
     JSR SwitchBankKeepX
-F_DB6F:
+@F_DB6F:
     LDY ram_0370,x
     LDA (zp_27),y
     AND #$03
@@ -3389,7 +3389,7 @@ F_DB6F:
     AND #$0F
     TAX
     DEC tmp_ptr_hi
-    BNE F_DB6F
+    BNE @F_DB6F
     LDY ppu_buffer_idx
     LDA #$00
     STA ppu_buffer,y
@@ -3400,9 +3400,9 @@ FilterCollectedTile:
     STA tmp_b
     SEC
     SBC #$80
-    BCC F_DBDC
+    BCC @F_DBDC
     CMP #$3C
-    BCS F_DBDC
+    BCS @F_DBDC
     STA tmp_c
     LSR a
     LSR a
@@ -3413,14 +3413,14 @@ FilterCollectedTile:
     TAX
     LDA a:collected_by_kind,y
     AND BitMask,x
-    BEQ F_DBF1
+    BEQ @F_DBF1
     LDX tmp_d
     LDA #$00
     RTS
-F_DBDC:
+@F_DBDC:
     LDA current_area
     CMP #$06
-    BEQ F_DBF1
+    BEQ @F_DBF1
     LDA map_read_lo
     STA ptr_lo
     LDA map_read_hi
@@ -3428,7 +3428,7 @@ F_DBDC:
     LDX tmp_d
     LDA tmp_b
     JMP ApplyCollectedFlag
-F_DBF1:
+@F_DBF1:
     LDX tmp_d
     LDA tmp_b
     RTS
@@ -3443,19 +3443,19 @@ PlayerBlinkCheck:
     LDY #$FF
     STY zp_62
     LDA invuln_hi
-    BNE F_DC36
+    BNE @F_DC36
     ORA invuln_lo
-    BEQ F_DC4C
+    BEQ @F_DC4C
     LDA invuln_lo
     CMP #$19
-    BCS F_DC36
-    JMP F_DC3D
-F_DC36:
+    BCS @F_DC36
+    JMP @F_DC3D
+@F_DC36:
     LDA invuln_lo
     AND #$04
-    BNE F_DC3D
+    BNE @F_DC3D
     INY
-F_DC3D:
+@F_DC3D:
     STY zp_62
     LDA invuln_lo
     SEC
@@ -3464,43 +3464,43 @@ F_DC3D:
     LDA invuln_hi
     SBC #$00
     STA invuln_hi
-F_DC4C:
+@F_DC4C:
     LDA #$01
     STA walk_speed
     LDA zp_86
-    BEQ F_DC67
+    BEQ @F_DC67
     LDA buttons
     AND #$80
-    BNE F_DC61
+    BNE @F_DC61
     LDA #$00
     STA zp_86
-    JMP F_DC67
-F_DC61:
+    JMP @F_DC67
+@F_DC61:
     LDA buttons
     AND #$7F
     STA buttons
-F_DC67:
+@F_DC67:
     LDA zp_87
-    BEQ F_DC7E
+    BEQ @F_DC7E
     LDA buttons
     AND #$01
-    BNE F_DC78
+    BNE @F_DC78
     LDA #$00
     STA zp_87
-    JMP F_DC7E
-F_DC78:
+    JMP @F_DC7E
+@F_DC78:
     LDA buttons
     AND #$FE
     STA buttons
-F_DC7E:
+@F_DC7E:
     LDA shot_cooldown
-    BEQ F_DC8C
+    BEQ @F_DC8C
     LDA buttons
     AND #$02
-    BNE F_DC8C
+    BNE @F_DC8C
     LDA #$00
     STA shot_cooldown
-F_DC8C:
+@F_DC8C:
     LDA #$DD
     PHA
     LDA #$11
@@ -3509,10 +3509,10 @@ F_DC8C:
     JSR SwitchBank
     LDY player_state
     LDX Tbl_B2_B56E,y
-    BEQ F_DCF8
+    BEQ @F_DCF8
     DEX
-    BEQ F_DCF2
-F_DCA1:
+    BEQ @F_DCF2
+@F_DCA1:
     LDA water_level_lo
     CLC
     ADC #$08
@@ -3525,39 +3525,39 @@ F_DCA1:
     SBC ptr_lo
     LDA player_y_hi
     SBC ptr_hi
-    BCC F_DCE0
+    BCC @F_DCE0
     LDA player_state
     CMP #$0D
-    BEQ F_DCF8
+    BEQ @F_DCF8
     CMP #$02
-    BNE F_DCC8
+    BNE @F_DCC8
     JSR SpawnWaterEntity
-F_DCC8:
+@F_DCC8:
     LDA #$22
     JSR PlaySfxNoise
     LDA #$0D
     STA player_state
     LDA dive_mode
-    BEQ F_DCF8
+    BEQ @F_DCF8
     LDA #$00
     STA dive_mode
     LDA zp_7F
     STA player_facing
-    JMP F_DCF8
-F_DCE0:
+    JMP @F_DCF8
+@F_DCE0:
     LDA player_state
     CMP #$0D
-    BNE F_DCF8
+    BNE @F_DCF8
     LDA #$00
     STA player_state
     LDA #$22
     JSR PlaySfxNoise
-    JMP F_DCF8
-F_DCF2:
+    JMP @F_DCF8
+@F_DCF2:
     LDA dive_mode
     CMP #$80
-    BNE F_DCA1
-F_DCF8:
+    BNE @F_DCA1
+@F_DCF8:
     LDA #$00
     STA zp_16
     STA zp_17
@@ -3573,40 +3573,40 @@ F_DCF8:
     JSR CheckHazardUnderPlayer
     JSR PlayerTileInteract
     LDY player_state
-    BEQ F_DD24
+    BEQ @F_DD24
     LDA #$00
     STA idle_timer_lo
     STA idle_timer_hi
     STA idle_anim_timer
-F_DD24:
+@F_DD24:
     LDA #$02
     JSR SwitchBank
     LDX $B58C,y
     BEQ TryStartJump
     DEX
-    BEQ F_DD3D
+    BEQ @F_DD3D
     DEX
-    BEQ F_DD40
+    BEQ @F_DD40
     DEX
-    BEQ F_DD43
+    BEQ @F_DD43
     DEX
     BNE TryStartJump
     JMP F_DE0C
-F_DD3D:
+@F_DD3D:
     JMP F_DE3F
-F_DD40:
+@F_DD40:
     JMP F_DD9E
-F_DD43:
+@F_DD43:
     JMP TryFireShot
 TryStartJump:
     LDA player_state
-    BEQ F_DD4B
-F_DD4A:
+    BEQ @F_DD4B
+@F_DD4A:
     RTS
-F_DD4B:
+@F_DD4B:
     LDA buttons
     AND #$01
-    BEQ F_DD4A
+    BEQ @F_DD4A
     LDA #$00
     STA zp_84
     STA zp_8C
@@ -3619,12 +3619,12 @@ F_DD4B:
     LDA touch_kind
     SEC
     SBC #$01
-    BEQ F_DD72
+    BEQ @F_DD72
     CMP #$03
-    BNE F_DD8F
+    BNE @F_DD8F
     LDX #$05
     STX tmp_a
-F_DD72:
+@F_DD72:
     STA zp_80
     LDA player_facing
     STA zp_7F
@@ -3639,7 +3639,7 @@ F_DD72:
     STA dive_mode
     LDA #$27
     JMP PlaySfxSq1
-F_DD8F:
+@F_DD8F:
     LDX #$01
     STX player_state
     DEX
@@ -3650,20 +3650,20 @@ F_DD9B:
     JMP TryStartJump
 F_DD9E:
     DEC zp_F7
-    BEQ F_DDA5
+    BEQ @F_DDA5
     JMP TryFireShot
-F_DDA5:
+@F_DDA5:
     LDA shot_state_1
-    BNE F_DDB0
+    BNE @F_DDB0
     LDA #$04
     STA shot_state_1
-    JMP F_DDB8
-F_DDB0:
+    JMP @F_DDB8
+@F_DDB0:
     LDA shot_state
     BNE TryStartJump
     LDA #$04
     STA shot_state
-F_DDB8:
+@F_DDB8:
     LDA rng_a
     AND #$1F
     CLC
@@ -3680,8 +3680,8 @@ TryFireShot:
     AND #$02
     BEQ F_DD9B
     LDA shot_state
-    BNE F_DDE8
-F_DDD7:
+    BNE @F_DDE8
+@F_DDD7:
     LDA #$06
     STA shot_state
     STA shot_cooldown
@@ -3690,12 +3690,12 @@ F_DDD7:
     LDA #$82
     STA zp_E0
     JMP TryStartJump
-F_DDE8:
+@F_DDE8:
     LDA shot_state_1
     BEQ F_DDFC
     LDX shot_state
     LDA Tbl_F_DC11,x
-    BNE F_DDD7
+    BNE @F_DDD7
     TXA
     CLC
     ADC shot_state_1
@@ -3715,21 +3715,21 @@ F_DE09:
 F_DE0C:
     LDA dive_mode
     CMP #$80
-    BEQ F_DE15
+    BEQ @F_DE15
     JMP TryFireShot
-F_DE15:
+@F_DE15:
     LDA fall_ticks
     CMP #$10
     BCC F_DE09
     LDA shot_state
-    BNE F_DE2C
+    BNE @F_DE2C
     LDA shot_state_1
     CMP #$07
     BEQ F_DE09
     LDA #$07
     STA shot_state
     JMP TryStartJump
-F_DE2C:
+@F_DE2C:
     LDA shot_state_1
     CMP #$07
     BEQ F_DE09
@@ -3741,33 +3741,33 @@ F_DE2C:
     JMP TryStartJump
 F_DE3F:
     LDA shot_cooldown
-    BNE F_DE72
+    BNE @F_DE72
     LDA zp_E0
-    BNE F_DE72
+    BNE @F_DE72
     LDA buttons
     AND #$02
-    BEQ F_DE72
+    BEQ @F_DE72
     STA shot_cooldown
     LDA shot_state
-    BNE F_DE5E
+    BNE @F_DE5E
     LDA #$01
     STA shot_state
     LDA #$05
     STA shot_E3
-    JMP F_DE6A
-F_DE5E:
+    JMP @F_DE6A
+@F_DE5E:
     LDA shot_state_1
-    BNE F_DE72
+    BNE @F_DE72
     LDA #$01
     STA shot_state_1
     LDA #$05
     STA shot_E3_1
-F_DE6A:
+@F_DE6A:
     LDA #$10
     STA zp_E0
     LDA #$37
     STA player_frame
-F_DE72:
+@F_DE72:
     JMP TryStartJump
 SpawnWaterEntity:
     LDA cur_bank
@@ -3803,24 +3803,24 @@ PlayerState00:
     LDA buttons
     AND #$B1
     CMP #$80
-    BNE F_DECB
+    BNE @F_DECB
     LDA #$05
     STA player_state
     JMP PlayerState05
-F_DECB:
+@F_DECB:
     LDA buttons
     AND #$20
-    BNE F_DED4
-    JMP F_DF66
-F_DED4:
+    BNE @F_DED4
+    JMP @F_DF66
+@F_DED4:
     LDA player_facing
-    BEQ F_DEE3
+    BEQ @F_DEE3
     LDA #$00
     STA player_facing
     STA zp_6D
     STA player_frame
     JMP ResetIdleTimer
-F_DEE3:
+@F_DEE3:
     LDA player_x_lo
     SEC
     SBC walk_speed
@@ -3828,12 +3828,12 @@ F_DEE3:
     LDA player_x_hi
     SBC #$00
     STA ptr_hi
-    BCS F_DEFB
+    BCS @F_DEFB
     LDA #$00
     STA player_x_lo
     STA player_x_hi
     JMP PlayerVerticalStep
-F_DEFB:
+@F_DEFB:
     LDA ptr_lo
     STA player_x_lo
     CLC
@@ -3850,10 +3850,10 @@ F_DEFB:
     JSR MapPtrFromPos
     JSR GetTilePropsAtPos
     AND #$01
-    BNE F_DF54
+    BNE @F_DF54
     LDA player_y_lo
     AND #$0F
-    BEQ F_DF60
+    BEQ @F_DF60
     LDA ptr_lo
     CLC
     ADC map_width
@@ -3863,45 +3863,45 @@ F_DEFB:
     STA ptr_hi
     JSR GetTilePropsAtPos
     AND #$01
-    BEQ F_DF60
+    BEQ @F_DF60
     INC ptr_lo
-    BNE F_DF3E
+    BNE @F_DF3E
     INC ptr_hi
-F_DF3E:
+@F_DF3E:
     JSR GetTilePropsAtPos
     STA tmp_a
     AND #$03
     CMP #$02
-    BNE F_DF54
+    BNE @F_DF54
     LDA tmp_a
     JSR ProfilePtrFromProps
     LDA #$04
     CMP (ptr_lo),y
-    BCS F_DF60
-F_DF54:
+    BCS @F_DF60
+@F_DF54:
     LDA player_x_lo
     AND #$F0
     CLC
     ADC #$0A
     STA player_x_lo
     JMP PlayerVerticalStep
-F_DF60:
+@F_DF60:
     JSR PlayerWalkAnimStep
     JMP ResetIdleTimer
-F_DF66:
+@F_DF66:
     LDA buttons
     AND #$10
-    BNE F_DF6F
+    BNE @F_DF6F
     JMP PlayerVerticalStep
-F_DF6F:
+@F_DF6F:
     LDA player_facing
-    BNE F_DF7E
+    BNE @F_DF7E
     STA player_frame
     STA zp_6D
     LDA #$01
     STA player_facing
     JMP ResetIdleTimer
-F_DF7E:
+@F_DF7E:
     LDA player_x_lo
     CLC
     ADC walk_speed
@@ -3921,7 +3921,7 @@ F_DF7E:
     SBC ptr_lo
     LDA tmp_b
     SBC ptr_hi
-    BCS F_DFB2
+    BCS @F_DFB2
     LDA tmp_a
     ADC #$01
     STA player_x_lo
@@ -3929,7 +3929,7 @@ F_DF7E:
     ADC #$00
     STA player_x_hi
     JMP PlayerVerticalStep
-F_DFB2:
+@F_DFB2:
     LDA ptr_lo
     STA player_x_lo
     CLC
@@ -3946,10 +3946,10 @@ F_DFB2:
     JSR MapPtrFromPos
     JSR GetTilePropsAtPos
     AND #$01
-    BNE F_E023
+    BNE @F_E023
     LDA player_y_lo
     AND #$0F
-    BEQ F_E02F
+    BEQ @F_E02F
     LDA ptr_lo
     CLC
     ADC map_width
@@ -3959,7 +3959,7 @@ F_DFB2:
     STA ptr_hi
     JSR GetTilePropsAtPos
     AND #$01
-    BEQ F_E02F
+    BEQ @F_E02F
     LDA ptr_lo
     SEC
     SBC #$01
@@ -3971,7 +3971,7 @@ F_DFB2:
     STA tmp_a
     AND #$03
     CMP #$02
-    BNE F_E023
+    BNE @F_E023
     LDA tmp_a
     STY ptr_hi
     AND #$FC
@@ -3986,15 +3986,15 @@ F_DFB2:
     STA ptr_hi
     LDA #$04
     CMP (ptr_lo),y
-    BCS F_E02F
-F_E023:
+    BCS @F_E02F
+@F_E023:
     LDA player_x_lo
     AND #$F0
     CLC
     ADC #$05
     STA player_x_lo
     JMP PlayerVerticalStep
-F_E02F:
+@F_E02F:
     JSR PlayerWalkAnimStep
     JMP ResetIdleTimer
 PlayerVerticalStep:
@@ -4088,23 +4088,23 @@ F_E0CE:
 ApplyRidingMotion:
     JSR SwitchBankFromAC
     LDA riding_flag
-    BNE F_E0DE
+    BNE @F_E0DE
     JMP F_E313
-F_E0DE:
+@F_E0DE:
     LDX riding_slot
     LDA ent_type,x
-    BNE F_E0E8
+    BNE @F_E0E8
     JMP PlayerState0E
-F_E0E8:
+@F_E0E8:
     LDA ent_dy,x
     STA tmp_c
     LDA #$00
     STA tmp_b
     STA ent_dy,x
     BIT tmp_c
-    BPL F_E0FA
+    BPL @F_E0FA
     DEC tmp_b
-F_E0FA:
+@F_E0FA:
     LDA player_y_lo
     CLC
     ADC tmp_c
@@ -4118,13 +4118,13 @@ F_E0FA:
     STA tmp_d
     STA ent_dx,x
     BIT zp_73
-    BPL F_E119
+    BPL @F_E119
     DEC tmp_d
-F_E119:
+@F_E119:
     LDA tmp_d
     STA zp_74
     BIT tmp_b
-    BPL F_E194
+    BPL @F_E194
     LDA player_y_lo
     STA tmp_c
     LDA player_y_hi
@@ -4149,7 +4149,7 @@ F_E119:
     JSR GetTilePropsAtPosY
     STA tmp_a
     AND #$01
-    BNE F_E170
+    BNE @F_E170
     LDA player_x_lo
     CLC
     ADC #$06
@@ -4162,19 +4162,19 @@ F_E119:
     JSR GetTilePropsAtPosY
     STA tmp_a
     AND #$01
-    BNE F_E170
-    JMP F_E1F7
-F_E170:
+    BNE @F_E170
+    JMP @F_E1F7
+@F_E170:
     LDA tmp_a
     AND #$02
-    BEQ F_E179
+    BEQ @F_E179
     JSR HurtPlayer
-F_E179:
+@F_E179:
     CMP #$0F
-    BNE F_E17E
-F_E17D:
+    BNE @F_E17E
+@F_E17D:
     RTS
-F_E17E:
+@F_E17E:
     LDA player_y_lo
     AND #$F0
     CLC
@@ -4186,7 +4186,7 @@ F_E17E:
     LDA #$08
     STA zp_7E
     JMP PlayerState0E
-F_E194:
+@F_E194:
     LDA player_y_lo
     CLC
     ADC #$10
@@ -4213,7 +4213,7 @@ F_E194:
     JSR GetTilePropsAtPosY
     STA tmp_a
     AND #$01
-    BNE F_E1DF
+    BNE @F_E1DF
     LDA player_x_lo
     CLC
     ADC #$06
@@ -4225,22 +4225,22 @@ F_E194:
     JSR GetTilePropsAtPosY
     STA tmp_a
     AND #$01
-    BEQ F_E1F7
-F_E1DF:
+    BEQ @F_E1F7
+@F_E1DF:
     LDA tmp_a
     AND #$02
-    BEQ F_E1E8
+    BEQ @F_E1E8
     JSR HurtPlayer
-F_E1E8:
+@F_E1E8:
     CMP #$0F
-    BEQ F_E17D
+    BEQ @F_E17D
     LDA player_y_lo
     AND #$F0
     STA player_y_lo
     LDA #$00
     STA riding_flag
     RTS
-F_E1F7:
+@F_E1F7:
     LDA player_x_lo
     CLC
     ADC zp_73
@@ -4249,9 +4249,9 @@ F_E1F7:
     ADC zp_74
     STA player_x_hi
     BIT zp_74
-    BMI F_E20B
-    JMP F_E275
-F_E20B:
+    BMI @F_E20B
+    JMP @F_E275
+@F_E20B:
     LDA player_x_lo
     CLC
     ADC #$05
@@ -4266,12 +4266,12 @@ F_E20B:
     JSR MapPtrFromPos
     JSR GetTilePropsAtPos
     AND #$01
-    BNE F_E269
+    BNE @F_E269
     LDA player_y_lo
     AND #$0F
-    BNE F_E233
+    BNE @F_E233
     JMP RidingCheckX
-F_E233:
+@F_E233:
     LDA ptr_lo
     CLC
     ADC map_width
@@ -4281,32 +4281,32 @@ F_E233:
     STA ptr_hi
     JSR GetTilePropsAtPos
     AND #$01
-    BNE F_E24A
+    BNE @F_E24A
     JMP RidingCheckX
-F_E24A:
+@F_E24A:
     INC ptr_lo
-    BNE F_E250
+    BNE @F_E250
     INC ptr_hi
-F_E250:
+@F_E250:
     JSR GetTilePropsAtPos
     STA tmp_a
     AND #$03
     CMP #$02
-    BNE F_E269
+    BNE @F_E269
     LDA tmp_a
     JSR ProfilePtrFromProps
     LDA #$04
     CMP (ptr_lo),y
-    BCC F_E269
+    BCC @F_E269
     JMP RidingCheckX
-F_E269:
+@F_E269:
     LDA player_x_lo
     AND #$F0
     CLC
     ADC #$0A
     STA player_x_lo
     JMP RidingCheckX
-F_E275:
+@F_E275:
     LDA player_x_lo
     CLC
     ADC #$0B
@@ -4321,7 +4321,7 @@ F_E275:
     JSR MapPtrFromPos
     JSR GetTilePropsAtPos
     AND #$01
-    BNE F_E2E2
+    BNE @F_E2E2
     LDA player_y_lo
     AND #$0F
     BEQ RidingCheckX
@@ -4346,7 +4346,7 @@ F_E275:
     STA tmp_a
     AND #$03
     CMP #$02
-    BNE F_E2E2
+    BNE @F_E2E2
     LDA tmp_a
     AND #$FC
     STY ptr_hi
@@ -4362,7 +4362,7 @@ F_E275:
     LDA #$04
     CMP (ptr_lo),y
     BCS RidingCheckX
-F_E2E2:
+@F_E2E2:
     LDA player_x_lo
     AND #$F0
     CLC
@@ -4383,12 +4383,12 @@ RidingCheckX:
     STA tmp_c
     LDA tmp_d
     SBC ent_x_hi,x
-    BCC F_E310
+    BCC @F_E310
     LDA tmp_c
     CMP #$12
-    BCS F_E310
+    BCS @F_E310
     RTS
-F_E310:
+@F_E310:
     JMP PlayerState0E
 F_E313:
     LDA player_y_lo
@@ -4410,9 +4410,9 @@ F_E313:
     JSR CheckDoorTile
     JSR GetTilePropsAtPos
     AND #$03
-    BEQ F_E3A4
+    BEQ @F_E3A4
     CMP #$02
-    BEQ F_E359
+    BEQ @F_E359
     LDA ptr_lo
     STA zp_16
     LDA ptr_hi
@@ -4426,7 +4426,7 @@ F_E313:
     SBC #$00
     STA player_y_hi
     RTS
-F_E359:
+@F_E359:
     LDA tile_props,x
     JSR ProfilePtrFromProps
     LDA player_x_lo
@@ -4442,16 +4442,16 @@ F_E359:
     LDA (ptr_lo),y
     STA tmp_a
     CMP #$FF
-    BEQ F_E3A4
+    BEQ @F_E3A4
     LDA player_y_lo
     AND #$0F
     CLC
     ADC #$10
     SEC
     SBC tmp_a
-    BCC F_E3A4
+    BCC @F_E3A4
     CMP #$04
-    BCS F_E3A4
+    BCS @F_E3A4
     LDA zp_73
     STA zp_16
     LDA zp_74
@@ -4467,10 +4467,10 @@ F_E359:
     SBC #$00
     STA player_y_hi
     RTS
-F_E3A4:
+@F_E3A4:
     LDA player_y_lo
     AND #$0F
-    BEQ F_E3CF
+    BEQ @F_E3CF
     LDA zp_73
     CLC
     ADC map_width
@@ -4481,7 +4481,7 @@ F_E3A4:
     LDY #$00
     JSR GetTilePropsAtPos
     AND #$01
-    BEQ F_E3CF
+    BEQ @F_E3CF
     LDA ptr_lo
     STA zp_16
     LDA ptr_hi
@@ -4490,7 +4490,7 @@ F_E3A4:
     AND #$F0
     STA player_y_lo
     RTS
-F_E3CF:
+@F_E3CF:
     LDA player_y_lo
     CLC
     ADC #$10
@@ -4525,17 +4525,17 @@ F_E3CF:
     LDA (ptr_lo),y
     STA tmp_a
     CMP #$FF
-    BEQ F_E436
+    BEQ @F_E436
     LDA player_y_lo
     AND #$0F
     SEC
     SBC tmp_a
-    BCS F_E421
+    BCS @F_E421
     EOR #$FF
     ADC #$01
-F_E421:
+@F_E421:
     CMP #$04
-    BCS F_E436
+    BCS @F_E436
     LDA zp_75
     STA zp_16
     LDA zp_76
@@ -4545,14 +4545,14 @@ F_E421:
     ADC tmp_a
     STA player_y_lo
     RTS
-F_E436:
+@F_E436:
     LDA zp_73
     STA ptr_lo
     LDA zp_74
     STA ptr_hi
     LDA player_y_lo
     AND #$0F
-    BEQ F_E451
+    BEQ @F_E451
     LDA ptr_lo
     CLC
     ADC map_width
@@ -4560,7 +4560,7 @@ F_E436:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-F_E451:
+@F_E451:
     LDA ptr_lo
     CLC
     ADC map_width
@@ -4574,7 +4574,7 @@ F_E451:
     JSR GetTilePropsAtPos
     STA tmp_a
     AND #$03
-    BEQ F_E4B4
+    BEQ @F_E4B4
     LDA tmp_a
     JSR ProfilePtrFromProps
     LDA player_x_lo
@@ -4595,12 +4595,12 @@ F_E451:
     AND #$0F
     SEC
     SBC tmp_a
-    BCS F_E498
+    BCS @F_E498
     EOR #$FF
     ADC #$01
-F_E498:
+@F_E498:
     CMP #$04
-    BCS F_E4B4
+    BCS @F_E4B4
     LDA zp_73
     STA zp_16
     LDA zp_74
@@ -4614,7 +4614,7 @@ F_E498:
     ADC #$00
     STA player_y_hi
     RTS
-F_E4B4:
+@F_E4B4:
     LDA player_y_lo
     CLC
     ADC #$10
@@ -4640,9 +4640,9 @@ F_E4B4:
     STA tmp_c
     JSR GetTilePropsAtPos
     AND #$01
-    BEQ F_E4E5
+    BEQ @F_E4E5
     RTS
-F_E4E5:
+@F_E4E5:
     LDA player_x_lo
     CLC
     ADC #$06
@@ -4653,9 +4653,9 @@ F_E4E5:
     JSR MapPtrFromPos
     JSR GetTilePropsAtPos
     AND #$01
-    BEQ F_E4FD
+    BEQ @F_E4FD
     RTS
-F_E4FD:
+@F_E4FD:
     LDA player_state
     CMP #$07
     BNE PlayerState0E
@@ -4681,21 +4681,21 @@ GetTilePropsAtPosY:
     RTS
 PlayerState02:
     LDX zp_7E
-    BEQ F_E52B
+    BEQ @F_E52B
     DEX
     STX zp_7E
-F_E52B:
+@F_E52B:
     LDA riding_flag
-    BEQ F_E532
+    BEQ @F_E532
     JMP PlayerLand
-F_E532:
+@F_E532:
     LDA #$00
     STA zp_87
     LDX zp_7D
     CPX #$15
-    BEQ F_E53D
+    BEQ @F_E53D
     INX
-F_E53D:
+@F_E53D:
     STX zp_7D
     LDA F_C27D,x
     STA zp_73
@@ -4708,13 +4708,13 @@ F_E53D:
     STA player_y_hi
     LDA buttons
     AND #$01
-    BEQ F_E579
+    BEQ @F_E579
     LDA dive_mode
-    BEQ F_E562
+    BEQ @F_E562
     STA zp_86
     LDA zp_7F
     STA player_facing
-F_E562:
+@F_E562:
     LDA #$04
     STA zp_7D
     LDA #$00
@@ -4726,26 +4726,26 @@ F_E562:
     LSR a
     ADC #$09
     STA player_frame
-    JMP F_E650
-F_E579:
+    JMP @F_E650
+@F_E579:
     LDA dive_mode
-    BNE F_E5AD
+    BNE @F_E5AD
     LDA buttons
     AND #$80
-    BNE F_E586
-F_E583:
-    JMP F_E64C
-F_E586:
+    BNE @F_E586
+@F_E583:
+    JMP @F_E64C
+@F_E586:
     LDA zp_7D
     CMP #$03
-    BCC F_E583
+    BCC @F_E583
     LDX #$FF
     LDA player_facing
     STA zp_7F
     STA zp_81
-    BEQ F_E598
+    BEQ @F_E598
     LDX #$06
-F_E598:
+@F_E598:
     STX zp_80
     LDA #$17
     STA player_frame
@@ -4755,83 +4755,83 @@ F_E598:
     STA dive_mode
     LDA #$78
     STA zp_83
-    JMP F_E650
-F_E5AD:
+    JMP @F_E650
+@F_E5AD:
     CMP #$80
-    BNE F_E5F5
-F_E5B1:
+    BNE @F_E5F5
+@F_E5B1:
     LDX fall_ticks
     CPX #$FF
-    BEQ F_E5BA
+    BEQ @F_E5BA
     INX
     STX fall_ticks
-F_E5BA:
+@F_E5BA:
     CPX #$05
-    BCS F_E5C5
+    BCS @F_E5C5
     LDA #$31
     STA tmp_a
-    JMP F_E5E0
-F_E5C5:
+    JMP @F_E5E0
+@F_E5C5:
     CPX #$0C
-    BCS F_E5D0
+    BCS @F_E5D0
     LDA #$32
     STA tmp_a
-    JMP F_E5E0
-F_E5D0:
+    JMP @F_E5E0
+@F_E5D0:
     LDA #$1D
     STA tmp_a
     CPX #$8C
-    BCC F_E5E0
+    BCC @F_E5E0
     INC tmp_a
     CPX #$90
-    BCC F_E5E0
+    BCC @F_E5E0
     INC tmp_a
-F_E5E0:
+@F_E5E0:
     LDA tmp_a
     STA player_frame
     LDA #$00
     STA player_facing
     INC player_y_lo
-    BNE F_E5EE
+    BNE @F_E5EE
     INC player_y_hi
-F_E5EE:
+@F_E5EE:
     INC zp_73
     LDA zp_73
-    JMP F_E641
-F_E5F5:
+    JMP @F_E641
+@F_E5F5:
     DEC zp_83
-    BNE F_E604
+    BNE @F_E604
     LDA #$00
     STA fall_ticks
     LDA #$80
     STA dive_mode
-    JMP F_E5B1
-F_E604:
+    JMP @F_E5B1
+@F_E604:
     LDA zp_82
     SEC
     SBC #$01
-    BNE F_E63F
+    BNE @F_E63F
     INC zp_80
     LDA zp_80
     CMP #$10
-    BNE F_E61D
+    BNE @F_E61D
     LDA dive_mode
     CMP #$02
-    BEQ F_E61B
+    BEQ @F_E61B
     DEC dive_mode
-F_E61B:
+@F_E61B:
     LDA #$00
-F_E61D:
+@F_E61D:
     STA zp_80
     STA tmp_a
     LDA zp_81
-    BEQ F_E62E
+    BEQ @F_E62E
     LDA tmp_a
     EOR #$FF
     CLC
     ADC #$01
     STA tmp_a
-F_E62E:
+@F_E62E:
     LDA tmp_a
     AND #$0E
     TAY
@@ -4840,18 +4840,18 @@ F_E62E:
     LDA F_C294,y
     STA player_facing
     LDA dive_mode
-F_E63F:
+@F_E63F:
     STA zp_82
-F_E641:
+@F_E641:
     LDA zp_90
     EOR #$01
     STA zp_90
     STA walk_speed
-    JMP F_E650
-F_E64C:
+    JMP @F_E650
+@F_E64C:
     LDA #$09
     STA player_frame
-F_E650:
+@F_E650:
     LDA player_y_lo
     CLC
     ADC #$10
@@ -4877,7 +4877,7 @@ F_E650:
     STA tmp_c
     JSR GetTilePropsAtPos
     AND #$01
-    BNE F_E69A
+    BNE @F_E69A
     LDA player_x_lo
     CLC
     ADC #$06
@@ -4888,14 +4888,14 @@ F_E650:
     JSR MapPtrFromPos
     JSR GetTilePropsAtPos
     AND #$01
-    BNE F_E69A
+    BNE @F_E69A
     JMP F_E734
-F_E69A:
+@F_E69A:
     LDA dive_mode
-    BEQ F_E6C5
+    BEQ @F_E6C5
     JSR GetMapTile
     CMP #$D1
-    BNE F_E6C5
+    BNE @F_E6C5
     JSR SetCollectedFlag
     LDA #$39
     JSR PlaySfxNoise
@@ -4909,23 +4909,23 @@ F_E69A:
     LDA dive_mode
     CMP #$80
     BEQ F_E734
-F_E6C5:
+@F_E6C5:
     JSR GetTilePropsAtPos
     AND #$03
     CMP #$03
-    BNE F_E6D1
+    BNE @F_E6D1
     JSR HurtPlayer
-F_E6D1:
+@F_E6D1:
     CMP #$0F
-    BNE F_E6D6
+    BNE @F_E6D6
     RTS
-F_E6D6:
+@F_E6D6:
     LDA player_y_lo
     AND #$F0
     STA player_y_lo
 PlayerLand:
     LDA dive_mode
-    BEQ F_E722
+    BEQ @F_E722
     LDA zp_7F
     STA player_facing
     LDX #$00
@@ -4934,10 +4934,10 @@ PlayerLand:
     DEX
     STX zp_86
     LDA riding_flag
-    BNE F_E70B
+    BNE @F_E70B
     LDA fall_ticks
     CMP #$8C
-    BCC F_E70B
+    BCC @F_E70B
     JSR ShockwaveKillEnemies
     LDA camera_mode
     STA ram_01A4
@@ -4945,30 +4945,30 @@ PlayerLand:
     STA ram_01A5
     LDA #$05
     STA camera_mode
-F_E70B:
+@F_E70B:
     LDA #$03
     STA player_state
     LDA #$00
     BIT dive_mode
-    BMI F_E718
+    BMI @F_E718
     CLC
     ADC #$14
-F_E718:
+@F_E718:
     STA zp_80
     LDA #$11
     JSR PlaySfxSq1
-    JMP F_E72C
-F_E722:
+    JMP @F_E72C
+@F_E722:
     LDA #$04
     STA player_state
     LDA #$00
     STA zp_80
     STA zp_84
-F_E72C:
+@F_E72C:
     LDA riding_flag
-    BNE F_E731
+    BNE @F_E731
     RTS
-F_E731:
+@F_E731:
     JMP ApplyRidingMotion
 F_E734:
     LDA #$06
@@ -4993,7 +4993,7 @@ F_E734:
     JSR GetTilePropsAtPos
     AND #$03
     CMP #$02
-    BNE F_E784
+    BNE @F_E784
     LDA tile_props,x
     JSR ProfilePtrFromProps
     LDA player_x_lo
@@ -5010,23 +5010,23 @@ F_E734:
     STA tmp_a
     CLC
     ADC #$01
-    BNE F_E787
-F_E784:
-    JMP F_E87B
-F_E787:
+    BNE @F_E787
+@F_E784:
+    JMP @F_E87B
+@F_E787:
     LDA player_y_lo
     AND #$0F
     CLC
     ADC #$10
     SEC
     SBC tmp_a
-    BCC F_E784
+    BCC @F_E784
     STA tmp_b
     LDA zp_73
     CLC
     ADC #$04
     CMP tmp_b
-    BCC F_E784
+    BCC @F_E784
     LDA player_y_lo
     AND #$F0
     CLC
@@ -5041,7 +5041,7 @@ F_E787:
     STA ptr_hi
     PLA
     STA ptr_lo
-F_E7B6:
+@F_E7B6:
     LDA ptr_lo
     STA zp_16
     LDA ptr_hi
@@ -5053,7 +5053,7 @@ F_E7B6:
     LDA #$00
     STA zp_84
     LDA dive_mode
-    BEQ F_E7F9
+    BEQ @F_E7F9
     LDY #$00
     JSR GetTilePropsAtPos
     AND #$FC
@@ -5061,7 +5061,7 @@ F_E7B6:
     LSR a
     TAX
     LDA Tbl_F_C1D0,x
-    BEQ F_E7F9
+    BEQ @F_E7F9
     AND #$01
     STA player_facing
     CLC
@@ -5080,7 +5080,7 @@ F_E7B6:
     PLA
     PLA
     RTS
-F_E7F9:
+@F_E7F9:
     PLA
     STA ptr_hi
     PLA
@@ -5088,52 +5088,52 @@ F_E7F9:
     LDY #$00
     JSR GetMapTile
     CMP #$B4
-    BCS F_E80B
+    BCS @F_E80B
     JMP PlayerLand
-F_E80B:
+@F_E80B:
     CMP #$CE
-    BNE F_E812
+    BNE @F_E812
     JSR ToggleSwitch1
-F_E812:
+@F_E812:
     CMP #$CF
-    BNE F_E819
+    BNE @F_E819
     JSR ToggleSwitch2
-F_E819:
+@F_E819:
     CMP #$D0
-    BNE F_E820
+    BNE @F_E820
     JSR ToggleSwitch3
-F_E820:
+@F_E820:
     TAX
     LDA #$02
     STA tmp_a
     LDA TileKindTable_Data,x
     CMP #$01
-    BEQ F_E837
+    BEQ @F_E837
     CMP #$04
-    BEQ F_E833
+    BEQ @F_E833
     JMP PlayerLand
-F_E833:
+@F_E833:
     LDA #$05
     STA tmp_a
-F_E837:
+@F_E837:
     LDA tmp_a
     STA zp_77
     LDA zp_7D
     CMP #$15
-    BEQ F_E848
+    BEQ @F_E848
     LDA #$FF
     STA zp_87
     JMP PlayerLand
-F_E848:
+@F_E848:
     LDA #$34
     STA zp_8F
     LDA #$03
     STA zp_8B
     LDA dive_mode
-    BEQ F_E858
+    BEQ @F_E858
     LDA zp_7F
     STA player_facing
-F_E858:
+@F_E858:
     LDA #$08
     STA player_state
     STA dive_mode
@@ -5151,7 +5151,7 @@ F_E858:
     LDA #$27
     JSR PlaySfxSq1
     RTS
-F_E87B:
+@F_E87B:
     PLA
     STA ptr_hi
     PLA
@@ -5169,10 +5169,10 @@ F_E87B:
     JSR GetTilePropsAtPos
     AND #$03
     CMP #$02
-    BEQ F_E89E
-F_E89D:
+    BEQ @F_E89E
+@F_E89D:
     RTS
-F_E89E:
+@F_E89E:
     LDA tile_props,x
     JSR ProfilePtrFromProps
     LDA player_x_lo
@@ -5188,18 +5188,18 @@ F_E89E:
     LDA (ptr_lo),y
     STA tmp_a
     CMP #$FF
-    BEQ F_E89D
+    BEQ @F_E89D
     LDA player_y_lo
     AND #$0F
     SEC
     SBC tmp_a
-    BCC F_E89D
+    BCC @F_E89D
     STA tmp_b
     LDA zp_73
     CLC
     ADC #$04
     CMP tmp_b
-    BCC F_E89D
+    BCC @F_E89D
     LDA player_y_lo
     AND #$F0
     CLC
@@ -5209,7 +5209,7 @@ F_E89E:
     STA ptr_lo
     LDA zp_76
     STA ptr_hi
-    JMP F_E7B6
+    JMP @F_E7B6
 PlayerState04:
     LDA #$02
     JSR SwitchBank
@@ -5234,40 +5234,40 @@ PlayerState08:
     DEC zp_8F
     LDX zp_8F
     STX zp_67
-    BNE F_E922
+    BNE @F_E922
     STX dive_mode
     INX
     STX player_state
     LDA zp_7F
     STA player_facing
     JMP PlayerState01
-F_E922:
+@F_E922:
     LDA player_y_lo
     SEC
     SBC zp_8B
     STA player_y_lo
     LDA player_y_hi
     SBC #$00
-    BCS F_E933
+    BCS @F_E933
     LDA #$00
     STA player_y_lo
-F_E933:
+@F_E933:
     STA player_y_hi
     LDA zp_8F
     AND #$01
-    BEQ F_E94E
+    BEQ @F_E94E
     LDX #$01
     LDA zp_7F
-    BNE F_E943
+    BNE @F_E943
     LDX #$FF
-F_E943:
+@F_E943:
     STX tmp_a
     LDA zp_80
     CLC
     ADC tmp_a
     AND #$0F
     STA zp_80
-F_E94E:
+@F_E94E:
     LDA zp_80
     AND #$0E
     TAY
@@ -5289,11 +5289,11 @@ PlayerState09:
     LSR a
     TAX
     LDA F_C25C,x
-    BNE F_E97F
+    BNE @F_E97F
     LDA zp_92
     STA player_state
     RTS
-F_E97F:
+@F_E97F:
     STA player_frame
     RTS
 PlayerState16:
@@ -5302,11 +5302,11 @@ PlayerState16:
     LDA #$00
     STA invuln_hi
     LDY ride_timer
-    BEQ F_E9B6
+    BEQ @F_E9B6
     INY
     STY ride_timer
     CPY #$30
-    BNE F_E9C9
+    BNE @F_E9C9
     LDA #$CD
     STA player_y_lo
     LDA #$03
@@ -5323,20 +5323,20 @@ PlayerState16:
     STA shot_state
     STA shot_state_1
     JMP F_F043
-F_E9B6:
+@F_E9B6:
     LDA player_y_hi
-    BNE F_E9CA
+    BNE @F_E9CA
     LDA player_y_lo
     CMP #$10
-    BCS F_E9CA
+    BCS @F_E9CA
     LDY #$00
     STY player_y_lo
     STY player_y_hi
     INY
     STY ride_timer
-F_E9C9:
+@F_E9C9:
     RTS
-F_E9CA:
+@F_E9CA:
     LDY ride_balloon_slot
     LDA ent_y_lo,y
     CLC
@@ -5350,7 +5350,7 @@ F_E9CA:
     SBC tmp_a
     LDA player_y_hi
     SBC tmp_b
-    BCS F_EA56
+    BCS @F_EA56
     LDA ent_x_lo,y
     SEC
     SBC #$02
@@ -5363,25 +5363,25 @@ F_E9CA:
     SBC tmp_a
     LDA player_x_lo
     SBC tmp_b
-    BCC F_EA07
+    BCC @F_EA07
     LDA #$00
     STA player_facing
-    JMP F_EA0B
-F_EA07:
+    JMP @F_EA0B
+@F_EA07:
     LDA #$01
     STA player_facing
-F_EA0B:
+@F_EA0B:
     LDA #$FA
     STA tmp_c
     LDA #$FF
     STA tmp_d
     LDA player_facing
-    BNE F_EA1F
+    BNE @F_EA1F
     LDA #$05
     STA tmp_c
     LDA #$00
     STA tmp_d
-F_EA1F:
+@F_EA1F:
     LDA tmp_a
     CLC
     ADC tmp_c
@@ -5395,15 +5395,15 @@ F_EA1F:
     STA tmp_a
     LDA player_x_hi
     SBC tmp_b
-    BCS F_EA42
+    BCS @F_EA42
     INC player_x_lo
-    BNE F_EA3F
+    BNE @F_EA3F
     INC player_x_hi
-F_EA3F:
-    JMP F_EA81
-F_EA42:
+@F_EA3F:
+    JMP @F_EA81
+@F_EA42:
     LDA tmp_a
-    BEQ F_EA81
+    BEQ @F_EA81
     LDA player_x_lo
     SEC
     SBC #$01
@@ -5411,8 +5411,8 @@ F_EA42:
     LDA player_x_hi
     SBC #$00
     STA player_x_hi
-    JMP F_EA81
-F_EA56:
+    JMP @F_EA81
+@F_EA56:
     LDA tmp_a
     STA player_y_lo
     LDA tmp_b
@@ -5422,12 +5422,12 @@ F_EA56:
     LDA #$FF
     STA tmp_b
     LDA player_facing
-    BNE F_EA72
+    BNE @F_EA72
     LDA #$05
     STA tmp_a
     LDA #$00
     STA tmp_b
-F_EA72:
+@F_EA72:
     LDA ent_x_lo,y
     CLC
     ADC tmp_a
@@ -5435,7 +5435,7 @@ F_EA72:
     LDA ent_x_hi,y
     ADC tmp_b
     STA player_x_hi
-F_EA81:
+@F_EA81:
     LDA entity_tick
     LSR a
     LSR a
@@ -5449,28 +5449,28 @@ PlayerState0C:
     STA walk_speed
     JSR MovePlayerKeepBank
     LDA zp_E0
-    BEQ F_EA9F
+    BEQ @F_EA9F
     DEC zp_E0
     LDA #$37
     STA player_frame
     RTS
-F_EA9F:
+@F_EA9F:
     LDA zp_BD
     SEC
     SBC #$01
-    BNE F_EAB9
+    BNE @F_EAB9
     INC zp_BE
     LDA zp_BE
     LSR a
     TAY
     LDA F_C1F0,y
-    BNE F_EAB5
+    BNE @F_EAB5
     STA zp_BE
     LDA #$35
-F_EAB5:
+@F_EAB5:
     STA player_frame
     LDA #$03
-F_EAB9:
+@F_EAB9:
     STA zp_BD
     RTS
 PlayerState0A:
@@ -5485,9 +5485,9 @@ PlayerState0D:
     JSR MovePlayerKeepBank
     LDA buttons
     AND #$40
-    BNE F_EAD5
-    JMP F_EB05
-F_EAD5:
+    BNE @F_EAD5
+    JMP @F_EB05
+@F_EAD5:
     LDA water_level_lo
     CLC
     ADC #$08
@@ -5500,7 +5500,7 @@ F_EAD5:
     SBC ptr_lo
     LDA player_y_hi
     SBC ptr_hi
-    BCS F_EB05
+    BCS @F_EB05
     LDA #$22
     JSR PlaySfxNoise
     LDA #$00
@@ -5511,11 +5511,11 @@ F_EAD5:
     STA player_state
     STA zp_8C
     JMP SpawnWaterEntity
-F_EB05:
+@F_EB05:
     LDA zp_BD
     SEC
     SBC #$01
-    BNE F_EB22
+    BNE @F_EB22
     INC zp_BE
     LDA zp_BE
     AND #$06
@@ -5524,12 +5524,12 @@ F_EB05:
     STA player_frame
     LDA buttons
     AND #$30
-    BEQ F_EB1F
+    BEQ @F_EB1F
     LDA #$FE
-F_EB1F:
+@F_EB1F:
     CLC
     ADC #$05
-F_EB22:
+@F_EB22:
     STA zp_BD
     RTS
 MovePlayerKeepBank:
@@ -5542,9 +5542,9 @@ PlayerMoveByButtons:
     JSR SwitchBankFromAC
     LDA buttons
     AND #$40
-    BNE F_EB3B
-    JMP F_EBC7
-F_EB3B:
+    BNE @F_EB3B
+    JMP @F_EBC7
+@F_EB3B:
     LDA walk_speed
     STA tmp_a
     LDA player_y_lo
@@ -5554,12 +5554,12 @@ F_EB3B:
     LDA player_y_hi
     SBC #$00
     STA ptr_hi
-    BCS F_EB57
+    BCS @F_EB57
     LDA #$00
     STA player_y_lo
     STA player_y_hi
     JMP PlayerMoveLeft
-F_EB57:
+@F_EB57:
     LDA ptr_lo
     STA player_y_lo
     STA tmp_c
@@ -5587,7 +5587,7 @@ F_EB57:
     STA tmp_c
     LDA tmp_a
     AND #$01
-    BNE F_EBAC
+    BNE @F_EBAC
     LDA player_x_lo
     CLC
     ADC #$06
@@ -5600,14 +5600,14 @@ F_EB57:
     JSR GetTilePropsAtPos
     STA tmp_a
     AND #$01
-    BNE F_EBAC
+    BNE @F_EBAC
     JMP PlayerMoveLeft
-F_EBAC:
+@F_EBAC:
     LDA tmp_a
     AND #$02
-    BEQ F_EBB5
+    BEQ @F_EBB5
     JSR HurtPlayer
-F_EBB5:
+@F_EBB5:
     LDA player_y_lo
     AND #$F0
     CLC
@@ -5617,13 +5617,13 @@ F_EBB5:
     ADC #$00
     STA player_y_hi
     JMP PlayerMoveLeft
-F_EBC7:
+@F_EBC7:
     LDA buttons
 F_EBC9:
     AND #$80
-    BNE F_EBD0
+    BNE @F_EBD0
     JMP PlayerMoveLeft
-F_EBD0:
+@F_EBD0:
     LDA walk_speed
     STA tmp_a
     LDA player_y_lo
@@ -5645,7 +5645,7 @@ F_EBD0:
     SBC ptr_lo
     LDA tmp_b
     SBC ptr_hi
-    BCS F_EC0D
+    BCS @F_EC0D
     LDA tmp_a
     CLC
     ADC #$01
@@ -5656,7 +5656,7 @@ F_EBD0:
     STA player_y_hi
     STA tmp_b
     JMP PlayerMoveLeft
-F_EC0D:
+@F_EC0D:
     LDA ptr_lo
     STA player_y_lo
     CLC
@@ -5687,7 +5687,7 @@ F_EC0D:
     STA tmp_c
     LDA tmp_a
     AND #$01
-    BNE F_EC64
+    BNE @F_EC64
     LDA player_x_lo
     CLC
     ADC #$06
@@ -5701,27 +5701,27 @@ F_EC0D:
     STA tmp_a
     AND #$01
     BEQ PlayerMoveLeft
-F_EC64:
+@F_EC64:
     LDA tmp_a
     AND #$02
-    BEQ F_EC6D
+    BEQ @F_EC6D
     JSR HurtPlayer
-F_EC6D:
+@F_EC6D:
     LDA player_y_lo
     AND #$F0
     STA player_y_lo
 PlayerMoveLeft:
     LDA buttons
     AND #$20
-    BNE F_EC7C
+    BNE @F_EC7C
     JMP PlayerMoveRight
-F_EC7C:
+@F_EC7C:
     LDA player_facing
-    BEQ F_EC87
+    BEQ @F_EC87
     LDA #$00
     STA player_facing
     JMP CheckPlayerDoor
-F_EC87:
+@F_EC87:
     LDA walk_speed
     STA tmp_a
     LDA player_x_lo
@@ -5731,12 +5731,12 @@ F_EC87:
     LDA player_x_hi
     SBC #$00
     STA ptr_hi
-    BCS F_ECA3
+    BCS @F_ECA3
     LDA #$00
     STA player_x_lo
     STA player_x_hi
     JMP CheckPlayerDoor
-F_ECA3:
+@F_ECA3:
     LDA ptr_lo
     STA player_x_lo
     CLC
@@ -5754,12 +5754,12 @@ F_ECA3:
     JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     AND #$01
-    BNE F_ED0B
+    BNE @F_ED0B
     LDA player_y_lo
     AND #$0F
-    BNE F_ECD2
+    BNE @F_ECD2
     JMP CheckPlayerDoor
-F_ECD2:
+@F_ECD2:
     LDA map_width
     CLC
     ADC ptr_lo
@@ -5770,25 +5770,25 @@ F_ECD2:
     JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     AND #$01
-    BNE F_ECEC
+    BNE @F_ECEC
     JMP CheckPlayerDoor
-F_ECEC:
+@F_ECEC:
     INC ptr_lo
-    BNE F_ECF2
+    BNE @F_ECF2
     INC ptr_hi
-F_ECF2:
+@F_ECF2:
     JSR GetTilePropsAtPos
     STA tmp_a
     AND #$03
     CMP #$02
-    BNE F_ED0B
+    BNE @F_ED0B
     LDA tmp_a
     JSR ProfilePtrFromProps
     LDA #$04
     CMP (ptr_lo),y
-    BCC F_ED0B
+    BCC @F_ED0B
     JMP CheckPlayerDoor
-F_ED0B:
+@F_ED0B:
     LDA player_x_lo
     AND #$F0
     CLC
@@ -5798,15 +5798,15 @@ F_ED0B:
 PlayerMoveRight:
     LDA buttons
     AND #$10
-    BNE F_ED20
+    BNE @F_ED20
     JMP CheckPlayerDoor
-F_ED20:
+@F_ED20:
     LDA player_facing
-    BNE F_ED2B
+    BNE @F_ED2B
     LDA #$01
     STA player_facing
     JMP CheckPlayerDoor
-F_ED2B:
+@F_ED2B:
     LDA walk_speed
     STA tmp_a
     LDA player_x_lo
@@ -5828,7 +5828,7 @@ F_ED2B:
     SBC ptr_lo
     LDA tmp_b
     SBC ptr_hi
-    BCS F_ED68
+    BCS @F_ED68
     LDA tmp_a
     CLC
     ADC #$01
@@ -5839,7 +5839,7 @@ F_ED2B:
     STA tmp_b
     STA player_x_hi
     JMP CheckPlayerDoor
-F_ED68:
+@F_ED68:
     LDA ptr_lo
     STA player_x_lo
     CLC
@@ -5857,7 +5857,7 @@ F_ED68:
     JSR CheckSpecialTile
     JSR GetTilePropsAtPos
     AND #$01
-    BNE F_EDDF
+    BNE @F_EDDF
     LDA player_y_lo
     AND #$0F
     BEQ CheckPlayerDoor
@@ -5883,7 +5883,7 @@ F_ED68:
     STA tmp_a
     AND #$03
     CMP #$02
-    BNE F_EDDF
+    BNE @F_EDDF
     LDA tmp_a
     STY ptr_hi
     AND #$FC
@@ -5899,7 +5899,7 @@ F_ED68:
     LDA #$04
     CMP (ptr_lo),y
     BCS CheckPlayerDoor
-F_EDDF:
+@F_EDDF:
     LDA player_x_lo
     AND #$F0
     CLC
@@ -5949,16 +5949,16 @@ CheckPlayerDoor:
     LDA (ptr_lo),y
     STA tmp_a
     CMP #$FF
-    BEQ F_EE64
+    BEQ @F_EE64
     LDA player_y_lo
     AND #$0F
     CLC
     ADC #$10
     SEC
     SBC tmp_a
-    BCC F_EE64
+    BCC @F_EE64
     CMP #$0A
-    BCS F_EE64
+    BCS @F_EE64
     LDA player_y_lo
     AND #$F0
     CLC
@@ -5974,7 +5974,7 @@ CheckPlayerDoor:
     PLA
     STA ptr_lo
     RTS
-F_EE64:
+@F_EE64:
     PLA
     STA ptr_hi
     PLA
@@ -5997,20 +5997,20 @@ F_EE64:
     LDA (ptr_lo),y
     STA tmp_a
     CMP #$FF
-    BEQ F_EEA5
+    BEQ @F_EEA5
     LDA player_y_lo
     AND #$0F
     SEC
     SBC tmp_a
-    BCC F_EEA5
+    BCC @F_EEA5
     CMP #$0A
-    BCS F_EEA5
+    BCS @F_EEA5
     LDA player_y_lo
     AND #$F0
     CLC
     ADC tmp_a
     STA player_y_lo
-F_EEA5:
+@F_EEA5:
     RTS
 ProfilePtrFromProps:
     AND #$FC
@@ -6028,20 +6028,20 @@ ProfilePtrFromProps:
 PlayerWalkAnimStep:
     LDX zp_6C
     DEX
-    BPL F_EED5
+    BPL @F_EED5
     INC zp_6D
     LDA zp_6D
     CMP #$10
-    BNE F_EECC
+    BNE @F_EECC
     LDA #$00
     STA zp_6D
-F_EECC:
+@F_EECC:
     LDX #$06
     LDA walk_speed
     CMP #$01
-    BEQ F_EED5
+    BEQ @F_EED5
     DEX
-F_EED5:
+@F_EED5:
     STX zp_6C
     LDX zp_6D
     LDA F_C210,x
@@ -6059,13 +6059,13 @@ MapPtrToCoords:
     STA tmp_c
     LDA ptr_lo
     DEC tmp_c
-    BEQ F_EEFD
-F_EEF6:
+    BEQ @F_EEFD
+@F_EEF6:
     LSR ptr_hi
     ROR a
     DEC tmp_c
-    BNE F_EEF6
-F_EEFD:
+    BNE @F_EEF6
+@F_EEFD:
     AND #$F0
     SEC
     SBC tmp_d
@@ -6105,11 +6105,11 @@ MapPtrFromPos:
     LSR tmp_d
     ROR a
     LDY map_log2_width
-F_EF3D:
+@F_EF3D:
     ASL a
     ROL tmp_d
     DEY
-    BNE F_EF3D
+    BNE @F_EF3D
     ADC ptr_lo
     STA ptr_lo
     LDA tmp_d
@@ -6163,10 +6163,10 @@ ApplySwitch3:
     STA ram_046B
 F_EFA2:
     LDY zp_DA
-    BNE F_EFAA
+    BNE @F_EFAA
     LDA zp_47
     STA zp_DA
-F_EFAA:
+@F_EFAA:
     RTS
 ToggleSwitch1:
     LDA switch_1
@@ -6194,31 +6194,31 @@ CheckDoorTile:
     LDA (ptr_lo),y
     SEC
     SBC #$78
-    BCS F_EFDB
-F_EFDA:
+    BCS @F_EFDB
+@F_EFDA:
     RTS
-F_EFDB:
+@F_EFDB:
     CMP #$08
-    BCC F_EFE9
+    BCC @F_EFE9
     SBC #$45
-    BCC F_EFDA
+    BCC @F_EFDA
     CMP #$03
-    BCS F_EFDA
+    BCS @F_EFDA
     ADC #$08
-F_EFE9:
+@F_EFE9:
     STA tmp_a
     LDA buttons
     AND #$40
-    BEQ F_EFDA
+    BEQ @F_EFDA
     LDA stage_index
     CMP #$05
-    BNE F_F002
+    BNE @F_F002
     LDA #$00
     STA tmp_a
     LDA collected_flags
     AND #$01
-    BEQ F_EFDA
-F_F002:
+    BEQ @F_EFDA
+@F_F002:
     LDA tmp_a
     ASL a
     STA tmp_a
@@ -6249,10 +6249,10 @@ F_F002:
     STA zp_9C
     INY
     CMP #$E0
-    BCC F_F03E
+    BCC @F_F03E
     LDA #$1B
     JSR PlaySfxSq1
-F_F03E:
+@F_F03E:
     LDA (ptr_lo),y
     STA zp_92
     INY
@@ -6261,10 +6261,10 @@ F_F043:
     LDA #$01
     STA nmi_state
     DEC fade_dir
-F_F04C:
+@F_F04C:
     JSR WaitForNMI
     LDA fade_dir
-    BNE F_F04C
+    BNE @F_F04C
     JSR RenderOffAndWait
     JSR DisableNMI
     JSR ClearOAMAndLoadSprites
@@ -6272,25 +6272,25 @@ F_F04C:
     STA player_state
     LDA shot_state
     CMP #$0F
-    BEQ F_F06A
+    BEQ @F_F06A
     LDA #$00
     STA shot_state
-F_F06A:
+@F_F06A:
     LDA shot_state_1
     CMP #$0F
-    BEQ F_F074
+    BEQ @F_F074
     LDA #$00
     STA shot_state_1
-F_F074:
+@F_F074:
     LDX #$FF
     TXS
     LDA zp_9C
     SEC
     SBC #$E0
-    BCC F_F083
+    BCC @F_F083
     STA stage_index
     JMP StageSetup
-F_F083:
+@F_F083:
     LDA zp_9C
     JMP F_C6CC
 PlayerTileInteract:
@@ -6317,7 +6317,7 @@ F_F090:
     PHA
     LDA ptr_hi
     PHA
-    JSR F_F0CD
+    JSR @F_F0CD
     PLA
     STA ptr_hi
     PLA
@@ -6332,7 +6332,7 @@ F_F090:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-F_F0CD:
+@F_F0CD:
     LDA ptr_lo
     STA zp_77
     LDA ptr_hi
@@ -6360,7 +6360,7 @@ F_F0F7:
     CMP #$3D
     BCS F_F08F
     CMP #$3C
-    BNE F_F118
+    BNE @F_F118
     LDA #$0A
     STA tmp_c
     LDA #$00
@@ -6369,7 +6369,7 @@ F_F0F7:
     JSR TickPickupCounter
     JSR SetCollectedFlag
     JMP F_F14F
-F_F118:
+@F_F118:
     STX tmp_08
     STA tmp_c
     LSR a
@@ -6381,10 +6381,10 @@ F_F118:
     TAX
     LDA a:collected_by_kind,y
     AND BitMask,x
-    BEQ F_F130
+    BEQ @F_F130
     LDX tmp_08
     RTS
-F_F130:
+@F_F130:
     LDA a:collected_by_kind,y
     ORA BitMask,x
     STA a:collected_by_kind,y
@@ -6417,22 +6417,22 @@ TickPickupCounter:
     INC zp_A7
     LDA zp_A7
     CMP #$64
-    BNE F_F190
+    BNE @F_F190
     LDA #$08
     STA tmp_a
     LDA zp_A5
     CMP #$04
-    BEQ F_F187
+    BEQ @F_F187
     INC zp_A5
     LDA #$0C
     STA tmp_a
-F_F187:
+@F_F187:
     JSR SpawnPickupAtPlayer
     LDA #$00
     STA zp_A7
     SEC
     RTS
-F_F190:
+@F_F190:
     CLC
     RTS
 PushTileEffect:
@@ -6445,10 +6445,10 @@ PushTileEffect:
     LDA ram_0727
     STA ram_072A
     LDA ram_0729
-    BEQ F_F1B2
+    BEQ @F_F1B2
     LDA #$00
     JSR QueueMapTileDraw
-F_F1B2:
+@F_F1B2:
     LDA ram_0726
     STA ram_0729
     LDA ram_0725
@@ -6467,76 +6467,76 @@ F_F1B2:
 RunTileEffects:
     LDA ppu_buffer_idx
     CMP #$40
-    BCS F_F255
+    BCS @F_F255
     LDX ram_0720
     LDA TileEffectScript,x
     STA ram_0720
     INX
     CMP #$00
-    BEQ F_F205
+    BEQ @F_F205
     LDA ram_0721
     STA tmp_a
     LDA ram_0722
     STA tmp_b
     LDA TileEffectScript,x
     CMP #$FF
-    BEQ F_F205
+    BEQ @F_F205
     JSR QueueMapTileDraw
-F_F205:
+@F_F205:
     LDA ppu_buffer_idx
     CMP #$40
-    BCS F_F27D
+    BCS @F_F27D
     LDX ram_0723
     LDA TileEffectScript,x
     STA ram_0723
     INX
     CMP #$00
-    BEQ F_F22D
+    BEQ @F_F22D
     LDA ram_0724
     STA tmp_a
     LDA ram_0725
     STA tmp_b
     LDA TileEffectScript,x
     CMP #$FF
-    BEQ F_F22D
+    BEQ @F_F22D
     JSR QueueMapTileDraw
-F_F22D:
+@F_F22D:
     LDA ppu_buffer_idx
     CMP #$40
-    BCS F_F27D
+    BCS @F_F27D
     LDX ram_0726
     LDA TileEffectScript,x
     STA ram_0726
     INX
     CMP #$00
-    BEQ F_F255
+    BEQ @F_F255
     LDA ram_0727
     STA tmp_a
     LDA ram_0728
     STA tmp_b
     LDA TileEffectScript,x
     CMP #$FF
-    BEQ F_F255
+    BEQ @F_F255
     JSR QueueMapTileDraw
-F_F255:
+@F_F255:
     LDA ppu_buffer_idx
     CMP #$40
-    BCS F_F27D
+    BCS @F_F27D
     LDX ram_0729
     LDA TileEffectScript,x
     STA ram_0729
     INX
     CMP #$00
-    BEQ F_F27D
+    BEQ @F_F27D
     LDA ram_072A
     STA tmp_a
     LDA ram_072B
     STA tmp_b
     LDA TileEffectScript,x
     CMP #$FF
-    BEQ F_F27D
+    BEQ @F_F27D
     JSR QueueMapTileDraw
-F_F27D:
+@F_F27D:
     RTS
 F_F27E:
     PLA
@@ -6552,10 +6552,10 @@ F_F27E:
 QueueMapTileDraw:
     STA zp_3E
     CMP #$D3
-    BNE F_F298
+    BNE @F_F298
     LDA #$00
     STA ram_0749
-F_F298:
+@F_F298:
     STX zp_40
     LDA tmp_a
     PHA
@@ -6582,13 +6582,13 @@ F_F298:
     LDX map_log2_width
     LDA tmp_a
     DEX
-    BEQ F_F2CE
-F_F2C8:
+    BEQ @F_F2CE
+@F_F2C8:
     LSR tmp_b
     ROR a
     DEX
-    BNE F_F2C8
-F_F2CE:
+    BNE @F_F2C8
+@F_F2CE:
     SEC
     SBC ram_01A3
     BCC F_F27E
@@ -6610,10 +6610,10 @@ F_F2CE:
     AND #$1F
     ADC tmp_a
     CMP #$1E
-    BCC F_F2FD
+    BCC @F_F2FD
     LDY #$02
     CLC
-F_F2FD:
+@F_F2FD:
     TYA
     ADC ram_01A1
     ADC tmp_a
@@ -6627,7 +6627,7 @@ F_F2FD:
     PHA
     LDA #$00
     JSR SwitchBank
-F_F318:
+@F_F318:
     LDY tmp_a
     LDX ppu_buffer_idx
     LDA NametableRowLo,y
@@ -6661,10 +6661,10 @@ F_F318:
     LDA tmp_ptr_hi
     STA ppu_buffer,x
     LDA zp_01
-    BNE F_F36C
+    BNE @F_F36C
     DEC zp_01
-    BNE F_F318
-F_F36C:
+    BNE @F_F318
+@F_F36C:
     TXA
     CLC
     ADC #$0A
@@ -6717,20 +6717,20 @@ UpdateTouchKind:
     STA tmp_d
     LDA zp_58
     CMP tmp_c
-    BNE F_F3CC
+    BNE @F_F3CC
     LDA zp_59
     CMP tmp_d
-    BEQ F_F426
-F_F3CC:
+    BEQ @F_F426
+@F_F3CC:
     LDY zp_5A
-    BEQ F_F3DE
+    BEQ @F_F3DE
     LDA zp_5B
     STA tmp_a
     LDA zp_5C
     STA tmp_b
     LDA Tbl_F_C331,y
     JSR QueueMapTileDraw
-F_F3DE:
+@F_F3DE:
     LDA touch_kind
     STA zp_5A
     LDA zp_58
@@ -6746,42 +6746,42 @@ F_F3DE:
     LDA (tmp_c),y
     JSR ApplyCollectedFlag
     CMP #$B4
-    BCS F_F40E
+    BCS @F_F40E
     LDA #$00
     STA touch_kind
     LDA tmp_c
     STA zp_58
     LDA tmp_d
     STA zp_59
-    JMP F_F43E
-F_F40E:
+    JMP @F_F43E
+@F_F40E:
     TAY
     LDA TileKindTable_Data,y
     STA touch_kind
     CMP #$03
-    BNE F_F41E
+    BNE @F_F41E
     JSR PlaySfxNoise
     JSR SetCollectedFlag
-F_F41E:
+@F_F41E:
     LDA tmp_c
     STA zp_58
     LDA tmp_d
     STA zp_59
-F_F426:
+@F_F426:
     LDY touch_kind
-    BEQ F_F43E
+    BEQ @F_F43E
     LDA zp_58
     STA tmp_a
     LDA zp_59
     STA tmp_b
     LDA ppu_buffer_idx
     CMP #$20
-    BCS F_F43E
+    BCS @F_F43E
     LDA Tbl_F_C336,y
     JSR QueueMapTileDraw
-F_F43E:
+@F_F43E:
     LDA zp_5A
-    BEQ F_F45E
+    BEQ @F_F45E
     ASL a
     TAY
     LDA Tbl_F_C326,y
@@ -6794,17 +6794,17 @@ F_F43E:
     TAY
     LDA (ptr_lo),y
     CMP #$FF
-    BNE F_F45F
+    BNE @F_F45F
     LDA #$00
     STA zp_5A
-F_F45E:
+@F_F45E:
     RTS
-F_F45F:
+@F_F45F:
     CMP #$FE
-    BEQ F_F45E
+    BEQ @F_F45E
     LDA ppu_buffer_idx
     CMP #$20
-    BCS F_F477
+    BCS @F_F477
     LDA zp_5B
     STA tmp_a
     LDA zp_5C
@@ -6812,7 +6812,7 @@ F_F45F:
     LDA (ptr_lo),y
     JSR QueueMapTileDraw
     RTS
-F_F477:
+@F_F477:
     DEC zp_5D
     RTS
 CheckHazardUnderPlayer:
@@ -6893,9 +6893,9 @@ Tbl_F_F510:
 PlayerState10:
     LDA death_timer
     CMP #$63
-    BEQ F_F525
+    BEQ @F_F525
     JMP DeathAnimFrame
-F_F525:
+@F_F525:
     LDA fade_dir
     BEQ F_F52A
     RTS
@@ -6904,7 +6904,7 @@ F_F52A:
     JSR DisableNMI
     JSR SilenceSound
     LDA lives
-    BNE F_F548
+    BNE @F_F548
     LDA rng_a
     AND #$01
     CLC
@@ -6913,7 +6913,7 @@ F_F52A:
     LDX #$FF
     TXS
     JMP StartNewGame
-F_F548:
+@F_F548:
     LDA #$01
     STA tmp_c
     JSR SubLives
@@ -6940,9 +6940,9 @@ F_F548:
     JMP F_C6CC
 DeathAnimFrame:
     CMP #$5E
-    BNE F_F580
+    BNE @F_F580
     DEC fade_dir
-F_F580:
+@F_F580:
     CLC
     ADC #$01
     STA death_timer
@@ -6974,12 +6974,12 @@ F_F580:
     JSR SwitchBank
     LDY #$00
     LDX #$0C
-F_F5BA:
+@F_F5BA:
     LDA (ptr_lo),y
     STA ram_0398,y
     INY
     DEX
-    BNE F_F5BA
+    BNE @F_F5BA
     LDA death_timer
     LSR a
     STA tmp_a
@@ -7034,14 +7034,14 @@ F_F5E3:
     DEC tmp_ptr_lo
     BNE F_F5DB
     LDX #$00
-F_F61A:
+@F_F61A:
     TXA
     ASL a
     ASL a
     TAY
     LDA ram_023E,y
     AND #$80
-    BEQ F_F631
+    BEQ @F_F631
     TXA
     ASL a
     TAY
@@ -7049,10 +7049,10 @@ F_F61A:
     SEC
     SBC #$08
     STA ram_0398,y
-F_F631:
+@F_F631:
     INX
     CPX #$06
-    BNE F_F61A
+    BNE @F_F61A
     LDA #$49
     STA player_frame
     LDA #$00
@@ -7103,10 +7103,10 @@ F_F68A:
 F_F68F:
     LDY zp_C6
     CPY #$CE
-    BCC F_F699
+    BCC @F_F699
     LDA #$00
     BEQ F_F68A
-F_F699:
+@F_F699:
     LDA F_F5E3,y
     JMP F_F68A
 ; Tbl_F_F69F: 17 bytes, no direct code reference (continuation or unreferenced)
@@ -7126,11 +7126,11 @@ Tbl_F_F6C1:
     .byte $BC,$D1,$DB,$D6,$D9,$C8,$C9,$CA,$CB,$CC,$CD,$BD,$BE,$BF,$C2,$C3
 GetCollectibleBit:
     LDX #$0F
-F_F6D3:
+@F_F6D3:
     CMP Tbl_F_F6C1,x
     BEQ MapPtrToTileCoords
     DEX
-    BPL F_F6D3
+    BPL @F_F6D3
     PLA
     PLA
     JMP F_F688
@@ -7158,11 +7158,11 @@ MapPtrToTileCoords:
     ROR tmp_c
     LSR tmp_d
     ROR tmp_c
-F_F70A:
+@F_F70A:
     LSR tmp_d
     ROR tmp_c
     DEC ram_072F
-    BNE F_F70A
+    BNE @F_F70A
     LDA map_width
     SEC
     SBC #$01
@@ -7192,13 +7192,13 @@ F_F70A:
     STA ptr_hi
     LDY #$00
     LDA tmp_d
-F_F749:
+@F_F749:
     CMP (ptr_lo),y
-    BEQ F_F751
+    BEQ @F_F751
     INY
     INY
-    BNE F_F749
-F_F751:
+    BNE @F_F749
+@F_F751:
     INY
     LDA (ptr_lo),y
     STA tmp_d
@@ -7225,26 +7225,26 @@ PeckSwitchPhase:
     LDA #$16
     JSR PlaySfxSq1
     LDA player_facing
-    BEQ F_F793
+    BEQ @F_F793
     INC switch_phase
     LDA switch_phase
     CMP #$05
-    BNE F_F789
+    BNE @F_F789
     LDA #$00
-F_F786:
+@F_F786:
     STA switch_phase
-F_F789:
+@F_F789:
     LDA switch_phase
     CLC
     ADC #$17
     STA zp_DA
     PLA
     RTS
-F_F793:
+@F_F793:
     DEC switch_phase
-    BPL F_F789
+    BPL @F_F789
     LDA #$04
-    JMP F_F786
+    JMP @F_F786
 PeckSwitchToggle:
     PHA
     LDA switch_flag
@@ -7268,10 +7268,10 @@ ShockwaveKillEnemies:
     LDA #$06
     JSR SwitchBank
     LDX #$2F
-F_F7C7:
+@F_F7C7:
     LDY ent_type,x
     LDA KillableTypeTable,y
-    BEQ F_F7E1
+    BEQ @F_F7E1
     LDA #$5D
     STA ent_type,x
     LDA ent_flags,x
@@ -7279,9 +7279,9 @@ F_F7C7:
     STA ent_flags,x
     LDA #$00
     STA ent_angle,x
-F_F7E1:
+@F_F7E1:
     DEX
-    BPL F_F7C7
+    BPL @F_F7C7
     LDA #$05
     JSR SwitchBank
     JSR FindFreeEntitySlot
@@ -7311,9 +7311,9 @@ HandleSpecialTile:
     STX zp_D3
     JSR GetMapTile
     CMP #$C8
-    BCC F_F840
+    BCC @F_F840
     CMP #$CD
-    BCS F_F840
+    BCS @F_F840
     LDA cur_bank
     PHA
     LDA #$03
@@ -7324,7 +7324,7 @@ HandleSpecialTile:
     JSR SwitchBankKeepX
     LDX zp_D3
     JMP $8405
-F_F840:
+@F_F840:
     LDX zp_D3
     RTS
 F_F843:
@@ -7390,10 +7390,10 @@ AddLives:
     ADC tmp_c
     STA lives
     CMP #$63
-    BCC F_F8C3
+    BCC @F_F8C3
     LDA #$63
     STA lives
-F_F8C3:
+@F_F8C3:
     RTS
 SubLives:
     LDA lives
@@ -7430,35 +7430,35 @@ DivideByTmpA:
     STA ptr_lo
     STA tmp_c
     LDX #$07
-F_F904:
+@F_F904:
     ROL tmp_b
     ROL ptr_lo
     LDA ptr_lo
     SEC
     SBC tmp_a
-    BCC F_F911
+    BCC @F_F911
     STA ptr_lo
-F_F911:
+@F_F911:
     ROL tmp_c
     DEX
-    BPL F_F904
+    BPL @F_F904
     RTS
 SpawnEffects:
     STA ptr_lo
     STY ptr_hi
 SpawnEffectsFromList:
     LDX #$0F
-F_F91D:
+@F_F91D:
     LDA effect_type,x
-    BEQ F_F928
+    BEQ @F_F928
     DEX
-    BPL F_F91D
-    JMP F_F99B
-F_F928:
+    BPL @F_F91D
+    JMP @F_F99B
+@F_F928:
     LDY #$00
     LDA (ptr_lo),y
     CMP #$FF
-    BEQ F_F99B
+    BEQ @F_F99B
     INY
     STA effect_type,x
     STX tmp_ptr_lo
@@ -7514,7 +7514,7 @@ F_F928:
     ADC #$00
     STA ptr_hi
     JMP SpawnEffectsFromList
-F_F99B:
+@F_F99B:
     LDX saved_x
     RTS
 ; Tbl_F_F99E: 24 bytes, read by F_F9EA
@@ -7585,16 +7585,16 @@ Tbl_F_FA32:
     .byte $37,$00,$00,$00,$00,$00,$29,$00,$00,$00,$FF
 FindFreeEntitySlot:
     LDY #$2F
-F_FA3F:
+@F_FA3F:
     LDA ent_type,y
-    BEQ F_FA4F
+    BEQ @F_FA4F
     CMP #$A0
-    BEQ F_FA4F
+    BEQ @F_FA4F
     DEY
     CPY #$1F
-    BNE F_FA3F
+    BNE @F_FA3F
     LDY #$2F
-F_FA4F:
+@F_FA4F:
     RTS
 PlayerState1C:
     LDY #$05
@@ -7619,44 +7619,44 @@ F_FA6B:
     LDA #$30
     STA zp_B8
     LDX zp_B7
-F_FA7A:
+@F_FA7A:
     LDA ent_type,x
-    BEQ F_FA8F
+    BEQ @F_FA8F
     CPX #$08
-    BCS F_FA8A
+    BCS @F_FA8A
     LDA current_area
     CMP ent_angle,x
-    BNE F_FA8F
-F_FA8A:
+    BNE @F_FA8F
+@F_FA8A:
     JSR DrawEntity
     LDX saved_x
-F_FA8F:
+@F_FA8F:
     INX
     INX
     CPX #$30
-    BCC F_FA9A
+    BCC @F_FA9A
     TXA
     SEC
     SBC #$30
     TAX
-F_FA9A:
+@F_FA9A:
     DEC zp_B8
     LDA zp_B8
-    BEQ F_FAAC
+    BEQ @F_FAAC
     CMP #$18
-    BNE F_FA7A
+    BNE @F_FA7A
     DEX
-    BPL F_FA7A
+    BPL @F_FA7A
     LDX #$2F
-    JMP F_FA7A
-F_FAAC:
+    JMP @F_FA7A
+@F_FAAC:
     LDA zp_B7
     CLC
     ADC #$01
     CMP #$30
-    BNE F_FAB7
+    BNE @F_FAB7
     LDA #$00
-F_FAB7:
+@F_FAB7:
     STA zp_B7
     JMP F_FAF7
 F_FABC:
@@ -7667,45 +7667,45 @@ F_FABC:
     LDA #$30
     STA zp_B8
     LDX zp_B7
-F_FACB:
+@F_FACB:
     LDA ent_type,x
-    BEQ F_FAE0
+    BEQ @F_FAE0
     CPX #$08
-    BCS F_FADB
+    BCS @F_FADB
     LDA current_area
     CMP ent_angle,x
-    BNE F_FAE0
-F_FADB:
+    BNE @F_FAE0
+@F_FADB:
     JSR DrawEntity
     LDX saved_x
-F_FAE0:
+@F_FAE0:
     DEX
     DEX
-    BPL F_FAE9
+    BPL @F_FAE9
     TXA
     CLC
     ADC #$30
     TAX
-F_FAE9:
+@F_FAE9:
     DEC zp_B8
     LDA zp_B8
     BEQ F_FAF7
     CMP #$18
-    BNE F_FACB
+    BNE @F_FACB
     INX
-    JMP F_FACB
+    JMP @F_FACB
 F_FAF7:
     LDA #$05
     JSR SwitchBank
     INC entity_tick
     LDX #$00
-F_FB00:
+@F_FB00:
     LDA ent_flags,x
     AND #$04
-    BNE F_FB52
+    BNE @F_FB52
     LDA ent_type,x
-    BEQ F_FB72
-F_FB0C:
+    BEQ @F_FB72
+@F_FB0C:
     LDY #$00
     STY ptr_hi
     ASL a
@@ -7734,50 +7734,50 @@ F_FB0C:
     STA tmp_b
     LDA ent_x_hi,x
     SBC focus_x_hi
-    BCS F_FB4D
+    BCS @F_FB4D
     LDA #$F8
     CMP tmp_b
-    BCC F_FB4D
+    BCC @F_FB4D
     STA tmp_d
-F_FB4D:
+@F_FB4D:
     STX saved_x
     JMP (ptr_lo)
-F_FB52:
+@F_FB52:
     CPX #$20
-    BCC F_FB5D
-F_FB56:
+    BCC @F_FB5D
+@F_FB56:
     LDA #$00
     STA ent_type,x
-    BEQ F_FB72
-F_FB5D:
+    BEQ @F_FB72
+@F_FB5D:
     CPX #$08
-    BCS F_FB72
+    BCS @F_FB72
     LDA ent_type,x
     CMP #$02
-    BNE F_FB72
+    BNE @F_FB72
     LDA player_state
     CMP #$16
-    BNE F_FB56
+    BNE @F_FB56
     LDA #$02
-    BNE F_FB0C
-F_FB72:
+    BNE @F_FB0C
+@F_FB72:
     LDA zp_01
-    BEQ F_FBCA
+    BEQ @F_FBCA
     INX
     CPX #$30
-    BNE F_FB00
+    BNE @F_FB00
     LDA nmi_state
     CMP #$02
-    BEQ F_FB84
-    JMP F_FBD4
-F_FB84:
+    BEQ @F_FB84
+    JMP @F_FBD4
+@F_FB84:
     LDX #$2F
-F_FB86:
+@F_FB86:
     LDA ent_flags,x
     AND #$04
-    BEQ F_FBBD
+    BEQ @F_FBBD
     LDA ent_type,x
-    BEQ F_FBBD
+    BEQ @F_FBBD
     LDY #$00
     STY ptr_hi
     ASL a
@@ -7801,28 +7801,28 @@ F_FB86:
     STA tmp_d
     STX saved_x
     JMP (ptr_lo)
-F_FBBD:
+@F_FBBD:
     LDA zp_01
-    BEQ F_FBCA
+    BEQ @F_FBCA
     DEX
-    BPL F_FB86
+    BPL @F_FB86
     LDA #$00
     JSR SwitchBank
     RTS
-F_FBCA:
+@F_FBCA:
     LDA #$00
     JSR SwitchBank
     PLA
     PLA
     JMP MainLoopBody
-F_FBD4:
+@F_FBD4:
     LDX #$00
-F_FBD6:
+@F_FBD6:
     LDA ent_flags,x
     AND #$04
-    BEQ F_FC0D
+    BEQ @F_FC0D
     LDA ent_type,x
-    BEQ F_FC0D
+    BEQ @F_FC0D
     LDY #$00
     STY ptr_hi
     ASL a
@@ -7846,16 +7846,16 @@ F_FBD6:
     STA tmp_d
     STX saved_x
     JMP (ptr_lo)
-F_FC0D:
+@F_FC0D:
     LDA zp_01
-    BEQ F_FC1C
+    BEQ @F_FC1C
     INX
     CPX #$30
-    BNE F_FBD6
+    BNE @F_FBD6
     LDA #$00
     JSR SwitchBank
     RTS
-F_FC1C:
+@F_FC1C:
     LDA #$00
     JSR SwitchBank
     PLA
@@ -7898,11 +7898,11 @@ GetTileSpecial:
     ROR tmp_c
     LSR tmp_d
     ROR tmp_c
-F_FC68:
+@F_FC68:
     LSR tmp_d
     ROR tmp_c
     DEC tmp_ptr_lo
-    BNE F_FC68
+    BNE @F_FC68
     LDA map_width
     SEC
     SBC #$01
@@ -7938,24 +7938,24 @@ F_FC68:
     PLA
     STA ptr_lo
     LDY #$00
-F_FCAE:
+@F_FCAE:
     LDA (ptr_lo),y
     CMP #$FE
-    BCS F_FCBF
+    BCS @F_FCBF
     INY
     LDA (ptr_lo),y
     CMP tmp_d
-    BEQ F_FCC3
+    BEQ @F_FCC3
     INY
     INY
-    BNE F_FCAE
-F_FCBF:
+    BNE @F_FCAE
+@F_FCBF:
     LDA #$00
-    BEQ F_FCC6
-F_FCC3:
+    BEQ @F_FCC6
+@F_FCC3:
     INY
     LDA (ptr_lo),y
-F_FCC6:
+@F_FCC6:
     STA tmp_ptr_lo
     PLA
     JSR SwitchBankKeepX
@@ -7986,91 +7986,91 @@ ScaledMultiply:
     EOR #$FF
     STA tmp_ptr_lo
     ROR tmp_ptr_lo
-    BCS F_FD00
+    BCS @F_FD00
     TYA
     ADC tmp_ptr_hi
     TAY
     TXA
     ADC tmp_c
     TAX
-F_FD00:
+@F_FD00:
     ASL tmp_ptr_hi
     ROL tmp_c
     ROR tmp_ptr_lo
-    BCS F_FD10
+    BCS @F_FD10
     TYA
     ADC tmp_ptr_hi
     TAY
     TXA
     ADC tmp_c
     TAX
-F_FD10:
+@F_FD10:
     ASL tmp_ptr_hi
     ROL tmp_c
     ROR tmp_ptr_lo
-    BCS F_FD20
+    BCS @F_FD20
     TYA
     ADC tmp_ptr_hi
     TAY
     TXA
     ADC tmp_c
     TAX
-F_FD20:
+@F_FD20:
     ASL tmp_ptr_hi
     ROL tmp_c
     ROR tmp_ptr_lo
-    BCS F_FD30
+    BCS @F_FD30
     TYA
     ADC tmp_ptr_hi
     TAY
     TXA
     ADC tmp_c
     TAX
-F_FD30:
+@F_FD30:
     ASL tmp_ptr_hi
     ROL tmp_c
     ROR tmp_ptr_lo
-    BCS F_FD40
+    BCS @F_FD40
     TYA
     ADC tmp_ptr_hi
     TAY
     TXA
     ADC tmp_c
     TAX
-F_FD40:
+@F_FD40:
     ASL tmp_ptr_hi
     ROL tmp_c
     ROR tmp_ptr_lo
-    BCS F_FD50
+    BCS @F_FD50
     TYA
     ADC tmp_ptr_hi
     TAY
     TXA
     ADC tmp_c
     TAX
-F_FD50:
+@F_FD50:
     ASL tmp_ptr_hi
     ROL tmp_c
     ROR tmp_ptr_lo
-    BCS F_FD60
+    BCS @F_FD60
     TYA
     ADC tmp_ptr_hi
     TAY
     TXA
     ADC tmp_c
     TAX
-F_FD60:
+@F_FD60:
     ASL tmp_ptr_hi
     ROL tmp_c
     ROR tmp_ptr_lo
-    BCS F_FD70
+    BCS @F_FD70
     TYA
     ADC tmp_ptr_hi
     TAY
     TXA
     ADC tmp_c
     TAX
-F_FD70:
+@F_FD70:
     ASL tmp_ptr_hi
     ROL tmp_c
     STY ptr_lo
@@ -8086,10 +8086,10 @@ SetPPUAddr:
     RTS
 Decomp_PutByte:
     BIT decomp_to_ram
-    BPL F_FD8C
+    BPL @F_FD8C
     STA (tmp_c),y
     RTS
-F_FD8C:
+@F_FD8C:
     PHA
     LDA PPUSTATUS
     LDA tmp_d
@@ -8101,10 +8101,10 @@ F_FD8C:
     RTS
 Decomp_ReadOut:
     BIT decomp_to_ram
-    BPL F_FDA7
+    BPL @F_FDA7
     LDA (tmp_c),y
     RTS
-F_FDA7:
+@F_FDA7:
     LDA PPUSTATUS
     LDA tmp_d
     STA PPUADDR
@@ -8115,10 +8115,10 @@ F_FDA7:
     RTS
 Decomp_ReadBack:
     BIT decomp_to_ram
-    BPL F_FDC3
+    BPL @F_FDC3
     LDA (ptr_lo),y
     RTS
-F_FDC3:
+@F_FDC3:
     LDA PPUSTATUS
     LDA ptr_hi
     STA PPUADDR
@@ -8130,17 +8130,17 @@ F_FDC3:
 Decomp_NextSrc:
     PHP
     INC ptr_lo
-    BNE F_FDDE
+    BNE @F_FDDE
     INC ptr_hi
-F_FDDE:
+@F_FDDE:
     PLP
     RTS
 Decomp_NextDst:
     PHP
     INC tmp_c
-    BNE F_FDE7
+    BNE @F_FDE7
     INC tmp_d
-F_FDE7:
+@F_FDE7:
     PLP
     RTS
 DecompressAndFinish:
@@ -8164,9 +8164,9 @@ F_FE03:
     JSR Decomp_NextDst
 F_FE0E:
     ASL tmp_a
-    BEQ F_FE15
-    JMP F_FE23
-F_FE15:
+    BEQ @F_FE15
+    JMP @F_FE23
+@F_FE15:
     LDA (ptr_lo),y
     STA tmp_08
     JSR Decomp_NextSrc
@@ -8174,31 +8174,31 @@ F_FE15:
     ROL a
     STA tmp_08
     STA tmp_a
-F_FE23:
-    BCS F_FE28
+@F_FE23:
+    BCS @F_FE28
     JMP F_FE03
-F_FE28:
+@F_FE28:
     LDA #$00
     STA tmp_08
     ASL tmp_a
-    BEQ F_FE33
-    JMP F_FE3C
-F_FE33:
+    BEQ @F_FE33
+    JMP @F_FE3C
+@F_FE33:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FE3C:
-    BCS F_FE41
-    JMP F_FE4E
-F_FE41:
+@F_FE3C:
+    BCS @F_FE41
+    JMP @F_FE4E
+@F_FE41:
     JSR Decomp_ReadBitsC
     CLC
     LDA tmp_08
     CMP #$00
-    BNE F_FE4E
+    BNE @F_FE4E
     JMP F_FE9F
-F_FE4E:
+@F_FE4E:
     INC tmp_08
     INC tmp_08
 F_FE52:
@@ -8233,9 +8233,9 @@ F_FE7F:
     JSR Decomp_PutByte
     JSR Decomp_NextDst
     DEC tmp_b
-    BEQ F_FE96
+    BEQ @F_FE96
     JMP F_FE7F
-F_FE96:
+@F_FE96:
     PLA
     STA ptr_hi
     PLA
@@ -8246,16 +8246,16 @@ F_FE9F:
     CLC
     LDA tmp_08
     CMP #$00
-    BNE F_FEAA
+    BNE @F_FEAA
     RTS
-F_FEAA:
+@F_FEAA:
     CLC
     LDA tmp_08
     ADC #$09
     STA tmp_08
-    BCS F_FEB6
+    BCS @F_FEB6
     JMP F_FE52
-F_FEB6:
+@F_FEB6:
     LDA tmp_08
     STA tmp_b
     JSR Decomp_ReadBitsA
@@ -8277,7 +8277,7 @@ F_FED2:
     ADC tmp_d
     STA tmp_08
     STA ptr_hi
-F_FEDB:
+@F_FEDB:
     JSR Decomp_ReadBack
     STA tmp_08
     JSR Decomp_NextSrc
@@ -8285,32 +8285,32 @@ F_FEDB:
     JSR Decomp_PutByte
     JSR Decomp_NextDst
     DEC tmp_b
-    BEQ F_FEF2
-    JMP F_FEDB
-F_FEF2:
+    BEQ @F_FEF2
+    JMP @F_FEDB
+@F_FEF2:
     JMP F_FE7F
 Decomp_ReadBitsA:
     LDA #$00
     STA tmp_08
     ASL tmp_a
-    BEQ F_FF00
-    JMP F_FF09
-F_FF00:
+    BEQ @F_FF00
+    JMP @F_FF09
+@F_FF00:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FF09:
+@F_FF09:
     ROL tmp_08
     ASL tmp_a
-    BEQ F_FF12
-    JMP F_FF1B
-F_FF12:
+    BEQ @F_FF12
+    JMP @F_FF1B
+@F_FF12:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FF1B:
+@F_FF1B:
     ROL tmp_08
     LDA tmp_08
     EOR #$FF
@@ -8318,85 +8318,85 @@ F_FF1B:
     JSR Decomp_PutByte
 Decomp_ReadBitsB:
     ASL tmp_a
-    BEQ F_FF2D
-    JMP F_FF36
-F_FF2D:
+    BEQ @F_FF2D
+    JMP @F_FF36
+@F_FF2D:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FF36:
+@F_FF36:
     ROL tmp_08
     ASL tmp_a
-    BEQ F_FF3F
-    JMP F_FF48
-F_FF3F:
+    BEQ @F_FF3F
+    JMP @F_FF48
+@F_FF3F:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FF48:
+@F_FF48:
     ROL tmp_08
     ASL tmp_a
-    BEQ F_FF51
-    JMP F_FF5A
-F_FF51:
+    BEQ @F_FF51
+    JMP @F_FF5A
+@F_FF51:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FF5A:
+@F_FF5A:
     ROL tmp_08
     ASL tmp_a
-    BEQ F_FF63
-    JMP F_FF6C
-F_FF63:
+    BEQ @F_FF63
+    JMP @F_FF6C
+@F_FF63:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FF6C:
+@F_FF6C:
     ROL tmp_08
     ASL tmp_a
-    BEQ F_FF75
-    JMP F_FF7E
-F_FF75:
+    BEQ @F_FF75
+    JMP @F_FF7E
+@F_FF75:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FF7E:
+@F_FF7E:
     ROL tmp_08
 Decomp_ReadBitsC:
     ASL tmp_a
-    BEQ F_FF87
-    JMP F_FF90
-F_FF87:
+    BEQ @F_FF87
+    JMP @F_FF90
+@F_FF87:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FF90:
+@F_FF90:
     ROL tmp_08
     ASL tmp_a
-    BEQ F_FF99
-    JMP F_FFA2
-F_FF99:
+    BEQ @F_FF99
+    JMP @F_FFA2
+@F_FF99:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FFA2:
+@F_FFA2:
     ROL tmp_08
     ASL tmp_a
-    BEQ F_FFAB
-    JMP F_FFB4
-F_FFAB:
+    BEQ @F_FFAB
+    JMP @F_FFB4
+@F_FFAB:
     LDA (ptr_lo),y
     STA tmp_a
     ROL tmp_a
     JSR Decomp_NextSrc
-F_FFB4:
+@F_FFB4:
     ROL tmp_08
     RTS
 ; Tbl_F_FFB7: 7 bytes, no direct code reference (continuation or unreferenced)
