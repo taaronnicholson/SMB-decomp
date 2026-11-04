@@ -821,18 +821,18 @@ B4_AC61:
     LDA #$BD
     STA credits_ptr_hi
     LDA #$20
-    STA zp_AD
+    STA sprite_y_tmp
     LDX #$00
     STX scroll_y_hi
     STX scroll_y_lo
     STX scroll_x_px
     STX zp_3D
-    STX ram_038A
+    STX cutscene_fade_b
     LDA ppumask_shadow
     ORA #$06
     JSR SetPPUMask
     LDA #$18
-    STA ram_0389
+    STA cutscene_fade_a
     LDA #$07
     STA palette_set
     JSR CutsceneScrollCall
@@ -865,20 +865,20 @@ B4_ACA1:
     JSR EnableRendering
 B4_ACD8:
     JSR WaitForNMI
-    INC ram_0389
-    INC ram_038A
+    INC cutscene_fade_a
+    INC cutscene_fade_b
     JSR CutsceneScrollCall
     LDA fade_dir
     BNE B4_ACD8
 B4_ACE8:
-    LDA ram_0389
+    LDA cutscene_fade_a
     CLC
     ADC #$01
     CMP #$88
     BEQ B4_ACF5
-    STA ram_0389
+    STA cutscene_fade_a
 B4_ACF5:
-    INC ram_038A
+    INC cutscene_fade_b
     JSR CutsceneScrollCall
     LDX #$00
     LDA frame_counter
@@ -917,7 +917,7 @@ B4_AD30:
     DEC fade_dir
 B4_AD39:
     JSR WaitForNMI
-    INC ram_038A
+    INC cutscene_fade_b
     JSR CutsceneScrollCall
     LDA fade_dir
     BNE B4_AD39
@@ -2653,9 +2653,9 @@ QueueTextAndStartFade:
     STA tmp_b
     JSR PPUBuffer_Append
     LDA #$66
-    STA ram_0389
+    STA cutscene_fade_a
     LDA #$00
-    STA ram_038A
+    STA cutscene_fade_b
     STA zp_74
     JSR FadeStepBEDF
     JMP WaitForNMI
@@ -2696,9 +2696,9 @@ B4_BE47:
     JSR EnableNMI
     JSR WaitForNMI
     LDA #$5F
-    STA ram_0389
+    STA cutscene_fade_a
     LDA #$00
-    STA ram_038A
+    STA cutscene_fade_b
     STA entity_tick
     LDA #$B2
     STA tmp_c
@@ -2732,7 +2732,7 @@ B4_BE99:
     DEC entity_tick
     LDA entity_tick
     LSR a
-    STA ram_038A
+    STA cutscene_fade_b
     DEC ram_01A8
     BEQ B4_BEB7
     BMI B4_BE99
@@ -2749,7 +2749,7 @@ B4_BEB9:
     DEC entity_tick
     LDA entity_tick
     LSR a
-    STA ram_038A
+    STA cutscene_fade_b
     LDA fade_step
     BNE B4_BEB9
     JSR RenderOffAndWait
@@ -2762,7 +2762,7 @@ FadeStepBEDF:
     INC zp_74
     LDA zp_74
     LSR a
-    STA ram_038A
+    STA cutscene_fade_b
 FadeStepBEE7:
     LDA #$7F
     STA zp_75
@@ -2796,9 +2796,9 @@ B4_BF0B:
     TAY
     LDA (tmp_c),y
     CLC
-    ADC ram_0389
+    ADC cutscene_fade_a
     STA ram_038B
-    LDA ram_038A
+    LDA cutscene_fade_b
     CLC
     ADC tmp_a
     TAY

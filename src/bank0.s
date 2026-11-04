@@ -1798,9 +1798,9 @@ InitIntroScreen:
     STA ptr_hi
     JSR DrawBlockAndAttributes
     LDA #$FF
-    STA ram_0389
+    STA cutscene_fade_a
     LDA #$00
-    STA ram_038A
+    STA cutscene_fade_b
     STA entity_tick
     STA player_frame
     LDA #$08
@@ -1867,8 +1867,8 @@ IntroScreenStep:
     STA zp_78
     INC entity_tick
     LDA entity_tick
-    STA ram_038A
-    LDA ram_0389
+    STA cutscene_fade_b
+    LDA cutscene_fade_a
     SEC
     SBC #$02
     CMP #$3A
@@ -1879,7 +1879,7 @@ IntroScreenStep:
 B0_B702:
     LDA #$3A
 B0_B704:
-    STA ram_0389
+    STA cutscene_fade_a
     JMP F_CED8
 DrawTileBlock17x5:
     LDA #$55

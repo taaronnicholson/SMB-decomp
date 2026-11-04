@@ -5158,11 +5158,11 @@ B6_BDA0:
     LDA B6_BEE6,y
     JSR PlaySong
     LDA #$10
-    STA ram_0389
+    STA cutscene_fade_a
     LDA #$FC
     STA scroll_x_px
     LDA #$00
-    STA ram_038A
+    STA cutscene_fade_b
     STA scroll_y_hi
     STA scroll_y_lo
     JSR CutsceneScrollCall
@@ -5224,25 +5224,25 @@ B6_BE4D:
     JSR EnableRendering
 B6_BE63:
     JSR WaitForNMI
-    LDA ram_0389
+    LDA cutscene_fade_a
     CLC
     ADC #$04
-    STA ram_0389
-    DEC ram_038A
+    STA cutscene_fade_a
+    DEC cutscene_fade_b
     JSR CutsceneScrollCall
     LDA fade_dir
     BNE B6_BE63
 B6_BE79:
     JSR WaitForNMI
     JSR ReadControllerBank0
-    LDA ram_0389
+    LDA cutscene_fade_a
     CLC
     ADC #$04
     CMP #$88
     BEQ B6_BE8C
-    STA ram_0389
+    STA cutscene_fade_a
 B6_BE8C:
-    DEC ram_038A
+    DEC cutscene_fade_b
     JSR CutsceneScrollCall
     LDA snd_playing
     BNE B6_BE9B
@@ -5312,7 +5312,7 @@ RngStep:
     ADC stage_index
     STA rng_a
     RTS
-    LDA zp_FC
+    LDA pixel_page_xor
     LSR a
     LSR a
     LSR a

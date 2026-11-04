@@ -611,3 +611,14 @@ name f F6E0 MapPtrToTileCoords      ; converts a map pointer in ptr to tile X/Y 
 name f FEF5 Decomp_ReadBitsA        ; decompressor helper: pulls bits from tmp_a/(ptr) into tmp_08
 name f FF26 Decomp_ReadBitsB
 name f FF80 Decomp_ReadBitsC
+
+; naming pass 15 (RAM)
+ram 06C0 ent_line_len               ; per-entity straight-line step length (EntAimAtTarget): the minor-axis distance + 1
+ram 06F0 ent_line_acc               ; per-entity line accumulator: decreased by ent_dx, reloaded with ent_line_len on wrap
+ram 00FC pixel_page_xor             ; toggled by $10 each pixel-tile upload cycle; xor-ed into the PPU address high byte ($1F/$0F pages)
+ram 0389 cutscene_fade_a            ; transition/fade parameters set before the cutscene scroll effects (with zp_75..78)
+ram 038A cutscene_fade_b
+ram 00AD sprite_y_tmp               ; scratch Y while assembling a sprite into OAM
+ram 0043 draw_row_count             ; rows left when queueing a map row/column draw
+ram 0045 draw_x                     ; X/Y of the map draw being queued (from X/Y registers)
+ram 0046 draw_y

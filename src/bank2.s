@@ -623,9 +623,9 @@ B2_9E3F:
     STY ram_07FD
     LDA player_facing
     STA ram_07FE
-    LDA zp_FC
+    LDA pixel_page_xor
     EOR #$10
-    STA zp_FC
+    STA pixel_page_xor
     LDX Tbl_B2_9EDC,y
     CPX #$60
     BCS B2_9E5A
@@ -670,7 +670,7 @@ B2_9E8A:
 B2_9E96:
     JSR PixelUploadDispatch
 B2_9E99:
-    LDA zp_FC
+    LDA pixel_page_xor
     LSR a
     LSR a
     LSR a
@@ -711,7 +711,7 @@ Tbl_B2_9EDC:
 ClearPixelTilesA:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$80
     STA PPUADDR
@@ -768,7 +768,7 @@ ClearPixelTilesA:
 ClearPixelTilesB:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$A0
     STA PPUADDR
@@ -826,7 +826,7 @@ ClearPixelTilesB:
 UploadPixelTilesC:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$C0
     STA PPUADDR
@@ -899,7 +899,7 @@ PixelTileUploadA:
 UploadPixelTilesD:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$E0
     STA PPUADDR
@@ -1116,7 +1116,7 @@ B2_A2F5:
 B2_A325:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$80
     STA PPUADDR
@@ -1126,7 +1126,7 @@ B2_A325:
 B2_A339:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$A0
     STA PPUADDR
@@ -1134,7 +1134,7 @@ B2_A339:
 B2_A34B:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$C0
     STA PPUADDR
@@ -1145,7 +1145,7 @@ B2_A34B:
 B2_A362:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$80
     STA PPUADDR
@@ -1153,7 +1153,7 @@ B2_A362:
 B2_A374:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$A0
     STA PPUADDR
@@ -1164,7 +1164,7 @@ B2_A374:
 B2_A38B:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$80
     STA PPUADDR
@@ -1172,7 +1172,7 @@ B2_A38B:
 B2_A39D:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$A0
     STA PPUADDR
@@ -1180,7 +1180,7 @@ B2_A39D:
 B2_A3AF:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$C0
     STA PPUADDR
@@ -1239,7 +1239,7 @@ B2_A3BF:
 B2_A454:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$E0
     STA PPUADDR
@@ -1297,7 +1297,7 @@ PixelTileUploadC:
 B2_A4F8:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$80
     STA PPUADDR
@@ -1305,7 +1305,7 @@ B2_A4F8:
 B2_A50A:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$A0
     STA PPUADDR
@@ -1315,7 +1315,7 @@ B2_A50A:
 B2_A51E:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$C0
     STA PPUADDR
@@ -1323,7 +1323,7 @@ B2_A51E:
 B2_A530:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$E0
     STA PPUADDR
@@ -1331,7 +1331,7 @@ B2_A530:
 B2_A542:
     LDA PPUSTATUS
     LDA #$1F
-    EOR zp_FC
+    EOR pixel_page_xor
     STA PPUADDR
     LDA #$80
     STA PPUADDR
@@ -3228,7 +3228,7 @@ ResetGameState:
     STA ram_01A8
     STA ram_01A9
     STA ram_01A7
-    STA zp_FC
+    STA pixel_page_xor
     STA zp_A5
     STA shot_state
     STA shot_state_1

@@ -1327,10 +1327,10 @@ F_CCD6:
     LDA ent_dx,x
     CMP tmp_b
     BNE F_CCFC
-    LDA ram_06C0,x
+    LDA ent_line_len,x
     CMP tmp_c
     BNE F_CCFC
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     CMP tmp_d
     BNE F_CCFC
     JMP F_CD44
@@ -1353,10 +1353,10 @@ F_CD03:
     STA ent_dx,x
     LDA tmp_c
     STA ent_x_lo,x
-    STA ram_06C0,x
+    STA ent_line_len,x
     LDA tmp_d
     STA ent_x_hi,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     LDA #$00
     STA ent_flags,x
     STA ent_param,x
@@ -1660,7 +1660,7 @@ F_CF52:
     BMI F_CF7D
     RTS
 F_CF61:
-    LDX zp_AD
+    LDX sprite_y_tmp
     LDA PPUSTATUS
     LDA NametableRowHi,x
     STA PPUADDR
@@ -1677,7 +1677,7 @@ F_CF7D:
     LDA #$07
     STA zp_3D
     LDA PPUSTATUS
-    LDX zp_AD
+    LDX sprite_y_tmp
     LDY #$00
     LDA (credits_ptr_lo),y
     CMP #$FF
@@ -1715,7 +1715,7 @@ F_CFB4:
     INX
     TXA
     AND #$3F
-    STA zp_AD
+    STA sprite_y_tmp
     AND #$1F
     CMP #$1E
     BNE F_CFD4
@@ -1723,7 +1723,7 @@ F_CFB4:
     INX
     TXA
     AND #$3F
-    STA zp_AD
+    STA sprite_y_tmp
 F_CFD4:
     CPY #$02
     BEQ F_CFD9
@@ -2501,8 +2501,8 @@ F_D500:
     STA scroll_x_px
     STA scroll_y_lo
     STA scroll_y_hi
-    STA zp_46
-    STA zp_45
+    STA draw_y
+    STA draw_x
     STA zp_3C
     STA zp_3D
     LDA focus_x_lo
@@ -2608,7 +2608,7 @@ F_D60A:
     PHA
     LDA map_read_hi
     PHA
-    LDA zp_45
+    LDA draw_x
     LSR a
     BCC F_D662
     LSR a
@@ -2674,7 +2674,7 @@ F_D677:
     STA map_read_hi
 F_D6AD:
     JSR F_D7C7
-    LDA zp_45
+    LDA draw_x
     LSR a
     BCC ScrollY
     LSR a
@@ -2771,7 +2771,7 @@ F_D732:
     ADC zp_39
     STA map_read_hi
     JSR F_D9BD
-    LDA zp_46
+    LDA draw_y
     AND #$03
     BNE F_D757
     JSR F_DAE3
@@ -2830,7 +2830,7 @@ F_D7A0:
     LSR a
     TAX
     JSR F_D9BD
-    LDA zp_46
+    LDA draw_y
     AND #$1F
     CMP #$1D
     BEQ F_D7B7
@@ -2850,22 +2850,22 @@ F_D7B7:
 F_D7C6:
     RTS
 F_D7C7:
-    STX zp_45
-    STY zp_46
+    STX draw_x
+    STY draw_y
     LDX ppu_buffer_idx
     TYA
     AND #$1F
     EOR #$FF
     SEC
     ADC #$1E
-    STA zp_43
+    STA draw_row_count
     STA tmp_ptr_lo
     LDA NametableRowHi,y
     STA ppu_buffer,x
     INX
     LDA NametableRowLo,y
     CLC
-    ADC zp_45
+    ADC draw_x
     STA ppu_buffer,x
     INX
     AND #$01
@@ -2894,7 +2894,7 @@ F_D811:
     INX
     TXA
     CLC
-    ADC zp_43
+    ADC draw_row_count
     STA ppu_buffer_idx
     TAX
     DEX
@@ -2902,7 +2902,7 @@ F_D811:
     PHA
     LDA map_read_hi
     PHA
-    LDA zp_43
+    LDA draw_row_count
     AND #$01
     BEQ F_D854
     LDA map_bank
@@ -2953,8 +2953,8 @@ F_D854:
 F_D885:
     LDA #$1F
     SEC
-    SBC zp_43
-    STA zp_43
+    SBC draw_row_count
+    STA draw_row_count
     LDX ppu_buffer_idx
     LDY #$00
     LDA scroll_y_hi
@@ -2965,15 +2965,15 @@ F_D898:
     LDA NametableRowHi,y
     STA ppu_buffer,x
     INX
-    LDA zp_45
+    LDA draw_x
     STA ppu_buffer,x
     INX
-    LDA zp_43
+    LDA draw_row_count
     STA ppu_buffer,x
     INX
     TXA
     CLC
-    ADC zp_43
+    ADC draw_row_count
     STA ppu_buffer_idx
     TAX
     DEX
@@ -2989,7 +2989,7 @@ F_D8B3:
     LDA (zp_3E),y
     STA ppu_buffer,x
     DEX
-    DEC zp_43
+    DEC draw_row_count
     BEQ F_D8E6
     LDA (zp_40),y
     STA ppu_buffer,x
@@ -3001,7 +3001,7 @@ F_D8B3:
     LDA map_read_hi
     ADC #$00
     STA map_read_hi
-    DEC zp_43
+    DEC draw_row_count
     BNE F_D8B3
 F_D8E6:
     LDX ppu_buffer_idx
@@ -3018,8 +3018,8 @@ F_D8F7:
     PHA
     LDA map_read_hi
     PHA
-    LSR zp_46
-    LSR zp_46
+    LSR draw_y
+    LSR draw_y
     BCC F_D910
     LDA map_read_lo
     SEC
@@ -3029,8 +3029,8 @@ F_D8F7:
     SBC #$00
     STA map_read_hi
 F_D910:
-    LSR zp_45
-    LSR zp_45
+    LSR draw_x
+    LSR draw_x
     LDX #$00
 F_D916:
     LDY tmp_ptr_lo
@@ -3054,13 +3054,13 @@ F_D916:
     LDA #$00
     STA tmp_ptr_hi
     LDA #$08
-    STA zp_43
+    STA draw_row_count
 F_D943:
     LDY ppu_buffer_idx
-    LDX zp_46
+    LDX draw_y
     LDA AttrRowLo,x
     CLC
-    ADC zp_45
+    ADC draw_x
     STA ram_0301,y
     LDA AttrRowHi,x
     ADC #$00
@@ -3098,16 +3098,16 @@ F_D943:
     STA ppu_buffer,y
     INY
     STY ppu_buffer_idx
-    INC zp_46
-    LDA zp_46
+    INC draw_y
+    LDA draw_y
     AND #$0F
-    STA zp_46
+    STA draw_y
     AND #$07
     BNE F_D9A8
     DEX
 F_D9A8:
     STX tmp_ptr_hi
-    DEC zp_43
+    DEC draw_row_count
     BPL F_D943
     LDA #$00
     STA ppu_buffer,y
@@ -3118,8 +3118,8 @@ F_D9A8:
     STA map_read_lo
     RTS
 F_D9BD:
-    STX zp_45
-    STY zp_46
+    STX draw_x
+    STY draw_y
     LDX ppu_buffer_idx
     TYA
     AND #$01
@@ -3148,21 +3148,21 @@ F_D9EB:
     INX
     LDA NametableRowLo,y
     CLC
-    ADC zp_45
+    ADC draw_x
     STA ppu_buffer,x
     INX
     AND #$1F
     EOR #$FF
     SEC
     ADC #$20
-    STA zp_43
+    STA draw_row_count
     STA tmp_ptr_lo
     ORA #$80
     STA ppu_buffer,x
     INX
     TXA
     CLC
-    ADC zp_43
+    ADC draw_row_count
     STA ppu_buffer_idx
     TAX
     DEX
@@ -3170,7 +3170,7 @@ F_D9EB:
     PHA
     LDA map_read_hi
     PHA
-    LDA zp_43
+    LDA draw_row_count
     AND #$01
     BEQ F_DA43
     LDY #$00
@@ -3218,7 +3218,7 @@ F_DA6D:
     STA ppu_buffer,x
     LDA #$20
     SEC
-    SBC zp_43
+    SBC draw_row_count
     BNE F_DA82
     PLA
     STA map_read_hi
@@ -3226,22 +3226,22 @@ F_DA6D:
     STA map_read_lo
     RTS
 F_DA82:
-    STA zp_43
+    STA draw_row_count
     STA tmp_ptr_lo
-    LDY zp_46
+    LDY draw_y
     LDA NametableRowHi,y
     STA ppu_buffer,x
     INX
     LDA NametableRowLo,y
     STA ppu_buffer,x
     INX
-    LDA zp_43
+    LDA draw_row_count
     ORA #$80
     STA ppu_buffer,x
     INX
     TXA
     CLC
-    ADC zp_43
+    ADC draw_row_count
     STA ppu_buffer_idx
     TAX
     DEX
@@ -3279,12 +3279,12 @@ F_DAD2:
     STA map_read_lo
     RTS
 F_DAE3:
-    LSR zp_45
+    LSR draw_x
     LDA #$10
     SEC
-    SBC zp_45
+    SBC draw_x
     TAX
-    LDA zp_46
+    LDA draw_y
     AND #$02
     BEQ F_DAFE
     LDA map_read_lo
@@ -3296,7 +3296,7 @@ F_DAE3:
     STA map_read_hi
 F_DAFE:
     LDY ppu_buffer_idx
-    LDA zp_46
+    LDA draw_y
     AND #$FC
     ASL a
     CMP #$40
@@ -3330,8 +3330,8 @@ F_DB2C:
     CLC
     ADC #$08
     STA ppu_buffer_idx
-    STA zp_43
-    DEC zp_43
+    STA draw_row_count
+    DEC draw_row_count
     LDY #$0F
     LDA map_bank
     JSR SwitchBankKeepX
@@ -3381,8 +3381,8 @@ F_DB6F:
     LDA (zp_27),y
     AND #$C0
     ORA tmp_ptr_lo
-    LDY zp_43
-    DEC zp_43
+    LDY draw_row_count
+    DEC draw_row_count
     STA ppu_buffer,y
     INX
     TXA
@@ -6987,7 +6987,7 @@ F_F5BA:
     CLC
     ADC tmp_a
     TAY
-    LDA zp_FC
+    LDA pixel_page_xor
     LSR a
     LSR a
     LSR a

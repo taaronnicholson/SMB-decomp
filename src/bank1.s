@@ -1423,18 +1423,18 @@ B1_8B00:
     INY
     CLC
     ADC tmp_c
-    STA zp_AD
+    STA sprite_y_tmp
     LDA (ptr_lo),y
     INY
     ADC tmp_d
     BNE B1_8B40
-    LDA zp_AD
+    LDA sprite_y_tmp
     STA ram_0203,x
     LDA (ptr_lo),y
     INY
     CLC
     ADC tmp_a
-    STA zp_AD
+    STA sprite_y_tmp
     LDA (ptr_lo),y
     INY
     ADC #$00
@@ -1447,7 +1447,7 @@ B1_8B00:
     LDA (ptr_lo),y
     INY
     STA ram_0202,x
-    LDA zp_AD
+    LDA sprite_y_tmp
     STA oam_buffer,x
     INX
     INX
@@ -1522,25 +1522,25 @@ B1_8BA6:
     SEC
     SBC (ptr_lo),y
     INY
-    STA zp_AD
+    STA sprite_y_tmp
     LDA #$00
     SBC (ptr_lo),y
     INY
     STA zp_AE
-    LDA zp_AD
+    LDA sprite_y_tmp
     CLC
     ADC tmp_c
-    STA zp_AD
+    STA sprite_y_tmp
     LDA zp_AE
     ADC tmp_d
     BNE B1_8BF5
-    LDA zp_AD
+    LDA sprite_y_tmp
     STA ram_0203,x
     LDA (ptr_lo),y
     INY
     CLC
     ADC tmp_a
-    STA zp_AD
+    STA sprite_y_tmp
     LDA (ptr_lo),y
     INY
     ADC #$00
@@ -1554,7 +1554,7 @@ B1_8BA6:
     INY
     EOR #$40
     STA ram_0202,x
-    LDA zp_AD
+    LDA sprite_y_tmp
     STA oam_buffer,x
     INX
     INX
@@ -1633,26 +1633,26 @@ B1_8C61:
     INY
     CLC
     ADC tmp_c
-    STA zp_AD
+    STA sprite_y_tmp
     LDA (ptr_lo),y
     INY
     ADC tmp_d
     BNE B1_8CB0
-    LDA zp_AD
+    LDA sprite_y_tmp
     STA ram_0203,x
     LDA #$00
     SEC
     SBC (ptr_lo),y
     INY
-    STA zp_AD
+    STA sprite_y_tmp
     LDA #$00
     SBC (ptr_lo),y
     INY
     STA zp_AE
-    LDA zp_AD
+    LDA sprite_y_tmp
     CLC
     ADC tmp_a
-    STA zp_AD
+    STA sprite_y_tmp
     LDA zp_AE
     ADC #$00
     BNE B1_8CB2
@@ -1665,7 +1665,7 @@ B1_8C61:
     INY
     EOR #$80
     STA ram_0202,x
-    LDA zp_AD
+    LDA sprite_y_tmp
     STA oam_buffer,x
     INX
     INX
@@ -1740,33 +1740,33 @@ B1_8D16:
     SEC
     SBC (ptr_lo),y
     INY
-    STA zp_AD
+    STA sprite_y_tmp
     LDA #$00
     SBC (ptr_lo),y
     INY
     STA zp_AE
-    LDA zp_AD
+    LDA sprite_y_tmp
     CLC
     ADC tmp_c
-    STA zp_AD
+    STA sprite_y_tmp
     LDA zp_AE
     ADC tmp_d
     BNE B1_8D72
-    LDA zp_AD
+    LDA sprite_y_tmp
     STA ram_0203,x
     LDA #$00
     SEC
     SBC (ptr_lo),y
     INY
-    STA zp_AD
+    STA sprite_y_tmp
     LDA #$00
     SBC (ptr_lo),y
     INY
     STA zp_AE
-    LDA zp_AD
+    LDA sprite_y_tmp
     CLC
     ADC tmp_a
-    STA zp_AD
+    STA sprite_y_tmp
     LDA zp_AE
     ADC #$00
     BNE B1_8D74
@@ -1779,7 +1779,7 @@ B1_8D16:
     INY
     EOR #$C0
     STA ram_0202,x
-    LDA zp_AD
+    LDA sprite_y_tmp
     STA oam_buffer,x
     INX
     INX
@@ -5481,7 +5481,7 @@ B1_BE62:
 B1_BE85:
     JSR SilenceSound
     LDA #$40
-    STA ram_0389
+    STA cutscene_fade_a
     LDA #$23
     LDY #$C0
     JSR SetPPUAddr
@@ -5496,7 +5496,7 @@ B1_BE98:
     LDA #$00
     STA scroll_y_lo
     STA scroll_y_hi
-    STA ram_038A
+    STA cutscene_fade_b
     JSR CutsceneScrollCall
     LDA #$01
     STA nmi_state
@@ -5507,13 +5507,13 @@ B1_BE98:
     JSR EnableRendering
 B1_BEC0:
     JSR WaitForNMI
-    DEC ram_038A
+    DEC cutscene_fade_b
     JSR CutsceneScrollCall
     LDA fade_dir
     BNE B1_BEC0
 B1_BECD:
     JSR WaitForNMI
-    DEC ram_038A
+    DEC cutscene_fade_b
     JSR CutsceneScrollCall
     JSR ReadControllerBank0
     LDA buttons_pressed

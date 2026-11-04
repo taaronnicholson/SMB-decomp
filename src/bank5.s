@@ -4562,11 +4562,11 @@ B5_A730:
     STA ent_dy,x
     LDA tmp_a
     STA ent_dx,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     LDA tmp_c
     CLC
     ADC #$01
-    STA ram_06C0,x
+    STA ent_line_len,x
     RTS
 B5_A755:
     LDA tmp_b
@@ -4580,8 +4580,8 @@ B5_A755:
     ADC #$01
     STA ent_dx,x
     LDA tmp_c
-    STA ram_06C0,x
-    STA ram_06F0,x
+    STA ent_line_len,x
+    STA ent_line_acc,x
     RTS
 B5_A773:
     .word B5_A79B
@@ -4614,13 +4614,13 @@ B5_A79B:
     LDA ent_x_hi,x
     SBC #$00
     STA ent_x_hi,x
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     SEC
     SBC ent_dx,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     BCS B5_A7D4
-    ADC ram_06C0,x
-    STA ram_06F0,x
+    ADC ent_line_len,x
+    STA ent_line_acc,x
     LDA ent_y_lo,x
     SEC
     SBC #$01
@@ -4640,13 +4640,13 @@ B5_A7D5:
     LDA ent_y_hi,x
     SBC #$00
     STA ent_y_hi,x
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     SEC
-    SBC ram_06C0,x
-    STA ram_06F0,x
+    SBC ent_line_len,x
+    STA ent_line_acc,x
     BCS B5_A7D4
     ADC ent_dx,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     LDA ent_x_lo,x
     SEC
     SBC #$01
@@ -4665,13 +4665,13 @@ B5_A80F:
     LDA ent_x_hi,x
     ADC #$00
     STA ent_x_hi,x
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     SEC
     SBC ent_dx,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     BCS B5_A848
-    ADC ram_06C0,x
-    STA ram_06F0,x
+    ADC ent_line_len,x
+    STA ent_line_acc,x
     LDA ent_y_lo,x
     SEC
     SBC #$01
@@ -4691,13 +4691,13 @@ B5_A849:
     LDA ent_y_hi,x
     SBC #$00
     STA ent_y_hi,x
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     SEC
-    SBC ram_06C0,x
-    STA ram_06F0,x
+    SBC ent_line_len,x
+    STA ent_line_acc,x
     BCS B5_A848
     ADC ent_dx,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     LDA ent_x_lo,x
     CLC
     ADC #$01
@@ -4716,13 +4716,13 @@ B5_A883:
     LDA ent_x_hi,x
     SBC #$00
     STA ent_x_hi,x
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     SEC
     SBC ent_dx,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     BCS B5_A8BC
-    ADC ram_06C0,x
-    STA ram_06F0,x
+    ADC ent_line_len,x
+    STA ent_line_acc,x
     LDA ent_y_lo,x
     CLC
     ADC #$01
@@ -4744,13 +4744,13 @@ B5_A8C0:
     LDA ent_y_hi,x
     ADC #$00
     STA ent_y_hi,x
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     SEC
-    SBC ram_06C0,x
-    STA ram_06F0,x
+    SBC ent_line_len,x
+    STA ent_line_acc,x
     BCS B5_A8BC
     ADC ent_dx,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     LDA ent_x_lo,x
     SEC
     SBC #$01
@@ -4769,13 +4769,13 @@ B5_A8FA:
     LDA ent_x_hi,x
     ADC #$00
     STA ent_x_hi,x
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     SEC
     SBC ent_dx,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     BCS B5_A933
-    ADC ram_06C0,x
-    STA ram_06F0,x
+    ADC ent_line_len,x
+    STA ent_line_acc,x
     LDA ent_y_lo,x
     CLC
     ADC #$01
@@ -4795,13 +4795,13 @@ B5_A934:
     LDA ent_y_hi,x
     ADC #$00
     STA ent_y_hi,x
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     SEC
-    SBC ram_06C0,x
-    STA ram_06F0,x
+    SBC ent_line_len,x
+    STA ent_line_acc,x
     BCS B5_A933
     ADC ent_dx,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     LDA ent_x_lo,x
     CLC
     ADC #$01
@@ -4995,7 +4995,7 @@ Ent_BecomeOrbiter:
     ROR a
     LSR tmp_a
     ROR a
-    STA ram_06C0,x
+    STA ent_line_len,x
     LDA ent_x_hi,x
     STA tmp_a
     LDA ent_x_lo,x
@@ -5007,7 +5007,7 @@ Ent_BecomeOrbiter:
     ROR a
     LSR tmp_a
     ROR a
-    STA ram_06F0,x
+    STA ent_line_acc,x
     RTS
 Ent4D_Update:
     JSR Ent_TryCarryPlayer
@@ -5030,25 +5030,25 @@ Ent4D_Update:
     JSR EntUnpackNibbles
     JMP EntityDeltaFromCentre
 EntUnpackNibbles:
-    LDA ram_06C0,x
+    LDA ent_line_len,x
     ASL a
     ASL a
     ASL a
     ASL a
     STA tmp_a
-    LDA ram_06C0,x
+    LDA ent_line_len,x
     LSR a
     LSR a
     LSR a
     LSR a
     STA tmp_b
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     ASL a
     ASL a
     ASL a
     ASL a
     STA tmp_c
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     LSR a
     LSR a
     LSR a
@@ -5868,9 +5868,9 @@ Ent77_Update:
     LDA ent_y_hi,x
     STA ent_dx,x
     LDA ent_x_lo,x
-    STA ram_06C0,x
+    STA ent_line_len,x
     LDA ent_x_hi,x
-    STA ram_06F0,x
+    STA ent_line_acc,x
     LDA #$78
     STA ent_type,x
     RTS
@@ -5880,9 +5880,9 @@ Ent78_Update:
     STA tmp_a
     LDA ent_dx,x
     STA tmp_b
-    LDA ram_06C0,x
+    LDA ent_line_len,x
     STA tmp_c
-    LDA ram_06F0,x
+    LDA ent_line_acc,x
     STA tmp_d
     INC ent_angle,x
     LDA ent_radius,x
