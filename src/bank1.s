@@ -1308,7 +1308,7 @@ MarkEntityOffscreen:
     STA ent_flags,x
     RTS
 DrawEntity:
-    STX zp_42
+    STX saved_x
     LDA ent_y_lo,x
     SEC
     SBC cam_y_lo
@@ -1425,7 +1425,7 @@ B1_8B00:
     INY
     STA ram_0202,x
     LDA zp_AD
-    STA ram_0200,x
+    STA oam_buffer,x
     INX
     INX
     INX
@@ -1532,7 +1532,7 @@ B1_8BA6:
     EOR #$40
     STA ram_0202,x
     LDA zp_AD
-    STA ram_0200,x
+    STA oam_buffer,x
     INX
     INX
     INX
@@ -1643,7 +1643,7 @@ B1_8C61:
     EOR #$80
     STA ram_0202,x
     LDA zp_AD
-    STA ram_0200,x
+    STA oam_buffer,x
     INX
     INX
     INX
@@ -1757,7 +1757,7 @@ B1_8D16:
     EOR #$C0
     STA ram_0202,x
     LDA zp_AD
-    STA ram_0200,x
+    STA oam_buffer,x
     INX
     INX
     INX
@@ -5292,7 +5292,7 @@ HideSprites:
     LDY #$3C
     LDA #$FF
 B1_BD99:
-    STA ram_0200,y
+    STA oam_buffer,y
     INY
     INY
     INY
@@ -5300,7 +5300,7 @@ B1_BD99:
     BNE B1_BD99
     RTS
     LDA #$6E
-    STA ram_0200
+    STA oam_buffer
     STA ram_0204
     LDA #$76
     STA ram_0203
@@ -5319,7 +5319,7 @@ B1_BD99:
     JSR SetPPUAddr
     LDA #$FF
     LDY #$BD
-    JSR B1_BE3C
+    JSR PrintString
     LDA items_found
     CLC
     ADC #$C4
@@ -5329,13 +5329,13 @@ B1_BD99:
     JSR SetPPUAddr
     LDA #$07
     LDY #$BE
-    JSR B1_BE3C
+    JSR PrintString
     LDA #$23
     LDY #$47
     JSR SetPPUAddr
     LDA #$16
     LDY #$BE
-    JSR B1_BE3C
+    JSR PrintString
     JMP B1_BE85
 ; Tbl_B1_BDFF: 8 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B1_BDFF:
@@ -5346,7 +5346,7 @@ Tbl_B1_BDFF:
     .byte $00
     .byte "TO BE CONTINUED:::"
     .byte $00
-B1_BE3C:
+PrintString:
     STA ptr_lo
     STY ptr_hi
     LDY #$00
@@ -5383,7 +5383,7 @@ B1_BE62:
     JSR SetPPUAddr
     LDA #$29
     LDY #$BE
-    JSR B1_BE3C
+    JSR PrintString
 B1_BE85:
     JSR SilenceSound
     LDA #$40
@@ -5421,7 +5421,7 @@ B1_BECD:
     JSR WaitForNMI
     DEC ram_038A
     JSR F_CEE1
-    JSR F_C9B3
+    JSR ReadControllerBank0
     LDA buttons_pressed
     AND #$0B
     BEQ B1_BECD
@@ -5431,7 +5431,7 @@ B1_BECD:
     JSR FarCall
     LDX #$FF
     TXS
-    JMP F_C647
+    JMP StartNewGame
 ; Tbl_B1_BEEE: 274 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B1_BEEE:
     .byte $80,$00,$FD,$00,$01,$20,$FF,$FF,$FE,$FF,$12,$10,$00,$09,$FF,$FF

@@ -754,7 +754,7 @@ Gfx_B4_ABB2:
     STA ent_x_lo,y
     LDA #$01
     STA ent_x_hi,y
-    STY zp_42
+    STY saved_x
     LDA #$B0
     LDY #$AD
     JSR SpawnEffects
@@ -779,7 +779,7 @@ B4_AC09:
     STA ent_y_lo,y
     LDA player_y_hi
     STA ent_y_hi,y
-    STY zp_42
+    STY saved_x
     LDA #$A5
     LDY #$AD
     JSR SpawnEffects
@@ -892,7 +892,7 @@ B4_AD05:
     STA zp_D6
     LDX #$00
 B4_AD0D:
-    LDA ram_0200,x
+    LDA oam_buffer,x
     CMP #$FF
     BEQ B4_AD1F
     LDA zp_D6
@@ -2043,7 +2043,7 @@ B4_B6B6:
     STA ent_y_lo,y
     LDA player_y_hi
     STA ent_y_hi,y
-    STY zp_42
+    STY saved_x
     LDA #$EF
     LDY #$B6
     JMP SpawnEffects
@@ -2756,7 +2756,7 @@ B4_BE99:
     DEC ram_01A8
     BEQ B4_BEB7
     BMI B4_BE99
-    JSR F_C9B3
+    JSR ReadControllerBank0
     LDA buttons
     AND #$0B
     BEQ B4_BE99
@@ -2764,7 +2764,7 @@ B4_BEB7:
     DEC fade_dir
 B4_BEB9:
     JSR WaitForNMI
-    JSR F_C9B3
+    JSR ReadControllerBank0
     JSR B4_BEE7
     DEC entity_tick
     LDA entity_tick
@@ -2847,7 +2847,7 @@ B4_BF41:
     BCS B4_BF5C
     LDA #$FF
 B4_BF5C:
-    STA ram_0200,x
+    STA oam_buffer,x
     JMP B4_BF6C
 B4_BF62:
     CLC
@@ -2855,7 +2855,7 @@ B4_BF62:
     BCC B4_BF69
     LDA #$FF
 B4_BF69:
-    STA ram_0200,x
+    STA oam_buffer,x
 B4_BF6C:
     LDA tmp_a
     STA ptr_hi

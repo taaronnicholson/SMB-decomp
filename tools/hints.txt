@@ -277,7 +277,7 @@ name 6 8746 Snd_Noise_NextToken
 name f CD53 CheckPause           ; fade complete and START pressed -> pause handling
 name f D00E UpdateCamera         ; dispatch on camera_mode ($01A6), then cam_x/cam_y follow the focus position
 name f D5E4 ScrollX              ; moves the horizontal scroll (zp_09) by the change in focus_x and draws new columns
-name f D5D9 ScrollY              ; stores the previous focus position, then falls into the vertical scroll update
+name f D5D9 SavePrevFocus        ; stores the previous focus position, then jumps to the tile redraw (F_F379)
 ram 001B focus_x_lo              ; world position the camera follows (smoothed player position)
 ram 001C focus_x_hi
 ram 001D focus_y_lo
@@ -397,3 +397,17 @@ name f EC73 PlayerMoveLeft          ; Left held: turns first (player_facing), th
 name f ED17 PlayerMoveRight
 ram 0064 walk_speed
 name f E035 PlayerVerticalStep      ; state-0 vertical motion: invulnerability/shot checks, then zp_70/71/72 counters and ApplyRidingMotion
+name f D6CE ScrollY                 ; vertical scroll from the change in focus_y (ScrollX falls into it when x did not change)
+name f C9B3 ReadControllerBank0     ; bank-safe wrapper: switch to bank 0, ReadController, restore the bank
+name f C874 NMI_EndOfFrame          ; end of the NMI state handlers: F_C7A1, bank 6 $BF02, then F_C82F
+name f DDC1 TryFireShot             ; powerup_shot set, shot_cooldown 0, no zp_E0 and B pressed -> start a projectile
+name f EEBB PlayerWalkAnimStep      ; advances the walking animation counter zp_6D (0-15) every few ticks
+name f F3B5 UpdateTouchKind         ; reads the tile at the player position and sets touch_kind (zp_57) from TileKindTable; collectibles play sfx and are flagged
+name f C647 StartNewGame            ; new game: silences sound, lives = 2, score = 0, items_found = 0, balloons_left = 0, stage_index = 0
+name f C667 StageSetup              ; loads the stage record (spawn position, area) for stage_index
+name f C6FD MainLoop
+name f C700 MainLoopBody
+name 1 BE3C PrintString             ; A/Y = pointer to a zero-terminated string: PPUDATA = char + $94 (space = $5C)
+name 5 977B Ent_BeginFall           ; remembers the current type in ent_dy and becomes $1B (falling)
+ram 0042 saved_x                    ; X register saved across helper calls (STX zp_42 ... LDX zp_42)
+ram 0200 oam_buffer                 ; sprite DMA source page ($0200-$02FF)

@@ -3574,7 +3574,7 @@ B6_A433:
     INC stage_index
     LDX #$FF
     TXS
-    JMP F_C667
+    JMP StageSetup
 ; Tbl_B6_A44E: 147 bytes, read by AreaMap22
 Tbl_B6_A44E:
     .byte $00
@@ -3669,7 +3669,7 @@ B6_A56E:
     LDY #$04
 B6_A572:
     LDA #$FF
-    STA ram_0200,x
+    STA oam_buffer,x
     INX
     INX
     INX
@@ -5023,7 +5023,7 @@ B6_BE63:
     BNE B6_BE63
 B6_BE79:
     JSR WaitForNMI
-    JSR F_C9B3
+    JSR ReadControllerBank0
     LDA ram_0389
     CLC
     ADC #$04

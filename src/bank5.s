@@ -2121,7 +2121,7 @@ B5_90BF:
     LDA BitMask,x
     ORA onetime_flags,y
     STA onetime_flags,y
-    LDX zp_42
+    LDX saved_x
     RTS
 Ent09_Update:
     LDA #$02
@@ -2418,7 +2418,7 @@ B5_946F:
     BNE B5_9467
     LDA #$05
     JSR PlaySong
-    LDX zp_42
+    LDX saved_x
     LDA #$01
     STA ent_angle,x
 B5_9493:
@@ -2748,7 +2748,7 @@ Ent19_Update:
     JSR Ent_CheckPlayerTouch
     JSR Ent_PatrolStep
     BEQ B5_978C
-B5_977B:
+Ent_BeginFall:
     LDA ent_type,x
     STA ent_dy,x
     LDA #$1B
@@ -2945,7 +2945,7 @@ Ent1F_Update:
     JSR Ent_CheckPlayerTouch
     JSR Ent_PatrolStep
     BEQ B5_9975
-    JMP B5_977B
+    JMP Ent_BeginFall
 B5_9975:
     LDA ent_radius,x
     SEC
@@ -2973,7 +2973,7 @@ Ent20_Update:
     JSR Ent_CheckPlayerTouch
     JSR Ent_PatrolStep
     BEQ B5_99B1
-    JMP B5_977B
+    JMP Ent_BeginFall
 B5_99B1:
     LDA ent_radius,x
     SEC
@@ -3002,7 +3002,7 @@ Ent9C_Update:
     JSR Ent_GroundCheck
     LDA ent_angle,x
     BPL B5_99F5
-    JMP B5_977B
+    JMP Ent_BeginFall
 B5_99F5:
     DEC ent_radius,x
     BNE B5_9A0E
@@ -6396,7 +6396,7 @@ Ent9D_Update:
     JSR Ent_GroundCheck
     LDA ent_angle,x
     BPL B5_B8F3
-    JMP B5_977B
+    JMP Ent_BeginFall
 B5_B8F3:
     DEC ent_radius,x
     BNE B5_B8FD
@@ -6573,7 +6573,7 @@ Ent92_Update:
     LDA #$3C
     STA ram_0720
     JSR SetCollectedFlag
-    LDX zp_42
+    LDX saved_x
 B5_BA7D:
     RTS
 B5_BA7E:
@@ -6805,7 +6805,7 @@ B5_BC5B:
     STA player_x_hi
     LDA #$00
     STA decomp_to_ram
-    JMP F_EEBB
+    JMP PlayerWalkAnimStep
     LDA #$00
     STA player_frame
     RTS
@@ -6827,7 +6827,7 @@ B5_BC5B:
     STA ent_x_lo,y
     LDA player_x_hi
     STA ent_x_hi,y
-    STY zp_42
+    STY saved_x
     LDA #$FF
     LDY #$BC
     JSR SpawnEffects
