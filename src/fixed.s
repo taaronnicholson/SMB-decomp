@@ -6427,7 +6427,7 @@ F_F16F:
     LDA #$0C
     STA tmp_a
 F_F187:
-    JSR F_F885
+    JSR SpawnPickupAtPlayer
     LDA #$00
     STA zp_A7
     SEC
@@ -7361,7 +7361,7 @@ F_F876:
     JSR Ent_MoveYWithGround
     PLA
     JMP SwitchBankKeepX
-F_F885:
+SpawnPickupAtPlayer:
     LDA cur_bank
     PHA
     LDA #$05

@@ -475,3 +475,8 @@ name 2 A5CC SetPPUAddr_1044         ; PPUADDR = $1044 (tile data for the animate
 name 2 AF19 SetPPUAddr_1432
 name f E0C6 ResetIdleTimer          ; clears idle_timer and idle_anim_timer, then continues with the normal frame setup
 name f E6DC PlayerLand              ; landing: dive_mode 0 = normal landing (state 4), otherwise the dive landing (state 3)
+
+; naming pass 6
+name f F885 SpawnPickupAtPlayer      ; saves bank and X, switches to bank 5, puts a free entity at the player's position and runs AwardPickup
+name 5 A785 EntStateJump             ; jumps through a word table indexed by ent_param2 (a sub-state dispatcher)
+name 4 BEEB CutsceneScrollEffect     ; far-called by F_CEE1 after zp_75 is set to $78

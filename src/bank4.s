@@ -1328,7 +1328,7 @@ B4_B0D8:
     BCS B4_B0F1
     LDA #$0C
     STA tmp_a
-    JSR F_F885
+    JSR SpawnPickupAtPlayer
 B4_B0F1:
     LDA #$28
     JSR PlaySfxNoise
@@ -1420,7 +1420,7 @@ B4_B195:
     STA tmp_a
     LDA zp_D3
     BNE B4_B1A0
-    JSR F_F885
+    JSR SpawnPickupAtPlayer
 B4_B1A0:
     INC ram_072F
     LDA #$13
@@ -1496,7 +1496,7 @@ B4_B239:
     BNE B4_B248
     LDA #$0C
     STA tmp_a
-    JSR F_F885
+    JSR SpawnPickupAtPlayer
 B4_B248:
     CMP #$00
     BNE B4_B226
@@ -1591,7 +1591,7 @@ GameState0D:
     INC ram_0745
     LDA #$0C
     STA tmp_a
-    JSR F_F885
+    JSR SpawnPickupAtPlayer
 B4_B351:
     JMP B4_B3AC
 B4_B354:
