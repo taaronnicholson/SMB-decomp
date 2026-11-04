@@ -276,9 +276,9 @@ output position as scratch and reads them back for 16-bit address arithmetic.
 
 ## Status
 `make verify` rebuilds the ROM byte-for-byte. Of the 128 KB of PRG, about 36% is code (traced from the vectors, far calls,
-pointer tables and a conservative speculative decode) and about 53% more is classified data with labels, structure or comments
+pointer tables and a conservative speculative decode) and about 55% more is classified data with labels, structure or comments
 (compressed graphics blocks, maps, tilesets, palettes, animation frames, spawn lists, sound data, text, tile property and
-height tables, pixel tables); **about 10% remains unclassified** (`GAPS=20 python3 -I tools/decomp.py` lists the largest
+height tables, pixel tables); **about 8% remains unclassified** (`GAPS=20 python3 -I tools/decomp.py` lists the largest
 gaps: the tail of bank 2, the start of bank 3, and assorted small tables in banks 6, 0, 1 and 5).
 Speculatively found code may include a few false positives (harmless for the byte-exact build; labels are provisional).
 

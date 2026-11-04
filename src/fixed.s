@@ -3,14 +3,17 @@
 
 .segment "FIXED"
 
-F_C000:
+; BankValueTable: bus-conflict-safe table read by SwitchBank: the byte at $C000+n is written back to select bank n (low 3 bits)
+BankValueTable:
     .byte $30,$31,$32,$33,$34,$35,$36,$37
-F_C008:
+; NametableRowLo: low address byte of each tile row in the two nametables (32-byte rows, padded)
+NametableRowLo:
     .byte $00,$20,$40,$60,$80,$A0,$C0,$E0,$00,$20,$40,$60,$80,$A0,$C0,$E0
     .byte $00,$20,$40,$60,$80,$A0,$C0,$E0,$00,$20,$40,$60,$80,$A0,$00,$00
     .byte $00,$20,$40,$60,$80,$A0,$C0,$E0,$00,$20,$40,$60,$80,$A0,$C0,$E0
     .byte $00,$20,$40,$60,$80,$A0,$C0,$E0,$00,$20,$40,$60,$80,$A0,$00,$00
-F_C048:
+; NametableRowHi: high address byte of each tile row
+NametableRowHi:
     .res 8, $20
     .res 8, $21
     .res 8, $22
@@ -18,9 +21,11 @@ F_C048:
     .res 8, $29
     .res 8, $2A
     .byte $2B,$2B,$2B,$2B,$2B,$2B,$00,$00
-F_C088:
+; AttrRowLo: low address of each attribute-table row
+AttrRowLo:
     .byte $C0,$C8,$D0,$D8,$E0,$E8,$F0,$F8,$C0,$C8,$D0,$D8,$E0,$E8,$F0,$F8
-F_C098:
+; AttrRowHi: high address of each attribute-table row
+AttrRowHi:
     .res 8, $23
     .res 8, $2B
 FlushPPUBuffer:
@@ -176,7 +181,8 @@ F_C1D0:
     .res 10, $00
     .byte $02,$02,$01,$01,$02,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$02
     .byte $02,$01,$01,$00,$00
-TileKindTable:
+; TileKindTable_Data: tile id -> kind (1 spring, 3 collectible, 4 = $CD)
+TileKindTable_Data:
     .byte $00
 F_C1F0:
     .byte $34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35
@@ -693,8 +699,8 @@ SetPPUMask:
 SwitchBank:
     STA cur_bank
     TAX
-    LDA F_C000,x
-    STA F_C000,x
+    LDA BankValueTable,x
+    STA BankValueTable,x
 GameState00:
     RTS
 SwitchBankFromAC:
@@ -705,8 +711,8 @@ SwitchBankKeepX:
     PHA
     LDA cur_bank
     TAX
-    LDA F_C000,x
-    STA F_C000,x
+    LDA BankValueTable,x
+    STA BankValueTable,x
     PLA
     TAX
     RTS
@@ -1486,7 +1492,7 @@ SinLookup:
     PHA
     LDA #$00
     JSR SwitchBankKeepX
-    LDA SineTable,y
+    LDA SineTable_Data,y
     STA tmp_08
     PLA
     JSR SwitchBankKeepX
@@ -1501,7 +1507,7 @@ CosLookup:
     CLC
     ADC #$40
     TAY
-    LDA SineTable,y
+    LDA SineTable_Data,y
     STA tmp_08
     TYA
     SEC
@@ -1588,9 +1594,9 @@ F_CF52:
 F_CF61:
     LDX zp_AD
     LDA PPUSTATUS
-    LDA F_C048,x
+    LDA NametableRowHi,x
     STA PPUADDR
-    LDA F_C008,x
+    LDA NametableRowLo,x
     STA PPUADDR
     LDY #$1F
     LDA #$F0
@@ -1609,9 +1615,9 @@ F_CF7D:
     CMP #$FF
     BEQ F_CFB4
     CLC
-    ADC F_C008,x
+    ADC NametableRowLo,x
     PHA
-    LDA F_C048,x
+    LDA NametableRowHi,x
     ADC #$00
     STA PPUADDR
     PLA
@@ -2785,10 +2791,10 @@ F_D7C7:
     ADC #$1E
     STA zp_43
     STA tmp_ptr_lo
-    LDA F_C048,y
+    LDA NametableRowHi,y
     STA ppu_buffer,x
     INX
-    LDA F_C008,y
+    LDA NametableRowLo,y
     CLC
     ADC zp_45
     STA ppu_buffer,x
@@ -2887,7 +2893,7 @@ F_D885:
     BNE F_D898
     LDY #$20
 F_D898:
-    LDA F_C048,y
+    LDA NametableRowHi,y
     STA ppu_buffer,x
     INX
     LDA zp_45
@@ -2983,11 +2989,11 @@ F_D916:
 F_D943:
     LDY ppu_buffer_idx
     LDX zp_46
-    LDA F_C088,x
+    LDA AttrRowLo,x
     CLC
     ADC zp_45
     STA ram_0301,y
-    LDA F_C098,x
+    LDA AttrRowHi,x
     ADC #$00
     STA ppu_buffer,y
     INY
@@ -3068,10 +3074,10 @@ F_D9DB:
     LDA zp_30
     STA zp_41
 F_D9EB:
-    LDA F_C048,y
+    LDA NametableRowHi,y
     STA ppu_buffer,x
     INX
-    LDA F_C008,y
+    LDA NametableRowLo,y
     CLC
     ADC zp_45
     STA ppu_buffer,x
@@ -3154,10 +3160,10 @@ F_DA82:
     STA zp_43
     STA tmp_ptr_lo
     LDY zp_46
-    LDA F_C048,y
+    LDA NametableRowHi,y
     STA ppu_buffer,x
     INX
-    LDA F_C008,y
+    LDA NametableRowLo,y
     STA ppu_buffer,x
     INX
     LDA zp_43
@@ -5029,7 +5035,7 @@ F_E820:
     TAX
     LDA #$02
     STA tmp_a
-    LDA TileKindTable,x
+    LDA TileKindTable_Data,x
     CMP #$01
     BEQ F_E837
     CMP #$04
@@ -6552,11 +6558,11 @@ F_F2FD:
 F_F318:
     LDY tmp_a
     LDX ppu_buffer_idx
-    LDA F_C008,y
+    LDA NametableRowLo,y
     CLC
     ADC tmp_ptr_lo
     STA ram_0301,x
-    LDA F_C048,y
+    LDA NametableRowHi,y
     ADC #$00
     STA tmp_ptr_hi
     LDA #$02
@@ -6678,7 +6684,7 @@ F_F3DE:
     JMP F_F43E
 F_F40E:
     TAY
-    LDA TileKindTable,y
+    LDA TileKindTable_Data,y
     STA touch_kind
     CMP #$03
     BNE F_F41E

@@ -362,3 +362,17 @@ name 5 A99A Ent_CheckPlayerOverlapD
 
 ; ---- unreferenced data ----
 blob 2 B8CB 1845 Bank2_TailData unreferenced: mostly $00/$FF bytes with single-bit variations (period 32), no code reads it; probably leftover fill
+
+; ---- bank 3 code reached through raw JSR/JMP $xxxx from the fixed bank ----
+entry 3 BE91
+entry 3 BE9D
+entry 3 8405
+entry 3 BF05
+; ---- tables classified ----
+blob 0 BE8A 256 SineTable_Data signed sine table, amplitude +-64 (see SineTable)
+blob f C000 8 BankValueTable bus-conflict-safe table read by SwitchBank: the byte at $C000+n is written back to select bank n (low 3 bits)
+blob f C008 64 NametableRowLo low address byte of each tile row in the two nametables (32-byte rows, padded)
+blob f C048 64 NametableRowHi high address byte of each tile row
+blob f C088 16 AttrRowLo low address of each attribute-table row
+blob f C098 16 AttrRowHi high address of each attribute-table row
+blob f C1EF 256 TileKindTable_Data tile id -> kind (1 spring, 3 collectible, 4 = $CD); only ids $B4-$DB are meaningful

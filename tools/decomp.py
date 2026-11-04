@@ -137,7 +137,13 @@ while queue:
             else: unresolved.append((pc, 'farcall-dyn'))
         else: push(val, cb, why=why)
         if ncb is not None or nxt >= 0xC000: push(nxt, ncb, (None, None, None), why)
-    elif mn == 'JMP' and m == 'abs': push(val, cb, nr, why)
+    elif mn == 'JMP' and m == 'abs':
+        if val == FARCALL:                                   # tail-called far call: A=hi X=lo Y=bank
+            if None not in regs and ry < NB and (ra << 8 | rx) >= 0x8000:
+                tgt = ra << 8 | rx
+                farcalls.add((tgt, ry)); push(tgt, ry if tgt < 0xC000 else None, why=why + ' farcall')
+            else: unresolved.append((pc, 'farcall-dyn'))
+        else: push(val, cb, nr, why)
     elif mn in ('RTS', 'RTI', 'BRK') or (mn == 'JMP' and m == 'ind'): pass
     else: push(nxt, cb, nr, why)
 

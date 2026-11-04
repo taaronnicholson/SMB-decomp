@@ -1183,19 +1183,61 @@ B3_BEA9:
     PLA
     STA ram_0720
     RTS
-    .byte $00,$3C,$4A,$58,$66,$A2,$00,$8E,$AA,$01,$E8,$8E,$36,$07,$8E,$37
-    .byte $07,$A9,$04,$8D,$38,$07,$A5,$60,$85,$51,$A5,$61,$4A,$66,$51,$4A
-    .byte $66,$51,$4A,$66,$51,$4A,$66,$51,$A5,$51,$C9,$3B,$B0,$17,$C9,$3A
-    .byte $F0,$14,$38,$E9,$05,$90,$0E,$E9,$03,$29,$03,$0A,$A8,$A9,$00,$99
-    .byte $04,$01,$99,$05,$01,$60,$A9,$00,$CD,$B3,$01,$D0,$F8,$CE,$B3,$01
-    .byte $8D,$04,$01,$8D,$05,$01,$8D,$08,$01,$8D,$09,$01,$8D,$0A,$01,$8D
-    .byte $0B,$01,$60,$FF,$00,$00,$00,$00,$FB,$FF,$3E,$DC,$80,$00,$00,$00
-    .byte $F2,$00,$01,$04,$DF,$7F,$FF,$FF,$10,$00,$00,$00,$FE,$FF,$EF,$ED
-    .byte $FF,$FF,$DF,$FE,$04,$00,$03,$10,$FF,$FD,$FF,$FE,$00,$00,$00,$00
-    .byte $F2,$40,$00,$00,$DF,$EF,$FF,$FB,$01,$40,$10,$00,$BF,$FF,$FF,$32
-    .byte $BF,$FF,$FF,$FF,$00,$00,$00,$40,$FF,$EF,$FF,$FF,$00,$00,$08,$00
-    .byte $03,$00,$00,$00,$FB,$FC,$FE,$FF,$01,$00,$00,$10,$FF,$9F,$EB,$7F
-    .byte $FF,$FF,$FF,$FF,$00,$00,$00,$81,$BB,$EE,$FF,$DB,$00,$00,$00,$00
-    .byte $55,$04,$08,$00,$FF,$7F,$6F,$EE,$80,$00,$00,$02,$F9,$9B,$FF,$7F
-    .byte $FF,$FF,$FA,$DF,$00,$00,$00,$00,$EF,$F7,$FF,$BB,$00,$00,$00,$00
-    .byte $D1,$00,$00,$00,$FF,$FF,$FF,$6D,$00,$01,$20,$00,$EF,$FF,$FF,$F6
+    .byte $00,$3C,$4A,$58,$66
+    LDX #$00
+    STX ram_01AA
+    INX
+    STX ram_0736
+    STX ram_0737
+    LDA #$04
+    STA ram_0738
+    LDA player_y_lo
+    STA ptr_lo
+    LDA player_y_hi
+    LSR a
+    ROR ptr_lo
+    LSR a
+    ROR ptr_lo
+    LSR a
+    ROR ptr_lo
+    LSR a
+    ROR ptr_lo
+    LDA ptr_lo
+    CMP #$3B
+    BCS B3_BF45
+    CMP #$3A
+    BEQ B3_BF46
+    SEC
+    SBC #$05
+    BCC B3_BF45
+    SBC #$03
+    AND #$03
+    ASL a
+    TAY
+    LDA #$00
+    STA ram_0104,y
+    STA ram_0105,y
+B3_BF45:
+    RTS
+B3_BF46:
+    LDA #$00
+    CMP ram_01B3
+    BNE B3_BF45
+    DEC ram_01B3
+    STA ram_0104
+    STA ram_0105
+    STA ram_0108
+    STA ram_0109
+    STA ram_010A
+    STA ram_010B
+    RTS
+    .byte $FF,$00,$00,$00,$00,$FB,$FF,$3E,$DC,$80,$00,$00,$00,$F2,$00,$01
+    .byte $04,$DF,$7F,$FF,$FF,$10,$00,$00,$00,$FE,$FF,$EF,$ED,$FF,$FF,$DF
+    .byte $FE,$04,$00,$03,$10,$FF,$FD,$FF,$FE,$00,$00,$00,$00,$F2,$40,$00
+    .byte $00,$DF,$EF,$FF,$FB,$01,$40,$10,$00,$BF,$FF,$FF,$32,$BF,$FF,$FF
+    .byte $FF,$00,$00,$00,$40,$FF,$EF,$FF,$FF,$00,$00,$08,$00,$03,$00,$00
+    .byte $00,$FB,$FC,$FE,$FF,$01,$00,$00,$10,$FF,$9F,$EB,$7F,$FF,$FF,$FF
+    .byte $FF,$00,$00,$00,$81,$BB,$EE,$FF,$DB,$00,$00,$00,$00,$55,$04,$08
+    .byte $00,$FF,$7F,$6F,$EE,$80,$00,$00,$02,$F9,$9B,$FF,$7F,$FF,$FF,$FA
+    .byte $DF,$00,$00,$00,$00,$EF,$F7,$FF,$BB,$00,$00,$00,$00,$D1,$00,$00
+    .byte $00,$FF,$FF,$FF,$6D,$00,$01,$20,$00,$EF,$FF,$FF,$F6

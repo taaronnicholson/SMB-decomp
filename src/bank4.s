@@ -736,19 +736,103 @@ Gfx_B4_A52A:
 Gfx_B4_ABB2:
     .byte $00,$01,$7E,$00,$00,$38,$00,$60,$10,$0C,$F8,$0D,$B0,$7B,$41,$1E
     .byte $42,$7D,$06,$40,$A8,$2D,$03,$81,$F4,$1A,$60,$04,$3F,$C0,$28,$71
-    .byte $C1,$5E,$08,$F0,$0E,$24,$74,$65,$C0,$00,$A5,$D1,$C9,$0F,$D0,$27
-    .byte $48,$20,$3D,$FA,$A9,$96,$99,$B0,$04,$A9,$00,$99,$E0,$04,$A9,$76
-    .byte $99,$10,$05,$A9,$01,$99,$40,$05,$84,$42,$A9,$B0,$A0,$AD,$20,$17
-    .byte $F9,$A9,$36,$20,$8F,$CE,$68,$38,$E9,$01,$D0,$41,$A5,$C2,$C9,$DC
-    .byte $D0,$2B,$A5,$C3,$D0,$25,$20,$3D,$FA,$A5,$5E,$99,$10,$05,$A5,$5F
-    .byte $99,$40,$05,$A5,$60,$99,$B0,$04,$A5,$61,$99,$E0,$04,$84,$42,$A9
-    .byte $A5,$A0,$AD,$20,$17,$F9,$A9,$29,$20,$78,$CE,$A5,$C2,$38,$E9,$01
-    .byte $85,$C2,$A5,$C3,$E9,$00,$85,$C3,$05,$C2,$F0,$0A,$60,$85,$D1,$A8
-    .byte $B9,$BB,$AD,$85,$47,$60,$20,$52,$CE,$A9,$01,$85,$00,$C6,$11,$A5
-    .byte $11,$D0,$FC,$20,$CD,$C7,$20,$A5,$C9,$A9,$F0,$8D,$B2,$01,$20,$B4
-    .byte $C8,$A9,$0A,$85,$C2,$A9,$BD,$85,$C3,$A9,$20,$85,$AD,$A2,$00,$86
-    .byte $0B,$86,$0A,$86,$09,$86,$3D,$8E,$8A,$03,$A5,$03,$09,$06,$20,$07
-    .byte $C9,$A9,$18,$8D,$89,$03,$A9,$07,$85,$0F,$20,$E1,$CE,$A0,$00
+    .byte $C1,$5E,$08,$F0,$0E,$24,$74,$65,$C0,$00
+    LDA zp_D1
+    CMP #$0F
+    BNE B4_AC09
+    PHA
+    JSR FindFreeEntitySlot
+    LDA #$96
+    STA ent_y_lo,y
+    LDA #$00
+    STA ent_y_hi,y
+    LDA #$76
+    STA ent_x_lo,y
+    LDA #$01
+    STA ent_x_hi,y
+    STY zp_42
+    LDA #$B0
+    LDY #$AD
+    JSR SpawnEffects
+    LDA #$36
+    JSR PlaySfxNoise
+    PLA
+B4_AC09:
+    SEC
+    SBC #$01
+    BNE B4_AC4F
+    LDA credits_ptr_lo
+    CMP #$DC
+    BNE B4_AC3F
+    LDA credits_ptr_hi
+    BNE B4_AC3D
+    JSR FindFreeEntitySlot
+    LDA player_x_lo
+    STA ent_x_lo,y
+    LDA player_x_hi
+    STA ent_x_hi,y
+    LDA player_y_lo
+    STA ent_y_lo,y
+    LDA player_y_hi
+    STA ent_y_hi,y
+    STY zp_42
+    LDA #$A5
+    LDY #$AD
+    JSR SpawnEffects
+    LDA #$29
+    JSR PlaySfxSq2
+B4_AC3D:
+    LDA credits_ptr_lo
+B4_AC3F:
+    SEC
+    SBC #$01
+    STA credits_ptr_lo
+    LDA credits_ptr_hi
+    SBC #$00
+    STA credits_ptr_hi
+    ORA credits_ptr_lo
+    BEQ B4_AC58
+    RTS
+B4_AC4F:
+    STA zp_D1
+    TAY
+    LDA B4_ADBB,y
+    STA zp_47
+    RTS
+B4_AC58:
+    JSR SilenceSound
+    LDA #$01
+    STA nmi_state
+    DEC fade_dir
+B4_AC61:
+    LDA fade_dir
+    BNE B4_AC61
+    JSR RenderOffAndWait
+    JSR DisableNMI
+    LDA #$F0
+    STA ram_01B2
+    JSR ClearNametables
+    LDA #$0A
+    STA credits_ptr_lo
+    LDA #$BD
+    STA credits_ptr_hi
+    LDA #$20
+    STA zp_AD
+    LDX #$00
+    STX scroll_y_hi
+    STX scroll_y_lo
+    STX scroll_x_px
+    STX zp_3D
+    STX ram_038A
+    LDA ppumask_shadow
+    ORA #$06
+    JSR SetPPUMask
+    LDA #$18
+    STA ram_0389
+    LDA #$07
+    STA palette_set
+    JSR F_CEE1
+    LDY #$00
 B4_ACA1:
     LDA #$78
     STA ram_0203,y
@@ -877,8 +961,10 @@ B4_AD99:
     STA nmi_state
     RTS
     .byte $40,$E8,$FF,$04,$00,$C0,$09,$50,$00,$00,$FF,$90,$00,$00,$00,$00
-    .byte $F0,$02,$00,$00,$00,$FF,$14,$14,$15,$15,$14,$14,$15,$15,$14,$14
-    .byte $14,$15,$15,$15,$15,$15,$15,$15,$15,$15
+    .byte $F0,$02,$00,$00,$00,$FF
+B4_ADBB:
+    .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
+    .byte $15,$15,$15,$15
 DispatchGameState:
     LDA game_state
     ASL a
