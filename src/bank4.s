@@ -968,7 +968,7 @@ B4_AD99:
 Tbl_B4_ADA5:
     .byte $40,$E8,$FF,$04,$00,$C0,$09,$50,$00,$00,$FF,$90,$00,$00,$00,$00
     .byte $F0,$02,$00,$00,$00,$FF
-; Tbl_B4_ADBB: 20 bytes, read by Gfx_B4_ABB2
+; Tbl_B4_ADBB: 20 bytes, read by B4_AC4F
 Tbl_B4_ADBB:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
@@ -1093,7 +1093,7 @@ B4_AEA2:
     STA zp_47
 B4_AEB5:
     RTS
-; Tbl_B4_AEB6: 64 bytes, read by GameState02
+; Tbl_B4_AEB6: 64 bytes, read by B4_AEA2
 Tbl_B4_AEB6:
     .byte $01,$FF,$02,$FE,$01,$FF,$02,$FE,$01,$FF,$02,$01,$00,$FF,$FF,$FF
     .byte $FF,$FF,$FF,$FF,$FF,$FF,$FF,$01,$FF,$02,$FE,$01,$FF,$02,$FE,$01
@@ -1313,7 +1313,7 @@ B4_B0BB:
     LDA Tbl_B4_B0C4,y
     STA zp_47
     RTS
-; Tbl_B4_B0C4: 20 bytes, read by GameState0B
+; Tbl_B4_B0C4: 20 bytes, read by B4_B0BB
 Tbl_B4_B0C4:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
@@ -1551,7 +1551,7 @@ B4_B278:
 B4_B2BB:
     STA zp_47
     RTS
-; Tbl_B4_B2BE: 64 bytes, read by GameState0B
+; Tbl_B4_B2BE: 64 bytes, read by B4_B278
 Tbl_B4_B2BE:
     .res 8, $14
     .byte $15,$15,$FF,$15,$15,$15,$15,$15,$15,$15,$15,$15,$14,$14,$15,$15
@@ -2153,7 +2153,7 @@ B4_B7B6:
     .byte $00
 B4_B7B7:
     .byte $02
-; Tbl_B4_B7B8: 58 bytes, read by GameState13
+; Tbl_B4_B7B8: 58 bytes, read by B4_B579
 Tbl_B4_B7B8:
     .byte $03,$03,$C4,$B9,$63,$B9,$3D,$3E,$46,$03,$C8,$B9,$C2,$B8,$3D,$99
     .byte $46,$02,$CF,$B9,$D1,$B7,$3D,$87,$8A,$5E,$41,$4C,$46,$52,$45,$44

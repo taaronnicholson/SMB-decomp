@@ -3,7 +3,7 @@
 
 .segment "BANK3"
 
-; Tbl_B3_8000: 747 bytes, read by PlayerState10
+; Tbl_B3_8000: 747 bytes, read by F_F5DB, F_F5E3
 Tbl_B3_8000:
     .byte $A0,$18,$13,$A0,$18,$13,$A0,$78,$80,$A3,$73,$80,$A3,$93,$3A,$A8
     .byte $93,$3A,$A8,$20,$01,$56,$20,$01,$56,$80,$A7,$3C,$8A,$A7,$3C,$3A
@@ -1123,19 +1123,19 @@ B3_BE04:
     DEC fade_dir
 B3_BE0D:
     RTS
-; Tbl_B3_BE0E: 4 bytes, read by AreaMap9
+; Tbl_B3_BE0E: 4 bytes, read by B3_BD7F
 Tbl_B3_BE0E:
     .byte $27,$4B,$4E,$4F
-; Tbl_B3_BE12: 24 bytes, read by AreaMap9
+; Tbl_B3_BE12: 24 bytes, read by B3_BD67
 Tbl_B3_BE12:
     .byte $08,$08,$4A,$4A,$08,$08,$08,$08,$4A,$4A,$4A,$08,$08,$08,$4A,$4A
     .byte $08,$08,$4A,$4A,$08,$4A,$4A,$00
-; Tbl_B3_BE2A: 14 bytes, read by AreaMap9
+; Tbl_B3_BE2A: 14 bytes, read by B3_BD8D, B3_BDE3
 Tbl_B3_BE2A:
     .byte $FD
 B3_BE2B:
     .byte $FF,$FE,$FF,$FE,$FF,$FE,$FF,$FE,$FF,$FE,$FF,$FF,$FF
-; Tbl_B3_BE38: 89 bytes, read by AreaMap9
+; Tbl_B3_BE38: 89 bytes, read by B3_BEA9
 Tbl_B3_BE38:
     .byte $FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$01,$00
     .byte $00,$00,$01,$00,$01,$00,$02,$00,$01,$00,$7F,$00,$FD,$FF,$FD,$FF

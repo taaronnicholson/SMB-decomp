@@ -17,17 +17,20 @@ OPS = r'(?:LDA|LDX|LDY|ADC|SBC|CMP|AND|ORA|EOR|BIT|STA)'
 # reference map: (bank, address) -> list of (reading routine, instruction text)
 refs = collections.defaultdict(list)
 tok = re.compile(r'(?<![A-Za-z0-9])(?:Tbl_)?(?:B(\d)|F)_([0-9A-F]{4})(?:[+-]\d)?(?![A-Za-z0-9])')
+def is_code_label(ls, i):
+    j = i + 1
+    while j < len(ls) and (not ls[j].strip() or ls[j].lstrip().startswith(';')): j += 1
+    return j < len(ls) and re.match(r'^    [A-Z]{3}\b', ls[j]) is not None
 for rb, ls in lines.items():
     cur = None
-    for l in ls:
+    for i, l in enumerate(ls):
         m = re.match(r'^([A-Za-z_]\w*):', l)
-        if m and not re.match(r'^(?:B\d|F)_[0-9A-F]{4}:$', l.split()[0]) : cur = m.group(1)
+        if m and is_code_label(ls, i) and not m.group(1).startswith('Tbl_'): cur = m.group(1)
         mi = re.match(rf'^\s+({OPS}) (.+),[xy]$|^\s+({OPS}) ((?:Tbl_)?(?:B\d|F)_[0-9A-F]{{4}})$', l)
         if not mi: continue
         for t in tok.finditer(l):
             bk = int(t.group(1)) if t.group(1) else 7
-            a = int(t.group(2), 16)
-            refs[(bk if bk != 7 or t.group(0).lstrip('Tbl_').startswith('F') else bk, a)].append((cur or '?', l.strip()))
+            refs[(bk, int(t.group(2), 16))].append((cur or '?', l.strip()))
 new = []
 for b, s, e in gaps:
     if b == 7 and False: continue
@@ -47,6 +50,16 @@ for b, s, e in gaps:
         rname = f'Tbl_{"F" if b == 7 else "B" + str(b)}_{a:04X}'
         cm = f'{end - a} bytes, ' + ('read by ' + ', '.join(who[:3]) + (' ...' if len(who) > 3 else '') if who else 'no direct code reference (continuation or unreferenced)')
         new.append(dict(bank=b, addr=a, len=end - a, name=rname, comment=cm))
+def readers(b, a, n):
+    who = []
+    for (bk, aa), lst in refs.items():
+        if bk == b and a <= aa < a + n:
+            for r, _ in lst:
+                if r not in who and r != '?': who.append(r)
+    return who
+for r in cache:
+    who = readers(r['bank'], r['addr'], r['len'])
+    r['comment'] = f"{r['len']} bytes, " + ('read by ' + ', '.join(who[:3]) + (' ...' if len(who) > 3 else '') if who else 'no direct code reference (continuation or unreferenced)')
 have = {(r['bank'], r['addr']) for r in cache}
 cache += [r for r in new if (r['bank'], r['addr']) not in have]
 cache.sort(key=lambda r: (r['bank'], r['addr']))

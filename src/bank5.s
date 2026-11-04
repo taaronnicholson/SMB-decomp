@@ -103,7 +103,7 @@ EntityDeltaFromCentre:
     STA ent_dx,x
 Ent18_Update:
     RTS
-; Tbl_B5_80B7: 28 bytes, read by Ent18_Update
+; Tbl_B5_80B7: 28 bytes, read by B5_80D8
 Tbl_B5_80B7:
     .byte $01,$00,$01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00
     .res 12, $00
@@ -1259,7 +1259,7 @@ B5_8949:
     STA shot_E3_1
 B5_8982:
     RTS
-; Tbl_B5_8983: 16 bytes, read by Ent_CheckPlayerOverlap, Ent_CheckPlayerOverlapD
+; Tbl_B5_8983: 16 bytes, read by Ent_CheckPlayerOverlap, B5_8949, Ent_CheckPlayerOverlapD ...
 Tbl_B5_8983:
     .byte $00,$00,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$02
 Ent_CheckPlayerOverlapC:
@@ -1859,7 +1859,7 @@ B5_8E2B:
     LDA ptr_hi
     STA ent_x_hi,x
     RTS
-; Tbl_B5_8E36: 18 bytes, read by Ent02_Update
+; Tbl_B5_8E36: 18 bytes, read by B5_8D62
 Tbl_B5_8E36:
     .byte $00,$01,$00,$00,$01,$00,$01,$00,$01,$01,$02,$01,$01,$02,$01,$02
     .byte $02,$03
@@ -2046,7 +2046,7 @@ B5_9004:
     STA ent_y_hi,x
     INC ent_radius,x
     RTS
-; Tbl_B5_901A: 45 bytes, read by Ent06_Update
+; Tbl_B5_901A: 45 bytes, read by B5_8FF0, B5_9004
 Tbl_B5_901A:
     .byte $FE
 B5_901B:
@@ -2181,7 +2181,7 @@ B5_914B:
 ; Tbl_B5_914C: 9 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_914C:
     .byte $04,$FC,$FF,$00,$00,$18,$01,$00,$00
-; Tbl_B5_9155: 46 bytes, read by Ent09_Update
+; Tbl_B5_9155: 46 bytes, read by B5_912F
 Tbl_B5_9155:
     .byte $00
 B5_9156:
@@ -2252,7 +2252,7 @@ Tbl_B5_91FD:
     .byte $00,$01,$00,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00,$00,$01,$00
     .byte $00,$00,$00,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00
     .byte $00,$01,$00,$00,$01,$00,$01,$00,$01,$00,$01,$01,$80
-; Tbl_B5_923A: 185 bytes, read by Ent0A_Update, Ent_StartCollectAnim
+; Tbl_B5_923A: 185 bytes, read by B5_91B0, B5_91D9
 Tbl_B5_923A:
     .byte $FF
 B5_923B:
@@ -2373,7 +2373,7 @@ B5_939C:
     LDA #$04
     STA game_state
     RTS
-; Tbl_B5_93C6: 139 bytes, read by Ent0C_Update
+; Tbl_B5_93C6: 139 bytes, read by Ent0C_Update, B5_9331
 Tbl_B5_93C6:
     .byte $FE
 B5_93C7:
@@ -2479,7 +2479,7 @@ B5_94ED:
     ADC B5_950F,y
     STA ent_y_hi,x
     RTS
-; Tbl_B5_950E: 32 bytes, read by Ent0E_Update
+; Tbl_B5_950E: 32 bytes, read by B5_94ED
 Tbl_B5_950E:
     .byte $FE
 B5_950F:
@@ -2733,12 +2733,12 @@ B5_96FF:
     ADC tmp_d
     STA ent_y_hi,x
     JMP EntityDeltaFromCentre
-; Tbl_B5_9720: 45 bytes, read by Ent16_Update
+; Tbl_B5_9720: 45 bytes, read by B5_96AC
 Tbl_B5_9720:
     .byte $02,$04,$06,$07,$09,$0A,$0B,$0B,$0C,$0C,$0C,$0C,$0B,$0B,$0A,$09
     .byte $07,$06,$04,$02,$00,$FE,$FD,$FD,$FC,$FC,$FD,$FD,$FE,$00,$01,$02
     .byte $03,$03,$04,$04,$04,$03,$03,$02,$02,$01,$01,$00,$80
-; Tbl_B5_974D: 32 bytes, read by Ent16_Update
+; Tbl_B5_974D: 32 bytes, read by B5_96E0
 Tbl_B5_974D:
     .byte $FF,$FE,$FE,$FD,$FD,$FD,$FD,$FD,$FD,$FD,$FE,$FE,$FF,$00,$00,$00
     .byte $01,$02,$02,$03,$03,$03,$03,$03,$03,$03,$02,$02,$01,$00,$00,$00
@@ -2766,7 +2766,7 @@ B5_978C:
     LDA Tbl_B5_979F,y
     STA ent_param,x
     RTS
-; Tbl_B5_979F: 16 bytes, read by Ent19_Update, Ent1F_Update
+; Tbl_B5_979F: 16 bytes, read by B5_978C, B5_9993
 Tbl_B5_979F:
     .res 10, $00
     .byte $01,$01,$01,$01,$01,$01
@@ -2796,7 +2796,7 @@ B5_97D2:
     ADC B5_97E8,y
     STA ent_y_hi,x
     RTS
-; Tbl_B5_97E7: 61 bytes, read by Ent1A_Update
+; Tbl_B5_97E7: 61 bytes, read by Ent1A_Update, B5_97D2
 Tbl_B5_97E7:
     .byte $FD
 B5_97E8:
@@ -2851,18 +2851,18 @@ B5_9877:
     STA ent_param2,x
 B5_9881:
     RTS
-; Tbl_B5_9882: 40 bytes, read by Ent1B_Update
+; Tbl_B5_9882: 40 bytes, read by B5_9849
 Tbl_B5_9882:
     .byte $02
 B5_9883:
     .byte $00,$02,$00,$02,$00,$02,$00,$02,$00,$02,$01,$02,$00,$02,$01,$02
     .byte $01,$03,$00,$03,$01,$03,$01,$03,$02,$03,$01,$03,$02,$03,$02,$03
     .byte $02,$03,$02,$03,$02,$03,$02
-; Tbl_B5_98AA: 23 bytes, read by Ent1B_Update, Ent1C_Update
+; Tbl_B5_98AA: 23 bytes, read by Ent1B_Update, B5_98F9
 Tbl_B5_98AA:
     .res 8, $03
     .byte $04,$04,$04,$04,$03,$03,$03,$04,$04,$04,$03,$03,$03,$03,$03
-; Tbl_B5_98C1: 20 bytes, read by Ent1E_Update
+; Tbl_B5_98C1: 20 bytes, read by B5_993C
 Tbl_B5_98C1:
     .res 9, $03
     .res 10, $02
@@ -2991,7 +2991,7 @@ B5_99C4:
     LDA Tbl_B5_99D1,y
     STA ent_param,x
     RTS
-; Tbl_B5_99D1: 16 bytes, read by Ent20_Update
+; Tbl_B5_99D1: 16 bytes, read by B5_99C4
 Tbl_B5_99D1:
     .res 10, $0C
     .byte $0D,$0D,$0D,$0D,$0D,$0D
@@ -3275,7 +3275,7 @@ B5_9C29:
 B5_9C2C:
     STA ent_param,x
     RTS
-; Tbl_B5_9C30: 18 bytes, read by Ent_TickRadius
+; Tbl_B5_9C30: 18 bytes, read by B5_9C0C
 Tbl_B5_9C30:
     .byte $01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$01
     .byte $00,$FF
@@ -3323,7 +3323,7 @@ B5_9C97:
     ADC #$07
     STA ent_param,x
     JMP EntityDeltaFromCentre
-; Tbl_B5_9CA2: 26 bytes, read by Ent2E_Update, Ent4A_Update
+; Tbl_B5_9CA2: 26 bytes, read by Ent2E_Update, B5_AA94
 Tbl_B5_9CA2:
     .byte $00,$00,$00,$00,$00,$01,$01,$01,$01,$01,$02,$02,$02,$03,$03,$03
     .byte $04,$04,$04,$05,$05,$05,$06,$06,$06,$FF
@@ -3431,7 +3431,7 @@ B5_9D8C:
     LDA #$D4
     LDY #$9D
     JMP SpawnEffects
-; Tbl_B5_9D9B: 108 bytes, read by Ent31_Update
+; Tbl_B5_9D9B: 108 bytes, read by B5_9D7A
 Tbl_B5_9D9B:
     .byte $01,$01,$01,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$01,$01,$01
     .byte $01,$01,$00,$00,$01,$01,$01,$01,$01,$01,$01,$01,$02,$02,$02,$03
@@ -3458,7 +3458,7 @@ B5_9E1E:
 ; Tbl_B5_9E25: 9 bytes, read by Ent32_Update
 Tbl_B5_9E25:
     .byte $1F,$1E,$1E,$1F,$1F,$1F,$1E,$1E,$00
-; Tbl_B5_9E2E: 174 bytes, read by Ent33_Update, Ent90_Update
+; Tbl_B5_9E2E: 174 bytes, read by Ent33_Update, B5_BAF5
 Tbl_B5_9E2E:
     .res 20, $0F
     .byte $1F,$0F,$0F,$1F,$0F,$0F,$1F,$0F,$1F,$0F,$0F,$0F,$0F,$FF,$0F,$FF
@@ -3676,12 +3676,12 @@ B5_A05A:
     STA ent_radius,x
 B5_A070:
     RTS
-; Tbl_B5_A071: 37 bytes, read by Ent37_Update
+; Tbl_B5_A071: 37 bytes, read by B5_A04E
 Tbl_B5_A071:
     .byte $FD,$FD,$FE,$FE,$FE,$FE,$FF,$FE,$FF,$FF,$FE,$FF,$FF,$FF,$00,$FF
     .byte $FF,$00,$FF,$00,$FF,$00,$00,$00,$01,$00,$01,$01,$00,$01,$01,$01
     .byte $02,$01,$01,$02,$80
-; Tbl_B5_A096: 58 bytes, read by Ent37_Update
+; Tbl_B5_A096: 58 bytes, read by B5_A01E
 Tbl_B5_A096:
     .byte $FD,$FE,$FE,$FE,$FF,$FE,$FF,$FF,$00,$FF,$00,$00,$00,$01,$00,$01
     .byte $01,$02,$01,$02,$02,$02,$03,$FE,$FE,$FE,$FF,$FF,$00,$FF,$00,$00
@@ -3832,7 +3832,7 @@ B5_A1E0:
 Tbl_B5_A1E9:
     .byte $22,$05,$00,$FD,$FF,$00,$24,$00,$25,$3C,$22,$05,$00,$0C,$00,$00
     .byte $24,$00,$26,$3C,$FF
-; Tbl_B5_A1FE: 51 bytes, read by Ent39_Update
+; Tbl_B5_A1FE: 51 bytes, read by Ent39_Update, B5_A118
 Tbl_B5_A1FE:
     .byte $01
 B5_A1FF:
@@ -4175,7 +4175,7 @@ Tbl_B5_A4B4:
     .byte $00,$1F,$00,$04,$FF,$07,$0A,$00,$0A,$00,$00,$1E,$00,$00,$FF,$07
     .byte $07,$00,$FD,$FF,$00,$1E,$00,$00,$FF,$07,$0F,$00,$F7,$FF,$00,$1F
     .byte $00,$0C,$FF,$FF
-; Tbl_B5_A528: 93 bytes, read by Ent47_Update
+; Tbl_B5_A528: 93 bytes, read by Ent47_Update, B5_A5B7
 Tbl_B5_A528:
     .byte $03
 B5_A529:
@@ -5176,7 +5176,7 @@ B5_AD95:
     STA ent_radius,x
     LDA #$00
     JMP PlaySfxSq2
-; Tbl_B5_ADAB: 79 bytes, read by Ent55_Update, Ent93_Update
+; Tbl_B5_ADAB: 79 bytes, read by Ent55_Update, Ent93_Update, B5_AE3E
 Tbl_B5_ADAB:
     .byte $FE
 B5_ADAC:
@@ -5185,7 +5185,7 @@ B5_ADAC:
     .byte $00,$01,$00,$00,$00,$01,$00,$01,$00,$02,$00,$01,$00,$02,$00,$FF
     .byte $FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$00,$00,$01,$00,$00
     .byte $00,$01,$00,$01,$00,$FF,$FF,$00,$00,$00,$00,$01,$00,$80
-; Tbl_B5_ADFA: 39 bytes, read by Ent3E_Update, Ent44_Update, Ent54_Update
+; Tbl_B5_ADFA: 39 bytes, read by B5_A37C, B5_A64F, B5_AD68
 Tbl_B5_ADFA:
     .byte $00,$00,$00,$01,$00,$00,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00
     .byte $01,$00,$01,$00,$01,$00,$01,$00,$01,$01,$01,$01,$01,$01,$01,$02
@@ -5377,7 +5377,7 @@ Ent60_Update:
 Tbl_B5_AFA9:
     .byte $01,$01,$01,$01,$01,$01,$01,$03,$03,$03,$03,$03,$03,$01,$01,$01
     .byte $01,$03,$03,$03,$01,$00
-; Tbl_B5_AFBF: 32 bytes, read by Ent5E_Update
+; Tbl_B5_AFBF: 32 bytes, read by B5_AF0A
 Tbl_B5_AFBF:
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$02,$02,$01,$00,$02,$02,$01
@@ -5659,7 +5659,7 @@ B5_B200:
     BEQ B5_B1F8
 B5_B236:
     JMP B5_B181
-; Tbl_B5_B239: 4 bytes, read by Ent74_Update
+; Tbl_B5_B239: 4 bytes, read by B5_B1CB
 Tbl_B5_B239:
     .byte $00,$01,$02,$01
 Ent76_Update:
@@ -6073,7 +6073,7 @@ B5_B5CC:
     .byte $FF
 B5_B5CD:
     .byte $03
-; Tbl_B5_B5CE: 30 bytes, read by Ent87_Update, Ent88_Update
+; Tbl_B5_B5CE: 30 bytes, read by Ent87_Update, B5_B652
 Tbl_B5_B5CE:
     .byte $78
 B5_B5CF:
@@ -6328,7 +6328,7 @@ B5_B7E7:
     LDA tmp_c
     STA ent_flags,x
     RTS
-; Tbl_B5_B7ED: 96 bytes, read by Ent8C_Update
+; Tbl_B5_B7ED: 96 bytes, read by B5_B758
 Tbl_B5_B7ED:
     .byte $0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$0E,$0E,$0A,$0A,$0E,$00,$22,$F4
     .byte $FF,$04,$00,$00,$24,$00,$24,$64,$22,$14,$00,$04,$00,$00,$24,$00
@@ -6436,7 +6436,7 @@ B5_B92A:
     ADC tmp_d
     STA ent_y_hi,x
     RTS
-; Tbl_B5_B93C: 51 bytes, read by Ent9E_Update
+; Tbl_B5_B93C: 51 bytes, read by B5_B90B
 Tbl_B5_B93C:
     .byte $00,$00,$01,$00,$00,$00,$01,$00,$00,$01,$00,$01,$01,$01,$00,$01
     .byte $00,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00,$FF,$00,$00,$00,$FF
@@ -6588,7 +6588,7 @@ B5_BA7E:
     LDA #$4C
     LDY #$91
     JMP SpawnEffects
-; Tbl_B5_BA97: 32 bytes, read by Ent90_Update
+; Tbl_B5_BA97: 32 bytes, read by B5_BAC5
 Tbl_B5_BA97:
     .byte $02,$02,$02,$02,$02,$02,$03,$02,$02,$03,$02,$02,$03,$02,$03,$02
     .byte $03,$02,$03,$03,$03,$04,$04,$FF,$05,$06,$07,$08,$09,$0A,$0B,$00
@@ -6861,7 +6861,7 @@ B5_BCAE:
     SBC #$00
     STA player_x_hi
     RTS
-; Tbl_B5_BCD7: 107 bytes, read by Ent_Noop
+; Tbl_B5_BCD7: 107 bytes, read by B5_BC5B, B5_BCAE
 Tbl_B5_BCD7:
     .byte $FE,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$00,$FF,$00,$FF,$00,$00,$00,$01
     .byte $00,$01,$00,$01,$01,$01,$01,$02,$01,$02,$02,$FE,$FF,$FF,$00,$FF

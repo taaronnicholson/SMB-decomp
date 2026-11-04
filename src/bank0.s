@@ -227,7 +227,7 @@ B0_81CD:
     LDA #$00
     STA zp_50
     JMP SetScroll
-; Tbl_B0_81D7: 5 bytes, read by PaletteFadeStep
+; Tbl_B0_81D7: 5 bytes, read by B0_812D, B0_8183, B0_8196 ...
 Tbl_B0_81D7:
     .byte $40,$30,$20,$10,$00
 B0_81DC:
@@ -281,7 +281,7 @@ B0_8229:
     AND buttons_prev
     STA buttons_released
     RTS
-; Tbl_B0_823D: 8 bytes, read by ReadController
+; Tbl_B0_823D: 8 bytes, read by B0_8217
 Tbl_B0_823D:
     .byte $10,$20,$80,$40,$08,$04,$02,$01
 ClearRAM:
@@ -748,7 +748,7 @@ Gfx_B0_88A7:
     .byte $2F,$DC,$2F,$17,$CC,$00,$66,$5F,$0F,$3B,$9E,$D1,$B0,$97,$45,$A1
     .byte $D0,$A8,$3C,$97,$E6,$E3,$B9,$E0,$F6,$7C,$CC,$BE,$E9,$68,$B8,$54
     .byte $2C,$1C,$CB,$E7,$67,$70,$79,$BC,$3E,$CC,$BF,$80,$00,$00
-; Tbl_B0_8C95: 6 bytes, read by CheckPause, LoadArea
+; Tbl_B0_8C95: 6 bytes, read by F_CDDD, F_D139
 Tbl_B0_8C95:
     .byte $00,$04,$04,$04,$04,$04
 TilesetRecord0:
@@ -2048,7 +2048,7 @@ B0_B8AD:
 B0_B8B9:
     STX ppu_buffer_idx
     RTS
-; Tbl_B0_B8BC: 22 bytes, read by LoadFont
+; Tbl_B0_B8BC: 22 bytes, read by B0_B8AD
 Tbl_B0_B8BC:
     .byte $21,$0F,$82,$62,$61,$21,$2F,$82,$64,$63,$00,$21,$0F,$82,$4C,$4B
     .byte $21,$2F,$82,$50,$4F,$00
@@ -2204,7 +2204,7 @@ B0_BFA1:
     STA zp_47
     INY
     JMP B0_BF96
-; Tbl_B0_BFBB: 69 bytes, read by SineTable_Data
+; Tbl_B0_BFBB: 69 bytes, read by B0_BF91, B0_BFA1
 Tbl_B0_BFBB:
     .byte $79,$01,$7B,$02,$7D,$03,$7F,$04,$7F,$00,$00,$00,$04,$F7,$FF,$FB
     .byte $FF,$60,$00,$88,$00,$9B,$04,$00,$21,$FF,$FF,$FF,$FF,$00,$02,$80

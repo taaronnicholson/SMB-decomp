@@ -177,7 +177,7 @@ PPUCopy1:
     ADC ppu_buffer_idx
     TAX
     JMP F_C0B3
-; Tbl_F_C1D0: 31 bytes, read by PlayerState02
+; Tbl_F_C1D0: 31 bytes, read by B1_838D, F_E7B6
 Tbl_F_C1D0:
     .res 10, $00
     .byte $02,$02,$01,$01,$02,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$02
@@ -239,15 +239,15 @@ Tbl_F_C2EF:
     .word F_D4FE
     .word F_FEC0
     .byte $FE,$C1,$FE
-; Tbl_F_C326: 11 bytes, read by QueueMapTileDraw
+; Tbl_F_C326: 11 bytes, read by F_F43E
 Tbl_F_C326:
     .byte $CD
 F_C327:
     .byte $FF,$CB,$C2,$D6,$C2,$F5,$C2,$06,$C3,$12
-; Tbl_F_C331: 5 bytes, read by QueueMapTileDraw
+; Tbl_F_C331: 5 bytes, read by F_F3CC
 Tbl_F_C331:
     .byte $C3,$D2,$D2,$00,$CD
-; Tbl_F_C336: 6 bytes, read by QueueMapTileDraw
+; Tbl_F_C336: 6 bytes, read by F_F426
 Tbl_F_C336:
     .byte $CD,$D3,$D3,$C0,$D3,$D3
 ; TileHeightProfiles: 32 profiles x 16 columns: ground surface height per pixel column of a tile ($FF = no surface)
@@ -286,10 +286,10 @@ TileHeightProfiles:
     .byte $0E, $0C, $0B, $0A, $09, $09, $08, $08, $08, $08, $09, $09, $0A, $0B, $0C, $0E
 BitMask:
     .byte $01
-; Tbl_F_C53D: 7 bytes, read by GameState0B
+; Tbl_F_C53D: 7 bytes, read by B4_B1AC
 Tbl_F_C53D:
     .byte $02,$04,$08,$10,$20,$40,$80
-; Tbl_F_C544: 130 bytes, read by RunTileEffects
+; Tbl_F_C544: 130 bytes, read by RunTileEffects, F_F205, F_F22D ...
 Tbl_F_C544:
     .byte $00,$FF,$04,$C0,$06,$FF,$08,$FF,$0A,$FF,$0C,$C1,$0E,$FF,$10,$FF
     .byte $12,$FF,$14,$C0,$16,$FF,$18,$FF,$1A,$C1,$1C,$FF,$1E,$FF,$20,$C0
@@ -786,7 +786,7 @@ F_C972:
     CPX #$3C
     BNE F_C972
     RTS
-; Tbl_F_C988: 5 bytes, read by ClearOAMBuffer
+; Tbl_F_C988: 5 bytes, read by F_C959
 Tbl_F_C988:
     .byte $00,$01,$00,$02,$03
 F_C98D:
@@ -3376,11 +3376,11 @@ F_DBF1:
     LDX tmp_d
     LDA tmp_b
     RTS
-; Tbl_F_DBF6: 27 bytes, read by CheckDoorTile
+; Tbl_F_DBF6: 27 bytes, read by F_F088
 Tbl_F_DBF6:
     .res 12, $01
     .byte $00,$01,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$00
-; Tbl_F_DC11: 16 bytes, read by TryStartJump
+; Tbl_F_DC11: 16 bytes, read by F_DDE8
 Tbl_F_DC11:
     .byte $00,$00,$00,$01,$01,$01,$00,$01,$00,$00,$00,$00,$01,$01,$00,$00
 F_DC21:
@@ -6809,7 +6809,7 @@ HurtPlayerKnockout:
     JSR PlaySfxNoise
     LDA #$1A
     JMP F_F4AD
-; Tbl_F_F4D5: 28 bytes, read by HurtPlayer, HurtPlayerKnockout
+; Tbl_F_F4D5: 28 bytes, read by F_F497, HurtPlayerKnockout
 Tbl_F_F4D5:
     .res 14, $01
     .res 14, $00
@@ -7065,7 +7065,7 @@ SetCollectedFlag:
     STA collected_flags,y
     LDX saved_x
     RTS
-; Tbl_F_F6C1: 16 bytes, read by GetCollectibleBit
+; Tbl_F_F6C1: 16 bytes, read by F_F6D3
 Tbl_F_F6C1:
     .byte $BC,$D1,$DB,$D6,$D9,$C8,$C9,$CA,$CB,$CC,$CD,$BD,$BE,$BF,$C2,$C3
 GetCollectibleBit:
@@ -7461,7 +7461,7 @@ F_F928:
 F_F99B:
     LDX saved_x
     RTS
-; Tbl_F_F99E: 24 bytes, read by AwardPickup
+; Tbl_F_F99E: 24 bytes, read by F_F9EA
 Tbl_F_F99E:
     .byte $0A
 F_F99F:

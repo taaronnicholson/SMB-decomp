@@ -3,7 +3,7 @@
 
 .segment "BANK1"
 
-; Tbl_B1_8000: 44 bytes, read by DrawEntity
+; Tbl_B1_8000: 44 bytes, read by B1_8AE7, B1_8AF5, B1_8B8D ...
 Tbl_B1_8000:
     .byte $00,$FC,$F8,$F4,$F0,$EC,$E8,$E4,$E0,$DC,$D8,$D4,$D0,$CC,$C8,$C4
     .byte $C0,$BC,$B8,$B4,$B0,$AC,$A8,$A4,$A0,$9C,$98,$94,$90,$8C,$88,$84
@@ -108,11 +108,11 @@ B1_80D7:
     ORA Tbl_B1_80EB,x
     STA ram_0252
     RTS
-; Tbl_B1_80EB: 26 bytes, no direct code reference (continuation or unreferenced)
+; Tbl_B1_80EB: 26 bytes, read by B1_807C, B1_80D7
 Tbl_B1_80EB:
     .byte $00,$00,$01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03,$00,$00,$03
     .byte $03,$00,$03,$03,$00,$00,$00,$00,$00,$02
-; Tbl_B1_8105: 25 bytes, no direct code reference (continuation or unreferenced)
+; Tbl_B1_8105: 25 bytes, read by B1_807C, B1_80D7
 Tbl_B1_8105:
     .byte $02,$00,$04,$06,$08,$0A,$16,$16,$16,$0C,$0E,$10,$12,$14,$16,$18
     .byte $1A,$1C,$1E,$20,$00,$00,$00,$22,$24
@@ -1010,7 +1010,7 @@ B1_876A:
     LDA #$02
     STA ram_0720
     RTS
-; Tbl_B1_8785: 16 bytes, no direct code reference (continuation or unreferenced)
+; Tbl_B1_8785: 16 bytes, read by B1_871D
 Tbl_B1_8785:
     .byte $03
 B1_8786:
@@ -1289,12 +1289,12 @@ B1_8982:
     CMP #$10
     BCC B1_8981
     JMP F_F0EA
-; Tbl_B1_8999: 100 bytes, read by LoadArea
+; Tbl_B1_8999: 100 bytes, read by F_D16B
 Tbl_B1_8999:
     .res 76, $00
     .byte $0A,$00,$00,$00,$00,$00,$00,$00,$00,$0E,$12,$12,$12,$05,$0E,$0E
     .byte $0E,$0E,$00,$05,$05,$05,$05,$05
-; Tbl_B1_89FD: 85 bytes, read by PlayerState00
+; Tbl_B1_89FD: 85 bytes, read by F_E066
 Tbl_B1_89FD:
     .byte $00,$0E,$44,$00,$0E,$00,$00,$0E,$26,$00,$0A,$00,$00,$06,$24,$00
     .byte $14,$25,$22,$0E,$2D,$22,$0A,$2E,$24,$0A,$2F,$26,$0A,$2F,$24,$0A
@@ -4838,7 +4838,7 @@ B1_B05C:
     SBC #$00
     STA player_x_hi
     RTS
-; Tbl_B1_B06A: 42 bytes, read by AreaSpawn23
+; Tbl_B1_B06A: 42 bytes, read by B1_AFD3, B1_B005
 Tbl_B1_B06A:
     .res 8, $02
     .byte $01,$02,$02,$02,$01,$02,$02,$01,$02,$02,$01,$01,$01,$02,$01,$01
@@ -4942,10 +4942,10 @@ B1_B141:
     STA zp_80
 B1_B143:
     RTS
-; Tbl_B1_B144: 13 bytes, read by AreaSpawn23
+; Tbl_B1_B144: 13 bytes, read by B1_B094
 Tbl_B1_B144:
     .byte $00,$00,$00,$00,$FF,$00,$01,$01,$FF,$FF,$00,$00,$80
-; Tbl_B1_B151: 10 bytes, read by AreaSpawn23
+; Tbl_B1_B151: 10 bytes, read by B1_B129
 Tbl_B1_B151:
     .byte $3E,$3E,$3F,$40,$41,$42,$43,$4C,$4D,$FF
 B1_B15B:
@@ -5101,7 +5101,7 @@ B1_B25B:
     LDA #$01
     STA player_facing
     RTS
-; Tbl_B1_B272: 163 bytes, read by AreaSpawn23
+; Tbl_B1_B272: 163 bytes, read by B1_B241, B1_B25B
 Tbl_B1_B272:
     .byte $32,$00,$32,$00,$32,$00,$32,$00,$32,$00,$33,$00,$33,$00,$33,$00
     .byte $33,$00,$33,$00,$09,$00,$09,$01,$09,$00,$09,$01,$09,$01,$09,$01

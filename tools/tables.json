@@ -4,14 +4,14 @@
   "addr": 33239,
   "len": 5,
   "name": "Tbl_B0_81D7",
-  "comment": "5 bytes, read by PaletteFadeStep"
+  "comment": "5 bytes, read by B0_812D, B0_8183, B0_8196 ..."
  },
  {
   "bank": 0,
   "addr": 33341,
   "len": 8,
   "name": "Tbl_B0_823D",
-  "comment": "8 bytes, read by ReadController"
+  "comment": "8 bytes, read by B0_8217"
  },
  {
   "bank": 0,
@@ -25,7 +25,7 @@
   "addr": 35989,
   "len": 6,
   "name": "Tbl_B0_8C95",
-  "comment": "6 bytes, read by CheckPause, LoadArea"
+  "comment": "6 bytes, read by F_CDDD, F_D139"
  },
  {
   "bank": 0,
@@ -53,35 +53,35 @@
   "addr": 47292,
   "len": 22,
   "name": "Tbl_B0_B8BC",
-  "comment": "22 bytes, read by LoadFont"
+  "comment": "22 bytes, read by B0_B8AD"
  },
  {
   "bank": 0,
   "addr": 49083,
   "len": 69,
   "name": "Tbl_B0_BFBB",
-  "comment": "69 bytes, read by SineTable_Data"
+  "comment": "69 bytes, read by B0_BF91, B0_BFA1"
  },
  {
   "bank": 1,
   "addr": 32768,
   "len": 44,
   "name": "Tbl_B1_8000",
-  "comment": "44 bytes, read by DrawEntity"
+  "comment": "44 bytes, read by B1_8AE7, B1_8AF5, B1_8B8D ..."
  },
  {
   "bank": 1,
   "addr": 33003,
   "len": 26,
   "name": "Tbl_B1_80EB",
-  "comment": "26 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "26 bytes, read by B1_807C, B1_80D7"
  },
  {
   "bank": 1,
   "addr": 33029,
   "len": 25,
   "name": "Tbl_B1_8105",
-  "comment": "25 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "25 bytes, read by B1_807C, B1_80D7"
  },
  {
   "bank": 1,
@@ -95,7 +95,7 @@
   "addr": 34693,
   "len": 16,
   "name": "Tbl_B1_8785",
-  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "16 bytes, read by B1_871D"
  },
  {
   "bank": 1,
@@ -109,14 +109,14 @@
   "addr": 35225,
   "len": 100,
   "name": "Tbl_B1_8999",
-  "comment": "100 bytes, read by LoadArea"
+  "comment": "100 bytes, read by F_D16B"
  },
  {
   "bank": 1,
   "addr": 35325,
   "len": 85,
   "name": "Tbl_B1_89FD",
-  "comment": "85 bytes, read by PlayerState00"
+  "comment": "85 bytes, read by F_E066"
  },
  {
   "bank": 1,
@@ -186,28 +186,28 @@
   "addr": 45162,
   "len": 42,
   "name": "Tbl_B1_B06A",
-  "comment": "42 bytes, read by AreaSpawn23"
+  "comment": "42 bytes, read by B1_AFD3, B1_B005"
  },
  {
   "bank": 1,
   "addr": 45380,
   "len": 13,
   "name": "Tbl_B1_B144",
-  "comment": "13 bytes, read by AreaSpawn23"
+  "comment": "13 bytes, read by B1_B094"
  },
  {
   "bank": 1,
   "addr": 45393,
   "len": 10,
   "name": "Tbl_B1_B151",
-  "comment": "10 bytes, read by AreaSpawn23"
+  "comment": "10 bytes, read by B1_B129"
  },
  {
   "bank": 1,
   "addr": 45682,
   "len": 163,
   "name": "Tbl_B1_B272",
-  "comment": "163 bytes, read by AreaSpawn23"
+  "comment": "163 bytes, read by B1_B241, B1_B25B"
  },
  {
   "bank": 1,
@@ -228,70 +228,70 @@
   "addr": 40668,
   "len": 80,
   "name": "Tbl_B2_9EDC",
-  "comment": "80 bytes, read by PixelTables"
+  "comment": "80 bytes, read by B2_9E3F"
  },
  {
   "bank": 2,
   "addr": 42400,
   "len": 11,
   "name": "Tbl_B2_A5A0",
-  "comment": "11 bytes, read by PixelTables"
+  "comment": "11 bytes, read by B2_A559"
  },
  {
   "bank": 2,
   "addr": 42411,
   "len": 11,
   "name": "Tbl_B2_A5AB",
-  "comment": "11 bytes, read by PixelTables"
+  "comment": "11 bytes, read by B2_A56C"
  },
  {
   "bank": 2,
   "addr": 42422,
   "len": 11,
   "name": "Tbl_B2_A5B6",
-  "comment": "11 bytes, read by PixelTables"
+  "comment": "11 bytes, read by B2_A57F"
  },
  {
   "bank": 2,
   "addr": 42433,
   "len": 11,
   "name": "Tbl_B2_A5C1",
-  "comment": "11 bytes, read by PixelTables"
+  "comment": "11 bytes, read by B2_A592"
  },
  {
   "bank": 2,
   "addr": 44628,
   "len": 32,
   "name": "Tbl_B2_AE54",
-  "comment": "32 bytes, read by TileFrameB"
+  "comment": "32 bytes, read by B2_AE12"
  },
  {
   "bank": 2,
   "addr": 44660,
   "len": 32,
   "name": "Tbl_B2_AE74",
-  "comment": "32 bytes, read by TileFrameB"
+  "comment": "32 bytes, read by B2_AE25"
  },
  {
   "bank": 2,
   "addr": 44692,
   "len": 133,
   "name": "Tbl_B2_AE94",
-  "comment": "133 bytes, read by TileFrameB"
+  "comment": "133 bytes, read by B2_AE38"
  },
  {
   "bank": 2,
   "addr": 46266,
   "len": 79,
   "name": "Tbl_B2_B4BA",
-  "comment": "79 bytes, read by TileFrameB"
+  "comment": "79 bytes, read by B2_B4AC"
  },
  {
   "bank": 2,
   "addr": 46446,
   "len": 60,
   "name": "Tbl_B2_B56E",
-  "comment": "60 bytes, read by FilterCollectedTile"
+  "comment": "60 bytes, read by F_DC8C"
  },
  {
   "bank": 2,
@@ -305,28 +305,28 @@
   "addr": 46969,
   "len": 22,
   "name": "Tbl_B2_B779",
-  "comment": "22 bytes, read by BinaryToDigits"
+  "comment": "22 bytes, read by B2_B73D"
  },
  {
   "bank": 2,
   "addr": 47024,
   "len": 34,
   "name": "Tbl_B2_B7B0",
-  "comment": "34 bytes, read by BinaryToDigits"
+  "comment": "34 bytes, read by B2_B79F"
  },
  {
   "bank": 2,
   "addr": 47058,
   "len": 34,
   "name": "Tbl_B2_B7D2",
-  "comment": "34 bytes, read by BinaryToDigits"
+  "comment": "34 bytes, read by B2_B79F"
  },
  {
   "bank": 3,
   "addr": 32768,
   "len": 747,
   "name": "Tbl_B3_8000",
-  "comment": "747 bytes, read by PlayerState10"
+  "comment": "747 bytes, read by F_F5DB, F_F5E3"
  },
  {
   "bank": 3,
@@ -382,28 +382,28 @@
   "addr": 48654,
   "len": 4,
   "name": "Tbl_B3_BE0E",
-  "comment": "4 bytes, read by AreaMap9"
+  "comment": "4 bytes, read by B3_BD7F"
  },
  {
   "bank": 3,
   "addr": 48658,
   "len": 24,
   "name": "Tbl_B3_BE12",
-  "comment": "24 bytes, read by AreaMap9"
+  "comment": "24 bytes, read by B3_BD67"
  },
  {
   "bank": 3,
   "addr": 48682,
   "len": 14,
   "name": "Tbl_B3_BE2A",
-  "comment": "14 bytes, read by AreaMap9"
+  "comment": "14 bytes, read by B3_BD8D, B3_BDE3"
  },
  {
   "bank": 3,
   "addr": 48696,
   "len": 89,
   "name": "Tbl_B3_BE38",
-  "comment": "89 bytes, read by AreaMap9"
+  "comment": "89 bytes, read by B3_BEA9"
  },
  {
   "bank": 3,
@@ -445,14 +445,14 @@
   "addr": 44475,
   "len": 20,
   "name": "Tbl_B4_ADBB",
-  "comment": "20 bytes, read by Gfx_B4_ABB2"
+  "comment": "20 bytes, read by B4_AC4F"
  },
  {
   "bank": 4,
   "addr": 44726,
   "len": 64,
   "name": "Tbl_B4_AEB6",
-  "comment": "64 bytes, read by GameState02"
+  "comment": "64 bytes, read by B4_AEA2"
  },
  {
   "bank": 4,
@@ -473,7 +473,7 @@
   "addr": 45252,
   "len": 20,
   "name": "Tbl_B4_B0C4",
-  "comment": "20 bytes, read by GameState0B"
+  "comment": "20 bytes, read by B4_B0BB"
  },
  {
   "bank": 4,
@@ -487,7 +487,7 @@
   "addr": 45758,
   "len": 64,
   "name": "Tbl_B4_B2BE",
-  "comment": "64 bytes, read by GameState0B"
+  "comment": "64 bytes, read by B4_B278"
  },
  {
   "bank": 4,
@@ -536,7 +536,7 @@
   "addr": 47032,
   "len": 58,
   "name": "Tbl_B4_B7B8",
-  "comment": "58 bytes, read by GameState13"
+  "comment": "58 bytes, read by B4_B579"
  },
  {
   "bank": 4,
@@ -648,7 +648,7 @@
   "addr": 32951,
   "len": 28,
   "name": "Tbl_B5_80B7",
-  "comment": "28 bytes, read by Ent18_Update"
+  "comment": "28 bytes, read by B5_80D8"
  },
  {
   "bank": 5,
@@ -669,7 +669,7 @@
   "addr": 35203,
   "len": 16,
   "name": "Tbl_B5_8983",
-  "comment": "16 bytes, read by Ent_CheckPlayerOverlap, Ent_CheckPlayerOverlapD"
+  "comment": "16 bytes, read by Ent_CheckPlayerOverlap, B5_8949, Ent_CheckPlayerOverlapD ..."
  },
  {
   "bank": 5,
@@ -683,7 +683,7 @@
   "addr": 36406,
   "len": 18,
   "name": "Tbl_B5_8E36",
-  "comment": "18 bytes, read by Ent02_Update"
+  "comment": "18 bytes, read by B5_8D62"
  },
  {
   "bank": 5,
@@ -711,7 +711,7 @@
   "addr": 36890,
   "len": 45,
   "name": "Tbl_B5_901A",
-  "comment": "45 bytes, read by Ent06_Update"
+  "comment": "45 bytes, read by B5_8FF0, B5_9004"
  },
  {
   "bank": 5,
@@ -739,7 +739,7 @@
   "addr": 37205,
   "len": 46,
   "name": "Tbl_B5_9155",
-  "comment": "46 bytes, read by Ent09_Update"
+  "comment": "46 bytes, read by B5_912F"
  },
  {
   "bank": 5,
@@ -753,21 +753,21 @@
   "addr": 37434,
   "len": 185,
   "name": "Tbl_B5_923A",
-  "comment": "185 bytes, read by Ent0A_Update, Ent_StartCollectAnim"
+  "comment": "185 bytes, read by B5_91B0, B5_91D9"
  },
  {
   "bank": 5,
   "addr": 37830,
   "len": 139,
   "name": "Tbl_B5_93C6",
-  "comment": "139 bytes, read by Ent0C_Update"
+  "comment": "139 bytes, read by Ent0C_Update, B5_9331"
  },
  {
   "bank": 5,
   "addr": 38158,
   "len": 32,
   "name": "Tbl_B5_950E",
-  "comment": "32 bytes, read by Ent0E_Update"
+  "comment": "32 bytes, read by B5_94ED"
  },
  {
   "bank": 5,
@@ -781,56 +781,56 @@
   "addr": 38688,
   "len": 45,
   "name": "Tbl_B5_9720",
-  "comment": "45 bytes, read by Ent16_Update"
+  "comment": "45 bytes, read by B5_96AC"
  },
  {
   "bank": 5,
   "addr": 38733,
   "len": 32,
   "name": "Tbl_B5_974D",
-  "comment": "32 bytes, read by Ent16_Update"
+  "comment": "32 bytes, read by B5_96E0"
  },
  {
   "bank": 5,
   "addr": 38815,
   "len": 16,
   "name": "Tbl_B5_979F",
-  "comment": "16 bytes, read by Ent19_Update, Ent1F_Update"
+  "comment": "16 bytes, read by B5_978C, B5_9993"
  },
  {
   "bank": 5,
   "addr": 38887,
   "len": 61,
   "name": "Tbl_B5_97E7",
-  "comment": "61 bytes, read by Ent1A_Update"
+  "comment": "61 bytes, read by Ent1A_Update, B5_97D2"
  },
  {
   "bank": 5,
   "addr": 39042,
   "len": 40,
   "name": "Tbl_B5_9882",
-  "comment": "40 bytes, read by Ent1B_Update"
+  "comment": "40 bytes, read by B5_9849"
  },
  {
   "bank": 5,
   "addr": 39082,
   "len": 23,
   "name": "Tbl_B5_98AA",
-  "comment": "23 bytes, read by Ent1B_Update, Ent1C_Update"
+  "comment": "23 bytes, read by Ent1B_Update, B5_98F9"
  },
  {
   "bank": 5,
   "addr": 39105,
   "len": 20,
   "name": "Tbl_B5_98C1",
-  "comment": "20 bytes, read by Ent1E_Update"
+  "comment": "20 bytes, read by B5_993C"
  },
  {
   "bank": 5,
   "addr": 39377,
   "len": 16,
   "name": "Tbl_B5_99D1",
-  "comment": "16 bytes, read by Ent20_Update"
+  "comment": "16 bytes, read by B5_99C4"
  },
  {
   "bank": 5,
@@ -844,14 +844,14 @@
   "addr": 39984,
   "len": 18,
   "name": "Tbl_B5_9C30",
-  "comment": "18 bytes, read by Ent_TickRadius"
+  "comment": "18 bytes, read by B5_9C0C"
  },
  {
   "bank": 5,
   "addr": 40098,
   "len": 26,
   "name": "Tbl_B5_9CA2",
-  "comment": "26 bytes, read by Ent2E_Update, Ent4A_Update"
+  "comment": "26 bytes, read by Ent2E_Update, B5_AA94"
  },
  {
   "bank": 5,
@@ -872,7 +872,7 @@
   "addr": 40347,
   "len": 108,
   "name": "Tbl_B5_9D9B",
-  "comment": "108 bytes, read by Ent31_Update"
+  "comment": "108 bytes, read by B5_9D7A"
  },
  {
   "bank": 5,
@@ -886,7 +886,7 @@
   "addr": 40494,
   "len": 174,
   "name": "Tbl_B5_9E2E",
-  "comment": "174 bytes, read by Ent33_Update, Ent90_Update"
+  "comment": "174 bytes, read by Ent33_Update, B5_BAF5"
  },
  {
   "bank": 5,
@@ -900,14 +900,14 @@
   "addr": 41073,
   "len": 37,
   "name": "Tbl_B5_A071",
-  "comment": "37 bytes, read by Ent37_Update"
+  "comment": "37 bytes, read by B5_A04E"
  },
  {
   "bank": 5,
   "addr": 41110,
   "len": 58,
   "name": "Tbl_B5_A096",
-  "comment": "58 bytes, read by Ent37_Update"
+  "comment": "58 bytes, read by B5_A01E"
  },
  {
   "bank": 5,
@@ -921,7 +921,7 @@
   "addr": 41470,
   "len": 51,
   "name": "Tbl_B5_A1FE",
-  "comment": "51 bytes, read by Ent39_Update"
+  "comment": "51 bytes, read by Ent39_Update, B5_A118"
  },
  {
   "bank": 5,
@@ -935,7 +935,7 @@
   "addr": 42280,
   "len": 93,
   "name": "Tbl_B5_A528",
-  "comment": "93 bytes, read by Ent47_Update"
+  "comment": "93 bytes, read by Ent47_Update, B5_A5B7"
  },
  {
   "bank": 5,
@@ -977,14 +977,14 @@
   "addr": 44459,
   "len": 79,
   "name": "Tbl_B5_ADAB",
-  "comment": "79 bytes, read by Ent55_Update, Ent93_Update"
+  "comment": "79 bytes, read by Ent55_Update, Ent93_Update, B5_AE3E"
  },
  {
   "bank": 5,
   "addr": 44538,
   "len": 39,
   "name": "Tbl_B5_ADFA",
-  "comment": "39 bytes, read by Ent3E_Update, Ent44_Update, Ent54_Update"
+  "comment": "39 bytes, read by B5_A37C, B5_A64F, B5_AD68"
  },
  {
   "bank": 5,
@@ -1005,7 +1005,7 @@
   "addr": 44991,
   "len": 32,
   "name": "Tbl_B5_AFBF",
-  "comment": "32 bytes, read by Ent5E_Update"
+  "comment": "32 bytes, read by B5_AF0A"
  },
  {
   "bank": 5,
@@ -1033,7 +1033,7 @@
   "addr": 45625,
   "len": 4,
   "name": "Tbl_B5_B239",
-  "comment": "4 bytes, read by Ent74_Update"
+  "comment": "4 bytes, read by B5_B1CB"
  },
  {
   "bank": 5,
@@ -1054,14 +1054,14 @@
   "addr": 46542,
   "len": 30,
   "name": "Tbl_B5_B5CE",
-  "comment": "30 bytes, read by Ent87_Update, Ent88_Update"
+  "comment": "30 bytes, read by Ent87_Update, B5_B652"
  },
  {
   "bank": 5,
   "addr": 47085,
   "len": 96,
   "name": "Tbl_B5_B7ED",
-  "comment": "96 bytes, read by Ent8C_Update"
+  "comment": "96 bytes, read by B5_B758"
  },
  {
   "bank": 5,
@@ -1075,7 +1075,7 @@
   "addr": 47420,
   "len": 51,
   "name": "Tbl_B5_B93C",
-  "comment": "51 bytes, read by Ent9E_Update"
+  "comment": "51 bytes, read by B5_B90B"
  },
  {
   "bank": 5,
@@ -1089,7 +1089,7 @@
   "addr": 47767,
   "len": 32,
   "name": "Tbl_B5_BA97",
-  "comment": "32 bytes, read by Ent90_Update"
+  "comment": "32 bytes, read by B5_BAC5"
  },
  {
   "bank": 5,
@@ -1124,7 +1124,7 @@
   "addr": 48343,
   "len": 107,
   "name": "Tbl_B5_BCD7",
-  "comment": "107 bytes, read by Ent_Noop"
+  "comment": "107 bytes, read by B5_BC5B, B5_BCAE"
  },
  {
   "bank": 5,
@@ -1264,49 +1264,49 @@
   "addr": 41502,
   "len": 160,
   "name": "Tbl_B6_A21E",
-  "comment": "160 bytes, read by PeckSwitchToggle"
+  "comment": "160 bytes, read by F_F7C7"
  },
  {
   "bank": 6,
   "addr": 42062,
   "len": 147,
   "name": "Tbl_B6_A44E",
-  "comment": "147 bytes, read by AreaMap22"
+  "comment": "147 bytes, read by B6_A3EC, B6_A40B"
  },
  {
   "bank": 6,
   "addr": 42579,
   "len": 80,
   "name": "Tbl_B6_A653",
-  "comment": "80 bytes, read by AreaMap22"
+  "comment": "80 bytes, read by B6_A57F"
  },
  {
   "bank": 6,
   "addr": 42659,
   "len": 11,
   "name": "Tbl_B6_A6A3",
-  "comment": "11 bytes, read by AreaMap22"
+  "comment": "11 bytes, read by B6_A57F"
  },
  {
   "bank": 6,
   "addr": 42670,
   "len": 116,
   "name": "Tbl_B6_A6AE",
-  "comment": "116 bytes, read by AreaMap22"
+  "comment": "116 bytes, read by B6_A57F"
  },
  {
   "bank": 6,
   "addr": 42788,
   "len": 122,
   "name": "Tbl_B6_A724",
-  "comment": "122 bytes, read by ScanMapForBalloons"
+  "comment": "122 bytes, read by F_CC6A"
  },
  {
   "bank": 6,
   "addr": 48876,
   "len": 22,
   "name": "Tbl_B6_BEEC",
-  "comment": "22 bytes, read by Gfx_B6_B738"
+  "comment": "22 bytes, read by B6_BDFC"
  },
  {
   "bank": 6,
@@ -1320,7 +1320,7 @@
   "addr": 49616,
   "len": 31,
   "name": "Tbl_F_C1D0",
-  "comment": "31 bytes, read by PlayerState02"
+  "comment": "31 bytes, read by B1_838D, F_E7B6"
  },
  {
   "bank": 7,
@@ -1334,42 +1334,42 @@
   "addr": 49958,
   "len": 11,
   "name": "Tbl_F_C326",
-  "comment": "11 bytes, read by QueueMapTileDraw"
+  "comment": "11 bytes, read by F_F43E"
  },
  {
   "bank": 7,
   "addr": 49969,
   "len": 5,
   "name": "Tbl_F_C331",
-  "comment": "5 bytes, read by QueueMapTileDraw"
+  "comment": "5 bytes, read by F_F3CC"
  },
  {
   "bank": 7,
   "addr": 49974,
   "len": 6,
   "name": "Tbl_F_C336",
-  "comment": "6 bytes, read by QueueMapTileDraw"
+  "comment": "6 bytes, read by F_F426"
  },
  {
   "bank": 7,
   "addr": 50493,
   "len": 7,
   "name": "Tbl_F_C53D",
-  "comment": "7 bytes, read by GameState0B"
+  "comment": "7 bytes, read by B4_B1AC"
  },
  {
   "bank": 7,
   "addr": 50500,
   "len": 130,
   "name": "Tbl_F_C544",
-  "comment": "130 bytes, read by RunTileEffects"
+  "comment": "130 bytes, read by RunTileEffects, F_F205, F_F22D ..."
  },
  {
   "bank": 7,
   "addr": 51592,
   "len": 5,
   "name": "Tbl_F_C988",
-  "comment": "5 bytes, read by ClearOAMBuffer"
+  "comment": "5 bytes, read by F_C959"
  },
  {
   "bank": 7,
@@ -1390,14 +1390,14 @@
   "addr": 56310,
   "len": 27,
   "name": "Tbl_F_DBF6",
-  "comment": "27 bytes, read by CheckDoorTile"
+  "comment": "27 bytes, read by F_F088"
  },
  {
   "bank": 7,
   "addr": 56337,
   "len": 16,
   "name": "Tbl_F_DC11",
-  "comment": "16 bytes, read by TryStartJump"
+  "comment": "16 bytes, read by F_DDE8"
  },
  {
   "bank": 7,
@@ -1411,7 +1411,7 @@
   "addr": 62677,
   "len": 28,
   "name": "Tbl_F_F4D5",
-  "comment": "28 bytes, read by HurtPlayer, HurtPlayerKnockout"
+  "comment": "28 bytes, read by F_F497, HurtPlayerKnockout"
  },
  {
   "bank": 7,
@@ -1432,14 +1432,14 @@
   "addr": 63169,
   "len": 16,
   "name": "Tbl_F_F6C1",
-  "comment": "16 bytes, read by GetCollectibleBit"
+  "comment": "16 bytes, read by F_F6D3"
  },
  {
   "bank": 7,
   "addr": 63902,
   "len": 24,
   "name": "Tbl_F_F99E",
-  "comment": "24 bytes, read by AwardPickup"
+  "comment": "24 bytes, read by F_F9EA"
  },
  {
   "bank": 7,

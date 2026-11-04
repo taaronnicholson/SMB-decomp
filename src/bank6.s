@@ -3345,7 +3345,7 @@ AreaMap22:
     .byte $00,$00,$00,$37,$06,$37,$06,$00,$01,$02,$02,$02,$36,$02,$02,$02
     .byte $02,$36,$03,$04,$06,$07,$09,$3B,$07,$08,$08,$08,$08,$08,$08,$08
     .byte $08,$08,$09,$07,$09
-; Tbl_B6_A21E: 160 bytes, read by PeckSwitchToggle
+; Tbl_B6_A21E: 160 bytes, read by F_F7C7
 Tbl_B6_A21E:
     .res 25, $00
     .res 9, $01
@@ -3575,7 +3575,7 @@ B6_A433:
     LDX #$FF
     TXS
     JMP StageSetup
-; Tbl_B6_A44E: 147 bytes, read by AreaMap22
+; Tbl_B6_A44E: 147 bytes, read by B6_A3EC, B6_A40B
 Tbl_B6_A44E:
     .byte $00
 B6_A44F:
@@ -3807,17 +3807,17 @@ B6_A643:
     DEC tmp_c
     BNE B6_A62A
     RTS
-; Tbl_B6_A653: 80 bytes, read by AreaMap22
+; Tbl_B6_A653: 80 bytes, read by B6_A57F
 Tbl_B6_A653:
     .res 21, $00
     .byte $08,$03,$03,$01,$01,$01,$01,$01,$01,$01,$01,$01,$00,$00,$02,$02
     .byte $0A,$00,$00,$04,$00,$00,$00,$00,$05,$05,$05,$05,$00,$00,$00,$09
     .byte $09,$09,$09,$00,$00,$00,$00,$00,$00,$07,$07,$07,$07,$07,$07,$00
     .byte $00,$00,$00,$00,$06,$00,$00,$07,$07,$00,$00
-; Tbl_B6_A6A3: 11 bytes, read by AreaMap22
+; Tbl_B6_A6A3: 11 bytes, read by B6_A57F
 Tbl_B6_A6A3:
     .byte $B9,$BC,$BF,$C2,$C5,$C8,$CB,$CE,$D1,$D4,$D7
-; Tbl_B6_A6AE: 116 bytes, read by AreaMap22
+; Tbl_B6_A6AE: 116 bytes, read by B6_A57F
 Tbl_B6_A6AE:
     .res 11, $A6
     .byte $DA,$A6,$04,$E2,$A6,$04,$EA,$A6,$04,$F2,$A6,$03,$F8,$A6,$04,$00
@@ -3831,7 +3831,7 @@ B6_A722:
     .byte $00
 B6_A723:
     .byte $00
-; Tbl_B6_A724: 122 bytes, read by ScanMapForBalloons
+; Tbl_B6_A724: 122 bytes, read by F_CC6A
 Tbl_B6_A724:
     .byte $00,$08,$22,$AC,$04,$00,$5C,$AC,$04,$00,$9C,$AC,$10,$00,$6E,$AD
     .byte $08,$00,$56,$B2,$0C,$00,$48,$B1,$0E,$00,$D4,$AD,$04,$00,$00,$00
@@ -5073,7 +5073,7 @@ B6_BEE6:
     .byte $01,$02,$02
 B6_BEE9:
     .byte $FA,$EF,$EF
-; Tbl_B6_BEEC: 22 bytes, read by Gfx_B6_B738
+; Tbl_B6_BEEC: 22 bytes, read by B6_BDFC
 Tbl_B6_BEEC:
     .byte $BE,$BE,$BE,$0B,$47,$41,$4D,$45,$5C,$4F,$56,$45,$52,$00,$0C,$53
     .byte $54,$41,$47,$45,$5C,$00
