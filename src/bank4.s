@@ -1885,7 +1885,7 @@ StartStoryScene_LB56B:
 @B4_B579:
     LDY ptr_lo
     LDA BossDefeated_LB7B1,y
-    STA story_scene_param
+    STA boss_hit_damage
     LDA $B7B2,y
     STA story_script_ptr_lo
     LDA $B7B3,y

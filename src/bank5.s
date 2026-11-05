@@ -4156,7 +4156,7 @@ Ent41_Update_LA295:
     JSR Ent_CheckPlayerOverlap
     DEC tmp_a
     BNE @B5_A2B1
-    LDA story_scene_param
+    LDA boss_hit_damage
     STA tmp_a
     JSR DamageBoss
     LDA #$38

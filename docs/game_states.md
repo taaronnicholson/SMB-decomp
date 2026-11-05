@@ -50,3 +50,13 @@ Observed in stage 1 (frame numbers from forcing the state): step 1 at frame 2, s
 | 7 | `BossFightHealthBar` | draws the 10-tile health bar at PPU `$274B` from `boss_health` while the fight runs |
 | 8 | `BossDefeated` | after the boss: boss 3 fades out and enters stage 5 setup, otherwise the level-complete chain |
 Steps 6 and 8 were not reached in the forced run; their description is from the code. The dialogue text is the boss speech listed in the README.
+
+### The fight itself (boss 1, verified)
+Forced as above, then with `powerup_shot` set and the player firing B (boss 1 at x `$78`, then tracking the player, invulnerable so the touch damage did not interfere):
+- Only **player shots** damage the boss: `Ent_CheckPlayerOverlap` returns the shot's hit value in `tmp_a`; when it is 1 `Ent3D_Update` calls `DamageBoss` with `boss_hit_damage` (3 for boss 1, in the run `boss_health` went `$63` -> `$60` -> `$5D` ... one hit per shot that landed).
+  `DamageBoss` clamps at 0 (`$04` -> `$01` -> `$00` with 3 per hit).
+- At `boss_health` 0 the boss entities change type: `$3D` -> `$41` -> `$44` and `$3E` -> `$42` -> `$43` -> `$45` -> `$46`; the effect list of type `$47` fires, `$44` rises and disappears (it stops at y `$345`; for boss 3 y `$3A9`
+  with a different effect list).
+- A prize entity then appears: type `$47` at x `$78` rises/falls to y `$3DE` and becomes type `$48` (`Ent47_Update` -> `Ent48_Update`). Touching `$48` plays sfx `$19`, sets `story_step` 8 and `story_timer` `$28` (the player had to be placed by hand
+  next to it in the run: its y is about 130 px above the ground).
+- Step 8 (`BossDefeated`) then ended the encounter: `player_state` `$17`, `game_state` `$0D` (the bonus ascent) for boss 1; boss 3 goes to stage 5 setup instead (code-read).

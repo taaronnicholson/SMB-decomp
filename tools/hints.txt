@@ -873,7 +873,7 @@ ram 01B2 story_timer                ; frames until the next script entry ($50 at
 ram 00CF story_script_ptr_lo        ; pointer into the scene's script: (delay, pointer to a sprite definition) triples; delay 0 ends it
 ram 00D0 story_script_ptr_hi
 ram 01B3 story_flag                 ; non-zero: the scene is skipped to story_step 6
-ram 01B9 story_scene_param          ; copied from the scene record (3, 3, 2 for scenes 1-3)
+ram 01B9 boss_hit_damage             ; hit points a player shot takes off boss_health (3, 3, 2 for bosses 1-3); copied from the scene record
 ram 01B4 story_param_a              ; the other scene record bytes ($3D constant, then two values per scene)
 ram 01B5 story_param_b
 ram 01B6 story_param_c
@@ -996,7 +996,7 @@ name 4 B728 BossDialoguePause         ; holds the speaker pose (ent_param_9 = 7)
 name 4 B74B BossFightStart           ; gives the two combatants their entity types (story_param_a/b), boss_health = $63 and goes to step 7
 name 4 B71D BossDialogueDelay        ; counts story_timer down, then returns to step 2 (next dialogue page)
 name 4 BA00 BossFightHealthBar       ; while the fight runs: draws the 10-tile health bar at PPU $274B from boss_health (ram_0732 = $FF once the bar is drawn empty or the effect $47 exists)
-name 4 B767 BossDefeated             ; counts story_timer down; after boss 3 (story_scene 3) fades out and enters stage 5 setup, otherwise goes to StoryBranchByStage (level-complete chain)
+name 4 B767 BossDefeated             ; step 8, started by touching the prize (type $48): counts story_timer ($28) down; after boss 3 fades out and enters stage 5 setup, otherwise goes to StoryBranchByStage (level-complete chain)
 name 4 BA1D StoryEntry_BA1D
 name 4 BA8C StoryTextStepTable       ; word table indexed by ram_01BE (StepDispatch_01BE)
 name 4 BAA6 DialogueTextStep0
