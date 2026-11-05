@@ -36,3 +36,9 @@ Left `$20`, Up `$40`, Down `$80` (`*` = tested on a fresh press, `buttons_presse
 | $1C | `PlayerState1C` | 33 | - | - | - | - |
 | $1D | `PlayerState1D` | 33 | - | - | - | - |
 | $1E | `PlayerState1E` | 33 | - | - | - | - |
+
+## States forced in the emulator (stage 1, invulnerable, no input)
+- `$1C`: walks right at 1 pixel per frame (x `$2A` -> `$A7` in 125 frames) with no input; it does not leave the state in that time.
+- `$1E`: a short hop to the left: x falls 1 px per frame for about 19 px while y rises 3 px and returns, then the player stands still at x `$16` (the state does not change).
+- `$0C` and `$1D`: nothing visible happens in 130 frames (position and animation frame stay constant); they wait for a trigger that stage 1 never provides
+  (`PlayerState0C`/`0D` share the exit-walk counters `zp_BD`/`zp_BE`).
