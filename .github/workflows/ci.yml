@@ -1,0 +1,16 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install cc65
+        run: sudo apt-get update && sudo apt-get install -y cc65
+      - name: Build and check the SHA-1
+        # No ROM is committed, so this only needs the sources: the build must reproduce the known SHA-1.
+        run: make verify

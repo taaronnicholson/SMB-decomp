@@ -307,4 +307,6 @@ renderers `extract_gfx.py`, `extract_maps.py`, `render_maps.py`, `render_sprites
 
 `make check` regenerates every generated file (`make regen`, then `make tables`), rebuilds, compares the ROM with `rom/game.nes` and fails if the regeneration changed any tracked file under `src/`, `tools/`, `docs/` or the README; it passes from a fresh clone (with the ROM placed in `rom/game.nes`). Hand-written notes live in `docs/player_notes.md`, `docs/game_states.md`, `docs/entity_behaviour.md` and the README; `docs/player_states.md` and `docs/entity_handlers.md` are generated and overwritten.
 
+CI (`.github/workflows/ci.yml`) installs `cc65` and runs `make verify` on every push: the committed sources must build to the ROM with SHA-1 `c1bc357f...` (no ROM file is needed for that check; `make check` additionally needs `rom/game.nes`).
+
 `tools/watch_ram.py` (run `LABELS=/tmp/labels.json python3 -I tools/decomp.py` first) plays stage 1 with random input in the built-in emulator and lists, for every still-unnamed RAM byte, which routines write or read it and the values written. It confirmed e.g. `fall_index`/`fall_dy` (PlayerState02) and the touch-tile state (`touch_ptr`, `prev_touch_*`), and showed that `scratch_74`-`scratch_78` are shared by unrelated routines.
