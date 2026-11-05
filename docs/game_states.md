@@ -29,3 +29,10 @@ in the emulator (writing the destination into RAM and jumping to `F_F040`); the 
 
 The set-up states `$01`-`$07` and `$0C` write their own timers (`ram_0735`-`ram_073E`) and `camera_mode`; `GameState06` falls into `GameState0C`
 (`camera_mode` 3, then a bank 4 routine at `$B515`).
+
+## Story scenes (`game_state` `$06` -> `$0C`, verified)
+Forcing `game_state` = `$06` in stage 1 and setting `stage_index` (`zp_93`) in the emulator: `GameState06` clears `story_step` and moves to `$0C`, which runs `StateDispatch_0735`
+(nine bank 4 routines indexed by `story_step`). Step 0 (`StoryBranchByStage`) reads a 5-byte table at `$B7B4` indexed by `stage_index`: `00 01 00 02 03`.
+A zero entry skips the story (`player_state` 9, `game_state` 9: the level-complete chain); stages 1, 3 and 4 start `StartStoryScene` with `story_scene` = 1, 2 or 3,
+which plays song 6, hides the sprites, loads the scene's 8-byte record from `$B7B1 + scene*8` (script pointer into `story_script_ptr`, a text pointer into `credits_ptr`, three parameters) and
+steps through the script: each entry is (delay, pointer to a sprite definition) and spawns an entity of type `$3A` per sprite. Stage 1's script ran for the 900 frames watched.

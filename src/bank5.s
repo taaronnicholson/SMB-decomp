@@ -4123,7 +4123,7 @@ Ent3C_Update:
     SBC #$04
     BCS @B5_A263
     LDA #$00
-    STA ram_01B2
+    STA story_timer
     RTS
 @B5_A263:
     LDA ptr_lo
@@ -4156,7 +4156,7 @@ Ent41_Update_LA295:
     JSR Ent_CheckPlayerOverlap
     DEC tmp_a
     BNE @B5_A2B1
-    LDA ram_01B9
+    LDA story_scene_param
     STA tmp_a
     JSR SubClamp01B8
     LDA #$38
@@ -4397,7 +4397,7 @@ Ent43_Update_LA452:
 Ent45_Update:
     DEC ent_angle,x
     BNE Ent43_Update_LA451
-    LDA ram_01B6
+    LDA story_param_c
     STA ent_type,x
     RTS
 Ent46_Update:
@@ -4523,7 +4523,7 @@ Ent48_Update:
     LDA #$08
     STA story_step
     LDA #$28
-    STA ram_01B2
+    STA story_timer
     RTS
 @B5_A5FD:
     LDA #$0B
@@ -4581,7 +4581,7 @@ Ent44_Update:
     SBC #$00
     STA tmp_b
     STA ent_y_hi,x
-    LDA ram_01B1
+    LDA story_scene
     CMP #$03
     BNE @B5_A688
     LDA #$A9

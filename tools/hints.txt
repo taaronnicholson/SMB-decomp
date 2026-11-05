@@ -866,3 +866,16 @@ ram 00B0 scratch_B0
 ram 00B2 scratch_B2
 ram 00B3 scratch_B3
 ram 01A7 tally_timer                ; counts up by 3 per step in CheckRam01A8Threshold
+
+; naming pass 23 (RAM): story scene, confirmed by forcing game_state 6 with stage_index 1, 3 and 4 in the emulator
+ram 01B1 story_scene                ; 1..3: the story screen shown (record of 8 bytes at B4_B7B1 + scene*8)
+ram 01B2 story_timer                ; frames until the next script entry ($50 at the start)
+ram 00CF story_script_ptr_lo        ; pointer into the scene's script: (delay, pointer to a sprite definition) triples; delay 0 ends it
+ram 00D0 story_script_ptr_hi
+ram 01B3 story_flag                 ; non-zero: the scene is skipped to story_step 6
+ram 01B9 story_scene_param          ; copied from the scene record (3, 3, 2 for scenes 1-3)
+ram 01B4 story_param_a              ; the other scene record bytes ($3D constant, then two values per scene)
+ram 01B5 story_param_b
+ram 01B6 story_param_c
+ram 01BA story_text_rows            ; number of text rows queued by QueueTextRow (6 at the start)
+ram 01BB story_text_row             ; current row of the text being typed

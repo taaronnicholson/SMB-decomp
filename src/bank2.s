@@ -3236,8 +3236,8 @@ ResetGameState:
     STA switch_1
     STA switch_2
     STA switch_3
-    STA ram_01B3
-    STA ram_01B1
+    STA story_flag
+    STA story_scene
     LDX #$07
 @B2_B88F:
     STA collected_by_kind,x

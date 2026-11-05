@@ -1352,9 +1352,9 @@ Tbl_B3_BF00:
     RTS
 @B3_BF46:
     LDA #$00
-    CMP ram_01B3
+    CMP story_flag
     BNE @B3_BF45
-    DEC ram_01B3
+    DEC story_flag
     STA ram_0104
     STA ram_0105
     STA ram_0108

@@ -1457,7 +1457,7 @@ CheckPause:
     JSR SwitchBankKeepX
     CLC
     JSR DecompressAndFinish
-    LDA ram_01B1
+    LDA story_scene
 CheckPause_LCE00:
     BEQ @F_CE05
     JSR HideAllSprites
@@ -1616,10 +1616,10 @@ DrawQueuedBlock:
     STA tmp_d
     LDA #$11
     STA ptr_lo
-    LDA ram_01BA
+    LDA story_text_rows
     BEQ @F_CF1D
     JSR $BAE7
-    DEC ram_01BA
+    DEC story_text_rows
 @F_CF1D:
     RTS
 CreditsStep:
@@ -1632,9 +1632,9 @@ CreditsStep:
     LDA frame_counter
     AND #$01
     BNE @F_CF39
-    LDA ram_01B2
+    LDA story_timer
     BEQ @F_CF39
-    DEC ram_01B2
+    DEC story_timer
 @F_CF39:
     RTS
 @F_CF3A:
@@ -1799,7 +1799,7 @@ CameraModeTable:
     .word $BCDA
     .word $BC5F
     .word $D054
-    EOR zp_D0
+    EOR story_script_ptr_hi
     LDA #$02
     JSR SwitchBank
     JMP $B618

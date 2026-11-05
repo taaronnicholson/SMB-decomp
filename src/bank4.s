@@ -814,7 +814,7 @@ Gfx_B4_ABB2:
     JSR RenderOffAndWait
     JSR DisableNMI
     LDA #$F0
-    STA ram_01B2
+    STA story_timer
     JSR ClearNametables
     LDA #$0A
     STA credits_ptr_lo
@@ -907,7 +907,7 @@ Gfx_B4_ABB2:
     TAX
     CMP #$30
     BNE @B4_AD0D
-    LDA ram_01B2
+    LDA story_timer
     BEQ @B4_AD30
     JMP @B4_ACE8
 @B4_AD30:
@@ -1550,7 +1550,7 @@ GameState0B_LB278:
     STA effect_param1
     LDA #$00
     STA ram_0745
-    STA ram_01B1
+    STA story_scene
     STA effect_param2
     LDA #$10
     STA effect_param3
@@ -1865,19 +1865,19 @@ StoryBranchByStage_LB540:
     LDA #$08
     JMP PlaySong
 StartStoryScene:
-    STA ram_01B1
+    STA story_scene
     LDA #$06
     JSR PlaySong
     JSR HideAllSprites
-    LDA ram_01B1
+    LDA story_scene
     ASL a
     ASL a
     ASL a
     STA ptr_lo
     LDA #$50
 StartStoryScene_LB56B:
-    STA ram_01B2
-    LDA ram_01B3
+    STA story_timer
+    LDA story_flag
     BEQ @B4_B579
     LDA #$06
     STA story_step
@@ -1885,53 +1885,53 @@ StartStoryScene_LB56B:
 @B4_B579:
     LDY ptr_lo
     LDA StartStoryScene_LB7B1,y
-    STA ram_01B9
+    STA story_scene_param
     LDA $B7B2,y
-    STA zp_CF
+    STA story_script_ptr_lo
     LDA $B7B3,y
-    STA zp_D0
+    STA story_script_ptr_hi
     LDA StartStoryScene_LB7B4,y
     STA credits_ptr_lo
     LDA StartStoryScene_LB7B5,y
     STA credits_ptr_hi
     LDA StartStoryScene_LB7B6,y
-    STA ram_01B4
+    STA story_param_a
     LDA StartStoryScene_LB7B7,y
-    STA ram_01B5
+    STA story_param_b
     LDA Tbl_B4_B7B8,y
-    STA ram_01B6
+    STA story_param_c
     LDA #$01
     STA story_step
     LDA #$06
-    STA ram_01BA
+    STA story_text_rows
     LDA #$00
     STA ram_01BE
 StartStoryScene_LB5B6:
     RTS
 StartStoryScene_LB5B7:
-    DEC ram_01B2
+    DEC story_timer
     BNE StartStoryScene_LB5B6
     LDY #$00
-    LDA (zp_CF),y
+    LDA (story_script_ptr_lo),y
     BNE @B4_B5C8
     LDA #$02
     STA story_step
     RTS
 @B4_B5C8:
     INY
-    STA ram_01B2
-    LDA (zp_CF),y
+    STA story_timer
+    LDA (story_script_ptr_lo),y
     STA tmp_c
     INY
-    LDA (zp_CF),y
+    LDA (story_script_ptr_lo),y
     STA tmp_d
-    LDA zp_CF
+    LDA story_script_ptr_lo
     CLC
     ADC #$03
-    STA zp_CF
-    LDA zp_D0
+    STA story_script_ptr_lo
+    LDA story_script_ptr_hi
     ADC #$00
-    STA zp_D0
+    STA story_script_ptr_hi
     LDY #$00
     LDA (tmp_c),y
     INC tmp_c
@@ -2022,13 +2022,13 @@ StartStoryScene_LB63F:
     STA ent_param2_8
     LDA #$03
     STA story_step
-    STA ram_01B2
+    STA story_timer
 StartStoryScene_LB6A3:
     RTS
 StartStoryScene_LB6A4:
-    LDA ram_01B2
+    LDA story_timer
     BNE StartStoryScene_LB6A3
-    LDA ram_01B3
+    LDA story_flag
     BEQ @B4_B6B6
     LDA #$05
     STA story_step
@@ -2085,7 +2085,7 @@ StartStoryScene_LB6FA:
 StartStoryScene_LB71C:
     RTS
 StartStoryScene_LB71D:
-    DEC ram_01B2
+    DEC story_timer
     BNE StartStoryScene_LB71C
     LDA #$02
     STA story_step
@@ -2101,15 +2101,15 @@ StartStoryScene_LB728:
     JMP StartStoryScene_LB71C
 @B4_B73B:
     JSR DrawQueuedBlock
-    LDA ram_01BA
+    LDA story_text_rows
     BNE StartStoryScene_LB71C
     LDA #$05
     STA story_step
-    STA ram_01B3
+    STA story_flag
 StartStoryScene_LB74B:
-    LDA ram_01B4
+    LDA story_param_a
     STA ent_type_9
-    LDA ram_01B5
+    LDA story_param_b
     STA ent_type_8
     LDA #$00
     STA ram_0732
@@ -2119,9 +2119,9 @@ StartStoryScene_LB74B:
     STA ram_01B8
     RTS
 StartStoryScene_LB767:
-    DEC ram_01B2
+    DEC story_timer
     BNE StartStoryScene_LB71C
-    LDA ram_01B1
+    LDA story_scene
     CMP #$03
     BEQ @B4_B776
     JMP StoryBranchByStage_LB540
@@ -2303,7 +2303,7 @@ StepDispatch_01BE:
     JMP (ptr_lo)
 StartStoryScene_LBAA6:
     LDA #$00
-    STA ram_01BB
+    STA story_text_row
     STA ram_01BF
     LDA #$01
     STA ram_01BD
@@ -2313,8 +2313,8 @@ StartStoryScene_LBAA6:
 StartStoryScene_LBABB:
     RTS
 StartStoryScene_LBABC:
-    LDA ram_01BB
-    CMP ram_01BA
+    LDA story_text_row
+    CMP story_text_rows
     BNE @B4_BACA
     LDA #$02
     STA ram_01BE
@@ -2322,10 +2322,10 @@ StartStoryScene_LBABC:
 @B4_BACA:
     CLC
     ADC #$01
-    STA ram_01BB
+    STA story_text_row
     CMP #$01
     BEQ QueueTextRow_LBB40
-    CMP ram_01BA
+    CMP story_text_rows
     BEQ QueueTextRow_LBB4F
 QueueTextRowDefault:
     PHA
@@ -2420,7 +2420,7 @@ QueueTextRow_LBB60:
     STA ptr_lo
     CMP #$10
     BEQ @B4_BB9E
-    LDA ram_01BA
+    LDA story_text_rows
     SEC
     SBC #$01
     JSR QueueTextRow
@@ -2460,7 +2460,7 @@ QueueTextRow_LBB60:
     PHA
     LDA tmp_d
     PHA
-    LDA ram_01BA
+    LDA story_text_rows
     SEC
     SBC #$01
     STA tmp_ptr_lo

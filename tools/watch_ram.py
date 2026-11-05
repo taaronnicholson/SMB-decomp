@@ -41,7 +41,7 @@ nes.rd = rd; nes.wr = wr
 recording = [False]
 def st():
     cur['pc'] = nes.PC
-    if nes.PC == 0xC66C: nes.ram[0x93] = 0
+    if nes.PC == 0xC66C and not recording[0]: nes.ram[0x93] = 0
     step()
 nes.step = st
 start = {130, 131, 260, 261, 400, 401, 720, 721, 722, 800, 801}
@@ -49,6 +49,9 @@ for f in range(1250):
     nes.joy = 8 if f in start else 0; nes.frame()
 recording[0] = True
 r = nes.ram
+if os.environ.get('STAGE'): r[0x93] = int(os.environ['STAGE'], 16)
+if os.environ.get('FORCE'): r[0x72C] = int(os.environ['FORCE'], 16)     # force a game_state at the start
+last_gs = [r[0x72C]]
 import random
 random.seed(int(sys.argv[1]))
 N = int(sys.argv[2])
@@ -60,7 +63,9 @@ for f in range(N):
     hold -= 1
     nes.joy = pat
     r[0x7A] = 99     # invulnerable
+    if os.environ.get('NOINPUT'): nes.joy = 0
     nes.frame()
+    if r[0x72C] != last_gs[0]: print(f'frame {f}: game_state {last_gs[0]:02X} -> {r[0x72C]:02X}'); last_gs[0] = r[0x72C]
 out = {}
 for a in sorted(watch):
     if a in W or a in R:
