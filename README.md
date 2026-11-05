@@ -230,7 +230,7 @@ channel's SFX state and set `snd_sfx_*` so music stops writing that channel. SFX
 
 (`$FF`-terminated volume sequences are stepped every `seq_speed` frames; a `$80` entry restarts the sequence.)
 
-`tools/gen_sound_hints.py` walks the song table and emits `tools/hints_sound.txt`
+`tools/gen_sound_hints.py` walks the song table and emits `tools/hints_sound.txt` (pattern lists are named `Song<n>_<Sq1|Sq2|Tri|Noi>List`, patterns `..._P<i>`, lists reached by `$F5` `..._Next<k>`;
 (lists, 72 streams, and the `snd_*` RAM names); `make regen` runs it.
 
 ## PPU update buffer and text

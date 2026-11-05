@@ -892,3 +892,24 @@ name 1 AFD3 PlayerState13_Body
 name 1 AFF8 PlayerState14_Body
 name 1 B094 PlayerState15_Body
 name 3 BD67 PlayerState1A_Body
+
+; naming pass 25: player shape records and offset lists
+name 6 A6BC PlayerShapeRecord1
+name 6 A6BF PlayerShapeRecord2
+name 6 A6C2 PlayerShapeRecord3
+name 6 A6C5 PlayerShapeRecord4
+name 6 A6C8 PlayerShapeRecord5
+name 6 A6CB PlayerShapeRecord6
+name 6 A6CE PlayerShapeRecord7
+name 6 A6D1 PlayerShapeRecord8
+name 6 A6D4 PlayerShapeRecord9
+name 6 A6D7 PlayerShapeRecord10
+name 6 A6E2 PlayerShapeOffsets1
+name 6 A6EA PlayerShapeOffsets2
+name 6 A6F2 PlayerShapeOffsets3
+name 6 A6F8 PlayerShapeOffsets4
+name 6 A700 PlayerShapeOffsets5
+name 6 A70A PlayerShapeOffsets7
+name 6 A70E PlayerShapeOffsets8
+name 6 A716 PlayerShapeOffsets9
+name 6 A71E PlayerShapeOffsets10

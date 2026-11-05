@@ -2093,92 +2093,92 @@ PitchMod8:
     .byte $00, $3F, $7E, $3F, $00, $C1, $82, $C1, $80
 SongTable:
     .byte $32
-    .word B6_94A8, B6_947C, B6_9492, B6_94C2
+    .word Song0_Sq1List, Song0_Sq2List, Song0_TriList, Song0_NoiList
     .byte $32
-    .word B6_9668, B6_9676, B6_966C, B6_967A
+    .word Song1_Sq1List, Song1_Sq2List, Song1_TriList, Song1_NoiList
     .byte $2C
-    .word B6_9743, B6_9751, B6_9747, B6_967A
+    .word Song2_Sq1List, Song2_Sq2List, Song2_TriList, Song1_NoiList
     .byte $26
-    .word B6_97C1, B6_97C9, B6_97C5, B6_97F3
+    .word Song3_Sq1List, Song3_Sq2List, Song3_TriList, Song3_NoiList
     .byte $31
-    .word B6_98F9, B6_9907, B6_98FD, B6_9945
+    .word Song4_Sq1List, Song4_Sq2List, Song4_TriList, Song4_NoiList
     .byte $27
-    .word B6_9B70, B6_9B68, B6_9B6C, B6_9B80
+    .word Song5_Sq1List, Song5_Sq2List, Song5_TriList, Song5_NoiList
     .byte $4A
-    .word B6_9C44, B6_9C3C, B6_9C40, B6_9C48
+    .word Song6_Sq1List, Song6_Sq2List, Song6_TriList, Song6_NoiList
     .byte $4C
-    .word B6_9DB2, B6_9DBC, B6_9DB8, B6_9DC6
+    .word Song7_Sq1List, Song7_Sq2List, Song7_TriList, Song7_NoiList
     .byte $2E
-    .word B6_9EEE, B6_9EF6, B6_9EF2, B6_9EFE
+    .word Song8_Sq1List, Song8_Sq2List, Song8_TriList, Song8_NoiList
 ; Bank6_PtrPair_9478: word $A03E (the filler before AreaMap22) and $0000
 Bank6_PtrPair_9478:
     .word $A03E
     .word $0000
-B6_947C:
-    .word B6_951B
-    .word B6_952A
-    .word B6_9584
-    .word B6_952A
-    .word B6_9598
-    .word B6_95B4
-    .word B6_952A
-    .word B6_9584
-    .word B6_952A
-    .word B6_9598
+Song0_Sq2List:
+    .word Song0_Sq2List_P0
+    .word Song0_Sq2List_P1
+    .word Song0_Sq2List_P2
+    .word Song0_Sq2List_P1
+    .word Song0_Sq2List_P4
+    .word Song0_Sq2List_P5
+    .word Song0_Sq2List_P1
+    .word Song0_Sq2List_P2
+    .word Song0_Sq2List_P1
+    .word Song0_Sq2List_P4
     .word $0000
-B6_9492:
-    .word B6_94C8
-    .word B6_94D5
-    .word B6_94FA
-    .word B6_94D5
-    .word B6_9507
-    .word B6_9511
-    .word B6_94D5
-    .word B6_94FA
-    .word B6_94D5
-    .word B6_9507
+Song0_TriList:
+    .word Song0_TriList_P0
+    .word Song0_TriList_P1
+    .word Song0_TriList_P2
+    .word Song0_TriList_P1
+    .word Song0_TriList_P4
+    .word Song0_TriList_P5
+    .word Song0_TriList_P1
+    .word Song0_TriList_P2
+    .word Song0_TriList_P1
+    .word Song0_TriList_P4
     .word $0000
-B6_94A8:
-    .word B6_95C0
-    .word B6_95CF
-    .word B6_9620
-    .word B6_95CF
-    .word B6_9633
-    .word B6_964D
-    .word B6_A035
-    .word B6_95CF
-    .word B6_9620
-    .word B6_95CF
-    .word B6_9633
-    .word B6_A032
+Song0_Sq1List:
+    .word Song0_Sq1List_P0
+    .word Song0_Sq1List_P1
+    .word Song0_Sq1List_P2
+    .word Song0_Sq1List_P1
+    .word Song0_Sq1List_P4
+    .word Song0_Sq1List_P5
+    .word Song0_Sq1List_P6
+    .word Song0_Sq1List_P1
+    .word Song0_Sq1List_P2
+    .word Song0_Sq1List_P1
+    .word Song0_Sq1List_P4
+    .word Song0_Sq1List_P11
     .word $0000
-B6_94C2:
-    .word B6_9657
-    .word B6_9661
+Song0_NoiList:
+    .word Song0_NoiList_P0
+    .word Song0_NoiList_P1
     .word $0000
-B6_94C8:
+Song0_TriList_P0:
     .byte $F6,$10   ; envelope
     .byte $F7,$04   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
     .byte $63,$00,$02,$00
     .byte $F5,$94,$94   ; new pattern list
-B6_94D5:
+Song0_TriList_P1:
     .byte $63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05,$04
     .byte $63,$00,$07,$00,$08,$07,$00,$61,$00,$02,$03,$04
     .byte $63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05,$04
     .byte $FF   ; next pattern
-B6_94FA:
+Song0_TriList_P2:
     .byte $63,$00,$04,$00,$02,$00,$00,$61,$00,$02,$03,$04
     .byte $FF   ; next pattern
-B6_9507:
+Song0_TriList_P4:
     .byte $63,$00,$04,$00,$07,$05,$00,$05,$09
     .byte $FF   ; next pattern
-B6_9511:
+Song0_TriList_P5:
     .byte $F6,$40   ; envelope
     .byte $67,$00,$02,$04,$00
     .byte $F6,$10   ; envelope
     .byte $FF   ; next pattern
-B6_951B:
+Song0_Sq2List_P0:
     .byte $F6,$02   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$02   ; pitch_mod
@@ -2186,7 +2186,7 @@ B6_951B:
     .byte $F6,$03   ; envelope
     .byte $1F
     .byte $F5,$7E,$94   ; new pattern list
-B6_952A:
+Song0_Sq2List_P1:
     .byte $F7,$02   ; pitch_mod
     .byte $60
     .byte $F8   ; key off
@@ -2226,7 +2226,7 @@ B6_952A:
     .byte $F6,$01   ; envelope
     .byte $FA,$F0   ; duty
     .byte $FF   ; next pattern
-B6_9584:
+Song0_Sq2List_P2:
     .byte $61,$1C,$1A,$18,$1C
     .byte $F9   ; hold
     .byte $1A,$17
@@ -2236,7 +2236,7 @@ B6_9584:
     .byte $FA,$30   ; duty
     .byte $2E,$2D,$2B
     .byte $FF   ; next pattern
-B6_9598:
+Song0_Sq2List_P4:
     .byte $61,$1C,$1A,$18,$1C
     .byte $F9   ; hold
     .byte $1B,$1C
@@ -2249,13 +2249,13 @@ B6_9598:
     .byte $F8   ; key off
     .byte $60,$1D,$1D,$63,$1D
     .byte $FF   ; next pattern
-B6_95B4:
+Song0_Sq2List_P5:
     .byte $F7,$03   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$0E   ; envelope
     .byte $67,$13,$16,$18,$1C
     .byte $FF   ; next pattern
-B6_95C0:
+Song0_Sq1List_P0:
     .byte $F6,$01   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$02   ; pitch_mod
@@ -2263,7 +2263,7 @@ B6_95C0:
     .byte $F6,$02   ; envelope
     .byte $1C
     .byte $F5,$AA,$94   ; new pattern list
-B6_95CF:
+Song0_Sq1List_P1:
     .byte $F7,$03   ; pitch_mod
     .byte $F6,$00   ; envelope
     .byte $FA,$F0   ; duty
@@ -2298,7 +2298,7 @@ B6_95CF:
     .byte $F6,$01   ; envelope
     .byte $FA,$F0   ; duty
     .byte $FF   ; next pattern
-B6_9620:
+Song0_Sq1List_P2:
     .byte $61,$1C,$1A,$18,$1C
     .byte $F9   ; hold
     .byte $1A,$17
@@ -2308,7 +2308,7 @@ B6_9620:
     .byte $FA,$30   ; duty
     .byte $30,$30,$30
     .byte $FF   ; next pattern
-B6_9633:
+Song0_Sq1List_P4:
     .byte $61,$1C,$1A,$18,$1C
     .byte $F9   ; hold
     .byte $1B,$1C
@@ -2319,38 +2319,38 @@ B6_9633:
     .byte $F8   ; key off
     .byte $60,$1D,$1D,$63,$1D
     .byte $FF   ; next pattern
-B6_964D:
+Song0_Sq1List_P5:
     .byte $FA,$30   ; duty
     .byte $F6,$0E   ; envelope
     .byte $67,$18,$1A,$1C,$1F
     .byte $FF   ; next pattern
-B6_9657:
+Song0_NoiList_P0:
     .byte $63
     .byte $F6,$04   ; envelope
     .byte $06,$06,$06,$61
     .byte $F5,$C4,$94   ; new pattern list
-B6_9661:
+Song0_NoiList_P1:
     .byte $F6,$10   ; envelope
     .byte $0D
     .byte $F6,$12   ; envelope
     .byte $08
     .byte $FF   ; next pattern
-B6_9668:
-    .word B6_967E
+Song1_Sq1List:
+    .word Song1_Sq1List_P0
     .word $0000
-B6_966C:
-    .word B6_96A0
-    .word B6_96A0
-    .word B6_96A0
-    .word B6_96E5
+Song1_TriList:
+    .word Song1_TriList_P0
+    .word Song1_TriList_P0
+    .word Song1_TriList_P0
+    .word Song1_TriList_P3
     .word $0000
-B6_9676:
-    .word B6_96E8
+Song1_Sq2List:
+    .word Song1_Sq2List_P0
     .word $0000
-B6_967A:
-    .word B6_970A
+Song1_NoiList:
+    .word Song1_NoiList_P0
     .word $0000
-B6_967E:
+Song1_Sq1List_P0:
     .byte $F7,$02   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$04   ; envelope
@@ -2358,7 +2358,7 @@ B6_967E:
     .byte $15,$0C,$15,$18,$11,$15,$18,$0C,$15,$18,$11,$15
     .byte $18,$61,$1D
     .byte $FE   ; end of song
-B6_96A0:
+Song1_TriList_P0:
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
     .byte $F6,$0A   ; envelope
@@ -2394,10 +2394,10 @@ B6_96A0:
     .byte $F6,$05   ; envelope
     .byte $60,$0C
     .byte $FF   ; next pattern
-B6_96E5:
+Song1_TriList_P3:
     .byte $62,$11
     .byte $FE   ; end of song
-B6_96E8:
+Song1_Sq2List_P0:
     .byte $F7,$02   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$04   ; envelope
@@ -2405,7 +2405,7 @@ B6_96E8:
     .byte $1D,$11,$18,$1D,$15,$18,$21,$11,$18,$1D,$15,$18
     .byte $20,$61,$21
     .byte $FE   ; end of song
-B6_970A:
+Song1_NoiList_P0:
     .byte $61
     .byte $F6,$11   ; envelope
     .byte $0D,$60
@@ -2436,19 +2436,19 @@ B6_970A:
     .byte $F6,$10   ; envelope
     .byte $06
     .byte $FF   ; next pattern
-B6_9743:
-    .word B6_979D
+Song2_Sq1List:
+    .word Song2_Sq1List_P0
     .word $0000
-B6_9747:
-    .word B6_9755
-    .word B6_9755
-    .word B6_9755
-    .word B6_979A
+Song2_TriList:
+    .word Song2_TriList_P0
+    .word Song2_TriList_P0
+    .word Song2_TriList_P0
+    .word Song2_TriList_P3
     .word $0000
-B6_9751:
-    .word B6_979F
+Song2_Sq2List:
+    .word Song2_Sq2List_P0
     .word $0000
-B6_9755:
+Song2_TriList_P0:
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
     .byte $F6,$0A   ; envelope
@@ -2485,13 +2485,13 @@ B6_9755:
     RTS
     .byte $00
     .byte $FF   ; next pattern
-B6_979A:
+Song2_TriList_P3:
     .byte $62,$05
     .byte $FE   ; end of song
-B6_979D:
+Song2_Sq1List_P0:
     .byte $60
     .byte $F8   ; key off
-B6_979F:
+Song2_Sq2List_P0:
     .byte $F7,$03   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$04   ; envelope
@@ -2499,42 +2499,42 @@ B6_979F:
     .byte $10,$13,$10,$0C,$10,$0C,$0A,$0C,$0A,$07,$0A,$07
     .byte $04,$61,$09
     .byte $FE   ; end of song
-B6_97C1:
-    .word B6_97F7
+Song3_Sq1List:
+    .word Song3_Sq1List_P0
     .word $0000
-B6_97C5:
-    .word B6_97FC
+Song3_TriList:
+    .word Song3_TriList_P0
     .word $0000
-B6_97C9:
-    .word B6_9839
-    .word B6_983F
-    .word B6_98A7
-    .word B6_98AD
-    .word B6_A035
-    .word B6_98A7
-    .word B6_98AD
-    .word B6_A038
-    .word B6_9876
-    .word B6_9878
-    .word B6_98A7
-    .word B6_98AD
-    .word B6_A032
-    .word B6_9876
-    .word B6_A035
-    .word B6_9878
-    .word B6_A038
-    .word B6_9839
-    .word B6_983F
-    .word B6_A032
+Song3_Sq2List:
+    .word Song3_Sq2List_P0
+    .word Song3_Sq2List_P1
+    .word Song3_Sq2List_P2
+    .word Song3_Sq2List_P3
+    .word Song0_Sq1List_P6
+    .word Song3_Sq2List_P2
+    .word Song3_Sq2List_P3
+    .word Song3_Sq2List_P7
+    .word Song3_Sq2List_P8
+    .word Song3_Sq2List_P9
+    .word Song3_Sq2List_P2
+    .word Song3_Sq2List_P3
+    .word Song0_Sq1List_P11
+    .word Song3_Sq2List_P8
+    .word Song0_Sq1List_P6
+    .word Song3_Sq2List_P9
+    .word Song3_Sq2List_P7
+    .word Song3_Sq2List_P0
+    .word Song3_Sq2List_P1
+    .word Song0_Sq1List_P11
     .word $0000
-B6_97F3:
-    .word B6_98F1
+Song3_NoiList:
+    .word Song3_NoiList_P0
     .word $0000
-B6_97F7:
+Song3_Sq1List_P0:
     .byte $60
     .byte $F8   ; key off
     .byte $F5,$C9,$97   ; new pattern list
-B6_97FC:
+Song3_TriList_P0:
     .byte $F6,$10   ; envelope
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
@@ -2545,11 +2545,11 @@ B6_97FC:
     .byte $F7,$02   ; pitch_mod
     .byte $0B,$17,$0C,$18
     .byte $FF   ; next pattern
-B6_9839:
+Song3_Sq2List_P0:
     .byte $F6,$0B   ; envelope
     .byte $FA,$F0   ; duty
     .byte $F7,$02   ; pitch_mod
-B6_983F:
+Song3_Sq2List_P1:
     .byte $61,$1D,$63,$21,$60,$20,$21,$61,$1D,$63,$21,$60
     .byte $20,$21,$61,$1C,$63,$1F,$60,$1E,$1F,$61,$18,$1F
     .byte $1C,$1A,$61,$18,$63,$1C,$60,$1B,$1C,$61,$18,$63
@@ -2557,9 +2557,9 @@ B6_983F:
     .byte $1D,$21,$20,$21
     .byte $FA,$30   ; duty
     .byte $FF   ; next pattern
-B6_9876:
+Song3_Sq2List_P8:
     .byte $FA,$F0   ; duty
-B6_9878:
+Song3_Sq2List_P9:
     .byte $F6,$05   ; envelope
     .byte $F7,$04   ; pitch_mod
     .byte $61
@@ -2572,11 +2572,11 @@ B6_9878:
     .byte $18,$18,$15,$61,$11
     .byte $FA,$30   ; duty
     .byte $FF   ; next pattern
-B6_98A7:
+Song3_Sq2List_P2:
     .byte $F6,$0B   ; envelope
     .byte $FA,$B0   ; duty
     .byte $F7,$03   ; pitch_mod
-B6_98AD:
+Song3_Sq2List_P3:
     .byte $60,$11,$1D,$61,$15,$21,$60,$20,$21,$11,$1D,$61
     .byte $15,$21,$60,$20,$21,$10,$1C,$61,$13,$1F,$60,$1E
     .byte $1F,$0C,$18,$13,$1F,$10,$1C,$0E,$1A,$0C,$18,$61
@@ -2585,62 +2585,62 @@ B6_98AD:
     .byte $21,$14,$20,$15,$21
     .byte $FA,$30   ; duty
     .byte $FF   ; next pattern
-B6_98F1:
+Song3_NoiList_P0:
     .byte $61
     .byte $F6,$12   ; envelope
     .byte $0D
     .byte $F6,$12   ; envelope
     .byte $08
     .byte $FF   ; next pattern
-B6_98F9:
-    .word B6_9949
+Song4_Sq1List:
+    .word Song4_Sq1List_P0
     .word $0000
-B6_98FD:
-    .word B6_994E
-    .word B6_9979
-    .word B6_994E
-    .word B6_9986
+Song4_TriList:
+    .word Song4_TriList_P0
+    .word Song4_TriList_P1
+    .word Song4_TriList_P0
+    .word Song4_TriList_P3
     .word $0000
-B6_9907:
-    .word B6_9990
-    .word B6_99E8
-    .word B6_9990
-    .word B6_9A01
-    .word B6_A035
-    .word B6_9A1A
-    .word B6_9A9C
-    .word B6_9A1A
-    .word B6_9ABB
-    .word B6_9ADC
-    .word B6_A032
-    .word B6_9ADC
-    .word B6_A038
-    .word B6_9A1A
-    .word B6_9A9C
-    .word B6_9A1A
-    .word B6_9ABB
-    .word B6_9ADC
-    .word B6_A03B
-    .word B6_9ADC
-    .word B6_A038
-    .word B6_9A1A
-    .word B6_9A9C
-    .word B6_9A1A
-    .word B6_9ABB
-    .word B6_A035
-    .word B6_9ADC
-    .word B6_A038
-    .word B6_9ADC
-    .word B6_A032
+Song4_Sq2List:
+    .word Song4_Sq2List_P0
+    .word Song4_Sq2List_P1
+    .word Song4_Sq2List_P0
+    .word Song4_Sq2List_P3
+    .word Song0_Sq1List_P6
+    .word Song4_Sq2List_P5
+    .word Song4_Sq2List_P6
+    .word Song4_Sq2List_P5
+    .word Song4_Sq2List_P8
+    .word Song4_Sq2List_P9
+    .word Song0_Sq1List_P11
+    .word Song4_Sq2List_P9
+    .word Song3_Sq2List_P7
+    .word Song4_Sq2List_P5
+    .word Song4_Sq2List_P6
+    .word Song4_Sq2List_P5
+    .word Song4_Sq2List_P8
+    .word Song4_Sq2List_P9
+    .word Song4_Sq2List_P18
+    .word Song4_Sq2List_P9
+    .word Song3_Sq2List_P7
+    .word Song4_Sq2List_P5
+    .word Song4_Sq2List_P6
+    .word Song4_Sq2List_P5
+    .word Song4_Sq2List_P8
+    .word Song0_Sq1List_P6
+    .word Song4_Sq2List_P9
+    .word Song3_Sq2List_P7
+    .word Song4_Sq2List_P9
+    .word Song0_Sq1List_P11
     .word $0000
-B6_9945:
-    .word B6_9B60
+Song4_NoiList:
+    .word Song4_NoiList_P0
     .word $0000
-B6_9949:
+Song4_Sq1List_P0:
     .byte $60
     .byte $F8   ; key off
     .byte $F5,$07,$99   ; new pattern list
-B6_994E:
+Song4_TriList_P0:
     .byte $F6,$10   ; envelope
     .byte $F7,$04   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
@@ -2648,13 +2648,13 @@ B6_994E:
     .byte $63,$00,$07,$00,$08,$07,$00,$61,$00,$02,$03,$04
     .byte $63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05,$04
     .byte $FF   ; next pattern
-B6_9979:
+Song4_TriList_P1:
     .byte $63,$00,$04,$00,$02,$00,$00,$61,$00,$02,$03,$04
     .byte $FF   ; next pattern
-B6_9986:
+Song4_TriList_P3:
     .byte $63,$00,$04,$00,$07,$05,$00,$05,$09
     .byte $FF   ; next pattern
-B6_9990:
+Song4_Sq2List_P0:
     .byte $F7,$03   ; pitch_mod
     .byte $FA,$F0   ; duty
     .byte $F6,$09   ; envelope
@@ -2693,7 +2693,7 @@ B6_9990:
     .byte $61,$1F,$2B,$1F,$2B,$1F,$2B
     .byte $FA,$F0   ; duty
     .byte $FF   ; next pattern
-B6_99E8:
+Song4_Sq2List_P1:
     .byte $F6,$09   ; envelope
     .byte $F7,$03   ; pitch_mod
     .byte $61,$1C,$1A,$18,$1C
@@ -2706,7 +2706,7 @@ B6_99E8:
     .byte $FA,$30   ; duty
     .byte $30,$2F,$2E
     .byte $FF   ; next pattern
-B6_9A01:
+Song4_Sq2List_P3:
     .byte $F6,$09   ; envelope
     .byte $61,$1C,$1A,$18,$1C
     .byte $F9   ; hold
@@ -2716,7 +2716,7 @@ B6_9A01:
     .byte $F8   ; key off
     .byte $1D,$1D,$63,$1D
     .byte $FF   ; next pattern
-B6_9A1A:
+Song4_Sq2List_P5:
     .byte $F6,$0B   ; envelope
     .byte $FA,$B0   ; duty
     .byte $F7,$03   ; pitch_mod
@@ -2763,7 +2763,7 @@ B6_9A1A:
     .byte $FA,$B0   ; duty
     .byte $F7,$03   ; pitch_mod
     .byte $FF   ; next pattern
-B6_9A9C:
+Song4_Sq2List_P6:
     .byte $60,$1C,$10,$1A,$0E,$18,$0C,$1C,$10
     .byte $F9   ; hold
     .byte $F9   ; hold
@@ -2775,7 +2775,7 @@ B6_9A9C:
     .byte $FA,$30   ; duty
     .byte $30,$24,$2F,$23,$2E,$22
     .byte $FF   ; next pattern
-B6_9ABB:
+Song4_Sq2List_P8:
     .byte $60,$1C,$10,$1A,$0E,$18,$0C,$1C,$10
     .byte $F9   ; hold
     .byte $F9   ; hold
@@ -2786,7 +2786,7 @@ B6_9ABB:
     .byte $F8   ; key off
     .byte $11,$11,$61,$11,$05
     .byte $FF   ; next pattern
-B6_9ADC:
+Song4_Sq2List_P9:
     .byte $F6,$09   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$03   ; pitch_mod
@@ -2839,32 +2839,32 @@ B6_9ADC:
     .byte $F9   ; hold
     .byte $F9   ; hold
     .byte $FF   ; next pattern
-B6_9B60:
+Song4_NoiList_P0:
     .byte $61
     .byte $F6,$12   ; envelope
     .byte $0D
     .byte $F6,$12   ; envelope
     .byte $08
     .byte $FF   ; next pattern
-B6_9B68:
-    .word B6_9B84
+Song5_Sq2List:
+    .word Song5_Sq2List_P0
     .word $0000
-B6_9B6C:
-    .word B6_9BAC
+Song5_TriList:
+    .word Song5_TriList_P0
     .word $0000
-B6_9B70:
-    .word B6_9BE3
-    .word B6_9BE3
-    .word B6_9C30
-    .word B6_A035
-    .word B6_9BE3
-    .word B6_9BE3
-    .word B6_A032
+Song5_Sq1List:
+    .word Song5_Sq1List_P0
+    .word Song5_Sq1List_P0
+    .word Song5_Sq1List_P2
+    .word Song0_Sq1List_P6
+    .word Song5_Sq1List_P0
+    .word Song5_Sq1List_P0
+    .word Song0_Sq1List_P11
     .word $0000
-B6_9B80:
-    .word B6_9C34
+Song5_NoiList:
+    .word Song5_NoiList_P0
     .word $0000
-B6_9B84:
+Song5_Sq2List_P0:
     .byte $F6,$08   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$02   ; pitch_mod
@@ -2872,7 +2872,7 @@ B6_9B84:
     .byte $16,$13,$16,$1B,$27,$13,$16,$1B,$16,$13,$16,$1B
     .byte $27,$14,$18,$1B,$18,$14,$18,$1B,$27
     .byte $FF   ; next pattern
-B6_9BAC:
+Song5_TriList_P0:
     .byte $F6,$10   ; envelope
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
@@ -2894,7 +2894,7 @@ B6_9BAC:
     .byte $F6,$10   ; envelope
     .byte $0C,$0F
     .byte $FF   ; next pattern
-B6_9BE3:
+Song5_Sq1List_P0:
     .byte $F6,$09   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$02   ; pitch_mod
@@ -2905,31 +2905,31 @@ B6_9BE3:
     .byte $60,$16,$16,$63,$1B,$61,$1F,$60,$1F,$20,$61,$22
     .byte $60,$20,$1F,$61,$20,$60,$20,$1B,$63,$18
     .byte $FF   ; next pattern
-B6_9C30:
+Song5_Sq1List_P2:
     .byte $7F
     .byte $F8   ; key off
     .byte $F8   ; key off
     .byte $FF   ; next pattern
-B6_9C34:
+Song5_NoiList_P0:
     .byte $61
     .byte $F6,$12   ; envelope
     .byte $0D
     .byte $F6,$12   ; envelope
     .byte $08
     .byte $FF   ; next pattern
-B6_9C3C:
-    .word B6_9C95
+Song6_Sq2List:
+    .word Song6_Sq2List_P0
     .word $0000
-B6_9C40:
-    .word B6_9C4C
+Song6_TriList:
+    .word Song6_TriList_P0
     .word $0000
-B6_9C44:
-    .word B6_9C9A
+Song6_Sq1List:
+    .word Song6_Sq1List_P0
     .word $0000
-B6_9C48:
-    .word B6_9D8C
+Song6_NoiList:
+    .word Song6_NoiList_P0
     .word $0000
-B6_9C4C:
+Song6_TriList_P0:
     .byte $F6,$0E   ; envelope
     .byte $FC,$0C   ; chan_transpose
     .byte $F7,$04   ; pitch_mod
@@ -2941,11 +2941,11 @@ B6_9C4C:
     .byte $02,$63,$05,$04,$65,$02,$02,$02,$02,$63,$04,$05
     .byte $65,$02,$02,$02,$02,$63,$05,$07
     .byte $FF   ; next pattern
-B6_9C95:
+Song6_Sq2List_P0:
     .byte $60
     .byte $F8   ; key off
     .byte $F5,$44,$9C   ; new pattern list
-B6_9C9A:
+Song6_Sq1List_P0:
     .byte $FA,$30   ; duty
     .byte $F6,$05   ; envelope
     .byte $F7,$05   ; pitch_mod
@@ -3041,7 +3041,7 @@ B6_9C9A:
     .byte $F7,$08   ; pitch_mod
     .byte $63,$23,$24
     .byte $FF   ; next pattern
-B6_9D8C:
+Song6_NoiList_P0:
     .byte $61
     .byte $F6,$10   ; envelope
     .byte $0D
@@ -3064,23 +3064,23 @@ B6_9D8C:
     .byte $F6,$12   ; envelope
     .byte $02,$02,$02
     .byte $FF   ; next pattern
-B6_9DB2:
-    .word B6_9E56
-    .word B6_9E0D
+Song7_Sq1List:
+    .word Song7_Sq1List_P0
+    .word Song7_Sq1List_P1
     .word $0000
-B6_9DB8:
-    .word B6_9DCA
+Song7_TriList:
+    .word Song7_TriList_P0
     .word $0000
-B6_9DBC:
-    .word B6_9E58
-    .word B6_9EA1
-    .word B6_9E5E
-    .word B6_9EA1
+Song7_Sq2List:
+    .word Song7_Sq2List_P0
+    .word Song7_Sq2List_P1
+    .word Song7_Sq2List_P2
+    .word Song7_Sq2List_P1
     .word $0000
-B6_9DC6:
-    .word B6_9EA4
+Song7_NoiList:
+    .word Song7_NoiList_P0
     .word $0000
-B6_9DCA:
+Song7_TriList_P0:
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
     .byte $F6,$0C   ; envelope
@@ -3090,7 +3090,7 @@ B6_9DCA:
     .byte $63,$0F,$08,$61,$08,$0F,$08,$0F,$11,$63,$0A,$0A
     .byte $0F,$61,$0A,$63,$0E,$0A,$61,$0A,$0E,$0A,$0E,$0A
     .byte $FF   ; next pattern
-B6_9E0D:
+Song7_Sq1List_P1:
     .byte $F6,$14   ; envelope
     .byte $FC,$0C   ; chan_transpose
     .byte $F7,$02   ; pitch_mod
@@ -3110,14 +3110,14 @@ B6_9E0D:
     .byte $6F,$11,$6B,$1A
     .byte $FC,$00   ; chan_transpose
     .byte $FF   ; next pattern
-B6_9E56:
+Song7_Sq1List_P0:
     .byte $60
     .byte $F8   ; key off
-B6_9E58:
+Song7_Sq2List_P0:
     .byte $F6,$14   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$04   ; pitch_mod
-B6_9E5E:
+Song7_Sq2List_P2:
     .byte $6B,$13,$63,$11,$13,$67,$16,$63,$13,$6B
     .byte $F9   ; hold
     .byte $63,$11,$13,$67,$11,$63,$0F,$63
@@ -3134,11 +3134,11 @@ B6_9E5E:
     .byte $6F,$11,$6A,$16
     .byte $F6,$13   ; envelope
     .byte $FF   ; next pattern
-B6_9EA1:
+Song7_Sq2List_P1:
     .byte $60
     .byte $F8   ; key off
     .byte $FF   ; next pattern
-B6_9EA4:
+Song7_NoiList_P0:
     .byte $61
     .byte $F6,$11   ; envelope
     .byte $0D
@@ -3181,21 +3181,21 @@ B6_9EA4:
     .byte $F6,$12   ; envelope
     .byte $02,$02,$02
     .byte $FF   ; next pattern
-B6_9EEE:
-    .word B6_9F02
+Song8_Sq1List:
+    .word Song8_Sq1List_P0
     .word $0000
-B6_9EF2:
-    .word B6_9F3A
+Song8_TriList:
+    .word Song8_TriList_P0
     .word $0000
-B6_9EF6:
-    .word B6_9FBF
-    .word B6_9FBF
-    .word B6_9FF7
+Song8_Sq2List:
+    .word Song8_Sq2List_P0
+    .word Song8_Sq2List_P0
+    .word Song8_Sq2List_P2
     .word $0000
-B6_9EFE:
-    .word B6_A021
+Song8_NoiList:
+    .word Song8_NoiList_P0
     .word $0000
-B6_9F02:
+Song8_Sq1List_P0:
     .byte $F7,$02   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$09   ; envelope
@@ -3205,7 +3205,7 @@ B6_9F02:
     .byte $15,$0E,$12,$15,$0E,$12,$15,$0E,$12,$15,$0E,$12
     .byte $15
     .byte $FF   ; next pattern
-B6_9F3A:
+Song8_TriList_P0:
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
     INC scroll_y_lo,x
@@ -3274,7 +3274,7 @@ B6_9F3A:
     .byte $F6,$05   ; envelope
     .byte $60,$0E
     .byte $FF   ; next pattern
-B6_9FBF:
+Song8_Sq2List_P0:
     .byte $F7,$02   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$09   ; envelope
@@ -3284,7 +3284,7 @@ B6_9FBF:
     .byte $1A,$12,$15,$1A,$12,$15,$1A,$12,$15,$1A,$12,$15
     .byte $1A
     .byte $FF   ; next pattern
-B6_9FF7:
+Song8_Sq2List_P2:
     .byte $FA,$F0   ; duty
     .byte $F6,$06   ; envelope
     .byte $F7,$02   ; pitch_mod
@@ -3294,7 +3294,7 @@ B6_9FF7:
     .byte $13,$1A,$17,$1A,$13,$1A,$16,$1A,$11,$1A,$15,$1A
     .byte $12,$1A,$15,$1A
     .byte $FF   ; next pattern
-B6_A021:
+Song8_NoiList_P0:
     .byte $61
     .byte $F6,$11   ; envelope
     .byte $0D,$60
@@ -3305,16 +3305,16 @@ B6_A021:
     .byte $F6,$12   ; envelope
     .byte $02
     .byte $FF   ; next pattern
-B6_A032:
+Song0_Sq1List_P11:
     .byte $FB,$00   ; song_transpose
     .byte $FF   ; next pattern
-B6_A035:
+Song0_Sq1List_P6:
     .byte $FB,$01   ; song_transpose
     .byte $FF   ; next pattern
-B6_A038:
+Song3_Sq2List_P7:
     .byte $FB,$02   ; song_transpose
     .byte $FF   ; next pattern
-B6_A03B:
+Song4_Sq2List_P18:
     .byte $FB,$03   ; song_transpose
     .byte $FF   ; next pattern
 ; Bank6_Filler_A03E: unreferenced bytes before AreaMap22 followed by a run of $D7
@@ -3891,62 +3891,62 @@ PlayerFrameShape:
 ; PlayerShapeRecordLo: low bytes of the shape record pointers
 PlayerShapeRecordLo:
     .byte <(PlayerShapeRecords)
-    .byte <(B6_A6BC)
-    .byte <(B6_A6BF)
-    .byte <(B6_A6C2)
-    .byte <(B6_A6C5)
-    .byte <(B6_A6C8)
-    .byte <(B6_A6CB)
-    .byte <(B6_A6CE)
-    .byte <(B6_A6D1)
-    .byte <(B6_A6D4)
-    .byte <(B6_A6D7)
+    .byte <(PlayerShapeRecord1)
+    .byte <(PlayerShapeRecord2)
+    .byte <(PlayerShapeRecord3)
+    .byte <(PlayerShapeRecord4)
+    .byte <(PlayerShapeRecord5)
+    .byte <(PlayerShapeRecord6)
+    .byte <(PlayerShapeRecord7)
+    .byte <(PlayerShapeRecord8)
+    .byte <(PlayerShapeRecord9)
+    .byte <(PlayerShapeRecord10)
 ; PlayerShapeRecordHi: high bytes of the shape record pointers
 PlayerShapeRecordHi:
     .byte >(PlayerShapeRecords)
-    .byte >(B6_A6BC)
-    .byte >(B6_A6BF)
-    .byte >(B6_A6C2)
-    .byte >(B6_A6C5)
-    .byte >(B6_A6C8)
-    .byte >(B6_A6CB)
-    .byte >(B6_A6CE)
-    .byte >(B6_A6D1)
-    .byte >(B6_A6D4)
-    .byte >(B6_A6D7)
+    .byte >(PlayerShapeRecord1)
+    .byte >(PlayerShapeRecord2)
+    .byte >(PlayerShapeRecord3)
+    .byte >(PlayerShapeRecord4)
+    .byte >(PlayerShapeRecord5)
+    .byte >(PlayerShapeRecord6)
+    .byte >(PlayerShapeRecord7)
+    .byte >(PlayerShapeRecord8)
+    .byte >(PlayerShapeRecord9)
+    .byte >(PlayerShapeRecord10)
 ; PlayerShapeRecords: 11 records of (offset list pointer, sprite count)
 PlayerShapeRecords:
     .word PlayerShapeOffsets
     .byte $04
-B6_A6BC:
-    .word B6_A6E2
+PlayerShapeRecord1:
+    .word PlayerShapeOffsets1
     .byte $04
-B6_A6BF:
-    .word B6_A6EA
+PlayerShapeRecord2:
+    .word PlayerShapeOffsets2
     .byte $04
-B6_A6C2:
-    .word B6_A6F2
+PlayerShapeRecord3:
+    .word PlayerShapeOffsets3
     .byte $03
-B6_A6C5:
-    .word B6_A6F8
+PlayerShapeRecord4:
+    .word PlayerShapeOffsets4
     .byte $04
-B6_A6C8:
-    .word B6_A700
+PlayerShapeRecord5:
+    .word PlayerShapeOffsets5
     .byte $05
-B6_A6CB:
+PlayerShapeRecord6:
     .word $0398
     .byte $06
-B6_A6CE:
-    .word B6_A70A
+PlayerShapeRecord7:
+    .word PlayerShapeOffsets7
     .byte $02
-B6_A6D1:
-    .word B6_A70E
+PlayerShapeRecord8:
+    .word PlayerShapeOffsets8
     .byte $04
-B6_A6D4:
-    .word B6_A716
+PlayerShapeRecord9:
+    .word PlayerShapeOffsets9
     .byte $04
-B6_A6D7:
-    .word B6_A71E
+PlayerShapeRecord10:
+    .word PlayerShapeOffsets10
     .byte $04
 ; PlayerShapeOffsets: signed (dy, dx) pairs per shape, back to back (the last list's final 4 bytes overlap the unused group-0 entry of GroupGfxTable)
 PlayerShapeOffsets:
@@ -3954,45 +3954,45 @@ PlayerShapeOffsets:
     .byte $F0, $08
     .byte $00, $00
     .byte $00, $08
-B6_A6E2:
+PlayerShapeOffsets1:
     .byte $F4, $00
     .byte $F4, $08
     .byte $04, $00
     .byte $04, $08
-B6_A6EA:
+PlayerShapeOffsets2:
     .byte $F0, $00
     .byte $F8, $F8
     .byte $00, $00
     .byte $00, $08
-B6_A6F2:
+PlayerShapeOffsets3:
     .byte $00, $F8
     .byte $00, $00
     .byte $00, $08
-B6_A6F8:
+PlayerShapeOffsets4:
     .byte $F4, $FF
     .byte $F4, $07
     .byte $04, $FF
     .byte $04, $07
-B6_A700:
+PlayerShapeOffsets5:
     .byte $F0, $00
     .byte $F0, $08
     .byte $00, $00
     .byte $00, $08
     .byte $00, $F8
-B6_A70A:
+PlayerShapeOffsets7:
     .byte $00, $00
     .byte $00, $08
-B6_A70E:
+PlayerShapeOffsets8:
     .byte $FB, $00
     .byte $FB, $08
     .byte $08, $00
     .byte $08, $08
-B6_A716:
+PlayerShapeOffsets9:
     .byte $F8, $00
     .byte $F0, $08
     .byte $08, $00
     .byte $00, $08
-B6_A71E:
+PlayerShapeOffsets10:
     .byte $F0, $00
     .byte $00, $F8
 B6_A722:
