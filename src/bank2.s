@@ -3184,7 +3184,7 @@ ResetLevelState:
     STA camera_mode
     STA ram_0736
     STA riding_flag
-    STA zp_7E
+    STA carry_cooldown
     STA player_box_x
     STA player_box_y
     STA hurt_flag

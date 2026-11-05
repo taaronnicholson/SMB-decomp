@@ -1700,7 +1700,7 @@ GameState0D:
     STA ram_073E
     RTS
 AimedRandomEffect:
-    STA zp_73
+    STA fall_dy
     LDA ptr_lo
     PHA
     LDA ptr_hi
@@ -1715,7 +1715,7 @@ AimedRandomEffect:
     ADC #$09
     STA ram_073F
     STA tmp_b
-    LDA zp_73
+    LDA fall_dy
     STA tmp_a
     JSR DivideByTmpA
     PLA
@@ -2792,7 +2792,7 @@ FadeStepBEE7:
     LDA #$23
     STA zp_78
     LDA #$54
-    STA zp_73
+    STA fall_dy
     LDA #$00
     STA tmp_a
 @B4_BF0B:
@@ -2831,7 +2831,7 @@ FadeStepBEE7:
     ASL ptr_hi
     JSR ScaledMultiply
     INC ptr_hi
-    LDX zp_73
+    LDX fall_dy
     LDA zp_75
     BIT tmp_b
     BPL @B4_BF62
@@ -2863,7 +2863,7 @@ FadeStepBEE7:
     ASL ptr_hi
     JSR ScaledMultiply
     INC ptr_hi
-    LDX zp_73
+    LDX fall_dy
     LDA zp_76
     BIT tmp_a
     BPL @B4_BF96
@@ -2880,10 +2880,10 @@ FadeStepBEE7:
     STA oam_tile,x
     LDA zp_78
     STA oam_attr,x
-    LDA zp_73
+    LDA fall_dy
     CLC
     ADC #$04
-    STA zp_73
+    STA fall_dy
     PLA
     STA tmp_d
     PLA

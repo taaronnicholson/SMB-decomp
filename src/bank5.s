@@ -108,7 +108,7 @@ SmallOffsets_B5_80B7:
     .byte $01,$00,$01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00
     .res 12, $00
 Ent_TryCarryPlayer:
-    LDA zp_7E
+    LDA carry_cooldown
     BEQ @B5_80D8
 @B5_80D7:
     RTS
@@ -1172,7 +1172,7 @@ Ent_CheckPlayerOverlapB:
     BNE @B5_8901
     LDA #$0C
     JSR PlaySfxSq2
-    LDA zp_7F
+    LDA dive_facing
     STA player_facing
     LDA #$14
     STA invuln_lo
@@ -1180,7 +1180,7 @@ Ent_CheckPlayerOverlapB:
     STA invuln_hi
     STA fall_ticks
     STA dive_mode
-    STA zp_7D
+    STA fall_index
     STA zp_86
     STA riding_flag
     STA zp_8F
@@ -1368,7 +1368,7 @@ Ent_SpawnBurst:
     LDY #$8D
     JMP SpawnEffects
 Ent_SpawnBurst_L8A5C:
-    LDA zp_7F
+    LDA dive_facing
     STA player_facing
     LDA #$07
     STA ent_type,x
@@ -1377,7 +1377,7 @@ Ent_SpawnBurst_L8A5C:
     STA ent_flags,x
     STA fall_ticks
     STA dive_mode
-    STA zp_7D
+    STA fall_index
     STA zp_86
     STA riding_flag
     STA zp_8F

@@ -206,12 +206,12 @@ TileKindTable_Data_LC266:
     .byte $00,$00,$21,$21,$22,$22,$21,$21,$00,$FF
 TileKindTable_Data_LC270:
     .byte $01,$01,$01,$01,$01,$00,$00,$00,$00,$01,$01,$01,$FF
-TileKindTable_Data_LC27D:
+FallDyTable:
     .byte $00,$00,$00,$01,$00,$01,$00,$01,$01,$01,$01,$01,$01,$01,$01,$02
     .byte $01,$02,$01,$02,$02,$02
-TileKindTable_Data_LC293:
+FallDyTable_LC293:
     .byte $18
-TileKindTable_Data_LC294:
+FallDyTable_LC294:
     .byte $00,$19,$00,$1A,$00,$19,$01,$18,$01,$1B,$00,$1C,$00,$1B,$01,$00
     .res 24, $00
     .byte $04,$00,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$00,$00,$03,$D3
@@ -988,7 +988,7 @@ ScanMapForBalloons:
     BCS ScanMapForBalloons_LCAD3
     CLC
     ADC #$30
-    STA zp_73
+    STA fall_dy
     LDA tmp_c
     PHA
     LDA tmp_d
@@ -1014,7 +1014,7 @@ ScanMapForBalloons:
     STA ent_x_hi,x
     LDA #$00
     STA ent_flags,x
-    LDA zp_73
+    LDA fall_dy
     STA ent_param,x
     LDA #$00
     STA ent_angle,x
@@ -3543,7 +3543,7 @@ PlayerBlinkCheck:
     BEQ @F_DCF8
     LDA #$00
     STA dive_mode
-    LDA zp_7F
+    LDA dive_facing
     STA player_facing
     JMP @F_DCF8
 @F_DCE0:
@@ -3612,7 +3612,7 @@ TryStartJump:
     LDA #$00
     STA zp_84
     STA zp_8C
-    STA zp_7D
+    STA fall_index
     STA zp_86
     STA dive_mode
     STA riding_flag
@@ -3629,7 +3629,7 @@ TryStartJump:
 @F_DD72:
     STA anim_tick
     LDA player_facing
-    STA zp_7F
+    STA dive_facing
     LDA tmp_a
     STA touch_kind
     LDA #$13
@@ -4115,11 +4115,11 @@ ApplyRidingMotion:
     ADC tmp_b
     STA player_y_hi
     LDA ent_dx,x
-    STA zp_73
+    STA fall_dy
     LDA #$00
     STA tmp_d
     STA ent_dx,x
-    BIT zp_73
+    BIT fall_dy
     BPL @F_E119
     DEC tmp_d
 @F_E119:
@@ -4186,7 +4186,7 @@ ApplyRidingMotion:
     ADC #$00
     STA player_y_hi
     LDA #$08
-    STA zp_7E
+    STA carry_cooldown
     JMP PlayerState0E
 @F_E194:
     LDA player_y_lo
@@ -4245,7 +4245,7 @@ ApplyRidingMotion:
 @F_E1F7:
     LDA player_x_lo
     CLC
-    ADC zp_73
+    ADC fall_dy
     STA player_x_lo
     LDA player_x_hi
     ADC zp_74
@@ -4406,7 +4406,7 @@ RidingCheckX_LE313:
     STA ptr_hi
     JSR MapPtrFromPos
     LDA ptr_lo
-    STA zp_73
+    STA fall_dy
     LDA ptr_hi
     STA zp_74
     JSR CheckDoorTile
@@ -4454,7 +4454,7 @@ RidingCheckX_LE313:
     BCC @F_E3A4
     CMP #$04
     BCS @F_E3A4
-    LDA zp_73
+    LDA fall_dy
     STA feet_tile_ptr_lo
     LDA zp_74
     STA feet_tile_ptr_hi
@@ -4473,7 +4473,7 @@ RidingCheckX_LE313:
     LDA player_y_lo
     AND #$0F
     BEQ @F_E3CF
-    LDA zp_73
+    LDA fall_dy
     CLC
     ADC map_width
     STA ptr_lo
@@ -4548,7 +4548,7 @@ RidingCheckX_LE313:
     STA player_y_lo
     RTS
 @F_E436:
-    LDA zp_73
+    LDA fall_dy
     STA ptr_lo
     LDA zp_74
     STA ptr_hi
@@ -4567,7 +4567,7 @@ RidingCheckX_LE313:
     CLC
     ADC map_width
     STA ptr_lo
-    STA zp_73
+    STA fall_dy
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
@@ -4603,7 +4603,7 @@ RidingCheckX_LE313:
 @F_E498:
     CMP #$04
     BCS @F_E4B4
-    LDA zp_73
+    LDA fall_dy
     STA feet_tile_ptr_lo
     LDA zp_74
     STA feet_tile_ptr_hi
@@ -4668,7 +4668,7 @@ PlayerState0E:
     LDA #$00
     STA zp_86
     STA riding_flag
-    STA zp_7D
+    STA fall_index
     STA dive_mode
     RTS
 GetTilePropsAtPos:
@@ -4682,10 +4682,10 @@ GetTilePropsAtPosY:
     LDA tile_props,y
     RTS
 PlayerState02:
-    LDX zp_7E
+    LDX carry_cooldown
     BEQ @F_E52B
     DEX
-    STX zp_7E
+    STX carry_cooldown
 @F_E52B:
     LDA riding_flag
     BEQ @F_E532
@@ -4693,17 +4693,17 @@ PlayerState02:
 @F_E532:
     LDA #$00
     STA zp_87
-    LDX zp_7D
+    LDX fall_index
     CPX #$15
     BEQ @F_E53D
     INX
 @F_E53D:
-    STX zp_7D
-    LDA TileKindTable_Data_LC27D,x
-    STA zp_73
+    STX fall_index
+    LDA FallDyTable,x
+    STA fall_dy
     LDA player_y_lo
     CLC
-    ADC TileKindTable_Data_LC27D,x
+    ADC FallDyTable,x
     STA player_y_lo
     LDA player_y_hi
     ADC #$00
@@ -4714,11 +4714,11 @@ PlayerState02:
     LDA dive_mode
     BEQ @F_E562
     STA zp_86
-    LDA zp_7F
+    LDA dive_facing
     STA player_facing
 @F_E562:
     LDA #$04
-    STA zp_7D
+    STA fall_index
     LDA #$00
     STA dive_mode
     INC anim_tick
@@ -4738,12 +4738,12 @@ PlayerState02:
 @F_E583:
     JMP @F_E64C
 @F_E586:
-    LDA zp_7D
+    LDA fall_index
     CMP #$03
     BCC @F_E583
     LDX #$FF
     LDA player_facing
-    STA zp_7F
+    STA dive_facing
     STA anim_index
     BEQ @F_E598
     LDX #$06
@@ -4797,8 +4797,8 @@ PlayerState02:
     BNE @F_E5EE
     INC player_y_hi
 @F_E5EE:
-    INC zp_73
-    LDA zp_73
+    INC fall_dy
+    LDA fall_dy
     JMP @F_E641
 @F_E5F5:
     DEC zp_83
@@ -4837,9 +4837,9 @@ PlayerState02:
     LDA tmp_a
     AND #$0E
     TAY
-    LDA TileKindTable_Data_LC293,y
+    LDA FallDyTable_LC293,y
     STA player_frame
-    LDA TileKindTable_Data_LC294,y
+    LDA FallDyTable_LC294,y
     STA player_facing
     LDA dive_mode
 @F_E63F:
@@ -4928,7 +4928,7 @@ PlayerState02:
 PlayerLand:
     LDA dive_mode
     BEQ @F_E722
-    LDA zp_7F
+    LDA dive_facing
     STA player_facing
     LDX #$00
     STX zp_84
@@ -5024,7 +5024,7 @@ PlayerLand_LE734:
     SBC tmp_a
     BCC @F_E784
     STA tmp_b
-    LDA zp_73
+    LDA fall_dy
     CLC
     ADC #$04
     CMP tmp_b
@@ -5120,7 +5120,7 @@ PlayerLand_LE734:
 @F_E837:
     LDA tmp_a
     STA zp_77
-    LDA zp_7D
+    LDA fall_index
     CMP #$15
     BEQ @F_E848
     LDA #$FF
@@ -5133,7 +5133,7 @@ PlayerLand_LE734:
     STA zp_8B
     LDA dive_mode
     BEQ @F_E858
-    LDA zp_7F
+    LDA dive_facing
     STA player_facing
 @F_E858:
     LDA #$08
@@ -5142,11 +5142,11 @@ PlayerLand_LE734:
     LDA #$00
     STA fall_ticks
     LDA player_facing
-    STA zp_7F
+    STA dive_facing
     JSR UpdateTouchKind
     LDA #$00
     STA anim_tick
-    STA zp_7D
+    STA fall_index
     STA zp_8C
     LDA zp_77
     STA touch_kind
@@ -5197,7 +5197,7 @@ PlayerLand_LE734:
     SBC tmp_a
     BCC @F_E89D
     STA tmp_b
-    LDA zp_73
+    LDA fall_dy
     CLC
     ADC #$04
     CMP tmp_b
@@ -5240,7 +5240,7 @@ PlayerState08:
     STX dive_mode
     INX
     STX player_state
-    LDA zp_7F
+    LDA dive_facing
     STA player_facing
     JMP PlayerState01
 @F_E922:
@@ -5259,7 +5259,7 @@ PlayerState08:
     AND #$01
     BEQ @F_E94E
     LDX #$01
-    LDA zp_7F
+    LDA dive_facing
     BNE @F_E943
     LDX #$FF
 @F_E943:
@@ -5273,9 +5273,9 @@ PlayerState08:
     LDA anim_tick
     AND #$0E
     TAY
-    LDA TileKindTable_Data_LC293,y
+    LDA FallDyTable_LC293,y
     STA player_frame
-    LDA TileKindTable_Data_LC294,y
+    LDA FallDyTable_LC294,y
     STA player_facing
     LDA #$06
     JSR SwitchBank
@@ -5506,7 +5506,7 @@ PlayerState0D:
     LDA #$22
     JSR PlaySfxNoise
     LDA #$00
-    STA zp_7D
+    STA fall_index
     STA zp_86
     STA zp_8F
     LDA #$01
@@ -6717,30 +6717,30 @@ UpdateTouchKind:
     STA tmp_c
     LDA feet_tile_ptr_hi
     STA tmp_d
-    LDA zp_58
+    LDA touch_ptr_lo
     CMP tmp_c
     BNE @F_F3CC
-    LDA zp_59
+    LDA touch_ptr_hi
     CMP tmp_d
     BEQ @F_F426
 @F_F3CC:
-    LDY zp_5A
+    LDY prev_touch_kind
     BEQ @F_F3DE
-    LDA zp_5B
+    LDA prev_touch_ptr_lo
     STA tmp_a
-    LDA zp_5C
+    LDA prev_touch_ptr_hi
     STA tmp_b
     LDA Tbl_F_C331,y
     JSR QueueMapTileDraw
 @F_F3DE:
     LDA touch_kind
-    STA zp_5A
-    LDA zp_58
-    STA zp_5B
-    LDA zp_59
-    STA zp_5C
+    STA prev_touch_kind
+    LDA touch_ptr_lo
+    STA prev_touch_ptr_lo
+    LDA touch_ptr_hi
+    STA prev_touch_ptr_hi
     LDY #$00
-    STY zp_5D
+    STY touch_anim_step
     LDA tmp_c
     STA ptr_lo
     LDA tmp_d
@@ -6752,9 +6752,9 @@ UpdateTouchKind:
     LDA #$00
     STA touch_kind
     LDA tmp_c
-    STA zp_58
+    STA touch_ptr_lo
     LDA tmp_d
-    STA zp_59
+    STA touch_ptr_hi
     JMP @F_F43E
 @F_F40E:
     TAY
@@ -6766,15 +6766,15 @@ UpdateTouchKind:
     JSR SetCollectedFlag
 @F_F41E:
     LDA tmp_c
-    STA zp_58
+    STA touch_ptr_lo
     LDA tmp_d
-    STA zp_59
+    STA touch_ptr_hi
 @F_F426:
     LDY touch_kind
     BEQ @F_F43E
-    LDA zp_58
+    LDA touch_ptr_lo
     STA tmp_a
-    LDA zp_59
+    LDA touch_ptr_hi
     STA tmp_b
     LDA ppu_buffer_idx
     CMP #$20
@@ -6782,7 +6782,7 @@ UpdateTouchKind:
     LDA Tbl_F_C336,y
     JSR QueueMapTileDraw
 @F_F43E:
-    LDA zp_5A
+    LDA prev_touch_kind
     BEQ @F_F45E
     ASL a
     TAY
@@ -6790,15 +6790,15 @@ UpdateTouchKind:
     STA ptr_lo
     LDA UpdateTouchKind_Tbl_C326_LC327,y
     STA ptr_hi
-    INC zp_5D
-    LDA zp_5D
+    INC touch_anim_step
+    LDA touch_anim_step
     LSR a
     TAY
     LDA (ptr_lo),y
     CMP #$FF
     BNE @F_F45F
     LDA #$00
-    STA zp_5A
+    STA prev_touch_kind
 @F_F45E:
     RTS
 @F_F45F:
@@ -6807,15 +6807,15 @@ UpdateTouchKind:
     LDA ppu_buffer_idx
     CMP #$20
     BCS @F_F477
-    LDA zp_5B
+    LDA prev_touch_ptr_lo
     STA tmp_a
-    LDA zp_5C
+    LDA prev_touch_ptr_hi
     STA tmp_b
     LDA (ptr_lo),y
     JSR QueueMapTileDraw
     RTS
 @F_F477:
-    DEC zp_5D
+    DEC touch_anim_step
     RTS
 CheckHazardUnderPlayer:
     LDA player_state

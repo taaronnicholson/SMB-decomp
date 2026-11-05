@@ -582,3 +582,7 @@ if os.environ.get('GAPS'):
             allgaps.append((a - s0, p, s0)); tot += a - s0
     print(f'unclassified bytes: {tot} of {NB * 16384} ({100 * tot / (NB * 16384):.1f}%)')
     for n, p, s0 in sorted(allgaps, reverse=True)[:int(os.environ.get("GAPS"))]: print(f'  bank {p} ${s0:04X}-${s0 + n - 1:04X} ({n} bytes)')
+
+if os.environ.get('LABELS'):      # dump (bank, address) -> label for the emulator probes
+    import json
+    json.dump([[p, a, n] for (p, a), n in sorted(labels.items())], open(os.environ['LABELS'], 'w'))

@@ -840,3 +840,16 @@ ram 009C door_id                    ; door index being entered (written before t
 ram 0062 blink_state                ; PlayerBlinkCheck result: $FF when not invulnerable
 ram 0080 anim_tick                  ; frame counter (to 8) of the current player animation
 ram 0081 anim_index                 ; position in the current player animation list
+
+; naming pass 21 (RAM / tables, confirmed by watching the emulator)
+ram 0058 touch_ptr_lo               ; map pointer of the special tile the player is touching (UpdateTouchKind)
+ram 0059 touch_ptr_hi
+ram 005A prev_touch_kind            ; touch_kind of the previously touched tile, used to restore its look
+ram 005B prev_touch_ptr_lo
+ram 005C prev_touch_ptr_hi
+ram 005D touch_anim_step            ; 0..7 step counter of the touched tile's animation
+ram 007D fall_index                 ; PlayerState02: index into FallDyTable, +1 per frame up to $15 (set to 4 after a jump/peck bounce)
+ram 0073 fall_dy                    ; PlayerState02: the vertical step applied this frame (FallDyTable[fall_index])
+ram 007E carry_cooldown             ; frames left before the player may be carried again; counts down in PlayerState02
+ram 007F dive_facing                ; facing remembered for the dive/air-turn logic
+name f C27D FallDyTable             ; per-frame fall speed by fall_index: 0,0,0,1,0,1,0,1,1,... up to 2 (22 entries)

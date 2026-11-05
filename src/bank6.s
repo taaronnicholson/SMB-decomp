@@ -4385,8 +4385,8 @@ Gfx_B6_B738:
     .byte $0F,$E8,$42,$42,$42,$1E,$32,$3F,$9E,$06,$11,$0D,$80,$95,$F8,$85
     .byte $D0,$10,$84,$24,$99,$A1,$24,$06,$60,$00
 GroupGfxTable_LB842:
-    INC zp_7D
-    LDA zp_7D
+    INC fall_index
+    LDA fall_index
     CMP #$11
     BCS @B6_B862
     LDA #$03
@@ -4401,7 +4401,7 @@ GroupGfxTable_LB842:
     JMP @B6_B937
 @B6_B85E:
     LDA #$11
-    STA zp_7D
+    STA fall_index
 @B6_B862:
     TAX
     LDA TileKindTable_Data_LC20F,x
@@ -4515,7 +4515,7 @@ GroupGfxTable_LB842:
     LDA #$02
     STA player_state
     LDA #$00
-    STA zp_7D
+    STA fall_index
     STA dive_mode
     JMP PlayerState02
 @B6_B937:
@@ -4530,7 +4530,7 @@ GroupGfxTable_LB842:
     STA player_y_lo
 @B6_B948:
     STA player_y_hi
-    LDA zp_7D
+    LDA fall_index
     LSR a
     TAX
     LDA TileKindTable_Data_LC235,x
@@ -4617,16 +4617,16 @@ GroupGfxTable_LB953:
     STX player_state
     LDA #$07
     STA player_frame
-    LDA zp_7F
+    LDA dive_facing
     STA player_facing
     JMP @B6_BA00
 @B6_B9FA:
-    LDA zp_7D
+    LDA fall_index
     CMP #$0E
     BCS PlayerAttackInput
 @B6_BA00:
     LDA #$0E
-    STA zp_7D
+    STA fall_index
 PlayerAttackInput:
     LDA buttons
     AND #$20
@@ -4635,10 +4635,10 @@ PlayerAttackInput:
 @B6_BA0D:
     LDA dive_mode
     BEQ @B6_BA1A
-    LDA zp_7F
+    LDA dive_facing
     BEQ @B6_BA23
     LDA #$00
-    STA zp_7F
+    STA dive_facing
     RTS
 @B6_BA1A:
     LDA player_facing
@@ -4708,10 +4708,10 @@ PlayerAttackInput:
 @B6_BA88:
     LDA dive_mode
     BEQ @B6_BA94
-    LDX zp_7F
+    LDX dive_facing
     BNE @B6_BA9C
     INX
-    STX zp_7F
+    STX dive_facing
     RTS
 @B6_BA94:
     LDX player_facing
@@ -4989,7 +4989,7 @@ PlayerAttackInput_LBC0D:
     STY tmp_d
 @B6_BC7B:
     ORA tmp_a
-    STA zp_73
+    STA fall_dy
     BEQ @B6_BC98
     LDA tmp_c
     STA ram_0741
@@ -5034,7 +5034,7 @@ PlayerAttackInput_LBCBC:
     ADC tmp_d
     STA focus_x_hi
 PlayerAttackInput_LBCD1:
-    LDA zp_73
+    LDA fall_dy
     ORA ptr_lo
     ORA ptr_hi
     STA ram_072D

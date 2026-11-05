@@ -905,7 +905,7 @@ ShotStartImpact_L8679:
     LDA dive_mode
     BEQ @B1_86B6
 @B1_86B2:
-    LDA zp_7F
+    LDA dive_facing
     STA tmp_b
 @B1_86B6:
     LDA zp_C8
@@ -5042,7 +5042,7 @@ PlayerAnimFrames_LB15B:
     PLA
 @B1_B1C3:
     ORA tmp_a
-    STA zp_73
+    STA fall_dy
     BEQ @B1_B1E0
     LDA tmp_c
     STA ram_0741
@@ -5089,7 +5089,7 @@ PlayerAnimFrames_LB15B:
     ADC tmp_d
     STA player_x_hi
 @B1_B21A:
-    LDA zp_73
+    LDA fall_dy
     ORA ptr_lo
     ORA ptr_hi
     BNE PlayerAnimFrames_LB235
