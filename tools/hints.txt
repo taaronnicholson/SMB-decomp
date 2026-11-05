@@ -591,7 +591,7 @@ name 2 B49F WriteTile69AndScroll    ; writes tile $69 to PPUDATA and resets the 
 name 2 B4A7 WriteTileFrame_14D0     ; writes the 30-byte frame Tbl_B2_B4BA to PPU $14D0
 name 2 B89D CheckRam01A8Threshold   ; compares ram_01A8/01A9 with $0257 unless ram_0736 is set
 name 3 BEA9 OpenBlockReward         ; redraws the block as tile $D7, sets the collected flag, plays sfx $28 and records the reward from Tbl_B3_BE38
-name 4 B2D9 SpawnEffect33           ; spawns the type $33 effect at the fixed screen position used by GameState0B
+name 4 B2D9 QueueTextAndSpawnPopup   ; queues the 4-byte text at (tmp_c) and spawns effect type $32 at (x $65, y $52) with parameters tmp_a/tmp_b (the tally popups)
 name 4 B40E AimedRandomEffect       ; multiplies/divides random values to place an effect (uses ScaledMultiply and DivideByTmpA)
 name 4 B515 StateDispatch_0735      ; jumps through a word table indexed by ram_0735
 name 4 BD3D AddToRam01A8            ; 16-bit ram_01A8/01A9 += tmp_c
@@ -1009,3 +1009,4 @@ ram 01B7 dialogue_pause_timer       ; frames BossDialoguePause waits before the 
 ; naming pass 28 (RAM): boss dialogue text state, confirmed in the emulator (01BE goes 1, 2, 3 during step 3)
 ram 01BE dialogue_phase             ; 1 = text queued, 2 = typing, 3 = finished (BossDialogueType then moves to step 4)
 ram 01BC dialogue_type_delay        ; 3 at the start; counts the typing and toggles the speaker's mouth
+entry 4 B2D9

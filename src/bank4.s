@@ -1348,7 +1348,7 @@ GameState0B_LB0D8:
     STA tmp_a
     LDA #$00
     STA tmp_b
-    JMP SpawnEffect33
+    JMP QueueTextAndSpawnPopup
 GameState0B_LB109:
     LDA #$0A
     STA tmp_b
@@ -1402,7 +1402,7 @@ GameState0B_LB140:
     STA tmp_a
     LDA #$28
     STA tmp_b
-    JSR SpawnEffect33
+    JSR QueueTextAndSpawnPopup
 GameState0B_LB170:
     LDA tally_small
     CMP #$3C
@@ -1564,11 +1564,25 @@ GameState0B_Sequence:
     .res 8, $14
     .byte $15,$15,$FF,$15,$15,$15,$15,$15,$15,$15,$15,$15,$14,$14,$15,$15
     .byte $14,$00,$60
-SpawnEffect33:
-    .byte $A5,$53,$48,$A5,$54,$48,$A9,$04,$85,$54,$20,$4E,$BC,$A9,$32,$8D
-    .byte $A0,$04,$A9,$52,$8D,$D0,$04,$A9,$00,$8D,$00,$05,$A9,$65,$8D,$30
-    .byte $05,$A9,$00,$8D,$60
-    ORA cam_x_lo
+QueueTextAndSpawnPopup:
+    LDA tmp_a
+    PHA
+    LDA tmp_b
+    PHA
+    LDA #$04
+    STA tmp_b
+    JSR PPUBuffer_Append
+    LDA #$32
+    STA effect_type
+    LDA #$52
+    STA effect_y_lo
+    LDA #$00
+    STA effect_y_hi
+    LDA #$65
+    STA effect_x_lo
+    LDA #$00
+    STA effect_x_hi
+    PLA
     STA tmp_b
     PLA
     STA tmp_a
