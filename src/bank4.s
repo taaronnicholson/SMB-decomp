@@ -1841,14 +1841,14 @@ StateDispatch_0735:
     JMP (ptr_lo)
 @B4_B527:
     .word StoryBranchByStage
-    .word StoryStep1
-    .word StoryStep2
-    .word StoryStep3
-    .word StoryStep4
-    .word StoryStep5
-    .word StoryStep6
-    .word StoryStep7
-    .word StoryStep8
+    .word BossIntroScript
+    .word BossSpawnSpeakers
+    .word BossDialogueType
+    .word BossDialoguePause
+    .word BossFightStart
+    .word BossDialogueDelay
+    .word BossFightHealthBar
+    .word BossDefeated
 StoryBranchByStage:
     LDY stage_index
     LDA StoryStageTable,y
@@ -1884,7 +1884,7 @@ StartStoryScene_LB56B:
     RTS
 @B4_B579:
     LDY ptr_lo
-    LDA StoryStep8_LB7B1,y
+    LDA BossDefeated_LB7B1,y
     STA story_scene_param
     LDA $B7B2,y
     STA story_script_ptr_lo
@@ -1908,7 +1908,7 @@ StartStoryScene_LB56B:
     STA ram_01BE
 StartStoryScene_LB5B6:
     RTS
-StoryStep1:
+BossIntroScript:
     DEC story_timer
     BNE StartStoryScene_LB5B6
     LDY #$00
@@ -1983,7 +1983,7 @@ StoryStep1:
     SBC #$01
     BNE @B4_B5EC
     RTS
-StoryStep2:
+BossSpawnSpeakers:
     LDA #$3B
     STA ent_type_9
     LDA #$94
@@ -2023,25 +2023,25 @@ StoryStep2:
     LDA #$03
     STA story_step
     STA story_timer
-StoryStep2_LB6A3:
+BossSpawnSpeakers_LB6A3:
     RTS
-StoryStep3:
+BossDialogueType:
     LDA story_timer
-    BNE StoryStep2_LB6A3
+    BNE BossSpawnSpeakers_LB6A3
     LDA story_flag
     BEQ @B4_B6B6
     LDA #$05
     STA story_step
-    JMP StoryStep5
+    JMP BossFightStart
 @B4_B6B6:
     JSR StepDispatch_01BE
     LDA ram_01BE
     CMP #$03
-    BNE StoryStep3_LB6FA
+    BNE BossDialogueType_LB6FA
     LDA #$04
     STA story_step
     LDA #$32
-    STA ram_01B7
+    STA dialogue_pause_timer
     LDA #$29
     JSR PlaySfxSq1
     JSR FindFreeEntitySlot
@@ -2063,15 +2063,15 @@ EffectList_B4_B6EF:
     .word $FFE8, $0004
     .byte $C0, $09, $50, $00, $00
     .byte $FF
-StoryStep3_LB6FA:
+BossDialogueType_LB6FA:
     CMP #$02
-    BNE StoryStep3_LB71C
+    BNE BossDialogueType_LB71C
     LDA ram_01BC
     SEC
     SBC #$01
     BEQ @B4_B713
     AND #$01
-    BEQ StoryStep3_LB71C
+    BEQ BossDialogueType_LB71C
     LDA #$03
     STA tmp_a
     LDA ent_param_9
@@ -2082,45 +2082,45 @@ StoryStep3_LB6FA:
 @B4_B717:
     LDA tmp_a
     STA ent_param_9
-StoryStep3_LB71C:
+BossDialogueType_LB71C:
     RTS
-StoryStep6:
+BossDialogueDelay:
     DEC story_timer
-    BNE StoryStep3_LB71C
+    BNE BossDialogueType_LB71C
     LDA #$02
     STA story_step
     RTS
-StoryStep4:
+BossDialoguePause:
     LDA #$07
     STA ent_param_9
-    LDA ram_01B7
+    LDA dialogue_pause_timer
     BEQ @B4_B73B
     SEC
     SBC #$01
-    STA ram_01B7
-    JMP StoryStep3_LB71C
+    STA dialogue_pause_timer
+    JMP BossDialogueType_LB71C
 @B4_B73B:
     JSR DrawQueuedBlock
     LDA story_text_rows
-    BNE StoryStep3_LB71C
+    BNE BossDialogueType_LB71C
     LDA #$05
     STA story_step
     STA story_flag
-StoryStep5:
+BossFightStart:
     LDA story_param_a
     STA ent_type_9
     LDA story_param_b
     STA ent_type_8
     LDA #$00
-    STA ram_0732
+    STA boss_bar_state
     LDA #$07
     STA story_step
     LDA #$63
-    STA ram_01B8
+    STA boss_health
     RTS
-StoryStep8:
+BossDefeated:
     DEC story_timer
-    BNE StoryStep3_LB71C
+    BNE BossDialogueType_LB71C
     LDA story_scene
     CMP #$03
     BEQ @B4_B776
@@ -2156,7 +2156,7 @@ StoryStep8:
     JSR ReturnStub
     LDA #$05
     STA stage_index
-StoryStep8_LB7B1:
+BossDefeated_LB7B1:
     JMP StageSetup_LC66C
 StoryStageTable:
     .byte $00
@@ -2207,20 +2207,20 @@ Tbl_B4_B7B8:
     .byte $D9,$B9,$78,$F6,$B9,$00,$06,$3A,$FE,$14,$5C,$FF,$00,$96,$FF,$00
     .byte $B8,$FE,$14,$48,$FE,$32,$A8,$FE,$32,$03,$38,$FE,$14,$B8,$FE,$14
     .byte $78,$FF,$00,$03,$42,$FE,$00,$AE,$FE,$28,$78,$FE,$50
-StoryStep7:
-    LDA ram_0732
-    BNE StoryStep7_LBA65
+BossFightHealthBar:
+    LDA boss_bar_state
+    BNE BossFightHealthBar_LBA65
     LDY #$0F
 @B4_BA07:
     LDA effect_type,y
     CMP #$47
-    BEQ StoryStep7_LBA65
+    BEQ BossFightHealthBar_LBA65
     DEY
     BPL @B4_BA07
-    LDA ram_01B8
+    LDA boss_health
     BNE @B4_BA1B
     STA tmp_c
-    JMP StoryStep7_LBA26
+    JMP BossFightHealthBar_LBA26
 @B4_BA1B:
     STA tmp_b
 StoryEntry_BA1D:
@@ -2228,7 +2228,7 @@ StoryEntry_BA1D:
     STA tmp_a
     JSR DivideByTmpA
     INC tmp_c
-StoryStep7_LBA26:
+BossFightHealthBar_LBA26:
     LDA #$0A
     SEC
     SBC tmp_c
@@ -2261,14 +2261,14 @@ StoryStep7_LBA26:
 @B4_BA59:
     DEC tmp_a
     BNE @B4_BA45
-StoryStep7_LBA5D:
+BossFightHealthBar_LBA5D:
     LDA #$00
     STA ppu_buffer,x
     STX ppu_buffer_idx
     RTS
-StoryStep7_LBA65:
+BossFightHealthBar_LBA65:
     LDA #$FF
-    STA ram_0732
+    STA boss_bar_state
     LDX ppu_buffer_idx
     LDA #$27
     STA ppu_buffer,x
@@ -2286,12 +2286,12 @@ StoryStep7_LBA65:
     INX
     DEY
     BPL @B4_BA82
-    JMP StoryStep7_LBA5D
+    JMP BossFightHealthBar_LBA5D
 StoryTextStepTable:
-    .word StoryTextStep0
-    .word StoryTextStep1
+    .word DialogueTextStep0
+    .word DialogueTextStep1
     .word QueueTextRow_LBB60
-    .word StoryTextStep0_LBABB
+    .word DialogueTextStep0_LBABB
 StepDispatch_01BE:
     LDA ram_01BE
     ASL a
@@ -2301,7 +2301,7 @@ StepDispatch_01BE:
     LDA StoryTextStepTable+1,y
     STA ptr_hi
     JMP (ptr_lo)
-StoryTextStep0:
+DialogueTextStep0:
     LDA #$00
     STA story_text_row
     STA ram_01BF
@@ -2310,9 +2310,9 @@ StoryTextStep0:
     STA ram_01BE
     LDA #$03
     STA ram_01BC
-StoryTextStep0_LBABB:
+DialogueTextStep0_LBABB:
     RTS
-StoryTextStep1:
+DialogueTextStep1:
     LDA story_text_row
     CMP story_text_rows
     BNE @B4_BACA

@@ -599,7 +599,7 @@ name 4 BD91 QueueTextAndStartFade   ; queues a text block, sets the fade counter
 name 4 BE32 InitEndScreen           ; silences sound, palette set 8, fills attribute bytes at $23D0 with $55, enables NMI
 name 4 BEDF FadeStepBEDF            ; zp_74 counts up; ram_038A = zp_74/2, then falls into BEE7
 name 4 BEE7 FadeStepBEE7            ; sets zp_75..zp_78 and tmp_b..tmp_d for a screen-fade effect and runs it
-name 5 AA15 SubClamp01B8            ; ram_01B8 = max(0, ram_01B8 - tmp_a)
+name 5 AA15 DamageBoss              ; boss_health = max(0, boss_health - tmp_a)
 name 5 AB0E EntUnpackNibbles        ; splits ram_06C0/06F0 into high/low nibbles in tmp_a..tmp_d
 name 6 817B SoundTickIfPlaying      ; returns at once unless snd_playing is set
 name 6 8AD7 SoundUpdateChannels     ; updates the noise generator, then the sfx square 1 and 2 channels
@@ -989,16 +989,19 @@ name 4 B7B4 StoryStageTable          ; 5 bytes indexed by stage_index: 0 = no st
 name 4 B7B5 StoryRecordField_B7B5    ; interior byte of the 8-byte story scene records at B4_B7B1 (credits pointer high / parameters)
 name 4 B7B6 StoryRecordField_B7B6
 name 4 B7B7 StoryRecordField_B7B7
-name 4 B5B7 StoryStep1
-name 4 B63F StoryStep2
-name 4 B6A4 StoryStep3
-name 4 B728 StoryStep4
-name 4 B74B StoryStep5
-name 4 B71D StoryStep6
-name 4 BA00 StoryStep7
-name 4 B767 StoryStep8
+name 4 B5B7 BossIntroScript            ; waits story_timer, then spawns the next scripted type $3A story sprite (delay, sprite-definition pointer); a zero delay ends it and starts step 2
+name 4 B63F BossSpawnSpeakers         ; spawns the two speaker entities (types $3B and $3C at x $78, y $494 and $4AC) and starts the dialogue (step 3, timer 3)
+name 4 B6A4 BossDialogueType          ; runs StepDispatch_01BE (the text typing); a mouth-animation toggle while typing; when typing is done: sfx $29, a burst effect at the player, step 4 with ram_01B7 = $32
+name 4 B728 BossDialoguePause         ; holds the speaker pose (ent_param_9 = 7) for ram_01B7 frames, then draws the queued text block; once all rows are shown goes to step 5
+name 4 B74B BossFightStart           ; gives the two combatants their entity types (story_param_a/b), boss_health = $63 and goes to step 7
+name 4 B71D BossDialogueDelay        ; counts story_timer down, then returns to step 2 (next dialogue page)
+name 4 BA00 BossFightHealthBar       ; while the fight runs: draws the 10-tile health bar at PPU $274B from boss_health (ram_0732 = $FF once the bar is drawn empty or the effect $47 exists)
+name 4 B767 BossDefeated             ; counts story_timer down; after boss 3 (story_scene 3) fades out and enters stage 5 setup, otherwise goes to StoryBranchByStage (level-complete chain)
 name 4 BA1D StoryEntry_BA1D
 name 4 BA8C StoryTextStepTable       ; word table indexed by ram_01BE (StepDispatch_01BE)
-name 4 BAA6 StoryTextStep0
-name 4 BABC StoryTextStep1
+name 4 BAA6 DialogueTextStep0
+name 4 BABC DialogueTextStep1
 name f C293 WalkFrameFacingPairs     ; (player_frame, player_facing) pairs indexed by anim_tick & $0E
+ram 01B8 boss_health                ; boss hit points ($63 at the start of the fight); drawn as a 10-tile bar by BossFightHealthBar and reduced by the boss entities / SubClamp01B8
+ram 0732 boss_bar_state             ; $FF once the health bar has been drawn as empty
+ram 01B7 dialogue_pause_timer       ; frames BossDialoguePause waits before the fight starts

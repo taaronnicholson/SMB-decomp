@@ -30,9 +30,23 @@ in the emulator (writing the destination into RAM and jumping to `F_F040`); the 
 The set-up states `$01`-`$07` and `$0C` write their own timers (`ram_0735`-`ram_073E`) and `camera_mode`; `GameState06` falls into `GameState0C`
 (`camera_mode` 3, then a bank 4 routine at `$B515`).
 
-## Story scenes (`game_state` `$06` -> `$0C`, verified)
-Forcing `game_state` = `$06` in stage 1 and setting `stage_index` (`zp_93`) in the emulator: `GameState06` clears `story_step` and moves to `$0C`, which runs `StateDispatch_0735`
-(nine bank 4 routines indexed by `story_step`). Step 0 (`StoryBranchByStage`) reads a 5-byte table at `$B7B4` indexed by `stage_index`: `00 01 00 02 03`.
-A zero entry skips the story (`player_state` 9, `game_state` 9: the level-complete chain); stages 1, 3 and 4 start `StartStoryScene` with `story_scene` = 1, 2 or 3,
-which plays song 6, hides the sprites, loads the scene's 8-byte record from `$B7B1 + scene*8` (script pointer into `story_script_ptr`, a text pointer into `credits_ptr`, three parameters) and
-steps through the script: each entry is (delay, pointer to a sprite definition) and spawns an entity of type `$3A` per sprite. Stage 1's script ran for the 900 frames watched.
+## Boss encounters (`game_state` `$06` -> `$0C`, verified)
+These are the three boss encounters (the "story" scenes): a dialogue, then a fight with a health bar. Forcing `game_state` = `$06` in stage 1 and setting `stage_index`
+(`zp_93`) in the emulator: `GameState06` clears `story_step` and moves to `$0C`, which runs `StateDispatch_0735` (nine bank 4 routines indexed by `story_step`).
+Step 0 (`StoryBranchByStage`) reads a 5-byte table at `$B7B4` indexed by `stage_index`: `00 01 00 02 03`. A zero entry skips the encounter (`player_state` 9,
+`game_state` 9: the level-complete chain); stages 1, 3 and 4 start `StartStoryScene` with `story_scene` = 1, 2 or 3 (boss 1-3), which plays song 6, hides the sprites and loads
+the scene's 8-byte record from `$B7B1 + scene*8` (script pointer in `story_script_ptr`, text pointer in `credits_ptr`, three parameters).
+
+Observed in stage 1 (frame numbers from forcing the state): step 1 at frame 2, step 2 at 361, step 3 at 363, `ram_01BE` (text step) 1 at 683 and 2 at 697, step 4 at 1363, steps 5 and 7 at 1475/1476.
+| Step | Routine | What it does |
+|------|---------|--------------|
+| 0 | `StoryBranchByStage` | skip or start the encounter |
+| 1 | `BossIntroScript` | steps through the sprite script: (delay, pointer to a sprite definition) entries each spawn a type `$3A` entity; a zero delay ends it |
+| 2 | `BossSpawnSpeakers` | spawns the two speaker entities (types `$3B`, `$3C`), then step 3 |
+| 3 | `BossDialogueType` | the text typing (`StepDispatch_01BE`); the speaker's mouth (`ent_param_9`) toggles while typing; when done plays sfx `$29` and a burst, then step 4 |
+| 4 | `BossDialoguePause` | holds the pose for `ram_01B7` frames, then draws the rest of the queued text block; then step 5 |
+| 5 | `BossFightStart` | gives the two combatants their entity types, sets `boss_health` = `$63`, goes to step 7 |
+| 6 | `BossDialogueDelay` | counts `story_timer` down and returns to step 2 (next page of dialogue) |
+| 7 | `BossFightHealthBar` | draws the 10-tile health bar at PPU `$274B` from `boss_health` while the fight runs |
+| 8 | `BossDefeated` | after the boss: boss 3 fades out and enters stage 5 setup, otherwise the level-complete chain |
+Steps 6 and 8 were not reached in the forced run; their description is from the code. The dialogue text is the boss speech listed in the README.

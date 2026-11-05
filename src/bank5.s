@@ -4136,7 +4136,7 @@ Ent3C_Update:
 @B5_A272:
     RTS
 Ent3D_Update:
-    LDA ram_01B8
+    LDA boss_health
     BNE Ent41_Update_LA295
     LDA #$42
     STA ent_type_8
@@ -4158,7 +4158,7 @@ Ent41_Update_LA295:
     BNE @B5_A2B1
     LDA story_scene_param
     STA tmp_a
-    JSR SubClamp01B8
+    JSR DamageBoss
     LDA #$38
     JSR PlaySfxNoise
     LDA #$1E
@@ -4228,7 +4228,7 @@ Ent3E_Update:
     JSR Ent_CheckPlayerOverlapD
     LDA #$01
     STA tmp_c
-    LDA ram_01B8
+    LDA boss_health
     CMP #$1E
     BCS @B5_A336
     INC tmp_c
@@ -5030,14 +5030,14 @@ Ent_CheckPlayerOverlapD:
     STA shot_state_1
     STA shot_E3_1
     RTS
-SubClamp01B8:
-    LDA ram_01B8
+DamageBoss:
+    LDA boss_health
     SEC
     SBC tmp_a
     BCS @B5_AA1F
     LDA #$00
 @B5_AA1F:
-    STA ram_01B8
+    STA boss_health
     RTS
 Ent4A_Update:
     JSR Ent_TryCarryPlayer
@@ -6485,7 +6485,7 @@ Ent88_Update:
     JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
     JSR EntStateJump
-    LDA ram_01B8
+    LDA boss_health
     CMP #$4B
     BCS @B5_B62A
     JSR EntStateJump
@@ -6557,12 +6557,12 @@ Ent8A_Update:
     LDA Tbl_B5_A4B4,y
     BEQ @B5_B6CB
     STA ent_param,x
-    LDA ram_01B8
+    LDA boss_health
     CLC
     ADC #$02
     CMP #$64
     BEQ Ent89_Update_LB6AC
-    STA ram_01B8
+    STA boss_health
     RTS
 @B5_B6CB:
     LDA #$34
@@ -6596,7 +6596,7 @@ Ent8B_Update:
     JSR PlaySfxSq2
     LDA #$0A
     STA tmp_a
-    JSR SubClamp01B8
+    JSR DamageBoss
     LDA #$8C
     STA ent_type,x
     LDA #$00
@@ -6631,7 +6631,7 @@ Ent8B_Update:
 Ent8C_Update:
     JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
-    LDA ram_01B8
+    LDA boss_health
     BNE @B5_B758
     JMP @B5_B783
 @B5_B758:
@@ -6766,7 +6766,7 @@ Ent99_Update:
 Ent9A_Update:
     JSR Ent_CheckPlayerOverlap
     JSR Ent_HurtOnTouch
-    LDA ram_01B8
+    LDA boss_health
     BNE @B5_B8B9
     JMP Ent_StartCollectAnim
 @B5_B8B9:
