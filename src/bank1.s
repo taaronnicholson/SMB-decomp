@@ -116,9 +116,9 @@ SmallOffsets_B1_80EB:
 Tbl_B1_8105:
     .byte $02,$00,$04,$06,$08,$0A,$16,$16,$16,$0C,$0E,$10,$12,$14,$16,$18
     .byte $1A,$1C,$1E,$20,$00,$00,$00,$22,$24
-UpdateShots_L811E:
+B1_811E:
     .byte $26
-UpdateShots_L811F:
+B1_811F:
     .byte $28
     .word Shot_TileHit_L8422
     .word Shot_TileHit_L846D
@@ -131,17 +131,17 @@ UpdateShots_L811F:
     .word ShotStartImpact_L860E
     .word ShotStartImpact_L8618
     .word ShotStartImpact_L8622
-    .word ArcPairs_B1_88EA_L8931
-    .word ArcPairs_B1_88EA_L8922
+    .word ShotPosByAngle_L8931
+    .word ShotPosByAngle_L8922
     .word ShotStartImpact_L865F
     .word ShotStartImpact_L8679
 ShotDispatch:
     LDA shot_state,x
     ASL a
     TAY
-    LDA UpdateShots_L811E,y
+    LDA B1_811E,y
     STA ptr_lo
-    LDA UpdateShots_L811F,y
+    LDA B1_811F,y
     STA ptr_hi
     JMP (ptr_lo)
 ShotTimerStep:
@@ -1188,7 +1188,7 @@ ShotPosByAngle_L881D:
     TYA
     TYA
     TYA
-    STA AreaSpawn15_LAAA8,y
+    STA B1_AAA8,y
     TAY
     TAY
     TAY
@@ -1235,22 +1235,22 @@ ArcPairs_B1_88EA:
     .byte $FF,$FE,$00,$FE,$01,$FF,$02,$FF,$02,$FF,$02,$00,$80,$00,$00,$00
     .byte $00,$FF,$00,$FE,$00,$FE,$01,$FE,$01,$FF,$02,$FF,$02,$00,$02,$01
     .byte $02,$02,$01,$02,$01,$02,$00,$80
-ArcPairs_B1_88EA_L8922:
+ShotPosByAngle_L8922:
     LDA #$10
     STA shot_frame,x
     LDA #$07
     STA tmp_a
     LDA #$89
     STA tmp_b
-    JMP ArcPairs_B1_88EA_L893D
-ArcPairs_B1_88EA_L8931:
+    JMP ShotPosByAngle_L893D
+ShotPosByAngle_L8931:
     LDA #$0F
     STA shot_frame,x
     LDA #$EA
     STA tmp_a
     LDA #$88
     STA tmp_b
-ArcPairs_B1_88EA_L893D:
+ShotPosByAngle_L893D:
     LDA shot_E3,x
     INC shot_E3,x
     ASL a
@@ -1291,19 +1291,19 @@ ArcPairs_B1_88EA_L893D:
     LDA shot_x_hi,x
     ADC ptr_hi
     STA shot_x_hi,x
-ArcPairs_B1_88EA_L8981:
+ShotPosByAngle_L8981:
     RTS
 ShotOffscreenCheck:
     LDA shot_screen_x,x
     CMP #$EC
-    BCS ArcPairs_B1_88EA_L8981
+    BCS ShotPosByAngle_L8981
     CMP #$10
-    BCC ArcPairs_B1_88EA_L8981
+    BCC ShotPosByAngle_L8981
     LDA shot_screen_y,x
     CMP #$E0
-    BCS ArcPairs_B1_88EA_L8981
+    BCS ShotPosByAngle_L8981
     CMP #$10
-    BCC ArcPairs_B1_88EA_L8981
+    BCC ShotPosByAngle_L8981
     JMP PlayerTileInteract_LF0EA
 ; Tbl_B1_8999: 100 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B1_8999:
@@ -4393,7 +4393,7 @@ AreaSpawn15:
     .byte $05, $3A, $06
     .byte $05, $3E, $06
     .byte $05, $40, $07
-AreaSpawn15_LAAA8:
+B1_AAA8:
     .byte $05, $44, $07
     .byte $05, $6A, $06
     .byte $05, $64, $06
@@ -4694,7 +4694,7 @@ AreaSpawn23:
 ; SmallOffsets_B1_AF1F: 4 bytes, no direct code reference (continuation or unreferenced)
 SmallOffsets_B1_AF1F:
     .byte $00,$00,$FE,$FF
-AreaSpawn23_LAF23:
+PlayerState11_Body:
     LDA #$02
     STA camera_mode
     LDA player_y_lo
@@ -4769,7 +4769,7 @@ AreaSpawn23_LAF23:
     LDA #$12
     STA player_state
     RTS
-AreaSpawn23_LAFAF:
+PlayerState12_Body:
     JSR PlayerAnimAdvance
     LDA player_y_lo
     SEC
@@ -4790,14 +4790,14 @@ AreaSpawn23_LAFAF:
     STA player_state
 @B1_AFD2:
     RTS
-AreaSpawn23_LAFD3:
+PlayerState13_Body:
     JSR PlayerAnimAdvance
     LDY zp_D6
     LDA Tbl_B1_B06A,y
     CMP #$14
     BNE @B1_AFE4
     STA player_state
-    JMP AreaSpawn23_LAFF8
+    JMP PlayerState14_Body
 @B1_AFE4:
     STA tmp_a
     LDA player_y_lo
@@ -4808,8 +4808,8 @@ AreaSpawn23_LAFD3:
     SBC #$00
     STA player_y_hi
     INC zp_D6
-    JMP AreaSpawn23_LB015
-AreaSpawn23_LAFF8:
+    JMP PlayerState14_Body_LB015
+PlayerState14_Body:
     DEC zp_D6
     BNE @B1_B005
     LDA #$15
@@ -4826,7 +4826,7 @@ AreaSpawn23_LAFF8:
     LDA player_y_hi
     ADC #$00
     STA player_y_hi
-AreaSpawn23_LB015:
+PlayerState14_Body_LB015:
     LDA #$00
     STA tmp_d
     LDA zp_D2
@@ -4883,7 +4883,7 @@ Tbl_B1_B06A:
     .byte $01,$02,$02,$02,$01,$02,$02,$01,$02,$02,$01,$01,$01,$02,$01,$01
     .byte $01,$01,$02,$01,$01,$01,$01,$01,$00,$01,$00,$01,$00,$00,$00,$00
     .byte $00,$14
-AreaSpawn23_LB094:
+PlayerState15_Body:
     LDA zp_D6
     LSR a
     TAY
@@ -4987,7 +4987,7 @@ SmallOffsets_B1_B144:
 ; PlayerAnimFrames: $FF-terminated player_frame list walked by PlayerAnimAdvance
 PlayerAnimFrames:
     .byte $3E,$3E,$3F,$40,$41,$42,$43,$4C,$4D,$FF
-PlayerAnimFrames_LB15B:
+PlayerAnimAdvance_LB15B:
     LDA ram_072D
     BEQ @B1_B193
     LDA player_y_lo
@@ -5092,7 +5092,7 @@ PlayerAnimFrames_LB15B:
     LDA fall_dy
     ORA ptr_lo
     ORA ptr_hi
-    BNE PlayerAnimFrames_LB235
+    BNE PlayerAnimAdvance_LB235
     STA zp_BD
     LDA #$18
     STA player_state
@@ -5103,7 +5103,7 @@ PlayerAnimFrames_LB15B:
     LDA #$02
     STA walk_speed
     JSR MovePlayerKeepBank
-PlayerAnimFrames_LB235:
+PlayerAnimAdvance_LB235:
     LDA entity_tick
     LSR a
     LSR a
@@ -5111,18 +5111,18 @@ PlayerAnimFrames_LB235:
     CLC
     ADC #$07
     STA player_frame
-PlayerAnimFrames_LB240:
+PlayerAnimAdvance_LB240:
     RTS
-PlayerAnimFrames_LB241:
+PlayerAnimAdvance_LB241:
     LDA ram_072D
-    BNE PlayerAnimFrames_LB235
+    BNE PlayerAnimAdvance_LB235
     LDA zp_BD
     ASL a
     TAY
     LDA BonusAscentEndAnim,y
     INY
     CMP #$FF
-    BEQ PlayerAnimFrames_LB240
+    BEQ PlayerAnimAdvance_LB240
     CMP #$44
     BNE @B1_B25B
     LDX #$0A

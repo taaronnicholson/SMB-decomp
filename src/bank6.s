@@ -2093,92 +2093,92 @@ PitchMod8:
     .byte $00, $3F, $7E, $3F, $00, $C1, $82, $C1, $80
 SongTable:
     .byte $32
-    .word Bank6_PtrPair_9478_L94A8, Bank6_PtrPair_9478_L947C, Bank6_PtrPair_9478_L9492, Bank6_PtrPair_9478_L94C2
+    .word B6_94A8, B6_947C, B6_9492, B6_94C2
     .byte $32
-    .word Bank6_PtrPair_9478_L9668, Bank6_PtrPair_9478_L9676, Bank6_PtrPair_9478_L966C, Bank6_PtrPair_9478_L967A
+    .word B6_9668, B6_9676, B6_966C, B6_967A
     .byte $2C
-    .word Bank6_PtrPair_9478_L9743, Bank6_PtrPair_9478_L9751, Bank6_PtrPair_9478_L9747, Bank6_PtrPair_9478_L967A
+    .word B6_9743, B6_9751, B6_9747, B6_967A
     .byte $26
-    .word Bank6_PtrPair_9478_L97C1, Bank6_PtrPair_9478_L97C9, Bank6_PtrPair_9478_L97C5, Bank6_PtrPair_9478_L97F3
+    .word B6_97C1, B6_97C9, B6_97C5, B6_97F3
     .byte $31
-    .word Bank6_PtrPair_9478_L98F9, Bank6_PtrPair_9478_L9907, Bank6_PtrPair_9478_L98FD, Bank6_PtrPair_9478_L9945
+    .word B6_98F9, B6_9907, B6_98FD, B6_9945
     .byte $27
-    .word Bank6_PtrPair_9478_L9B70, Bank6_PtrPair_9478_L9B68, Bank6_PtrPair_9478_L9B6C, Bank6_PtrPair_9478_L9B80
+    .word B6_9B70, B6_9B68, B6_9B6C, B6_9B80
     .byte $4A
-    .word Bank6_PtrPair_9478_L9C44, Bank6_PtrPair_9478_L9C3C, Bank6_PtrPair_9478_L9C40, Bank6_PtrPair_9478_L9C48
+    .word B6_9C44, B6_9C3C, B6_9C40, B6_9C48
     .byte $4C
-    .word Bank6_PtrPair_9478_L9DB2, Bank6_PtrPair_9478_L9DBC, Bank6_PtrPair_9478_L9DB8, Bank6_PtrPair_9478_L9DC6
+    .word B6_9DB2, B6_9DBC, B6_9DB8, B6_9DC6
     .byte $2E
-    .word Bank6_PtrPair_9478_L9EEE, Bank6_PtrPair_9478_L9EF6, Bank6_PtrPair_9478_L9EF2, Bank6_PtrPair_9478_L9EFE
+    .word B6_9EEE, B6_9EF6, B6_9EF2, B6_9EFE
 ; Bank6_PtrPair_9478: word $A03E (the filler before AreaMap22) and $0000
 Bank6_PtrPair_9478:
     .word $A03E
     .word $0000
-Bank6_PtrPair_9478_L947C:
-    .word Bank6_PtrPair_9478_L951B
-    .word Bank6_PtrPair_9478_L952A
-    .word Bank6_PtrPair_9478_L9584
-    .word Bank6_PtrPair_9478_L952A
-    .word Bank6_PtrPair_9478_L9598
-    .word Bank6_PtrPair_9478_L95B4
-    .word Bank6_PtrPair_9478_L952A
-    .word Bank6_PtrPair_9478_L9584
-    .word Bank6_PtrPair_9478_L952A
-    .word Bank6_PtrPair_9478_L9598
+B6_947C:
+    .word B6_951B
+    .word B6_952A
+    .word B6_9584
+    .word B6_952A
+    .word B6_9598
+    .word B6_95B4
+    .word B6_952A
+    .word B6_9584
+    .word B6_952A
+    .word B6_9598
     .word $0000
-Bank6_PtrPair_9478_L9492:
-    .word Bank6_PtrPair_9478_L94C8
-    .word Bank6_PtrPair_9478_L94D5
-    .word Bank6_PtrPair_9478_L94FA
-    .word Bank6_PtrPair_9478_L94D5
-    .word Bank6_PtrPair_9478_L9507
-    .word Bank6_PtrPair_9478_L9511
-    .word Bank6_PtrPair_9478_L94D5
-    .word Bank6_PtrPair_9478_L94FA
-    .word Bank6_PtrPair_9478_L94D5
-    .word Bank6_PtrPair_9478_L9507
+B6_9492:
+    .word B6_94C8
+    .word B6_94D5
+    .word B6_94FA
+    .word B6_94D5
+    .word B6_9507
+    .word B6_9511
+    .word B6_94D5
+    .word B6_94FA
+    .word B6_94D5
+    .word B6_9507
     .word $0000
-Bank6_PtrPair_9478_L94A8:
-    .word Bank6_PtrPair_9478_L95C0
-    .word Bank6_PtrPair_9478_L95CF
-    .word Bank6_PtrPair_9478_L9620
-    .word Bank6_PtrPair_9478_L95CF
-    .word Bank6_PtrPair_9478_L9633
-    .word Bank6_PtrPair_9478_L964D
-    .word Bank6_PtrPair_9478_LA035
-    .word Bank6_PtrPair_9478_L95CF
-    .word Bank6_PtrPair_9478_L9620
-    .word Bank6_PtrPair_9478_L95CF
-    .word Bank6_PtrPair_9478_L9633
-    .word Bank6_PtrPair_9478_LA032
+B6_94A8:
+    .word B6_95C0
+    .word B6_95CF
+    .word B6_9620
+    .word B6_95CF
+    .word B6_9633
+    .word B6_964D
+    .word B6_A035
+    .word B6_95CF
+    .word B6_9620
+    .word B6_95CF
+    .word B6_9633
+    .word B6_A032
     .word $0000
-Bank6_PtrPair_9478_L94C2:
-    .word Bank6_PtrPair_9478_L9657
-    .word Bank6_PtrPair_9478_L9661
+B6_94C2:
+    .word B6_9657
+    .word B6_9661
     .word $0000
-Bank6_PtrPair_9478_L94C8:
+B6_94C8:
     .byte $F6,$10   ; envelope
     .byte $F7,$04   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
     .byte $63,$00,$02,$00
     .byte $F5,$94,$94   ; new pattern list
-Bank6_PtrPair_9478_L94D5:
+B6_94D5:
     .byte $63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05,$04
     .byte $63,$00,$07,$00,$08,$07,$00,$61,$00,$02,$03,$04
     .byte $63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05,$04
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L94FA:
+B6_94FA:
     .byte $63,$00,$04,$00,$02,$00,$00,$61,$00,$02,$03,$04
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9507:
+B6_9507:
     .byte $63,$00,$04,$00,$07,$05,$00,$05,$09
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9511:
+B6_9511:
     .byte $F6,$40   ; envelope
     .byte $67,$00,$02,$04,$00
     .byte $F6,$10   ; envelope
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L951B:
+B6_951B:
     .byte $F6,$02   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$02   ; pitch_mod
@@ -2186,7 +2186,7 @@ Bank6_PtrPair_9478_L951B:
     .byte $F6,$03   ; envelope
     .byte $1F
     .byte $F5,$7E,$94   ; new pattern list
-Bank6_PtrPair_9478_L952A:
+B6_952A:
     .byte $F7,$02   ; pitch_mod
     .byte $60
     .byte $F8   ; key off
@@ -2226,7 +2226,7 @@ Bank6_PtrPair_9478_L952A:
     .byte $F6,$01   ; envelope
     .byte $FA,$F0   ; duty
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9584:
+B6_9584:
     .byte $61,$1C,$1A,$18,$1C
     .byte $F9   ; hold
     .byte $1A,$17
@@ -2236,7 +2236,7 @@ Bank6_PtrPair_9478_L9584:
     .byte $FA,$30   ; duty
     .byte $2E,$2D,$2B
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9598:
+B6_9598:
     .byte $61,$1C,$1A,$18,$1C
     .byte $F9   ; hold
     .byte $1B,$1C
@@ -2249,13 +2249,13 @@ Bank6_PtrPair_9478_L9598:
     .byte $F8   ; key off
     .byte $60,$1D,$1D,$63,$1D
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L95B4:
+B6_95B4:
     .byte $F7,$03   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$0E   ; envelope
     .byte $67,$13,$16,$18,$1C
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L95C0:
+B6_95C0:
     .byte $F6,$01   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$02   ; pitch_mod
@@ -2263,7 +2263,7 @@ Bank6_PtrPair_9478_L95C0:
     .byte $F6,$02   ; envelope
     .byte $1C
     .byte $F5,$AA,$94   ; new pattern list
-Bank6_PtrPair_9478_L95CF:
+B6_95CF:
     .byte $F7,$03   ; pitch_mod
     .byte $F6,$00   ; envelope
     .byte $FA,$F0   ; duty
@@ -2298,7 +2298,7 @@ Bank6_PtrPair_9478_L95CF:
     .byte $F6,$01   ; envelope
     .byte $FA,$F0   ; duty
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9620:
+B6_9620:
     .byte $61,$1C,$1A,$18,$1C
     .byte $F9   ; hold
     .byte $1A,$17
@@ -2308,7 +2308,7 @@ Bank6_PtrPair_9478_L9620:
     .byte $FA,$30   ; duty
     .byte $30,$30,$30
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9633:
+B6_9633:
     .byte $61,$1C,$1A,$18,$1C
     .byte $F9   ; hold
     .byte $1B,$1C
@@ -2319,38 +2319,38 @@ Bank6_PtrPair_9478_L9633:
     .byte $F8   ; key off
     .byte $60,$1D,$1D,$63,$1D
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L964D:
+B6_964D:
     .byte $FA,$30   ; duty
     .byte $F6,$0E   ; envelope
     .byte $67,$18,$1A,$1C,$1F
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9657:
+B6_9657:
     .byte $63
     .byte $F6,$04   ; envelope
     .byte $06,$06,$06,$61
     .byte $F5,$C4,$94   ; new pattern list
-Bank6_PtrPair_9478_L9661:
+B6_9661:
     .byte $F6,$10   ; envelope
     .byte $0D
     .byte $F6,$12   ; envelope
     .byte $08
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9668:
-    .word Bank6_PtrPair_9478_L967E
+B6_9668:
+    .word B6_967E
     .word $0000
-Bank6_PtrPair_9478_L966C:
-    .word Bank6_PtrPair_9478_L96A0
-    .word Bank6_PtrPair_9478_L96A0
-    .word Bank6_PtrPair_9478_L96A0
-    .word Bank6_PtrPair_9478_L96E5
+B6_966C:
+    .word B6_96A0
+    .word B6_96A0
+    .word B6_96A0
+    .word B6_96E5
     .word $0000
-Bank6_PtrPair_9478_L9676:
-    .word Bank6_PtrPair_9478_L96E8
+B6_9676:
+    .word B6_96E8
     .word $0000
-Bank6_PtrPair_9478_L967A:
-    .word Bank6_PtrPair_9478_L970A
+B6_967A:
+    .word B6_970A
     .word $0000
-Bank6_PtrPair_9478_L967E:
+B6_967E:
     .byte $F7,$02   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$04   ; envelope
@@ -2358,7 +2358,7 @@ Bank6_PtrPair_9478_L967E:
     .byte $15,$0C,$15,$18,$11,$15,$18,$0C,$15,$18,$11,$15
     .byte $18,$61,$1D
     .byte $FE   ; end of song
-Bank6_PtrPair_9478_L96A0:
+B6_96A0:
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
     .byte $F6,$0A   ; envelope
@@ -2394,10 +2394,10 @@ Bank6_PtrPair_9478_L96A0:
     .byte $F6,$05   ; envelope
     .byte $60,$0C
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L96E5:
+B6_96E5:
     .byte $62,$11
     .byte $FE   ; end of song
-Bank6_PtrPair_9478_L96E8:
+B6_96E8:
     .byte $F7,$02   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$04   ; envelope
@@ -2405,7 +2405,7 @@ Bank6_PtrPair_9478_L96E8:
     .byte $1D,$11,$18,$1D,$15,$18,$21,$11,$18,$1D,$15,$18
     .byte $20,$61,$21
     .byte $FE   ; end of song
-Bank6_PtrPair_9478_L970A:
+B6_970A:
     .byte $61
     .byte $F6,$11   ; envelope
     .byte $0D,$60
@@ -2436,19 +2436,19 @@ Bank6_PtrPair_9478_L970A:
     .byte $F6,$10   ; envelope
     .byte $06
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9743:
-    .word Bank6_PtrPair_9478_L979D
+B6_9743:
+    .word B6_979D
     .word $0000
-Bank6_PtrPair_9478_L9747:
-    .word Bank6_PtrPair_9478_L9755
-    .word Bank6_PtrPair_9478_L9755
-    .word Bank6_PtrPair_9478_L9755
-    .word Bank6_PtrPair_9478_L979A
+B6_9747:
+    .word B6_9755
+    .word B6_9755
+    .word B6_9755
+    .word B6_979A
     .word $0000
-Bank6_PtrPair_9478_L9751:
-    .word Bank6_PtrPair_9478_L979F
+B6_9751:
+    .word B6_979F
     .word $0000
-Bank6_PtrPair_9478_L9755:
+B6_9755:
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
     .byte $F6,$0A   ; envelope
@@ -2485,13 +2485,13 @@ Bank6_PtrPair_9478_L9755:
     RTS
     .byte $00
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L979A:
+B6_979A:
     .byte $62,$05
     .byte $FE   ; end of song
-Bank6_PtrPair_9478_L979D:
+B6_979D:
     .byte $60
     .byte $F8   ; key off
-Bank6_PtrPair_9478_L979F:
+B6_979F:
     .byte $F7,$03   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$04   ; envelope
@@ -2499,42 +2499,42 @@ Bank6_PtrPair_9478_L979F:
     .byte $10,$13,$10,$0C,$10,$0C,$0A,$0C,$0A,$07,$0A,$07
     .byte $04,$61,$09
     .byte $FE   ; end of song
-Bank6_PtrPair_9478_L97C1:
-    .word Bank6_PtrPair_9478_L97F7
+B6_97C1:
+    .word B6_97F7
     .word $0000
-Bank6_PtrPair_9478_L97C5:
-    .word Bank6_PtrPair_9478_L97FC
+B6_97C5:
+    .word B6_97FC
     .word $0000
-Bank6_PtrPair_9478_L97C9:
-    .word Bank6_PtrPair_9478_L9839
-    .word Bank6_PtrPair_9478_L983F
-    .word Bank6_PtrPair_9478_L98A7
-    .word Bank6_PtrPair_9478_L98AD
-    .word Bank6_PtrPair_9478_LA035
-    .word Bank6_PtrPair_9478_L98A7
-    .word Bank6_PtrPair_9478_L98AD
-    .word Bank6_PtrPair_9478_LA038
-    .word Bank6_PtrPair_9478_L9876
-    .word Bank6_PtrPair_9478_L9878
-    .word Bank6_PtrPair_9478_L98A7
-    .word Bank6_PtrPair_9478_L98AD
-    .word Bank6_PtrPair_9478_LA032
-    .word Bank6_PtrPair_9478_L9876
-    .word Bank6_PtrPair_9478_LA035
-    .word Bank6_PtrPair_9478_L9878
-    .word Bank6_PtrPair_9478_LA038
-    .word Bank6_PtrPair_9478_L9839
-    .word Bank6_PtrPair_9478_L983F
-    .word Bank6_PtrPair_9478_LA032
+B6_97C9:
+    .word B6_9839
+    .word B6_983F
+    .word B6_98A7
+    .word B6_98AD
+    .word B6_A035
+    .word B6_98A7
+    .word B6_98AD
+    .word B6_A038
+    .word B6_9876
+    .word B6_9878
+    .word B6_98A7
+    .word B6_98AD
+    .word B6_A032
+    .word B6_9876
+    .word B6_A035
+    .word B6_9878
+    .word B6_A038
+    .word B6_9839
+    .word B6_983F
+    .word B6_A032
     .word $0000
-Bank6_PtrPair_9478_L97F3:
-    .word Bank6_PtrPair_9478_L98F1
+B6_97F3:
+    .word B6_98F1
     .word $0000
-Bank6_PtrPair_9478_L97F7:
+B6_97F7:
     .byte $60
     .byte $F8   ; key off
     .byte $F5,$C9,$97   ; new pattern list
-Bank6_PtrPair_9478_L97FC:
+B6_97FC:
     .byte $F6,$10   ; envelope
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
@@ -2545,11 +2545,11 @@ Bank6_PtrPair_9478_L97FC:
     .byte $F7,$02   ; pitch_mod
     .byte $0B,$17,$0C,$18
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9839:
+B6_9839:
     .byte $F6,$0B   ; envelope
     .byte $FA,$F0   ; duty
     .byte $F7,$02   ; pitch_mod
-Bank6_PtrPair_9478_L983F:
+B6_983F:
     .byte $61,$1D,$63,$21,$60,$20,$21,$61,$1D,$63,$21,$60
     .byte $20,$21,$61,$1C,$63,$1F,$60,$1E,$1F,$61,$18,$1F
     .byte $1C,$1A,$61,$18,$63,$1C,$60,$1B,$1C,$61,$18,$63
@@ -2557,9 +2557,9 @@ Bank6_PtrPair_9478_L983F:
     .byte $1D,$21,$20,$21
     .byte $FA,$30   ; duty
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9876:
+B6_9876:
     .byte $FA,$F0   ; duty
-Bank6_PtrPair_9478_L9878:
+B6_9878:
     .byte $F6,$05   ; envelope
     .byte $F7,$04   ; pitch_mod
     .byte $61
@@ -2572,11 +2572,11 @@ Bank6_PtrPair_9478_L9878:
     .byte $18,$18,$15,$61,$11
     .byte $FA,$30   ; duty
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L98A7:
+B6_98A7:
     .byte $F6,$0B   ; envelope
     .byte $FA,$B0   ; duty
     .byte $F7,$03   ; pitch_mod
-Bank6_PtrPair_9478_L98AD:
+B6_98AD:
     .byte $60,$11,$1D,$61,$15,$21,$60,$20,$21,$11,$1D,$61
     .byte $15,$21,$60,$20,$21,$10,$1C,$61,$13,$1F,$60,$1E
     .byte $1F,$0C,$18,$13,$1F,$10,$1C,$0E,$1A,$0C,$18,$61
@@ -2585,62 +2585,62 @@ Bank6_PtrPair_9478_L98AD:
     .byte $21,$14,$20,$15,$21
     .byte $FA,$30   ; duty
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L98F1:
+B6_98F1:
     .byte $61
     .byte $F6,$12   ; envelope
     .byte $0D
     .byte $F6,$12   ; envelope
     .byte $08
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L98F9:
-    .word Bank6_PtrPair_9478_L9949
+B6_98F9:
+    .word B6_9949
     .word $0000
-Bank6_PtrPair_9478_L98FD:
-    .word Bank6_PtrPair_9478_L994E
-    .word Bank6_PtrPair_9478_L9979
-    .word Bank6_PtrPair_9478_L994E
-    .word Bank6_PtrPair_9478_L9986
+B6_98FD:
+    .word B6_994E
+    .word B6_9979
+    .word B6_994E
+    .word B6_9986
     .word $0000
-Bank6_PtrPair_9478_L9907:
-    .word Bank6_PtrPair_9478_L9990
-    .word Bank6_PtrPair_9478_L99E8
-    .word Bank6_PtrPair_9478_L9990
-    .word Bank6_PtrPair_9478_L9A01
-    .word Bank6_PtrPair_9478_LA035
-    .word Bank6_PtrPair_9478_L9A1A
-    .word Bank6_PtrPair_9478_L9A9C
-    .word Bank6_PtrPair_9478_L9A1A
-    .word Bank6_PtrPair_9478_L9ABB
-    .word Bank6_PtrPair_9478_L9ADC
-    .word Bank6_PtrPair_9478_LA032
-    .word Bank6_PtrPair_9478_L9ADC
-    .word Bank6_PtrPair_9478_LA038
-    .word Bank6_PtrPair_9478_L9A1A
-    .word Bank6_PtrPair_9478_L9A9C
-    .word Bank6_PtrPair_9478_L9A1A
-    .word Bank6_PtrPair_9478_L9ABB
-    .word Bank6_PtrPair_9478_L9ADC
-    .word Bank6_PtrPair_9478_LA03B
-    .word Bank6_PtrPair_9478_L9ADC
-    .word Bank6_PtrPair_9478_LA038
-    .word Bank6_PtrPair_9478_L9A1A
-    .word Bank6_PtrPair_9478_L9A9C
-    .word Bank6_PtrPair_9478_L9A1A
-    .word Bank6_PtrPair_9478_L9ABB
-    .word Bank6_PtrPair_9478_LA035
-    .word Bank6_PtrPair_9478_L9ADC
-    .word Bank6_PtrPair_9478_LA038
-    .word Bank6_PtrPair_9478_L9ADC
-    .word Bank6_PtrPair_9478_LA032
+B6_9907:
+    .word B6_9990
+    .word B6_99E8
+    .word B6_9990
+    .word B6_9A01
+    .word B6_A035
+    .word B6_9A1A
+    .word B6_9A9C
+    .word B6_9A1A
+    .word B6_9ABB
+    .word B6_9ADC
+    .word B6_A032
+    .word B6_9ADC
+    .word B6_A038
+    .word B6_9A1A
+    .word B6_9A9C
+    .word B6_9A1A
+    .word B6_9ABB
+    .word B6_9ADC
+    .word B6_A03B
+    .word B6_9ADC
+    .word B6_A038
+    .word B6_9A1A
+    .word B6_9A9C
+    .word B6_9A1A
+    .word B6_9ABB
+    .word B6_A035
+    .word B6_9ADC
+    .word B6_A038
+    .word B6_9ADC
+    .word B6_A032
     .word $0000
-Bank6_PtrPair_9478_L9945:
-    .word Bank6_PtrPair_9478_L9B60
+B6_9945:
+    .word B6_9B60
     .word $0000
-Bank6_PtrPair_9478_L9949:
+B6_9949:
     .byte $60
     .byte $F8   ; key off
     .byte $F5,$07,$99   ; new pattern list
-Bank6_PtrPair_9478_L994E:
+B6_994E:
     .byte $F6,$10   ; envelope
     .byte $F7,$04   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
@@ -2648,13 +2648,13 @@ Bank6_PtrPair_9478_L994E:
     .byte $63,$00,$07,$00,$08,$07,$00,$61,$00,$02,$03,$04
     .byte $63,$05,$00,$05,$00,$00,$07,$61,$07,$06,$05,$04
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9979:
+B6_9979:
     .byte $63,$00,$04,$00,$02,$00,$00,$61,$00,$02,$03,$04
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9986:
+B6_9986:
     .byte $63,$00,$04,$00,$07,$05,$00,$05,$09
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9990:
+B6_9990:
     .byte $F7,$03   ; pitch_mod
     .byte $FA,$F0   ; duty
     .byte $F6,$09   ; envelope
@@ -2693,7 +2693,7 @@ Bank6_PtrPair_9478_L9990:
     .byte $61,$1F,$2B,$1F,$2B,$1F,$2B
     .byte $FA,$F0   ; duty
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L99E8:
+B6_99E8:
     .byte $F6,$09   ; envelope
     .byte $F7,$03   ; pitch_mod
     .byte $61,$1C,$1A,$18,$1C
@@ -2706,7 +2706,7 @@ Bank6_PtrPair_9478_L99E8:
     .byte $FA,$30   ; duty
     .byte $30,$2F,$2E
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9A01:
+B6_9A01:
     .byte $F6,$09   ; envelope
     .byte $61,$1C,$1A,$18,$1C
     .byte $F9   ; hold
@@ -2716,7 +2716,7 @@ Bank6_PtrPair_9478_L9A01:
     .byte $F8   ; key off
     .byte $1D,$1D,$63,$1D
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9A1A:
+B6_9A1A:
     .byte $F6,$0B   ; envelope
     .byte $FA,$B0   ; duty
     .byte $F7,$03   ; pitch_mod
@@ -2763,7 +2763,7 @@ Bank6_PtrPair_9478_L9A1A:
     .byte $FA,$B0   ; duty
     .byte $F7,$03   ; pitch_mod
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9A9C:
+B6_9A9C:
     .byte $60,$1C,$10,$1A,$0E,$18,$0C,$1C,$10
     .byte $F9   ; hold
     .byte $F9   ; hold
@@ -2775,7 +2775,7 @@ Bank6_PtrPair_9478_L9A9C:
     .byte $FA,$30   ; duty
     .byte $30,$24,$2F,$23,$2E,$22
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9ABB:
+B6_9ABB:
     .byte $60,$1C,$10,$1A,$0E,$18,$0C,$1C,$10
     .byte $F9   ; hold
     .byte $F9   ; hold
@@ -2786,7 +2786,7 @@ Bank6_PtrPair_9478_L9ABB:
     .byte $F8   ; key off
     .byte $11,$11,$61,$11,$05
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9ADC:
+B6_9ADC:
     .byte $F6,$09   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$03   ; pitch_mod
@@ -2839,32 +2839,32 @@ Bank6_PtrPair_9478_L9ADC:
     .byte $F9   ; hold
     .byte $F9   ; hold
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9B60:
+B6_9B60:
     .byte $61
     .byte $F6,$12   ; envelope
     .byte $0D
     .byte $F6,$12   ; envelope
     .byte $08
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9B68:
-    .word Bank6_PtrPair_9478_L9B84
+B6_9B68:
+    .word B6_9B84
     .word $0000
-Bank6_PtrPair_9478_L9B6C:
-    .word Bank6_PtrPair_9478_L9BAC
+B6_9B6C:
+    .word B6_9BAC
     .word $0000
-Bank6_PtrPair_9478_L9B70:
-    .word Bank6_PtrPair_9478_L9BE3
-    .word Bank6_PtrPair_9478_L9BE3
-    .word Bank6_PtrPair_9478_L9C30
-    .word Bank6_PtrPair_9478_LA035
-    .word Bank6_PtrPair_9478_L9BE3
-    .word Bank6_PtrPair_9478_L9BE3
-    .word Bank6_PtrPair_9478_LA032
+B6_9B70:
+    .word B6_9BE3
+    .word B6_9BE3
+    .word B6_9C30
+    .word B6_A035
+    .word B6_9BE3
+    .word B6_9BE3
+    .word B6_A032
     .word $0000
-Bank6_PtrPair_9478_L9B80:
-    .word Bank6_PtrPair_9478_L9C34
+B6_9B80:
+    .word B6_9C34
     .word $0000
-Bank6_PtrPair_9478_L9B84:
+B6_9B84:
     .byte $F6,$08   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$02   ; pitch_mod
@@ -2872,7 +2872,7 @@ Bank6_PtrPair_9478_L9B84:
     .byte $16,$13,$16,$1B,$27,$13,$16,$1B,$16,$13,$16,$1B
     .byte $27,$14,$18,$1B,$18,$14,$18,$1B,$27
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9BAC:
+B6_9BAC:
     .byte $F6,$10   ; envelope
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
@@ -2894,7 +2894,7 @@ Bank6_PtrPair_9478_L9BAC:
     .byte $F6,$10   ; envelope
     .byte $0C,$0F
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9BE3:
+B6_9BE3:
     .byte $F6,$09   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$02   ; pitch_mod
@@ -2905,31 +2905,31 @@ Bank6_PtrPair_9478_L9BE3:
     .byte $60,$16,$16,$63,$1B,$61,$1F,$60,$1F,$20,$61,$22
     .byte $60,$20,$1F,$61,$20,$60,$20,$1B,$63,$18
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9C30:
+B6_9C30:
     .byte $7F
     .byte $F8   ; key off
     .byte $F8   ; key off
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9C34:
+B6_9C34:
     .byte $61
     .byte $F6,$12   ; envelope
     .byte $0D
     .byte $F6,$12   ; envelope
     .byte $08
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9C3C:
-    .word Bank6_PtrPair_9478_L9C95
+B6_9C3C:
+    .word B6_9C95
     .word $0000
-Bank6_PtrPair_9478_L9C40:
-    .word Bank6_PtrPair_9478_L9C4C
+B6_9C40:
+    .word B6_9C4C
     .word $0000
-Bank6_PtrPair_9478_L9C44:
-    .word Bank6_PtrPair_9478_L9C9A
+B6_9C44:
+    .word B6_9C9A
     .word $0000
-Bank6_PtrPair_9478_L9C48:
-    .word Bank6_PtrPair_9478_L9D8C
+B6_9C48:
+    .word B6_9D8C
     .word $0000
-Bank6_PtrPair_9478_L9C4C:
+B6_9C4C:
     .byte $F6,$0E   ; envelope
     .byte $FC,$0C   ; chan_transpose
     .byte $F7,$04   ; pitch_mod
@@ -2941,11 +2941,11 @@ Bank6_PtrPair_9478_L9C4C:
     .byte $02,$63,$05,$04,$65,$02,$02,$02,$02,$63,$04,$05
     .byte $65,$02,$02,$02,$02,$63,$05,$07
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9C95:
+B6_9C95:
     .byte $60
     .byte $F8   ; key off
     .byte $F5,$44,$9C   ; new pattern list
-Bank6_PtrPair_9478_L9C9A:
+B6_9C9A:
     .byte $FA,$30   ; duty
     .byte $F6,$05   ; envelope
     .byte $F7,$05   ; pitch_mod
@@ -3041,7 +3041,7 @@ Bank6_PtrPair_9478_L9C9A:
     .byte $F7,$08   ; pitch_mod
     .byte $63,$23,$24
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9D8C:
+B6_9D8C:
     .byte $61
     .byte $F6,$10   ; envelope
     .byte $0D
@@ -3064,23 +3064,23 @@ Bank6_PtrPair_9478_L9D8C:
     .byte $F6,$12   ; envelope
     .byte $02,$02,$02
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9DB2:
-    .word Bank6_PtrPair_9478_L9E56
-    .word Bank6_PtrPair_9478_L9E0D
+B6_9DB2:
+    .word B6_9E56
+    .word B6_9E0D
     .word $0000
-Bank6_PtrPair_9478_L9DB8:
-    .word Bank6_PtrPair_9478_L9DCA
+B6_9DB8:
+    .word B6_9DCA
     .word $0000
-Bank6_PtrPair_9478_L9DBC:
-    .word Bank6_PtrPair_9478_L9E58
-    .word Bank6_PtrPair_9478_L9EA1
-    .word Bank6_PtrPair_9478_L9E5E
-    .word Bank6_PtrPair_9478_L9EA1
+B6_9DBC:
+    .word B6_9E58
+    .word B6_9EA1
+    .word B6_9E5E
+    .word B6_9EA1
     .word $0000
-Bank6_PtrPair_9478_L9DC6:
-    .word Bank6_PtrPair_9478_L9EA4
+B6_9DC6:
+    .word B6_9EA4
     .word $0000
-Bank6_PtrPair_9478_L9DCA:
+B6_9DCA:
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
     .byte $F6,$0C   ; envelope
@@ -3090,7 +3090,7 @@ Bank6_PtrPair_9478_L9DCA:
     .byte $63,$0F,$08,$61,$08,$0F,$08,$0F,$11,$63,$0A,$0A
     .byte $0F,$61,$0A,$63,$0E,$0A,$61,$0A,$0E,$0A,$0E,$0A
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9E0D:
+B6_9E0D:
     .byte $F6,$14   ; envelope
     .byte $FC,$0C   ; chan_transpose
     .byte $F7,$02   ; pitch_mod
@@ -3110,14 +3110,14 @@ Bank6_PtrPair_9478_L9E0D:
     .byte $6F,$11,$6B,$1A
     .byte $FC,$00   ; chan_transpose
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9E56:
+B6_9E56:
     .byte $60
     .byte $F8   ; key off
-Bank6_PtrPair_9478_L9E58:
+B6_9E58:
     .byte $F6,$14   ; envelope
     .byte $FA,$30   ; duty
     .byte $F7,$04   ; pitch_mod
-Bank6_PtrPair_9478_L9E5E:
+B6_9E5E:
     .byte $6B,$13,$63,$11,$13,$67,$16,$63,$13,$6B
     .byte $F9   ; hold
     .byte $63,$11,$13,$67,$11,$63,$0F,$63
@@ -3134,11 +3134,11 @@ Bank6_PtrPair_9478_L9E5E:
     .byte $6F,$11,$6A,$16
     .byte $F6,$13   ; envelope
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9EA1:
+B6_9EA1:
     .byte $60
     .byte $F8   ; key off
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9EA4:
+B6_9EA4:
     .byte $61
     .byte $F6,$11   ; envelope
     .byte $0D
@@ -3181,21 +3181,21 @@ Bank6_PtrPair_9478_L9EA4:
     .byte $F6,$12   ; envelope
     .byte $02,$02,$02
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9EEE:
-    .word Bank6_PtrPair_9478_L9F02
+B6_9EEE:
+    .word B6_9F02
     .word $0000
-Bank6_PtrPair_9478_L9EF2:
-    .word Bank6_PtrPair_9478_L9F3A
+B6_9EF2:
+    .word B6_9F3A
     .word $0000
-Bank6_PtrPair_9478_L9EF6:
-    .word Bank6_PtrPair_9478_L9FBF
-    .word Bank6_PtrPair_9478_L9FBF
-    .word Bank6_PtrPair_9478_L9FF7
+B6_9EF6:
+    .word B6_9FBF
+    .word B6_9FBF
+    .word B6_9FF7
     .word $0000
-Bank6_PtrPair_9478_L9EFE:
-    .word Bank6_PtrPair_9478_LA021
+B6_9EFE:
+    .word B6_A021
     .word $0000
-Bank6_PtrPair_9478_L9F02:
+B6_9F02:
     .byte $F7,$02   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$09   ; envelope
@@ -3205,7 +3205,7 @@ Bank6_PtrPair_9478_L9F02:
     .byte $15,$0E,$12,$15,$0E,$12,$15,$0E,$12,$15,$0E,$12
     .byte $15
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9F3A:
+B6_9F3A:
     .byte $F7,$03   ; pitch_mod
     .byte $FC,$0C   ; chan_transpose
     INC scroll_y_lo,x
@@ -3274,7 +3274,7 @@ Bank6_PtrPair_9478_L9F3A:
     .byte $F6,$05   ; envelope
     .byte $60,$0E
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9FBF:
+B6_9FBF:
     .byte $F7,$02   ; pitch_mod
     .byte $FA,$30   ; duty
     .byte $F6,$09   ; envelope
@@ -3284,7 +3284,7 @@ Bank6_PtrPair_9478_L9FBF:
     .byte $1A,$12,$15,$1A,$12,$15,$1A,$12,$15,$1A,$12,$15
     .byte $1A
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_L9FF7:
+B6_9FF7:
     .byte $FA,$F0   ; duty
     .byte $F6,$06   ; envelope
     .byte $F7,$02   ; pitch_mod
@@ -3294,7 +3294,7 @@ Bank6_PtrPair_9478_L9FF7:
     .byte $13,$1A,$17,$1A,$13,$1A,$16,$1A,$11,$1A,$15,$1A
     .byte $12,$1A,$15,$1A
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_LA021:
+B6_A021:
     .byte $61
     .byte $F6,$11   ; envelope
     .byte $0D,$60
@@ -3305,16 +3305,16 @@ Bank6_PtrPair_9478_LA021:
     .byte $F6,$12   ; envelope
     .byte $02
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_LA032:
+B6_A032:
     .byte $FB,$00   ; song_transpose
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_LA035:
+B6_A035:
     .byte $FB,$01   ; song_transpose
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_LA038:
+B6_A038:
     .byte $FB,$02   ; song_transpose
     .byte $FF   ; next pattern
-Bank6_PtrPair_9478_LA03B:
+B6_A03B:
     .byte $FB,$03   ; song_transpose
     .byte $FF   ; next pattern
 ; Bank6_Filler_A03E: unreferenced bytes before AreaMap22 followed by a run of $D7
@@ -3369,7 +3369,7 @@ KillableTypeTable:
     .byte $00,$00,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00
     .res 21, $00
     .byte $01,$01,$00,$00
-KillableTypeTable_LA2BE:
+PlayerState05_Body:
     LDA player_facing
     BNE @B6_A2D2
     LDA player_x_lo
@@ -3410,7 +3410,7 @@ KillableTypeTable_LA2BE:
     LDA #$39
     JSR PlaySfxNoise
     LDA #$24
-    JMP KillableTypeTable_LA38F
+    JMP PlayerState06_Body_LA38F
 @B6_A30B:
     TAX
     LDA tile_props,x
@@ -3429,10 +3429,10 @@ KillableTypeTable_LA2BE:
     LDA #$06
     STA player_state
     JMP ApplyRidingMotion
-KillableTypeTable_LA32E:
+PlayerState06_Body:
     LDA zp_91
     BEQ @B6_A335
-    JMP KillableTypeTable_LA3CB
+    JMP PlayerState06_Body_LA3CB
 @B6_A335:
     LDA #$0F
     STA tmp_a
@@ -3479,11 +3479,11 @@ KillableTypeTable_LA32E:
 @B6_A383:
     PLA
     CMP #$D1
-    BNE KillableTypeTable_LA3AF
+    BNE PlayerState06_Body_LA3AF
     LDA #$39
     JSR PlaySfxNoise
     LDA #$17
-KillableTypeTable_LA38F:
+PlayerState06_Body_LA38F:
     STA player_frame
     JSR SetCollectedFlag
     JSR PushTileEffect
@@ -3494,11 +3494,11 @@ KillableTypeTable_LA38F:
     LDA #$02
     STA pending_tile_kind
     LDA riding_flag
-    BNE KillableTypeTable_LA3CF
+    BNE PlayerState06_Body_LA3CF
     LDA #$03
     STA zp_91
     RTS
-KillableTypeTable_LA3AF:
+PlayerState06_Body_LA3AF:
     TAX
     LDA tile_props,x
     LDX #$17
@@ -3510,19 +3510,19 @@ KillableTypeTable_LA3AF:
 @B6_A3C0:
     STX player_frame
     LDA riding_flag
-    BNE KillableTypeTable_LA3CF
+    BNE PlayerState06_Body_LA3CF
     LDA #$03
     STA zp_91
-KillableTypeTable_LA3CA:
+PlayerState06_Body_LA3CA:
     RTS
-KillableTypeTable_LA3CB:
+PlayerState06_Body_LA3CB:
     DEC zp_91
-    BNE KillableTypeTable_LA3CA
-KillableTypeTable_LA3CF:
+    BNE PlayerState06_Body_LA3CA
+PlayerState06_Body_LA3CF:
     LDA #$07
     STA player_state
     JMP ApplyRidingMotion
-KillableTypeTable_LA3D6:
+PlayerState07_Body:
     LDA buttons
     AND #$B1
     CMP #$80
@@ -3891,62 +3891,62 @@ PlayerFrameShape:
 ; PlayerShapeRecordLo: low bytes of the shape record pointers
 PlayerShapeRecordLo:
     .byte <(PlayerShapeRecords)
-    .byte <(PlayerShapeRecords_LA6BC)
-    .byte <(PlayerShapeRecords_LA6BF)
-    .byte <(PlayerShapeRecords_LA6C2)
-    .byte <(PlayerShapeRecords_LA6C5)
-    .byte <(PlayerShapeRecords_LA6C8)
-    .byte <(PlayerShapeRecords_LA6CB)
-    .byte <(PlayerShapeRecords_LA6CE)
-    .byte <(PlayerShapeRecords_LA6D1)
-    .byte <(PlayerShapeRecords_LA6D4)
-    .byte <(PlayerShapeRecords_LA6D7)
+    .byte <(B6_A6BC)
+    .byte <(B6_A6BF)
+    .byte <(B6_A6C2)
+    .byte <(B6_A6C5)
+    .byte <(B6_A6C8)
+    .byte <(B6_A6CB)
+    .byte <(B6_A6CE)
+    .byte <(B6_A6D1)
+    .byte <(B6_A6D4)
+    .byte <(B6_A6D7)
 ; PlayerShapeRecordHi: high bytes of the shape record pointers
 PlayerShapeRecordHi:
     .byte >(PlayerShapeRecords)
-    .byte >(PlayerShapeRecords_LA6BC)
-    .byte >(PlayerShapeRecords_LA6BF)
-    .byte >(PlayerShapeRecords_LA6C2)
-    .byte >(PlayerShapeRecords_LA6C5)
-    .byte >(PlayerShapeRecords_LA6C8)
-    .byte >(PlayerShapeRecords_LA6CB)
-    .byte >(PlayerShapeRecords_LA6CE)
-    .byte >(PlayerShapeRecords_LA6D1)
-    .byte >(PlayerShapeRecords_LA6D4)
-    .byte >(PlayerShapeRecords_LA6D7)
+    .byte >(B6_A6BC)
+    .byte >(B6_A6BF)
+    .byte >(B6_A6C2)
+    .byte >(B6_A6C5)
+    .byte >(B6_A6C8)
+    .byte >(B6_A6CB)
+    .byte >(B6_A6CE)
+    .byte >(B6_A6D1)
+    .byte >(B6_A6D4)
+    .byte >(B6_A6D7)
 ; PlayerShapeRecords: 11 records of (offset list pointer, sprite count)
 PlayerShapeRecords:
     .word PlayerShapeOffsets
     .byte $04
-PlayerShapeRecords_LA6BC:
-    .word PlayerShapeOffsets_LA6E2
+B6_A6BC:
+    .word B6_A6E2
     .byte $04
-PlayerShapeRecords_LA6BF:
-    .word PlayerShapeOffsets_LA6EA
+B6_A6BF:
+    .word B6_A6EA
     .byte $04
-PlayerShapeRecords_LA6C2:
-    .word PlayerShapeOffsets_LA6F2
+B6_A6C2:
+    .word B6_A6F2
     .byte $03
-PlayerShapeRecords_LA6C5:
-    .word PlayerShapeOffsets_LA6F8
+B6_A6C5:
+    .word B6_A6F8
     .byte $04
-PlayerShapeRecords_LA6C8:
-    .word PlayerShapeOffsets_LA700
+B6_A6C8:
+    .word B6_A700
     .byte $05
-PlayerShapeRecords_LA6CB:
+B6_A6CB:
     .word $0398
     .byte $06
-PlayerShapeRecords_LA6CE:
-    .word PlayerShapeOffsets_LA70A
+B6_A6CE:
+    .word B6_A70A
     .byte $02
-PlayerShapeRecords_LA6D1:
-    .word PlayerShapeOffsets_LA70E
+B6_A6D1:
+    .word B6_A70E
     .byte $04
-PlayerShapeRecords_LA6D4:
-    .word PlayerShapeOffsets_LA716
+B6_A6D4:
+    .word B6_A716
     .byte $04
-PlayerShapeRecords_LA6D7:
-    .word PlayerShapeOffsets_LA71E
+B6_A6D7:
+    .word B6_A71E
     .byte $04
 ; PlayerShapeOffsets: signed (dy, dx) pairs per shape, back to back (the last list's final 4 bytes overlap the unused group-0 entry of GroupGfxTable)
 PlayerShapeOffsets:
@@ -3954,52 +3954,52 @@ PlayerShapeOffsets:
     .byte $F0, $08
     .byte $00, $00
     .byte $00, $08
-PlayerShapeOffsets_LA6E2:
+B6_A6E2:
     .byte $F4, $00
     .byte $F4, $08
     .byte $04, $00
     .byte $04, $08
-PlayerShapeOffsets_LA6EA:
+B6_A6EA:
     .byte $F0, $00
     .byte $F8, $F8
     .byte $00, $00
     .byte $00, $08
-PlayerShapeOffsets_LA6F2:
+B6_A6F2:
     .byte $00, $F8
     .byte $00, $00
     .byte $00, $08
-PlayerShapeOffsets_LA6F8:
+B6_A6F8:
     .byte $F4, $FF
     .byte $F4, $07
     .byte $04, $FF
     .byte $04, $07
-PlayerShapeOffsets_LA700:
+B6_A700:
     .byte $F0, $00
     .byte $F0, $08
     .byte $00, $00
     .byte $00, $08
     .byte $00, $F8
-PlayerShapeOffsets_LA70A:
+B6_A70A:
     .byte $00, $00
     .byte $00, $08
-PlayerShapeOffsets_LA70E:
+B6_A70E:
     .byte $FB, $00
     .byte $FB, $08
     .byte $08, $00
     .byte $08, $08
-PlayerShapeOffsets_LA716:
+B6_A716:
     .byte $F8, $00
     .byte $F0, $08
     .byte $08, $00
     .byte $00, $08
-PlayerShapeOffsets_LA71E:
+B6_A71E:
     .byte $F0, $00
     .byte $00, $F8
-PlayerShapeOffsets_LA722:
+B6_A722:
     .byte $00
-PlayerShapeOffsets_LA723:
+B6_A723:
     .byte $00
-PlayerShapeOffsets_LA724:
+B6_A724:
     .byte $00,$08
 ; GroupGfxTable: 30 entries of 4 bytes for animation groups 1-30 (group 0 would be at $A722 but its 4 bytes are the tail of the last PlayerShape offset list and are never read): compressed block pointer (word), tile count, 0. A pointer of 0 = shares another group's tiles (8,9,12,16,18-20,26). Read by LoadGroupGfx
 GroupGfxTable:
@@ -4384,7 +4384,7 @@ Gfx_B6_B738:
     .byte $F4,$0A,$04,$82,$21,$20,$A0,$72,$4F,$9F,$87,$C1,$E1,$F1,$F9,$03
     .byte $0F,$E8,$42,$42,$42,$1E,$32,$3F,$9E,$06,$11,$0D,$80,$95,$F8,$85
     .byte $D0,$10,$84,$24,$99,$A1,$24,$06,$60,$00
-GroupGfxTable_LB842:
+PlayerState01_Body:
     INC fall_index
     LDA fall_index
     CMP #$11
@@ -4404,7 +4404,7 @@ GroupGfxTable_LB842:
     STA fall_index
 @B6_B862:
     TAX
-    LDA TileKindTable_Data_LC20F,x
+    LDA F_C20F,x
     STA tmp_a
     CMP #$FF
     BNE @B6_B86F
@@ -4533,9 +4533,9 @@ GroupGfxTable_LB842:
     LDA fall_index
     LSR a
     TAX
-    LDA TileKindTable_Data_LC235,x
+    LDA F_C235,x
     STA player_frame
-GroupGfxTable_LB953:
+PlayerGfxStep_B953:
     LDA player_y_lo
     STA tmp_c
     LDA player_y_hi

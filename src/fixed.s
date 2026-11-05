@@ -185,33 +185,33 @@ SmallOffsets_F_C1D0:
 ; TileKindTable_Data: tile id -> kind (1 spring, 3 collectible, 4 = $CD)
 TileKindTable_Data:
     .byte $00
-TileKindTable_Data_LC1F0:
+F_C1F0:
     .byte $34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35
     .byte $34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$36,$35,$36,$35,$34
-TileKindTable_Data_LC20F:
+F_C20F:
     .byte $00
-TileKindTable_Data_LC210:
+F_C210:
     .byte $02,$03,$04,$05,$02,$03,$04,$05,$02,$06,$04,$05,$02,$03,$04,$05
     .byte $02,$02,$02,$01,$02,$01,$02,$01,$02,$01,$01,$01,$00,$01,$00,$01
     .byte $00,$00,$00,$00,$FF
-TileKindTable_Data_LC235:
+F_C235:
     .byte $08,$07,$08,$08,$07,$07,$08,$08,$07,$07,$08,$08,$08,$07,$07,$07
     .byte $08,$08,$08,$08
-TileKindTable_Data_LC249:
+F_C249:
     .byte $1A,$1A,$20,$20,$1A,$1A,$28,$28,$1A,$1A,$20,$1A,$28,$1A,$20,$1A
     .byte $28,$1A,$FF
-TileKindTable_Data_LC25C:
+F_C25C:
     .byte $31,$31,$31,$32,$32,$32,$33,$33,$33,$00
-TileKindTable_Data_LC266:
+F_C266:
     .byte $00,$00,$21,$21,$22,$22,$21,$21,$00,$FF
-TileKindTable_Data_LC270:
+F_C270:
     .byte $01,$01,$01,$01,$01,$00,$00,$00,$00,$01,$01,$01,$FF
 FallDyTable:
     .byte $00,$00,$00,$01,$00,$01,$00,$01,$01,$01,$01,$01,$01,$01,$01,$02
     .byte $01,$02,$01,$02,$02,$02
-FallDyTable_LC293:
+F_C293:
     .byte $18
-FallDyTable_LC294:
+F_C294:
     .byte $00,$19,$00,$1A,$00,$19,$01,$18,$01,$1B,$00,$1C,$00,$1B,$01,$00
     .res 24, $00
     .byte $04,$00,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$00,$00,$03,$D3
@@ -242,7 +242,7 @@ Tbl_F_C2EF:
 ; UpdateTouchKind_Tbl_C326: 11 bytes, read by UpdateTouchKind
 UpdateTouchKind_Tbl_C326:
     .byte $CD
-UpdateTouchKind_Tbl_C326_LC327:
+F_C327:
     .byte $FF,$CB,$C2,$D6,$C2,$F5,$C2,$06,$C3,$12
 ; Tbl_F_C331: 5 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_C331:
@@ -443,9 +443,9 @@ StageSetup_LC66C:
     LDA stage_index
     ASL a
     TAX
-    LDA ClearRAM_L8263,x
+    LDA B0_8263,x
     STA ptr_lo
-    LDA ClearRAM_L8263+1,x
+    LDA B0_8263+1,x
     STA ptr_hi
     LDY #$00
     LDA (ptr_lo),y
@@ -1286,11 +1286,11 @@ LoadGroupGfx_LCC6A:
     ASL a
     ASL a
     TAY
-    LDA PlayerShapeOffsets_LA722,y
+    LDA B6_A722,y
     STA ptr_lo
-    LDA PlayerShapeOffsets_LA723,y
+    LDA B6_A723,y
     STA ptr_hi
-    LDA PlayerShapeOffsets_LA724,y
+    LDA B6_A724,y
     STA tmp_a
     BEQ @F_CCB7
     LDA sprite_tile_next
@@ -2776,7 +2776,7 @@ ScrollY:
     LDA draw_y
     AND #$03
     BNE @F_D757
-    JSR ScrollY_LDAE3
+    JSR F_DAE3
 @F_D757:
     PLA
     STA map_read_hi
@@ -2844,7 +2844,7 @@ ScrollY:
     PHA
     LDA map_read_hi
     PHA
-    JSR ScrollY_LDAE3
+    JSR F_DAE3
     PLA
     STA map_read_hi
     PLA
@@ -3280,7 +3280,7 @@ ScrollY_LD9BD:
     PLA
     STA map_read_lo
     RTS
-ScrollY_LDAE3:
+F_DAE3:
     LSR draw_x
     LDA #$10
     SEC
@@ -4073,7 +4073,7 @@ PlayerIdleAnim_LE0B4:
     LDA zp_6F
     LSR a
     TAX
-    LDA TileKindTable_Data_LC270,x
+    LDA F_C270,x
     CMP #$FF
     BNE PlayerIdleAnim_LE0AF
     LDA #$00
@@ -4837,9 +4837,9 @@ PlayerState02:
     LDA tmp_a
     AND #$0E
     TAY
-    LDA FallDyTable_LC293,y
+    LDA F_C293,y
     STA player_frame
-    LDA FallDyTable_LC294,y
+    LDA F_C294,y
     STA player_facing
     LDA dive_mode
 @F_E63F:
@@ -5223,15 +5223,15 @@ PlayerState03:
 PlayerState05:
     LDA #$06
     JSR SwitchBank
-    JMP KillableTypeTable_LA2BE
+    JMP PlayerState05_Body
 PlayerState06:
     LDA #$06
     JSR SwitchBank
-    JMP KillableTypeTable_LA32E
+    JMP PlayerState06_Body
 PlayerState07:
     LDA #$06
     JSR SwitchBank
-    JMP KillableTypeTable_LA3D6
+    JMP PlayerState07_Body
 PlayerState08:
     DEC zp_8F
     LDX zp_8F
@@ -5273,24 +5273,24 @@ PlayerState08:
     LDA anim_tick
     AND #$0E
     TAY
-    LDA FallDyTable_LC293,y
+    LDA F_C293,y
     STA player_frame
-    LDA FallDyTable_LC294,y
+    LDA F_C294,y
     STA player_facing
     LDA #$06
     JSR SwitchBank
-    JMP GroupGfxTable_LB953
+    JMP PlayerGfxStep_B953
 PlayerState01:
     LDA #$06
     JSR SwitchBank
-    JMP GroupGfxTable_LB842
+    JMP PlayerState01_Body
 PlayerState09:
     INC anim_tick
     LDA anim_tick
     AND #$1E
     LSR a
     TAX
-    LDA TileKindTable_Data_LC25C,x
+    LDA F_C25C,x
     BNE @F_E97F
     LDA zp_92
     STA player_state
@@ -5465,7 +5465,7 @@ PlayerState0C:
     LDA zp_BE
     LSR a
     TAY
-    LDA TileKindTable_Data_LC1F0,y
+    LDA F_C1F0,y
     BNE @F_EAB5
     STA zp_BE
     LDA #$35
@@ -6046,7 +6046,7 @@ PlayerWalkAnimStep:
 @F_EED5:
     STX zp_6C
     LDX zp_6D
-    LDA TileKindTable_Data_LC210,x
+    LDA F_C210,x
     STA player_frame
     RTS
 MapPtrToCoords:
@@ -6788,7 +6788,7 @@ UpdateTouchKind:
     TAY
     LDA UpdateTouchKind_Tbl_C326,y
     STA ptr_lo
-    LDA UpdateTouchKind_Tbl_C326_LC327,y
+    LDA F_C327,y
     STA ptr_hi
     INC touch_anim_step
     LDA touch_anim_step
@@ -7064,31 +7064,31 @@ DeathAnimFrame_LF5E3:
 PlayerState11:
     LDA #$01
     JSR SwitchBank
-    JMP AreaSpawn23_LAF23
+    JMP PlayerState11_Body
 PlayerState12:
     LDA #$01
     JSR SwitchBank
-    JMP AreaSpawn23_LAFAF
+    JMP PlayerState12_Body
 PlayerState13:
     LDA #$01
     JSR SwitchBank
-    JMP AreaSpawn23_LAFD3
+    JMP PlayerState13_Body
 PlayerState14:
     LDA #$01
     JSR SwitchBank
-    JMP AreaSpawn23_LAFF8
+    JMP PlayerState14_Body
 PlayerState15:
     LDA #$01
     JSR SwitchBank
-    JMP AreaSpawn23_LB094
+    JMP PlayerState15_Body
 PlayerState17:
     LDA #$01
     JSR SwitchBank
-    JMP PlayerAnimFrames_LB15B
+    JMP PlayerAnimAdvance_LB15B
 PlayerState18:
     LDA #$01
     JSR SwitchBank
-    JMP PlayerAnimFrames_LB241
+    JMP PlayerAnimAdvance_LB241
 ApplyCollectedFlag:
     STA zp_C6
     STX saved_x
@@ -7350,7 +7350,7 @@ PlayerState19:
 PlayerState1A:
     LDA #$03
     JSR SwitchBank
-    JMP AreaMap9_LBD67
+    JMP PlayerState1A_Body
 PlayerState1B:
     LDA #$03
     JSR SwitchBank

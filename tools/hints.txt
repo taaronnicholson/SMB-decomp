@@ -879,3 +879,16 @@ ram 01B5 story_param_b
 ram 01B6 story_param_c
 ram 01BA story_text_rows            ; number of text rows queued by QueueTextRow (6 at the start)
 ram 01BB story_text_row             ; current row of the text being typed
+
+; naming pass 24: bodies of the player state handlers that live in banks 1, 3 and 6 (the fixed-bank PlayerStateNN stubs switch bank and jump here)
+name 6 B842 PlayerState01_Body
+name 6 A2BE PlayerState05_Body
+name 6 A32E PlayerState06_Body
+name 6 A3D6 PlayerState07_Body
+name 6 B953 PlayerGfxStep_B953     ; bank 6 routine reached after the walk/idle code sets player_frame and player_facing
+name 1 AF23 PlayerState11_Body
+name 1 AFAF PlayerState12_Body
+name 1 AFD3 PlayerState13_Body
+name 1 AFF8 PlayerState14_Body
+name 1 B094 PlayerState15_Body
+name 3 BD67 PlayerState1A_Body

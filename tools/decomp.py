@@ -500,17 +500,22 @@ def localize(banks):
         if not bad: break
         local -= bad
     ren = {c: '@' + c for c in local}
+    name2addr = {n: a for (_b, a), n in labels.items()}
+    paddr = 0
     # remaining global auto labels: name them after the nearest preceding real routine (<Routine>_L<addr>)
     for p in range(NB):
         parent = None
-        for l in banks[p]:
+        bl = banks[p]
+        for li, l in enumerate(bl):
             m = LABEL.match(l)
             if not m: continue
             nm = m.group(1)
+            nxt = next((x for x in bl[li + 1:li + 6] if x.strip() and not x.lstrip().startswith(';')), '')
+            is_code = re.match(r'^    [A-Z]{3}\b', nxt) is not None
             if AUTO.match(l):
-                if nm in cand and nm not in local and parent: ren[nm] = f'{parent}_L{nm.split("_")[1]}'
-            elif not nm.startswith('@') and not re.match(r'^(Tbl_|Gfx_|Ent\w+_Tbl_|Fill_|SmallOffsets_|EffectList_)', nm) and not re.match(r'^[A-Za-z]+_[0-9A-F]{4}$', nm):
-                parent = nm
+                if nm in cand and nm not in local and is_code and parent and int(nm.split("_")[1], 16) - paddr < 0x300: ren[nm] = f'{parent}_L{nm.split("_")[1]}'
+            elif is_code and not nm.startswith('@') and not re.match(r'^(Tbl_|Gfx_|Ent\w+_Tbl_|Fill_|SmallOffsets_|EffectList_)', nm) and not re.match(r'^[A-Za-z]+_[0-9A-F]{4}$', nm):
+                parent = nm; paddr = name2addr.get(nm, 0)
     for p in range(NB):
         out = []
         for l in banks[p]:

@@ -2229,7 +2229,7 @@ Ent09_Update_L911B:
     ADC SmallOffsets_B5_9155,y
     STA ent_x_lo,x
     LDA ent_x_hi,x
-    ADC Ent09_Update_L9156,y
+    ADC B5_9156,y
     STA ent_x_hi,x
 @B5_914B:
     RTS
@@ -2239,7 +2239,7 @@ Tbl_B5_914C:
 ; SmallOffsets_B5_9155: 46 bytes, read by B5_911B
 SmallOffsets_B5_9155:
     .byte $00
-Ent09_Update_L9156:
+B5_9156:
     .byte $FF,$FF,$FF,$01,$00,$00,$00,$01,$00,$FF,$FF,$FF,$FF,$01,$00,$00
     .byte $00,$00,$00,$01,$00,$FF,$FF,$FF,$FF,$01,$00,$00,$00,$01,$00,$FF
     .byte $FF,$FF,$FF,$01,$00,$00,$00,$00,$00,$01,$00,$FF,$FF
@@ -3057,7 +3057,7 @@ Ent1B_Update:
     TAY
     LDA Ent1B_Tbl_9882,y
     STA ent_param,x
-    LDA Ent1B_Update_L9883,y
+    LDA B5_9883,y
     STA tmp_a
 @B5_985B:
     JSR Ent_MoveYWithGround
@@ -3082,7 +3082,7 @@ Ent1B_Update:
 ; Ent1B_Tbl_9882: 40 bytes, read by Ent1B_Update
 Ent1B_Tbl_9882:
     .byte $02
-Ent1B_Update_L9883:
+B5_9883:
     .byte $00,$02,$00,$02,$00,$02,$00,$02,$00,$02,$01,$02,$00,$02,$01,$02
     .byte $01,$03,$00,$03,$01,$03,$01,$03,$02,$03,$01,$03,$02,$03,$02,$03
     .byte $02,$03,$02,$03,$02,$03,$02
@@ -3981,7 +3981,7 @@ Ent39_Update:
     STA ent_param,x
     LDA ent_y_lo,x
     SEC
-    SBC Ent3A_Update_LA1FF,y
+    SBC B5_A1FF,y
     STA ent_y_lo,x
     LDA ent_y_hi,x
     SBC #$00
@@ -4095,7 +4095,7 @@ EffectList_B5_A1E9:
 ; Ent39_Tbl_A1FE: 51 bytes, read by Ent39_Update
 Ent39_Tbl_A1FE:
     .byte $01
-Ent3A_Update_LA1FF:
+B5_A1FF:
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$02,$00,$02,$00,$02,$00,$02
     .byte $00,$01,$00,$01,$00,$01,$01,$01,$00,$02,$00,$02,$01,$02,$00,$02
     .byte $01,$01,$01,$01,$01,$01,$02,$01,$02,$01,$03,$01,$02,$01,$02,$00
@@ -4460,7 +4460,7 @@ EffectList_B5_A4D7:
 ; Tbl_B5_A528: 93 bytes, read by B5_A5B7
 Tbl_B5_A528:
     .byte $03
-Ent46_Update_LA529:
+B5_A529:
     .byte $00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$03,$00,$02
     .byte $00,$03,$00,$03,$00,$02,$00,$03,$00,$02,$00,$03,$00,$02,$00,$02
     .byte $00,$02,$00,$01,$00,$02,$00,$01,$00,$01,$00,$00,$00,$01,$00,$00
@@ -4498,7 +4498,7 @@ Ent47_Update_LA5B7:
     SBC tmp_a
     STA ent_y_lo,x
     LDA ent_y_hi,x
-    SBC Ent46_Update_LA529,y
+    SBC B5_A529,y
     STA ent_y_hi,x
     INC ent_angle,x
     RTS
@@ -4711,7 +4711,7 @@ EntAimAtTarget:
     STA ent_line_len,x
     STA ent_line_acc,x
     RTS
-EntAimAtTarget_LA773:
+B5_A773:
     .word EntStateJump_LA79B
     .word EntStateJump_LA7D5
     .word EntStateJump_LA80F
@@ -4723,9 +4723,9 @@ EntAimAtTarget_LA773:
     .word EntStateJump_LA795
 EntStateJump:
     LDY ent_param2,x
-    LDA EntAimAtTarget_LA773,y
+    LDA B5_A773,y
     STA ptr_lo
-    LDA EntAimAtTarget_LA773+1,y
+    LDA B5_A773+1,y
     STA ptr_hi
     JMP (ptr_lo)
 EntStateJump_LA795:
@@ -6441,9 +6441,9 @@ Tbl_B5_B591:
     .byte $00,$01,$00,$01,$01,$00,$01,$01,$01,$02,$02,$80,$FE,$FF,$FF,$00
     .byte $FF,$00,$FF,$00,$00,$00,$01,$00,$01,$00,$01,$01,$02,$80,$FF,$FF
     .byte $00,$FF,$00,$00,$00,$01,$00,$01,$01,$80,$81
-Ent86_Update_LB5CC:
+B5_B5CC:
     .byte $FF
-Ent86_Update_LB5CD:
+B5_B5CD:
     .byte $03
 ; Ent87_88_Positions: position words used by entity types $87 and $88
 Ent87_88_Positions:
@@ -6468,9 +6468,9 @@ Ent87_Update:
     DEC ent_param2,x
     BNE Ent87_Update_LB616
     LDY ent_angle,x
-    LDA Ent86_Update_LB5CC,y
+    LDA B5_B5CC,y
     STA tmp_a
-    LDA Ent86_Update_LB5CD,y
+    LDA B5_B5CD,y
     STA tmp_b
     LDA Ent87_88_Positions,y
     STA tmp_c
@@ -6513,11 +6513,11 @@ Ent88_Update:
     TAY
     LDA #$8F
     STA ent_type_A
-    LDA Ent86_Update_LB5CC,y
+    LDA B5_B5CC,y
     SEC
     SBC #$06
     STA ent_y_lo_A
-    LDA Ent86_Update_LB5CD,y
+    LDA B5_B5CD,y
     SBC #$00
     STA ent_y_hi_A
     LDA Ent87_88_Positions,y

@@ -731,7 +731,7 @@ Gfx_B4_A52A:
     .word QueueMapTileDraw_LF392
     .word StartStoryScene_LB56B
     .word TryFireShot_LDDFA
-    .word StartStoryScene_LBA1D
+    .word B4_BA1D
     .word GameState17_LBCE4
     .word PlayerMoveByButtons_LEBC9
     .byte $5B,$00,$D7,$3E,$01,$B5,$FC,$03,$EC,$FE,$E0,$D9,$8F,$F1,$8E,$01
@@ -1847,11 +1847,11 @@ StateDispatch_0735:
     .word StartStoryScene_LB728
     .word StartStoryScene_LB74B
     .word StartStoryScene_LB71D
-    .word StartStoryScene_LBA00
+    .word B4_BA00
     .word StartStoryScene_LB767
 StoryBranchByStage:
     LDY stage_index
-    LDA StartStoryScene_LB7B4,y
+    LDA B4_B7B4,y
     BNE StartStoryScene
 StoryBranchByStage_LB540:
     LDA #$09
@@ -1890,13 +1890,13 @@ StartStoryScene_LB56B:
     STA story_script_ptr_lo
     LDA $B7B3,y
     STA story_script_ptr_hi
-    LDA StartStoryScene_LB7B4,y
+    LDA B4_B7B4,y
     STA credits_ptr_lo
-    LDA StartStoryScene_LB7B5,y
+    LDA B4_B7B5,y
     STA credits_ptr_hi
-    LDA StartStoryScene_LB7B6,y
+    LDA B4_B7B6,y
     STA story_param_a
-    LDA StartStoryScene_LB7B7,y
+    LDA B4_B7B7,y
     STA story_param_b
     LDA Tbl_B4_B7B8,y
     STA story_param_c
@@ -2158,13 +2158,13 @@ StartStoryScene_LB767:
     STA stage_index
 StartStoryScene_LB7B1:
     JMP StageSetup_LC66C
-StartStoryScene_LB7B4:
+B4_B7B4:
     .byte $00
-StartStoryScene_LB7B5:
+B4_B7B5:
     .byte $01
-StartStoryScene_LB7B6:
+B4_B7B6:
     .byte $00
-StartStoryScene_LB7B7:
+B4_B7B7:
     .byte $02
 ; Tbl_B4_B7B8: 58 bytes, read by B4_B56B
 Tbl_B4_B7B8:
@@ -2207,28 +2207,28 @@ Tbl_B4_B7B8:
     .byte $D9,$B9,$78,$F6,$B9,$00,$06,$3A,$FE,$14,$5C,$FF,$00,$96,$FF,$00
     .byte $B8,$FE,$14,$48,$FE,$32,$A8,$FE,$32,$03,$38,$FE,$14,$B8,$FE,$14
     .byte $78,$FF,$00,$03,$42,$FE,$00,$AE,$FE,$28,$78,$FE,$50
-StartStoryScene_LBA00:
+B4_BA00:
     LDA ram_0732
-    BNE StartStoryScene_LBA65
+    BNE B4_BA65
     LDY #$0F
 @B4_BA07:
     LDA effect_type,y
     CMP #$47
-    BEQ StartStoryScene_LBA65
+    BEQ B4_BA65
     DEY
     BPL @B4_BA07
     LDA ram_01B8
     BNE @B4_BA1B
     STA tmp_c
-    JMP StartStoryScene_LBA26
+    JMP B4_BA26
 @B4_BA1B:
     STA tmp_b
-StartStoryScene_LBA1D:
+B4_BA1D:
     LDA #$0A
     STA tmp_a
     JSR DivideByTmpA
     INC tmp_c
-StartStoryScene_LBA26:
+B4_BA26:
     LDA #$0A
     SEC
     SBC tmp_c
@@ -2261,12 +2261,12 @@ StartStoryScene_LBA26:
 @B4_BA59:
     DEC tmp_a
     BNE @B4_BA45
-StartStoryScene_LBA5D:
+B4_BA5D:
     LDA #$00
     STA ppu_buffer,x
     STX ppu_buffer_idx
     RTS
-StartStoryScene_LBA65:
+B4_BA65:
     LDA #$FF
     STA ram_0732
     LDX ppu_buffer_idx
@@ -2286,22 +2286,22 @@ StartStoryScene_LBA65:
     INX
     DEY
     BPL @B4_BA82
-    JMP StartStoryScene_LBA5D
-StartStoryScene_LBA8C:
-    .word StartStoryScene_LBAA6
-    .word StartStoryScene_LBABC
+    JMP B4_BA5D
+B4_BA8C:
+    .word B4_BAA6
+    .word B4_BABC
     .word QueueTextRow_LBB60
-    .word StartStoryScene_LBABB
+    .word B4_BABB
 StepDispatch_01BE:
     LDA ram_01BE
     ASL a
     TAY
-    LDA StartStoryScene_LBA8C,y
+    LDA B4_BA8C,y
     STA ptr_lo
-    LDA StartStoryScene_LBA8C+1,y
+    LDA B4_BA8C+1,y
     STA ptr_hi
     JMP (ptr_lo)
-StartStoryScene_LBAA6:
+B4_BAA6:
     LDA #$00
     STA story_text_row
     STA ram_01BF
@@ -2310,9 +2310,9 @@ StartStoryScene_LBAA6:
     STA ram_01BE
     LDA #$03
     STA ram_01BC
-StartStoryScene_LBABB:
+B4_BABB:
     RTS
-StartStoryScene_LBABC:
+B4_BABC:
     LDA story_text_row
     CMP story_text_rows
     BNE @B4_BACA
