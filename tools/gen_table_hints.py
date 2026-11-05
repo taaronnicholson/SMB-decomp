@@ -17,6 +17,12 @@ lines = {b: open(f).read().split('\n') for b, f in files.items()}
 OPS = r'(?:LDA|LDX|LDY|ADC|SBC|CMP|AND|ORA|EOR|BIT|STA)'
 # reference map: (bank, address) -> list of (reading routine, instruction text)
 refs = collections.defaultdict(list)
+curnames = {}                     # names the tables currently carry in src (from the previous run) -> (bank, address)
+_hp = os.path.join(HERE, 'hints_tables.txt')
+if os.path.exists(_hp):
+    for _ln in open(_hp):
+        _t = _ln.split()
+        if len(_t) > 4 and _t[0] == 'blob': curnames[_t[4]] = (7 if _t[1] == 'f' else int(_t[1]), int(_t[2], 16))
 tok = re.compile(r'(?<![A-Za-z0-9])(?:Tbl_)?(?:B(\d)|F)_([0-9A-F]{4})(?:[+-]\d)?(?![A-Za-z0-9])')
 def is_code_label(ls, i):
     j = i + 1
@@ -32,6 +38,8 @@ for rb, ls in lines.items():
         for t in tok.finditer(l):
             bk = int(t.group(1)) if t.group(1) else 7
             refs[(bk, int(t.group(2), 16))].append((cur or '?', l.strip()))
+        for w in re.findall(r'[A-Za-z_]\w*', l.strip().split(None, 1)[1] if ' ' in l.strip() else ''):
+            if w in curnames and not tok.fullmatch(w): refs[curnames[w]].append((cur or '?', l.strip()))
 new = []
 for b, s, e in gaps:
     if b == 7 and False: continue

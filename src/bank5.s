@@ -2063,7 +2063,7 @@ Ent06_Update:
     LDA ent_radius,x
     ASL a
     TAY
-    LDA SmallOffsets_B5_901A,y
+    LDA Ent06_Tbl_901A,y
     STA tmp_a
     CMP #$80
     BNE @B5_9004
@@ -2080,8 +2080,8 @@ Ent06_Update:
     STA ent_y_hi,x
     INC ent_radius,x
     RTS
-; SmallOffsets_B5_901A: signed 16-bit X offsets stepped by the entity handler
-SmallOffsets_B5_901A:
+; Ent06_Tbl_901A: signed 16-bit X offsets stepped by the entity handler
+Ent06_Tbl_901A:
     .word $FFFE
     .word $FFFE
     .word $FFFE
@@ -2664,14 +2664,14 @@ Ent0E_Update:
     TAY
     LDA ent_y_lo,x
     CLC
-    ADC SmallOffsets_B5_950E,y
+    ADC Ent0E_Tbl_950E,y
     STA ent_y_lo,x
     LDA ent_y_hi,x
     ADC $950F,y
     STA ent_y_hi,x
     RTS
-; SmallOffsets_B5_950E: signed 16-bit offsets stepped by the entity handler
-SmallOffsets_B5_950E:
+; Ent0E_Tbl_950E: signed 16-bit offsets stepped by the entity handler
+Ent0E_Tbl_950E:
     .word $FFFE
     .word $FFFE
     .word $FFFF
@@ -2980,7 +2980,7 @@ Ent1A_Update:
     INC ent_param2,x
     ASL a
     TAY
-    LDA SmallOffsets_B5_97E7,y
+    LDA Ent1A_Tbl_97E7,y
     CMP #$80
     BNE @B5_97D2
     LDA #$1E
@@ -2999,8 +2999,8 @@ Ent1A_Update:
     ADC $97E8,y
     STA ent_y_hi,x
     RTS
-; SmallOffsets_B5_97E7: signed 16-bit offsets stepped by the entity handler
-SmallOffsets_B5_97E7:
+; Ent1A_Tbl_97E7: signed 16-bit offsets stepped by the entity handler
+Ent1A_Tbl_97E7:
     .word $FFFD
     .word $FFFD
     .word $FFFE
@@ -5795,15 +5795,15 @@ Ent62_Update:
     TAY
     LDA ent_y_lo,x
     CLC
-    ADC SmallOffsets_B5_B04A,y
+    ADC Ent62_Tbl_B04A,y
     STA ent_y_lo,x
     LDA ent_y_hi,x
     ADC $B04B,y
     STA ent_y_hi,x
 @B5_B049:
     RTS
-; SmallOffsets_B5_B04A: signed 16-bit offsets stepped by the entity handler
-SmallOffsets_B5_B04A:
+; Ent62_Tbl_B04A: signed 16-bit offsets stepped by the entity handler
+Ent62_Tbl_B04A:
     .word $0000
     .word $0001
     .word $0000

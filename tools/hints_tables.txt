@@ -107,7 +107,7 @@ blob 5 8EAD 23 Ent03_Tbl_8EAD 23 bytes, read by Ent03_Update
 blob 5 8EEF 40 Ent04_Tbl_8EEF 40 bytes, read by Ent04_Update
 blob 5 8F63 72 WobbleDxTable signed 16-bit X deltas, 36 steps of a wobble; B5_8F3D steps ent_radius through the first 18 (wraps at $12) and adds the word to ent_x
 struct 5 8F63 36 w
-blob 5 901A 45 SmallOffsets_B5_901A signed 16-bit X offsets stepped by the entity handler; a final byte ends the table
+blob 5 901A 45 Ent06_Tbl_901A signed 16-bit X offsets stepped by the entity handler; a final byte ends the table
 struct 5 901A 22 w
 blob 5 9067 12 Ent07_Tbl_9067 12 bytes, read by Ent07_Update
 blob 5 9110 11 EffectList_B5_9110 effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
@@ -119,14 +119,14 @@ blob 5 923A 185 FloatPathDx signed 16-bit X offsets per tick for a pickup floati
 struct 5 923A 92 w
 blob 5 93C6 139 ItemHopArc signed 16-bit Y offsets per tick for the weapon item hopping out ($0B/$0C); word $7E = play a sound, $80 = switch $0B/$0C, $7F = settle as $0D (read by Ent0C_Update)
 struct 5 93C6 69 w
-blob 5 950E 32 SmallOffsets_B5_950E signed 16-bit offsets stepped by the entity handler
+blob 5 950E 32 Ent0E_Tbl_950E signed 16-bit offsets stepped by the entity handler
 struct 5 950E 16 w
 blob 5 9694 6 Ent16_SubstateTable code pointers of Ent16's sub-states
 struct 5 9694 3 w
 blob 5 9720 45 Ent16_Tbl_9720 45 bytes, read by Ent16_Update
 blob 5 974D 32 Ent16_Tbl_974D 32 bytes, read by Ent16_Update
 blob 5 979F 16 Ent1F_Tbl_979F 16 bytes, read by Ent_BeginFall_L978C, Ent1F_Update
-blob 5 97E7 61 SmallOffsets_B5_97E7 signed 16-bit offsets stepped by the entity handler; a final byte ends the table
+blob 5 97E7 61 Ent1A_Tbl_97E7 signed 16-bit offsets stepped by the entity handler; a final byte ends the table
 struct 5 97E7 30 w
 blob 5 9882 40 Ent1B_Tbl_9882 40 bytes, read by Ent1B_Update
 blob 5 98AA 23 SmallOffsets_B5_98AA 23 bytes, read by Ent1B_Update, Ent1C_Update
@@ -175,7 +175,7 @@ blob 5 AFEF 11 EffectList_B5_AFEF effect list for SpawnEffects: records of (type
 struct 5 AFEF 1 bwwbbbbb
 blob 5 AFFA 11 EffectList_B5_AFFA effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 struct 5 AFFA 1 bwwbbbbb
-blob 5 B04A 32 SmallOffsets_B5_B04A signed 16-bit offsets stepped by the entity handler
+blob 5 B04A 32 Ent62_Tbl_B04A signed 16-bit offsets stepped by the entity handler
 struct 5 B04A 16 w
 blob 5 B0DB 11 EffectList_B5_B0DB effect list for SpawnEffects
 struct 5 B0DB 1 bwwbbbbb
