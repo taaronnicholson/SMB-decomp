@@ -40,6 +40,9 @@ tables:
 	python3 -I tools/gen_table_hints.py
 	python3 -I tools/decomp.py
 
+check: regen tables verify
+	@git diff --exit-code --stat -- src tools docs README.md >/dev/null && echo "OK: regeneration reproduces the committed sources" || (echo "regeneration changed tracked files"; git diff --stat; exit 1)
+
 clean:
 	rm -rf build
-.PHONY: all verify regen tables clean
+.PHONY: all verify regen tables check clean

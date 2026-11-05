@@ -304,4 +304,6 @@ generators `gen_*_hints.py` (sound, ppu, text, gfx, area, palette, spawn, anim, 
 renderers `extract_gfx.py`, `extract_maps.py`, `render_maps.py`, `render_sprites.py`, and analysis helpers `chrtrace.py`,
 `decomptrace.py`, `gfx_scan.py`, `check_decomp.py`. Rendered images and extracted data go to `build/` (not committed).
 
+`make check` regenerates every generated file (`make regen`, then `make tables`), rebuilds, compares the ROM with `rom/game.nes` and fails if the regeneration changed any tracked file under `src/`, `tools/`, `docs/` or the README; it passes from a fresh clone (with the ROM placed in `rom/game.nes`). Hand-written notes live in `docs/player_notes.md`, `docs/game_states.md`, `docs/entity_behaviour.md` and the README; `docs/player_states.md` and `docs/entity_handlers.md` are generated and overwritten.
+
 `tools/watch_ram.py` (run `LABELS=/tmp/labels.json python3 -I tools/decomp.py` first) plays stage 1 with random input in the built-in emulator and lists, for every still-unnamed RAM byte, which routines write or read it and the values written. It confirmed e.g. `fall_index`/`fall_dy` (PlayerState02) and the touch-tile state (`touch_ptr`, `prev_touch_*`), and showed that `scratch_74`-`scratch_78` are shared by unrelated routines.
