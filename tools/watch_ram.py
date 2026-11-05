@@ -50,6 +50,7 @@ for f in range(1250):
 recording[0] = True
 r = nes.ram
 if os.environ.get('STAGE'): r[0x93] = int(os.environ['STAGE'], 16)
+if os.environ.get('FORCEPS'): r[0x63] = int(os.environ['FORCEPS'], 16)      # force a player_state
 if os.environ.get('FORCE'): r[0x72C] = int(os.environ['FORCE'], 16)     # force a game_state at the start
 last_gs = [r[0x72C]]
 import random
@@ -62,7 +63,7 @@ for f in range(N):
         hold = random.randint(5, 40)
     hold -= 1
     nes.joy = pat
-    r[0x7A] = 99     # invulnerable
+    if not os.environ.get('VULN'): r[0x7A] = 99     # invulnerable
     if os.environ.get('NOINPUT'): nes.joy = 0
     nes.frame()
     if r[0x72C] != last_gs[0]: print(f'frame {f}: game_state {last_gs[0]:02X} -> {r[0x72C]:02X}'); last_gs[0] = r[0x72C]
