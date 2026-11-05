@@ -1318,11 +1318,11 @@ GameState0B:
 @B4_B0BB:
     STA state_delay
     TAY
-    LDA Tbl_B4_B0C4,y
+    LDA GameState0B_Tbl_B0C4,y
     STA ppu_job
     RTS
-; Tbl_B4_B0C4: 20 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B0C4:
+; GameState0B_Tbl_B0C4: 20 bytes, read by GameState0B
+GameState0B_Tbl_B0C4:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
 GameState0B_LB0D8:
@@ -1912,7 +1912,7 @@ StartStoryScene_LB56B:
     STA story_param_a
     LDA StoryRecordField_B7B7,y
     STA story_param_b
-    LDA Tbl_B4_B7B8,y
+    LDA StartStoryScene_LB56B_Tbl_B7B8,y
     STA story_param_c
     LDA #$01
     STA story_step
@@ -2181,8 +2181,8 @@ StoryRecordField_B7B6:
     .byte $00
 StoryRecordField_B7B7:
     .byte $02
-; Tbl_B4_B7B8: 58 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_B7B8:
+; StartStoryScene_LB56B_Tbl_B7B8: 58 bytes, read by StartStoryScene_LB56B
+StartStoryScene_LB56B_Tbl_B7B8:
     .byte $03,$03,$C4,$B9,$63,$B9,$3D,$3E,$46,$03,$C8,$B9,$C2,$B8,$3D,$99
     .byte $46,$02,$CF,$B9,$D1,$B7,$3D,$87,$8A
     .byte "^ALFRED:       _"

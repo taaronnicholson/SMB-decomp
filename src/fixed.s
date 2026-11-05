@@ -244,11 +244,11 @@ UpdateTouchKind_Tbl_C326:
     .byte $CD
 F_C327:
     .byte $FF,$CB,$C2,$D6,$C2,$F5,$C2,$06,$C3,$12
-; Tbl_F_C331: 5 bytes, no direct code reference (continuation or unreferenced)
-Tbl_F_C331:
+; UpdateTouchKind_Tbl_C331: 5 bytes, read by UpdateTouchKind
+UpdateTouchKind_Tbl_C331:
     .byte $C3,$D2,$D2,$00,$CD
-; Tbl_F_C336: 6 bytes, no direct code reference (continuation or unreferenced)
-Tbl_F_C336:
+; UpdateTouchKind_Tbl_C336: 6 bytes, read by UpdateTouchKind
+UpdateTouchKind_Tbl_C336:
     .byte $CD,$D3,$D3,$C0,$D3,$D3
 ; TileHeightProfiles: 32 profiles x 16 columns: ground surface height per pixel column of a tile ($FF = no surface)
 TileHeightProfiles:
@@ -1948,8 +1948,8 @@ LoadArea:
     JSR SwitchBankKeepX
     LDY #$63
 @F_D16B:
-    LDA Tbl_B1_8999,y
-    STA ram_041C,y
+    LDA LevelStateInit,y
+    STA level_state_block,y
     DEY
     BPL @F_D16B
     LDA #$00
@@ -6730,7 +6730,7 @@ UpdateTouchKind:
     STA tmp_a
     LDA prev_touch_ptr_hi
     STA tmp_b
-    LDA Tbl_F_C331,y
+    LDA UpdateTouchKind_Tbl_C331,y
     JSR QueueMapTileDraw
 @F_F3DE:
     LDA touch_kind
@@ -6779,7 +6779,7 @@ UpdateTouchKind:
     LDA ppu_buffer_idx
     CMP #$20
     BCS @F_F43E
-    LDA Tbl_F_C336,y
+    LDA UpdateTouchKind_Tbl_C336,y
     JSR QueueMapTileDraw
 @F_F43E:
     LDA prev_touch_kind
@@ -6876,7 +6876,7 @@ PlayerState0F:
     LDA death_timer
     LSR a
     TAY
-    LDA Tbl_F_F510,y
+    LDA PlayerState0F_Tbl_F510,y
     BNE PlayerState0F_LF507
     LDA #$10
     STA player_state
@@ -6889,8 +6889,8 @@ PlayerState0F_LF507:
     STA zp_67
     STA zp_C1
     RTS
-; Tbl_F_F510: 12 bytes, no direct code reference (continuation or unreferenced)
-Tbl_F_F510:
+; PlayerState0F_Tbl_F510: 12 bytes, read by PlayerState0F
+PlayerState0F_Tbl_F510:
     .byte $46,$46,$47,$47,$48,$48,$48,$45,$45,$45,$45,$00
 PlayerState10:
     LDA death_timer
@@ -7123,13 +7123,13 @@ SetCollectedFlag:
     STA collected_flags,y
     LDX saved_x
     RTS
-; Tbl_F_F6C1: 16 bytes, no direct code reference (continuation or unreferenced)
-Tbl_F_F6C1:
+; GetCollectibleBit_Tbl_F6C1: 16 bytes, read by GetCollectibleBit
+GetCollectibleBit_Tbl_F6C1:
     .byte $BC,$D1,$DB,$D6,$D9,$C8,$C9,$CA,$CB,$CC,$CD,$BD,$BE,$BF,$C2,$C3
 GetCollectibleBit:
     LDX #$0F
 @F_F6D3:
-    CMP Tbl_F_F6C1,x
+    CMP GetCollectibleBit_Tbl_F6C1,x
     BEQ MapPtrToTileCoords
     DEX
     BPL @F_F6D3
@@ -7543,12 +7543,12 @@ AwardPickup:
     LDY #$FA
     JSR SpawnEffects
     LDY stage_index
-    LDA Tbl_F_F9D2,y
+    LDA AwardPickup_Tbl_F9D2,y
     LDY tmp_ptr_lo
     STA effect_param1,y
     RTS
-; Tbl_F_F9D2: 5 bytes, no direct code reference (continuation or unreferenced)
-Tbl_F_F9D2:
+; AwardPickup_Tbl_F9D2: 5 bytes, read by AwardPickup
+AwardPickup_Tbl_F9D2:
     .byte $29,$3F,$3E,$40,$29
 AwardPickup_LF9D7:
     LDA #$01

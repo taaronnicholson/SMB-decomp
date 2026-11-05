@@ -1058,3 +1058,4 @@ ram 0394 scroll_x_save
 ram 01A4 shake_saved_camera_mode    ; camera_mode before the dive-landing shake; restored when the shake table ends
 ram 01A5 shake_step                 ; index into DiveShakeOffsets while camera_mode is 5 (dive-landing shake)
 ram 0398 death_anim_pos             ; death animation sprite positions (base of the array)
+ram 041C level_state_block          ; $041C-$047F: 100 bytes initialised from LevelStateInit at area load; ApplySwitch1-3 write bytes inside it ($0469/$046A/$0472-$0474)

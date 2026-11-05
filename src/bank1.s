@@ -3,8 +3,8 @@
 
 .segment "BANK1"
 
-; Tbl_B1_8000: 44 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_8000:
+; DrawEntity_Tbl_8000: 44 bytes, read by DrawEntity
+DrawEntity_Tbl_8000:
     .byte $00,$FC,$F8,$F4,$F0,$EC,$E8,$E4,$E0,$DC,$D8,$D4,$D0,$CC,$C8,$C4
     .byte $C0,$BC,$B8,$B4,$B0,$AC,$A8,$A4,$A0,$9C,$98,$94,$90,$8C,$88,$84
     .byte $80,$7C,$78,$74,$70,$6C,$68,$64,$60,$5C,$58,$54
@@ -54,7 +54,7 @@ UpdateShots:
 @B1_807C:
     STA oam_buf_4C
     LDX shot_frame
-    LDA Tbl_B1_8105,x
+    LDA UpdateShots_Tbl_8105,x
     STA oam_buf_4D
     LDA shot_attr
     ORA SmallOffsets_B1_80EB,x
@@ -102,7 +102,7 @@ UpdateShots:
 @B1_80D7:
     STA oam_buf_50
     LDX shot_frame_1
-    LDA Tbl_B1_8105,x
+    LDA UpdateShots_Tbl_8105,x
     STA oam_buf_51
     LDA shot_attr_1
     ORA SmallOffsets_B1_80EB,x
@@ -112,8 +112,8 @@ UpdateShots:
 SmallOffsets_B1_80EB:
     .byte $00,$00,$01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03,$00,$00,$03
     .byte $03,$00,$03,$03,$00,$00,$00,$00,$00,$02
-; Tbl_B1_8105: 25 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_8105:
+; UpdateShots_Tbl_8105: 25 bytes, read by UpdateShots
+UpdateShots_Tbl_8105:
     .byte $02,$00,$04,$06,$08,$0A,$16,$16,$16,$0C,$0E,$10,$12,$14,$16,$18
     .byte $1A,$1C,$1E,$20,$00,$00,$00,$22,$24
 B1_811E:
@@ -1305,8 +1305,8 @@ ShotOffscreenCheck:
     CMP #$10
     BCC ShotPosByAngle_L8981
     JMP PlayerTileInteract_LF0EA
-; Tbl_B1_8999: 100 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_8999:
+; LevelStateInit: 100 bytes copied by LoadArea to level_state_block ($041C-$047F)
+LevelStateInit:
     .res 76, $00
     .byte $0A,$00,$00,$00,$00,$00,$00,$00,$00,$0E,$12,$12,$12,$05,$0E,$0E
     .byte $0E,$0E,$00,$05,$05,$05,$05,$05
@@ -1424,12 +1424,12 @@ DrawEntity:
     STA scratch_75
     LDA #$00
     STA scratch_B0
-    LDA Tbl_B1_8000,x
+    LDA DrawEntity_Tbl_8000,x
     TAX
     JMP @B1_8B00
 @B1_8AF5:
     STA scratch_B0
-    LDA Tbl_B1_8000,x
+    LDA DrawEntity_Tbl_8000,x
     TAX
     LDA (ptr_lo),y
     INY
@@ -1523,12 +1523,12 @@ DrawEntity:
     STA scratch_75
     LDA #$00
     STA scratch_B0
-    LDA Tbl_B1_8000,x
+    LDA DrawEntity_Tbl_8000,x
     TAX
     JMP @B1_8BA6
 @B1_8B9B:
     STA scratch_B0
-    LDA Tbl_B1_8000,x
+    LDA DrawEntity_Tbl_8000,x
     TAX
     LDA (ptr_lo),y
     INY
@@ -1634,12 +1634,12 @@ DrawEntity:
     STA scratch_75
     LDA #$00
     STA scratch_B0
-    LDA Tbl_B1_8000,x
+    LDA DrawEntity_Tbl_8000,x
     TAX
     JMP @B1_8C61
 @B1_8C56:
     STA scratch_B0
-    LDA Tbl_B1_8000,x
+    LDA DrawEntity_Tbl_8000,x
     TAX
     LDA (ptr_lo),y
     INY
@@ -1741,12 +1741,12 @@ DrawEntity:
     STA scratch_75
     LDA #$00
     STA scratch_B0
-    LDA Tbl_B1_8000,x
+    LDA DrawEntity_Tbl_8000,x
     TAX
     JMP @B1_8D16
 @B1_8D0B:
     STA scratch_B0
-    LDA Tbl_B1_8000,x
+    LDA DrawEntity_Tbl_8000,x
     TAX
     LDA (ptr_lo),y
     INY

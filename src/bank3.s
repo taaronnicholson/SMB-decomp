@@ -1141,7 +1141,7 @@ PlayerState1A_Body:
     LDA anim_index
     LSR a
     TAY
-    LDA Tbl_B3_BE12,y
+    LDA PlayerState1A_Body_Tbl_BE12,y
     BEQ @B3_BD75
     JMP PlayerState0F_LF507
 @B3_BD75:
@@ -1157,7 +1157,7 @@ PlayerFrameCycle4:
     LSR a
     AND #$03
     TAY
-    LDA Tbl_B3_BE0E,y
+    LDA PlayerFrameCycle4_Tbl_BE0E,y
     STA player_frame
     RTS
 PlayerFrameCycle4_LBD8D:
@@ -1227,11 +1227,11 @@ PlayerFrameCycle4_LBD8D:
     DEC fade_dir
 @B3_BE0D:
     RTS
-; Tbl_B3_BE0E: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B3_BE0E:
+; PlayerFrameCycle4_Tbl_BE0E: 4 bytes, read by PlayerFrameCycle4
+PlayerFrameCycle4_Tbl_BE0E:
     .byte $27,$4B,$4E,$4F
-; Tbl_B3_BE12: 24 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B3_BE12:
+; PlayerState1A_Body_Tbl_BE12: 24 bytes, read by PlayerState1A_Body
+PlayerState1A_Body_Tbl_BE12:
     .byte $08,$08,$4A,$4A,$08,$08,$08,$08,$4A,$4A,$4A,$08,$08,$08,$4A,$4A
     .byte $08,$08,$4A,$4A,$08,$4A,$4A,$00
 ; SmallOffsets_B3_BE2A: signed 16-bit offsets of a decelerating arc (read by B3_BD8D)
@@ -1243,8 +1243,8 @@ SmallOffsets_B3_BE2A:
     .word $FFFE
     .word $FFFE
     .word $FFFF
-; Tbl_B3_BE38: 89 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B3_BE38:
+; OpenBlockReward_Tbl_BE38: 89 bytes, read by OpenBlockReward
+OpenBlockReward_Tbl_BE38:
     .byte $FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$01,$00
     .byte $00,$00,$01,$00,$01,$00,$02,$00,$01,$00,$7F,$00,$FD,$FF,$FD,$FF
     .byte $FE,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$00,$00,$01,$00
@@ -1285,7 +1285,7 @@ OpenBlockReward:
     LDA #$28
     JSR PlaySfxSq2
     LDY tmp_a
-    LDA Tbl_B3_BE38,y
+    LDA OpenBlockReward_Tbl_BE38,y
     BEQ Bank3_SpecialTileCheck_LBE9C
     PHA
     LDA ptr_lo
