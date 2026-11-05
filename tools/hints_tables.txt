@@ -59,7 +59,7 @@ blob 3 BE12 24 PlayerState1A_Body_Tbl_BE12 24 bytes, read by PlayerState1A_Body
 blob 3 BE2A 14 SmallOffsets_B3_BE2A signed 16-bit offsets of a decelerating arc (read by B3_BD8D)
 struct 3 BE2A 7 w
 blob 3 BE38 89 OpenBlockReward_Tbl_BE38 89 bytes, read by OpenBlockReward
-blob 3 BF00 5 Tbl_B3_BF00 5 bytes, no direct code reference (continuation or unreferenced)
+blob 3 BF00 5 GameState0E_Thresholds 5 byte thresholds ($00,$3C,$4A,$58,$66) compared with the player Y/16 by GameState0E_Body
 blob 3 BF63 157 Bank3_TailData unreferenced leftover fill at the end of bank 3
 blob 4 8000 128 AreaMap23_PhantomRow the second phantom row of area 23's map (its base $7F80 + 128): 128 bytes of $D7 (ceiling); the first phantom row lies before the bank
 blob 4 8880 32 Fill_B4_8880 32 bytes, no direct code reference (continuation or unreferenced)

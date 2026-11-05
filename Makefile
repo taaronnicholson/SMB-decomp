@@ -35,6 +35,7 @@ regen:
 	python3 -I tools/decomp.py
 	python3 -I tools/summarize_handlers.py
 	python3 -I tools/summarize_player.py
+	python3 -I tools/list_open_items.py
 
 tables:
 	python3 -I tools/gen_table_hints.py

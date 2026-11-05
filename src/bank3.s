@@ -1312,8 +1312,8 @@ OpenBlockReward:
     PLA
     STA pending_tile_kind
     RTS
-; Tbl_B3_BF00: 5 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B3_BF00:
+; GameState0E_Thresholds: 5 byte thresholds ($00,$3C,$4A,$58,$66) compared with the player Y/16 by GameState0E_Body
+GameState0E_Thresholds:
     .byte $00,$3C,$4A,$58,$66
     LDX #$00
     STX tally_small

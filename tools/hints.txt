@@ -1063,3 +1063,4 @@ ram 041C level_state_block          ; $041C-$047F: 100 bytes initialised from Le
 ; naming pass 33 (RAM): area 5 power-up orb scene, verified by loading area 5 through the door loader
 ram 00A6 orb_tile_taken             ; set when the player touches tile $D6 (PlayerTileInteract); GameState02 waits for it, then starts the dissolve (game_state 5)
 ram 00C5 orb_anim_frame             ; GameState02: frame 0..$3F of the orb animation (index into GameState02_FrameTable)
+name 3 BF05 GameState0E_Body        ; area 6 arrival state ($0E), reached through FarCall: resets tally_small, sets ram_0736 and the clear text counters, then picks a row from the player's Y (thresholds in GameState0E_Thresholds)

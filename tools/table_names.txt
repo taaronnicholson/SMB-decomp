@@ -109,3 +109,4 @@ f D046 CameraModeTable struct 6 w ; code pointers for the camera modes selected 
 5 A528 PrizeRiseDy struct 46 w ; 16-bit vertical steps of the boss prize ($47) as it rises and settles; the final byte $48 is the type it becomes (Ent48, the pickup that starts BossDefeated)
 5 A4B4 Ent8A_FrameList ; animation parameters stepped by Ent8A_Update (angle/2); each non-zero entry also adds 2 to boss_health (cap $64); 0 ends it
 1 8999 LevelStateInit ; 100 bytes copied by LoadArea to level_state_block ($041C-$047F); mostly zero, the rest are per-level switch/door state values
+3 BF00 GameState0E_Thresholds ; 5 byte thresholds ($00,$3C,$4A,$58,$66) compared with the player Y/16 by GameState0E_Body
