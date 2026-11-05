@@ -2039,7 +2039,7 @@ QueuePpuStringB:
 QueuePpuStringB_LB8AB:
     LDX ppu_buffer_idx
 @B0_B8AD:
-    LDA Tbl_B0_B8BC,y
+    LDA QueuePpuStringB_LB8AB_Tbl_B8BC,y
     STA ppu_buffer,x
     BEQ @B0_B8B9
     INX
@@ -2048,8 +2048,8 @@ QueuePpuStringB_LB8AB:
 @B0_B8B9:
     STX ppu_buffer_idx
     RTS
-; Tbl_B0_B8BC: 22 bytes, read by B0_B8AB
-Tbl_B0_B8BC:
+; QueuePpuStringB_LB8AB_Tbl_B8BC: 22 bytes, read by QueuePpuStringB_LB8AB
+QueuePpuStringB_LB8AB_Tbl_B8BC:
     .byte $21,$0F,$82,$62,$61,$21,$2F,$82,$64,$63,$00,$21,$0F,$82,$4C,$4B
     .byte $21,$2F,$82,$50,$4F,$00
 LoadBank0Gfx:
@@ -2180,7 +2180,7 @@ FadeTableStep:
     BNE @B0_BF91
     TAY
 @B0_BF91:
-    CMP Tbl_B0_BFBB,y
+    CMP FadeTableStep_Tbl_BFBB,y
     BEQ @B0_BFA1
 @B0_BF96:
     STY fade_tbl_idx
@@ -2200,12 +2200,12 @@ FadeTableStep:
     LDA ppu_job
     BNE @B0_BFA0
     INY
-    LDA Tbl_B0_BFBB,y
+    LDA FadeTableStep_Tbl_BFBB,y
     STA ppu_job
     INY
     JMP @B0_BF96
-; Tbl_B0_BFBB: 69 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B0_BFBB:
+; FadeTableStep_Tbl_BFBB: 69 bytes, read by FadeTableStep
+FadeTableStep_Tbl_BFBB:
     .byte $79,$01,$7B,$02,$7D,$03,$7F,$04,$7F,$00,$00,$00,$04,$F7,$FF,$FB
     .byte $FF,$60,$00,$88,$00,$9B,$04,$00,$21,$FF,$FF,$FF,$FF,$00,$02,$80
     .byte $00,$FF,$FD,$FF,$7E,$FF,$FF,$FF,$FD,$40,$00,$80,$00,$FD,$FF,$FF
