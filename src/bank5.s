@@ -574,7 +574,7 @@ Ent_MoveYWithGround:
     STA tmp_d
     STA ent_y_hi,x
     LDA tmp_a
-    STA zp_75
+    STA scratch_75
     LDA ent_x_lo,x
     CLC
     ADC #$08
@@ -584,9 +584,9 @@ Ent_MoveYWithGround:
     STA ptr_hi
     JSR MapPtrFromPos
     LDA ptr_lo
-    STA zp_B2
+    STA scratch_B2
     LDA ptr_hi
-    STA zp_B3
+    STA scratch_B3
     LDA ptr_lo
     PHA
     LDA ptr_hi
@@ -621,7 +621,7 @@ Ent_MoveYWithGround:
     SBC tmp_a
     BCC @B5_84DC
     STA tmp_b
-    LDA zp_75
+    LDA scratch_75
     CLC
     ADC #$04
     CMP tmp_b
@@ -654,11 +654,11 @@ Ent_MoveYWithGround:
     CLC
     ADC map_width
     STA ptr_lo
-    STA zp_B2
+    STA scratch_B2
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    STA zp_B3
+    STA scratch_B3
     JSR GetTilePropsAtPosY
     LDY #$00
     AND #$FC
@@ -687,7 +687,7 @@ Ent_MoveYWithGround:
     SBC tmp_a
     BCC @B5_84DB
     STA tmp_b
-    LDA zp_75
+    LDA scratch_75
     CLC
     ADC #$04
     CMP tmp_b
@@ -719,9 +719,9 @@ Ent_GroundCheck:
     STA ptr_hi
     JSR MapPtrFromPos
     LDA ptr_lo
-    STA zp_75
+    STA scratch_75
     LDA ptr_hi
-    STA zp_76
+    STA scratch_76
     JSR GetTilePropsAtPosY
     AND #$03
     BEQ @B5_85E3
@@ -783,11 +783,11 @@ Ent_GroundCheck:
     LDA ent_y_lo,x
     AND #$0F
     BEQ @B5_8607
-    LDA zp_75
+    LDA scratch_75
     CLC
     ADC map_width
     STA ptr_lo
-    LDA zp_76
+    LDA scratch_76
     ADC #$00
     STA ptr_hi
     JSR GetTilePropsAtPosY
@@ -853,11 +853,11 @@ Ent_GroundCheck:
     STA ent_y_lo,x
     RTS
 @B5_8671:
-    LDA zp_75
+    LDA scratch_75
     CLC
     ADC map_width
     STA ptr_lo
-    LDA zp_76
+    LDA scratch_76
     ADC #$00
     STA ptr_hi
     LDA ent_y_lo,x
@@ -955,9 +955,9 @@ Ent_MoveXLeft:
     STA tmp_d
     JSR MapPtrFromPos
     LDA ptr_lo
-    STA zp_77
+    STA scratch_77
     LDA ptr_hi
-    STA zp_78
+    STA scratch_78
     JSR GetTilePropsAtPosY
     AND #$01
     BNE @B5_8793
@@ -1064,9 +1064,9 @@ Ent_MoveX:
     STA tmp_d
     JSR MapPtrFromPos
     LDA ptr_lo
-    STA zp_77
+    STA scratch_77
     LDA ptr_hi
-    STA zp_78
+    STA scratch_78
     JSR GetTilePropsAtPosY
     AND #$01
     BNE @B5_8872
@@ -2735,7 +2735,7 @@ Ent10_Update:
     CMP tmp_d
     BCC @B5_95B0
     LDA #$00
-    STA ram_01A7
+    STA tally_timer
     LDA tally_lo
     SEC
     SBC #$96
@@ -3063,9 +3063,9 @@ Ent1B_Update:
     JSR Ent_MoveYWithGround
     LDA ent_angle,x
     BPL @B5_9881
-    LDA zp_B2
+    LDA scratch_B2
     STA ptr_lo
-    LDA zp_B3
+    LDA scratch_B3
     STA ptr_hi
     JSR GetTilePropsAtPosY
     AND #$03
@@ -5312,9 +5312,9 @@ Ent_PatrolStep:
     JSR Ent_MoveX
     LDA ent_angle,x
     BMI @B5_AC9A
-    LDA zp_77
+    LDA scratch_77
     STA ptr_lo
-    LDA zp_78
+    LDA scratch_78
     STA ptr_hi
     JSR GetTileSpecial
     AND #$FE
@@ -5347,9 +5347,9 @@ Ent_PatrolStep:
     JSR Ent_MoveXLeft
     LDA ent_angle,x
     BMI @B5_AC9A
-    LDA zp_77
+    LDA scratch_77
     STA ptr_lo
-    LDA zp_78
+    LDA scratch_78
     STA ptr_hi
     JSR GetTileSpecial
     AND #$FE
@@ -5445,9 +5445,9 @@ Ent54_Update:
     JSR Ent_MoveYWithGround
     LDA ent_angle,x
     BPL Ent53_Update_LAD53
-    LDA zp_B2
+    LDA scratch_B2
     STA ptr_lo
-    LDA zp_B3
+    LDA scratch_B3
     STA ptr_hi
     JSR GetMapTile
     CMP #$CE
@@ -5900,9 +5900,9 @@ Ent74_Update:
     STA ent_type,x
     JMP Ent_PatrolTail
 @B5_B14F:
-    LDA zp_77
+    LDA scratch_77
     STA ptr_lo
-    LDA zp_78
+    LDA scratch_78
     STA ptr_hi
     JSR GetTileSpecial
     CMP #$10
@@ -5990,9 +5990,9 @@ Ent75_Update:
     STA ent_type,x
     JMP Ent_PatrolTail
 @B5_B200:
-    LDA zp_77
+    LDA scratch_77
     STA ptr_lo
-    LDA zp_78
+    LDA scratch_78
     STA ptr_hi
     JSR GetTileSpecial
     AND #$FE
@@ -6375,9 +6375,9 @@ Ent85_Update:
     JSR Ent_MoveYWithGround
     LDA ent_angle,x
     BPL Ent85_Update_LB549
-    LDA zp_B2
+    LDA scratch_B2
     STA ptr_lo
-    LDA zp_B3
+    LDA scratch_B3
     STA ptr_hi
     JSR GetMapTile
     CMP #$CE

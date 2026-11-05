@@ -954,7 +954,7 @@ InitAnimTileState:
     LDA #$2A
     STA anim_tile_base
     LDA #$08
-    STA zp_77
+    STA scratch_77
     LDA map_bank
     JSR SwitchBank
     LDY #$00
@@ -1000,8 +1000,8 @@ ScanMapForBalloons:
     LDA #$0D
     STA tmp_d
     JSR MapPtrToCoords
-    LDX zp_77
-    INC zp_77
+    LDX scratch_77
+    INC scratch_77
     LDA #$62
     STA ent_type,x
     LDA tmp_a
@@ -1068,7 +1068,7 @@ ScanMapForBalloons_LCAD3:
     STA ptr_lo
     JMP @F_CAFA
 @F_CB1C:
-    LDX zp_77
+    LDX scratch_77
 @F_CB1E:
     LDY #$00
     LDA (ptr_lo),y
@@ -1590,7 +1590,7 @@ CosLookup_LCED8:
     JMP FarCall
 CutsceneScrollCall:
     LDA #$78
-    STA zp_75
+    STA scratch_75
     LDY #$04
     LDX #$EB
     LDA #$BE
@@ -4124,7 +4124,7 @@ ApplyRidingMotion:
     DEC tmp_d
 @F_E119:
     LDA tmp_d
-    STA zp_74
+    STA scratch_74
     BIT tmp_b
     BPL @F_E194
     LDA player_y_lo
@@ -4248,9 +4248,9 @@ ApplyRidingMotion:
     ADC fall_dy
     STA player_x_lo
     LDA player_x_hi
-    ADC zp_74
+    ADC scratch_74
     STA player_x_hi
-    BIT zp_74
+    BIT scratch_74
     BMI @F_E20B
     JMP @F_E275
 @F_E20B:
@@ -4408,7 +4408,7 @@ RidingCheckX_LE313:
     LDA ptr_lo
     STA fall_dy
     LDA ptr_hi
-    STA zp_74
+    STA scratch_74
     JSR CheckDoorTile
     JSR GetTilePropsAtPos
     AND #$03
@@ -4456,7 +4456,7 @@ RidingCheckX_LE313:
     BCS @F_E3A4
     LDA fall_dy
     STA feet_tile_ptr_lo
-    LDA zp_74
+    LDA scratch_74
     STA feet_tile_ptr_hi
     LDA player_y_lo
     AND #$F0
@@ -4477,7 +4477,7 @@ RidingCheckX_LE313:
     CLC
     ADC map_width
     STA ptr_lo
-    LDA zp_74
+    LDA scratch_74
     ADC #$00
     STA ptr_hi
     LDY #$00
@@ -4509,9 +4509,9 @@ RidingCheckX_LE313:
     STA ptr_hi
     JSR MapPtrFromPos
     LDA ptr_lo
-    STA zp_75
+    STA scratch_75
     LDA ptr_hi
-    STA zp_76
+    STA scratch_76
     JSR GetTilePropsAtPos
     JSR ProfilePtrFromProps
     LDA player_x_lo
@@ -4538,9 +4538,9 @@ RidingCheckX_LE313:
 @F_E421:
     CMP #$04
     BCS @F_E436
-    LDA zp_75
+    LDA scratch_75
     STA feet_tile_ptr_lo
-    LDA zp_76
+    LDA scratch_76
     STA feet_tile_ptr_hi
     LDA player_y_lo
     AND #$F0
@@ -4550,7 +4550,7 @@ RidingCheckX_LE313:
 @F_E436:
     LDA fall_dy
     STA ptr_lo
-    LDA zp_74
+    LDA scratch_74
     STA ptr_hi
     LDA player_y_lo
     AND #$0F
@@ -4571,7 +4571,7 @@ RidingCheckX_LE313:
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    STA zp_74
+    STA scratch_74
     LDY #$00
     JSR GetTilePropsAtPos
     STA tmp_a
@@ -4605,7 +4605,7 @@ RidingCheckX_LE313:
     BCS @F_E4B4
     LDA fall_dy
     STA feet_tile_ptr_lo
-    LDA zp_74
+    LDA scratch_74
     STA feet_tile_ptr_hi
     LDA player_y_lo
     AND #$F0
@@ -5119,7 +5119,7 @@ PlayerLand_LE734:
     STA tmp_a
 @F_E837:
     LDA tmp_a
-    STA zp_77
+    STA scratch_77
     LDA fall_index
     CMP #$15
     BEQ @F_E848
@@ -5148,7 +5148,7 @@ PlayerLand_LE734:
     STA anim_tick
     STA fall_index
     STA zp_8C
-    LDA zp_77
+    LDA scratch_77
     STA touch_kind
     LDA #$27
     JSR PlaySfxSq1
@@ -5162,11 +5162,11 @@ PlayerLand_LE734:
     CLC
     ADC map_width
     STA ptr_lo
-    STA zp_75
+    STA scratch_75
     LDA ptr_hi
     ADC #$00
     STA ptr_hi
-    STA zp_76
+    STA scratch_76
     LDY #$00
     JSR GetTilePropsAtPos
     AND #$03
@@ -5207,9 +5207,9 @@ PlayerLand_LE734:
     CLC
     ADC tmp_a
     STA player_y_lo
-    LDA zp_75
+    LDA scratch_75
     STA ptr_lo
-    LDA zp_76
+    LDA scratch_76
     STA ptr_hi
     JMP @F_E7B6
 PlayerState04:
@@ -6336,9 +6336,9 @@ PlayerTileInteract_LF090:
     STA ptr_hi
 @F_F0CD:
     LDA ptr_lo
-    STA zp_77
+    STA scratch_77
     LDA ptr_hi
-    STA zp_78
+    STA scratch_78
     LDY #$00
     LDA (ptr_lo),y
     JSR ApplyCollectedFlag
@@ -6350,9 +6350,9 @@ PlayerTileInteract_LF090:
     JMP PlayerTileInteract_LF14F
 PlayerTileInteract_LF0EA:
     LDA ptr_lo
-    STA zp_77
+    STA scratch_77
     LDA ptr_hi
-    STA zp_78
+    STA scratch_78
     LDY #$00
     JSR GetMapTile
 PlayerTileInteract_LF0F7:
@@ -6401,9 +6401,9 @@ PlayerTileInteract_LF0F7:
     LDY #$00
     LDX tmp_08
 PlayerTileInteract_LF14F:
-    LDA zp_77
+    LDA scratch_77
     STA ptr_lo
-    LDA zp_78
+    LDA scratch_78
     STA ptr_hi
     JSR PushTileEffect
     LDA ptr_lo
@@ -6934,7 +6934,7 @@ PlayerState10_LF52A:
     LDA #$00
     STA shot_state
     STA shot_state_1
-    STA ram_01A7
+    STA tally_timer
     LDX #$FF
     TXS
     LDA zp_98
@@ -7626,7 +7626,7 @@ PlayerState1E:
     JMP FarCall
 PlayerState1E_LFA6B:
     LDA zp_AA
-    STA zp_B0
+    STA scratch_B0
     LDA #$01
     JSR SwitchBank
     LDA #$30
@@ -7674,7 +7674,7 @@ PlayerState1E_LFA6B:
     JMP PlayerState1E_LFAF7
 PlayerState1E_LFABC:
     LDA zp_AA
-    STA zp_B0
+    STA scratch_B0
     LDA #$01
     JSR SwitchBank
     LDA #$30

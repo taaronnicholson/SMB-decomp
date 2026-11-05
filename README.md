@@ -290,7 +290,7 @@ speculative decode), and nearly all the rest is classified data. The data falls 
 - **labelled but not decoded** (about 6%, blobs from `tools/gen_table_hints.py`, cache `tools/tables.json`; overrides in `tools/table_names.txt`): 213 small tables. About 110 now have
   real names or decoded formats (23 `EffectList_*` spawn lists, credits/story/text packets, arcs); the other ~100 remain `Tbl_<bank>_<addr>` (or `<Reader>_Tbl_<addr>`), annotated with the routines that read them.
 `GAPS=20 python3 -I tools/decomp.py` reports what is still unclassified (under 0.1%); `make tables` re-runs the table pass after new code is traced.
-Auto-named labels are no longer bare addresses: branch targets used only inside their own routine are ca65 local labels (`@B5_8F4A`), and the rest are named after the routine they sit in (`PlayerState02_L8F4A`). Every routine that other code calls has a hand-given name, though some are neutral where the purpose is not yet clear. About 170 RAM symbols still have address-based names (`python3 -I tools/rank_unnamed.py`).
+Auto-named labels are no longer bare addresses: branch targets used only inside their own routine are ca65 local labels (`@B5_8F4A`), and the rest are named after the routine they sit in (`PlayerState02_L8F4A`). Every routine that other code calls has a hand-given name, though some are neutral where the purpose is not yet clear. About 150 RAM symbols still have address-based names (`python3 -I tools/rank_unnamed.py`).
 Speculatively found code may include a few false positives (harmless for the byte-exact build; labels are provisional).
 
 Known unknowns: the meaning of most entity handlers beyond `docs/entity_handlers.md`, the 3-byte kind field of special-tile
@@ -304,3 +304,5 @@ Regenerate the sources after editing `tools/hints*.txt` or the generators: `make
 generators `gen_*_hints.py` (sound, ppu, text, gfx, area, palette, spawn, anim, entity, map), `summarize_handlers.py`,
 renderers `extract_gfx.py`, `extract_maps.py`, `render_maps.py`, `render_sprites.py`, and analysis helpers `chrtrace.py`,
 `decomptrace.py`, `gfx_scan.py`, `check_decomp.py`. Rendered images and extracted data go to `build/` (not committed).
+
+`tools/watch_ram.py` (run `LABELS=/tmp/labels.json python3 -I tools/decomp.py` first) plays stage 1 with random input in the built-in emulator and lists, for every still-unnamed RAM byte, which routines write or read it and the values written. It confirmed e.g. `fall_index`/`fall_dy` (PlayerState02) and the touch-tile state (`touch_ptr`, `prev_touch_*`), and showed that `scratch_74`-`scratch_78` are shared by unrelated routines.

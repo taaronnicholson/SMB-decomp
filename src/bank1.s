@@ -346,7 +346,7 @@ ShotMoveDown:
     STY ptr_hi
     TAY
     LDA tile_props,y
-    STA zp_75
+    STA scratch_75
     AND #$FC
     ASL a
     ROL ptr_hi
@@ -408,7 +408,7 @@ ShotMoveDown:
     STY ptr_hi
     TAY
     LDA tile_props,y
-    STA zp_75
+    STA scratch_75
     AND #$FC
     ASL a
     ROL ptr_hi
@@ -457,7 +457,7 @@ ShotMoveDown:
     ADC #$00
     STA shot_y_hi,x
 @B1_838D:
-    LDA zp_75
+    LDA scratch_75
     LSR a
     LSR a
     TAY
@@ -598,7 +598,7 @@ Shot_TileHit_L846D:
     LDA shot_y_lo,x
     CLC
     ADC #$02
-    STA zp_77
+    STA scratch_77
     STA tmp_c
     LDA shot_y_hi,x
     ADC #$00
@@ -616,9 +616,9 @@ Shot_TileHit_L846D:
     PHA
     JSR MapPtrFromPos
     LDA ptr_lo
-    STA zp_75
+    STA scratch_75
     LDA ptr_hi
-    STA zp_76
+    STA scratch_76
     JSR GetMapTile
     TAY
     PLA
@@ -632,16 +632,16 @@ Shot_TileHit_L846D:
     LDA shot_y_lo,x
     CLC
     ADC #$04
-    STA zp_77
+    STA scratch_77
     STA tmp_c
     LDA shot_y_hi,x
     ADC #$00
     STA tmp_d
     JSR MapPtrFromPos
     LDA ptr_lo
-    STA zp_75
+    STA scratch_75
     LDA ptr_hi
-    STA zp_76
+    STA scratch_76
     JSR GetMapTile
     TAY
     LDA tile_props,y
@@ -679,21 +679,21 @@ Shot_TileHit_L846D:
     STA tmp_a
     CMP #$FF
     BEQ ShotStartImpact_L8574
-    LDA zp_77
+    LDA scratch_77
     AND #$0F
     SEC
     SBC tmp_a
     BCS @B1_8528
-    LDA zp_77
+    LDA scratch_77
     ADC #$04
     AND #$0F
     SEC
     SBC tmp_a
     BCC ShotStartImpact_L8574
 @B1_8528:
-    LDA zp_75
+    LDA scratch_75
     STA ptr_lo
-    LDA zp_76
+    LDA scratch_76
     STA ptr_hi
     JSR GetMapTile
     CMP #$DA
@@ -1193,7 +1193,7 @@ ShotPosByAngle_L881D:
     TAY
     TAY
     LDY area_extra_ptr_lo
-    LDY zp_B0,x
+    LDY scratch_B0,x
     CPY #$C0
     BNE ShotPosByAngle_L88AF
 ShotPosByAngle_L88AF:
@@ -1401,7 +1401,7 @@ DrawEntity:
     LSR a
     TAY
     LDA anim_tile_base,y
-    STA zp_AF
+    STA scratch_AF
     LDY #$00
     LDA (tmp_ptr_lo),y
     ADC tmp_ptr_lo
@@ -1411,7 +1411,7 @@ DrawEntity:
     ADC tmp_ptr_hi
     STA ptr_hi
     DEY
-    LDA zp_B0
+    LDA scratch_B0
     TAX
     SEC
     SBC (ptr_lo),y
@@ -1421,19 +1421,19 @@ DrawEntity:
     RTS
 @B1_8AE7:
     INY
-    STA zp_75
+    STA scratch_75
     LDA #$00
-    STA zp_B0
+    STA scratch_B0
     LDA Tbl_B1_8000,x
     TAX
     JMP @B1_8B00
 @B1_8AF5:
-    STA zp_B0
+    STA scratch_B0
     LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
-    STA zp_75
+    STA scratch_75
 @B1_8B00:
     LDA (ptr_lo),y
     INY
@@ -1455,7 +1455,7 @@ DrawEntity:
     INY
     ADC #$00
     BNE @B1_8B42
-    LDA zp_AF
+    LDA scratch_AF
     CLC
     ADC (ptr_lo),y
     INY
@@ -1469,7 +1469,7 @@ DrawEntity:
     INX
     INX
     INX
-    DEC zp_75
+    DEC scratch_75
     BNE @B1_8B00
     RTS
 @B1_8B40:
@@ -1478,8 +1478,8 @@ DrawEntity:
 @B1_8B42:
     INY
     INY
-    INC zp_B0
-    DEC zp_75
+    INC scratch_B0
+    DEC scratch_75
     BNE @B1_8B00
     RTS
 @B1_8B4B:
@@ -1500,7 +1500,7 @@ DrawEntity:
     LSR a
     TAY
     LDA anim_tile_base,y
-    STA zp_AF
+    STA scratch_AF
     LDY #$00
     LDA (tmp_ptr_lo),y
     ADC tmp_ptr_lo
@@ -1510,7 +1510,7 @@ DrawEntity:
     ADC tmp_ptr_hi
     STA ptr_hi
     DEY
-    LDA zp_B0
+    LDA scratch_B0
     TAX
     SEC
     SBC (ptr_lo),y
@@ -1520,19 +1520,19 @@ DrawEntity:
     RTS
 @B1_8B8D:
     INY
-    STA zp_75
+    STA scratch_75
     LDA #$00
-    STA zp_B0
+    STA scratch_B0
     LDA Tbl_B1_8000,x
     TAX
     JMP @B1_8BA6
 @B1_8B9B:
-    STA zp_B0
+    STA scratch_B0
     LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
-    STA zp_75
+    STA scratch_75
 @B1_8BA6:
     LDA #$08
     SEC
@@ -1542,12 +1542,12 @@ DrawEntity:
     LDA #$00
     SBC (ptr_lo),y
     INY
-    STA zp_AE
+    STA scratch_AE
     LDA sprite_y_tmp
     CLC
     ADC tmp_c
     STA sprite_y_tmp
-    LDA zp_AE
+    LDA scratch_AE
     ADC tmp_d
     BNE @B1_8BF5
     LDA sprite_y_tmp
@@ -1561,7 +1561,7 @@ DrawEntity:
     INY
     ADC #$00
     BNE @B1_8BF7
-    LDA zp_AF
+    LDA scratch_AF
     CLC
     ADC (ptr_lo),y
     INY
@@ -1576,7 +1576,7 @@ DrawEntity:
     INX
     INX
     INX
-    DEC zp_75
+    DEC scratch_75
     BNE @B1_8BA6
     RTS
 @B1_8BF5:
@@ -1585,8 +1585,8 @@ DrawEntity:
 @B1_8BF7:
     INY
     INY
-    INC zp_B0
-    DEC zp_75
+    INC scratch_B0
+    DEC scratch_75
     BNE @B1_8BA6
     RTS
 @B1_8C00:
@@ -1611,7 +1611,7 @@ DrawEntity:
     LSR a
     TAY
     LDA anim_tile_base,y
-    STA zp_AF
+    STA scratch_AF
     LDY #$00
     LDA (tmp_ptr_lo),y
     ADC tmp_ptr_lo
@@ -1621,7 +1621,7 @@ DrawEntity:
     ADC tmp_ptr_hi
     STA ptr_hi
     DEY
-    LDA zp_B0
+    LDA scratch_B0
     TAX
     SEC
     SBC (ptr_lo),y
@@ -1631,19 +1631,19 @@ DrawEntity:
     RTS
 @B1_8C48:
     INY
-    STA zp_75
+    STA scratch_75
     LDA #$00
-    STA zp_B0
+    STA scratch_B0
     LDA Tbl_B1_8000,x
     TAX
     JMP @B1_8C61
 @B1_8C56:
-    STA zp_B0
+    STA scratch_B0
     LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
-    STA zp_75
+    STA scratch_75
 @B1_8C61:
     LDA (ptr_lo),y
     INY
@@ -1664,15 +1664,15 @@ DrawEntity:
     LDA #$00
     SBC (ptr_lo),y
     INY
-    STA zp_AE
+    STA scratch_AE
     LDA sprite_y_tmp
     CLC
     ADC tmp_a
     STA sprite_y_tmp
-    LDA zp_AE
+    LDA scratch_AE
     ADC #$00
     BNE @B1_8CB2
-    LDA zp_AF
+    LDA scratch_AF
     CLC
     ADC (ptr_lo),y
     INY
@@ -1687,7 +1687,7 @@ DrawEntity:
     INX
     INX
     INX
-    DEC zp_75
+    DEC scratch_75
     BNE @B1_8C61
     RTS
 @B1_8CB0:
@@ -1696,8 +1696,8 @@ DrawEntity:
 @B1_8CB2:
     INY
     INY
-    INC zp_B0
-    DEC zp_75
+    INC scratch_B0
+    DEC scratch_75
     BNE @B1_8C61
     RTS
 @B1_8CBB:
@@ -1718,7 +1718,7 @@ DrawEntity:
     LSR a
     TAY
     LDA anim_tile_base,y
-    STA zp_AF
+    STA scratch_AF
     LDY #$00
     LDA (tmp_ptr_lo),y
     ADC tmp_ptr_lo
@@ -1728,7 +1728,7 @@ DrawEntity:
     ADC tmp_ptr_hi
     STA ptr_hi
     DEY
-    LDA zp_B0
+    LDA scratch_B0
     TAX
     SEC
     SBC (ptr_lo),y
@@ -1738,19 +1738,19 @@ DrawEntity:
     RTS
 @B1_8CFD:
     INY
-    STA zp_75
+    STA scratch_75
     LDA #$00
-    STA zp_B0
+    STA scratch_B0
     LDA Tbl_B1_8000,x
     TAX
     JMP @B1_8D16
 @B1_8D0B:
-    STA zp_B0
+    STA scratch_B0
     LDA Tbl_B1_8000,x
     TAX
     LDA (ptr_lo),y
     INY
-    STA zp_75
+    STA scratch_75
 @B1_8D16:
     LDA #$08
     SEC
@@ -1760,12 +1760,12 @@ DrawEntity:
     LDA #$00
     SBC (ptr_lo),y
     INY
-    STA zp_AE
+    STA scratch_AE
     LDA sprite_y_tmp
     CLC
     ADC tmp_c
     STA sprite_y_tmp
-    LDA zp_AE
+    LDA scratch_AE
     ADC tmp_d
     BNE @B1_8D72
     LDA sprite_y_tmp
@@ -1778,15 +1778,15 @@ DrawEntity:
     LDA #$00
     SBC (ptr_lo),y
     INY
-    STA zp_AE
+    STA scratch_AE
     LDA sprite_y_tmp
     CLC
     ADC tmp_a
     STA sprite_y_tmp
-    LDA zp_AE
+    LDA scratch_AE
     ADC #$00
     BNE @B1_8D74
-    LDA zp_AF
+    LDA scratch_AF
     CLC
     ADC (ptr_lo),y
     INY
@@ -1801,7 +1801,7 @@ DrawEntity:
     INX
     INX
     INX
-    DEC zp_75
+    DEC scratch_75
     BNE @B1_8D16
     RTS
 @B1_8D72:
@@ -1810,8 +1810,8 @@ DrawEntity:
 @B1_8D74:
     INY
     INY
-    INC zp_B0
-    DEC zp_75
+    INC scratch_B0
+    DEC scratch_75
     BNE @B1_8D16
     RTS
 AnimGroupPtrs:

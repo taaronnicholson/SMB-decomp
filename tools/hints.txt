@@ -853,3 +853,16 @@ ram 0073 fall_dy                    ; PlayerState02: the vertical step applied t
 ram 007E carry_cooldown             ; frames left before the player may be carried again; counts down in PlayerState02
 ram 007F dive_facing                ; facing remembered for the dive/air-turn logic
 name f C27D FallDyTable             ; per-frame fall speed by fall_index: 0,0,0,1,0,1,0,1,1,... up to 2 (22 entries)
+
+; naming pass 22: bytes that several unrelated routines use as scratch (the emulator watch shows different roles per routine)
+ram 0074 scratch_74
+ram 0075 scratch_75
+ram 0076 scratch_76
+ram 0077 scratch_77
+ram 0078 scratch_78
+ram 00AE scratch_AE
+ram 00AF scratch_AF
+ram 00B0 scratch_B0
+ram 00B2 scratch_B2
+ram 00B3 scratch_B3
+ram 01A7 tally_timer                ; counts up by 3 per step in CheckRam01A8Threshold

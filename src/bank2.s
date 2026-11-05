@@ -3227,7 +3227,7 @@ ResetGameState:
     LDA #$00
     STA tally_lo
     STA tally_hi
-    STA ram_01A7
+    STA tally_timer
     STA pixel_page_xor
     STA pickup_tier
     STA shot_state
@@ -3259,14 +3259,14 @@ CheckRam01A8Threshold:
 @B2_B8AF:
     RTS
 @B2_B8B0:
-    LDA ram_01A7
+    LDA tally_timer
     CLC
     ADC #$03
-    STA ram_01A7
+    STA tally_timer
     CMP #$64
     BCC @B2_B8AF
     SBC #$64
-    STA ram_01A7
+    STA tally_timer
     INC tally_lo
     BNE @B2_B8CA
     INC tally_hi

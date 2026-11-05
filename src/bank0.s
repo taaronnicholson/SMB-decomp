@@ -1858,13 +1858,13 @@ IntroScreenStep:
     LDA #$BE
     STA tmp_d
     LDA #$49
-    STA zp_75
+    STA scratch_75
     LDA #$7C
-    STA zp_76
+    STA scratch_76
     LDA #$10
-    STA zp_77
+    STA scratch_77
     LDA #$02
-    STA zp_78
+    STA scratch_78
     INC entity_tick
     LDA entity_tick
     STA cutscene_fade_b

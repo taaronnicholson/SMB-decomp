@@ -2669,7 +2669,7 @@ QueueTextAndStartFade:
     STA cutscene_fade_a
     LDA #$00
     STA cutscene_fade_b
-    STA zp_74
+    STA scratch_74
     JSR FadeStepBEDF
     JMP WaitForNMI
 ; TextPackets_BDB2: PPU text packets
@@ -2772,15 +2772,15 @@ InitEndScreen:
 Tbl_B4_BED7:
     .byte $14,$00,$14,$2D,$00,$00,$00,$00
 FadeStepBEDF:
-    INC zp_74
-    LDA zp_74
+    INC scratch_74
+    LDA scratch_74
     LSR a
     STA cutscene_fade_b
 FadeStepBEE7:
     LDA #$7F
-    STA zp_75
+    STA scratch_75
     LDA #$7C
-    STA zp_76
+    STA scratch_76
     LDA #$1F
     STA tmp_b
     LDA #$D7
@@ -2788,9 +2788,9 @@ FadeStepBEE7:
     LDA #$BE
     STA tmp_d
     LDA #$08
-    STA zp_77
+    STA scratch_77
     LDA #$23
-    STA zp_78
+    STA scratch_78
     LDA #$54
     STA fall_dy
     LDA #$00
@@ -2832,7 +2832,7 @@ FadeStepBEE7:
     JSR ScaledMultiply
     INC ptr_hi
     LDX fall_dy
-    LDA zp_75
+    LDA scratch_75
     BIT tmp_b
     BPL @B4_BF62
     SEC
@@ -2864,7 +2864,7 @@ FadeStepBEE7:
     JSR ScaledMultiply
     INC ptr_hi
     LDX fall_dy
-    LDA zp_76
+    LDA scratch_76
     BIT tmp_a
     BPL @B4_BF96
     SEC
@@ -2878,7 +2878,7 @@ FadeStepBEE7:
 @B4_BF9C:
     LDA #$28
     STA oam_tile,x
-    LDA zp_78
+    LDA scratch_78
     STA oam_attr,x
     LDA fall_dy
     CLC
@@ -2894,7 +2894,7 @@ FadeStepBEE7:
     STA tmp_a
     LDA tmp_a
     CLC
-    ADC zp_77
+    ADC scratch_77
     STA tmp_a
     DEC tmp_b
     BMI @B4_BFD6
