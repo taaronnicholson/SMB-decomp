@@ -3535,7 +3535,7 @@ PlayerState07_Body:
     STA zp_86
     JMP ApplyRidingMotion
 ExitWalkStep:
-    LDA zp_BD
+    LDA anim_cursor
     AND #$FE
     TAY
     LDA ExitWalkAnim,y
@@ -3560,7 +3560,7 @@ ExitWalkStep:
     LDA player_x_hi
     SBC #$00
     STA player_x_hi
-    INC zp_BD
+    INC anim_cursor
 ExitWalkStep_LA41D:
     RTS
 AdvanceStage:
@@ -3568,7 +3568,7 @@ AdvanceStage:
     STA ppu_job
     LDA #$00
     STA blink_state
-    DEC zp_D3
+    DEC respawn_major
     BNE ExitWalkStep_LA41D
     LDA #$01
     STA nmi_state

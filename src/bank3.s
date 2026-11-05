@@ -1147,7 +1147,7 @@ PlayerState1A_Body:
 @B3_BD75:
     STA anim_index
     LDA #$64
-    STA zp_D4
+    STA respawn_swapped
     LDA #$1B
     STA player_state
 PlayerFrameCycle4:
@@ -1213,7 +1213,7 @@ PlayerFrameCycle4_LBD8D:
     RTS
 @B3_BDF4:
     JSR PlayerFrameCycle4
-    LDA zp_D4
+    LDA respawn_swapped
     CMP #$FF
     BCC @B3_BE04
     LDA fade_step
@@ -1222,7 +1222,7 @@ PlayerFrameCycle4_LBD8D:
 @B3_BE04:
     SEC
     SBC #$01
-    STA zp_D4
+    STA respawn_swapped
     BNE @B3_BE0D
     DEC fade_dir
 @B3_BE0D:

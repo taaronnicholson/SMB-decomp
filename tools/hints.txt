@@ -1015,5 +1015,19 @@ entry 4 B2D9
 ram 0737 clear_text_row             ; GameState0A: row of the "STAGE CLEAR" text being typed (1..$0E, then game_state $0B)
 ram 0738 clear_text_ticks           ; GameState0A: countdown (5) between rows
 ram 072F tally_step                 ; GameState0B: step 0..9 of the tally (word table at GameState0B)
-ram 00D1 state_delay                ; countdown used by GameState0B (and by the respawn-arc handlers in bank 1)
-ram 00D2 state_delay_outer          ; outer countdown paired with state_delay
+ram 00D1 state_delay                ; GameState0B countdown; in the respawn arc (bank 1) the horizontal direction: 0 = move left, 1 = move right
+ram 00D2 state_delay_outer          ; GameState0B outer countdown; in the respawn arc the smaller of (82 steps, |dx|)
+
+; naming pass 30 (RAM): respawn arc (player states $11-$15), confirmed by forcing a death in the emulator
+ram 00D3 respawn_major              ; the larger of (82 vertical steps, |dx| to the respawn point); the arc spreads the horizontal move over the steps (also saves X in HandleSpecialTile)
+ram 00D4 respawn_swapped            ; 1 when |dx| >= 82 (the two values were swapped)
+ram 00D5 respawn_accum              ; interpolation accumulator, reduced by respawn_major when it wraps
+ram 00D6 respawn_step               ; step index into Tbl_B1_B06A / SmallOffsets_B1_B144: counts up during the rise, down during the fall
+ram 00F8 respawn_y_lo               ; where the player respawns (the position when the death arc started)
+ram 00F9 respawn_y_hi
+ram 00FA respawn_x_lo
+ram 00FB respawn_x_hi
+; exit walk / swim / bonus ascent end
+ram 00BD anim_cursor                ; index (or frame countdown) into the scripted player animation: ExitWalkAnim, BonusAscentEndAnim; frame timer in the swim states $0C/$0D
+ram 00BE swim_anim_step             ; step counter of the swim animation (states $0C/$0D)
+ram 0090 half_speed_toggle          ; flipped every frame in PlayerState0D so walk_speed alternates 0/1

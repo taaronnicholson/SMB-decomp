@@ -3733,11 +3733,11 @@ Ent33_Update:
     STA tally_step
     LDA #$00
     STA state_delay
-    STA zp_BD
+    STA anim_cursor
     LDA #$01
     STA state_delay_outer
     LDA #$7D
-    STA zp_D3
+    STA respawn_major
     JSR Ent_StartCollectAnim
     LDA #$22
     JSR PlaySfxSq2

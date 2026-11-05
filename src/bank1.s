@@ -4698,15 +4698,15 @@ PlayerState11_Body:
     LDA #$02
     STA camera_mode
     LDA player_y_lo
-    STA zp_F8
+    STA respawn_y_lo
     LDA player_y_hi
-    STA zp_F9
+    STA respawn_y_hi
     LDA player_x_lo
     STA tmp_a
-    STA zp_FA
+    STA respawn_x_lo
     LDA player_x_hi
     STA tmp_b
-    STA zp_FB
+    STA respawn_x_hi
     LDA focus_y_lo
     CLC
     ADC #$12
@@ -4756,16 +4756,16 @@ PlayerState11_Body:
     LDA tmp_a
     STA state_delay_outer
     LDA tmp_b
-    STA zp_D3
+    STA respawn_major
     LDA tmp_c
-    STA zp_D4
+    STA respawn_swapped
     LDA #$3E
     STA player_frame
     LDA #$00
-    STA zp_D5
+    STA respawn_accum
     STA anim_index
     STA anim_tick
-    STA zp_D6
+    STA respawn_step
     LDA #$12
     STA player_state
     RTS
@@ -4780,10 +4780,10 @@ PlayerState12_Body:
     SBC #$00
     STA tmp_b
     STA player_y_hi
-    LDA zp_F8
+    LDA respawn_y_lo
     SEC
     SBC tmp_a
-    LDA zp_F9
+    LDA respawn_y_hi
     SBC tmp_b
     BCC @B1_AFD2
     LDA #$13
@@ -4792,7 +4792,7 @@ PlayerState12_Body:
     RTS
 PlayerState13_Body:
     JSR PlayerAnimAdvance
-    LDY zp_D6
+    LDY respawn_step
     LDA Tbl_B1_B06A,y
     CMP #$14
     BNE @B1_AFE4
@@ -4807,10 +4807,10 @@ PlayerState13_Body:
     LDA player_y_hi
     SBC #$00
     STA player_y_hi
-    INC zp_D6
+    INC respawn_step
     JMP PlayerState14_Body_LB015
 PlayerState14_Body:
-    DEC zp_D6
+    DEC respawn_step
     BNE @B1_B005
     LDA #$15
     STA player_state
@@ -4818,7 +4818,7 @@ PlayerState14_Body:
     STA anim_tick
     RTS
 @B1_B005:
-    LDY zp_D6
+    LDY respawn_step
     LDA player_y_lo
     CLC
     ADC Tbl_B1_B06A,y
@@ -4831,13 +4831,13 @@ PlayerState14_Body_LB015:
     STA tmp_d
     LDA state_delay_outer
     STA tmp_a
-    LDA zp_D3
+    LDA respawn_major
     STA tmp_b
     STA tmp_c
     INC tmp_c
-    LDA zp_D4
+    LDA respawn_swapped
     BNE @B1_B03A
-    LDA zp_D5
+    LDA respawn_accum
     CLC
     ADC tmp_a
     CMP tmp_c
@@ -4847,7 +4847,7 @@ PlayerState14_Body_LB015:
     SBC tmp_b
     JMP @B1_B048
 @B1_B03A:
-    LDA zp_D5
+    LDA respawn_accum
 @B1_B03C:
     INC tmp_d
     CLC
@@ -4857,7 +4857,7 @@ PlayerState14_Body_LB015:
     SEC
     SBC tmp_b
 @B1_B048:
-    STA zp_D5
+    STA respawn_accum
     LDA state_delay
     BEQ @B1_B05C
     LDA player_x_lo
@@ -4884,7 +4884,7 @@ Tbl_B1_B06A:
     .byte $01,$01,$02,$01,$01,$01,$01,$01,$00,$01,$00,$01,$00,$00,$00,$00
     .byte $00,$14
 PlayerState15_Body:
-    LDA zp_D6
+    LDA respawn_step
     LSR a
     TAY
     LDA SmallOffsets_B1_B144,y
@@ -4911,18 +4911,18 @@ PlayerState15_Body:
     LDA player_y_hi
     ADC tmp_b
     STA player_y_hi
-    INC zp_D6
+    INC respawn_step
     RTS
 @B1_B0C6:
     LDA #$4A
     JSR PlaySfxNoise
-    LDA zp_F8
+    LDA respawn_y_lo
     STA player_y_lo
-    LDA zp_F9
+    LDA respawn_y_hi
     STA player_y_hi
-    LDA zp_FA
+    LDA respawn_x_lo
     STA player_x_lo
-    LDA zp_FB
+    LDA respawn_x_hi
     STA player_x_hi
     LDA zp_99
     STA player_state
@@ -5093,7 +5093,7 @@ PlayerAnimAdvance_LB15B:
     ORA ptr_lo
     ORA ptr_hi
     BNE PlayerAnimAdvance_LB235
-    STA zp_BD
+    STA anim_cursor
     LDA #$18
     STA player_state
     LDA #$43
@@ -5116,7 +5116,7 @@ PlayerAnimAdvance_LB240:
 PlayerAnimAdvance_LB241:
     LDA ram_072D
     BNE PlayerAnimAdvance_LB235
-    LDA zp_BD
+    LDA anim_cursor
     ASL a
     TAY
     LDA BonusAscentEndAnim,y
@@ -5136,7 +5136,7 @@ PlayerAnimAdvance_LB241:
     LDA player_y_hi
     ADC #$00
     STA player_y_hi
-    INC zp_BD
+    INC anim_cursor
     LDA #$01
     STA player_facing
     RTS

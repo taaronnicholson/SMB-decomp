@@ -4845,9 +4845,9 @@ PlayerState02:
 @F_E63F:
     STA zp_82
 @F_E641:
-    LDA zp_90
+    LDA half_speed_toggle
     EOR #$01
-    STA zp_90
+    STA half_speed_toggle
     STA walk_speed
     JMP @F_E650
 @F_E64C:
@@ -5457,32 +5457,32 @@ PlayerState0C:
     STA player_frame
     RTS
 @F_EA9F:
-    LDA zp_BD
+    LDA anim_cursor
     SEC
     SBC #$01
     BNE @F_EAB9
-    INC zp_BE
-    LDA zp_BE
+    INC swim_anim_step
+    LDA swim_anim_step
     LSR a
     TAY
     LDA F_C1F0,y
     BNE @F_EAB5
-    STA zp_BE
+    STA swim_anim_step
     LDA #$35
 @F_EAB5:
     STA player_frame
     LDA #$03
 @F_EAB9:
-    STA zp_BD
+    STA anim_cursor
     RTS
 PlayerState0A:
     LDA #$00
     STA player_state
     RTS
 PlayerState0D:
-    LDA zp_90
+    LDA half_speed_toggle
     EOR #$01
-    STA zp_90
+    STA half_speed_toggle
     STA walk_speed
     JSR MovePlayerKeepBank
     LDA buttons
@@ -5514,12 +5514,12 @@ PlayerState0D:
     STA zp_8C
     JMP SpawnWaterEntity
 @F_EB05:
-    LDA zp_BD
+    LDA anim_cursor
     SEC
     SBC #$01
     BNE @F_EB22
-    INC zp_BE
-    LDA zp_BE
+    INC swim_anim_step
+    LDA swim_anim_step
     AND #$06
     LSR a
     ADC #$29
@@ -5532,7 +5532,7 @@ PlayerState0D:
     CLC
     ADC #$05
 @F_EB22:
-    STA zp_BD
+    STA anim_cursor
     RTS
 MovePlayerKeepBank:
     LDA cur_bank
@@ -7310,7 +7310,7 @@ CheckSpecialTile:
     PLA
     JMP SwitchBankKeepX
 HandleSpecialTile:
-    STX zp_D3
+    STX respawn_major
     JSR GetMapTile
     CMP #$C8
     BCC @F_F840
@@ -7324,10 +7324,10 @@ HandleSpecialTile:
     JSR Bank3_SpecialTileAction
     PLA
     JSR SwitchBankKeepX
-    LDX zp_D3
+    LDX respawn_major
     JMP $8405
 @F_F840:
-    LDX zp_D3
+    LDX respawn_major
     RTS
 HandleSpecialTile_LF843:
     LDA cur_bank

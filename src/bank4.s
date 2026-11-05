@@ -852,7 +852,7 @@ Gfx_B4_ABB2:
     CMP #$30
     BNE @B4_ACA1
     LDA #$C4
-    STA zp_D6
+    STA respawn_step
     LDA #$02
     STA ram_0395
     ASL a
@@ -889,13 +889,13 @@ Gfx_B4_ABB2:
     TXA
     CLC
     ADC #$C4
-    STA zp_D6
+    STA respawn_step
     LDX #$00
 @B4_AD0D:
     LDA oam_buffer,x
     CMP #$FF
     BEQ @B4_AD1F
-    LDA zp_D6
+    LDA respawn_step
     STA oam_tile,x
     CLC
     ADC #$02
@@ -1387,7 +1387,7 @@ GameState0B_LB140:
     STA tally_step
     RTS
 @B4_B14D:
-    STA zp_D3
+    STA respawn_major
     LDA #$04
     STA tally_step
     LDA #$19
@@ -1426,7 +1426,7 @@ GameState0B_LB170:
 @B4_B195:
     LDA #$0C
     STA tmp_a
-    LDA zp_D3
+    LDA respawn_major
     BNE @B4_B1A0
     JSR SpawnPickupAtPlayer
 @B4_B1A0:

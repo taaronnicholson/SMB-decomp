@@ -3193,7 +3193,7 @@ ResetLevelState:
     STA invuln_hi
     STA anim_tick
     STA zp_6D
-    STA zp_BE
+    STA swim_anim_step
     STA focus_x_lo
     STA focus_x_hi
     STA focus_y_lo
@@ -3214,7 +3214,7 @@ ResetLevelState:
     STX zp_C4
     LDA #$01
     STA zp_6C
-    STA zp_BD
+    STA anim_cursor
     STA blink_state
     LDA #$70
     STA focus_offset_x
