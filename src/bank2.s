@@ -2909,8 +2909,8 @@ B2_B53A:
     STA invuln_lo
 @B2_B56B:
     JMP PlayerState00
-; Tbl_B2_B56E: 60 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B2_B56E:
+; SmallOffsets_B2_B56E: 60 bytes, read by PlayerBlinkCheck
+SmallOffsets_B2_B56E:
     .byte $01,$01,$02,$00,$01,$01,$01,$01,$01,$00,$01,$01,$00,$01,$00,$00
     .res 14, $00
     .byte $03,$03,$04,$00,$03,$03,$03,$03,$03,$00,$00,$00,$01,$02,$00,$00

@@ -103,8 +103,8 @@ EntityDeltaFromCentre:
     STA ent_dx,x
 Ent18_Update:
     RTS
-; Tbl_B5_80B7: 28 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_80B7:
+; SmallOffsets_B5_80B7: 28 bytes, read by Ent_TryCarryPlayer
+SmallOffsets_B5_80B7:
     .byte $01,$00,$01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$00,$00,$00
     .res 12, $00
 Ent_TryCarryPlayer:
@@ -117,7 +117,7 @@ Ent_TryCarryPlayer:
     AND #$04
     BNE @B5_80D7
     LDY player_state
-    LDA Tbl_B5_80B7,y
+    LDA SmallOffsets_B5_80B7,y
     BEQ @B5_80D7
     LDA player_box_y
     CLC
@@ -1198,7 +1198,7 @@ Ent_CheckPlayerOverlap:
     AND #$04
     BNE B5_8903
     LDY shot_state
-    LDA Tbl_B5_8983,y
+    LDA SmallOffsets_B5_8983,y
     BEQ @B5_8949
     LDA shot_screen_y
     SEC
@@ -1216,7 +1216,7 @@ Ent_CheckPlayerOverlap:
     ADC #$16
     CMP tmp_d
     BCC @B5_8949
-    LDA Tbl_B5_8983,y
+    LDA SmallOffsets_B5_8983,y
     STA tmp_a
     SEC
     SBC #$01
@@ -1229,7 +1229,7 @@ Ent_CheckPlayerOverlap:
     RTS
 @B5_8949:
     LDY shot_state_1
-    LDA Tbl_B5_8983,y
+    LDA SmallOffsets_B5_8983,y
     BEQ B5_8982
     LDA shot_screen_y_1
     SEC
@@ -1247,7 +1247,7 @@ Ent_CheckPlayerOverlap:
     ADC #$16
     CMP tmp_d
     BCC B5_8982
-    LDA Tbl_B5_8983,y
+    LDA SmallOffsets_B5_8983,y
     STA tmp_a
     SEC
     SBC #$01
@@ -1259,8 +1259,8 @@ Ent_CheckPlayerOverlap:
     STA shot_E3_1
 B5_8982:
     RTS
-; Tbl_B5_8983: 16 bytes, read by Ent_CheckPlayerOverlap, Ent_CheckPlayerOverlapD
-Tbl_B5_8983:
+; SmallOffsets_B5_8983: 16 bytes, read by Ent_CheckPlayerOverlap, Ent_CheckPlayerOverlapD
+SmallOffsets_B5_8983:
     .byte $00,$00,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$02
 Ent_CheckPlayerOverlapC:
     LDA ent_flags,x
@@ -1752,7 +1752,7 @@ Ent02_Update:
 @B5_8D62:
     LDA ent_y_lo,x
     SEC
-    SBC Tbl_B5_8E36,y
+    SBC SmallOffsets_B5_8E36,y
     STA ent_y_lo,x
     LDA ent_y_hi,x
     SBC #$00
@@ -1862,8 +1862,8 @@ Ent02_Update:
     LDA ptr_hi
     STA ent_x_hi,x
     RTS
-; Tbl_B5_8E36: 18 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_8E36:
+; SmallOffsets_B5_8E36: 18 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_8E36:
     .byte $00,$01,$00,$00,$01,$00,$01,$00,$01,$01,$02,$01,$01,$02,$01,$02
     .byte $02,$03
 SpawnDebrisEntity:
@@ -1923,7 +1923,7 @@ Ent04_Update:
     LSR a
     BCS @B5_8EEE
     TAY
-    LDA Tbl_B5_8EEF,y
+    LDA SmallOffsets_B5_8EEF,y
     CMP #$FF
     BNE @B5_8EDB
     LDA #$00
@@ -1940,8 +1940,8 @@ Ent04_Update:
     STA ent_y_hi,x
 @B5_8EEE:
     RTS
-; Tbl_B5_8EEF: 40 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_8EEF:
+; SmallOffsets_B5_8EEF: 40 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_8EEF:
     .res 12, $01
     .byte $00,$01,$01,$00,$01,$00,$01,$00,$01,$00,$00,$01,$00,$00,$01,$00
     .res 11, $00
@@ -2226,7 +2226,7 @@ B5_911B:
     TAY
     LDA ent_x_lo,x
     CLC
-    ADC Tbl_B5_9155,y
+    ADC SmallOffsets_B5_9155,y
     STA ent_x_lo,x
     LDA ent_x_hi,x
     ADC B5_9156,y
@@ -2236,8 +2236,8 @@ B5_911B:
 ; Tbl_B5_914C: 9 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B5_914C:
     .byte $04,$FC,$FF,$00,$00,$18,$01,$00,$00
-; Tbl_B5_9155: 46 bytes, read by B5_911B
-Tbl_B5_9155:
+; SmallOffsets_B5_9155: 46 bytes, read by B5_911B
+SmallOffsets_B5_9155:
     .byte $00
 B5_9156:
     .byte $FF,$FF,$FF,$01,$00,$00,$00,$01,$00,$FF,$FF,$FF,$FF,$01,$00,$00
@@ -2914,7 +2914,7 @@ Ent16_SubstateTable:
     LSR a
     AND #$1F
     TAY
-    LDA Tbl_B5_974D,y
+    LDA SmallOffsets_B5_974D,y
     CLC
     ADC tmp_c
     STA tmp_a
@@ -2941,8 +2941,8 @@ Tbl_B5_9720:
     .byte $02,$04,$06,$07,$09,$0A,$0B,$0B,$0C,$0C,$0C,$0C,$0B,$0B,$0A,$09
     .byte $07,$06,$04,$02,$00,$FE,$FD,$FD,$FC,$FC,$FD,$FD,$FE,$00,$01,$02
     .byte $03,$03,$04,$04,$04,$03,$03,$02,$02,$01,$01,$00,$80
-; Tbl_B5_974D: 32 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_974D:
+; SmallOffsets_B5_974D: 32 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_974D:
     .byte $FF,$FE,$FE,$FD,$FD,$FD,$FD,$FD,$FD,$FD,$FE,$FE,$FF,$00,$00,$00
     .byte $01,$02,$02,$03,$03,$03,$03,$03,$03,$03,$02,$02,$01,$00,$00,$00
 Ent19_Update:
@@ -2966,11 +2966,11 @@ B5_978C:
     STA ent_radius,x
     AND #$0F
     TAY
-    LDA Tbl_B5_979F,y
+    LDA SmallOffsets_B5_979F,y
     STA ent_param,x
     RTS
-; Tbl_B5_979F: 16 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_979F:
+; SmallOffsets_B5_979F: 16 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_979F:
     .res 10, $00
     .byte $01,$01,$01,$01,$01,$01
 Ent1A_Update:
@@ -3047,7 +3047,7 @@ Ent1B_Update:
     LSR a
     AND #$1F
     TAY
-    LDA Tbl_B5_98AA,y
+    LDA SmallOffsets_B5_98AA,y
     STA ent_param,x
     JMP @B5_985B
 @B5_9849:
@@ -3086,12 +3086,12 @@ B5_9883:
     .byte $00,$02,$00,$02,$00,$02,$00,$02,$00,$02,$01,$02,$00,$02,$01,$02
     .byte $01,$03,$00,$03,$01,$03,$01,$03,$02,$03,$01,$03,$02,$03,$02,$03
     .byte $02,$03,$02,$03,$02,$03,$02
-; Tbl_B5_98AA: 23 bytes, read by Ent1B_Update, Ent1C_Update
-Tbl_B5_98AA:
+; SmallOffsets_B5_98AA: 23 bytes, read by Ent1B_Update, Ent1C_Update
+SmallOffsets_B5_98AA:
     .res 8, $03
     .byte $04,$04,$04,$04,$03,$03,$03,$04,$04,$04,$03,$03,$03,$03,$03
-; Tbl_B5_98C1: 20 bytes, read by B5_993C
-Tbl_B5_98C1:
+; SmallOffsets_B5_98C1: 20 bytes, read by B5_993C
+SmallOffsets_B5_98C1:
     .res 9, $03
     .res 10, $02
     .byte $00
@@ -3119,7 +3119,7 @@ Ent1C_Update:
     CMP #$20
     BCS @B5_990A
     TAY
-    LDA Tbl_B5_98AA,y
+    LDA SmallOffsets_B5_98AA,y
     STA ent_param,x
 @B5_990A:
     JSR Ent_GroundCheck
@@ -3150,7 +3150,7 @@ Ent1E_Update:
     ADC #$01
 B5_993C:
     STA ent_param2,x
-    LDA Tbl_B5_98C1,y
+    LDA SmallOffsets_B5_98C1,y
     BNE @B5_994B
     LDA ent_dy,x
     STA ent_type,x
@@ -3192,7 +3192,7 @@ Ent1F_Update:
     STA ent_radius,x
     AND #$0F
     TAY
-    LDA Tbl_B5_979F,y
+    LDA SmallOffsets_B5_979F,y
     STA ent_param,x
     RTS
 Ent20_Update:
@@ -3487,7 +3487,7 @@ Ent_TickRadius:
     LDA ent_param2,x
     LSR a
     TAY
-    LDA Tbl_B5_9C30,y
+    LDA SmallOffsets_B5_9C30,y
     CMP #$FF
     BNE @B5_9C29
     STA ent_param2,x
@@ -3503,8 +3503,8 @@ Ent_TickRadius:
 B5_9C2C:
     STA ent_param,x
     RTS
-; Tbl_B5_9C30: 18 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_9C30:
+; SmallOffsets_B5_9C30: 18 bytes, read by Ent_TickRadius
+SmallOffsets_B5_9C30:
     .byte $01,$01,$01,$01,$01,$01,$00,$00,$00,$00,$00,$01,$01,$01,$01,$01
     .byte $00,$FF
 Ent2E_Update:
@@ -3796,8 +3796,8 @@ EffectList_B5_9F60:
     .word $0004, $0004
     .byte $00, $02, $19, $00, $00
     .byte $FF
-; Tbl_B5_9F6B: 1 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_9F6B:
+; Fill_B5_9F6B: 1 bytes, no direct code reference (continuation or unreferenced)
+Fill_B5_9F6B:
     .byte $60
 Ent34_Update:
     DEC ent_angle,x
@@ -3893,7 +3893,7 @@ Ent37_Update:
     LDA ent_param2,x
     BEQ @B5_A04E
     LDY ent_radius,x
-    LDA Tbl_B5_A096,y
+    LDA SmallOffsets_B5_A096,y
     STA tmp_a
     CMP #$80
     BEQ @B5_A05A
@@ -3915,7 +3915,7 @@ Ent37_Update:
     RTS
 @B5_A04E:
     LDY ent_radius,x
-    LDA Tbl_B5_A071,y
+    LDA SmallOffsets_B5_A071,y
     STA tmp_a
     CMP #$80
     BNE @B5_A02F
@@ -3931,13 +3931,13 @@ Ent37_Update:
     STA ent_radius,x
 @B5_A070:
     RTS
-; Tbl_B5_A071: 37 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_A071:
+; SmallOffsets_B5_A071: 37 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_A071:
     .byte $FD,$FD,$FE,$FE,$FE,$FE,$FF,$FE,$FF,$FF,$FE,$FF,$FF,$FF,$00,$FF
     .byte $FF,$00,$FF,$00,$FF,$00,$00,$00,$01,$00,$01,$01,$00,$01,$01,$01
     .byte $02,$01,$01,$02,$80
-; Tbl_B5_A096: 58 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_A096:
+; SmallOffsets_B5_A096: 58 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_A096:
     .byte $FD,$FE,$FE,$FE,$FF,$FE,$FF,$FF,$00,$FF,$00,$00,$00,$01,$00,$01
     .byte $01,$02,$01,$02,$02,$02,$03,$FE,$FE,$FE,$FF,$FF,$00,$FF,$00,$00
     .byte $01,$00,$01,$01,$02,$02,$02,$FE,$FF,$00,$FF,$00,$00,$01,$00,$01
@@ -4269,7 +4269,7 @@ Ent3E_Update:
     BEQ @B5_A37C
     STA ent_radius,x
 @B5_A37C:
-    LDA Tbl_B5_ADFA,y
+    LDA SmallOffsets_B5_ADFA,y
     STA tmp_c
     LDA player_x_lo
     SEC
@@ -4574,7 +4574,7 @@ Ent44_Update:
 @B5_A64F:
     LDA ent_y_lo,x
     SEC
-    SBC Tbl_B5_ADFA,y
+    SBC SmallOffsets_B5_ADFA,y
     STA tmp_a
     STA ent_y_lo,x
     LDA ent_y_hi,x
@@ -4969,7 +4969,7 @@ Ent_CheckPlayerOverlapD:
     AND #$04
     BNE B5_A975
     LDY shot_state
-    LDA Tbl_B5_8983,y
+    LDA SmallOffsets_B5_8983,y
     BEQ @B5_A9DB
     LDA shot_screen_y
     SEC
@@ -4987,7 +4987,7 @@ Ent_CheckPlayerOverlapD:
     ADC #$1E
     CMP tmp_d
     BCC @B5_A9DB
-    LDA Tbl_B5_8983,y
+    LDA SmallOffsets_B5_8983,y
     STA tmp_a
     SEC
     SBC #$01
@@ -5001,7 +5001,7 @@ Ent_CheckPlayerOverlapD:
     RTS
 @B5_A9DB:
     LDY shot_state_1
-    LDA Tbl_B5_8983,y
+    LDA SmallOffsets_B5_8983,y
     BEQ @B5_A9DA
     LDA shot_screen_y_1
     SEC
@@ -5019,7 +5019,7 @@ Ent_CheckPlayerOverlapD:
     ADC #$1E
     CMP tmp_d
     BCC @B5_A9DA
-    LDA Tbl_B5_8983,y
+    LDA SmallOffsets_B5_8983,y
     STA tmp_a
     SEC
     SBC #$01
@@ -5397,12 +5397,12 @@ Ent50_Update:
     AND #$0F
     BNE @B5_AD17
     LDY switch_phase
-    LDA Tbl_B5_AD1A,y
+    LDA SmallOffsets_B5_AD1A,y
     STA ent_angle,x
 @B5_AD17:
     JMP Ent_TickParam2
-; Tbl_B5_AD1A: 5 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_AD1A:
+; SmallOffsets_B5_AD1A: 5 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_AD1A:
     .byte $00,$03,$02,$04,$01
 Ent51_Update:
     LDA #$52
@@ -5440,7 +5440,7 @@ Ent54_Update:
     BEQ @B5_AD68
     STA ent_radius,x
 @B5_AD68:
-    LDA Tbl_B5_ADFA,y
+    LDA SmallOffsets_B5_ADFA,y
     STA tmp_a
     JSR Ent_MoveYWithGround
     LDA ent_angle,x
@@ -5471,8 +5471,8 @@ Ent54_Update:
     STA ent_radius,x
     LDA #$00
     JMP PlaySfxSq2
-; Tbl_B5_ADAB: signed 16-bit offsets stepped by several entity handlers
-Tbl_B5_ADAB:
+; SmallOffsets_B5_ADAB: signed 16-bit offsets stepped by several entity handlers
+SmallOffsets_B5_ADAB:
     .word $FFFE
     .word $FFFF
     .word $FFFE
@@ -5513,8 +5513,8 @@ Tbl_B5_ADAB:
     .word $0000
     .word $0001
     .byte $80
-; Tbl_B5_ADFA: 39 bytes, read by Ent3E_Update, Ent44_Update, Ent54_Update
-Tbl_B5_ADFA:
+; SmallOffsets_B5_ADFA: 39 bytes, read by Ent3E_Update, Ent44_Update, Ent54_Update
+SmallOffsets_B5_ADFA:
     .byte $00,$00,$00,$01,$00,$00,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00
     .byte $01,$00,$01,$00,$01,$00,$01,$00,$01,$01,$01,$01,$01,$01,$01,$02
     .byte $01,$01,$02,$01,$02,$01,$02
@@ -5525,7 +5525,7 @@ Ent55_Update:
     INC ent_radius,x
     ASL a
     TAY
-    LDA Tbl_B5_ADAB,y
+    LDA SmallOffsets_B5_ADAB,y
     STA tmp_a
     CMP #$80
     BNE B5_AE3E
@@ -5548,7 +5548,7 @@ Ent56_Update:
 Ent5D_Update:
     LDY ent_angle,x
     INC ent_angle,x
-    LDA Tbl_B5_AE8E,y
+    LDA SmallOffsets_B5_AE8E,y
     STA tmp_a
     CMP #$80
     BNE @B5_AE72
@@ -5571,8 +5571,8 @@ Ent5D_Update:
     ADC tmp_d
     STA ent_y_hi,x
     RTS
-; Tbl_B5_AE8E: 21 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_AE8E:
+; SmallOffsets_B5_AE8E: 21 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_AE8E:
     .byte $FE,$FE,$FE,$FF,$FE,$FF,$00,$FF,$00,$00,$00,$01,$00,$01,$01,$02
     .byte $01,$02,$02,$02,$80
 Ent5E_Update:
@@ -5639,7 +5639,7 @@ Ent5E_Update:
     LSR a
     AND #$1F
     TAY
-    LDA Tbl_B5_AFBF,y
+    LDA SmallOffsets_B5_AFBF,y
     STA ent_param,x
     LDA ent_radius,x
     AND #$0F
@@ -5674,7 +5674,7 @@ Ent5F_Update:
     SBC #$50
     BCC B5_AF39
     TAY
-    LDA Tbl_B5_AFA9,y
+    LDA SmallOffsets_B5_AFA9,y
     BNE B5_AF7E
     STA ent_radius,x
     LDA #$5E
@@ -5701,12 +5701,12 @@ Ent60_Update:
     BNE B5_AF7E
     STA ent_type,x
     RTS
-; Tbl_B5_AFA9: 22 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_AFA9:
+; SmallOffsets_B5_AFA9: 22 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_AFA9:
     .byte $01,$01,$01,$01,$01,$01,$01,$03,$03,$03,$03,$03,$03,$01,$01,$01
     .byte $01,$03,$03,$03,$01,$00
-; Tbl_B5_AFBF: 32 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_AFBF:
+; SmallOffsets_B5_AFBF: 32 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_AFBF:
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01,$00,$01
     .byte $00,$01,$00,$01,$00,$01,$00,$01,$00,$02,$02,$01,$00,$02,$02,$01
 ; Tbl_B5_AFDF: 16 bytes, no direct code reference (continuation or unreferenced)
@@ -5719,9 +5719,12 @@ EffectList_B5_AFEF:
     .word $0000, $FFFB
     .byte $B0, $04, $00, $00, $00
     .byte $FF
-; Tbl_B5_AFFA: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_AFFA:
-    .byte $60,$00,$00,$0D,$00,$B0,$04,$00,$00,$00,$FF
+; EffectList_B5_AFFA: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+EffectList_B5_AFFA:
+    .byte $60
+    .word $0000, $000D
+    .byte $B0, $04, $00, $00, $00
+    .byte $FF
 Ent61_Update:
     DEC ent_angle,x
     BNE @B5_B022
@@ -5835,9 +5838,12 @@ Ent67_Update:
     STA ent_radius,x
 B5_B0DA:
     RTS
-; Tbl_B5_B0DB: 11 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_B0DB:
-    .byte $68,$00,$00,$F2,$FF,$D8,$03,$00,$00,$00,$FF
+; EffectList_B5_B0DB: effect list for SpawnEffects
+EffectList_B5_B0DB:
+    .byte $68
+    .word $0000, $FFF2
+    .byte $D8, $03, $00, $00, $00
+    .byte $FF
 ; EffectList_B5_B0E6: effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
 EffectList_B5_B0E6:
     .byte $69
@@ -5959,7 +5965,7 @@ Ent_PatrolTail:
     AND #$06
     LSR a
     TAY
-    LDA Tbl_B5_B239,y
+    LDA SmallOffsets_B5_B239,y
     CLC
     ADC #$0D
     STA ent_param,x
@@ -6012,8 +6018,8 @@ Ent75_Update:
     BEQ @B5_B1F8
 @B5_B236:
     JMP Ent_PatrolTail
-; Tbl_B5_B239: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_B239:
+; SmallOffsets_B5_B239: 4 bytes, read by Ent_PatrolTail
+SmallOffsets_B5_B239:
     .byte $00,$01,$02,$01
 Ent76_Update:
     JSR Ent_HurtOnTouch
@@ -6808,7 +6814,7 @@ B5_B90B:
     INC ent_radius,x
     LDA #$00
     STA tmp_d
-    LDA Tbl_B5_B93C,y
+    LDA SmallOffsets_B5_B93C,y
     CMP #$80
     BNE @B5_B922
     LDA #$00
@@ -6828,8 +6834,8 @@ B5_B90B:
     ADC tmp_d
     STA ent_y_hi,x
     RTS
-; Tbl_B5_B93C: 51 bytes, read by B5_B90B
-Tbl_B5_B93C:
+; SmallOffsets_B5_B93C: 51 bytes, read by B5_B90B
+SmallOffsets_B5_B93C:
     .byte $00,$00,$01,$00,$00,$00,$01,$00,$00,$01,$00,$01,$01,$01,$00,$01
     .byte $00,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00,$FF,$00,$00,$00,$FF
     .byte $00,$00,$FF,$00,$FF,$FF,$FF,$00,$FF,$00,$00,$FF,$00,$00,$00,$FF
@@ -7081,7 +7087,7 @@ Ent93_Update:
     INC ent_radius,x
     ASL a
     TAY
-    LDA Tbl_B5_ADAB,y
+    LDA SmallOffsets_B5_ADAB,y
     STA tmp_a
     CMP #$80
     BEQ @B5_BB6E
@@ -7168,7 +7174,7 @@ Ent97_Update:
     AND #$03
     BNE @B5_BC32
     LDY ent_angle,x
-    LDA Tbl_B5_BC33,y
+    LDA SmallOffsets_B5_BC33,y
     CMP #$FF
     BNE @B5_BC2C
     DEC ent_radius,x
@@ -7184,8 +7190,8 @@ Ent97_Update:
     INC ent_angle,x
 @B5_BC32:
     RTS
-; Tbl_B5_BC33: 19 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_BC33:
+; SmallOffsets_B5_BC33: 19 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B5_BC33:
     .byte $00,$00,$00,$00,$01,$01,$03,$03,$02,$02,$03,$03,$01,$01,$03,$03
     .byte $00,$03,$FF
 Ent_Noop:
@@ -7216,7 +7222,7 @@ Ent_Noop:
     STA player_frame
     RTS
     LDY zp_D8
-    LDA Tbl_B5_BCD7,y
+    LDA SmallOffsets_B5_BCD7,y
     CMP #$80
     BNE @B5_BCAE
     LDA zp_D9
@@ -7253,7 +7259,7 @@ Ent_Noop:
     STA player_frame
     LDA player_y_lo
     CLC
-    ADC Tbl_B5_BCD7,y
+    ADC SmallOffsets_B5_BCD7,y
     STA player_y_lo
     INC zp_D8
     LDA entity_tick
@@ -7267,8 +7273,8 @@ Ent_Noop:
     SBC #$00
     STA player_x_hi
     RTS
-; Tbl_B5_BCD7: 40 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B5_BCD7:
+; SmallOffsets_B5_BCD7: 40 bytes, read by Ent_Noop
+SmallOffsets_B5_BCD7:
     .byte $FE,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$00,$FF,$00,$FF,$00,$00,$00,$01
     .byte $00,$01,$00,$01,$01,$01,$01,$02,$01,$02,$02,$FE,$FF,$FF,$00,$FF
     .byte $00,$00,$01,$00,$01,$01,$02,$80

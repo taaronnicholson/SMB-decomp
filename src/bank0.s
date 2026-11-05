@@ -748,8 +748,8 @@ Gfx_B0_88A7:
     .byte $2F,$DC,$2F,$17,$CC,$00,$66,$5F,$0F,$3B,$9E,$D1,$B0,$97,$45,$A1
     .byte $D0,$A8,$3C,$97,$E6,$E3,$B9,$E0,$F6,$7C,$CC,$BE,$E9,$68,$B8,$54
     .byte $2C,$1C,$CB,$E7,$67,$70,$79,$BC,$3E,$CC,$BF,$80,$00,$00
-; Tbl_B0_8C95: 6 bytes, read by CheckPause, LoadArea
-Tbl_B0_8C95:
+; SmallOffsets_B0_8C95: 6 bytes, read by CheckPause, LoadArea
+SmallOffsets_B0_8C95:
     .byte $00,$04,$04,$04,$04,$04
 TilesetRecord0:
     .word $AD31, $A43B, $A881, $AC41

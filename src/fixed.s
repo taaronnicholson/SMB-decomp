@@ -177,8 +177,8 @@ PPUCopy1:
     ADC ppu_buffer_idx
     TAX
     JMP F_C0B3
-; Tbl_F_C1D0: 31 bytes, read by ShotMoveDown, F_E734
-Tbl_F_C1D0:
+; SmallOffsets_F_C1D0: 31 bytes, read by ShotMoveDown, F_E734
+SmallOffsets_F_C1D0:
     .res 10, $00
     .byte $02,$02,$01,$01,$02,$01,$00,$00,$00,$00,$00,$00,$00,$00,$00,$02
     .byte $02,$01,$01,$00,$00
@@ -822,7 +822,7 @@ F_C959:
     CMP #$04
     BNE @F_C96F
     LDY stage_index
-    LDA Tbl_F_C988,y
+    LDA SmallOffsets_F_C988,y
     BNE HideAllSprites
 @F_C96F:
     LDX #$00
@@ -842,8 +842,8 @@ F_C959:
     CPX #$3C
     BNE @F_C972
     RTS
-; Tbl_F_C988: 5 bytes, read by F_C959
-Tbl_F_C988:
+; SmallOffsets_F_C988: 5 bytes, read by F_C959
+SmallOffsets_F_C988:
     .byte $00,$01,$00,$02,$03
 HideAllSprites:
     LDY #$00
@@ -1453,7 +1453,7 @@ CheckPause:
     JSR SwitchBank
     JSR RestoreScrollAndRedraw
     LDX tileset_id
-    LDA Tbl_B0_8C95,x
+    LDA SmallOffsets_B0_8C95,x
     JSR SwitchBankKeepX
     CLC
     JSR DecompressAndFinish
@@ -1924,7 +1924,7 @@ LoadArea:
 @F_D139:
     STA tileset_id
     TAX
-    LDA Tbl_B0_8C95,x
+    LDA SmallOffsets_B0_8C95,x
     STA ram_01A5
     TXA
     ASL a
@@ -3434,12 +3434,12 @@ FilterCollectedTile:
     LDX tmp_d
     LDA tmp_b
     RTS
-; Tbl_F_DBF6: 27 bytes, no direct code reference (continuation or unreferenced)
-Tbl_F_DBF6:
+; SmallOffsets_F_DBF6: 27 bytes, read by PlayerTileInteract
+SmallOffsets_F_DBF6:
     .res 12, $01
     .byte $00,$01,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$00
-; Tbl_F_DC11: 16 bytes, no direct code reference (continuation or unreferenced)
-Tbl_F_DC11:
+; SmallOffsets_F_DC11: 16 bytes, read by TryFireShot
+SmallOffsets_F_DC11:
     .byte $00,$00,$00,$01,$01,$01,$00,$01,$00,$00,$00,$00,$01,$01,$00,$00
 PlayerBlinkCheck:
     LDY #$FF
@@ -3510,7 +3510,7 @@ PlayerBlinkCheck:
     LDA #$02
     JSR SwitchBank
     LDY player_state
-    LDX Tbl_B2_B56E,y
+    LDX SmallOffsets_B2_B56E,y
     BEQ @F_DCF8
     DEX
     BEQ @F_DCF2
@@ -3696,12 +3696,12 @@ TryFireShot:
     LDA shot_state_1
     BEQ F_DDFC
     LDX shot_state
-    LDA Tbl_F_DC11,x
+    LDA SmallOffsets_F_DC11,x
     BNE @F_DDD7
     TXA
     CLC
     ADC shot_state_1
-    LDA Tbl_F_DC11,x
+    LDA SmallOffsets_F_DC11,x
 F_DDFA:
     BEQ F_DE09
 F_DDFC:
@@ -5062,7 +5062,7 @@ F_E734:
     LSR a
     LSR a
     TAX
-    LDA Tbl_F_C1D0,x
+    LDA SmallOffsets_F_C1D0,x
     BEQ @F_E7F9
     AND #$01
     STA player_facing
@@ -6297,7 +6297,7 @@ F_F043:
     JMP F_C6CC
 PlayerTileInteract:
     LDX player_state
-    LDA Tbl_F_DBF6,x
+    LDA SmallOffsets_F_DBF6,x
     BNE F_F090
 F_F08F:
     RTS

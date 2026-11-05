@@ -140,8 +140,8 @@ AreaMap23:
     .res 23, $05
     .byte $06,$04,$05,$05,$05,$05,$05,$04,$05,$06,$05,$05,$06,$04,$05,$05
     .byte $05,$05,$05,$05,$05,$05,$05,$06,$00,$04,$05,$05,$05,$05,$06,$04
-; Tbl_B4_8880: 32 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B4_8880:
+; Fill_B4_8880: 32 bytes, no direct code reference (continuation or unreferenced)
+Fill_B4_8880:
     .res 32, $D7
 ; AreaMap21: tile map for area(s) 21: 32 x 32 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap21:

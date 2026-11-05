@@ -74,7 +74,7 @@
   "addr": 33003,
   "len": 26,
   "name": "Tbl_B1_80EB",
-  "comment": "26 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "26 bytes, read by UpdateShots"
  },
  {
   "bank": 1,
@@ -284,7 +284,7 @@
   "addr": 46446,
   "len": 60,
   "name": "Tbl_B2_B56E",
-  "comment": "60 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "60 bytes, read by PlayerBlinkCheck"
  },
  {
   "bank": 2,
@@ -627,7 +627,7 @@
   "addr": 32951,
   "len": 28,
   "name": "Tbl_B5_80B7",
-  "comment": "28 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "28 bytes, read by Ent_TryCarryPlayer"
  },
  {
   "bank": 5,
@@ -823,7 +823,7 @@
   "addr": 39984,
   "len": 18,
   "name": "Tbl_B5_9C30",
-  "comment": "18 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "18 bytes, read by Ent_TickRadius"
  },
  {
   "bank": 5,
@@ -977,7 +977,7 @@
   "addr": 44459,
   "len": 79,
   "name": "Tbl_B5_ADAB",
-  "comment": "79 bytes, read by Ent55_Update, Ent93_Update, B5_AE3E"
+  "comment": "79 bytes, read by Ent55_Update, Ent93_Update"
  },
  {
   "bank": 5,
@@ -1054,7 +1054,7 @@
   "addr": 45625,
   "len": 4,
   "name": "Tbl_B5_B239",
-  "comment": "4 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "4 bytes, read by Ent_PatrolTail"
  },
  {
   "bank": 5,
@@ -1166,7 +1166,7 @@
   "addr": 48343,
   "len": 40,
   "name": "Tbl_B5_BCD7",
-  "comment": "40 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "40 bytes, read by Ent_Noop"
  },
  {
   "bank": 5,
@@ -1411,14 +1411,14 @@
   "addr": 56310,
   "len": 27,
   "name": "Tbl_F_DBF6",
-  "comment": "27 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "27 bytes, read by PlayerTileInteract"
  },
  {
   "bank": 7,
   "addr": 56337,
   "len": 16,
   "name": "Tbl_F_DC11",
-  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
+  "comment": "16 bytes, read by TryFireShot"
  },
  {
   "bank": 7,

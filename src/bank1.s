@@ -57,7 +57,7 @@ UpdateShots:
     LDA Tbl_B1_8105,x
     STA oam_buf_4D
     LDA shot_attr
-    ORA Tbl_B1_80EB,x
+    ORA SmallOffsets_B1_80EB,x
     STA oam_buf_4E
 @B1_808F:
     LDA shot_state_1
@@ -105,11 +105,11 @@ UpdateShots:
     LDA Tbl_B1_8105,x
     STA oam_buf_51
     LDA shot_attr_1
-    ORA Tbl_B1_80EB,x
+    ORA SmallOffsets_B1_80EB,x
     STA oam_buf_52
     RTS
-; Tbl_B1_80EB: 26 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_80EB:
+; SmallOffsets_B1_80EB: 26 bytes, read by UpdateShots
+SmallOffsets_B1_80EB:
     .byte $00,$00,$01,$03,$03,$03,$03,$03,$03,$03,$03,$03,$03,$00,$00,$03
     .byte $03,$00,$03,$03,$00,$00,$00,$00,$00,$02
 ; Tbl_B1_8105: 25 bytes, no direct code reference (continuation or unreferenced)
@@ -461,7 +461,7 @@ ShotMoveDown:
     LSR a
     LSR a
     TAY
-    LDA Tbl_F_C1D0,y
+    LDA SmallOffsets_F_C1D0,y
     CMP #$03
     BCS @B1_83A0
 @B1_8399:
@@ -4660,22 +4660,22 @@ AreaSpawn19:
     .word $02D0, $00D9
     .byte $68, $00, $00, $00, $00
     .byte $FF
-; Tbl_B1_AEF2: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_AEF2:
+; SmallOffsets_B1_AEF2: 4 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B1_AEF2:
     .byte $04,$00,$FE,$FF
 ; AreaSpawn20: spawn data for area(s) 5: 1 setup actions, 0 entities
 AreaSpawn20:
     .byte $04, $FF
     .byte $FF
-; Tbl_B1_AEF9: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_AEF9:
+; SmallOffsets_B1_AEF9: 4 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B1_AEF9:
     .byte $00,$00,$FE,$FF
 ; AreaSpawn21: spawn data for area(s) 4: 6 setup actions, 0 entities
 AreaSpawn21:
     .byte $0F, $06, $02, $07, $18, $15, $FF
     .byte $FF
-; Tbl_B1_AF05: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_AF05:
+; SmallOffsets_B1_AF05: 4 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B1_AF05:
     .byte $00,$00,$FE,$FF
 ; AreaSpawn22: spawn data for area(s) 6: 1 setup actions, 1 entities
 AreaSpawn22:
@@ -4684,15 +4684,15 @@ AreaSpawn22:
     .word $0400, $0020
     .byte $C0, $0B, $00, $00, $00
     .byte $FF
-; Tbl_B1_AF16: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_AF16:
+; SmallOffsets_B1_AF16: 4 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B1_AF16:
     .byte $00,$00,$FE,$FF
 ; AreaSpawn23: spawn data for area(s) 2: 3 setup actions, 0 entities
 AreaSpawn23:
     .byte $1E, $18, $02, $FF
     .byte $FF
-; Tbl_B1_AF1F: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B1_AF1F:
+; SmallOffsets_B1_AF1F: 4 bytes, no direct code reference (continuation or unreferenced)
+SmallOffsets_B1_AF1F:
     .byte $00,$00,$FE,$FF
 B1_AF23:
     LDA #$02
@@ -4887,7 +4887,7 @@ B1_B094:
     LDA zp_D6
     LSR a
     TAY
-    LDA Tbl_B1_B144,y
+    LDA SmallOffsets_B1_B144,y
     CMP #$80
     BNE @B1_B0A8
     LDA #$15
@@ -4981,8 +4981,8 @@ PlayerAnimAdvance:
     STA anim_tick
 @B1_B143:
     RTS
-; Tbl_B1_B144: 13 bytes, read by B1_B094
-Tbl_B1_B144:
+; SmallOffsets_B1_B144: 13 bytes, read by B1_B094
+SmallOffsets_B1_B144:
     .byte $00,$00,$00,$00,$FF,$00,$01,$01,$FF,$FF,$00,$00,$80
 ; PlayerAnimFrames: $FF-terminated player_frame list walked by PlayerAnimAdvance
 PlayerAnimFrames:

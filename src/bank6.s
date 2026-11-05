@@ -2110,9 +2110,10 @@ SongTable:
     .word B6_9DB2, B6_9DBC, B6_9DB8, B6_9DC6
     .byte $2E
     .word B6_9EEE, B6_9EF6, B6_9EF2, B6_9EFE
-; Tbl_B6_9478: 4 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B6_9478:
-    .byte $3E,$A0,$00,$00
+; Bank6_PtrPair_9478: word $A03E (the filler before AreaMap22) and $0000
+Bank6_PtrPair_9478:
+    .word $A03E
+    .word $0000
 B6_947C:
     .word B6_951B
     .word B6_952A
@@ -5184,7 +5185,7 @@ B6_BCD1:
 @B6_BDFC:
     LDA @B6_BEE9,y
     STA ptr_lo
-    LDA Tbl_B6_BEEC,y
+    LDA GameOverTextPacket,y
     STA ptr_hi
     LDA PPUSTATUS
     LDA #$23
@@ -5294,8 +5295,8 @@ B6_BCD1:
     .byte $01,$02,$02
 @B6_BEE9:
     .byte $FA,$EF,$EF
-; Tbl_B6_BEEC: 22 bytes, read by B6_BCD1
-Tbl_B6_BEEC:
+; GameOverTextPacket: PPU text packet with the "GAME OVER" characters (read by B6_BCD1)
+GameOverTextPacket:
     .byte $BE,$BE,$BE,$0B,$47,$41,$4D,$45,$5C,$4F,$56,$45,$52,$00,$0C,$53
     .byte $54,$41,$47,$45,$5C,$00
 RngStep:

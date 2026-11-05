@@ -7,6 +7,7 @@ Results are cached in tools/tables.json (merged), so the pass can be repeated af
 import os, re, sys, json, subprocess, collections
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 cache_path = os.path.join(HERE, 'tables.json')
+ROM = open(os.path.join(ROOT, 'rom/game.nes'), 'rb').read()
 cache = json.load(open(cache_path)) if os.path.exists(cache_path) else []
 env = dict(os.environ, GAPS='400')
 txt = subprocess.run([sys.executable, '-I', os.path.join(HERE, 'decomp.py')], env=env, capture_output=True, text=True, cwd=ROOT).stdout
@@ -88,6 +89,11 @@ with open(os.path.join(HERE, 'hints_tables.txt'), 'w') as f:
         ents = [w for w in who if re.match(r'^Ent[0-9A-F]{2}_Update$', w)]
         if nm == r["name"] and len(ents) == 1 and len(set(who)) <= 2:           # read by one entity handler: name it after the handler
             nm = f'{ents[0][:-7]}_Tbl_{r["addr"]:04X}'
+        if nm == r["name"]:                                                        # still generic: classify by shape
+            o = 16 + r["bank"] * 16384 + (r["addr"] - (0xC000 if r["bank"] == 7 else 0x8000)); d = ROM[o:o + r["len"]]
+            tag = f'{"F" if r["bank"] == 7 else "B" + str(r["bank"])}_{r["addr"]:04X}'
+            if len(set(d)) == 1: nm = f'Fill_{tag}'
+            elif all(v in (0, 1, 2, 3, 4, 0xFF, 0xFE, 0xFD, 0xFC, 0x80) for v in d): nm = f'SmallOffsets_{tag}'
         named_readers = sorted({w for w in who if not re.match(r'^(?:F|B\d)_[0-9A-F]{4}$', w) and w != '?'})
         if nm == r["name"] and len(named_readers) == 1 and len(set(who)) == 1:      # one reader that already has a real name
             nm = f'{named_readers[0]}_Tbl_{r["addr"]:04X}'

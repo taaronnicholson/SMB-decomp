@@ -200,8 +200,8 @@ StageTileSet4:
     .byte $14,$14,$14,$7C,$B4,$CC,$78,$00,$08,$08,$08,$08,$78,$70,$00,$00
     .byte $7E,$82,$32,$3A,$3A,$02,$7A,$8A,$00,$7C,$CC,$F4,$D4,$FC,$84,$04
     .byte $0A,$0A,$3E,$5A,$66,$3C,$00,$00,$04,$04,$04,$3C,$38,$00,$00,$00
-; Tbl_B3_8437: 32 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B3_8437:
+; Fill_B3_8437: 32 bytes, no direct code reference (continuation or unreferenced)
+Fill_B3_8437:
     .res 32, $00
 ; AreaMap4: tile map for area(s) 4: 16 x 78 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap4:
@@ -391,8 +391,8 @@ AreaMap0:
     .byte $06,$D2,$00,$00,$00,$00,$26,$00,$00,$00,$00,$AB,$00,$00,$D7,$04
     .byte $06,$D7,$D7,$D7,$00,$00,$00,$00,$C4,$00,$00,$00,$00,$D7,$D7,$04
     .byte $06,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$D7,$04
-; Tbl_B3_8FD7: 32 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B3_8FD7:
+; Fill_B3_8FD7: 32 bytes, no direct code reference (continuation or unreferenced)
+Fill_B3_8FD7:
     .res 32, $D7
 ; AreaMap1: tile map for area(s) 1: 32 x 22 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap1:
@@ -716,8 +716,8 @@ AreaMap12:
     .byte $00,$2A,$29,$29,$2D,$14,$14,$2C,$29,$29,$2D,$14,$14,$2F,$14,$14
     .byte $14,$14,$14,$14,$2A,$29,$29,$2B,$14,$14,$2A,$29,$29,$2B,$14,$14
     .res 15, $14
-; Tbl_B3_A317: 32 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B3_A317:
+; Fill_B3_A317: 32 bytes, no direct code reference (continuation or unreferenced)
+Fill_B3_A317:
     .res 32, $D7
 ; AreaMap10: tile map for area(s) 10: 16 x 70 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap10:
@@ -901,8 +901,8 @@ AreaMap15:
     .byte $16,$3E,$02,$3D,$00,$00,$00,$00,$00,$00,$00,$3C,$02,$01,$3F,$14
     .byte $14,$00,$00,$00,$00,$CD,$00,$14,$14,$00,$00,$00,$00,$00,$00,$14
     .byte $14,$4C,$4C,$4C,$4C,$4C,$4C,$14,$15,$4C,$4C,$4C,$4C,$4C,$4C,$15
-; Tbl_B3_AF57: 16 bytes, no direct code reference (continuation or unreferenced)
-Tbl_B3_AF57:
+; Fill_B3_AF57: 16 bytes, no direct code reference (continuation or unreferenced)
+Fill_B3_AF57:
     .res 16, $D7
 ; AreaMap3: tile map for area(s) 3: 16 x 70 metatiles (rows 2..), one byte per 16x16 tile
 AreaMap3:
@@ -1165,7 +1165,7 @@ B3_BD8D:
     LDA anim_index
     ASL a
     TAY
-    LDA Tbl_B3_BE2A,y
+    LDA SmallOffsets_B3_BE2A,y
     STA tmp_a
     CMP #$80
     BEQ @B3_BDF4
@@ -1234,8 +1234,8 @@ Tbl_B3_BE0E:
 Tbl_B3_BE12:
     .byte $08,$08,$4A,$4A,$08,$08,$08,$08,$4A,$4A,$4A,$08,$08,$08,$4A,$4A
     .byte $08,$08,$4A,$4A,$08,$4A,$4A,$00
-; Tbl_B3_BE2A: signed 16-bit offsets of a decelerating arc (read by B3_BD8D)
-Tbl_B3_BE2A:
+; SmallOffsets_B3_BE2A: signed 16-bit offsets of a decelerating arc (read by B3_BD8D)
+SmallOffsets_B3_BE2A:
     .word $FFFD
     .word $FFFE
     .word $FFFE
