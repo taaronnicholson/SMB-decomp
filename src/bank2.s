@@ -3173,7 +3173,7 @@ ResetLevelState:
     STA fall_ticks
     STA shake_step
     STA zp_84
-    STA zp_A6
+    STA orb_tile_taken
     STA idle_timer_lo
     STA idle_timer_hi
     STA idle_anim_timer

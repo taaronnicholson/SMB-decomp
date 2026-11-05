@@ -1029,8 +1029,8 @@ ram 00FA respawn_x_lo
 ram 00FB respawn_x_hi
 ; exit walk / swim / bonus ascent end
 ram 00BD anim_cursor                ; index (or frame countdown) into the scripted player animation: ExitWalkAnim, BonusAscentEndAnim; frame timer in the swim states $0C/$0D
-ram 00BE swim_anim_step             ; step counter of the swim animation (states $0C/$0D)
-ram 0090 half_speed_toggle          ; flipped every frame in PlayerState0D so walk_speed alternates 0/1
+ram 00BE swim_anim_step             ; step counter of the swim animation (states $0C/$0D); counts up about every 3 frames (verified in area 20)
+ram 0090 half_speed_toggle          ; flipped every frame in PlayerState0D so walk_speed alternates 0/1 (verified in area 20)
 
 ; naming pass 31 (RAM): scrolling and map tile drawing; the value ranges below were seen in the emulator watch (zp_3A 0..1, zp_3B signed, zp_3C/3D 0..7, zp_3F/41 = $8C..$8F pointer high bytes)
 ram 003A scroll_dx                  ; ScrollX: focus_x - prev_focus_x this frame (signed)
@@ -1059,3 +1059,7 @@ ram 01A4 shake_saved_camera_mode    ; camera_mode before the dive-landing shake;
 ram 01A5 shake_step                 ; index into DiveShakeOffsets while camera_mode is 5 (dive-landing shake)
 ram 0398 death_anim_pos             ; death animation sprite positions (base of the array)
 ram 041C level_state_block          ; $041C-$047F: 100 bytes initialised from LevelStateInit at area load; ApplySwitch1-3 write bytes inside it ($0469/$046A/$0472-$0474)
+
+; naming pass 33 (RAM): area 5 power-up orb scene, verified by loading area 5 through the door loader
+ram 00A6 orb_tile_taken             ; set when the player touches tile $D6 (PlayerTileInteract); GameState02 waits for it, then starts the dissolve (game_state 5)
+ram 00C5 orb_anim_frame             ; GameState02: frame 0..$3F of the orb animation (index into GameState02_FrameTable)

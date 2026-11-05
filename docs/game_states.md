@@ -84,3 +84,10 @@ Shooting did not defeat boss 3 in the emulator (3-4 landed shots in about 5,600 
 `GameState0B` runs `tally_step` through a 10-entry word table; in the run it went 0, 1, 2, 3, 6, 7, 9 (step 3 jumped to 6 because the second tally was already `$3C`):
 0 starts (spawns a pickup if `tally` < `$96`, sfx `$28`, popup), 1 counts `tally` up to `$0257` at 10 score per step, 2/5 are timed pauses (`state_delay`/`state_delay_outer`, blinking via the table at `$B0C4`),
 3/4 count the second tally (`tally_small`) up to `$3C` at 50 score per step, 6-9 draw the final messages and hand over to `GameState0D`/the next stage (steps 7-9 read from the code and the table `GameState0B_Sequence`).
+
+### Area 5 power-up scene (`$01`-`$05`, verified by loading area 5 through the door loader)
+- `$01` (`GameState01`, frame 10): with `powerup_shot` = 0 it moves on to `$02` (frame 57, after the drop-in); with `powerup_shot` already set it goes straight to `$03` (a no-op) and sets `collected_flags` to 7 [both checked].
+- `$02` (`GameState02`): `EnableCameraAtX`, then animates the orb with `orb_anim_frame` (0..`$3F`, `GameState02_FrameTable`, `ppu_job` `$11`+) until `orb_tile_taken` (`zp_A6`, set when the player touches tile `$D6`) is non-zero.
+  In the run (I set `zp_A6` by hand at frame 150) it spawned a type `$04` item at x `$120`, y `$D0` (via `AwardPickup` kind 8) and went to `$05` at frame 151.
+- `$05` (`GameState05`): types the dissolve one row per tick (`clear_text_row` 1 -> `$1F`, `ppu_job` `$14`/`$15`; frame 151 -> 459), then spawns a type `$0B` item at x `$76`, y `$9C` and sets `game_state` `$03`.
+- The items spawned in that forced run were removed again after one frame (their fixed spawn position was apparently off-screen for the forced camera), so `$04` -> `$0B` -> `$0C` -> `$0D` (the hopping power-up, `ItemHopArc`; `Ent0D_Update` sets `powerup_shot` = 1, plays sfx `$19`, spawns a type `$04` entity and sets `game_state` `$04`) was not run in the emulator. `GameState04` (queue the text packets at `$AFB3` ("ALFRED ... HELP YOU:") and go to `$03`) is therefore code-read. `$07` is not reached from area 5 and remains code-read.

@@ -6346,7 +6346,7 @@ PlayerTileInteract_LF090:
     BNE PlayerTileInteract_LF0F7
     JSR SetCollectedFlag
     LDA #$01
-    STA zp_A6
+    STA orb_tile_taken
     JMP PlayerTileInteract_LF14F
 PlayerTileInteract_LF0EA:
     LDA ptr_lo

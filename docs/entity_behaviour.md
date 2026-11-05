@@ -69,3 +69,6 @@ the track movers (`$50`) pick their direction from `switch_phase` and the fallin
 
 ## Open questions
 Types `$86` and `$5D` (collect animation after a table, `ent_param2` = `$0D`), and every type not used by the six stages' door-reachable areas.
+
+**Entity types `$86` and `$5D`, probed in the emulator** (a type placed in an unused slot in stage 1, player invulnerable): `$86` fell from y `$43E` to the floor (`$460`) and became `$83` after 73 frames; toggling `switch_flag` (`ram_0731`) then turned `$83` into `$84` (`ent_param2` `$1A`, `ent_param` 2), which matches the documented chain `$83` -> `$84` -> `$85` -> `$86`.
+`$5D` with `ent_param2` = `$0D` became type `$07` after 20 frames (`ent_param` `$1E`, flags 0: the collect-animation entity) and vanished at frame 42, i.e. `$5D` is the start of the collect animation chain `$5D` -> `$07` -> 0.

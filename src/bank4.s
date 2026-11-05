@@ -1049,12 +1049,12 @@ GameState01:
     LDA #$02
     STA game_state
     LDA #$00
-    STA zp_C5
+    STA orb_anim_frame
 GameState03:
     RTS
 GameState02:
     JSR EnableCameraAtX
-    LDA zp_A6
+    LDA orb_tile_taken
     BEQ @B4_AE8F
     JSR FindFreeEntitySlot
     LDA #$D0
@@ -1078,7 +1078,7 @@ GameState02:
     STA clear_text_row
     JMP GameState05
 @B4_AE8F:
-    LDA zp_C5
+    LDA orb_anim_frame
     STA ptr_lo
     CMP #$17
     BEQ @B4_AE9B
@@ -1092,7 +1092,7 @@ GameState02:
     CLC
     ADC #$01
     AND #$3F
-    STA zp_C5
+    STA orb_anim_frame
     LDY ptr_lo
     LDA GameState02_FrameTable,y
     BMI GameState02_LAEB5
