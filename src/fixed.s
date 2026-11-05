@@ -244,11 +244,11 @@ UpdateTouchKind_Tbl_C326:
     .byte $CD
 F_C327:
     .byte $FF,$CB,$C2,$D6,$C2,$F5,$C2,$06,$C3,$12
-; UpdateTouchKind_Tbl_C331: 5 bytes, read by UpdateTouchKind
-UpdateTouchKind_Tbl_C331:
+; Tbl_F_C331: 5 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_C331:
     .byte $C3,$D2,$D2,$00,$CD
-; UpdateTouchKind_Tbl_C336: 6 bytes, read by UpdateTouchKind
-UpdateTouchKind_Tbl_C336:
+; Tbl_F_C336: 6 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_C336:
     .byte $CD,$D3,$D3,$C0,$D3,$D3
 ; TileHeightProfiles: 32 profiles x 16 columns: ground surface height per pixel column of a tile ($FF = no surface)
 TileHeightProfiles:
@@ -1925,7 +1925,7 @@ LoadArea:
     STA tileset_id
     TAX
     LDA SmallOffsets_B0_8C95,x
-    STA ram_01A5
+    STA shake_step
     TXA
     ASL a
     ASL a
@@ -1936,7 +1936,7 @@ LoadArea:
     STA ptr_lo
     LDA $8C9C,x
     STA ptr_hi
-    LDA ram_01A5
+    LDA shake_step
     JSR SwitchBankKeepX
     LDA #$A4
     STA tmp_c
@@ -1948,7 +1948,7 @@ LoadArea:
     JSR SwitchBankKeepX
     LDY #$63
 @F_D16B:
-    LDA LoadArea_Tbl_8999,y
+    LDA Tbl_B1_8999,y
     STA ram_041C,y
     DEY
     BPL @F_D16B
@@ -1979,7 +1979,7 @@ LoadArea:
     STA ptr_lo
     LDA tmp_ptr_hi
     STA ptr_hi
-    LDA ram_01A5
+    LDA shake_step
     JSR SwitchBankKeepX
     CLC
     JSR DecompressAndFinish
@@ -3469,26 +3469,26 @@ PlayerBlinkCheck:
 @F_DC4C:
     LDA #$01
     STA walk_speed
-    LDA zp_86
+    LDA down_lock
     BEQ @F_DC67
     LDA buttons
     AND #$80
     BNE @F_DC61
     LDA #$00
-    STA zp_86
+    STA down_lock
     JMP @F_DC67
 @F_DC61:
     LDA buttons
     AND #$7F
     STA buttons
 @F_DC67:
-    LDA zp_87
+    LDA jump_lock
     BEQ @F_DC7E
     LDA buttons
     AND #$01
     BNE @F_DC78
     LDA #$00
-    STA zp_87
+    STA jump_lock
     JMP @F_DC7E
 @F_DC78:
     LDA buttons
@@ -3613,7 +3613,7 @@ TryStartJump:
     STA zp_84
     STA zp_8C
     STA fall_index
-    STA zp_86
+    STA down_lock
     STA dive_mode
     STA riding_flag
     LDA #$02
@@ -4061,16 +4061,16 @@ PlayerIdleAnim_LE09A:
     ADC #$00
     STA idle_timer_hi
 PlayerIdleAnim_LE0A7:
-    LDA zp_6E
+    LDA idle_wait
     BEQ PlayerIdleAnim_LE0B4
-    DEC zp_6E
+    DEC idle_wait
     LDA #$00
 PlayerIdleAnim_LE0AF:
     STA player_frame
     JMP ApplyRidingMotion
 PlayerIdleAnim_LE0B4:
-    INC zp_6F
-    LDA zp_6F
+    INC idle_step
+    LDA idle_step
     LSR a
     TAX
     LDA F_C270,x
@@ -4084,9 +4084,9 @@ ResetIdleTimer:
     STA idle_timer_hi
     STA idle_anim_timer
 ResetIdleTimer_LE0CE:
-    STA zp_6F
+    STA idle_step
     LDA #$96
-    STA zp_6E
+    STA idle_wait
 ApplyRidingMotion:
     JSR SwitchBankFromAC
     LDA riding_flag
@@ -4661,12 +4661,12 @@ RidingCheckX_LE313:
     LDA player_state
     CMP #$07
     BNE PlayerState0E
-    STA zp_86
+    STA down_lock
 PlayerState0E:
     LDA #$02
     STA player_state
     LDA #$00
-    STA zp_86
+    STA down_lock
     STA riding_flag
     STA fall_index
     STA dive_mode
@@ -4692,7 +4692,7 @@ PlayerState02:
     JMP PlayerLand
 @F_E532:
     LDA #$00
-    STA zp_87
+    STA jump_lock
     LDX fall_index
     CPX #$15
     BEQ @F_E53D
@@ -4713,7 +4713,7 @@ PlayerState02:
     BEQ @F_E579
     LDA dive_mode
     BEQ @F_E562
-    STA zp_86
+    STA down_lock
     LDA dive_facing
     STA player_facing
 @F_E562:
@@ -4932,9 +4932,9 @@ PlayerLand:
     STA player_facing
     LDX #$00
     STX zp_84
-    STX ram_01A5
+    STX shake_step
     DEX
-    STX zp_86
+    STX down_lock
     LDA riding_flag
     BNE @F_E70B
     LDA fall_ticks
@@ -4942,9 +4942,9 @@ PlayerLand:
     BCC @F_E70B
     JSR ShockwaveKillEnemies
     LDA camera_mode
-    STA ram_01A4
+    STA shake_saved_camera_mode
     LDA #$01
-    STA ram_01A5
+    STA shake_step
     LDA #$05
     STA camera_mode
 @F_E70B:
@@ -5070,7 +5070,7 @@ PlayerLand_LE734:
     ADC #$0A
     STA player_state
     LDX #$FF
-    STX zp_86
+    STX down_lock
     STX zp_89
     INX
     STX zp_8D
@@ -5124,7 +5124,7 @@ PlayerLand_LE734:
     CMP #$15
     BEQ @F_E848
     LDA #$FF
-    STA zp_87
+    STA jump_lock
     JMP PlayerLand
 @F_E848:
     LDA #$34
@@ -5507,7 +5507,7 @@ PlayerState0D:
     JSR PlaySfxNoise
     LDA #$00
     STA fall_index
-    STA zp_86
+    STA down_lock
     STA zp_8F
     LDA #$01
     STA player_state
@@ -6730,7 +6730,7 @@ UpdateTouchKind:
     STA tmp_a
     LDA prev_touch_ptr_hi
     STA tmp_b
-    LDA UpdateTouchKind_Tbl_C331,y
+    LDA Tbl_F_C331,y
     JSR QueueMapTileDraw
 @F_F3DE:
     LDA touch_kind
@@ -6779,7 +6779,7 @@ UpdateTouchKind:
     LDA ppu_buffer_idx
     CMP #$20
     BCS @F_F43E
-    LDA UpdateTouchKind_Tbl_C336,y
+    LDA Tbl_F_C336,y
     JSR QueueMapTileDraw
 @F_F43E:
     LDA prev_touch_kind
@@ -6876,7 +6876,7 @@ PlayerState0F:
     LDA death_timer
     LSR a
     TAY
-    LDA PlayerState0F_Tbl_F510,y
+    LDA Tbl_F_F510,y
     BNE PlayerState0F_LF507
     LDA #$10
     STA player_state
@@ -6889,8 +6889,8 @@ PlayerState0F_LF507:
     STA zp_67
     STA zp_C1
     RTS
-; PlayerState0F_Tbl_F510: 12 bytes, read by PlayerState0F
-PlayerState0F_Tbl_F510:
+; Tbl_F_F510: 12 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_F510:
     .byte $46,$46,$47,$47,$48,$48,$48,$45,$45,$45,$45,$00
 PlayerState10:
     LDA death_timer
@@ -6978,7 +6978,7 @@ DeathAnimFrame:
     LDX #$0C
 @F_F5BA:
     LDA (ptr_lo),y
-    STA ram_0398,y
+    STA death_anim_pos,y
     INY
     DEX
     BNE @F_F5BA
@@ -7047,10 +7047,10 @@ DeathAnimFrame_LF5E3:
     TXA
     ASL a
     TAY
-    LDA ram_0398,y
+    LDA death_anim_pos,y
     SEC
     SBC #$08
-    STA ram_0398,y
+    STA death_anim_pos,y
 @F_F631:
     INX
     CPX #$06
@@ -7123,13 +7123,13 @@ SetCollectedFlag:
     STA collected_flags,y
     LDX saved_x
     RTS
-; GetCollectibleBit_Tbl_F6C1: 16 bytes, read by GetCollectibleBit
-GetCollectibleBit_Tbl_F6C1:
+; Tbl_F_F6C1: 16 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_F6C1:
     .byte $BC,$D1,$DB,$D6,$D9,$C8,$C9,$CA,$CB,$CC,$CD,$BD,$BE,$BF,$C2,$C3
 GetCollectibleBit:
     LDX #$0F
 @F_F6D3:
-    CMP GetCollectibleBit_Tbl_F6C1,x
+    CMP Tbl_F_F6C1,x
     BEQ MapPtrToTileCoords
     DEX
     BPL @F_F6D3
@@ -7543,12 +7543,12 @@ AwardPickup:
     LDY #$FA
     JSR SpawnEffects
     LDY stage_index
-    LDA AwardPickup_Tbl_F9D2,y
+    LDA Tbl_F_F9D2,y
     LDY tmp_ptr_lo
     STA effect_param1,y
     RTS
-; AwardPickup_Tbl_F9D2: 5 bytes, read by AwardPickup
-AwardPickup_Tbl_F9D2:
+; Tbl_F_F9D2: 5 bytes, no direct code reference (continuation or unreferenced)
+Tbl_F_F9D2:
     .byte $29,$3F,$3E,$40,$29
 AwardPickup_LF9D7:
     LDA #$01

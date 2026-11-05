@@ -1046,3 +1046,15 @@ ram 0749 scroll_draw_ok             ; $FF at the start of a frame; ScrollY draws
 ram 0370 attr_cells_a               ; map cells gathered for the attribute-table update of the rows/columns being drawn (17 entries)
 ram 0380 attr_cells_b               ; second gathered column (base used by the row-draw variant at F_DAE3)
 ram 0381 attr_cells_b1              ; the same second column as the column-draw variant (F_D8F7) addresses it
+
+; naming pass 32 (RAM): small single-purpose bytes
+ram 0086 down_lock                  ; while non-zero the Down button is masked out of buttons until it is released (set after a dive landing / jump start)
+ram 0087 jump_lock                  ; same for the A button: masked until released (set in PlayerState02 and PlayerLand_LE734)
+ram 006E idle_wait                  ; counts down from $96 while standing still before the next idle animation step (PlayerIdleAnim)
+ram 006F idle_step                  ; step of the idle animation
+ram 0392 scroll_y_hi_save           ; SaveScrollAndClearScreen / RestoreScrollAndRedraw
+ram 0393 scroll_y_lo_save
+ram 0394 scroll_x_save
+ram 01A4 shake_saved_camera_mode    ; camera_mode before the dive-landing shake; restored when the shake table ends
+ram 01A5 shake_step                 ; index into DiveShakeOffsets while camera_mode is 5 (dive-landing shake)
+ram 0398 death_anim_pos             ; death animation sprite positions (base of the array)

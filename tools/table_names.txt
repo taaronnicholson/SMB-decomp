@@ -85,7 +85,7 @@ f FA32 EffectList_F_FA32 struct 1 bwwbbbbb ; effect list for SpawnEffects: recor
 6 88CA PeriodTableLow struct 12 w ; the twelve APU period values of the lower octave, directly before PeriodTable
 5 ABC1 Ent4F_FrameTbl ; frame list for Ent4F_Update
 5 817E PermutationTable_817E ; 3 permutations of 0..4 (5 entries each) used by Ent_TickParam2
-2 B5E8 HopArc_B2_B5E8 ; signed Y offsets in several arcs, $80 ends the table
+2 B5E8 DiveShakeOffsets ; signed vertical camera offsets of the dive-landing shake (camera_mode 5, read from ram_01A5 on), several shake patterns back to back; $80 ends one and restores the camera mode
 1 88EA ArcPairs_B1_88EA ; (dx, dy) signed byte pairs of two motion arcs, each ended by $80
 6 A03E Bank6_Filler_A03E ; unreferenced bytes before AreaMap22 followed by a run of $D7
 7 FFC6 FixedBankTail ; end of the fixed bank: a few header-like bytes, the text "ALFRED CHICKEN" and padding before the vectors

@@ -3532,7 +3532,7 @@ PlayerState07_Body:
     LDA #$00
     STA player_state
     LDA #$01
-    STA zp_86
+    STA down_lock
     JMP ApplyRidingMotion
 ExitWalkStep:
     LDA anim_cursor
