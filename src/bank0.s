@@ -304,7 +304,7 @@ ClearRAM:
     JMP @B0_8255
 @B0_8262:
     RTS
-B0_8263:
+StageRecords:
     .word StageRecord0
     .word StageRecord1
     .word StageRecord2

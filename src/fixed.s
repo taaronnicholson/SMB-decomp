@@ -209,7 +209,7 @@ F_C270:
 FallDyTable:
     .byte $00,$00,$00,$01,$00,$01,$00,$01,$01,$01,$01,$01,$01,$01,$01,$02
     .byte $01,$02,$01,$02,$02,$02
-F_C293:
+WalkFrameFacingPairs:
     .byte $18
 F_C294:
     .byte $00,$19,$00,$1A,$00,$19,$01,$18,$01,$1B,$00,$1C,$00,$1B,$01,$00
@@ -443,9 +443,9 @@ StageSetup_LC66C:
     LDA stage_index
     ASL a
     TAX
-    LDA B0_8263,x
+    LDA StageRecords,x
     STA ptr_lo
-    LDA B0_8263+1,x
+    LDA StageRecords+1,x
     STA ptr_hi
     LDY #$00
     LDA (ptr_lo),y
@@ -4837,7 +4837,7 @@ PlayerState02:
     LDA tmp_a
     AND #$0E
     TAY
-    LDA F_C293,y
+    LDA WalkFrameFacingPairs,y
     STA player_frame
     LDA F_C294,y
     STA player_facing
@@ -5273,7 +5273,7 @@ PlayerState08:
     LDA anim_tick
     AND #$0E
     TAY
-    LDA F_C293,y
+    LDA WalkFrameFacingPairs,y
     STA player_frame
     LDA F_C294,y
     STA player_facing
