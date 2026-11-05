@@ -975,9 +975,9 @@ B1_8679:
     LSR a
     AND #$0E
     TAY
-    LDA Tbl_B1_8785,y
+    LDA ShotDirWords,y
     STA shot_frame,x
-    LDA B1_8786,y
+    LDA $8786,y
     STA shot_attr,x
     LDA shot_y_lo,x
     CLC
@@ -1021,11 +1021,16 @@ B1_8679:
     LDA #$02
     STA pending_tile_kind
     RTS
-; Tbl_B1_8785: 16 bytes, read by B1_8679
-Tbl_B1_8785:
-    .byte $03
-B1_8786:
-    .byte $00,$04,$00,$12,$00,$13,$00,$03,$C0,$04,$C0,$12,$C0,$13,$C0
+; ShotDirWords: 16-bit direction/offset words indexed by the shot kind (read by B1_8679)
+ShotDirWords:
+    .word $0003
+    .word $0004
+    .word $0012
+    .word $0013
+    .word $C003
+    .word $C004
+    .word $C012
+    .word $C013
 ShotPosByAngle:
     LDY shot_angle
     JSR SinLookup

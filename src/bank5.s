@@ -2076,17 +2076,35 @@ Ent06_Update:
     ADC tmp_a
     STA ent_y_lo,x
     LDA ent_y_hi,x
-    ADC B5_901B,y
+    ADC $901B,y
     STA ent_y_hi,x
     INC ent_radius,x
     RTS
-; Ent06_Tbl_901A: 45 bytes, read by Ent06_Update
+; Ent06_Tbl_901A: signed 16-bit X offsets stepped by the entity handler
 Ent06_Tbl_901A:
-    .byte $FE
-B5_901B:
-    .byte $FF,$FE,$FF,$FE,$FF,$FF,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF
-    .byte $FF,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$01,$00,$01
-    .byte $00,$02,$00,$01,$00,$02,$00,$02,$00,$02,$00,$80
+    .word $FFFE
+    .word $FFFE
+    .word $FFFE
+    .word $FFFF
+    .word $FFFE
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0002
+    .word $0001
+    .word $0002
+    .word $0002
+    .word $0002
+    .byte $80
 Ent07_Update:
     INC ent_radius,x
     LDA ent_radius,x
@@ -2649,15 +2667,27 @@ Ent0E_Update:
     ADC Ent0E_Tbl_950E,y
     STA ent_y_lo,x
     LDA ent_y_hi,x
-    ADC B5_950F,y
+    ADC $950F,y
     STA ent_y_hi,x
     RTS
-; Ent0E_Tbl_950E: 32 bytes, read by Ent0E_Update
+; Ent0E_Tbl_950E: signed 16-bit offsets stepped by the entity handler
 Ent0E_Tbl_950E:
-    .byte $FE
-B5_950F:
-    .byte $FF,$FE,$FF,$FF,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00
-    .byte $00,$01,$00,$00,$00,$01,$00,$01,$00,$01,$00,$02,$00,$02,$00
+    .word $FFFE
+    .word $FFFE
+    .word $FFFF
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0001
+    .word $0002
+    .word $0002
 Ent0F_Update:
     LDA entity_tick
     AND #$01
@@ -2826,16 +2856,16 @@ Ent16_Update:
     LDA ent_angle,x
     ASL a
     TAY
-    LDA Ent16_Tbl_9694,y
+    LDA Ent16_SubstateTable,y
     STA ptr_lo
-    LDA B5_9695,y
+    LDA $9695,y
     STA ptr_hi
     JMP (ptr_lo)
-; Ent16_Tbl_9694: 6 bytes, read by Ent16_Update
-Ent16_Tbl_9694:
-    .byte $AD
-B5_9695:
-    .byte $96,$CC,$96,$9A,$96
+; Ent16_SubstateTable: code pointers of Ent16's sub-states
+Ent16_SubstateTable:
+    .word $96AD
+    .word $96CC
+    .word $969A
 @B5_969A:
     LDA #$FA
     STA tmp_c
@@ -2966,17 +2996,42 @@ Ent1A_Update:
     ADC tmp_a
     STA ent_y_lo,x
     LDA ent_y_hi,x
-    ADC B5_97E8,y
+    ADC $97E8,y
     STA ent_y_hi,x
     RTS
-; Ent1A_Tbl_97E7: 61 bytes, read by Ent1A_Update
+; Ent1A_Tbl_97E7: signed 16-bit offsets stepped by the entity handler
 Ent1A_Tbl_97E7:
-    .byte $FD
-B5_97E8:
-    .byte $FF,$FD,$FF,$FE,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$00
-    .byte $00,$01,$00,$01,$00,$02,$00,$02,$00,$03,$00,$03,$00,$FE,$FF,$FE
-    .byte $FF,$FF,$FF,$FF,$FF,$00,$00,$00,$00,$01,$00,$01,$00,$02,$00,$02
-    .byte $00,$FF,$FF,$FF,$FF,$00,$00,$01,$00,$01,$00,$80
+    .word $FFFD
+    .word $FFFD
+    .word $FFFE
+    .word $FFFE
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0002
+    .word $0002
+    .word $0003
+    .word $0003
+    .word $FFFE
+    .word $FFFE
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0002
+    .word $0002
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $0001
+    .word $0001
+    .byte $80
 Ent1B_Update:
     JSR Ent_CheckPlayerOverlap
     JSR Ent_HurtOnTouch
@@ -5416,15 +5471,48 @@ Ent54_Update:
     STA ent_radius,x
     LDA #$00
     JMP PlaySfxSq2
-; Tbl_B5_ADAB: 79 bytes, read by Ent55_Update, Ent93_Update, B5_AE3E
+; Tbl_B5_ADAB: signed 16-bit offsets stepped by several entity handlers
 Tbl_B5_ADAB:
-    .byte $FE
-B5_ADAC:
-    .byte $FF,$FF,$FF,$FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00
-    .byte $00,$FF,$FF,$00,$00,$00,$00,$00,$00,$00,$00,$01,$00,$00,$00,$00
-    .byte $00,$01,$00,$00,$00,$01,$00,$01,$00,$02,$00,$01,$00,$02,$00,$FF
-    .byte $FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$00,$00,$01,$00,$00
-    .byte $00,$01,$00,$01,$00,$FF,$FF,$00,$00,$00,$00,$01,$00,$80
+    .word $FFFE
+    .word $FFFF
+    .word $FFFE
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0002
+    .word $0001
+    .word $0002
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $FFFF
+    .word $0000
+    .word $0000
+    .word $0001
+    .byte $80
 ; Tbl_B5_ADFA: 39 bytes, read by Ent3E_Update, Ent44_Update, Ent54_Update
 Tbl_B5_ADFA:
     .byte $00,$00,$00,$01,$00,$00,$00,$01,$00,$00,$01,$00,$00,$01,$00,$00
@@ -5450,7 +5538,7 @@ B5_AE3E:
     ADC tmp_a
     STA ent_y_lo,x
     LDA ent_y_hi,x
-    ADC B5_ADAC,y
+    ADC $ADAC,y
     STA ent_y_hi,x
     RTS
 Ent56_Update:
@@ -5668,16 +5756,28 @@ Ent62_Update:
     ADC Ent62_Tbl_B04A,y
     STA ent_y_lo,x
     LDA ent_y_hi,x
-    ADC B5_B04B,y
+    ADC $B04B,y
     STA ent_y_hi,x
 @B5_B049:
     RTS
-; Ent62_Tbl_B04A: 32 bytes, read by Ent62_Update
+; Ent62_Tbl_B04A: signed 16-bit offsets stepped by the entity handler
 Ent62_Tbl_B04A:
-    .byte $00
-B5_B04B:
-    .byte $00,$01,$00,$00,$00,$01,$00,$01,$00,$00,$00,$01,$00,$00,$00,$00
-    .byte $00,$FF,$FF,$00,$00,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0001
+    .word $0000
+    .word $0001
+    .word $0000
+    .word $0000
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $FFFF
+    .word $0000
+    .word $FFFF
+    .word $0000
 Ent66_Update:
     JSR Ent_CheckPlayerOverlapB
     JSR Ent_CheckPlayerOverlap
@@ -6339,12 +6439,23 @@ B5_B5CC:
     .byte $FF
 B5_B5CD:
     .byte $03
-; Tbl_B5_B5CE: 30 bytes, read by Ent87_Update, Ent88_Update
-Tbl_B5_B5CE:
-    .byte $78
-B5_B5CF:
-    .byte $00,$D6,$03,$B8,$00,$99,$03,$1A,$00,$99,$03,$98,$00,$14,$04,$3A
-    .byte $00,$B8,$03,$D8,$00,$37,$04,$5A,$00,$F5,$03,$B8,$00
+; Ent87_88_Positions: position words used by entity types $87 and $88
+Ent87_88_Positions:
+    .word $0078
+    .word $03D6
+    .word $00B8
+    .word $0399
+    .word $001A
+    .word $0399
+    .word $0098
+    .word $0414
+    .word $003A
+    .word $03B8
+    .word $00D8
+    .word $0437
+    .word $005A
+    .word $03F5
+    .word $00B8
 Ent87_Update:
     JSR Ent_OffscreenGuard
     JSR Ent_CheckPlayerOverlapD
@@ -6355,9 +6466,9 @@ Ent87_Update:
     STA tmp_a
     LDA B5_B5CD,y
     STA tmp_b
-    LDA Tbl_B5_B5CE,y
+    LDA Ent87_88_Positions,y
     STA tmp_c
-    LDA B5_B5CF,y
+    LDA $B5CF,y
     STA tmp_d
     JSR EntAimAtTarget
     LDA #$88
@@ -6403,9 +6514,9 @@ Ent88_Update:
     LDA B5_B5CD,y
     SBC #$00
     STA ent_y_hi_A
-    LDA Tbl_B5_B5CE,y
+    LDA Ent87_88_Positions,y
     STA ent_x_lo_A
-    LDA B5_B5CF,y
+    LDA $B5CF,y
     STA ent_x_hi_A
     LDA #$C0
     STA ent_flags_A

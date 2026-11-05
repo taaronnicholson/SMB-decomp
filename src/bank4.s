@@ -1448,7 +1448,7 @@ B4_B1AC:
     JSR PPUBuffer_Append
     INC ram_072F
     LDA onetime_flags
-    AND Tbl_F_C53D
+    AND SwitchBitMasks
     BNE @B4_B1D8
     LDA #$09
     STA ram_072F

@@ -1206,7 +1206,7 @@ B3_BD8D:
     ADC tmp_a
     STA player_y_lo
     LDA player_y_hi
-    ADC B3_BE2B,y
+    ADC $BE2B,y
     STA player_y_hi
 @B3_BDF1:
     INC anim_index
@@ -1234,11 +1234,15 @@ Tbl_B3_BE0E:
 Tbl_B3_BE12:
     .byte $08,$08,$4A,$4A,$08,$08,$08,$08,$4A,$4A,$4A,$08,$08,$08,$4A,$4A
     .byte $08,$08,$4A,$4A,$08,$4A,$4A,$00
-; Tbl_B3_BE2A: 14 bytes, read by B3_BD8D
+; Tbl_B3_BE2A: signed 16-bit offsets of a decelerating arc (read by B3_BD8D)
 Tbl_B3_BE2A:
-    .byte $FD
-B3_BE2B:
-    .byte $FF,$FE,$FF,$FE,$FF,$FE,$FF,$FE,$FF,$FE,$FF,$FF,$FF
+    .word $FFFD
+    .word $FFFE
+    .word $FFFE
+    .word $FFFE
+    .word $FFFE
+    .word $FFFE
+    .word $FFFF
 ; Tbl_B3_BE38: 89 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B3_BE38:
     .byte $FE,$FF,$FF,$FF,$FF,$FF,$00,$00,$FF,$FF,$00,$00,$00,$00,$01,$00

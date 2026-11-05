@@ -88,7 +88,7 @@
   "addr": 34693,
   "len": 16,
   "name": "Tbl_B1_8785",
-  "comment": "16 bytes, read by B1_8679"
+  "comment": "16 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 1,
@@ -753,7 +753,7 @@
   "addr": 38548,
   "len": 6,
   "name": "Tbl_B5_9694",
-  "comment": "6 bytes, read by Ent16_Update"
+  "comment": "6 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 5,
@@ -1082,7 +1082,7 @@
   "addr": 46542,
   "len": 30,
   "name": "Tbl_B5_B5CE",
-  "comment": "30 bytes, read by Ent87_Update, Ent88_Update"
+  "comment": "30 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 5,
@@ -1383,7 +1383,7 @@
   "addr": 50493,
   "len": 7,
   "name": "Tbl_F_C53D",
-  "comment": "7 bytes, read by B4_B1AC"
+  "comment": "7 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,
@@ -1404,7 +1404,7 @@
   "addr": 53318,
   "len": 12,
   "name": "Tbl_F_D046",
-  "comment": "12 bytes, read by UpdateCamera"
+  "comment": "12 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,
@@ -1432,7 +1432,7 @@
   "addr": 62677,
   "len": 28,
   "name": "Tbl_F_F4D5",
-  "comment": "28 bytes, read by F_F497, HurtPlayerKnockout"
+  "comment": "28 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,
@@ -1460,7 +1460,7 @@
   "addr": 63902,
   "len": 24,
   "name": "Tbl_F_F99E",
-  "comment": "24 bytes, read by F_F9EA"
+  "comment": "24 bytes, no direct code reference (continuation or unreferenced)"
  },
  {
   "bank": 7,

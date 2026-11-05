@@ -286,8 +286,8 @@ TileHeightProfiles:
     .byte $0E, $0C, $0B, $0A, $09, $09, $08, $08, $08, $08, $09, $09, $0A, $0B, $0C, $0E
 BitMask:
     .byte $01
-; Tbl_F_C53D: 7 bytes, read by B4_B1AC
-Tbl_F_C53D:
+; SwitchBitMasks: single-bit masks $02..$80 (read by bank 4 B4_B1AC)
+SwitchBitMasks:
     .byte $02,$04,$08,$10,$20,$40,$80
 ; TileEffectScript: (next index, tile) pairs forming chains: RunTileEffects follows next (0 = end) and redraws the tile ($FF = none)
 TileEffectScript:
@@ -1765,9 +1765,9 @@ UpdateCamera:
     LDA camera_mode
     ASL a
     TAY
-    LDA UpdateCamera_Tbl_D046,y
+    LDA CameraModeTable,y
     STA tmp_ptr_lo
-    LDA F_D047,y
+    LDA $D047,y
     STA tmp_ptr_hi
     LDA #$D0
     PHA
@@ -1791,11 +1791,14 @@ UpdateCamera:
     SBC #$00
     STA cam_x_hi
     RTS
-; UpdateCamera_Tbl_D046: 12 bytes, read by UpdateCamera
-UpdateCamera_Tbl_D046:
-    .byte $16
-F_D047:
-    .byte $BB,$5F,$BC,$5D,$BD,$DA,$BC,$5F,$BC,$54,$D0
+; CameraModeTable: code pointers for the camera modes selected by camera_mode (UpdateCamera)
+CameraModeTable:
+    .word $BB16
+    .word $BC5F
+    .word $BD5D
+    .word $BCDA
+    .word $BC5F
+    .word $D054
     EOR zp_D0
     LDA #$02
     JSR SwitchBank
@@ -6836,7 +6839,7 @@ F_F497:
     ORA invuln_hi
     BNE F_F496
     LDY player_state
-    LDA Tbl_F_F4D5,y
+    LDA HurtKnockoutDy,y
     STA tmp_a
     BEQ F_F496
     LDA #$06
@@ -6858,14 +6861,14 @@ HurtPlayerKnockout:
     ORA invuln_hi
     BNE F_F4B9
     LDY player_state
-    LDA Tbl_F_F4D5,y
+    LDA HurtKnockoutDy,y
     BEQ F_F4B9
     LDA #$09
     JSR PlaySfxNoise
     LDA #$1A
     JMP F_F4AD
-; Tbl_F_F4D5: 28 bytes, read by F_F497, HurtPlayerKnockout
-Tbl_F_F4D5:
+; HurtKnockoutDy: per-frame vertical offsets of the player's knock-back after being hurt
+HurtKnockoutDy:
     .res 14, $01
     .res 14, $00
 PlayerState0F:
@@ -7516,12 +7519,20 @@ SpawnEffectsFromList:
 @F_F99B:
     LDX saved_x
     RTS
-; Tbl_F_F99E: 24 bytes, read by F_F9EA
-Tbl_F_F99E:
-    .byte $0A
-F_F99F:
-    .byte $00,$14,$00,$1E,$00,$32,$00,$64,$00,$C8,$00,$2C,$01,$F4,$01,$E8
-    .byte $03,$D0,$07,$B8,$0B,$88,$13
+; PickupScoreValues: score values (10, 20, 30, 50, 100, 200, ...) added by AwardPickup for pickup kinds 0..11
+PickupScoreValues:
+    .word $000A
+    .word $0014
+    .word $001E
+    .word $0032
+    .word $0064
+    .word $00C8
+    .word $012C
+    .word $01F4
+    .word $03E8
+    .word $07D0
+    .word $0BB8
+    .word $1388
 AwardPickup:
     LDA tmp_a
     CMP #$0C
@@ -7551,9 +7562,9 @@ F_F9D7:
 F_F9EA:
     ASL a
     TAY
-    LDA Tbl_F_F99E,y
+    LDA PickupScoreValues,y
     STA tmp_c
-    LDA F_F99F,y
+    LDA $F99F,y
     STA tmp_d
     JSR AddScore
 F_F9F9:

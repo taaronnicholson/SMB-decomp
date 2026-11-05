@@ -89,3 +89,16 @@ f FA32 EffectList_F_FA32 struct 1 bwwbbbbb ; effect list for SpawnEffects: recor
 1 88EA ArcPairs_B1_88EA ; (dx, dy) signed byte pairs of two motion arcs, each ended by $80
 6 A03E Bank6_Filler_A03E ; unreferenced bytes before AreaMap22 followed by a run of $D7
 7 FFC6 FixedBankTail ; end of the fixed bank: a few header-like bytes, the text "ALFRED CHICKEN" and padding before the vectors
+f F99E PickupScoreValues struct 12 w ; score values (10, 20, 30, 50, 100, 200, ...) added by AwardPickup for pickup kinds 0..11
+f F4D5 HurtKnockoutDy ; per-frame vertical offsets of the player's knock-back after being hurt
+f C53D SwitchBitMasks ; single-bit masks $02..$80 (read by bank 4 B4_B1AC)
+1 8785 ShotDirWords struct 8 w ; 16-bit direction/offset words indexed by the shot kind (read by B1_8679)
+5 B5CE Ent87_88_Positions struct 15 w ; position words used by entity types $87 and $88
+5 9694 Ent16_SubstateTable struct 3 w ; code pointers of Ent16's sub-states
+f D046 CameraModeTable struct 6 w ; code pointers for the camera modes selected by camera_mode (UpdateCamera)
+3 BE2A - struct 7 w ; signed 16-bit offsets of a decelerating arc (read by B3_BD8D)
+5 901A - struct 22 w ; signed 16-bit X offsets stepped by the entity handler; a final byte ends the table
+5 950E - struct 16 w ; signed 16-bit offsets stepped by the entity handler
+5 97E7 - struct 30 w ; signed 16-bit offsets stepped by the entity handler; a final byte ends the table
+5 ADAB - struct 39 w ; signed 16-bit offsets stepped by several entity handlers; a final byte ends the table
+5 B04A - struct 16 w ; signed 16-bit offsets stepped by the entity handler
