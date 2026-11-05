@@ -1,0 +1,5 @@
+build/
+rom/
+*.o
+__pycache__/
+*.pyc

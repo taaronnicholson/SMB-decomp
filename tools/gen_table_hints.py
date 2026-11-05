@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+"""Label unclassified data gaps that code reads as tables.
+
+For every gap (as reported by `GAPS=n python3 -I tools/decomp.py`), find the addresses code references (LDA tbl,y etc.) inside it, split the gap
+at those addresses and emit `blob` hints naming each piece Tbl_<bank>_<addr> with a comment listing the routines that read it.
+Results are cached in tools/tables.json (merged), so the pass can be repeated after `make regen`. Run:  make tables"""
+import os, re, sys, json, subprocess, collections
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
+cache_path = os.path.join(HERE, 'tables.json')
+ROM = open(os.path.join(ROOT, 'rom/game.nes'), 'rb').read()
+cache = json.load(open(cache_path)) if os.path.exists(cache_path) else []
+env = dict(os.environ, GAPS='400')
+txt = subprocess.run([sys.executable, '-I', os.path.join(HERE, 'decomp.py')], env=env, capture_output=True, text=True, cwd=ROOT).stdout
+gaps = [(int(m.group(1)), int(m.group(2), 16), int(m.group(3), 16) + 1) for m in re.finditer(r'bank (\d) \$([0-9A-F]+)-\$([0-9A-F]+) \(', txt)]
+files = {b: os.path.join(ROOT, f'src/bank{b}.s') for b in range(7)}; files[7] = os.path.join(ROOT, 'src/fixed.s')
+lines = {b: open(f).read().split('\n') for b, f in files.items()}
+OPS = r'(?:LDA|LDX|LDY|ADC|SBC|CMP|AND|ORA|EOR|BIT|STA)'
+# reference map: (bank, address) -> list of (reading routine, instruction text)
+refs = collections.defaultdict(list)
+curnames = {}                     # names the tables currently carry in src (from the previous run) -> (bank, address)
+_hp = os.path.join(HERE, 'hints_tables.txt')
+if os.path.exists(_hp):
+    for _ln in open(_hp):
+        _t = _ln.split()
+        if len(_t) > 4 and _t[0] == 'blob': curnames[_t[4]] = (7 if _t[1] == 'f' else int(_t[1]), int(_t[2], 16))
+tok = re.compile(r'(?<![A-Za-z0-9])(?:Tbl_)?(?:B(\d)|F)_([0-9A-F]{4})(?:[+-]\d)?(?![A-Za-z0-9])')
+def is_code_label(ls, i):
+    j = i + 1
+    while j < len(ls) and (not ls[j].strip() or ls[j].lstrip().startswith(';')): j += 1
+    return j < len(ls) and re.match(r'^    [A-Z]{3}\b', ls[j]) is not None
+for rb, ls in lines.items():
+    cur = None
+    for i, l in enumerate(ls):
+        m = re.match(r'^([A-Za-z_]\w*):', l)
+        if m and is_code_label(ls, i) and not m.group(1).startswith('Tbl_'): cur = m.group(1)
+        mi = re.match(rf'^\s+({OPS}) (.+),[xy]$|^\s+({OPS}) ((?:Tbl_)?(?:B\d|F)_[0-9A-F]{{4}})$', l)
+        if not mi: continue
+        for t in tok.finditer(l):
+            bk = int(t.group(1)) if t.group(1) else 7
+            refs[(bk, int(t.group(2), 16))].append((cur or '?', l.strip()))
+        for w in re.findall(r'[A-Za-z_]\w*', l.strip().split(None, 1)[1] if ' ' in l.strip() else ''):
+            if w in curnames and not tok.fullmatch(w): refs[curnames[w]].append((cur or '?', l.strip()))
+new = []
+for b, s, e in gaps:
+    if b == 7 and False: continue
+    inside = sorted({a for (bk, a) in refs if bk == b and s <= a < e})
+    starts = []
+    for a in inside:
+        if not starts or a - starts[-1] > 1: starts.append(a)
+    if not starts or starts[0] > s: starts.insert(0, s)
+    for k, a in enumerate(starts):
+        end = starts[k + 1] if k + 1 < len(starts) else e
+        if end - a < 4: continue
+        who = []
+        for (bk, aa), lst in refs.items():
+            if bk == b and a <= aa < end:
+                for r, _ in lst:
+                    if r not in who and r != '?': who.append(r)
+        rname = f'Tbl_{"F" if b == 7 else "B" + str(b)}_{a:04X}'
+        cm = f'{end - a} bytes, ' + ('read by ' + ', '.join(who[:3]) + (' ...' if len(who) > 3 else '') if who else 'no direct code reference (continuation or unreferenced)')
+        new.append(dict(bank=b, addr=a, len=end - a, name=rname, comment=cm))
+def readers(b, a, n):
+    who = []
+    for (bk, aa), lst in refs.items():
+        if bk == b and a <= aa < a + n:
+            for r, _ in lst:
+                if r not in who and r != '?': who.append(r)
+    return who
+for r in cache:
+    who = readers(r['bank'], r['addr'], r['len'])
+    r['comment'] = f"{r['len']} bytes, " + ('read by ' + ', '.join(who[:3]) + (' ...' if len(who) > 3 else '') if who else 'no direct code reference (continuation or unreferenced)')
+have = {(r['bank'], r['addr']) for r in cache}
+cache += [r for r in new if (r['bank'], r['addr']) not in have]
+cache.sort(key=lambda r: (r['bank'], r['addr']))
+json.dump(cache, open(cache_path, 'w'), indent=1)
+# decoded tables get real names/formats from tools/table_names.txt:  <bank|f> <addr hex> <Name> [struct <n> <fmt>] ; comment
+over = {}
+op = os.path.join(HERE, 'table_names.txt')
+extra = []
+if os.path.exists(op):
+    for ln in open(op):
+        ln = ln.rstrip('\n')
+        if not ln.strip() or ln.lstrip().startswith('#'): continue
+        head, _, cm = ln.partition(';')
+        t = head.split()
+        b = 7 if t[0] == 'f' else int(t[0]); a = int(t[1], 16)
+        st = None
+        if 'struct' in t: i = t.index('struct'); st = (int(t[i + 1]), t[i + 2])
+        over[(b, a)] = (t[2], cm.strip(), st)
+with open(os.path.join(HERE, 'hints_tables.txt'), 'w') as f:
+    f.write('; generated by tools/gen_table_hints.py from tools/tables.json -- do not edit by hand\n')
+    for r in cache:
+        bk = "f" if r["bank"] == 7 else r["bank"]
+        nm, cm, st = over.get((r["bank"], r["addr"]), (r["name"], r["comment"], None))
+        if nm == '-': nm = r["name"]                     # '-' in table_names.txt keeps the generated name
+        who = readers(r["bank"], r["addr"], r["len"])
+        ents = [w for w in who if re.match(r'^Ent[0-9A-F]{2}_Update$', w)]
+        if nm == r["name"] and len(ents) == 1 and len(set(who)) <= 2:           # read by one entity handler: name it after the handler
+            nm = f'{ents[0][:-7]}_Tbl_{r["addr"]:04X}'
+        if nm == r["name"]:                                                        # still generic: classify by shape
+            o = 16 + r["bank"] * 16384 + (r["addr"] - (0xC000 if r["bank"] == 7 else 0x8000)); d = ROM[o:o + r["len"]]
+            tag = f'{"F" if r["bank"] == 7 else "B" + str(r["bank"])}_{r["addr"]:04X}'
+            if len(set(d)) == 1: nm = f'Fill_{tag}'
+            elif all(v in (0, 1, 2, 3, 4, 0xFF, 0xFE, 0xFD, 0xFC, 0x80) for v in d): nm = f'SmallOffsets_{tag}'
+        named_readers = sorted({w for w in who if not re.match(r'^(?:F|B\d)_[0-9A-F]{4}$', w) and w != '?'})
+        if nm == r["name"] and len(named_readers) == 1 and len(set(who)) == 1:      # one reader that already has a real name
+            nm = f'{named_readers[0]}_Tbl_{r["addr"]:04X}'
+        f.write(f'blob {bk} {r["addr"]:X} {r["len"]} {nm} {cm}\n')
+        if st: f.write(f'struct {bk} {r["addr"]:X} {st[0]} {st[1]}\n')
+print(len(new), 'new table blobs;', len(cache), 'total')

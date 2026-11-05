@@ -1,0 +1,112 @@
+# Decoded tables: <bank|f> <addr> <Name> [struct <rows> <fmt>] ; comment      (used by gen_table_hints.py)
+5 93C6 ItemHopArc struct 69 w ; signed 16-bit Y offsets per tick for the weapon item hopping out ($0B/$0C); word $7E = play a sound, $80 = switch $0B/$0C, $7F = settle as $0D (read by Ent0C_Update)
+f C544 TileEffectScript struct 65 bb ; (next index, tile) pairs forming chains: RunTileEffects follows next (0 = end) and redraws the tile ($FF = none); chains start at index $02 (peck-broken tile) or $3C
+1 B272 BonusAscentEndAnim struct 81 bb ; (player_frame, Y offset) pairs for the end of the bonus ascent (PlayerState18): frame, player_y += offset, player faces right; frame $44 switches game_state to $0A (tally), $FF ends
+6 A44E ExitWalkAnim struct 73 bb ; (player_frame, X offset subtracted) pairs for the walk to the NEXT sign (PlayerState19); $FD = noise sfx 8 + frame $4A, $FE = face left, $FF = end
+5 923A FloatPathDx struct 92 w ; signed 16-bit X offsets per tick for a pickup floating upward (Ent_FloatStep: Y -= 1, X += word); a low byte of $80 ends it with the collect animation
+5 91FD Ent0A_FrameSeq ; frame (0/1) sequence read by Ent0A_Update, $80 ends
+5 9E2E Ent33_Sequence ; per-tick sequence for type $33; at the end ($80) it sets player_state $19 (the exit walk), plays sfx $22 and bursts: type $33 starts the exit
+1 BEEE Bank1_TailData ; unreferenced leftover fill at the end of bank 1 (mostly $00/$FF with single-bit variations, like Bank2_TailData)
+6 BF5B Bank6_TailData ; unreferenced leftover fill at the end of bank 6
+3 BF63 Bank3_TailData ; unreferenced leftover fill at the end of bank 3
+4 8000 AreaMap23_PhantomRow ; the second phantom row of area 23's map (its base $7F80 + 128): 128 bytes of $D7 (ceiling); the first phantom row lies before the bank
+6 A21E KillableTypeTable ; indexed by ent_type: non-zero = turned into $5D by the dive shockwave (ShockwaveKillEnemies)
+1 89FD IdleAnim struct 28 bbb ; the idle animation after 600 idle frames: (OAM tile for the sprite at ram_024D, duration in zp_72, player_frame) triples, $FF ends
+2 AE94 Anim_TileFrames ; 32-byte tile frames copied to PPUDATA by B2_AE38 (animated background tiles); the 133-byte span holds several frames
+4 AEB6 GameState02_FrameTable ; indexed by the frame counter; $80+ entries skip, otherwise value+$11 goes to zp_47
+4 B2BE GameState0B_Sequence ; indexed by zp_D1; $FF spawns effect type $33 at a fixed position
+5 8F63 WobbleDxTable struct 36 w ; signed 16-bit X deltas, 36 steps of a wobble; B5_8F3D steps ent_radius through the first 18 (wraps at $12) and adds the word to ent_x
+4 ADB0 EffectList_B4_ADB0 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+4 ADA5 EffectList_B4_ADA5 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+4 B6EF EffectList_B4_B6EF struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 8D4D EffectList_B5_8D4D struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 9110 EffectList_B5_9110 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 9CE9 EffectList_B5_9CE9 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 9D6F EffectList_B5_9D6F struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 9DD4 EffectList_B5_9DD4 struct 5 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 9F60 EffectList_B5_9F60 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 A1E9 EffectList_B5_A1E9 struct 2 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 A4D7 EffectList_B5_A4D7 struct 8 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 A5AC EffectList_B5_A5AC struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 A6AA EffectList_B5_A6AA struct 4 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 AFEF EffectList_B5_AFEF struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 B0E6 EffectList_B5_B0E6 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 B27C EffectList_B5_B27C struct 4 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 B7FB EffectList_B5_B7FB struct 4 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 BA26 EffectList_B5_BA26 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 BADE EffectList_B5_BADE struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 BBA3 EffectList_B5_BBA3 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 BBF6 EffectList_B5_BBF6 struct 2 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 BCFF EffectList_B5_BCFF struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+f FA32 EffectList_F_FA32 struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+0 81D7 PaletteFadeAmounts ; fade-step subtrahends $40,$30,$20,$10,$00 applied to each palette byte
+0 823D ButtonBitMasks ; button bit order used by ReadController
+1 B151 PlayerAnimFrames ; $FF-terminated player_frame list walked by PlayerAnimAdvance
+2 B779 DecimalPlaceValues ; third (high) byte of the 24-bit place values read at stride 4 from B2_B777 by BinaryToDigits (100000, 10000, 1000, 100, 10, 1)
+0 B755 IntroBlockTiles ; 5 rows x 17 source bytes for DrawTileBlock17x5 (each minus $80 gives the tile; counts up from $80)
+0 B84F PressStartText ; 0-terminated tile string "PRESS START" (written by the title screen)
+0 B887 TitleLogoTilemap ; tile rows of the title logo ($70 separates rows)
+1 BDFF FoundText ; "FOUND" / "NOW" text
+4 B810 StoryText_B810 ; story dialogue lines (16 bytes each: 2 border tiles + 14 characters)
+4 B870 StoryText_B870 ; story dialogue lines
+4 B901 StoryText_B901 ; story dialogue lines
+4 B921 StoryText_B921 ; story dialogue lines
+4 B972 StoryText_B972 ; story dialogue lines
+4 B9A2 StoryText_B9A2 ; story dialogue lines
+4 AFB3 TextPackets_AFB3 ; PPU text packets (address hi/lo, $80|length, characters stored reversed), $FF between packets
+4 B074 TextPackets_B074 ; PPU text packets
+4 B227 TextPackets_B227 ; PPU text packets
+4 B31F TextPackets_B31F ; PPU text packets
+4 B4A9 TextPackets_B4A9 ; PPU text packets
+4 B4C1 TextPackets_B4C1 ; PPU text packets
+4 BD5E TextPackets_BD5E ; PPU text packets
+4 BD73 TextPackets_BD73 ; PPU text packets
+4 BDB2 TextPackets_BDB2 ; PPU text packets
+4 BDD5 TextPackets_BDD5 ; PPU text packets
+4 BE06 TextPackets_BE06 ; PPU text packets
+4 BE19 TextPackets_BE19 ; PPU text packets
+5 BD0A CreditsScript_BD0A ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BD67 CreditsScript_BD67 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BD74 CreditsScript_BD74 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BD8C CreditsScript_BD8C ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BD99 CreditsScript_BD99 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BDAD CreditsScript_BDAD ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BDF4 CreditsScript_BDF4 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BE18 CreditsScript_BE18 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BE3D CreditsScript_BE3D ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BE62 CreditsScript_BE62 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BE77 CreditsScript_BE77 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BEA4 CreditsScript_BEA4 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BECF CreditsScript_BECF ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BF0A CreditsScript_BF0A ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BF48 CreditsScript_BF48 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BFA9 CreditsScript_BFA9 ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+5 BFDC CreditsScript_BFDC ; credits scroll script: lines of (control bytes, column, 0-terminated text) -- mostly ASCII text cells
+6 88CA PeriodTableLow struct 12 w ; the twelve APU period values of the lower octave, directly before PeriodTable
+5 ABC1 Ent4F_FrameTbl ; frame list for Ent4F_Update
+5 817E PermutationTable_817E ; 3 permutations of 0..4 (5 entries each) used by Ent_TickParam2
+2 B5E8 DiveShakeOffsets ; signed vertical camera offsets of the dive-landing shake (camera_mode 5, read from ram_01A5 on), several shake patterns back to back; $80 ends one and restores the camera mode
+1 88EA ArcPairs_B1_88EA ; (dx, dy) signed byte pairs of two motion arcs, each ended by $80
+6 A03E Bank6_Filler_A03E ; unreferenced bytes before AreaMap22 followed by a run of $D7
+7 FFC6 FixedBankTail ; end of the fixed bank: a few header-like bytes, the text "ALFRED CHICKEN" and padding before the vectors
+f F99E PickupScoreValues struct 12 w ; score values (10, 20, 30, 50, 100, 200, ...) added by AwardPickup for pickup kinds 0..11
+f F4D5 HurtKnockoutDy ; per-frame vertical offsets of the player's knock-back after being hurt
+f C53D SwitchBitMasks ; single-bit masks $02..$80 (read by bank 4 B4_B1AC)
+1 8785 ShotDirWords struct 8 w ; 16-bit direction/offset words indexed by the shot kind (read by B1_8679)
+5 B5CE Ent87_88_Positions struct 15 w ; position words used by entity types $87 and $88
+5 9694 Ent16_SubstateTable struct 3 w ; code pointers of Ent16's sub-states
+f D046 CameraModeTable struct 6 w ; code pointers for the camera modes selected by camera_mode (UpdateCamera)
+3 BE2A - struct 7 w ; signed 16-bit offsets of a decelerating arc (read by B3_BD8D)
+5 901A - struct 22 w ; signed 16-bit X offsets stepped by the entity handler; a final byte ends the table
+5 950E - struct 16 w ; signed 16-bit offsets stepped by the entity handler
+5 97E7 - struct 30 w ; signed 16-bit offsets stepped by the entity handler; a final byte ends the table
+5 ADAB - struct 39 w ; signed 16-bit offsets stepped by several entity handlers; a final byte ends the table
+5 B04A - struct 16 w ; signed 16-bit offsets stepped by the entity handler
+5 AFFA EffectList_B5_AFFA struct 1 bwwbbbbb ; effect list for SpawnEffects: records of (type, dy.w, dx.w, 5 effect parameter bytes) ending in $FF
+5 B0DB EffectList_B5_B0DB struct 1 bwwbbbbb ; effect list for SpawnEffects
+6 BEEC GameOverTextPacket ; PPU text packet with the "GAME OVER" characters (read by B6_BCD1)
+6 9478 Bank6_PtrPair_9478 struct 2 w ; word $A03E (the filler before AreaMap22) and $0000
+5 A528 PrizeRiseDy struct 46 w ; 16-bit vertical steps of the boss prize ($47) as it rises and settles; the final byte $48 is the type it becomes (Ent48, the pickup that starts BossDefeated)
+5 A4B4 Ent8A_FrameList ; animation parameters stepped by Ent8A_Update (angle/2); each non-zero entry also adds 2 to boss_health (cap $64); 0 ends it
+1 8999 LevelStateInit ; 100 bytes copied by LoadArea to level_state_block ($041C-$047F); mostly zero, the rest are per-level switch/door state values
+3 BF00 GameState0E_Thresholds ; 5 byte thresholds ($00,$3C,$4A,$58,$66) compared with the player Y/16 by GameState0E_Body

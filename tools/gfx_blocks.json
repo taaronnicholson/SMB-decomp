@@ -1,0 +1,422 @@
+[
+ {
+  "bank": 0,
+  "src": 34081,
+  "end": 34632,
+  "insize": 551,
+  "outsize": 736,
+  "ram": false,
+  "dsts": [
+   7232
+  ],
+  "stages": [
+   -1,
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ {
+  "bank": 0,
+  "src": 34983,
+  "end": 35988,
+  "insize": 1005,
+  "outsize": 1328,
+  "ram": false,
+  "dsts": [
+   4096
+  ],
+  "stages": [
+   -1,
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ {
+  "bank": 0,
+  "src": 47334,
+  "end": 48777,
+  "insize": 1443,
+  "outsize": 1616,
+  "ram": false,
+  "dsts": [
+   4096
+  ],
+  "stages": [
+   -1,
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ {
+  "bank": 1,
+  "src": 47829,
+  "end": 48533,
+  "insize": 704,
+  "outsize": 1408,
+  "ram": false,
+  "dsts": [
+   0
+  ],
+  "stages": [
+   -1,
+   0,
+   1,
+   2,
+   3,
+   4,
+   5
+  ]
+ },
+ {
+  "bank": 4,
+  "src": 36000,
+  "end": 36998,
+  "insize": 998,
+  "outsize": 1504,
+  "ram": false,
+  "dsts": [
+   5424
+  ],
+  "stages": [
+   -1,
+   0
+  ]
+ },
+ {
+  "bank": 4,
+  "src": 36998,
+  "end": 37035,
+  "insize": 37,
+  "outsize": 120,
+  "ram": true,
+  "dsts": [
+   932
+  ],
+  "stages": [
+   -1,
+   0
+  ]
+ },
+ {
+  "bank": 4,
+  "src": 37036,
+  "end": 38674,
+  "insize": 1638,
+  "outsize": 2336,
+  "ram": false,
+  "dsts": [
+   5424
+  ],
+  "stages": [
+   1
+  ]
+ },
+ {
+  "bank": 4,
+  "src": 38674,
+  "end": 38722,
+  "insize": 48,
+  "outsize": 120,
+  "ram": true,
+  "dsts": [
+   932
+  ],
+  "stages": [
+   1
+  ]
+ },
+ {
+  "bank": 4,
+  "src": 38722,
+  "end": 40549,
+  "insize": 1827,
+  "outsize": 2336,
+  "ram": false,
+  "dsts": [
+   5424
+  ],
+  "stages": [
+   2,
+   5
+  ]
+ },
+ {
+  "bank": 4,
+  "src": 40550,
+  "end": 40602,
+  "insize": 52,
+  "outsize": 120,
+  "ram": true,
+  "dsts": [
+   932
+  ],
+  "stages": [
+   2,
+   5
+  ]
+ },
+ {
+  "bank": 4,
+  "src": 40602,
+  "end": 42239,
+  "insize": 1637,
+  "outsize": 2144,
+  "ram": false,
+  "dsts": [
+   5424
+  ],
+  "stages": [
+   3
+  ]
+ },
+ {
+  "bank": 4,
+  "src": 42240,
+  "end": 42282,
+  "insize": 42,
+  "outsize": 120,
+  "ram": true,
+  "dsts": [
+   932
+  ],
+  "stages": [
+   3
+  ]
+ },
+ {
+  "bank": 4,
+  "src": 42282,
+  "end": 43954,
+  "insize": 1672,
+  "outsize": 2128,
+  "ram": false,
+  "dsts": [
+   5424
+  ],
+  "stages": [
+   4
+  ]
+ },
+ {
+  "bank": 4,
+  "src": 43954,
+  "end": 43996,
+  "insize": 42,
+  "outsize": 120,
+  "ram": true,
+  "dsts": [
+   932
+  ],
+  "stages": [
+   4
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 42910,
+  "end": 43210,
+  "insize": 300,
+  "outsize": 544,
+  "ram": false,
+  "dsts": [
+   1824,
+   2464
+  ],
+  "stages": [
+   -1,
+   0,
+   3
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 43210,
+  "end": 43312,
+  "insize": 102,
+  "outsize": 128,
+  "ram": false,
+  "dsts": [
+   1408,
+   1696,
+   3616
+  ],
+  "stages": [
+   -1,
+   0,
+   1,
+   3,
+   4
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 43388,
+  "end": 43488,
+  "insize": 100,
+  "outsize": 160,
+  "ram": false,
+  "dsts": [
+   2336,
+   2560
+  ],
+  "stages": [
+   2,
+   4
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 43488,
+  "end": 43638,
+  "insize": 150,
+  "outsize": 288,
+  "ram": false,
+  "dsts": [
+   1408,
+   2272,
+   3328
+  ],
+  "stages": [
+   -1,
+   0,
+   1,
+   3,
+   4
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 43638,
+  "end": 43994,
+  "insize": 356,
+  "outsize": 736,
+  "ram": false,
+  "dsts": [
+   1536,
+   1824,
+   2496
+  ],
+  "stages": [
+   1,
+   2,
+   4
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 44124,
+  "end": 44187,
+  "insize": 63,
+  "outsize": 64,
+  "ram": false,
+  "dsts": [
+   2368
+  ],
+  "stages": [
+   -1,
+   0
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 44188,
+  "end": 44398,
+  "insize": 210,
+  "outsize": 256,
+  "ram": false,
+  "dsts": [
+   1408
+  ],
+  "stages": [
+   5
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 44500,
+  "end": 44571,
+  "insize": 71,
+  "outsize": 64,
+  "ram": false,
+  "dsts": [
+   3744
+  ],
+  "stages": [
+   3
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 44572,
+  "end": 44832,
+  "insize": 260,
+  "outsize": 320,
+  "ram": false,
+  "dsts": [
+   3008,
+   3232
+  ],
+  "stages": [
+   2,
+   3
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 44832,
+  "end": 45165,
+  "insize": 333,
+  "outsize": 896,
+  "ram": false,
+  "dsts": [
+   1408,
+   1536,
+   2720
+  ],
+  "stages": [
+   2,
+   3,
+   4
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 45924,
+  "end": 46837,
+  "insize": 913,
+  "outsize": 1600,
+  "ram": false,
+  "dsts": [
+   1664
+  ],
+  "stages": [
+   5
+  ]
+ },
+ {
+  "bank": 6,
+  "src": 46838,
+  "end": 46904,
+  "insize": 66,
+  "outsize": 128,
+  "ram": false,
+  "dsts": [
+   1408
+  ],
+  "stages": [
+   3
+  ]
+ }
+]

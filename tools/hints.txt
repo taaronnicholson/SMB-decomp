@@ -1,0 +1,1066 @@
+; Analysis hints for tools/decomp.py
+;   entry <bank|f> <addr> [curbank]   extra code entry point
+;   words <bank|f> <addr> <n> [bank]  table of n code pointers (lo,hi)
+;   lohi  <bank|f> <lo> <hi> <n> [bank|-] [adj]  split lo/hi pointer tables
+;   name  <bank|f> <addr> <label>     rename a label
+;   ram   <addr> <name>               name a RAM location
+words f C825 6                ; NMI state dispatch (indexed by nmi_state, $00)
+
+name f C5C6 Reset
+name f C7E3 NMI
+name f C84A IRQ
+name f C90D SwitchBank        ; A = PRG bank 0-6 -> $8000; shadows in cur_bank
+name f C917 SwitchBankFromAC  ; bank taken from $AC
+name f C901 SetPPUCtrl        ; writes A to $2000 and shadow
+name f C907 SetPPUMask        ; writes A to $2001 and shadow
+name f C93D ClearOAMBuffer    ; fills $0200-$02FF with $FF/0
+name f CEEE FarCall           ; A=hi X=lo Y=bank : call $AAXX in bank Y, restores bank
+
+ram 0002 ppuctrl_shadow
+ram 0003 ppumask_shadow
+ram 0000 nmi_state            ; index into NMI dispatch table
+ram 000C cur_bank
+ram 000E frame_counter
+ram 0006 jump_ptr_lo          ; scratch indirect-jump vector
+ram 0007 jump_ptr_hi
+ram 0004 tmp_ptr_lo           ; scratch pointer (also FarCall target vector)
+ram 0005 tmp_ptr_hi
+ram 0012 buttons              ; current controller state (A,B,Sel,Start,U,D,L,R bits)
+ram 0013 buttons_prev
+ram 0014 buttons_pressed      ; newly pressed this frame
+ram 0015 buttons_released
+
+name 0 8205 ReadController
+name 0 8245 ClearRAM           ; zeroes RAM $0000-$06FF except the $0100 stack page
+dwords 0 8263 6                ; table of 6 pointers to record lists
+
+; ---- routines identified by reading the main loop / callees ----
+name f C9AC WaitForNMI         ; spins until frame_counter changes
+name f C99E EnableNMI          ; sets PPUCTRL bit 7
+name f C7C8 EnableRendering    ; render_enable = $FF (NMI keeps BG+sprites on)
+name 1 BD95 HideSprites        ; Y=$FF for OAM entries 15..63
+name 2 B868 ResetGameState
+name 2 B7F4 ResetLevelState
+name 4 ADCF DispatchGameState  ; indirect jump via table indexed by game_state
+name 6 8003 Sound_Update       ; per-frame sound engine tick (bank 6 = sound engine)
+ram 000D render_enable
+ram 0051 ptr_lo                  ; scratch pointer used with (ptr_lo),y
+ram 0052 ptr_hi
+ram 0093 stage_index             ; index into the stage record pointer table (bank 0 $8263)
+ram 072C game_state            ; index for DispatchGameState table
+
+; ---- bank 5 = entity movement; bank 0 holds a sine table ----
+refbank BE8A 0
+name 0 BE8A SineTable          ; 256 signed entries, amplitude +-64, index = angle (256 = full turn)
+name f CEA6 SinLookup          ; Y = angle -> A = sin (via bank 0 table)
+name f CEBA CosLookup          ; Y = angle -> A = cos (= table[angle+$40])
+name f C919 SwitchBankKeepX    ; like SwitchBank but preserves X
+name f FCDC ScaledMultiply     ; radius x sin/cos helper used by polar movement
+name 5 8000 SetEntityPolarPos  ; X=entity: pos = centre(zp_55/56) +- radius*cos/sin(angle)
+name 5 809E EntityDeltaFromCentre
+ram 04B0 ent_y_lo
+ram 04E0 ent_y_hi
+ram 0510 ent_x_lo
+ram 0540 ent_x_hi
+ram 05D0 ent_angle
+ram 0600 ent_radius
+ram 0660 ent_dy
+ram 0690 ent_dx
+ram 0570 ent_flags            ; bit tests (e.g. AND #$04) seen in bank 5 movement code
+
+; ---- stage records (bank 0): 6 records, pointer table at $8263 ----
+; record = spawn entry (y16, x16, area, param) + 1 byte + N door entries of (y16, x16, area, param)
+; area = destination area number (0-23, see AreaHeader*); >= $E0 means "go to stage (code-$E0)"; entries are indexed 6*n from record+7
+name 0 826F StageRecord0
+name 0 82B8 StageRecord1
+name 0 8301 StageRecord2
+name 0 834A StageRecord3
+name 0 8393 StageRecord4
+name 0 83AC StageRecord5
+struct 0 826F 1 wwbbb
+struct 0 8276 11 wwbb
+struct 0 82B8 1 wwbbb
+struct 0 82BF 11 wwbb
+struct 0 8301 1 wwbbb
+struct 0 8308 11 wwbb
+struct 0 834A 1 wwbbb
+struct 0 8351 11 wwbb
+struct 0 8393 1 wwbbb
+struct 0 839A 3 wwbb
+struct 0 83AC 1 wwbbb
+ram 0060 player_y_lo          ; loaded from the stage-record spawn entry (y first, then x)
+ram 0061 player_y_hi
+ram 005E player_x_lo
+ram 005F player_x_hi
+ram 0094 spawn_y_lo           ; copies of the spawn entry kept for respawn
+ram 0095 spawn_y_hi
+ram 0096 spawn_x_lo
+ram 0097 spawn_x_hi
+ram 009A entry_list_lo        ; pointer to the current record's entry list (record+7)
+ram 009B entry_list_hi
+
+; ---- PPU update buffer (flushed by NMI) ----
+name f C0A8 FlushPPUBuffer     ; reads commands at ppu_buffer: [addr_hi][addr_lo][len][data...], hi=0 ends
+ram 0300 ppu_buffer            ; len=1: single byte; len bit7 set: horizontal (+1) else vertical (+32)
+name 0 8108 PaletteFadeStep    ; fades the palette at $3F00 toward/away from black (zp_10 = step 0-4, zp_11 = direction)
+ram 0010 fade_step
+ram 0011 fade_dir
+
+; ---- LZ-style decompressor (graphics and stage data) ----
+name f FDEF Decompress         ; ptr_lo/hi = source, $55/$56 = destination; carry set = RAM target, clear = VRAM
+name f FDE9 DecompressAndFinish
+name f FD84 Decomp_PutByte     ; write A to the destination (RAM via ($55),y, or PPU)
+name f FD9F Decomp_ReadOut     ; read back a byte already written (for copy matches)
+name f FDBB Decomp_ReadBack
+name f FDD7 Decomp_NextSrc
+name f FDE0 Decomp_NextDst
+ram 0397 decomp_to_ram         ; bit 7 set = output to RAM instead of VRAM
+
+; ---- areas and maps ----
+name f D05C LoadArea            ; A = area number (0-23): sets map bank, pointer, width, height
+name f FC26 GetMapTile          ; returns the tile id at (ptr_lo/hi = x, $55/$56 = y), applying collected-item flags
+name f EF24 MapPtrFromPos       ; map address = map_ptr + (x>>4) + (y>>4) * map_width
+ram 00AB current_area
+ram 00AC map_bank
+ram 0025 map_ptr_lo
+ram 0026 map_ptr_hi
+ram 0033 map_log2_width         ; width = 8 << this
+ram 0023 map_width              ; tiles per row: 16, 32, 64 or 128
+ram 0024 map_height             ; rows
+ram 03A4 tile_props             ; per-tile property table (bit 0 = solid), 120 bytes decompressed per stage
+name f CE3B PlaySong             ; A = song number: switches to bank 6 and calls Sound_PlaySong
+name f CE52 SilenceSound         ; calls Sound_Silence in bank 6
+ram 000F palette_set             ; area header byte 5: index into the palette fade tables (bank 0 $8040/$8049)
+ram 001A tileset_id              ; area header byte 11: selects the tileset record at $8C9B + 8*id
+
+; ---- collectibles (diamonds etc.): tile ids $80-$BB, collected state kept in two bitmaps ----
+name f F6D1 GetCollectibleBit   ; map position -> Y = byte, X = bit in collected_flags (via the area's collectible table)
+name f F679 ApplyCollectedFlag  ; GetMapTile helper: returns 0 instead of the tile once its flag is set
+name f DBB7 FilterCollectedTile ; tile ids $80-$BB: hide if that kind's bit in collected_by_kind is set
+ram 009D collected_by_kind      ; 8-byte bitmap, one bit per collectible tile kind ($80 + n)
+ram 0100 collected_flags        ; bitmap, one bit per collectible placement (flag index from the collectible table)
+ram 0480 ent_type                ; spawn record byte 0 (entity kind)
+ram 05A0 ent_param               ; spawn record byte 6
+ram 0630 ent_param2              ; spawn record byte 9
+
+; ---- credits scroller (bank 5 holds the credits text; $C2/$C3 walk it) ----
+name f CF1E CreditsStep         ; prints the next credits line (tile = char + $94), $FE = end
+ram 00C2 credits_ptr_lo
+ram 00C3 credits_ptr_hi
+
+; ---- entity drawing (bank 1) ----
+name 1 8A5B DrawEntity          ; X = slot: builds OAM sprites from the entity's animation group/frame
+name 1 8A52 MarkEntityOffscreen ; sets ent_flags bit 2 when the entity is outside the screen window
+ram 0120 anim_tile_base         ; per animation group: first CHR tile number of its sprite sheet (loaded per stage)
+
+; ---- entity behaviour (bank 5) ----
+name 5 8904 Ent_CheckPlayerOverlap   ; box overlap with the player; sets zp_53 to the hit kind
+name 5 8A06 Ent_CheckPlayerTouch     ; second overlap test; leads to the player-hurt routine (F_F492) when the player is vulnerable
+name 5 AC25 Ent_PatrolStep           ; per-entity tick (ent_angle low 3 bits), checks map tiles ahead; returns zero flag when it must turn
+name f FAFE UpdateEntities           ; loops over the 48 entity slots, JMP (handler) with bank 5 mapped
+
+; ---- gameplay counters and sound wrappers ----
+name f CE61 PlaySfxSq1           ; A = sfx id (bank-safe wrapper for Sound_PlaySfxSq1)
+name f CE78 PlaySfxSq2           ; A = sfx id (bank-safe wrapper for Sound_PlaySfxSq2)
+ram 00A8 balloons_left           ; set from the stage data at level load, drawn on the HUD; level ends at 0 (inferred)
+ram 00A9 balloons_popped
+ram 00D7 items_found             ; hidden bonus items found (the "FOUND n" message)
+
+; ---- balloons and one-time objects ----
+name f CCC1 SpawnBalloon          ; called for each map tile $C4: reuses or takes a free slot 0-7, type $01, ent_angle = area
+name f CA6F ScanMapForBalloons    ; level load: walks every map tile of the area
+ram 0733 onetime_flags            ; bitmap: one-time objects (from the area spawn data) already taken
+
+; ---- per-tile special codes ----
+name f FC3F GetTileSpecial       ; ptr = map address -> A = special value*2 for that tile (0 if none), from the area's lookup block
+ram 00B4 area_extra_ptr_lo       ; start of the area's lookup block (after the entity records)
+ram 00B5 area_extra_ptr_hi
+
+; ---- tile properties ($03A4 table): bits 0-1 class (0 passable, 1 solid, 2 sloped ground, 3 hurts the player), bits 2-7 height profile ----
+blob f C33C 512 TileHeightProfiles 32 profiles x 16 columns: ground surface height per pixel column of a tile ($FF = no surface); index = tile_props >> 2
+struct f C33C 32 bbbbbbbbbbbbbbbb
+name f C53C BitMask             ; 1 << n, n = 0-7
+name f F492 HurtPlayer          ; called when the player touches a hazard tile or enemy
+name f E514 GetTilePropsAtPos   ; GetMapTile then tile_props lookup (A = properties, X = tile id)
+name f E51C GetTilePropsAtPosY  ; same but leaves the tile id in Y
+name f EEA6 ProfilePtrFromProps ; ptr = TileHeightProfiles + (props & $FC) * 4
+
+; ---- water level and player state ----
+ram 01AF water_level_lo          ; area header byte 8: Y below which the player is in water ($FF00 = no water)
+ram 01B0 water_level_hi          ; area header byte 9
+ram 0063 player_state            ; player state index ($0D = in water, $07 = ..., $16 = level complete); indexes per-state tables
+name f CE8F PlaySfxNoise          ; A = sfx id (bank-safe wrapper for Sound_PlaySfxNoise)
+
+; ---- bank 2: pixel/bitmap tables for the unrolled CHR upload routines ----
+blob 2 8000 7680 PixelTables 32 tables of 240 bytes; the unrolled upload routines at $9E00+ write 16 zero bytes then one byte from each of 16 tables (same index X) to a CHR tile
+
+; ---- bank 3: per-stage raw tile sets (4 tiles = 64 bytes each, copied to PPU $1080 at area load; stage 5 reuses stage 1's) ----
+name 3 82EB StageTileSetPtrLo
+name 3 82F1 StageTileSetPtrHi
+dlohi 3 82EB 82F1 6
+blob 3 82F7 64 StageTileSet0 raw tiles for stage 0 (PPU $1080)
+blob 3 8337 64 StageTileSet2 raw tiles for stage 2
+blob 3 8377 64 StageTileSet1 raw tiles for stages 1 and 5
+blob 3 83B7 64 StageTileSet3 raw tiles for stage 3
+blob 3 83F7 64 StageTileSet4 raw tiles for stage 4
+
+; ---- frequently used routines (ranked by call count) ----
+name f C7D4 SetScroll            ; writes scroll_x ($07FF) and scroll_y_lo ($0A) to PPUSCROLL (38 callers)
+name f C7CD RenderOffAndWait     ; render_enable = 0, then WaitForNMI
+name f C9A5 DisableNMI           ; clears PPUCTRL bit 7
+name f FD7D SetPPUAddr           ; A = high byte, Y = low byte -> PPUADDR
+name f F917 SpawnEffects         ; A/Y = pointer to an effect template; creates short-lived effect objects at entity X's position
+name f F6B0 SetCollectedFlag     ; marks the map cell's collectible as taken in collected_flags
+name f FA3D FindFreeEntitySlot   ; scans slots $2F..$20 for a free one (type 0 or $A0); Y = slot
+name f F8E2 AddScore             ; score (24-bit at $01AB) += $55/$56
+name 4 BC4E PPUBuffer_Append     ; copies a record from ($55) into ppu_buffer at index zp_44 (Y/ptr lists)
+name 5 91C1 Ent_StartCollectAnim ; type $07, frame $1E, ent_param2 = $FF: the collect sparkle
+name 5 89E3 Ent_HurtOnTouch      ; overlap test, then HurtPlayer
+name 5 8A55 Ent_SpawnBurst       ; SpawnEffects with the template at $8D4D
+name 5 9C03 Ent_TickRadius       ; counts ent_radius down to 0 (timer helper)
+ram 07FF scroll_x
+ram 000A scroll_y_lo
+ram 000B scroll_y_hi
+ram 01AB score_lo
+ram 01AC score_mid
+ram 01AD score_hi
+ram 04A0 effect_type             ; 16 effect slots (created by SpawnEffects)
+ram 04D0 effect_y_lo
+ram 0500 effect_y_hi
+ram 0530 effect_x_lo
+ram 0560 effect_x_hi
+ram 0053 tmp_a                   ; scratch/argument bytes shared by many routines
+ram 0054 tmp_b
+ram 0055 tmp_c
+ram 0056 tmp_d
+ram 0008 tmp_08
+ram 00FE ptr2_lo                 ; second indirect pointer (sound engine, table readers)
+ram 00FF ptr2_hi
+
+; ---- player attack projectile (B button), 2 slots (arrays $E1..$F6, element 0 / 1; drawn into OAM entries 19-20 by bank 1 $802C) ----
+ram 00E1 shot_state
+ram 00E2 shot_state_1
+ram 00E3 shot_E3
+ram 00E4 shot_E3_1
+ram 00E5 shot_x_lo
+ram 00E6 shot_x_lo_1
+ram 00E7 shot_x_hi
+ram 00E8 shot_x_hi_1
+ram 00E9 shot_y_lo
+ram 00EA shot_y_lo_1
+ram 00EB shot_y_hi
+ram 00EC shot_y_hi_1
+ram 00ED shot_onscreen
+ram 00EE shot_onscreen_1
+ram 00EF shot_screen_x
+ram 00F0 shot_screen_x_1
+ram 00F1 shot_screen_y
+ram 00F2 shot_screen_y_1
+ram 00F3 shot_attr
+ram 00F4 shot_attr_1
+ram 00F5 shot_frame
+ram 00F6 shot_frame_1
+
+; ---- camera and misc ----
+ram 0068 cam_x_lo
+ram 0069 cam_x_hi
+ram 006A cam_y_lo
+ram 006B cam_y_hi
+ram 00B1 entity_tick            ; incremented once per UpdateEntities pass (animation clock)
+ram 0044 ppu_buffer_idx         ; next free index in ppu_buffer ($0300)
+name 6 81BD Snd_Sq1_NextToken
+name 6 83B8 Snd_Sq2_NextToken
+name 6 85AB Snd_Tri_NextToken
+name 6 8746 Snd_Noise_NextToken
+
+; ---- main loop routines and camera ----
+name f CD53 CheckPause           ; fade complete and START pressed -> pause handling
+name f D00E UpdateCamera         ; dispatch on camera_mode ($01A6), then cam_x/cam_y follow the focus position
+name f D5E4 ScrollX              ; moves the horizontal scroll (zp_09) by the change in focus_x and draws new columns
+name f D5D9 SavePrevFocus        ; stores the previous focus position, then jumps to the tile redraw (F_F379)
+ram 001B focus_x_lo              ; world position the camera follows (smoothed player position)
+ram 001C focus_x_hi
+ram 001D focus_y_lo
+ram 001E focus_y_hi
+ram 001F prev_focus_x_lo
+ram 0020 prev_focus_y_lo
+ram 0009 scroll_x_px             ; horizontal scroll counter used by ScrollX
+ram 01A6 camera_mode
+
+; ---- shared entity physics helpers (bank 5) ----
+name 5 8434 Ent_MoveYWithGround  ; tmp_a = dy: adds it to Y, snaps the feet to the tile's height profile; ent_angle bit 7 = blocked/landed
+name 5 8546 Ent_GroundCheck      ; like Ent_MoveYWithGround with dy = 0
+name 5 87A7 Ent_MoveX            ; tmp_a = dx: horizontal step with map edge checks; ent_angle bit 7 set when blocked
+name 5 86EF Ent_MoveXLeft        ; counterpart of Ent_MoveX used by the other direction
+name 5 818D Ent_TickParam2       ; counts the low nibble of ent_param2 down
+ram 00B6 riding_slot             ; entity slot the player is standing on (platform carrying the player)
+ram 0079 riding_flag
+name 5 AAB2 Ent_BecomeOrbiter    ; A = new type: stores the entity's position/16 as the orbit centre (ram_06C0/06F0), used by $4C and $51
+
+; ---- toggle switches and the weapon power-up ----
+ram 00DC switch_1                ; toggled by the falling hazard landing on tile $CE (ToggleSwitch1); the stage loader loads extra tiles when set
+
+ram 00DD switch_2                ; tile $CF
+ram 00DE switch_3                ; tile $D0
+ram 00DF powerup_shot            ; set by touching a type $0D pickup; must be non-zero for the B button to fire the player projectile (shot_* arrays)
+
+; ---- switch tiles pecked by the player ----
+name f F770 PeckSwitchPhase      ; tile $D8: sfx $16, steps switch_phase 0..4 (direction by facing); the track movers ($50) read it
+name f F79D PeckSwitchToggle     ; tile $DA: toggles switch_flag, sfx $1B/$1C; the falling weights ($83-$85) follow it
+ram 0730 switch_phase            ; 0-4, cycled by pecking tile $D8; selects the direction table entry for type $50
+ram 0731 switch_flag             ; 0/1, toggled by pecking tile $DA; releases the falling weights $83/$84/$85
+
+; ---- player variables (hurt, lives, invulnerability, balloon ride) ----
+ram 01AE lives                   ; starts at 2; HurtPlayer/respawn decrements it, the bonus tally adds one; 0 -> game over
+ram 00C0 hurt_flag               ; set to $0F by HurtPlayer; blocks further hits
+ram 007A invuln_lo               ; invulnerability counter (16-bit with zp_7B), decremented each frame
+ram 007B invuln_hi
+ram 00BF death_timer             ; counts the death / respawn animations
+ram 00B9 ride_timer              ; balloon ride: 0 while rising, then counts to $30 at the top
+ram 00BA ride_balloon_slot       ; entity slot of the balloon carrying the player
+ram 0088 shot_cooldown
+name 5 89BB Ent_HurtOnTouchKnockout ; small box overlap, then F_F4BA: knocked-out death ($1A)
+name f F4BA HurtPlayerKnockout
+name f EFAB ToggleSwitch1        ; flips switch_1 (sfx $16 on pulse 2), then ApplySwitch1
+name f EF5D ToggleSwitch2
+name f EF81 ToggleSwitch3
+name f EFB6 ApplySwitch1         ; updates the switch's tile frame / graphics from its state
+name f EF68 ApplySwitch2
+name f EF8C ApplySwitch3
+
+; ---- tile kinds under the player ----
+name f C1EF TileKindTable         ; indexed by tile id (>= $B4): 1 = spring ($D2-$D5), 3 = collectible ($DB), 4 = $CD
+ram 0057 touch_kind               ; kind of the special tile at the player (set by F_F3B5), also reused as the bounce strength
+
+; ---- naming pass 2 ----
+name 5 8886 Ent_DieIfHit            ; if tmp_a (player attack hit) != 0: becomes $07 (sparkle), noise sfx $03, and returns from the CALLER (pops two return addresses)
+name 5 88AA Ent_CheckPlayerOverlapB ; overlap-box variant used by $50/$66/$83/$85
+name f EFD3 CheckDoorTile           ; tile at (ptr) $78-$7F = door 0-7, $BD-$BF = 8-10; on Up loads the matching stage-record entry
+name f EDE8 CheckPlayerDoor         ; door check at the player's position (+8, +8)
+name f F9B6 AwardPickup             ; tmp_a = pickup kind: popups, score and special effects (kind $0C/$0D spawn effects)
+name f F81C HandleSpecialTile       ; map tiles $C8-$CC: calls bank 3 $BE9D
+name f C8B4 ClearNametables         ; A = tile: clears OAM and fills nametables $2000 and $2800
+name f C8DD FillNametable           ; A = high address byte of the nametable to fill with tmp_08
+name 2 B732 BinaryToDigits          ; ptr_lo/hi/tmp_a (24-bit) -> decimal digits in ram_038C.. (powers table at $B777)
+name 2 B6EF DrawDigitsToBuffer      ; appends the digits as tiles ($C4 = '0') to ppu_buffer at address ptr_hi/ptr_lo
+name 0 B563 LoadFont                ; decompresses the font block (bank 0 $8521) into PPU $1C40
+ram 0066 player_facing              ; 0/1 (peck and projectile direction)
+ram 0065 player_frame               ; sprite frame of the player
+ram 00BB rng_a                      ; pseudo-random generator state (rng_b ^= rng_a ...)
+ram 00BC rng_b
+ram 0019 player_box_y               ; low bytes of the player's position used by the overlap tests
+ram 0018 player_box_x
+ram 0021 map_read_lo                ; working map pointer while drawing columns/rows
+ram 0022 map_read_hi
+name f F28D QueueMapTileDraw        ; A = tile id, tmp_a/tmp_b = map address: converts it to nametable coordinates and queues a 2x2 redraw in ppu_buffer
+name f F192 PushTileEffect          ; shifts the 3-entry delayed tile-effect queue (ram_0720-0728)
+name f F1DD RunTileEffects          ; per frame: advances the queued tile effects through the table at F_C544
+name f E0D4 ApplyRidingMotion       ; while riding_flag: adds the platform's ent_dx/ent_dy to the player
+name f DD46 TryStartJump            ; player_state 0 and A pressed: picks the jump variant from touch_kind and starts it
+name 5 8993 Ent_CheckPlayerOverlapC
+name 5 A99A Ent_CheckPlayerOverlapD
+
+; ---- unreferenced data ----
+blob 2 B8CB 1845 Bank2_TailData unreferenced: mostly $00/$FF bytes with single-bit variations (period 32), no code reads it; probably leftover fill
+
+; ---- bank 3 code reached through raw JSR/JMP $xxxx from the fixed bank ----
+entry 3 BE91
+entry 3 BE9D
+entry 3 8405
+entry 3 BF05
+; ---- tables classified ----
+blob 0 BE8A 256 SineTable_Data signed sine table, amplitude +-64 (see SineTable)
+blob f C000 8 BankValueTable bus-conflict-safe table read by SwitchBank: the byte at $C000+n is written back to select bank n (low 3 bits)
+blob f C008 64 NametableRowLo low address byte of each tile row in the two nametables (32-byte rows, padded)
+blob f C048 64 NametableRowHi high address byte of each tile row
+blob f C088 16 AttrRowLo low address of each attribute-table row
+blob f C098 16 AttrRowHi high address of each attribute-table row
+blob f C1EF 256 TileKindTable_Data tile id -> kind (1 spring, 3 collectible, 4 = $CD); only ids $B4-$DB are meaningful
+blob 2 A629 30 TileFrameA 30 bytes written to PPU $1232 (CHR tile data for an animated tile, two variants of the call)
+blob 2 A696 30 TileFrameB 30 bytes written to PPU $1232 (the second frame set used by B2_A647/A65D/A673)
+
+; ---- code found hiding in table gaps ----
+entry 2 A6B4
+entry 2 A6B7
+words 5 B990 3 5                ; three sub-state entry points (Ent9E)
+
+; ---- naming pass 3 ----
+name 5 80D3 Ent_TryCarryPlayer      ; if the player can ride (Tbl_B5_80B7[player_state]) and stands on top of this entity: riding_slot/riding_flag set, player snapped to Y-16
+name 5 8148 Ent_Return              ; a bare RTS used as a table target
+name 5 8122 Ent_SubHandlerTable     ; 15 code pointers (indexed by an entity sub-state), many to Ent_Return
+name 5 9B09 Ent_StartFade           ; type $23 with ent_angle = 7: the fade-out before the entity disappears
+name 5 A96E Ent_OffscreenGuard      ; returns when the entity is off-screen (ent_flags bit 2)
+name f F80D CheckSpecialTile        ; switches to bank 3 and calls the special-tile check at $BE91 for the tile at (ptr)
+name 3 BE91 Bank3_SpecialTileCheck  ; GetMapTile; tiles $C8-$CD fall into Bank3_SpecialTileAction
+name 3 BE9D Bank3_SpecialTileAction ; tile in A: acts unless the area is 2 or 5 (the underwater caves)
+name f EC73 PlayerMoveLeft          ; Left held: turns first (player_facing), then x -= walk_speed with wall/slope checks, then CheckPlayerDoor
+name f ED17 PlayerMoveRight
+ram 0064 walk_speed
+name f E035 PlayerVerticalStep      ; state-0 vertical motion: invulnerability/shot checks, then zp_70/71/72 counters and ApplyRidingMotion
+name f D6CE ScrollY                 ; vertical scroll from the change in focus_y (ScrollX falls into it when x did not change)
+name f C9B3 ReadControllerBank0     ; bank-safe wrapper: switch to bank 0, ReadController, restore the bank
+name f C874 NMI_EndOfFrame          ; end of the NMI state handlers: F_C7A1, bank 6 $BF02, then F_C82F
+name f DDC1 TryFireShot             ; powerup_shot set, shot_cooldown 0, no zp_E0 and B pressed -> start a projectile
+name f EEBB PlayerWalkAnimStep      ; advances the walking animation counter zp_6D (0-15) every few ticks
+name f F3B5 UpdateTouchKind         ; reads the tile at the player position and sets touch_kind (zp_57) from TileKindTable; collectibles play sfx and are flagged
+name f C647 StartNewGame            ; new game: silences sound, lives = 2, score = 0, items_found = 0, balloons_left = 0, stage_index = 0
+name f C667 StageSetup              ; loads the stage record (spawn position, area) for stage_index
+name f C6FD MainLoop
+name f C700 MainLoopBody
+name 1 BE3C PrintString             ; A/Y = pointer to a zero-terminated string: PPUDATA = char + $94 (space = $5C)
+name 5 977B Ent_BeginFall           ; remembers the current type in ent_dy and becomes $1B (falling)
+ram 0042 saved_x                    ; X register saved across helper calls (STX zp_42 ... LDX zp_42)
+ram 0200 oam_buffer                 ; sprite DMA source page ($0200-$02FF)
+
+; ---- dive attack (Down in the air) ----
+name f F7B8 ShockwaveKillEnemies    ; noise sfx 4; every entity whose type is flagged in KillableTypeTable becomes $5D (collect/death), then is removed
+ram 007C dive_mode                  ; 0 normally; 4 while diving (Down held in the air); bounce/dive flag read by landing and enemy code
+ram 0085 fall_ticks                 ; counts fall time while diving; at landing >= $8C triggers the shockwave and camera shake
+
+; ---- death animation (PlayerState0F/10: F_F57A builds six sprites per tick) ----
+blob 3 8000 147 DeathAnimTiles 49 steps x 3 bytes: each byte packs two sprites: bits 5-4 / 1-0 = tile index (tile = $F9 + 2*index), bits 7-6 / 3-2 = flip/attribute bits
+struct 3 8000 49 bbb
+blob 3 8093 600 DeathAnimPath sprite positions: 6 bytes per tick; the routine copies 12 bytes (a 2-tick window) at $8093 + 6*(death_timer+1) into ram_0398 so the six sprites trail each other (100 steps; the last frames' windows read a few bytes into the pointer table that follows)
+struct 3 8093 100 bbbbbb
+name f F57A DeathAnimFrame          ; A = death_timer: builds the six death-animation sprites in OAM entries 15-20 from DeathAnimTiles/DeathAnimPath
+
+; ---- player and projectile drawing ----
+name 6 A4E1 DrawPlayer              ; per frame: PlayerToScreen, then frame-dependent sprite flip fix-ups ($34-$37, $3E-$43, $4C, $4D, $15)
+name 6 A535 PlayerToScreen          ; player_box_y/x = player position minus the camera (minus the sprite offsets); hides the sprites when off-screen
+name 1 802C UpdateShots             ; per frame: for each of the 2 projectile slots, dispatch on shot_state and write OAM entries 19-20
+name 1 813E ShotDispatch            ; X = slot: jumps through the 15-entry handler table at B1_811E by shot_state
+name 1 8982 ShotOffscreenCheck      ; ends the projectile when it leaves the screen window
+ram 004E player_draw_frame          ; frame index tested by DrawPlayer
+ram 0065 player_frame               ; sprite frame set by the player states
+name 1 83FB Shot_TileHit            ; projectile hit a tile: tile $DA (the peck switch) toggles via PeckSwitchToggle and the projectile ends
+name 5 B181 Ent_PatrolTail          ; shared tail of types $74/$75: restores tmp_c/tmp_d, overlap tests and the player-touch check
+name 6 A3EC ExitWalkStep            ; PlayerState19: steps ExitWalkAnim (player_frame, player_x -= offset)
+name 6 A41E AdvanceStage            ; end of the exit walk: fade out, silence, INC stage_index, restart at StageSetup
+name 5 91B0 Ent_FloatStep          ; ent_angle steps through FloatPathDx: Y -= 1, X += dx; word $80 -> Ent_StartCollectAnim
+
+; ---- per-group sprite graphics loader ----
+blob 6 A726 120 GroupGfxTable 30 entries of 4 bytes for animation groups 1-30 (group 0 would be at $A722 but its 4 bytes are the tail of the last PlayerShape offset list and are never read): compressed block pointer (word), tile count, 0. A pointer of 0 = shares another group's tiles (8,9,12,16,18-20,26). Read by LoadGroupGfx
+struct 6 A726 30 pbb
+name f CC51 LoadGroupGfxFromFlags   ; A = ent_flags: group = (flags >> 3) & $3F; loads its graphics if anim_tile_base[group] is 0
+name f CC65 LoadGroupGfx            ; A = animation group: allocates tiles (anim_tile_base = 0 - sprite_tile_next), decompresses the block from GroupGfxTable to PPU $0000 + base*16
+ram 00DB sprite_tile_next           ; counts down from $A8: each loaded group lowers it by its tile count, so bases rise from $58
+
+; ---- player sprite shapes (DrawPlayer, B6_A57F) ----
+blob 6 A653 80 PlayerFrameShape player_draw_frame -> shape index (0-10)
+blob 6 A6A3 11 PlayerShapeRecordLo low bytes of the shape record pointers
+dlohi 6 A6A3 A6AE 11
+blob 6 A6AE 11 PlayerShapeRecordHi high bytes of the shape record pointers
+blob 6 A6B9 33 PlayerShapeRecords 11 records of (offset list pointer, sprite count); shape 6 points at RAM $0398 (the death-animation positions)
+struct 6 A6B9 11 pb
+blob 6 A6DA 72 PlayerShapeOffsets signed (dy, dx) pairs per shape, back to back (the last list's final 4 bytes overlap the unused group-0 entry of GroupGfxTable)
+struct 6 A6DA 4 bb
+struct 6 A6E2 4 bb
+struct 6 A6EA 4 bb
+struct 6 A6F2 3 bb
+struct 6 A6F8 4 bb
+struct 6 A700 5 bb
+struct 6 A70A 2 bb
+struct 6 A70E 4 bb
+struct 6 A716 4 bb
+struct 6 A71E 2 bb
+name f E066 PlayerIdleAnim          ; once idle_timer passes $258 (600 frames) steps IdleAnim: tile, duration and player_frame
+ram 0070 idle_timer_lo              ; frames the player has been standing still (reset by input); an idle animation starts at $258
+ram 0071 idle_timer_hi
+ram 0072 idle_anim_timer
+
+; ---- naming pass 5 ----
+name 2 A084 PixelTileUploadA        ; X = index: writes one 16-byte tile to PPUDATA, byte n taken from table n of PixelTables (set A)
+name 2 A156 PixelTileUploadB        ; same for the second set of 16 tables ($8F00...)
+name 2 A5CC SetPPUAddr_1044         ; PPUADDR = $1044 (tile data for the animated tiles) and return
+name 2 AF19 SetPPUAddr_1432
+name f E0C6 ResetIdleTimer          ; clears idle_timer and idle_anim_timer, then continues with the normal frame setup
+name f E6DC PlayerLand              ; landing: dive_mode 0 = normal landing (state 4), otherwise the dive landing (state 3)
+
+; naming pass 6
+name f F885 SpawnPickupAtPlayer      ; saves bank and X, switches to bank 5, puts a free entity at the player's position and runs AwardPickup
+name 5 A785 EntStateJump             ; jumps through a word table indexed by ent_param2 (a sub-state dispatcher)
+name 4 BEEB CutsceneScrollEffect     ; far-called by F_CEE1 after zp_75 is set to $78
+name 5 8F35 EntWobbleX               ; sets tmp_a/b to WobbleDxTable then falls into B5_8F3D: advances ent_radius (0..17) and adds the table word to ent_x
+name 1 814F ShotTimerStep            ; per-frame shot countdown on zp_E0: at zero ends the shot (B1_8568), otherwise animates shot_frame from shot_E3
+name f E2EB RidingCheckX             ; compares player X+9 with the ridden entity's X (riding_slot); within $12 keeps riding, otherwise leaves F_E310
+name f F91B SpawnEffectsFromList     ; finds a free effect slot (16) and spawns effects from the list at ptr, positioned relative to the entity in saved_x; $FF ends the list
+name f EB25 MovePlayerKeepBank       ; saves the current bank around F_EB2F (the buttons-driven player move), then restores it
+name 1 8568 ShotStartImpact          ; shot_state 3 (impact), shot_E3 = 6, frame 0
+name 5 BA00 EntRiseWobble            ; every other tick: moves up 1 pixel and wobbles X (EntWobbleX), then recomputes the delta from the centre
+name 5 B40B EntMarkAngleBit7         ; sets bit 7 of ent_angle (flag consumed elsewhere)
+name 5 82F2 CollectTileItem          ; pushes a tile effect, records the tile pointer in ram_0720..0722, sets the collected flag and plays noise sfx 5
+
+; naming pass 10 (small subroutines)
+name 0 8183 PaletteRowFadeToPPU       ; writes 16 palette bytes to PPUDATA, each reduced by the fade table value (floor $0F)
+name 0 B873 WriteBiasedText           ; sets the PPU address, then writes the 0-terminated string at (tmp_c) with $94 added to each tile
+name 2 AE46 SetPPUAddr_13B0
+name 2 B467 SetPPUAddr_1D20
+name 2 B475 SetPPUAddr_1D70
+name 2 B483 SetPPUAddr_1E40
+name 2 B509 SetPPUAddr_14D0
+name 1 B129 PlayerAnimAdvance        ; counts zp_80 to 8, then takes the next player_frame from a $FF-terminated list indexed by zp_81
+name 3 BD7F PlayerFrameCycle4        ; player_frame cycles through a 4-entry table every 8 ticks
+name 5 90BF SetOneTimeFlag           ; sets bit (ent_dy & 7) of onetime_flags[ent_dy >> 3] (entity already handled), restores X
+name f C929 RandomByteFar            ; far-calls the bank 6 RNG routine, preserving X and Y, returns rng_a
+name f C9B2 ReturnStub               ; bare RTS
+name 0 B8A5 QueuePpuStringA          ; copies the 0-terminated string at the table start into ppu_buffer
+name 0 B8A9 QueuePpuStringB          ; as above, starting at table offset $0B
+name 4 B4F7 SetSpawnAbovePlayer      ; spawn position = player position, Y reduced by tmp_a; also copies current_area and zp_92 to zp_98/zp_99
+name 6 8DA7 SoundNoiseLFSR           ; shifts a 32-bit pseudo-random register in ram_0751..0754
+name 6 8AE3 SndUpdateSfxSq1
+name 6 8BDB SndUpdateSfxSq2
+name f C98D HideAllSprites           ; sets the Y of 15 OAM entries to $FF
+name f CFF5 NudgeSpritesUp           ; for each 8-byte group in OAM$0000..$002F, decrements the Y of both sprites unless the first is $FF (hidden)
+name 5 A6F2 EntAimAtTarget           ; builds a direction/distance vector from the entity to (tmp_c,tmp_a): sign bits in tmp_b, major axis in ent_dy/ent_dx, divisor in ram_06C0
+name 5 8A9F EntRaiseAndSnap          ; raises the entity by tmp_a; if the tile above (x+8) is solid, snaps to the tile boundary and sets ent_angle bit 7
+name 0 B70A DrawTileBlock17x5        ; writes 5 rows of 17 tiles (source bytes minus $80) to the nametable at ptr, advancing 32 per row
+name 1 816F ShotMoveRight            ; moves a shot 2 px right, stopping on solid tiles or past the screen edge
+name 1 81DA ShotMoveLeft             ; moves a shot 2 px left, stopping on solid tiles
+name 1 8223 ShotMoveUp               ; moves a shot 2 px up, stopping on solid tiles
+name 2 B02D WriteFixedTiles_1432     ; sets PPU address $1432 and writes 14 fixed tile values
+name f C9D7 InitBalloonRoom          ; advances ptr by Y, decompresses the bank 1 data at $BAD5, clears 8 entity slots (angle $FF), then reads balloons_left from (ptr) and zeroes balloons_popped
+name f EEDF MapPtrToCoords           ; inverse of MapPtrFromPos: converts a map pointer back to pixel Y (tmp_a/b) and X (tmp_d) using map_width
+name f F8FC DivideByTmpA             ; 8-step long division: (tmp_b:ptr_lo) by tmp_a, quotient in tmp_c, remainder in ptr_lo
+name f F16F TickPickupCounter        ; counts zp_A7 to $64, then spawns a pickup at the player (kind in tmp_a: 8, or $0C while zp_A5 is below 4) and returns carry set
+name 4 BA94 StepDispatch_01BE      ; jumps through the word table at B4_BA8C indexed by ram_01BE
+name 2 A2E2 PixelUploadDispatch      ; jumps through a word table indexed by X-$60 to the tile upload routines
+
+; naming pass 12 (JSR targets)
+name 0 81DC ClearPalettesBlack       ; fade_step = palette_set = 0 and fills the 32 palette bytes with $0F
+name 0 B577 SaveScrollAndClearScreen ; saves the scroll registers to ram_0392..0394, zeroes the scroll and clears the screen
+name 0 B63F InitIntroScreen          ; render off, clears nametables, loads the font and the bank 0 graphics, draws the block and attribute table, palette set 8
+name 0 B6CF IntroScreenStep          ; one step of the intro animation driven by entity_tick
+name 0 B7AA DrawBlockAndAttributes   ; DrawTileBlock17x5, then fills the attribute table ($23C0/$23E8)
+name 0 B8D2 LoadBank0Gfx             ; decompresses Gfx_B0_B8E6 to PPU $1000
+name 2 9F2C ClearPixelTilesA         ; zeroes a run of PPU bytes at $1F80 (xor zp_FC)
+name 2 9FD0 ClearPixelTilesB         ; zeroes a run of PPU bytes at $1FA0 (xor zp_FC)
+name 2 A075 UploadPixelTilesC        ; sets PPU address $1FC0 (xor zp_FC) and uploads the pixel tile column for X
+name 2 A147 UploadPixelTilesD        ; sets PPU address $1FE0 (xor zp_FC) and falls into PixelTileUploadB
+name 2 A219 PixelDispatch_A22C       ; jumps through a word table indexed by X-$60 (one of three near-identical dispatchers with A25C and A29F)
+name 2 A25C PixelDispatch_A26F
+name 2 A29F PixelDispatch_A2B2
+name 2 A463 PixelTileUploadC         ; writes one byte from each of the pixel tables at X to PPUDATA
+name 2 A554 WriteTileStrip_1044      ; writes 11 tiles from Tbl_B2_A5A0 to PPU $1044, then a second strip, then resets the scroll
+name 2 A5DA TileFrameA_At1252        ; zp_47 = zp_DA = $0A and PPU address $1252, then the TileFrameA upload (A5F0: $0E/$1272, A606: $06/$1232)
+name 2 A5F0 TileFrameA_At1272
+name 2 A606 TileFrameA_At1232
+name 2 A647 TileFrameB_At1252        ; same with TileFrameB: $0C/$1252 (A65D: $10/$1272, A673: $08/$1232)
+name 2 A65D TileFrameB_At1272
+name 2 A673 TileFrameB_At1232
+name 2 A7EF WriteTiles_1170          ; writes a fixed tile strip to PPU $1170
+name 2 AA65 WriteTiles_11B0          ; writes a fixed tile strip to PPU $11B0
+name 2 ACD7 WriteTiles_11F0          ; writes a fixed tile strip to PPU $11F0
+name 2 B64F DrawScoreAndBalloons     ; converts the score to digits and queues them at PPU $218E, then the balloon counters
+name 2 B78F PpuJobDispatch           ; when the PPU buffer is under $18 bytes: runs the job number in zp_47 (or zp_DA) through the Tbl_B2_B7B0/B7D2 pointer table
+name 4 AEF6 EnableCameraAtX          ; once the player passes X $C0: camera_mode = 1 and sets the camera limits ram_0739..073C
+name 4 BAD9 QueueTextRowDefault      ; as QueueTextRow with the default text pointer $BC1E
+name 4 BAE7 QueueTextRow             ; A = row index: address = $24C8 + A*32; queues the text at (tmp_c) into the PPU buffer
+name 5 8E48 SpawnDebrisEntity        ; spawns an entity of type 5 12 px below the caller, with a random $0-$F horizontal offset
+name 5 9D55 EntPeriodicEffects       ; every $40 frames of ent_param2 runs SpawnEffectsFromList on the list at $9D6F
+name 5 B3BB EntClampMinY             ; keeps the entity at or below focus_y+$10 (otherwise pushes it back by 1)
+name 5 B3E7 EntClampMinX             ; keeps the entity at or right of focus_x
+name 5 B414 EntClampMaxX             ; keeps the entity at or left of focus_x+$E0
+name 5 B440 EntClampMaxY             ; keeps the entity at or above focus_y+$E0
+name 6 BF02 RngStep                  ; advances the random generator (rng_a/rng_b mixed with the sound noise register ram_0751..0754)
+name f C7A1 ApplyScroll              ; sets the nametable bit in PPUCTRL from scroll_y_hi and writes the scroll registers
+name f CA31 InitAnimTileState        ; clears ram_0488.. and anim_tile_base, then starts the animated tile setup (anim_tile_base = $2A)
+name f CE2C DrawTileBlockBank0       ; switches to bank 0, runs DrawTileBlock17x5, restores the bank
+name f D282 ClearPpu_1F80_0F80       ; zeroes 128 bytes of PPU memory at $1F80 and at $0F80
+name f D290 ClearPpuRegion128        ; zeroes 128 bytes of PPU memory at the address in X:Y
+name f D2A1 ComputeFocusY            ; focus_y = player_y - zp_4B, clamped to the level
+name f DC21 PlayerBlinkCheck         ; from invuln_hi/lo decides whether the player sprite is drawn this frame (zp_62: $FF when not invulnerable)
+name f DE75 SpawnWaterEntity         ; bank 5 call: spawns an entity at the water surface (water_level - $0C) under the player's X
+name f EB2F PlayerMoveByButtons      ; the up-button branch of the free-move code: tests buttons & $40 and moves player_y by walk_speed against the map
+name f F088 PlayerTileInteract       ; looks up the player state's interaction flag (Tbl_F_DBF6) and, if set, inspects the tiles at the player's feet
+name f F47A CheckHazardUnderPlayer   ; in state 0, reads the tile properties at the saved pointer zp_16/17; when both low bits are set falls into HurtPlayer
+name f F876 EntMoveYWithGroundFar    ; runs Ent_MoveYWithGround in bank 5 and restores the bank
+name f F8B1 AddLives                 ; lives += tmp_c, capped at 99
+name f F8C4 SubLives                 ; lives -= tmp_c
+name f F8CE SubRam01AA               ; ram_01AA -= tmp_c
+name f F8D8 AddRam01AA               ; ram_01AA += tmp_c
+
+; naming pass 14 (remaining JSR targets; neutral names where the purpose is not yet clear)
+name 0 B5B3 CopyPpuTileVia2007      ; reads a PPU tile at ptr and rewrites it at (tmp_c) (read-modify-write through PPUDATA), looping tmp_b rows
+name 0 B5FB RestoreScrollAndRedraw  ; render off, restores the scroll saved by SaveScrollAndClearScreen and redraws the screen
+name 0 B636 SetBlockSource_1530     ; tmp_c/tmp_d = $1530
+name 0 BF8A FadeTableStep           ; steps through Tbl_B0_BFBB with zp_48/zp_49 (7-bit counter) while the PPU buffer has room
+name 1 8795 ShotPosByAngle          ; places a shot from the player using SinLookup/CosLookup of zp_C7 scaled by zp_CC
+name 2 9E00 SetPlayerFacingBit      ; copies player_facing bit 0 into zp_4F bit 0, returns early while zp_50 is set and the PPU buffer is busy
+name 2 AF27 WriteTiles_1432         ; writes a fixed tile strip at PPU $1432
+name 2 B49F WriteTile69AndScroll    ; writes tile $69 to PPUDATA and resets the scroll
+name 2 B4A7 WriteTileFrame_14D0     ; writes the 30-byte frame Tbl_B2_B4BA to PPU $14D0
+name 2 B89D CheckRam01A8Threshold   ; compares ram_01A8/01A9 with $0257 unless ram_0736 is set
+name 3 BEA9 OpenBlockReward         ; redraws the block as tile $D7, sets the collected flag, plays sfx $28 and records the reward from Tbl_B3_BE38
+name 4 B2D9 QueueTextAndSpawnPopup   ; queues the 4-byte text at (tmp_c) and spawns effect type $32 at (x $65, y $52) with parameters tmp_a/tmp_b (the tally popups)
+name 4 B40E AimedRandomEffect       ; multiplies/divides random values to place an effect (uses ScaledMultiply and DivideByTmpA)
+name 4 B515 StateDispatch_0735      ; jumps through a word table indexed by ram_0735
+name 4 BD3D AddToRam01A8            ; 16-bit ram_01A8/01A9 += tmp_c
+name 4 BD91 QueueTextAndStartFade   ; queues a text block, sets the fade counters and runs B4_BEDF
+name 4 BE32 InitEndScreen           ; silences sound, palette set 8, fills attribute bytes at $23D0 with $55, enables NMI
+name 4 BEDF FadeStepBEDF            ; zp_74 counts up; ram_038A = zp_74/2, then falls into BEE7
+name 4 BEE7 FadeStepBEE7            ; sets zp_75..zp_78 and tmp_b..tmp_d for a screen-fade effect and runs it
+name 5 AA15 DamageBoss              ; boss_health = max(0, boss_health - tmp_a)
+name 5 AB0E EntUnpackNibbles        ; splits ram_06C0/06F0 into high/low nibbles in tmp_a..tmp_d
+name 6 817B SoundTickIfPlaying      ; returns at once unless snd_playing is set
+name 6 8AD7 SoundUpdateChannels     ; updates the noise generator, then the sfx square 1 and 2 channels
+name 6 BA04 PlayerAttackInput       ; tests the B button (buttons & $20): dive/peck handling for the player
+name f C956 ClearOAMAndLoadSprites  ; clears OAM, far-calls bank 6 $BF32, then fills OAM with a fixed sprite column
+name f CEE1 CutsceneScrollCall      ; sets zp_75 = $78 and far-calls bank 4 $BEEB
+name f CF06 DrawQueuedBlock         ; sets tmp_c/d = $BC3E, ptr_lo = $11 and, if ram_01BA is set, runs bank 4 B4_BAE7 and decrements ram_01BA
+name f F6E0 MapPtrToTileCoords      ; converts a map pointer in ptr to tile X/Y using map_ptr and map_log2_width, preserving tmp/ptr
+name f FEF5 Decomp_ReadBitsA        ; decompressor helper: pulls bits from tmp_a/(ptr) into tmp_08
+name f FF26 Decomp_ReadBitsB
+name f FF80 Decomp_ReadBitsC
+
+; naming pass 15 (RAM)
+ram 06C0 ent_line_len               ; per-entity straight-line step length (EntAimAtTarget): the minor-axis distance + 1
+ram 06F0 ent_line_acc               ; per-entity line accumulator: decreased by ent_dx, reloaded with ent_line_len on wrap
+ram 00FC pixel_page_xor             ; toggled by $10 each pixel-tile upload cycle; xor-ed into the PPU address high byte ($1F/$0F pages)
+ram 0389 cutscene_fade_a            ; transition/fade parameters set before the cutscene scroll effects (with zp_75..78)
+ram 038A cutscene_fade_b
+ram 00AD sprite_y_tmp               ; scratch Y while assembling a sprite into OAM
+ram 0043 draw_row_count             ; rows left when queueing a map row/column draw
+ram 0045 draw_x                     ; X/Y of the map draw being queued (from X/Y registers)
+ram 0046 draw_y
+
+; code reached only through stack/JSR-table tricks that the tracer did not follow
+entry 1 826C
+entry 4 B539
+entry 4 B556
+entry f CF02
+name 1 826C ShotMoveDown            ; moves a shot 2 px down, stopping on solid tiles
+name 4 B539 StoryBranchByStage      ; looks up Tbl at B4_B7B4 by stage_index; zero falls into the game_state 9 / player_state 9 setup
+name 4 B556 StartStoryScene         ; plays song 6, hides all sprites and starts the story text with ram_01B1 selecting the screen
+name f CF02 FarCallReturn           ; return target pushed by FarCall: restores the caller's bank and returns
+
+; naming pass 16 (RAM): tileset pointers and map sizes
+ram 0027 meta_attr_ptr_lo           ; pointer to the tileset's attribute plane (index = map byte, low 2 bits = palette)
+ram 0028 meta_attr_ptr_hi
+ram 0029 meta_tl_ptr_lo             ; pointers to the four 240-entry metatile planes (top-left, top-right, bottom-left, bottom-right)
+ram 002A meta_tl_ptr_hi
+ram 002B meta_tr_ptr_lo
+ram 002C meta_tr_ptr_hi
+ram 002D meta_bl_ptr_lo
+ram 002E meta_bl_ptr_hi
+ram 002F meta_br_ptr_lo
+ram 0030 meta_br_ptr_hi
+ram 0034 map_width_px_lo            ; map width in pixels (map_width * 16)
+ram 0035 map_width_px_hi
+ram 0036 map_height_px_lo           ; map height in pixels (map_height * 16)
+ram 0037 map_height_px_hi
+ram 0038 map_cells15_lo             ; map_width * 15 (cells in a 15-row map)
+ram 0039 map_cells15_hi
+ram 0047 ppu_job                    ; job number for PpuJobDispatch (0 = none)
+ram 00DA ppu_job_saved              ; copy of the last job number
+ram 0720 pending_tile_kind          ; kind of the tile effect recorded for the tile at ram_0721/0722
+ram 0721 pending_tile_ptr_lo
+ram 0722 pending_tile_ptr_hi
+ram 01A8 tally_lo                   ; 16-bit tally shown on the results screen (>= $96 earns a pickup; compared with $0257 elsewhere)
+ram 01A9 tally_hi
+ram 01AA tally_small                ; second, 8-bit tally shown on the results screen
+ram 0735 story_step                 ; index into the StateDispatch_0735 word table
+
+; naming pass 17 (RAM)
+ram 0590 effect_param0              ; five per-effect parameter arrays filled from the effect list records (SpawnEffectsFromList)
+ram 05C0 effect_param1
+ram 05F0 effect_param2
+ram 0620 effect_param3
+ram 0650 effect_param4
+ram 0016 feet_tile_ptr_lo           ; map pointer of the tile under the player's feet (CheckHazardUnderPlayer, UpdateTouchKind)
+ram 0017 feet_tile_ptr_hi
+ram 0201 oam_tile                   ; bytes 1..3 of OAM entry 0; code indexes them with x = entry*4
+ram 0202 oam_attr
+ram 0203 oam_x
+ram 038C digit_buffer               ; digits produced by BinaryToDigits, most significant first
+ram 00C7 shot_angle                 ; angle (0..255) used by ShotPosByAngle
+ram 0751 noise_lfsr0                ; 32-bit pseudo-random register advanced by SoundNoiseLFSR; also mixed into RngStep
+ram 0752 noise_lfsr1
+ram 0753 noise_lfsr2
+ram 0754 noise_lfsr3
+
+; naming pass 18 (RAM): pulse 2 and noise SFX state, same layout as snd_sfx1_* (14 definition bytes + 6 runtime bytes)
+ram 07C9 snd_sfx2_duration
+ram 07CA snd_sfx2_pitch_interval
+ram 07CB snd_sfx2_period_lo
+ram 07CC snd_sfx2_period_hi
+ram 07CD snd_sfx2_slide_lo
+ram 07CE snd_sfx2_slide_hi
+ram 07CF snd_sfx2_duty_vol
+ram 07D0 snd_sfx2_add_pitch_offset
+ram 07D1 snd_sfx2_slide_mode
+ram 07D2 snd_sfx2_repeat
+ram 07D3 snd_sfx2_seq_index
+ram 07D4 snd_sfx2_seq_speed
+ram 07D5 snd_sfx2_sustain
+ram 07D6 snd_sfx2_slide_interval
+ram 07D7 snd_sfx2_cur_period_lo
+ram 07D8 snd_sfx2_cur_period_hi
+ram 07D9 snd_sfx2_pitch_timer
+ram 07DA snd_sfx2_slide_timer
+ram 07DB snd_sfx2_seq_pos
+ram 07DC snd_sfx2_seq_timer
+ram 07DF snd_sfxn_duration
+ram 07E0 snd_sfxn_pitch_interval
+ram 07E1 snd_sfxn_period_lo
+ram 07E2 snd_sfxn_period_hi
+ram 07E3 snd_sfxn_slide_lo
+ram 07E4 snd_sfxn_slide_hi
+ram 07E5 snd_sfxn_duty_vol
+ram 07E6 snd_sfxn_add_pitch_offset
+ram 07E7 snd_sfxn_slide_mode
+ram 07E8 snd_sfxn_repeat
+ram 07E9 snd_sfxn_seq_index
+ram 07EA snd_sfxn_seq_speed
+ram 07EB snd_sfxn_sustain
+ram 07EC snd_sfxn_slide_interval
+ram 07ED snd_sfxn_cur_period_lo
+ram 07EE snd_sfxn_cur_period_hi
+ram 07EF snd_sfxn_pitch_timer
+ram 07F0 snd_sfxn_slide_timer
+ram 07F1 snd_sfxn_seq_pos
+ram 07F2 snd_sfxn_seq_timer
+ram 07DD snd_sfx2_id            ; sound-effect number last started on pulse 2
+ram 07DE snd_sfx2_flag
+ram 07F3 snd_sfx1_seq_ptr_lo       ; current volume-sequence pointers of the three SFX channels
+ram 07F4 snd_sfx1_seq_ptr_hi
+ram 07F5 snd_sfx2_seq_ptr_lo
+ram 07F6 snd_sfx2_seq_ptr_hi
+ram 07F7 snd_sfxn_seq_ptr_lo
+ram 07F8 snd_sfxn_seq_ptr_hi
+
+; tile effect queue: four 3-byte slots (kind, map pointer lo/hi); slot 0 is pending_tile_*
+ram 0723 tile_fx1_kind
+ram 0724 tile_fx1_ptr_lo
+ram 0725 tile_fx1_ptr_hi
+ram 0726 tile_fx2_kind
+ram 0727 tile_fx2_ptr_lo
+ram 0728 tile_fx2_ptr_hi
+ram 0729 tile_fx3_kind
+ram 072A tile_fx3_ptr_lo
+ram 072B tile_fx3_ptr_hi
+ram 0739 cam_limit_a_lo            ; set by EnableCameraAtX to $00C0 / $0020
+ram 073A cam_limit_a_hi
+ram 073B cam_limit_b_lo
+ram 073C cam_limit_b_hi
+
+; naming pass 19 (RAM): fixed elements of arrays, named mechanically
+; entity arrays: <field>_<slot> is element <slot> of the array
+ram 0488 ent_type_8
+ram 05A9 ent_param_9
+ram 0489 ent_type_9
+ram 04B8 ent_y_lo_8
+ram 04E8 ent_y_hi_8
+ram 0518 ent_x_lo_8
+ram 0548 ent_x_hi_8
+ram 05D9 ent_angle_9
+ram 0639 ent_param2_9
+ram 04B9 ent_y_lo_9
+ram 04E9 ent_y_hi_9
+ram 0519 ent_x_lo_9
+ram 0549 ent_x_hi_9
+ram 0579 ent_flags_9
+ram 0609 ent_radius_9
+ram 0578 ent_flags_8
+ram 05A8 ent_param_8
+ram 05D8 ent_angle_8
+ram 0608 ent_radius_8
+ram 0638 ent_param2_8
+ram 048A ent_type_A
+ram 04BA ent_y_lo_A
+ram 04EA ent_y_hi_A
+ram 051A ent_x_lo_A
+ram 054A ent_x_hi_A
+ram 057A ent_flags_A
+ram 05AA ent_param_A
+ram 05DA ent_angle_A
+; OAM shadow buffer bytes (offset into oam_buffer)
+ram 023C oam_buf_3C
+ram 024D oam_buf_4D
+ram 0246 oam_buf_46
+ram 024A oam_buf_4A
+ram 0204 oam_buf_04
+ram 023D oam_buf_3D
+ram 0241 oam_buf_41
+ram 0245 oam_buf_45
+ram 0249 oam_buf_49
+ram 023E oam_buf_3E
+ram 0207 oam_buf_07
+ram 0206 oam_buf_06
+ram 0205 oam_buf_05
+ram 0242 oam_buf_42
+ram 024F oam_buf_4F
+ram 024C oam_buf_4C
+ram 024E oam_buf_4E
+ram 0253 oam_buf_53
+ram 0250 oam_buf_50
+ram 0251 oam_buf_51
+ram 0252 oam_buf_52
+; PPU copy staging buffer ($0300..)
+ram 0301 ppu_copy_buf_01
+ram 030A ppu_copy_buf_0A
+ram 0309 ppu_copy_buf_09
+ram 0308 ppu_copy_buf_08
+ram 0307 ppu_copy_buf_07
+ram 0306 ppu_copy_buf_06
+ram 0305 ppu_copy_buf_05
+ram 0304 ppu_copy_buf_04
+ram 0303 ppu_copy_buf_03
+ram 0302 ppu_copy_buf_02
+ram 031F ppu_copy_buf_1F
+ram 031E ppu_copy_buf_1E
+ram 031D ppu_copy_buf_1D
+ram 031C ppu_copy_buf_1C
+ram 031B ppu_copy_buf_1B
+ram 031A ppu_copy_buf_1A
+ram 0319 ppu_copy_buf_19
+ram 0318 ppu_copy_buf_18
+ram 0317 ppu_copy_buf_17
+ram 0316 ppu_copy_buf_16
+ram 0315 ppu_copy_buf_15
+ram 0314 ppu_copy_buf_14
+ram 0313 ppu_copy_buf_13
+ram 0312 ppu_copy_buf_12
+ram 0311 ppu_copy_buf_11
+ram 0310 ppu_copy_buf_10
+ram 030F ppu_copy_buf_0F
+ram 030E ppu_copy_buf_0E
+ram 030D ppu_copy_buf_0D
+ram 030C ppu_copy_buf_0C
+ram 030B ppu_copy_buf_0B
+
+; naming pass 20 (RAM): zero-page variables with a single clear role
+ram 00E0 shot_timer                 ; frames until the current shot ends (ShotTimerStep)
+ram 0048 fade_tbl_pos               ; 7-bit position and table index used by FadeTableStep
+ram 0049 fade_tbl_idx
+ram 004A focus_offset_x             ; camera focus offsets from the player position (set by ResetLevelState and the dive/attack code)
+ram 004B focus_offset_y
+ram 00A5 pickup_tier                ; counts up to 4 each time TickPickupCounter spawns a pickup
+ram 00A7 pickup_timer               ; counts frames to $64 in TickPickupCounter
+ram 009C door_id                    ; door index being entered (written before the door loader runs)
+ram 0062 blink_state                ; PlayerBlinkCheck result: $FF when not invulnerable
+ram 0080 anim_tick                  ; frame counter (to 8) of the current player animation
+ram 0081 anim_index                 ; position in the current player animation list
+
+; naming pass 21 (RAM / tables, confirmed by watching the emulator)
+ram 0058 touch_ptr_lo               ; map pointer of the special tile the player is touching (UpdateTouchKind)
+ram 0059 touch_ptr_hi
+ram 005A prev_touch_kind            ; touch_kind of the previously touched tile, used to restore its look
+ram 005B prev_touch_ptr_lo
+ram 005C prev_touch_ptr_hi
+ram 005D touch_anim_step            ; 0..7 step counter of the touched tile's animation
+ram 007D fall_index                 ; PlayerState02: index into FallDyTable, +1 per frame up to $15 (set to 4 after a jump/peck bounce)
+ram 0073 fall_dy                    ; PlayerState02: the vertical step applied this frame (FallDyTable[fall_index])
+ram 007E carry_cooldown             ; frames left before the player may be carried again; counts down in PlayerState02
+ram 007F dive_facing                ; facing remembered for the dive/air-turn logic
+name f C27D FallDyTable             ; per-frame fall speed by fall_index: 0,0,0,1,0,1,0,1,1,... up to 2 (22 entries)
+
+; naming pass 22: bytes that several unrelated routines use as scratch (the emulator watch shows different roles per routine)
+ram 0074 scratch_74
+ram 0075 scratch_75
+ram 0076 scratch_76
+ram 0077 scratch_77
+ram 0078 scratch_78
+ram 00AE scratch_AE
+ram 00AF scratch_AF
+ram 00B0 scratch_B0
+ram 00B2 scratch_B2
+ram 00B3 scratch_B3
+ram 01A7 tally_timer                ; counts up by 3 per step in CheckRam01A8Threshold
+
+; naming pass 23 (RAM): story scene, confirmed by forcing game_state 6 with stage_index 1, 3 and 4 in the emulator
+ram 01B1 story_scene                ; 1..3: the story screen shown (record of 8 bytes at B4_B7B1 + scene*8)
+ram 01B2 story_timer                ; frames until the next script entry ($50 at the start)
+ram 00CF story_script_ptr_lo        ; pointer into the scene's script: (delay, pointer to a sprite definition) triples; delay 0 ends it
+ram 00D0 story_script_ptr_hi
+ram 01B3 story_flag                 ; non-zero: the scene is skipped to story_step 6
+ram 01B9 boss_hit_damage             ; hit points a player shot takes off boss_health (3, 3, 2 for bosses 1-3); copied from the scene record
+ram 01B4 story_param_a              ; the other scene record bytes ($3D constant, then two values per scene)
+ram 01B5 story_param_b
+ram 01B6 story_param_c
+ram 01BA story_text_rows            ; number of text rows queued by QueueTextRow (6 at the start)
+ram 01BB story_text_row             ; current row of the text being typed
+
+; naming pass 24: bodies of the player state handlers that live in banks 1, 3 and 6 (the fixed-bank PlayerStateNN stubs switch bank and jump here)
+name 6 B842 PlayerState01_Body
+name 6 A2BE PlayerState05_Body
+name 6 A32E PlayerState06_Body
+name 6 A3D6 PlayerState07_Body
+name 6 B953 PlayerGfxStep_B953     ; bank 6 routine reached after the walk/idle code sets player_frame and player_facing
+name 1 AF23 PlayerState11_Body
+name 1 AFAF PlayerState12_Body
+name 1 AFD3 PlayerState13_Body
+name 1 AFF8 PlayerState14_Body
+name 1 B094 PlayerState15_Body
+name 3 BD67 PlayerState1A_Body
+
+; naming pass 25: player shape records and offset lists
+name 6 A6BC PlayerShapeRecord1
+name 6 A6BF PlayerShapeRecord2
+name 6 A6C2 PlayerShapeRecord3
+name 6 A6C5 PlayerShapeRecord4
+name 6 A6C8 PlayerShapeRecord5
+name 6 A6CB PlayerShapeRecord6
+name 6 A6CE PlayerShapeRecord7
+name 6 A6D1 PlayerShapeRecord8
+name 6 A6D4 PlayerShapeRecord9
+name 6 A6D7 PlayerShapeRecord10
+name 6 A6E2 PlayerShapeOffsets1
+name 6 A6EA PlayerShapeOffsets2
+name 6 A6F2 PlayerShapeOffsets3
+name 6 A6F8 PlayerShapeOffsets4
+name 6 A700 PlayerShapeOffsets5
+name 6 A70A PlayerShapeOffsets7
+name 6 A70E PlayerShapeOffsets8
+name 6 A716 PlayerShapeOffsets9
+name 6 A71E PlayerShapeOffsets10
+
+; naming pass 26: bank 2 pixel tables (64 tables of $78 bytes, one byte per upload column) and misc
+name 2 8078 PixelTable_1
+name 2 80F0 PixelTable_2
+name 2 8168 PixelTable_3
+name 2 81E0 PixelTable_4
+name 2 8258 PixelTable_5
+name 2 82D0 PixelTable_6
+name 2 8348 PixelTable_7
+name 2 83C0 PixelTable_8
+name 2 8438 PixelTable_9
+name 2 84B0 PixelTable_10
+name 2 8528 PixelTable_11
+name 2 85A0 PixelTable_12
+name 2 8618 PixelTable_13
+name 2 8690 PixelTable_14
+name 2 8708 PixelTable_15
+name 2 8780 PixelTable_16
+name 2 87F8 PixelTable_17
+name 2 8870 PixelTable_18
+name 2 88E8 PixelTable_19
+name 2 8960 PixelTable_20
+name 2 89D8 PixelTable_21
+name 2 8A50 PixelTable_22
+name 2 8AC8 PixelTable_23
+name 2 8B40 PixelTable_24
+name 2 8BB8 PixelTable_25
+name 2 8C30 PixelTable_26
+name 2 8CA8 PixelTable_27
+name 2 8D20 PixelTable_28
+name 2 8D98 PixelTable_29
+name 2 8E10 PixelTable_30
+name 2 8E88 PixelTable_31
+name 2 8F00 PixelTable_32
+name 2 8F78 PixelTable_33
+name 2 8FF0 PixelTable_34
+name 2 9068 PixelTable_35
+name 2 90E0 PixelTable_36
+name 2 9158 PixelTable_37
+name 2 91D0 PixelTable_38
+name 2 9248 PixelTable_39
+name 2 92C0 PixelTable_40
+name 2 9338 PixelTable_41
+name 2 93B0 PixelTable_42
+name 2 9428 PixelTable_43
+name 2 94A0 PixelTable_44
+name 2 9518 PixelTable_45
+name 2 9590 PixelTable_46
+name 2 9608 PixelTable_47
+name 2 9680 PixelTable_48
+name 2 96F8 PixelTable_49
+name 2 9770 PixelTable_50
+name 2 97E8 PixelTable_51
+name 2 9860 PixelTable_52
+name 2 98D8 PixelTable_53
+name 2 9950 PixelTable_54
+name 2 99C8 PixelTable_55
+name 2 9A40 PixelTable_56
+name 2 9AB8 PixelTable_57
+name 2 9B30 PixelTable_58
+name 2 9BA8 PixelTable_59
+name 2 9C20 PixelTable_60
+name 2 9C98 PixelTable_61
+name 2 9D10 PixelTable_62
+name 2 9D88 PixelTable_63
+name 2 B5E6 PlayerStateTable_1E        ; the last entry of the player state pointer table in this bank
+name 2 B777 DecimalPlaceLo            ; low byte of the 24-bit place values read by BinaryToDigits
+name 2 B778 DecimalPlaceMid
+name 2 B494 WriteTile95AndScroll     ; writes tile $95 to PPUDATA and resets the scroll
+
+; naming pass 27: remaining table interiors and story-step entry points
+name 0 8263 StageRecords             ; the stage record table (see README)
+name 4 B7B4 StoryStageTable          ; 5 bytes indexed by stage_index: 0 = no story scene, otherwise the story_scene number
+name 4 B7B5 StoryRecordField_B7B5    ; interior byte of the 8-byte story scene records at B4_B7B1 (credits pointer high / parameters)
+name 4 B7B6 StoryRecordField_B7B6
+name 4 B7B7 StoryRecordField_B7B7
+name 4 B5B7 BossIntroScript            ; waits story_timer, then spawns the next scripted type $3A story sprite (delay, sprite-definition pointer); a zero delay ends it and starts step 2
+name 4 B63F BossSpawnSpeakers         ; spawns the two speaker entities (types $3B and $3C at x $78, y $494 and $4AC) and starts the dialogue (step 3, timer 3)
+name 4 B6A4 BossDialogueType          ; runs StepDispatch_01BE (the text typing); a mouth-animation toggle while typing; when typing is done: sfx $29, a burst effect at the player, step 4 with ram_01B7 = $32
+name 4 B728 BossDialoguePause         ; holds the speaker pose (ent_param_9 = 7) for ram_01B7 frames, then draws the queued text block; once all rows are shown goes to step 5
+name 4 B74B BossFightStart           ; gives the two combatants their entity types (story_param_a/b), boss_health = $63 and goes to step 7
+name 4 B71D BossDialogueDelay        ; counts story_timer down, then returns to step 2 (next dialogue page)
+name 4 BA00 BossFightHealthBar       ; while the fight runs: draws the 10-tile health bar at PPU $274B from boss_health (ram_0732 = $FF once the bar is drawn empty or the effect $47 exists)
+name 4 B767 BossDefeated             ; step 8, started by touching the prize (type $48): counts story_timer ($28) down; after boss 3 fades out and enters stage 5 setup, otherwise goes to StoryBranchByStage (level-complete chain)
+name 4 BA1D StoryEntry_BA1D
+name 4 BA8C StoryTextStepTable       ; word table indexed by ram_01BE (StepDispatch_01BE)
+name 4 BAA6 DialogueTextStep0
+name 4 BABC DialogueTextStep1
+name f C293 WalkFrameFacingPairs     ; (player_frame, player_facing) pairs indexed by anim_tick & $0E
+ram 01B8 boss_health                ; boss hit points ($63 at the start of the fight); drawn as a 10-tile bar by BossFightHealthBar and reduced by the boss entities / SubClamp01B8
+ram 0732 boss_bar_state             ; $FF once the health bar has been drawn as empty
+ram 01B7 dialogue_pause_timer       ; frames BossDialoguePause waits before the fight starts
+
+; naming pass 28 (RAM): boss dialogue text state, confirmed in the emulator (01BE goes 1, 2, 3 during step 3)
+ram 01BE dialogue_phase             ; 1 = text queued, 2 = typing, 3 = finished (BossDialogueType then moves to step 4)
+ram 01BC dialogue_type_delay        ; 3 at the start; counts the typing and toggles the speaker's mouth
+entry 4 B2D9
+
+; naming pass 29 (RAM): stage-clear text and tally, confirmed by forcing game_state $0A (it moved to $0B at frame 644 and the step went 0,1,2,3,6,7,9)
+ram 0737 clear_text_row             ; GameState0A: row of the "STAGE CLEAR" text being typed (1..$0E, then game_state $0B)
+ram 0738 clear_text_ticks           ; GameState0A: countdown (5) between rows
+ram 072F tally_step                 ; GameState0B: step 0..9 of the tally (word table at GameState0B)
+ram 00D1 state_delay                ; GameState0B countdown; in the respawn arc (bank 1) the horizontal direction: 0 = move left, 1 = move right
+ram 00D2 state_delay_outer          ; GameState0B outer countdown; in the respawn arc the smaller of (82 steps, |dx|)
+
+; naming pass 30 (RAM): respawn arc (player states $11-$15), confirmed by forcing a death in the emulator
+ram 00D3 respawn_major              ; the larger of (82 vertical steps, |dx| to the respawn point); the arc spreads the horizontal move over the steps (also saves X in HandleSpecialTile)
+ram 00D4 respawn_swapped            ; 1 when |dx| >= 82 (the two values were swapped)
+ram 00D5 respawn_accum              ; interpolation accumulator, reduced by respawn_major when it wraps
+ram 00D6 respawn_step               ; step index into Tbl_B1_B06A / SmallOffsets_B1_B144: counts up during the rise, down during the fall
+ram 00F8 respawn_y_lo               ; where the player respawns (the position when the death arc started)
+ram 00F9 respawn_y_hi
+ram 00FA respawn_x_lo
+ram 00FB respawn_x_hi
+; exit walk / swim / bonus ascent end
+ram 00BD anim_cursor                ; index (or frame countdown) into the scripted player animation: ExitWalkAnim, BonusAscentEndAnim; frame timer in the swim states $0C/$0D
+ram 00BE swim_anim_step             ; step counter of the swim animation (states $0C/$0D); counts up about every 3 frames (verified in area 20)
+ram 0090 half_speed_toggle          ; flipped every frame in PlayerState0D so walk_speed alternates 0/1 (verified in area 20)
+
+; naming pass 31 (RAM): scrolling and map tile drawing; the value ranges below were seen in the emulator watch (zp_3A 0..1, zp_3B signed, zp_3C/3D 0..7, zp_3F/41 = $8C..$8F pointer high bytes)
+ram 003A scroll_dx                  ; ScrollX: focus_x - prev_focus_x this frame (signed)
+ram 003B scroll_dy                  ; ScrollY: focus_y - prev_focus_y this frame (signed)
+ram 003C scroll_x_sub               ; pixels scrolled since the last 8-pixel column was queued (0..7)
+ram 003D scroll_y_sub               ; same for rows (also a row-wipe counter in the IRQ/NMI helper at F_CF52)
+ram 003E draw_top_ptr_lo            ; ScrollX/ScrollY: metatile plane for the top half of the column being drawn (TL or TR by column parity); QueueMapTileDraw reuses zp_3E for the tile id
+ram 003F draw_top_ptr_hi
+ram 0040 draw_bot_ptr_lo            ; the bottom-half plane (BL or BR); QueueMapTileDraw reuses zp_40 to save X
+ram 0041 draw_bot_ptr_hi
+ram 0001 no_nmi_yet                 ; $FF at the start of each main loop pass, cleared by NMI; QueueMapTileDraw checks it
+ram 0749 scroll_draw_ok             ; $FF at the start of a frame; ScrollY draws new rows only while it is set; queuing a $D3 tile clears it
+ram 0370 attr_cells_a               ; map cells gathered for the attribute-table update of the rows/columns being drawn (17 entries)
+ram 0380 attr_cells_b               ; second gathered column (base used by the row-draw variant at F_DAE3)
+ram 0381 attr_cells_b1              ; the same second column as the column-draw variant (F_D8F7) addresses it
+
+; naming pass 32 (RAM): small single-purpose bytes
+ram 0086 down_lock                  ; while non-zero the Down button is masked out of buttons until it is released (set after a dive landing / jump start)
+ram 0087 jump_lock                  ; same for the A button: masked until released (set in PlayerState02 and PlayerLand_LE734)
+ram 006E idle_wait                  ; counts down from $96 while standing still before the next idle animation step (PlayerIdleAnim)
+ram 006F idle_step                  ; step of the idle animation
+ram 0392 scroll_y_hi_save           ; SaveScrollAndClearScreen / RestoreScrollAndRedraw
+ram 0393 scroll_y_lo_save
+ram 0394 scroll_x_save
+ram 01A4 shake_saved_camera_mode    ; camera_mode before the dive-landing shake; restored when the shake table ends
+ram 01A5 shake_step                 ; index into DiveShakeOffsets while camera_mode is 5 (dive-landing shake)
+ram 0398 death_anim_pos             ; death animation sprite positions (base of the array)
+ram 041C level_state_block          ; $041C-$047F: 100 bytes initialised from LevelStateInit at area load; ApplySwitch1-3 write bytes inside it ($0469/$046A/$0472-$0474)
+
+; naming pass 33 (RAM): area 5 power-up orb scene, verified by loading area 5 through the door loader
+ram 00A6 orb_tile_taken             ; set when the player touches tile $D6 (PlayerTileInteract); GameState02 waits for it, then starts the dissolve (game_state 5)
+ram 00C5 orb_anim_frame             ; GameState02: frame 0..$3F of the orb animation (index into GameState02_FrameTable)
+name 3 BF05 GameState0E_Body        ; area 6 arrival state ($0E), reached through FarCall: resets tally_small, sets ram_0736 and the clear text counters, then picks a row from the player's Y (thresholds in GameState0E_Thresholds)
