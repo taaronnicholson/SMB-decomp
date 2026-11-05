@@ -1005,3 +1005,7 @@ name f C293 WalkFrameFacingPairs     ; (player_frame, player_facing) pairs index
 ram 01B8 boss_health                ; boss hit points ($63 at the start of the fight); drawn as a 10-tile bar by BossFightHealthBar and reduced by the boss entities / SubClamp01B8
 ram 0732 boss_bar_state             ; $FF once the health bar has been drawn as empty
 ram 01B7 dialogue_pause_timer       ; frames BossDialoguePause waits before the fight starts
+
+; naming pass 28 (RAM): boss dialogue text state, confirmed in the emulator (01BE goes 1, 2, 3 during step 3)
+ram 01BE dialogue_phase             ; 1 = text queued, 2 = typing, 3 = finished (BossDialogueType then moves to step 4)
+ram 01BC dialogue_type_delay        ; 3 at the start; counts the typing and toggles the speaker's mouth

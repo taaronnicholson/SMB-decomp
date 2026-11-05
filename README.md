@@ -289,7 +289,7 @@ speculative decode), and nearly all the rest is classified data. The data falls 
 - **labelled but not decoded** (about 6%, blobs from `tools/gen_table_hints.py`, cache `tools/tables.json`; overrides in `tools/table_names.txt`): 213 small tables. About 110 now have
   real names or decoded formats (23 `EffectList_*` spawn lists, credits/story/text packets, arcs); the other ~100 remain `Tbl_<bank>_<addr>` (or `<Reader>_Tbl_<addr>`), annotated with the routines that read them.
 `GAPS=20 python3 -I tools/decomp.py` reports what is still unclassified (under 0.1%); `make tables` re-runs the table pass after new code is traced.
-Auto-named labels are no longer bare addresses: branch targets used only inside their own routine are ca65 local labels (`@B5_8F4A`), and the rest are named after the routine they sit in (`PlayerState02_L8F4A`). Every routine that other code calls has a hand-given name, though some are neutral where the purpose is not yet clear. About 150 RAM symbols still have address-based names (`python3 -I tools/rank_unnamed.py`).
+Auto-named labels are no longer bare addresses: branch targets used only inside their own routine are ca65 local labels (`@B5_8F4A`), and the rest are named after the routine they sit in (`PlayerState02_L8F4A`). Every routine that other code calls has a hand-given name, though some are neutral where the purpose is not yet clear. About 130 RAM symbols still have address-based names (`python3 -I tools/rank_unnamed.py`).
 Speculatively found code may include a few false positives (harmless for the byte-exact build; labels are provisional).
 
 Known unknowns: the meaning of most entity handlers beyond `docs/entity_handlers.md`, the 3-byte kind field of special-tile

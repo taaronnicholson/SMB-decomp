@@ -1905,7 +1905,7 @@ StartStoryScene_LB56B:
     LDA #$06
     STA story_text_rows
     LDA #$00
-    STA ram_01BE
+    STA dialogue_phase
 StartStoryScene_LB5B6:
     RTS
 BossIntroScript:
@@ -2035,7 +2035,7 @@ BossDialogueType:
     JMP BossFightStart
 @B4_B6B6:
     JSR StepDispatch_01BE
-    LDA ram_01BE
+    LDA dialogue_phase
     CMP #$03
     BNE BossDialogueType_LB6FA
     LDA #$04
@@ -2066,7 +2066,7 @@ EffectList_B4_B6EF:
 BossDialogueType_LB6FA:
     CMP #$02
     BNE BossDialogueType_LB71C
-    LDA ram_01BC
+    LDA dialogue_type_delay
     SEC
     SBC #$01
     BEQ @B4_B713
@@ -2294,7 +2294,7 @@ StoryTextStepTable:
     .word QueueTextRow_LBB60
     .word DialogueTextStep0_LBABB
 StepDispatch_01BE:
-    LDA ram_01BE
+    LDA dialogue_phase
     ASL a
     TAY
     LDA StoryTextStepTable,y
@@ -2308,9 +2308,9 @@ DialogueTextStep0:
     STA ram_01BF
     LDA #$01
     STA ram_01BD
-    STA ram_01BE
+    STA dialogue_phase
     LDA #$03
-    STA ram_01BC
+    STA dialogue_type_delay
 DialogueTextStep0_LBABB:
     RTS
 DialogueTextStep1:
@@ -2318,7 +2318,7 @@ DialogueTextStep1:
     CMP story_text_rows
     BNE @B4_BACA
     LDA #$02
-    STA ram_01BE
+    STA dialogue_phase
     RTS
 @B4_BACA:
     CLC
@@ -2412,7 +2412,7 @@ QueueTextRow_LBB60:
     STA tmp_c
     LDA credits_ptr_hi
     STA tmp_d
-    LDA ram_01BC
+    LDA dialogue_type_delay
     SEC
     SBC #$01
     BNE @B4_BB9A
@@ -2429,7 +2429,7 @@ QueueTextRow_LBB60:
     BEQ @B4_BB98
 @B4_BB89:
     LDA #$05
-    STA ram_01BC
+    STA dialogue_type_delay
     LDA buttons
     AND #$01
     BEQ @B4_BB9D
@@ -2438,7 +2438,7 @@ QueueTextRow_LBB60:
 @B4_BB98:
     LDA #$01
 @B4_BB9A:
-    STA ram_01BC
+    STA dialogue_type_delay
 @B4_BB9D:
     RTS
 @B4_BB9E:
@@ -2496,7 +2496,7 @@ QueueTextRow_LBB60:
     JMP @B4_BB89
 @B4_BC04:
     LDA #$03
-    STA ram_01BE
+    STA dialogue_phase
     RTS
 ; Tbl_B4_BC0A: 68 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B4_BC0A:
