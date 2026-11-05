@@ -69,3 +69,12 @@ Forced as above, then with `powerup_shot` set and the player firing B (boss 1 at
   even with the player placed beside the body: the body jumps between fixed x positions (`$1A`, `$3A`, `$5A`, `$78`, `$91`, `$98`, `$B8`) and both hits came with the head at `$88` and the body at x `$91`, 1,000 frames apart.
   The code has `Ent8A_Update` adding 2 to `boss_health` (capped at `$64`) and `Ent8B_Update` calling `DamageBoss` with 10, but entities `$8A`/`$8B` never appeared in the run, so neither was observed. Boss 3 was not defeated in the emulator,
   so its defeat sequence and the stage 5 setup are code-read only.
+
+### Boss 3's second phase and ending (verified by forcing `boss_health` to 0 at the start of the fight)
+Shooting did not defeat boss 3 in the emulator (3-4 landed shots in about 5,600 frames at several firing heights), so `boss_health` was set to 0 directly at step 7:
+- Phase 1 ends as for the other bosses: body `$3D` -> `$41` -> `$44` -> gone, head `$87` -> `$42` -> `$43` -> `$45`.
+- Then the head becomes **`$8A`**, which raises `boss_health` by 2 per step (it reached 2: the heal in `Ent8A_Update`), and after about 65 frames it becomes **`$8B`**, the second, hittable form. A player shot overlapping `$8B` called `DamageBoss`
+  with 10 (health back to 0), after which the head went `$8C` -> `$8D` -> `$8E` -> gone (frames 2896-3155 of the run).
+- The same prize (`$47` -> `$48` at x `$78`, y `$3DE`; it landed in entity slot 42 this time) then appeared. Touching it started step 8 (`story_timer` `$28` counting down in steps of 2 frames),
+  after which `story_scene` was cleared, `player_state` became `$09` (start of a life) and `game_state` `$0E`, the arrival state of area 6 listed in the table above, with the player dropping in (`$0E` -> `$02` -> `$04` -> `$00`).
+  So boss 3 leads into the stage 5 setup (`stage_index` 5, code-read) rather than the bonus ascent.
