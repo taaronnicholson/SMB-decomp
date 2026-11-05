@@ -9,7 +9,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 src = open(os.path.join(ROOT, 'src/bank5.s')).read().split('\n')
 labels = {}
 for i, l in enumerate(src):
-    m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', l)
+    m = re.match(r'^(@?[A-Za-z_][A-Za-z0-9_]*):', l)
     if m: labels[m.group(1)] = i
 def region(start, seen=None, depth=0):
     seen = seen if seen is not None else set()
@@ -18,10 +18,10 @@ def region(start, seen=None, depth=0):
     out = []; i = start; far = start
     while i < len(src):
         l = src[i].strip(); out.append(l)
-        m = re.match(r'^(B[A-Z]{2}|BNE|BEQ|BCC|BCS|BMI|BPL|BVC|BVS) ([A-Za-z_][A-Za-z0-9_]*)$', l)
+        m = re.match(r'^(B[A-Z]{2}|BNE|BEQ|BCC|BCS|BMI|BPL|BVC|BVS) (@?[A-Za-z_][A-Za-z0-9_]*)$', l)
         if m and m.group(2) in labels and labels[m.group(2)] > i: far = max(far, labels[m.group(2)])
         if re.match(r'^(RTS|RTI)$', l) and i >= far: break
-        mj = re.match(r'^JMP ([A-Za-z_][A-Za-z0-9_]*)$', l)
+        mj = re.match(r'^JMP (@?[A-Za-z_][A-Za-z0-9_]*)$', l)
         if mj and i >= far:
             if depth < 2 and mj.group(1) in labels and labels[mj.group(1)] != i: out += region(labels[mj.group(1)], seen, depth + 1)
             break

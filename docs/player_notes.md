@@ -59,3 +59,16 @@ to the screen position to fill OAM entries 15 and up (`$023C`...). Facing left (
 `idle_timer` (`zp_70`/`zp_71`) counts the frames the player stands still and is reset by input. Once it passes `$258` (600 frames, about 10 seconds), `PlayerIdleAnim` steps `IdleAnim`
 (bank 1 `$89FD`, 28 triples of OAM tile for the sprite at `$024D`, duration in `idle_anim_timer` (`zp_72`) and `player_frame`, ended by `$FF`): the character plays a looping pose sequence
 (frames `$24`-`$2F`) while waiting. [verified in the emulator: the counter passed `$258` and `player_frame` then followed `$44`, `$00`, `$26` with durations 14, 15, 14, exactly the first `IdleAnim` entries; being invulnerable resets the counter]
+
+## States forced in the emulator (stage 1, invulnerable, no input)
+- `$1C`: walks right at 1 pixel per frame (x `$2A` -> `$A7` in 125 frames) with no input; it does not leave the state in that time.
+- `$1E`: a short hop to the left: x falls 1 px per frame for about 19 px while y rises 3 px and returns, then the player stands still at x `$16` (the state does not change).
+- `$0C` and `$1D`: nothing visible happens in 130 frames (position and animation frame stay constant); they wait for a trigger that stage 1 never provides
+  (`PlayerState0C`/`0D` share the exit-walk counters `zp_BD`/`zp_BE`).
+
+## Respawn arc (states `$11`-`$15`, bank 1) [verified by forcing `player_state` `$0F` with the invulnerability off]
+After the death animation, `PlayerState11_Body` stores the respawn point (`respawn_x`/`respawn_y` = where the player died, here x `$29`, y `$44C`), puts the player at the screen centre bottom (`focus` + `$7C`, +`$112`)
+and sets up a Bresenham-style interpolation: `state_delay` (`zp_D1`) = horizontal direction (0 = left), `state_delay_outer` (`zp_D2`) = `$52` (82 vertical steps), `respawn_major` (`zp_D3`) = `$53` (|dx|), `respawn_swapped` = 1 when |dx| >= 82.
+`$12` rises 2 px per frame until the player is above the respawn Y, `$13` continues the rise along `Tbl_B1_B06A` (`respawn_step` 1..8 up), `$14` descends along the same table in reverse while `respawn_accum` spreads the horizontal move,
+and `$15` follows the small hop table `SmallOffsets_B1_B144` and, when it ends, restores the respawn position and hands over to the state in `zp_99`.
+The exit-walk and swim states share `anim_cursor` (`zp_BD`): in `$0C`/`$0D` it counts frames between swim animation steps (`swim_anim_step`, `zp_BE`); `ExitWalkStep` and the bonus-ascent end walk use it as an index into `ExitWalkAnim` / `BonusAscentEndAnim` (code-read; forcing `$0D` in stage 1, which has no water, did not run the state).

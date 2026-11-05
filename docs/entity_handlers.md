@@ -13,16 +13,16 @@ lists may include a little neighbouring code or miss code reached through other 
 | $06 | `Ent06_Update` | 54 | $07 | $19 sq2 | - | - |
 | $07 | `Ent07_Update` | 17 | - | - | - | - |
 | $08 | `Ent08_Update` | 50 | $00, $07 | $19 sq2 | - | INC items_found |
-| $09 | `Ent09_Update` | 53 | - | - | - | - |
+| $09 | `Ent09_Update` | 58 | - | - | - | - |
 | $0A | `Ent0A_Update` | 58 | $07 | - | - | - |
 | $0B | `Ent0B_Update` | 42 | $0D, $0C | - | - | - |
 | $0C | `Ent0C_Update` | 34 | $0D, $0C | - | - | - |
-| $0D | `Ent0D_Update` | 61 | $04 | $19 sq2 | - | INC zp_54 |
+| $0D | `Ent0D_Update` | 61 | $04 | $19 sq2 | - | - |
 | $0E | `Ent0E_Update` | 93 | $0F | - | - | - |
 | $0F | `Ent0F_Update` | 50 | $00 | - | - | - |
 | $10 | `Ent10_Update` | 91 | $0F | $19 sq2 | - | - |
 | $11 | `Ent11_Update` | 36 | $07 | $19 sq2 | - | - |
-| $16 | `Ent16_Update` | 39 | - | - | - | - |
+| $16 | `Ent16_Update` | 40 | - | - | - | - |
 | $18 | `Ent18_Update` | 2 | - | - | - | - |
 | $19 | `Ent19_Update` | 24 | $1B | - | overlap test, patrols, touch test | - |
 | $1A | `Ent1A_Update` | 26 | $1E | - | overlap test | - |
@@ -43,20 +43,20 @@ lists may include a little neighbouring code or miss code reached through other 
 | $2E | `Ent2E_Update` | 59 | - | - | - | - |
 | $2F | `Ent2F_Update` | 46 | - | - | overlap test | - |
 | $30 | `Ent30_Update` | 33 | $07 | - | - | - |
-| $31 | `Ent31_Update` | 57 | - | $05 noise, $43 sq2 | - | - |
+| $31 | `Ent31_Update` | 62 | - | $05 noise, $43 sq2 | - | - |
 | $32 | `Ent32_Update` | 15 | - | - | - | - |
 | $33 | `Ent33_Update` | 69 | - | $22 sq2 | - | - |
 | $34 | `Ent34_Update` | 7 | $00 | - | - | - |
 | $35 | `Ent35_Update` | 43 | $07, $00 | $29 sq1 | - | DEC ram_0745 |
 | $36 | `Ent36_Update` | 31 | $00 | - | - | - |
-| $37 | `Ent37_Update` | 67 | $00 | $17 sq2 | - | DEC zp_56 |
+| $37 | `Ent37_Update` | 67 | $00 | $17 sq2 | - | - |
 | $38 | `Ent38_Update` | 20 | $39 | - | overlap test | - |
 | $39 | `Ent39_Update` | 121 | $00 | $05 noise | overlap test | - |
 | $3A | `Ent3A_Update` | 95 | $00 | $05 noise | overlap test | - |
 | $3B | `Ent3B_Update` | 20 | - | - | overlap test | - |
 | $3C | `Ent3C_Update` | 31 | - | - | - | - |
-| $3D | `Ent3D_Update` | 88 | $41 | $38 noise | overlap test | DEC zp_53, DEC zp_55, INC zp_55 |
-| $3E | `Ent3E_Update` | 109 | - | - | - | INC zp_55 |
+| $3D | `Ent3D_Update` | 88 | $41 | $38 noise | overlap test | - |
+| $3E | `Ent3E_Update` | 109 | - | - | - | - |
 | $3F | `Ent3F_Update` | 22 | - | - | - | - |
 | $40 | `Ent40_Update` | 22 | $00 | - | - | - |
 | $41 | `Ent41_Update` | 24 | - | - | - | - |
@@ -65,7 +65,7 @@ lists may include a little neighbouring code or miss code reached through other 
 | $44 | `Ent44_Update` | 72 | $00 | $06 noise | - | - |
 | $45 | `Ent45_Update` | 6 | - | - | - | - |
 | $46 | `Ent46_Update` | 25 | - | $04 noise, $41 sq1 | - | - |
-| $47 | `Ent47_Update` | 30 | - | - | - | - |
+| $47 | `Ent47_Update` | 35 | - | - | - | - |
 | $48 | `Ent48_Update` | 53 | - | $19 sq1 | - | - |
 | $49 | `Ent49_Update` | 11 | $00 | - | - | - |
 | $4A | `Ent4A_Update` | 57 | - | - | - | - |
@@ -73,15 +73,15 @@ lists may include a little neighbouring code or miss code reached through other 
 | $4D | `Ent4D_Update` | 35 | - | - | - | - |
 | $4E | `Ent4E_Update` | 67 | $4F | - | overlap test, patrols, touch test | - |
 | $4F | `Ent4F_Update` | 22 | $4E | - | overlap test, touch test | - |
-| $50 | `Ent50_Update` | 136 | - | - | overlap test, reads map, special-tile lookup | DEC zp_54 |
+| $50 | `Ent50_Update` | 136 | - | - | overlap test, reads map, special-tile lookup | - |
 | $51 | `Ent51_Update` | 30 | - | - | - | - |
 | $52 | `Ent52_Update` | 121 | - | - | overlap test | - |
 | $53 | `Ent53_Update` | 12 | $54 | - | overlap test | - |
 | $54 | `Ent54_Update` | 42 | $55 | - | overlap test, reads map | - |
 | $55 | `Ent55_Update` | 23 | $53 | - | overlap test | - |
-| $56 | `Ent56_Update` | 117 | - | - | overlap test, reads map, special-tile lookup | DEC zp_54 |
-| $5D | `Ent5D_Update` | 26 | - | - | - | DEC zp_56 |
-| $5E | `Ent5E_Update` | 90 | $07, $5F | - | hurts player, overlap test | DEC zp_53 |
+| $56 | `Ent56_Update` | 117 | - | - | overlap test, reads map, special-tile lookup | - |
+| $5D | `Ent5D_Update` | 26 | - | - | - | - |
+| $5E | `Ent5E_Update` | 90 | $07, $5F | - | hurts player, overlap test | - |
 | $5F | `Ent5F_Update` | 18 | $5E | - | overlap test | - |
 | $60 | `Ent60_Update` | 18 | - | - | - | - |
 | $61 | `Ent61_Update` | 17 | $00 | - | - | - |
@@ -90,8 +90,8 @@ lists may include a little neighbouring code or miss code reached through other 
 | $67 | `Ent67_Update` | 39 | $66 | - | overlap test | - |
 | $68 | `Ent68_Update` | 27 | $07 | - | - | - |
 | $69 | `Ent69_Update` | 27 | $07 | - | - | - |
-| $74 | `Ent74_Update` | 113 | $75, $76 | - | overlap test, special-tile lookup | DEC zp_56 |
-| $75 | `Ent75_Update` | 119 | $74, $76 | - | overlap test, special-tile lookup | DEC zp_56 |
+| $74 | `Ent74_Update` | 113 | $75, $76 | - | overlap test, special-tile lookup | - |
+| $75 | `Ent75_Update` | 119 | $74, $76 | - | overlap test, special-tile lookup | - |
 | $76 | `Ent76_Update` | 28 | - | $05 noise | - | - |
 | $77 | `Ent77_Update` | 12 | $78 | - | - | - |
 | $78 | `Ent78_Update` | 28 | - | - | polar motion | - |
@@ -105,12 +105,12 @@ lists may include a little neighbouring code or miss code reached through other 
 | $88 | `Ent88_Update` | 51 | $89 | - | - | - |
 | $89 | `Ent89_Update` | 17 | $87 | - | - | - |
 | $8A | `Ent8A_Update` | 31 | $8B | $34 sq2 | - | - |
-| $8B | `Ent8B_Update` | 59 | $8C | $38 sq2 | - | DEC zp_53 |
+| $8B | `Ent8B_Update` | 59 | $8C | $38 sq2 | - | - |
 | $8C | `Ent8C_Update` | 27 | $8B | $0A noise | - | - |
 | $8D | `Ent8D_Update` | 10 | $8E | - | - | - |
 | $8E | `Ent8E_Update` | 26 | - | $04 noise, $41 sq1 | - | - |
 | $8F | `Ent8F_Update` | 21 | - | - | - | - |
-| $90 | `Ent90_Update` | 62 | - | $22 noise | - | - |
+| $90 | `Ent90_Update` | 67 | - | $22 noise | - | - |
 | $91 | `Ent91_Update` | 22 | $93 | $00 sq2 | - | - |
 | $92 | `Ent92_Update` | 49 | - | $19 sq2, $2C sq2 | - | - |
 | $93 | `Ent93_Update` | 18 | $94 | - | - | - |

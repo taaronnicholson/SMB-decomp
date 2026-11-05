@@ -6,7 +6,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 src = open(os.path.join(ROOT, 'src/fixed.s')).read().split('\n')
 labels = {}
 for i, l in enumerate(src):
-    m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', l)
+    m = re.match(r'^(@?[A-Za-z_][A-Za-z0-9_]*):', l)
     if m: labels[m.group(1)] = i
 BTN = {0x01: 'A', 0x02: 'B', 0x04: 'Select', 0x08: 'Start', 0x10: 'Right', 0x20: 'Left', 0x40: 'Up', 0x80: 'Down'}
 def region(start, seen=None, depth=0):
@@ -15,10 +15,10 @@ def region(start, seen=None, depth=0):
     seen.add(start); out = []; i = start; far = start
     while i < len(src) and i - start < 500:
         l = src[i].strip(); out.append(l)
-        m = re.match(r'^(?:BNE|BEQ|BCC|BCS|BMI|BPL|BVC|BVS) (\w+)$', l)
+        m = re.match(r'^(?:BNE|BEQ|BCC|BCS|BMI|BPL|BVC|BVS) (@?\w+)$', l)
         if m and m.group(1) in labels and labels[m.group(1)] > i: far = max(far, labels[m.group(1)])
         if l in ('RTS', 'RTI') and i >= far: break
-        mj = re.match(r'^JMP (\w+)$', l)
+        mj = re.match(r'^JMP (@?\w+)$', l)
         if mj and i >= far:
             if depth < 2 and mj.group(1) in labels and labels[mj.group(1)] != i: out += region(labels[mj.group(1)], seen, depth + 1)
             break
