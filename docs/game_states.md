@@ -60,3 +60,12 @@ Forced as above, then with `powerup_shot` set and the player firing B (boss 1 at
 - A prize entity then appears: type `$47` at x `$78` rises/falls to y `$3DE` and becomes type `$48` (`Ent47_Update` -> `Ent48_Update`). Touching `$48` plays sfx `$19`, sets `story_step` 8 and `story_timer` `$28` (the player had to be placed by hand
   next to it in the run: its y is about 130 px above the ground).
 - Step 8 (`BossDefeated`) then ended the encounter: `player_state` `$17`, `game_state` `$0D` (the bonus ascent) for boss 1; boss 3 goes to stage 5 setup instead (code-read).
+
+### Bosses 2 and 3 (verified with the same method)
+- **Boss 2** (`stage_index` 3, `story_scene` 2): body type `$3D` (slot 9), second part type `$98` (slot 8); the dialogue ran about 1,400 frames. The body bobs vertically around the player's x, so right-facing shots only hit when its y
+  is near the player's. With the player placed beside it and firing every other frame, `boss_health` fell by 3 on about every second frame (`$63` -> 0 in about 120 frames); the defeat chain was the same as boss 1 (`$98` -> `$42` -> `$43` -> `$45` -> `$46`,
+  `$3D` -> `$41` -> `$44`), then the prize (`$47` -> `$48`) and step 8 led to the bonus ascent (`player_state` `$18`, `game_state` `$0A`/`$0B`).
+- **Boss 3** (`stage_index` 4, `story_scene` 3): body `$3D` (slot 9), head cycling `$87`/`$88`/`$89` (slot 8), an extra entity `$8F` appearing in slot 10 now and then. Each landed shot did 2 damage (`$63` -> `$61` -> `$5F`), but only two shots landed in 4,500 frames
+  even with the player placed beside the body: the body jumps between fixed x positions (`$1A`, `$3A`, `$5A`, `$78`, `$91`, `$98`, `$B8`) and both hits came with the head at `$88` and the body at x `$91`, 1,000 frames apart.
+  The code has `Ent8A_Update` adding 2 to `boss_health` (capped at `$64`) and `Ent8B_Update` calling `DamageBoss` with 10, but entities `$8A`/`$8B` never appeared in the run, so neither was observed. Boss 3 was not defeated in the emulator,
+  so its defeat sequence and the stage 5 setup are code-read only.
