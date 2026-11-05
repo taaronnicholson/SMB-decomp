@@ -500,6 +500,17 @@ def localize(banks):
         if not bad: break
         local -= bad
     ren = {c: '@' + c for c in local}
+    # remaining global auto labels: name them after the nearest preceding real routine (<Routine>_L<addr>)
+    for p in range(NB):
+        parent = None
+        for l in banks[p]:
+            m = LABEL.match(l)
+            if not m: continue
+            nm = m.group(1)
+            if AUTO.match(l):
+                if nm in cand and nm not in local and parent: ren[nm] = f'{parent}_L{nm.split("_")[1]}'
+            elif not nm.startswith('@') and not re.match(r'^(Tbl_|Gfx_|Ent\w+_Tbl_|Fill_|SmallOffsets_|EffectList_)', nm) and not re.match(r'^[A-Za-z]+_[0-9A-F]{4}$', nm):
+                parent = nm
     for p in range(NB):
         out = []
         for l in banks[p]:

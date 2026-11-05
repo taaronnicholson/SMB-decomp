@@ -116,32 +116,32 @@ SmallOffsets_B1_80EB:
 Tbl_B1_8105:
     .byte $02,$00,$04,$06,$08,$0A,$16,$16,$16,$0C,$0E,$10,$12,$14,$16,$18
     .byte $1A,$1C,$1E,$20,$00,$00,$00,$22,$24
-B1_811E:
+UpdateShots_L811E:
     .byte $26
-B1_811F:
+UpdateShots_L811F:
     .byte $28
-    .word B1_8422
-    .word B1_846D
-    .word B1_8417
-    .word B1_88AF
-    .word B1_881D
-    .word B1_85CE
-    .word B1_862C
-    .word B1_8604
-    .word B1_860E
-    .word B1_8618
-    .word B1_8622
-    .word B1_8931
-    .word B1_8922
-    .word B1_865F
-    .word B1_8679
+    .word Shot_TileHit_L8422
+    .word Shot_TileHit_L846D
+    .word Shot_TileHit_L8417
+    .word ShotPosByAngle_L88AF
+    .word ShotPosByAngle_L881D
+    .word ShotStartImpact_L85CE
+    .word ShotStartImpact_L862C
+    .word ShotStartImpact_L8604
+    .word ShotStartImpact_L860E
+    .word ShotStartImpact_L8618
+    .word ShotStartImpact_L8622
+    .word ArcPairs_B1_88EA_L8931
+    .word ArcPairs_B1_88EA_L8922
+    .word ShotStartImpact_L865F
+    .word ShotStartImpact_L8679
 ShotDispatch:
     LDA shot_state,x
     ASL a
     TAY
-    LDA B1_811E,y
+    LDA UpdateShots_L811E,y
     STA ptr_lo
-    LDA B1_811F,y
+    LDA UpdateShots_L811F,y
     STA ptr_hi
     JMP (ptr_lo)
 ShotTimerStep:
@@ -541,14 +541,14 @@ Shot_TileHit:
     STA shot_timer
 @B1_8416:
     RTS
-B1_8417:
+Shot_TileHit_L8417:
     LDA #$00
     STA shot_frame,x
     DEC shot_E3,x
-    BNE B1_846C
+    BNE Shot_TileHit_L846C
     STA shot_state,x
     RTS
-B1_8422:
+Shot_TileHit_L8422:
     LDA #$01
     STA shot_frame,x
     LDA #$10
@@ -581,15 +581,15 @@ B1_8422:
     ADC tmp_b
     STA shot_x_hi,x
     DEC shot_E3,x
-    BEQ B1_846C
+    BEQ Shot_TileHit_L846C
     LDA #$02
     STA shot_state,x
     STA shot_frame,x
     LDA #$2E
     JSR PlaySfxNoise
-B1_846C:
+Shot_TileHit_L846C:
     RTS
-B1_846D:
+Shot_TileHit_L846D:
     LDA shot_onscreen,x
     BNE @B1_8474
     STA shot_state,x
@@ -648,7 +648,7 @@ B1_846D:
     STA tmp_a
     AND #$03
     BNE @B1_84DE
-    JMP B1_8574
+    JMP ShotStartImpact_L8574
 @B1_84DE:
     CMP #$02
     BNE @B1_8528
@@ -678,7 +678,7 @@ B1_846D:
     LDA (ptr_lo),y
     STA tmp_a
     CMP #$FF
-    BEQ B1_8574
+    BEQ ShotStartImpact_L8574
     LDA zp_77
     AND #$0F
     SEC
@@ -689,7 +689,7 @@ B1_846D:
     AND #$0F
     SEC
     SBC tmp_a
-    BCC B1_8574
+    BCC ShotStartImpact_L8574
 @B1_8528:
     LDA zp_75
     STA ptr_lo
@@ -730,7 +730,7 @@ ShotStartImpact:
     LDA #$00
     STA shot_frame,x
     RTS
-B1_8574:
+ShotStartImpact_L8574:
     LDA shot_attr,x
     BEQ @B1_85B6
     LDA shot_x_lo,x
@@ -780,7 +780,7 @@ B1_8574:
     STA shot_x_lo,x
     STA shot_x_hi,x
     JMP ShotStartImpact
-B1_85CE:
+ShotStartImpact_L85CE:
     LDA player_y_lo
     CLC
     ADC #$02
@@ -810,27 +810,27 @@ B1_85CE:
     LDA #$0A
     JSR PlaySfxNoise
     RTS
-B1_8604:
+ShotStartImpact_L8604:
     JSR ShotMoveLeft
     JSR ShotMoveUp
     JSR ShotTimerStep
     RTS
-B1_860E:
+ShotStartImpact_L860E:
     JSR ShotMoveRight
     JSR ShotMoveUp
     JSR ShotTimerStep
     RTS
-B1_8618:
+ShotStartImpact_L8618:
     JSR ShotMoveDown
     JSR ShotMoveLeft
     JSR ShotTimerStep
     RTS
-B1_8622:
+ShotStartImpact_L8622:
     JSR ShotMoveDown
     JSR ShotMoveRight
     JSR ShotTimerStep
     RTS
-B1_862C:
+ShotStartImpact_L862C:
     LDA player_y_lo
     SEC
     SBC #$0D
@@ -859,7 +859,7 @@ B1_862C:
     STA shot_state,x
     STA shot_attr,x
     RTS
-B1_865F:
+ShotStartImpact_L865F:
     LDA #$00
     STA shot_E3,x
     STA zp_C8
@@ -873,7 +873,7 @@ B1_865F:
     STA shot_state,x
     LDA #$13
     STA shot_frame,x
-B1_8679:
+ShotStartImpact_L8679:
     JSR ShotPosByAngle
     LDA zp_C1
     BEQ @B1_8688
@@ -1107,7 +1107,7 @@ ShotPosByAngle:
     ADC #$00
     STA shot_y_hi,x
     RTS
-B1_881D:
+ShotPosByAngle_L881D:
     LDA water_level_lo
     CLC
     ADC #$03
@@ -1188,15 +1188,15 @@ B1_881D:
     TYA
     TYA
     TYA
-    STA B1_AAA8,y
+    STA AreaSpawn15_LAAA8,y
     TAY
     TAY
     TAY
     LDY area_extra_ptr_lo
     LDY zp_B0,x
     CPY #$C0
-    BNE B1_88AF
-B1_88AF:
+    BNE ShotPosByAngle_L88AF
+ShotPosByAngle_L88AF:
     LDA player_y_lo
     CLC
     ADC #$03
@@ -1235,22 +1235,22 @@ ArcPairs_B1_88EA:
     .byte $FF,$FE,$00,$FE,$01,$FF,$02,$FF,$02,$FF,$02,$00,$80,$00,$00,$00
     .byte $00,$FF,$00,$FE,$00,$FE,$01,$FE,$01,$FF,$02,$FF,$02,$00,$02,$01
     .byte $02,$02,$01,$02,$01,$02,$00,$80
-B1_8922:
+ArcPairs_B1_88EA_L8922:
     LDA #$10
     STA shot_frame,x
     LDA #$07
     STA tmp_a
     LDA #$89
     STA tmp_b
-    JMP B1_893D
-B1_8931:
+    JMP ArcPairs_B1_88EA_L893D
+ArcPairs_B1_88EA_L8931:
     LDA #$0F
     STA shot_frame,x
     LDA #$EA
     STA tmp_a
     LDA #$88
     STA tmp_b
-B1_893D:
+ArcPairs_B1_88EA_L893D:
     LDA shot_E3,x
     INC shot_E3,x
     ASL a
@@ -1291,20 +1291,20 @@ B1_893D:
     LDA shot_x_hi,x
     ADC ptr_hi
     STA shot_x_hi,x
-B1_8981:
+ArcPairs_B1_88EA_L8981:
     RTS
 ShotOffscreenCheck:
     LDA shot_screen_x,x
     CMP #$EC
-    BCS B1_8981
+    BCS ArcPairs_B1_88EA_L8981
     CMP #$10
-    BCC B1_8981
+    BCC ArcPairs_B1_88EA_L8981
     LDA shot_screen_y,x
     CMP #$E0
-    BCS B1_8981
+    BCS ArcPairs_B1_88EA_L8981
     CMP #$10
-    BCC B1_8981
-    JMP F_F0EA
+    BCC ArcPairs_B1_88EA_L8981
+    JMP PlayerTileInteract_LF0EA
 ; Tbl_B1_8999: 100 bytes, no direct code reference (continuation or unreferenced)
 Tbl_B1_8999:
     .res 76, $00
@@ -4393,7 +4393,7 @@ AreaSpawn15:
     .byte $05, $3A, $06
     .byte $05, $3E, $06
     .byte $05, $40, $07
-B1_AAA8:
+AreaSpawn15_LAAA8:
     .byte $05, $44, $07
     .byte $05, $6A, $06
     .byte $05, $64, $06
@@ -4694,7 +4694,7 @@ AreaSpawn23:
 ; SmallOffsets_B1_AF1F: 4 bytes, no direct code reference (continuation or unreferenced)
 SmallOffsets_B1_AF1F:
     .byte $00,$00,$FE,$FF
-B1_AF23:
+AreaSpawn23_LAF23:
     LDA #$02
     STA camera_mode
     LDA player_y_lo
@@ -4769,7 +4769,7 @@ B1_AF23:
     LDA #$12
     STA player_state
     RTS
-B1_AFAF:
+AreaSpawn23_LAFAF:
     JSR PlayerAnimAdvance
     LDA player_y_lo
     SEC
@@ -4790,14 +4790,14 @@ B1_AFAF:
     STA player_state
 @B1_AFD2:
     RTS
-B1_AFD3:
+AreaSpawn23_LAFD3:
     JSR PlayerAnimAdvance
     LDY zp_D6
     LDA Tbl_B1_B06A,y
     CMP #$14
     BNE @B1_AFE4
     STA player_state
-    JMP B1_AFF8
+    JMP AreaSpawn23_LAFF8
 @B1_AFE4:
     STA tmp_a
     LDA player_y_lo
@@ -4808,8 +4808,8 @@ B1_AFD3:
     SBC #$00
     STA player_y_hi
     INC zp_D6
-    JMP B1_B015
-B1_AFF8:
+    JMP AreaSpawn23_LB015
+AreaSpawn23_LAFF8:
     DEC zp_D6
     BNE @B1_B005
     LDA #$15
@@ -4826,7 +4826,7 @@ B1_AFF8:
     LDA player_y_hi
     ADC #$00
     STA player_y_hi
-B1_B015:
+AreaSpawn23_LB015:
     LDA #$00
     STA tmp_d
     LDA zp_D2
@@ -4883,7 +4883,7 @@ Tbl_B1_B06A:
     .byte $01,$02,$02,$02,$01,$02,$02,$01,$02,$02,$01,$01,$01,$02,$01,$01
     .byte $01,$01,$02,$01,$01,$01,$01,$01,$00,$01,$00,$01,$00,$00,$00,$00
     .byte $00,$14
-B1_B094:
+AreaSpawn23_LB094:
     LDA zp_D6
     LSR a
     TAY
@@ -4987,7 +4987,7 @@ SmallOffsets_B1_B144:
 ; PlayerAnimFrames: $FF-terminated player_frame list walked by PlayerAnimAdvance
 PlayerAnimFrames:
     .byte $3E,$3E,$3F,$40,$41,$42,$43,$4C,$4D,$FF
-B1_B15B:
+PlayerAnimFrames_LB15B:
     LDA ram_072D
     BEQ @B1_B193
     LDA player_y_lo
@@ -5092,7 +5092,7 @@ B1_B15B:
     LDA zp_73
     ORA ptr_lo
     ORA ptr_hi
-    BNE B1_B235
+    BNE PlayerAnimFrames_LB235
     STA zp_BD
     LDA #$18
     STA player_state
@@ -5103,7 +5103,7 @@ B1_B15B:
     LDA #$02
     STA walk_speed
     JSR MovePlayerKeepBank
-B1_B235:
+PlayerAnimFrames_LB235:
     LDA entity_tick
     LSR a
     LSR a
@@ -5111,18 +5111,18 @@ B1_B235:
     CLC
     ADC #$07
     STA player_frame
-B1_B240:
+PlayerAnimFrames_LB240:
     RTS
-B1_B241:
+PlayerAnimFrames_LB241:
     LDA ram_072D
-    BNE B1_B235
+    BNE PlayerAnimFrames_LB235
     LDA zp_BD
     ASL a
     TAY
     LDA BonusAscentEndAnim,y
     INY
     CMP #$FF
-    BEQ B1_B240
+    BEQ PlayerAnimFrames_LB240
     CMP #$44
     BNE @B1_B25B
     LDX #$0A
@@ -5446,7 +5446,7 @@ HideSprites:
     LDA #$16
     LDY #$BE
     JSR PrintString
-    JMP B1_BE85
+    JMP PrintString_LBE85
 ; FoundText: "FOUND" / "NOW" text
 FoundText:
     .byte $46,$4F,$55,$4E,$44,$40,$20,$00
@@ -5494,7 +5494,7 @@ PrintString:
     LDA #$29
     LDY #$BE
     JSR PrintString
-B1_BE85:
+PrintString_LBE85:
     JSR SilenceSound
     LDA #$40
     STA cutscene_fade_a

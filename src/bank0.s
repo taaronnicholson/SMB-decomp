@@ -174,11 +174,11 @@ PaletteFadeStep:
     STA jump_ptr_hi
     LDY #$00
     LDA (jump_ptr_lo),y
-    BEQ B0_8196
+    BEQ PaletteRowFadeToPPU_L8196
     JSR PaletteRowFadeToPPU
-    BEQ B0_81CD
+    BEQ PaletteRowFadeToPPU_L81CD
     JSR PaletteRowFadeToPPU
-    JMP B0_81CD
+    JMP PaletteRowFadeToPPU_L81CD
 PaletteRowFadeToPPU:
     LDA (jump_ptr_lo),y
     SEC
@@ -191,7 +191,7 @@ PaletteRowFadeToPPU:
     CPY #$10
     BNE PaletteRowFadeToPPU
     RTS
-B0_8196:
+PaletteRowFadeToPPU_L8196:
     LDA tmp_08
     STA PPUDATA
     INY
@@ -220,8 +220,8 @@ B0_8196:
     STA PPUDATA
     INY
     CPY #$10
-    BNE B0_8196
-B0_81CD:
+    BNE PaletteRowFadeToPPU_L8196
+PaletteRowFadeToPPU_L81CD:
     PLA
     STA tmp_08
     LDA #$00
@@ -304,7 +304,7 @@ ClearRAM:
     JMP @B0_8255
 @B0_8262:
     RTS
-B0_8263:
+ClearRAM_L8263:
     .word StageRecord0
     .word StageRecord1
     .word StageRecord2
@@ -1880,7 +1880,7 @@ IntroScreenStep:
     LDA #$3A
 @B0_B704:
     STA cutscene_fade_a
-    JMP F_CED8
+    JMP CosLookup_LCED8
 DrawTileBlock17x5:
     LDA #$55
     STA tmp_c
@@ -1890,7 +1890,7 @@ DrawTileBlock17x5:
     STA tmp_b
     LDA #$11
     STA tmp_a
-B0_B71A:
+DrawTileBlock17x5_LB71A:
     LDA PPUSTATUS
     LDA ptr_hi
     LDY ptr_lo
@@ -1920,7 +1920,7 @@ B0_B71A:
     ADC #$00
     STA tmp_d
     DEC tmp_b
-    BNE B0_B71A
+    BNE DrawTileBlock17x5_LB71A
     RTS
 ; IntroBlockTiles: 5 rows x 17 source bytes for DrawTileBlock17x5 (each minus $80 gives the tile
 IntroBlockTiles:
@@ -2008,7 +2008,7 @@ DrawBlockAndAttributes:
     STA tmp_b
     LDA #$05
     STA tmp_a
-    JMP B0_B71A
+    JMP DrawTileBlock17x5_LB71A
 ; PressStartText: 0-terminated tile string "PRESS START" (written by the title screen)
 PressStartText:
     .byte $50,$52,$45,$53,$53,$5C,$53,$54,$41,$52,$54,$00,$4C,$41,$53,$54
@@ -2033,10 +2033,10 @@ TitleLogoTilemap:
     .byte $D4,$D5,$D6,$D7,$D8,$D9,$DA,$DB,$DC,$70,$DD,$DE,$DF,$E0
 QueuePpuStringA:
     LDY #$00
-    BEQ B0_B8AB
+    BEQ QueuePpuStringB_LB8AB
 QueuePpuStringB:
     LDY #$0B
-B0_B8AB:
+QueuePpuStringB_LB8AB:
     LDX ppu_buffer_idx
 @B0_B8AD:
     LDA Tbl_B0_B8BC,y

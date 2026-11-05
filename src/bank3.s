@@ -1136,14 +1136,14 @@ AreaMap9:
     .byte $21,$BA,$00,$00,$1E,$1F,$1E,$00,$00,$00,$9D,$00,$00,$00,$00,$1E
     .byte $1F,$21,$00,$BB,$46,$1E,$1E,$00,$C4,$00,$00,$00,$00,$00,$7F,$22
     .byte $22,$22,$23,$23,$22,$22,$22,$23,$23,$23,$23,$23,$23,$23,$23,$23
-B3_BD67:
+AreaMap9_LBD67:
     INC anim_index
     LDA anim_index
     LSR a
     TAY
     LDA Tbl_B3_BE12,y
     BEQ @B3_BD75
-    JMP F_F507
+    JMP PlayerState0F_LF507
 @B3_BD75:
     STA anim_index
     LDA #$64
@@ -1160,7 +1160,7 @@ PlayerFrameCycle4:
     LDA Tbl_B3_BE0E,y
     STA player_frame
     RTS
-B3_BD8D:
+PlayerFrameCycle4_LBD8D:
     JSR PlayerFrameCycle4
     LDA anim_index
     ASL a
@@ -1218,7 +1218,7 @@ B3_BD8D:
     BCC @B3_BE04
     LDA fade_step
     BNE @B3_BE0D
-    JMP F_F52A
+    JMP PlayerState10_LF52A
 @B3_BE04:
     SEC
     SBC #$01
@@ -1254,18 +1254,18 @@ Tbl_B3_BE38:
 Bank3_SpecialTileCheck:
     JSR GetMapTile
     CMP #$C8
-    BCC B3_BE9C
+    BCC Bank3_SpecialTileCheck_LBE9C
     CMP #$CE
     BCC Bank3_SpecialTileAction
-B3_BE9C:
+Bank3_SpecialTileCheck_LBE9C:
     RTS
 Bank3_SpecialTileAction:
     STA tmp_a
     LDA current_area
     CMP #$05
-    BEQ B3_BE9C
+    BEQ Bank3_SpecialTileCheck_LBE9C
     CMP #$02
-    BEQ B3_BE9C
+    BEQ Bank3_SpecialTileCheck_LBE9C
 OpenBlockReward:
     LDA tmp_a
     PHA
@@ -1286,7 +1286,7 @@ OpenBlockReward:
     JSR PlaySfxSq2
     LDY tmp_a
     LDA Tbl_B3_BE38,y
-    BEQ B3_BE9C
+    BEQ Bank3_SpecialTileCheck_LBE9C
     PHA
     LDA ptr_lo
     PHA

@@ -728,12 +728,12 @@ Gfx_B4_A52A:
     .byte $50,$2C,$14,$00,$12,$B5,$60,$65,$FC,$BE,$82,$EA,$D6,$78,$02,$02
     .byte $8C,$47,$13,$08,$E4,$F2,$93,$F7,$58,$ED,$BA,$FD,$76,$9B,$5E,$47
     .byte $27,$13,$89,$88,$14
-    .word F_F392
-    .word B4_B56B
-    .word F_DDFA
-    .word B4_BA1D
-    .word B4_BCE4
-    .word F_EBC9
+    .word QueueMapTileDraw_LF392
+    .word StartStoryScene_LB56B
+    .word TryFireShot_LDDFA
+    .word StartStoryScene_LBA1D
+    .word GameState17_LBCE4
+    .word PlayerMoveByButtons_LEBC9
     .byte $5B,$00,$D7,$3E,$01,$B5,$FC,$03,$EC,$FE,$E0,$D9,$8F,$F1,$8E,$01
     .byte $49,$FF,$89,$FD,$E9,$F0,$00
 ; Gfx_B4_ABB2: LZ-compressed, 42 bytes -> 120 bytes to RAM $03A4 (stage 4)
@@ -945,7 +945,7 @@ Gfx_B4_ABB2:
     LDX #$18
     LDA #$D3
     JSR FarCall
-    JSR F_C959
+    JSR ClearOAMAndLoadSprites_LC959
     LDA #$02
     STA palette_set
     LDA #$01
@@ -1095,11 +1095,11 @@ GameState02:
     STA zp_C5
     LDY ptr_lo
     LDA GameState02_FrameTable,y
-    BMI B4_AEB5
+    BMI GameState02_LAEB5
     CLC
     ADC #$11
     STA ppu_job
-B4_AEB5:
+GameState02_LAEB5:
     RTS
 ; GameState02_FrameTable: indexed by the frame counter
 GameState02_FrameTable:
@@ -1113,7 +1113,7 @@ EnableCameraAtX:
     SBC #$C0
     LDA player_x_hi
     SBC #$00
-    BCC B4_AEB5
+    BCC GameState02_LAEB5
     LDA #$01
     STA camera_mode
     LDA #$00
@@ -1135,7 +1135,7 @@ GameState04:
     JSR PPUBuffer_Append
     LDA #$03
     STA game_state
-    JMP F_F843
+    JMP HandleSpecialTile_LF843
 GameState05:
     LDA #$B3
     STA tmp_c
@@ -1217,12 +1217,12 @@ GameState0C:
     LDA #$03
     STA camera_mode
     JSR StateDispatch_0735
-B4_AFF4:
+GameState0C_LAFF4:
     RTS
 GameState09:
     LDA player_state
     CMP #$09
-    BEQ B4_AFF4
+    BEQ GameState0C_LAFF4
     LDA #$01
     STA camera_mode
     STA ram_0737
@@ -1294,16 +1294,16 @@ GameState0B:
     STA ptr_hi
     JMP (ptr_lo)
 @B4_B096:
-    .word B4_B0D8
-    .word B4_B109
+    .word GameState0B_LB0D8
+    .word GameState0B_LB109
     .word @B4_B0AC
-    .word B4_B140
-    .word B4_B170
+    .word GameState0B_LB140
+    .word GameState0B_LB170
     .word @B4_B0AC
-    .word B4_B1AC
-    .word B4_B1D9
-    .word B4_B239
-    .word B4_B278
+    .word GameState0B_LB1AC
+    .word GameState0B_LB1D9
+    .word GameState0B_LB239
+    .word GameState0B_LB278
     .byte $D8,$B2
 @B4_B0AC:
     LDA zp_D1
@@ -1325,7 +1325,7 @@ GameState0B:
 Tbl_B4_B0C4:
     .byte $14,$14,$15,$15,$14,$14,$15,$15,$14,$14,$14,$15,$15,$15,$15,$15
     .byte $15,$15,$15,$15
-B4_B0D8:
+GameState0B_LB0D8:
     LDA #$01
     STA ram_072F
     LDA tally_lo
@@ -1349,7 +1349,7 @@ B4_B0D8:
     LDA #$00
     STA tmp_b
     JMP SpawnEffect33
-B4_B109:
+GameState0B_LB109:
     LDA #$0A
     STA tmp_b
 @B4_B10D:
@@ -1379,7 +1379,7 @@ B4_B109:
     LDA #$19
     STA zp_D2
     RTS
-B4_B140:
+GameState0B_LB140:
     LDA tally_small
     CMP #$3C
     BNE @B4_B14D
@@ -1403,7 +1403,7 @@ B4_B140:
     LDA #$28
     STA tmp_b
     JSR SpawnEffect33
-B4_B170:
+GameState0B_LB170:
     LDA tally_small
     CMP #$3C
     BEQ @B4_B195
@@ -1436,7 +1436,7 @@ B4_B170:
     LDA #$19
     STA zp_D2
     RTS
-B4_B1AC:
+GameState0B_LB1AC:
     LDA #$00
     STA effect_type
     LDA #$2F
@@ -1458,7 +1458,7 @@ B4_B1AC:
     STA zp_D2
 @B4_B1D8:
     RTS
-B4_B1D9:
+GameState0B_LB1D9:
     LDA #$5A
     STA zp_D1
     LDA #$28
@@ -1491,13 +1491,13 @@ B4_B1D9:
     LDA #$00
     STA effect_param4
     INC ram_072F
-B4_B226:
+GameState0B_LB226:
     RTS
 ; TextPackets_B227: PPU text packets
 TextPackets_B227:
     .byte $26,$CE,$85,$44,$4E,$55,$4F,$46,$00,$26,$CE,$85,$20,$20,$20,$20
     .byte $20,$00
-B4_B239:
+GameState0B_LB239:
     DEC zp_D1
     LDA zp_D1
     CMP #$4B
@@ -1507,7 +1507,7 @@ B4_B239:
     JSR SpawnPickupAtPlayer
 @B4_B248:
     CMP #$00
-    BNE B4_B226
+    BNE GameState0B_LB226
     INC ram_072F
     LDA #$07
     STA effect_type
@@ -1526,12 +1526,12 @@ B4_B239:
     LDA #$05
     STA tmp_b
     JSR PPUBuffer_Append
-B4_B277:
+GameState0B_LB277:
     RTS
-B4_B278:
+GameState0B_LB278:
     LDY zp_D1
     LDA GameState0B_Sequence,y
-    BEQ B4_B277
+    BEQ GameState0B_LB277
     INC zp_D1
     CMP #$FF
     BNE @B4_B2BB
@@ -1723,7 +1723,7 @@ AimedRandomEffect:
     PLA
     STA ptr_lo
     LDA tmp_c
-B4_B43B:
+AimedRandomEffect_LB43B:
     RTS
 GameState0E:
     LDY #$03
@@ -1741,10 +1741,10 @@ GameState0F:
     STA ram_0738
     LDA camera_mode
     CMP #$01
-    BNE B4_B43B
+    BNE AimedRandomEffect_LB43B
     LDA focus_x_lo
     CMP #$C0
-    BNE B4_B43B
+    BNE AimedRandomEffect_LB43B
     INC game_state
     RTS
 GameState10:
@@ -1778,7 +1778,7 @@ GameState10:
     CLC
     ADC tmp_a
     STA ppu_job
-B4_B4A8:
+GameState10_LB4A8:
     RTS
 ; TextPackets_B4A9: PPU text packets
 TextPackets_B4A9:
@@ -1791,7 +1791,7 @@ TextPackets_B4C1:
     .byte $00
 GameState11:
     DEC ram_0737
-    BNE B4_B4A8
+    BNE GameState10_LB4A8
     LDX #$12
     STX game_state
     INX
@@ -1841,19 +1841,19 @@ StateDispatch_0735:
     JMP (ptr_lo)
 @B4_B527:
     .word StoryBranchByStage
-    .word B4_B5B7
-    .word B4_B63F
-    .word B4_B6A4
-    .word B4_B728
-    .word B4_B74B
-    .word B4_B71D
-    .word B4_BA00
-    .word B4_B767
+    .word StartStoryScene_LB5B7
+    .word StartStoryScene_LB63F
+    .word StartStoryScene_LB6A4
+    .word StartStoryScene_LB728
+    .word StartStoryScene_LB74B
+    .word StartStoryScene_LB71D
+    .word StartStoryScene_LBA00
+    .word StartStoryScene_LB767
 StoryBranchByStage:
     LDY stage_index
-    LDA B4_B7B4,y
+    LDA StartStoryScene_LB7B4,y
     BNE StartStoryScene
-B4_B540:
+StoryBranchByStage_LB540:
     LDA #$09
     STA player_state
     LDA #$17
@@ -1875,7 +1875,7 @@ StartStoryScene:
     ASL a
     STA ptr_lo
     LDA #$50
-B4_B56B:
+StartStoryScene_LB56B:
     STA ram_01B2
     LDA ram_01B3
     BEQ @B4_B579
@@ -1884,19 +1884,19 @@ B4_B56B:
     RTS
 @B4_B579:
     LDY ptr_lo
-    LDA B4_B7B1,y
+    LDA StartStoryScene_LB7B1,y
     STA ram_01B9
     LDA $B7B2,y
     STA zp_CF
     LDA $B7B3,y
     STA zp_D0
-    LDA B4_B7B4,y
+    LDA StartStoryScene_LB7B4,y
     STA credits_ptr_lo
-    LDA B4_B7B5,y
+    LDA StartStoryScene_LB7B5,y
     STA credits_ptr_hi
-    LDA B4_B7B6,y
+    LDA StartStoryScene_LB7B6,y
     STA ram_01B4
-    LDA B4_B7B7,y
+    LDA StartStoryScene_LB7B7,y
     STA ram_01B5
     LDA Tbl_B4_B7B8,y
     STA ram_01B6
@@ -1906,11 +1906,11 @@ B4_B56B:
     STA ram_01BA
     LDA #$00
     STA ram_01BE
-B4_B5B6:
+StartStoryScene_LB5B6:
     RTS
-B4_B5B7:
+StartStoryScene_LB5B7:
     DEC ram_01B2
-    BNE B4_B5B6
+    BNE StartStoryScene_LB5B6
     LDY #$00
     LDA (zp_CF),y
     BNE @B4_B5C8
@@ -1983,7 +1983,7 @@ B4_B5B7:
     SBC #$01
     BNE @B4_B5EC
     RTS
-B4_B63F:
+StartStoryScene_LB63F:
     LDA #$3B
     STA ent_type_9
     LDA #$94
@@ -2023,21 +2023,21 @@ B4_B63F:
     LDA #$03
     STA story_step
     STA ram_01B2
-B4_B6A3:
+StartStoryScene_LB6A3:
     RTS
-B4_B6A4:
+StartStoryScene_LB6A4:
     LDA ram_01B2
-    BNE B4_B6A3
+    BNE StartStoryScene_LB6A3
     LDA ram_01B3
     BEQ @B4_B6B6
     LDA #$05
     STA story_step
-    JMP B4_B74B
+    JMP StartStoryScene_LB74B
 @B4_B6B6:
     JSR StepDispatch_01BE
     LDA ram_01BE
     CMP #$03
-    BNE B4_B6FA
+    BNE StartStoryScene_LB6FA
     LDA #$04
     STA story_step
     LDA #$32
@@ -2063,15 +2063,15 @@ EffectList_B4_B6EF:
     .word $FFE8, $0004
     .byte $C0, $09, $50, $00, $00
     .byte $FF
-B4_B6FA:
+StartStoryScene_LB6FA:
     CMP #$02
-    BNE B4_B71C
+    BNE StartStoryScene_LB71C
     LDA ram_01BC
     SEC
     SBC #$01
     BEQ @B4_B713
     AND #$01
-    BEQ B4_B71C
+    BEQ StartStoryScene_LB71C
     LDA #$03
     STA tmp_a
     LDA ent_param_9
@@ -2082,15 +2082,15 @@ B4_B6FA:
 @B4_B717:
     LDA tmp_a
     STA ent_param_9
-B4_B71C:
+StartStoryScene_LB71C:
     RTS
-B4_B71D:
+StartStoryScene_LB71D:
     DEC ram_01B2
-    BNE B4_B71C
+    BNE StartStoryScene_LB71C
     LDA #$02
     STA story_step
     RTS
-B4_B728:
+StartStoryScene_LB728:
     LDA #$07
     STA ent_param_9
     LDA ram_01B7
@@ -2098,15 +2098,15 @@ B4_B728:
     SEC
     SBC #$01
     STA ram_01B7
-    JMP B4_B71C
+    JMP StartStoryScene_LB71C
 @B4_B73B:
     JSR DrawQueuedBlock
     LDA ram_01BA
-    BNE B4_B71C
+    BNE StartStoryScene_LB71C
     LDA #$05
     STA story_step
     STA ram_01B3
-B4_B74B:
+StartStoryScene_LB74B:
     LDA ram_01B4
     STA ent_type_9
     LDA ram_01B5
@@ -2118,13 +2118,13 @@ B4_B74B:
     LDA #$63
     STA ram_01B8
     RTS
-B4_B767:
+StartStoryScene_LB767:
     DEC ram_01B2
-    BNE B4_B71C
+    BNE StartStoryScene_LB71C
     LDA ram_01B1
     CMP #$03
     BEQ @B4_B776
-    JMP B4_B540
+    JMP StoryBranchByStage_LB540
 @B4_B776:
     LDA #$01
     STA nmi_state
@@ -2156,15 +2156,15 @@ B4_B767:
     JSR ReturnStub
     LDA #$05
     STA stage_index
-B4_B7B1:
-    JMP F_C66C
-B4_B7B4:
+StartStoryScene_LB7B1:
+    JMP StageSetup_LC66C
+StartStoryScene_LB7B4:
     .byte $00
-B4_B7B5:
+StartStoryScene_LB7B5:
     .byte $01
-B4_B7B6:
+StartStoryScene_LB7B6:
     .byte $00
-B4_B7B7:
+StartStoryScene_LB7B7:
     .byte $02
 ; Tbl_B4_B7B8: 58 bytes, read by B4_B56B
 Tbl_B4_B7B8:
@@ -2207,28 +2207,28 @@ Tbl_B4_B7B8:
     .byte $D9,$B9,$78,$F6,$B9,$00,$06,$3A,$FE,$14,$5C,$FF,$00,$96,$FF,$00
     .byte $B8,$FE,$14,$48,$FE,$32,$A8,$FE,$32,$03,$38,$FE,$14,$B8,$FE,$14
     .byte $78,$FF,$00,$03,$42,$FE,$00,$AE,$FE,$28,$78,$FE,$50
-B4_BA00:
+StartStoryScene_LBA00:
     LDA ram_0732
-    BNE B4_BA65
+    BNE StartStoryScene_LBA65
     LDY #$0F
 @B4_BA07:
     LDA effect_type,y
     CMP #$47
-    BEQ B4_BA65
+    BEQ StartStoryScene_LBA65
     DEY
     BPL @B4_BA07
     LDA ram_01B8
     BNE @B4_BA1B
     STA tmp_c
-    JMP B4_BA26
+    JMP StartStoryScene_LBA26
 @B4_BA1B:
     STA tmp_b
-B4_BA1D:
+StartStoryScene_LBA1D:
     LDA #$0A
     STA tmp_a
     JSR DivideByTmpA
     INC tmp_c
-B4_BA26:
+StartStoryScene_LBA26:
     LDA #$0A
     SEC
     SBC tmp_c
@@ -2261,12 +2261,12 @@ B4_BA26:
 @B4_BA59:
     DEC tmp_a
     BNE @B4_BA45
-B4_BA5D:
+StartStoryScene_LBA5D:
     LDA #$00
     STA ppu_buffer,x
     STX ppu_buffer_idx
     RTS
-B4_BA65:
+StartStoryScene_LBA65:
     LDA #$FF
     STA ram_0732
     LDX ppu_buffer_idx
@@ -2286,22 +2286,22 @@ B4_BA65:
     INX
     DEY
     BPL @B4_BA82
-    JMP B4_BA5D
-B4_BA8C:
-    .word B4_BAA6
-    .word B4_BABC
-    .word B4_BB60
-    .word B4_BABB
+    JMP StartStoryScene_LBA5D
+StartStoryScene_LBA8C:
+    .word StartStoryScene_LBAA6
+    .word StartStoryScene_LBABC
+    .word QueueTextRow_LBB60
+    .word StartStoryScene_LBABB
 StepDispatch_01BE:
     LDA ram_01BE
     ASL a
     TAY
-    LDA B4_BA8C,y
+    LDA StartStoryScene_LBA8C,y
     STA ptr_lo
-    LDA B4_BA8C+1,y
+    LDA StartStoryScene_LBA8C+1,y
     STA ptr_hi
     JMP (ptr_lo)
-B4_BAA6:
+StartStoryScene_LBAA6:
     LDA #$00
     STA ram_01BB
     STA ram_01BF
@@ -2310,9 +2310,9 @@ B4_BAA6:
     STA ram_01BE
     LDA #$03
     STA ram_01BC
-B4_BABB:
+StartStoryScene_LBABB:
     RTS
-B4_BABC:
+StartStoryScene_LBABC:
     LDA ram_01BB
     CMP ram_01BA
     BNE @B4_BACA
@@ -2324,9 +2324,9 @@ B4_BABC:
     ADC #$01
     STA ram_01BB
     CMP #$01
-    BEQ B4_BB40
+    BEQ QueueTextRow_LBB40
     CMP ram_01BA
-    BEQ B4_BB4F
+    BEQ QueueTextRow_LBB4F
 QueueTextRowDefault:
     PHA
     LDA #$11
@@ -2388,7 +2388,7 @@ QueueTextRow:
     LDY ptr_lo
     LDA (tmp_c),y
     RTS
-B4_BB40:
+QueueTextRow_LBB40:
     LDA #$0A
     STA tmp_c
     LDA #$BC
@@ -2396,7 +2396,7 @@ B4_BB40:
     LDA #$11
     STA tmp_b
     JMP PPUBuffer_Append
-B4_BB4F:
+QueueTextRow_LBB4F:
     PHA
     LDA #$2E
     STA tmp_c
@@ -2406,7 +2406,7 @@ B4_BB4F:
     STA ptr_lo
     PLA
     JMP QueueTextRow
-B4_BB60:
+QueueTextRow_LBB60:
     LDA credits_ptr_lo
     STA tmp_c
     LDA credits_ptr_hi
@@ -2566,10 +2566,10 @@ PPUBuffer_Append:
     RTS
 GameState18:
     LDA #$20
-    JMP B4_BCB9
+    JMP GameState17_LBCB9
 GameState17:
     LDA #$1C
-B4_BCB9:
+GameState17_LBCB9:
     STA tmp_08
     LDA fade_tbl_pos
     AND #$03
@@ -2585,16 +2585,16 @@ B4_BCB9:
     STA ppu_job
 @B4_BCD0:
     LDY #$07
-B4_BCD2:
+GameState17_LBCD2:
     LDA effect_type,y
-    BNE B4_BD39
+    BNE GameState17_LBD39
     LDA #$A0
     STA effect_type,y
     LDA rng_a
     CLC
     ADC focus_x_lo
     STA effect_x_lo,y
-B4_BCE4:
+GameState17_LBCE4:
     LDA focus_x_hi
     ADC #$00
     STA effect_x_hi,y
@@ -2634,9 +2634,9 @@ B4_BCE4:
     LDA rng_b
     AND #$07
     STA effect_param2,y
-B4_BD39:
+GameState17_LBD39:
     DEY
-    BPL B4_BCD2
+    BPL GameState17_LBCD2
     RTS
 AddToRam01A8:
     LDA tally_lo

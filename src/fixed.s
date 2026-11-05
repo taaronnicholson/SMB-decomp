@@ -34,7 +34,7 @@ FlushPPUBuffer:
     ORA #$04
     STA ppuctrl_shadow
     LDX #$00
-F_C0B3:
+FlushPPUBuffer_LC0B3:
     LDA ppuctrl_shadow
     STA PPUCTRL
     LDA ppu_buffer,x
@@ -51,7 +51,7 @@ F_C0B3:
     LDA ppu_buffer,x
     STA PPUDATA
     INX
-    JMP F_C0B3
+    JMP FlushPPUBuffer_LC0B3
 @F_C0DA:
     BPL @F_C0E7
     TYA
@@ -176,7 +176,7 @@ PPUCopy1:
     CLC
     ADC ppu_buffer_idx
     TAX
-    JMP F_C0B3
+    JMP FlushPPUBuffer_LC0B3
 ; SmallOffsets_F_C1D0: 31 bytes, read by ShotMoveDown, F_E734
 SmallOffsets_F_C1D0:
     .res 10, $00
@@ -185,43 +185,43 @@ SmallOffsets_F_C1D0:
 ; TileKindTable_Data: tile id -> kind (1 spring, 3 collectible, 4 = $CD)
 TileKindTable_Data:
     .byte $00
-F_C1F0:
+TileKindTable_Data_LC1F0:
     .byte $34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$34,$35
     .byte $34,$35,$34,$35,$34,$35,$34,$35,$34,$35,$36,$35,$36,$35,$34
-F_C20F:
+TileKindTable_Data_LC20F:
     .byte $00
-F_C210:
+TileKindTable_Data_LC210:
     .byte $02,$03,$04,$05,$02,$03,$04,$05,$02,$06,$04,$05,$02,$03,$04,$05
     .byte $02,$02,$02,$01,$02,$01,$02,$01,$02,$01,$01,$01,$00,$01,$00,$01
     .byte $00,$00,$00,$00,$FF
-F_C235:
+TileKindTable_Data_LC235:
     .byte $08,$07,$08,$08,$07,$07,$08,$08,$07,$07,$08,$08,$08,$07,$07,$07
     .byte $08,$08,$08,$08
-F_C249:
+TileKindTable_Data_LC249:
     .byte $1A,$1A,$20,$20,$1A,$1A,$28,$28,$1A,$1A,$20,$1A,$28,$1A,$20,$1A
     .byte $28,$1A,$FF
-F_C25C:
+TileKindTable_Data_LC25C:
     .byte $31,$31,$31,$32,$32,$32,$33,$33,$33,$00
-F_C266:
+TileKindTable_Data_LC266:
     .byte $00,$00,$21,$21,$22,$22,$21,$21,$00,$FF
-F_C270:
+TileKindTable_Data_LC270:
     .byte $01,$01,$01,$01,$01,$00,$00,$00,$00,$01,$01,$01,$FF
-F_C27D:
+TileKindTable_Data_LC27D:
     .byte $00,$00,$00,$01,$00,$01,$00,$01,$01,$01,$01,$01,$01,$01,$01,$02
     .byte $01,$02,$01,$02,$02,$02
-F_C293:
+TileKindTable_Data_LC293:
     .byte $18
-F_C294:
+TileKindTable_Data_LC294:
     .byte $00,$19,$00,$1A,$00,$19,$01,$18,$01,$1B,$00,$1C,$00,$1B,$01,$00
     .res 24, $00
     .byte $04,$00,$00,$00,$00,$01,$01,$01,$01,$00,$00,$00,$00,$00,$03,$D3
     .byte $FE,$D2,$FE,$D3,$FE
-    .word F_FED2
-    .word F_D2D3
-    .word F_D3FF
-    .word F_D4FE
-    .word F_D4D5
-    .word F_D2D3
+    .word Decompress_LFED2
+    .word ComputeFocusY_LD2D3
+    .word ComputeFocusY_LD3FF
+    .word ComputeFocusY_LD4FE
+    .word ComputeFocusY_LD4D5
+    .word ComputeFocusY_LD2D3
     .byte $FE,$D3,$FE,$D4,$FE,$D5,$FE,$D4,$FE,$D3,$FE,$D2,$FE,$FE,$D3,$FE
     .byte $FE,$D4
 ; Tbl_F_C2EF: 34 bytes, no direct code reference (continuation or unreferenced)
@@ -229,20 +229,20 @@ Tbl_F_C2EF:
     .byte $FE,$D3,$D2,$D3,$D2,$FF,$C0,$FE,$FE,$FE,$C1,$FE,$FE,$FE,$C0,$FE
     .byte $FE,$C1,$FE,$C0,$C1,$00,$FF,$D3,$FE,$D2,$FE,$D3,$C0,$FE,$FE,$C1
     .byte $FE,$CD
-    .word F_D3FF
-    .word F_D4FE
-    .word F_D4D5
-    .word F_D2D3
+    .word ComputeFocusY_LD3FF
+    .word ComputeFocusY_LD4FE
+    .word ComputeFocusY_LD4D5
+    .word ComputeFocusY_LD2D3
     .byte $FE,$D3
-    .word F_D4FE
-    .word F_D5FE
-    .word F_D4FE
-    .word F_FEC0
+    .word ComputeFocusY_LD4FE
+    .word ScrollX_LD5FE
+    .word ComputeFocusY_LD4FE
+    .word Decompress_LFEC0
     .byte $FE,$C1,$FE
 ; UpdateTouchKind_Tbl_C326: 11 bytes, read by UpdateTouchKind
 UpdateTouchKind_Tbl_C326:
     .byte $CD
-F_C327:
+UpdateTouchKind_Tbl_C326_LC327:
     .byte $FF,$CB,$C2,$D6,$C2,$F5,$C2,$06,$C3,$12
 ; Tbl_F_C331: 5 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_C331:
@@ -433,8 +433,8 @@ StartNewGame:
     STA stage_index
 StageSetup:
     LDA #$00
-    JSR F_C9C2
-F_C66C:
+    JSR ReadControllerBank0_LC9C2
+StageSetup_LC66C:
     LDA #$02
     JSR SwitchBank
     JSR ResetGameState
@@ -443,9 +443,9 @@ F_C66C:
     LDA stage_index
     ASL a
     TAX
-    LDA B0_8263,x
+    LDA ClearRAM_L8263,x
     STA ptr_lo
-    LDA B0_8263+1,x
+    LDA ClearRAM_L8263+1,x
     STA ptr_hi
     LDY #$00
     LDA (ptr_lo),y
@@ -485,7 +485,7 @@ F_C66C:
     LDA #$09
     STA player_state
     PLA
-F_C6CC:
+StageSetup_LC6CC:
     JSR LoadArea
     JSR InitAnimTileState
     JSR ClearOAMAndLoadSprites
@@ -545,7 +545,7 @@ MainLoopBody:
     LDA #$00
     JSR SwitchBank
     JSR FadeTableStep
-    JSR F_FA6B
+    JSR PlayerState1E_LFA6B
     JMP MainLoop
 @F_C763:
     LDA #$01
@@ -568,7 +568,7 @@ MainLoopBody:
     JSR SwitchBank
     JSR DrawPlayer
     JSR Sound_Update
-    JSR F_FABC
+    JSR PlayerState1E_LFABC
     JMP MainLoop
 ApplyScroll:
     LDA scroll_y_hi
@@ -622,7 +622,7 @@ NMI:
     LDA #$02
     STA OAMDMA
     LDA ppumask_shadow
-F_C800:
+NMI_LC800:
     ORA #$18
     LDY render_enable
     BNE @F_C808
@@ -643,12 +643,12 @@ F_C800:
     STA jump_ptr_hi
     JMP (jump_ptr_lo)
 @F_C825:
-    .word F_C82F
-    .word F_C863
-    .word F_C882
-    .word F_C89F
-    .word F_C84B
-F_C82F:
+    .word NMI_LC82F
+    .word IRQ_LC863
+    .word NMI_EndOfFrame_LC882
+    .word NMI_EndOfFrame_LC89F
+    .word IRQ_LC84B
+NMI_LC82F:
     DEC frame_counter
     LDA #$00
     STA zp_01
@@ -666,7 +666,7 @@ F_C82F:
     PLA
 IRQ:
     RTI
-F_C84B:
+IRQ_LC84B:
     LDA fade_dir
     BNE @F_C852
     JSR CreditsStep
@@ -678,7 +678,7 @@ F_C84B:
     JSR SwitchBank
     JSR PaletteFadeStep
     JMP NMI_EndOfFrame
-F_C863:
+IRQ_LC863:
     LDA #$00
     JSR SwitchBank
     LDA frame_counter
@@ -692,8 +692,8 @@ NMI_EndOfFrame:
     LDA #$06
     JSR SwitchBank
     JSR RngStep
-    JMP F_C82F
-F_C882:
+    JMP NMI_LC82F
+NMI_EndOfFrame_LC882:
     LDA #$00
     JSR SwitchBank
     JSR PaletteFadeStep
@@ -705,7 +705,7 @@ F_C882:
     JSR FlushPPUBuffer
     INC nmi_state
     JMP NMI_EndOfFrame
-F_C89F:
+NMI_EndOfFrame_LC89F:
     LDA #$02
     JSR SwitchBank
     JSR SetPlayerFacingBit
@@ -813,7 +813,7 @@ ClearOAMBuffer:
     RTS
 ClearOAMAndLoadSprites:
     JSR ClearOAMBuffer
-F_C959:
+ClearOAMAndLoadSprites_LC959:
     LDY #$06
     LDX #$32
     LDA #$BF
@@ -881,7 +881,7 @@ ReadControllerBank0:
     JSR ReadController
     PLA
     JMP SwitchBank
-F_C9C2:
+ReadControllerBank0_LC9C2:
     STA ram_0745
     LDY #$00
     LDX #$63
@@ -971,7 +971,7 @@ InitAnimTileState:
     SEC
     SBC #$02
     STA tmp_c
-F_CA6B:
+InitAnimTileState_LCA6B:
     LDA map_width
     STA tmp_d
 ScanMapForBalloons:
@@ -983,9 +983,9 @@ ScanMapForBalloons:
 @F_CA7A:
     SEC
     SBC #$CE
-    BCC F_CAD3
+    BCC ScanMapForBalloons_LCAD3
     CMP #$03
-    BCS F_CAD3
+    BCS ScanMapForBalloons_LCAD3
     CLC
     ADC #$30
     STA zp_73
@@ -1026,7 +1026,7 @@ ScanMapForBalloons:
     STA tmp_d
     PLA
     STA tmp_c
-F_CAD3:
+ScanMapForBalloons_LCAD3:
     INC ptr_lo
     BNE @F_CAD9
     INC ptr_hi
@@ -1034,7 +1034,7 @@ F_CAD3:
     DEC tmp_d
     BNE ScanMapForBalloons
     DEC tmp_c
-    BNE F_CA6B
+    BNE InitAnimTileState_LCA6B
     LDA #$01
     JSR SwitchBank
     LDA current_area
@@ -1249,7 +1249,7 @@ LoadGroupGfxFromFlags:
     STA tmp_a
     TAY
     LDA anim_tile_base,y
-    BEQ F_CC6A
+    BEQ LoadGroupGfx_LCC6A
 @F_CC62:
     LDY saved_x
     RTS
@@ -1257,7 +1257,7 @@ LoadGroupGfx:
     STY saved_x
     STA tmp_a
     TAY
-F_CC6A:
+LoadGroupGfx_LCC6A:
     LDA #$00
     SEC
     SBC sprite_tile_next
@@ -1286,11 +1286,11 @@ F_CC6A:
     ASL a
     ASL a
     TAY
-    LDA B6_A722,y
+    LDA PlayerShapeOffsets_LA722,y
     STA ptr_lo
-    LDA B6_A723,y
+    LDA PlayerShapeOffsets_LA723,y
     STA ptr_hi
-    LDA B6_A724,y
+    LDA PlayerShapeOffsets_LA724,y
     STA tmp_a
     BEQ @F_CCB7
     LDA sprite_tile_next
@@ -1376,7 +1376,7 @@ SpawnBalloon:
     STA tmp_d
     PLA
     STA tmp_c
-    JMP F_CAD3
+    JMP ScanMapForBalloons_LCAD3
 CheckPause:
     LDA fade_step
     CMP #$04
@@ -1458,7 +1458,7 @@ CheckPause:
     CLC
     JSR DecompressAndFinish
     LDA ram_01B1
-F_CE00:
+CheckPause_LCE00:
     BEQ @F_CE05
     JSR HideAllSprites
 @F_CE05:
@@ -1583,7 +1583,7 @@ CosLookup:
     JSR SwitchBankKeepX
     LDA tmp_08
     RTS
-F_CED8:
+CosLookup_LCED8:
     LDY #$04
     LDX #$03
     LDA #$BF
@@ -2128,7 +2128,7 @@ ComputeFocusY:
     STA tmp_b
     LDA focus_y_lo
     SEC
-F_D2D3:
+ComputeFocusY_LD2D3:
     SBC tmp_a
     LDA focus_y_hi
     SBC tmp_b
@@ -2292,9 +2292,9 @@ F_D2D3:
     ADC #$00
     STA map_read_hi
     DEC tmp_ptr_hi
-    BEQ F_D3FF
+    BEQ ComputeFocusY_LD3FF
     JMP @F_D37F
-F_D3FF:
+ComputeFocusY_LD3FF:
     LDA #$28
     STA PPUADDR
     LDA #$00
@@ -2334,7 +2334,7 @@ F_D3FF:
     STA PPUADDR
     LDA #$07
     STA tmp_ptr_hi
-F_D44C:
+ComputeFocusY_LD44C:
     LDX #$08
     LDA map_read_lo
     PHA
@@ -2406,7 +2406,7 @@ F_D44C:
     ADC #$00
     STA map_read_hi
     LDA map_read_lo
-F_D4D5:
+ComputeFocusY_LD4D5:
     CLC
     ADC map_width
     STA map_read_lo
@@ -2415,7 +2415,7 @@ F_D4D5:
     STA map_read_hi
     DEC tmp_ptr_hi
     BMI @F_D4E7
-    JMP F_D44C
+    JMP ComputeFocusY_LD44C
 @F_D4E7:
     LDA map_read_lo
     SEC
@@ -2428,7 +2428,7 @@ F_D4D5:
     STA PPUADDR
     LDA #$C0
     STA PPUADDR
-F_D4FE:
+ComputeFocusY_LD4FE:
     LDX #$08
 @F_D500:
     LDA map_bank
@@ -2548,7 +2548,7 @@ SavePrevFocus:
     STA prev_focus_x_lo
     LDA focus_y_lo
     STA prev_focus_y_lo
-    JMP F_F379
+    JMP QueueMapTileDraw_LF379
 ScrollX:
     LDA focus_x_lo
     SEC
@@ -2558,14 +2558,14 @@ ScrollX:
     BNE @F_D5F5
     JMP ScrollY
 @F_D5F2:
-    JMP F_D677
+    JMP ScrollX_LD677
 @F_D5F5:
     LDA zp_3A
     CLC
     ADC scroll_x_px
     STA scroll_x_px
     LDA zp_3C
-F_D5FE:
+ScrollX_LD5FE:
     CLC
     ADC zp_3A
     STA zp_3C
@@ -2601,7 +2601,7 @@ F_D5FE:
     LDA map_read_hi
     ADC #$00
     STA map_read_hi
-    JSR F_D7C7
+    JSR ScrollY_LD7C7
     PLA
     STA map_read_hi
     PLA
@@ -2626,7 +2626,7 @@ F_D5FE:
     LDA #$10
     STA tmp_ptr_hi
 @F_D65F:
-    JSR F_D8F7
+    JSR ScrollY_LD8F7
 @F_D662:
     PLA
     STA map_read_hi
@@ -2640,7 +2640,7 @@ F_D5FE:
     INC map_read_hi
 @F_D674:
     JMP ScrollY
-F_D677:
+ScrollX_LD677:
     LDA zp_3A
     CLC
     ADC scroll_x_px
@@ -2675,7 +2675,7 @@ F_D677:
     SBC #$00
     STA map_read_hi
 @F_D6AD:
-    JSR F_D7C7
+    JSR ScrollY_LD7C7
     LDA draw_x
     LSR a
     BCC ScrollY
@@ -2692,7 +2692,7 @@ F_D677:
     LDA #$00
     STA tmp_ptr_hi
 @F_D6CB:
-    JSR F_D8F7
+    JSR ScrollY_LD8F7
 ScrollY:
     LDA focus_y_lo
     SEC
@@ -2772,11 +2772,11 @@ ScrollY:
     LDA map_read_hi
     ADC map_cells15_hi
     STA map_read_hi
-    JSR F_D9BD
+    JSR ScrollY_LD9BD
     LDA draw_y
     AND #$03
     BNE @F_D757
-    JSR F_DAE3
+    JSR ScrollY_LDAE3
 @F_D757:
     PLA
     STA map_read_hi
@@ -2831,7 +2831,7 @@ ScrollY:
     LSR a
     LSR a
     TAX
-    JSR F_D9BD
+    JSR ScrollY_LD9BD
     LDA draw_y
     AND #$1F
     CMP #$1D
@@ -2844,14 +2844,14 @@ ScrollY:
     PHA
     LDA map_read_hi
     PHA
-    JSR F_DAE3
+    JSR ScrollY_LDAE3
     PLA
     STA map_read_hi
     PLA
     STA map_read_lo
 @F_D7C6:
     RTS
-F_D7C7:
+ScrollY_LD7C7:
     STX draw_x
     STY draw_y
     LDX ppu_buffer_idx
@@ -3015,7 +3015,7 @@ F_D7C7:
     PLA
     STA map_read_lo
     RTS
-F_D8F7:
+ScrollY_LD8F7:
     LDA map_read_lo
     PHA
     LDA map_read_hi
@@ -3119,7 +3119,7 @@ F_D8F7:
     PLA
     STA map_read_lo
     RTS
-F_D9BD:
+ScrollY_LD9BD:
     STX draw_x
     STY draw_y
     LDX ppu_buffer_idx
@@ -3280,7 +3280,7 @@ F_D9BD:
     PLA
     STA map_read_lo
     RTS
-F_DAE3:
+ScrollY_LDAE3:
     LSR draw_x
     LDA #$10
     SEC
@@ -3593,11 +3593,11 @@ PlayerBlinkCheck:
     BEQ @F_DD43
     DEX
     BNE TryStartJump
-    JMP F_DE0C
+    JMP TryFireShot_LDE0C
 @F_DD3D:
-    JMP F_DE3F
+    JMP TryFireShot_LDE3F
 @F_DD40:
-    JMP F_DD9E
+    JMP TryStartJump_LDD9E
 @F_DD43:
     JMP TryFireShot
 TryStartJump:
@@ -3648,9 +3648,9 @@ TryStartJump:
     STX zp_8F
     LDA #$07
     JMP PlaySfxSq1
-F_DD9B:
+TryStartJump_LDD9B:
     JMP TryStartJump
-F_DD9E:
+TryStartJump_LDD9E:
     DEC zp_F7
     BEQ @F_DDA5
     JMP TryFireShot
@@ -3673,14 +3673,14 @@ F_DD9E:
     STA zp_F7
 TryFireShot:
     LDA powerup_shot
-    BEQ F_DD9B
+    BEQ TryStartJump_LDD9B
     LDA shot_cooldown
-    BNE F_DD9B
+    BNE TryStartJump_LDD9B
     LDA shot_timer
-    BNE F_DD9B
+    BNE TryStartJump_LDD9B
     LDA buttons
     AND #$02
-    BEQ F_DD9B
+    BEQ TryStartJump_LDD9B
     LDA shot_state
     BNE @F_DDE8
 @F_DDD7:
@@ -3694,7 +3694,7 @@ TryFireShot:
     JMP TryStartJump
 @F_DDE8:
     LDA shot_state_1
-    BEQ F_DDFC
+    BEQ TryFireShot_LDDFC
     LDX shot_state
     LDA SmallOffsets_F_DC11,x
     BNE @F_DDD7
@@ -3702,9 +3702,9 @@ TryFireShot:
     CLC
     ADC shot_state_1
     LDA SmallOffsets_F_DC11,x
-F_DDFA:
-    BEQ F_DE09
-F_DDFC:
+TryFireShot_LDDFA:
+    BEQ TryFireShot_LDE09
+TryFireShot_LDDFC:
     LDA #$06
     STA shot_state_1
     STA shot_cooldown
@@ -3712,9 +3712,9 @@ F_DDFC:
     STA shot_E3_1
     LDA #$82
     STA shot_timer
-F_DE09:
+TryFireShot_LDE09:
     JMP TryStartJump
-F_DE0C:
+TryFireShot_LDE0C:
     LDA dive_mode
     CMP #$80
     BEQ @F_DE15
@@ -3722,26 +3722,26 @@ F_DE0C:
 @F_DE15:
     LDA fall_ticks
     CMP #$10
-    BCC F_DE09
+    BCC TryFireShot_LDE09
     LDA shot_state
     BNE @F_DE2C
     LDA shot_state_1
     CMP #$07
-    BEQ F_DE09
+    BEQ TryFireShot_LDE09
     LDA #$07
     STA shot_state
     JMP TryStartJump
 @F_DE2C:
     LDA shot_state_1
     CMP #$07
-    BEQ F_DE09
+    BEQ TryFireShot_LDE09
     LDA shot_state
     CMP #$07
-    BEQ F_DE09
+    BEQ TryFireShot_LDE09
     LDA #$07
     STA shot_state_1
     JMP TryStartJump
-F_DE3F:
+TryFireShot_LDE3F:
     LDA shot_cooldown
     BNE @F_DE72
     LDA shot_timer
@@ -4005,9 +4005,9 @@ PlayerVerticalStep:
     STA zp_6D
     LDA invuln_lo
     ORA invuln_hi
-    BNE F_E08F
+    BNE PlayerIdleAnim_LE08F
     LDA shot_state
-    BNE F_E08F
+    BNE PlayerIdleAnim_LE08F
     LDA idle_timer_lo
     STA tmp_c
     SEC
@@ -4016,7 +4016,7 @@ PlayerVerticalStep:
     LDA idle_timer_hi
     STA tmp_d
     SBC #$02
-    BCC F_E09A
+    BCC PlayerIdleAnim_LE09A
     LDA ptr_lo
     ASL a
     CLC
@@ -4039,20 +4039,20 @@ PlayerIdleAnim:
     LDA IdleAnim,y
     INY
     CMP #$FF
-    BEQ F_E08F
+    BEQ PlayerIdleAnim_LE08F
     STA oam_buf_4D
     LDA IdleAnim,y
     INY
     STA idle_anim_timer
     LDA IdleAnim,y
-    JMP F_E0AF
-F_E08F:
+    JMP PlayerIdleAnim_LE0AF
+PlayerIdleAnim_LE08F:
     LDA #$00
     STA idle_timer_lo
     STA idle_timer_hi
     STA idle_anim_timer
-    JMP F_E0A7
-F_E09A:
+    JMP PlayerIdleAnim_LE0A7
+PlayerIdleAnim_LE09A:
     LDA tmp_c
     CLC
     ADC #$01
@@ -4060,30 +4060,30 @@ F_E09A:
     LDA tmp_d
     ADC #$00
     STA idle_timer_hi
-F_E0A7:
+PlayerIdleAnim_LE0A7:
     LDA zp_6E
-    BEQ F_E0B4
+    BEQ PlayerIdleAnim_LE0B4
     DEC zp_6E
     LDA #$00
-F_E0AF:
+PlayerIdleAnim_LE0AF:
     STA player_frame
     JMP ApplyRidingMotion
-F_E0B4:
+PlayerIdleAnim_LE0B4:
     INC zp_6F
     LDA zp_6F
     LSR a
     TAX
-    LDA F_C270,x
+    LDA TileKindTable_Data_LC270,x
     CMP #$FF
-    BNE F_E0AF
+    BNE PlayerIdleAnim_LE0AF
     LDA #$00
-    JMP F_E0CE
+    JMP ResetIdleTimer_LE0CE
 ResetIdleTimer:
     LDA #$00
     STA idle_timer_lo
     STA idle_timer_hi
     STA idle_anim_timer
-F_E0CE:
+ResetIdleTimer_LE0CE:
     STA zp_6F
     LDA #$96
     STA zp_6E
@@ -4091,7 +4091,7 @@ ApplyRidingMotion:
     JSR SwitchBankFromAC
     LDA riding_flag
     BNE @F_E0DE
-    JMP F_E313
+    JMP RidingCheckX_LE313
 @F_E0DE:
     LDX riding_slot
     LDA ent_type,x
@@ -4392,7 +4392,7 @@ RidingCheckX:
     RTS
 @F_E310:
     JMP PlayerState0E
-F_E313:
+RidingCheckX_LE313:
     LDA player_y_lo
     STA tmp_c
     LDA player_y_hi
@@ -4699,11 +4699,11 @@ PlayerState02:
     INX
 @F_E53D:
     STX zp_7D
-    LDA F_C27D,x
+    LDA TileKindTable_Data_LC27D,x
     STA zp_73
     LDA player_y_lo
     CLC
-    ADC F_C27D,x
+    ADC TileKindTable_Data_LC27D,x
     STA player_y_lo
     LDA player_y_hi
     ADC #$00
@@ -4837,9 +4837,9 @@ PlayerState02:
     LDA tmp_a
     AND #$0E
     TAY
-    LDA F_C293,y
+    LDA TileKindTable_Data_LC293,y
     STA player_frame
-    LDA F_C294,y
+    LDA TileKindTable_Data_LC294,y
     STA player_facing
     LDA dive_mode
 @F_E63F:
@@ -4891,7 +4891,7 @@ PlayerState02:
     JSR GetTilePropsAtPos
     AND #$01
     BNE @F_E69A
-    JMP F_E734
+    JMP PlayerLand_LE734
 @F_E69A:
     LDA dive_mode
     BEQ @F_E6C5
@@ -4910,7 +4910,7 @@ PlayerState02:
     STA pending_tile_kind
     LDA dive_mode
     CMP #$80
-    BEQ F_E734
+    BEQ PlayerLand_LE734
 @F_E6C5:
     JSR GetTilePropsAtPos
     AND #$03
@@ -4972,7 +4972,7 @@ PlayerLand:
     RTS
 @F_E731:
     JMP ApplyRidingMotion
-F_E734:
+PlayerLand_LE734:
     LDA #$06
     JSR SwitchBank
     JSR PlayerAttackInput
@@ -5215,23 +5215,23 @@ F_E734:
 PlayerState04:
     LDA #$02
     JSR SwitchBank
-    JMP B2_B517
+    JMP WriteTile69AndScroll_LB517
 PlayerState03:
     LDA #$02
     JSR SwitchBank
-    JMP B2_B53A
+    JMP WriteTile69AndScroll_LB53A
 PlayerState05:
     LDA #$06
     JSR SwitchBank
-    JMP B6_A2BE
+    JMP KillableTypeTable_LA2BE
 PlayerState06:
     LDA #$06
     JSR SwitchBank
-    JMP B6_A32E
+    JMP KillableTypeTable_LA32E
 PlayerState07:
     LDA #$06
     JSR SwitchBank
-    JMP B6_A3D6
+    JMP KillableTypeTable_LA3D6
 PlayerState08:
     DEC zp_8F
     LDX zp_8F
@@ -5273,24 +5273,24 @@ PlayerState08:
     LDA anim_tick
     AND #$0E
     TAY
-    LDA F_C293,y
+    LDA TileKindTable_Data_LC293,y
     STA player_frame
-    LDA F_C294,y
+    LDA TileKindTable_Data_LC294,y
     STA player_facing
     LDA #$06
     JSR SwitchBank
-    JMP B6_B953
+    JMP GroupGfxTable_LB953
 PlayerState01:
     LDA #$06
     JSR SwitchBank
-    JMP B6_B842
+    JMP GroupGfxTable_LB842
 PlayerState09:
     INC anim_tick
     LDA anim_tick
     AND #$1E
     LSR a
     TAX
-    LDA F_C25C,x
+    LDA TileKindTable_Data_LC25C,x
     BNE @F_E97F
     LDA zp_92
     STA player_state
@@ -5324,7 +5324,7 @@ PlayerState16:
     LDA #$00
     STA shot_state
     STA shot_state_1
-    JMP F_F043
+    JMP CheckDoorTile_LF043
 @F_E9B6:
     LDA player_y_hi
     BNE @F_E9CA
@@ -5465,7 +5465,7 @@ PlayerState0C:
     LDA zp_BE
     LSR a
     TAY
-    LDA F_C1F0,y
+    LDA TileKindTable_Data_LC1F0,y
     BNE @F_EAB5
     STA zp_BE
     LDA #$35
@@ -5621,7 +5621,7 @@ PlayerMoveByButtons:
     JMP PlayerMoveLeft
 @F_EBC7:
     LDA buttons
-F_EBC9:
+PlayerMoveByButtons_LEBC9:
     AND #$80
     BNE @F_EBD0
     JMP PlayerMoveLeft
@@ -6046,7 +6046,7 @@ PlayerWalkAnimStep:
 @F_EED5:
     STX zp_6C
     LDX zp_6D
-    LDA F_C210,x
+    LDA TileKindTable_Data_LC210,x
     STA player_frame
     RTS
 MapPtrToCoords:
@@ -6144,7 +6144,7 @@ ApplySwitch2:
     INY
     LDA Tbl_F_EFCF,y
     STA ram_046A
-    JMP F_EFA2
+    JMP ApplySwitch3_LEFA2
 ToggleSwitch3:
     LDA switch_3
     EOR #$01
@@ -6163,7 +6163,7 @@ ApplySwitch3:
     INY
     LDA Tbl_F_EFCF,y
     STA ram_046B
-F_EFA2:
+ApplySwitch3_LEFA2:
     LDY ppu_job_saved
     BNE @F_EFAA
     LDA ppu_job
@@ -6188,7 +6188,7 @@ ApplySwitch1:
     INY
     LDA Tbl_F_EFCF,y
     STA ram_0469
-    JMP F_EFA2
+    JMP ApplySwitch3_LEFA2
 ; Tbl_F_EFCF: 4 bytes, read by ApplySwitch2, ApplySwitch3, ApplySwitch1
 Tbl_F_EFCF:
     .byte $12,$00,$16,$05
@@ -6258,7 +6258,7 @@ CheckDoorTile:
     LDA (ptr_lo),y
     STA zp_92
     INY
-F_F043:
+CheckDoorTile_LF043:
     JSR SilenceSound
     LDA #$01
     STA nmi_state
@@ -6294,14 +6294,14 @@ F_F043:
     JMP StageSetup
 @F_F083:
     LDA door_id
-    JMP F_C6CC
+    JMP StageSetup_LC6CC
 PlayerTileInteract:
     LDX player_state
     LDA SmallOffsets_F_DBF6,x
-    BNE F_F090
-F_F08F:
+    BNE PlayerTileInteract_LF090
+PlayerTileInteract_LF08F:
     RTS
-F_F090:
+PlayerTileInteract_LF090:
     JSR SwitchBankFromAC
     LDA player_y_lo
     STA tmp_c
@@ -6326,7 +6326,7 @@ F_F090:
     STA ptr_lo
     LDA player_y_lo
     AND #$0F
-    BEQ F_F08F
+    BEQ PlayerTileInteract_LF08F
     LDA ptr_lo
     CLC
     ADC map_width
@@ -6343,24 +6343,24 @@ F_F090:
     LDA (ptr_lo),y
     JSR ApplyCollectedFlag
     CMP #$D6
-    BNE F_F0F7
+    BNE PlayerTileInteract_LF0F7
     JSR SetCollectedFlag
     LDA #$01
     STA zp_A6
-    JMP F_F14F
-F_F0EA:
+    JMP PlayerTileInteract_LF14F
+PlayerTileInteract_LF0EA:
     LDA ptr_lo
     STA zp_77
     LDA ptr_hi
     STA zp_78
     LDY #$00
     JSR GetMapTile
-F_F0F7:
+PlayerTileInteract_LF0F7:
     SEC
     SBC #$80
-    BCC F_F08F
+    BCC PlayerTileInteract_LF08F
     CMP #$3D
-    BCS F_F08F
+    BCS PlayerTileInteract_LF08F
     CMP #$3C
     BNE @F_F118
     LDA #$0A
@@ -6370,7 +6370,7 @@ F_F0F7:
     JSR AddScore
     JSR TickPickupCounter
     JSR SetCollectedFlag
-    JMP F_F14F
+    JMP PlayerTileInteract_LF14F
 @F_F118:
     STX tmp_08
     STA tmp_c
@@ -6400,7 +6400,7 @@ F_F0F7:
     JSR AddScore
     LDY #$00
     LDX tmp_08
-F_F14F:
+PlayerTileInteract_LF14F:
     LDA zp_77
     STA ptr_lo
     LDA zp_78
@@ -6540,7 +6540,7 @@ RunTileEffects:
     JSR QueueMapTileDraw
 @F_F27D:
     RTS
-F_F27E:
+RunTileEffects_LF27E:
     PLA
     STA ptr_hi
     PLA
@@ -6593,9 +6593,9 @@ QueueMapTileDraw:
 @F_F2CE:
     SEC
     SBC ram_01A3
-    BCC F_F27E
+    BCC RunTileEffects_LF27E
     CMP #$20
-    BCS F_F27E
+    BCS RunTileEffects_LF27E
     STA tmp_a
     LDA map_width
     SBC #$00
@@ -6603,9 +6603,9 @@ QueueMapTileDraw:
     ASL a
     SEC
     SBC ram_01A2
-    BCC F_F27E
+    BCC RunTileEffects_LF27E
     CMP #$1F
-    BCS F_F27E
+    BCS RunTileEffects_LF27E
     STA tmp_b
     LDY #$00
     LDA ram_01A1
@@ -6673,8 +6673,8 @@ QueueMapTileDraw:
     STA ppu_buffer_idx
     PLA
     JSR SwitchBankKeepX
-    JMP F_F27E
-F_F379:
+    JMP RunTileEffects_LF27E
+QueueMapTileDraw_LF379:
     LDA scroll_x_px
     LSR a
     LSR a
@@ -6690,7 +6690,7 @@ F_F379:
     AND #$FF
     STA ram_01A1
     LDA focus_y_hi
-F_F392:
+QueueMapTileDraw_LF392:
     STA ptr_hi
     LDA focus_y_lo
     LSR ptr_hi
@@ -6788,7 +6788,7 @@ UpdateTouchKind:
     TAY
     LDA UpdateTouchKind_Tbl_C326,y
     STA ptr_lo
-    LDA F_C327,y
+    LDA UpdateTouchKind_Tbl_C326_LC327,y
     STA ptr_hi
     INC zp_5D
     LDA zp_5D
@@ -6819,7 +6819,7 @@ UpdateTouchKind:
     RTS
 CheckHazardUnderPlayer:
     LDA player_state
-    BNE F_F496
+    BNE HurtPlayer_LF496
     LDA feet_tile_ptr_lo
     STA ptr_lo
     LDA feet_tile_ptr_hi
@@ -6828,45 +6828,45 @@ CheckHazardUnderPlayer:
     JSR GetTilePropsAtPosY
     AND #$03
     CMP #$03
-    BNE F_F496
+    BNE HurtPlayer_LF496
 HurtPlayer:
     LDA hurt_flag
-    BEQ F_F497
-F_F496:
+    BEQ HurtPlayer_LF497
+HurtPlayer_LF496:
     RTS
-F_F497:
+HurtPlayer_LF497:
     LDA invuln_lo
     ORA invuln_hi
-    BNE F_F496
+    BNE HurtPlayer_LF496
     LDY player_state
     LDA HurtKnockoutDy,y
     STA tmp_a
-    BEQ F_F496
+    BEQ HurtPlayer_LF496
     LDA #$06
     JSR PlaySfxNoise
     LDA #$0F
-F_F4AD:
+HurtPlayer_LF4AD:
     STA player_state
     STA hurt_flag
     LDA #$00
     STA death_timer
     STA riding_flag
     LDA hurt_flag
-F_F4B9:
+HurtPlayer_LF4B9:
     RTS
 HurtPlayerKnockout:
     LDA hurt_flag
-    BNE F_F4B9
+    BNE HurtPlayer_LF4B9
     LDA invuln_lo
     ORA invuln_hi
-    BNE F_F4B9
+    BNE HurtPlayer_LF4B9
     LDY player_state
     LDA HurtKnockoutDy,y
-    BEQ F_F4B9
+    BEQ HurtPlayer_LF4B9
     LDA #$09
     JSR PlaySfxNoise
     LDA #$1A
-    JMP F_F4AD
+    JMP HurtPlayer_LF4AD
 ; HurtKnockoutDy: per-frame vertical offsets of the player's knock-back after being hurt
 HurtKnockoutDy:
     .res 14, $01
@@ -6877,13 +6877,13 @@ PlayerState0F:
     LSR a
     TAY
     LDA Tbl_F_F510,y
-    BNE F_F507
+    BNE PlayerState0F_LF507
     LDA #$10
     STA player_state
     LDA #$00
     STA death_timer
     JMP PlayerState10
-F_F507:
+PlayerState0F_LF507:
     STA player_frame
     LDA #$00
     STA zp_67
@@ -6899,9 +6899,9 @@ PlayerState10:
     JMP DeathAnimFrame
 @F_F525:
     LDA fade_dir
-    BEQ F_F52A
+    BEQ PlayerState10_LF52A
     RTS
-F_F52A:
+PlayerState10_LF52A:
     JSR RenderOffAndWait
     JSR DisableNMI
     JSR SilenceSound
@@ -6911,7 +6911,7 @@ F_F52A:
     AND #$01
     CLC
     ADC #$01
-    JSR F_C9C2
+    JSR ReadControllerBank0_LC9C2
     LDX #$FF
     TXS
     JMP StartNewGame
@@ -6939,7 +6939,7 @@ F_F52A:
     TXS
     LDA zp_98
     STA door_id
-    JMP F_C6CC
+    JMP StageSetup_LC6CC
 DeathAnimFrame:
     CMP #$5E
     BNE @F_F580
@@ -6998,13 +6998,13 @@ DeathAnimFrame:
     LDX #$00
     LDA #$03
     STA tmp_ptr_lo
-F_F5DB:
+DeathAnimFrame_LF5DB:
     INX
     LDA DeathAnimTiles,y
     AND #$30
     LSR a
     LSR a
-F_F5E3:
+DeathAnimFrame_LF5E3:
     LSR a
     ADC #$F9
     EOR tmp_ptr_hi
@@ -7034,7 +7034,7 @@ F_F5E3:
     INX
     INY
     DEC tmp_ptr_lo
-    BNE F_F5DB
+    BNE DeathAnimFrame_LF5DB
     LDX #$00
 @F_F61A:
     TXA
@@ -7064,53 +7064,53 @@ F_F5E3:
 PlayerState11:
     LDA #$01
     JSR SwitchBank
-    JMP B1_AF23
+    JMP AreaSpawn23_LAF23
 PlayerState12:
     LDA #$01
     JSR SwitchBank
-    JMP B1_AFAF
+    JMP AreaSpawn23_LAFAF
 PlayerState13:
     LDA #$01
     JSR SwitchBank
-    JMP B1_AFD3
+    JMP AreaSpawn23_LAFD3
 PlayerState14:
     LDA #$01
     JSR SwitchBank
-    JMP B1_AFF8
+    JMP AreaSpawn23_LAFF8
 PlayerState15:
     LDA #$01
     JSR SwitchBank
-    JMP B1_B094
+    JMP AreaSpawn23_LB094
 PlayerState17:
     LDA #$01
     JSR SwitchBank
-    JMP B1_B15B
+    JMP PlayerAnimFrames_LB15B
 PlayerState18:
     LDA #$01
     JSR SwitchBank
-    JMP B1_B241
+    JMP PlayerAnimFrames_LB241
 ApplyCollectedFlag:
     STA zp_C6
     STX saved_x
     JSR GetCollectibleBit
     LDA BitMask,x
     AND collected_flags,y
-    BNE F_F68F
-F_F688:
+    BNE ApplyCollectedFlag_LF68F
+ApplyCollectedFlag_LF688:
     LDA zp_C6
-F_F68A:
+ApplyCollectedFlag_LF68A:
     LDX saved_x
     LDY #$00
     RTS
-F_F68F:
+ApplyCollectedFlag_LF68F:
     LDY zp_C6
     CPY #$CE
     BCC @F_F699
     LDA #$00
-    BEQ F_F68A
+    BEQ ApplyCollectedFlag_LF68A
 @F_F699:
-    LDA F_F5E3,y
-    JMP F_F68A
+    LDA DeathAnimFrame_LF5E3,y
+    JMP ApplyCollectedFlag_LF68A
 ; Tbl_F_F69F: 17 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_F69F:
     .byte $00,$78,$78,$78,$00,$00,$D2,$CE,$00,$00,$00,$00,$D7,$D7,$D7,$D7
@@ -7135,7 +7135,7 @@ GetCollectibleBit:
     BPL @F_F6D3
     PLA
     PLA
-    JMP F_F688
+    JMP ApplyCollectedFlag_LF688
 MapPtrToTileCoords:
     LDA tmp_c
     PHA
@@ -7329,7 +7329,7 @@ HandleSpecialTile:
 @F_F840:
     LDX zp_D3
     RTS
-F_F843:
+HandleSpecialTile_LF843:
     LDA cur_bank
     PHA
     LDA #$03
@@ -7350,11 +7350,11 @@ PlayerState19:
 PlayerState1A:
     LDA #$03
     JSR SwitchBank
-    JMP B3_BD67
+    JMP AreaMap9_LBD67
 PlayerState1B:
     LDA #$03
     JSR SwitchBank
-    JMP B3_BD8D
+    JMP PlayerFrameCycle4_LBD8D
 EntMoveYWithGroundFar:
     LDA cur_bank
     PHA
@@ -7536,9 +7536,9 @@ PickupScoreValues:
 AwardPickup:
     LDA tmp_a
     CMP #$0C
-    BCC F_F9EA
+    BCC AwardPickup_LF9EA
     CMP #$0D
-    BNE F_F9D7
+    BNE AwardPickup_LF9D7
     LDA #$32
     LDY #$FA
     JSR SpawnEffects
@@ -7550,7 +7550,7 @@ AwardPickup:
 ; Tbl_F_F9D2: 5 bytes, no direct code reference (continuation or unreferenced)
 Tbl_F_F9D2:
     .byte $29,$3F,$3E,$40,$29
-F_F9D7:
+AwardPickup_LF9D7:
     LDA #$01
     STA tmp_c
     JSR AddLives
@@ -7558,8 +7558,8 @@ F_F9D7:
     JSR PlaySfxSq1
     LDA #$1A
     STA tmp_a
-    JMP F_F9F9
-F_F9EA:
+    JMP AwardPickup_LF9F9
+AwardPickup_LF9EA:
     ASL a
     TAY
     LDA PickupScoreValues,y
@@ -7567,7 +7567,7 @@ F_F9EA:
     LDA $F99F,y
     STA tmp_d
     JSR AddScore
-F_F9F9:
+AwardPickup_LF9F9:
     JSR FindFreeEntitySlot
     LDA #$04
     STA ent_type,y
@@ -7624,7 +7624,7 @@ PlayerState1E:
     LDX #$75
     LDA #$BC
     JMP FarCall
-F_FA6B:
+PlayerState1E_LFA6B:
     LDA zp_AA
     STA zp_B0
     LDA #$01
@@ -7671,8 +7671,8 @@ F_FA6B:
     LDA #$00
 @F_FAB7:
     STA zp_B7
-    JMP F_FAF7
-F_FABC:
+    JMP PlayerState1E_LFAF7
+PlayerState1E_LFABC:
     LDA zp_AA
     STA zp_B0
     LDA #$01
@@ -7702,12 +7702,12 @@ F_FABC:
 @F_FAE9:
     DEC zp_B8
     LDA zp_B8
-    BEQ F_FAF7
+    BEQ PlayerState1E_LFAF7
     CMP #$18
     BNE @F_FACB
     INX
     JMP @F_FACB
-F_FAF7:
+PlayerState1E_LFAF7:
     LDA #$05
     JSR SwitchBank
     INC entity_tick
@@ -8170,12 +8170,12 @@ Decompress:
     ROL a
     STA tmp_08
     STA tmp_a
-F_FE03:
+Decompress_LFE03:
     JSR Decomp_ReadBitsB
     LDA tmp_08
     JSR Decomp_PutByte
     JSR Decomp_NextDst
-F_FE0E:
+Decompress_LFE0E:
     ASL tmp_a
     BEQ @F_FE15
     JMP @F_FE23
@@ -8189,7 +8189,7 @@ F_FE0E:
     STA tmp_a
 @F_FE23:
     BCS @F_FE28
-    JMP F_FE03
+    JMP Decompress_LFE03
 @F_FE28:
     LDA #$00
     STA tmp_08
@@ -8210,11 +8210,11 @@ F_FE0E:
     LDA tmp_08
     CMP #$00
     BNE @F_FE4E
-    JMP F_FE9F
+    JMP Decompress_LFE9F
 @F_FE4E:
     INC tmp_08
     INC tmp_08
-F_FE52:
+Decompress_LFE52:
     LDA tmp_08
     STA tmp_b
     JSR Decomp_ReadBitsA
@@ -8238,7 +8238,7 @@ F_FE52:
     STA tmp_08
     LDA tmp_08
     STA ptr_hi
-F_FE7F:
+Decompress_LFE7F:
     JSR Decomp_ReadBack
     STA tmp_08
     JSR Decomp_NextSrc
@@ -8247,14 +8247,14 @@ F_FE7F:
     JSR Decomp_NextDst
     DEC tmp_b
     BEQ @F_FE96
-    JMP F_FE7F
+    JMP Decompress_LFE7F
 @F_FE96:
     PLA
     STA ptr_hi
     PLA
     STA ptr_lo
-    JMP F_FE0E
-F_FE9F:
+    JMP Decompress_LFE0E
+Decompress_LFE9F:
     JSR Decomp_ReadBitsB
     CLC
     LDA tmp_08
@@ -8267,14 +8267,14 @@ F_FE9F:
     ADC #$09
     STA tmp_08
     BCS @F_FEB6
-    JMP F_FE52
+    JMP Decompress_LFE52
 @F_FEB6:
     LDA tmp_08
     STA tmp_b
     JSR Decomp_ReadBitsA
     LDA ptr_lo
     PHA
-F_FEC0:
+Decompress_LFEC0:
     LDA ptr_hi
     PHA
     LDA tmp_08
@@ -8285,7 +8285,7 @@ F_FEC0:
     ADC tmp_08
     STA tmp_08
     STA ptr_lo
-F_FED2:
+Decompress_LFED2:
     JSR Decomp_ReadOut
     ADC tmp_d
     STA tmp_08
@@ -8301,7 +8301,7 @@ F_FED2:
     BEQ @F_FEF2
     JMP @F_FEDB
 @F_FEF2:
-    JMP F_FE7F
+    JMP Decompress_LFE7F
 Decomp_ReadBitsA:
     LDA #$00
     STA tmp_08
