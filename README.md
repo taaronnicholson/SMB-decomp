@@ -9,6 +9,18 @@ The code is back-translated
 back into buildable ca65 assembly. `make verify` rebuilds the ROM and checks that it is
 **byte-identical** to the original (SHA-1 `c1bc357fce0aee0973e8d1f7aac75a68d52bea02`).
 
+## Quickstart
+You need `make` and the [cc65](https://cc65.github.io/) tools (`ca65`, `ld65`): `sudo apt install cc65` on Debian/Ubuntu, `brew install cc65` on macOS. Python 3 is only needed for the tools.
+
+```sh
+git clone https://github.com/taaronnicholson/SMB-decomp.git && cd SMB-decomp
+make verify          # assembles src/ into build/game.nes and checks its SHA-1 (c1bc357f...)
+```
+
+`make verify` needs no ROM file. The original ROM is not in the repository; if you have your own dump of it (SHA-1 above), copy it to `rom/game.nes` and `make verify` also compares the build with it byte for byte.
+With the ROM in place, `make check` regenerates every generated file from it (`make regen`, `make tables`), rebuilds, and fails if anything tracked changed.
+The emulator in `tools/emu.py` (`python3 -I tools/emu.py 600 out --press=START@130`) writes a screenshot of the game after 600 frames; `tools/watch_ram.py` and the docs under `docs/` explain what the game does.
+
 ## Layout
 - `src/bank0.s … bank6.s` – switchable banks, mapped at `$8000-$BFFF` (labels `B<bank>_<addr>`)
 - `src/fixed.s` – fixed bank 7 at `$C000-$FFFF` (labels `F_<addr>`; reset/NMI/IRQ, bank switching)
