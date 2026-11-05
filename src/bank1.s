@@ -4739,7 +4739,7 @@ PlayerState11_Body:
     INC tmp_c
 @B1_AF74:
     LDA tmp_c
-    STA zp_D1
+    STA state_delay
     LDA #$00
     STA tmp_c
     LDA #$52
@@ -4754,7 +4754,7 @@ PlayerState11_Body:
     STY tmp_b
 @B1_AF90:
     LDA tmp_a
-    STA zp_D2
+    STA state_delay_outer
     LDA tmp_b
     STA zp_D3
     LDA tmp_c
@@ -4829,7 +4829,7 @@ PlayerState14_Body:
 PlayerState14_Body_LB015:
     LDA #$00
     STA tmp_d
-    LDA zp_D2
+    LDA state_delay_outer
     STA tmp_a
     LDA zp_D3
     STA tmp_b
@@ -4858,7 +4858,7 @@ PlayerState14_Body_LB015:
     SBC tmp_b
 @B1_B048:
     STA zp_D5
-    LDA zp_D1
+    LDA state_delay
     BEQ @B1_B05C
     LDA player_x_lo
     CLC

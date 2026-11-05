@@ -78,3 +78,9 @@ Shooting did not defeat boss 3 in the emulator (3-4 landed shots in about 5,600 
 - The same prize (`$47` -> `$48` at x `$78`, y `$3DE`; it landed in entity slot 42 this time) then appeared. Touching it started step 8 (`story_timer` `$28` counting down in steps of 2 frames),
   after which `story_scene` was cleared, `player_state` became `$09` (start of a life) and `game_state` `$0E`, the arrival state of area 6 listed in the table above, with the player dropping in (`$0E` -> `$02` -> `$04` -> `$00`).
   So boss 3 leads into the stage 5 setup (`stage_index` 5, code-read) rather than the bonus ascent.
+
+### Stage-clear tally (`$0A` -> `$0B`, verified by forcing `game_state` = `$0A`)
+`GameState0A` types the "STAGE CLEAR" text one row per `clear_text_ticks` countdown (5 ticks; `clear_text_row` 1..`$0E`) and then sets `game_state` `$0B` (frame 644 of the forced run).
+`GameState0B` runs `tally_step` through a 10-entry word table; in the run it went 0, 1, 2, 3, 6, 7, 9 (step 3 jumped to 6 because the second tally was already `$3C`):
+0 starts (spawns a pickup if `tally` < `$96`, sfx `$28`, popup), 1 counts `tally` up to `$0257` at 10 score per step, 2/5 are timed pauses (`state_delay`/`state_delay_outer`, blinking via the table at `$B0C4`),
+3/4 count the second tally (`tally_small`) up to `$3C` at 50 score per step, 6-9 draw the final messages and hand over to `GameState0D`/the next stage (steps 7-9 read from the code and the table `GameState0B_Sequence`).

@@ -7153,7 +7153,7 @@ MapPtrToTileCoords:
     SBC map_ptr_hi
     STA tmp_d
     LDA map_log2_width
-    STA ram_072F
+    STA tally_step
     LSR tmp_d
     ROR tmp_c
     LSR tmp_d
@@ -7163,16 +7163,16 @@ MapPtrToTileCoords:
 @F_F70A:
     LSR tmp_d
     ROR tmp_c
-    DEC ram_072F
+    DEC tally_step
     BNE @F_F70A
     LDA map_width
     SEC
     SBC #$01
-    STA ram_072F
+    STA tally_step
     LDA ptr_lo
     SEC
     SBC map_ptr_lo
-    AND ram_072F
+    AND tally_step
     STA tmp_d
     LDA tmp_c
     SEC

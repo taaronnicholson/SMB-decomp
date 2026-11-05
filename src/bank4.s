@@ -741,7 +741,7 @@ Gfx_B4_ABB2:
     .byte $00,$01,$7E,$00,$00,$38,$00,$60,$10,$0C,$F8,$0D,$B0,$7B,$41,$1E
     .byte $42,$7D,$06,$40,$A8,$2D,$03,$81,$F4,$1A,$60,$04,$3F,$C0,$28,$71
     .byte $C1,$5E,$08,$F0,$0E,$24,$74,$65,$C0,$00
-    LDA zp_D1
+    LDA state_delay
     CMP #$0F
     BNE @B4_AC09
     PHA
@@ -798,7 +798,7 @@ Gfx_B4_ABB2:
     BEQ @B4_AC58
     RTS
 @B4_AC4F:
-    STA zp_D1
+    STA state_delay
     TAY
     LDA Tbl_B4_ADBB,y
     STA ppu_job
@@ -1073,9 +1073,9 @@ GameState02:
     LDA #$05
     STA game_state
     LDA #$05
-    STA ram_0738
+    STA clear_text_ticks
     LDA #$01
-    STA ram_0737
+    STA clear_text_row
     JMP GameState05
 @B4_AE8F:
     LDA zp_C5
@@ -1145,27 +1145,27 @@ GameState05:
     BEQ @B4_AF40
     RTS
 @B4_AF40:
-    LDA ram_0738
+    LDA clear_text_ticks
     SEC
     SBC #$01
     BNE @B4_AF5A
-    LDA ram_0737
+    LDA clear_text_row
     CMP #$1F
     BNE @B4_AF52
     JMP @B4_AF7B
 @B4_AF52:
     CLC
     ADC #$01
-    STA ram_0737
+    STA clear_text_row
     LDA #$05
 @B4_AF5A:
-    STA ram_0738
-    LDA ram_0737
+    STA clear_text_ticks
+    LDA clear_text_row
     STA tmp_b
     JSR PPUBuffer_Append
     LDA #$14
     STA tmp_a
-    LDA ram_0737
+    LDA clear_text_row
     CMP #$19
     BCS @B4_AF76
     AND #$01
@@ -1225,7 +1225,7 @@ GameState09:
     BEQ GameState0C_LAFF4
     LDA #$01
     STA camera_mode
-    STA ram_0737
+    STA clear_text_row
     LDA #$08
     STA cam_limit_a_lo
     LDA #$00
@@ -1235,7 +1235,7 @@ GameState09:
     STA cam_limit_b_hi
     STA ram_0745
     LDA #$03
-    STA ram_0738
+    STA clear_text_ticks
     LDA #$0D
     STA game_state
     LDA #$0A
@@ -1250,26 +1250,26 @@ GameState0A:
     STA tmp_c
     LDA #$B0
     STA tmp_d
-    LDA ram_0738
+    LDA clear_text_ticks
     SEC
     SBC #$01
     BNE @B4_B048
-    INC ram_0737
+    INC clear_text_row
     LDA #$05
 @B4_B048:
-    STA ram_0738
-    LDA ram_0737
+    STA clear_text_ticks
+    LDA clear_text_row
     STA tmp_b
     JSR PPUBuffer_Append
     LDA #$14
     STA tmp_a
-    LDA ram_0737
+    LDA clear_text_row
     CMP #$0E
     BNE @B4_B069
     LDA #$0B
     STA game_state
     LDA #$00
-    STA ram_072F
+    STA tally_step
     RTS
 @B4_B069:
     AND #$01
@@ -1285,7 +1285,7 @@ TextPackets_B074:
     .byte "RAELC EGATS"   ; reads: "STAGE CLEAR"
     .byte $00
 GameState0B:
-    LDA ram_072F
+    LDA tally_step
     ASL a
     TAY
     LDA @B4_B096,y
@@ -1306,17 +1306,17 @@ GameState0B:
     .word GameState0B_LB278
     .byte $D8,$B2
 @B4_B0AC:
-    LDA zp_D1
+    LDA state_delay
     SEC
     SBC #$01
     BNE @B4_B0BB
-    DEC zp_D2
+    DEC state_delay_outer
     BNE @B4_B0BA
-    INC ram_072F
+    INC tally_step
 @B4_B0BA:
     RTS
 @B4_B0BB:
-    STA zp_D1
+    STA state_delay
     TAY
     LDA GameState0B_Tbl_B0C4,y
     STA ppu_job
@@ -1327,7 +1327,7 @@ GameState0B_Tbl_B0C4:
     .byte $15,$15,$15,$15
 GameState0B_LB0D8:
     LDA #$01
-    STA ram_072F
+    STA tally_step
     LDA tally_lo
     SEC
     SBC #$96
@@ -1373,25 +1373,25 @@ GameState0B_LB109:
     RTS
 @B4_B132:
     LDA #$02
-    STA ram_072F
+    STA tally_step
     LDA #$13
-    STA zp_D1
+    STA state_delay
     LDA #$19
-    STA zp_D2
+    STA state_delay_outer
     RTS
 GameState0B_LB140:
     LDA tally_small
     CMP #$3C
     BNE @B4_B14D
     LDA #$06
-    STA ram_072F
+    STA tally_step
     RTS
 @B4_B14D:
     STA zp_D3
     LDA #$04
-    STA ram_072F
+    STA tally_step
     LDA #$19
-    STA zp_D1
+    STA state_delay
     LDA #$28
     JSR PlaySfxNoise
     LDA #$27
@@ -1407,7 +1407,7 @@ GameState0B_LB170:
     LDA tally_small
     CMP #$3C
     BEQ @B4_B195
-    LDA zp_D1
+    LDA state_delay
     SEC
     SBC #$01
     BNE @B4_B192
@@ -1421,7 +1421,7 @@ GameState0B_LB170:
     JSR AddRam01AA
     LDA tmp_c
 @B4_B192:
-    STA zp_D1
+    STA state_delay
     RTS
 @B4_B195:
     LDA #$0C
@@ -1430,11 +1430,11 @@ GameState0B_LB170:
     BNE @B4_B1A0
     JSR SpawnPickupAtPlayer
 @B4_B1A0:
-    INC ram_072F
+    INC tally_step
     LDA #$13
-    STA zp_D1
+    STA state_delay
     LDA #$19
-    STA zp_D2
+    STA state_delay_outer
     RTS
 GameState0B_LB1AC:
     LDA #$00
@@ -1446,21 +1446,21 @@ GameState0B_LB1AC:
     LDA #$04
     STA tmp_b
     JSR PPUBuffer_Append
-    INC ram_072F
+    INC tally_step
     LDA onetime_flags
     AND SwitchBitMasks
     BNE @B4_B1D8
     LDA #$09
-    STA ram_072F
+    STA tally_step
     LDA #$00
-    STA zp_D1
+    STA state_delay
     LDA #$07
-    STA zp_D2
+    STA state_delay_outer
 @B4_B1D8:
     RTS
 GameState0B_LB1D9:
     LDA #$5A
-    STA zp_D1
+    STA state_delay
     LDA #$28
     JSR PlaySfxNoise
     LDA #$0A
@@ -1490,7 +1490,7 @@ GameState0B_LB1D9:
     STA effect_param3
     LDA #$00
     STA effect_param4
-    INC ram_072F
+    INC tally_step
 GameState0B_LB226:
     RTS
 ; TextPackets_B227: PPU text packets
@@ -1498,8 +1498,8 @@ TextPackets_B227:
     .byte $26,$CE,$85,$44,$4E,$55,$4F,$46,$00,$26,$CE,$85,$20,$20,$20,$20
     .byte $20,$00
 GameState0B_LB239:
-    DEC zp_D1
-    LDA zp_D1
+    DEC state_delay
+    LDA state_delay
     CMP #$4B
     BNE @B4_B248
     LDA #$0C
@@ -1508,10 +1508,10 @@ GameState0B_LB239:
 @B4_B248:
     CMP #$00
     BNE GameState0B_LB226
-    INC ram_072F
+    INC tally_step
     LDA #$07
     STA effect_type
-    STA zp_D2
+    STA state_delay_outer
     LDA #$00
     STA effect_param2
     STA effect_param0
@@ -1529,10 +1529,10 @@ GameState0B_LB239:
 GameState0B_LB277:
     RTS
 GameState0B_LB278:
-    LDY zp_D1
+    LDY state_delay
     LDA GameState0B_Sequence,y
     BEQ GameState0B_LB277
-    INC zp_D1
+    INC state_delay
     CMP #$FF
     BNE @B4_B2BB
     LDA #$33
@@ -1749,10 +1749,10 @@ GameState0F:
     LDA #$01
     STA ram_0736
     STA player_facing
-    STA ram_0737
+    STA clear_text_row
     LDA #$04
     STA collected_flags
-    STA ram_0738
+    STA clear_text_ticks
     LDA camera_mode
     CMP #$01
     BNE AimedRandomEffect_LB43B
@@ -1766,24 +1766,24 @@ GameState10:
     STA tmp_c
     LDA #$B4
     STA tmp_d
-    LDA ram_0738
+    LDA clear_text_ticks
     SEC
     SBC #$01
     BNE @B4_B480
-    INC ram_0737
+    INC clear_text_row
     LDA #$05
 @B4_B480:
-    STA ram_0738
-    LDA ram_0737
+    STA clear_text_ticks
+    LDA clear_text_row
     STA tmp_b
     JSR PPUBuffer_Append
     LDA #$14
     STA tmp_a
-    LDA ram_0737
+    LDA clear_text_row
     CMP #$1A
     BNE @B4_B49F
     LDA #$23
-    STA ram_0737
+    STA clear_text_row
     INC game_state
     RTS
 @B4_B49F:
@@ -1804,12 +1804,12 @@ TextPackets_B4C1:
     .byte ":REVO SI"   ; reads: "IS OVER:"
     .byte $00
 GameState11:
-    DEC ram_0737
+    DEC clear_text_row
     BNE GameState10_LB4A8
     LDX #$12
     STX game_state
     INX
-    STX zp_D1
+    STX state_delay
     LDA #$00
     STA credits_ptr_lo
     LDA #$02

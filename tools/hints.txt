@@ -1010,3 +1010,10 @@ ram 01B7 dialogue_pause_timer       ; frames BossDialoguePause waits before the 
 ram 01BE dialogue_phase             ; 1 = text queued, 2 = typing, 3 = finished (BossDialogueType then moves to step 4)
 ram 01BC dialogue_type_delay        ; 3 at the start; counts the typing and toggles the speaker's mouth
 entry 4 B2D9
+
+; naming pass 29 (RAM): stage-clear text and tally, confirmed by forcing game_state $0A (it moved to $0B at frame 644 and the step went 0,1,2,3,6,7,9)
+ram 0737 clear_text_row             ; GameState0A: row of the "STAGE CLEAR" text being typed (1..$0E, then game_state $0B)
+ram 0738 clear_text_ticks           ; GameState0A: countdown (5) between rows
+ram 072F tally_step                 ; GameState0B: step 0..9 of the tally (word table at GameState0B)
+ram 00D1 state_delay                ; countdown used by GameState0B (and by the respawn-arc handlers in bank 1)
+ram 00D2 state_delay_outer          ; outer countdown paired with state_delay

@@ -3730,12 +3730,12 @@ Ent33_Update:
     LDA #$19
     STA player_state
     LDA #$0A
-    STA ram_072F
+    STA tally_step
     LDA #$00
-    STA zp_D1
+    STA state_delay
     STA zp_BD
     LDA #$01
-    STA zp_D2
+    STA state_delay_outer
     LDA #$7D
     STA zp_D3
     JSR Ent_StartCollectAnim

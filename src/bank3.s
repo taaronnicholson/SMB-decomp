@@ -1319,9 +1319,9 @@ Tbl_B3_BF00:
     STX tally_small
     INX
     STX ram_0736
-    STX ram_0737
+    STX clear_text_row
     LDA #$04
-    STA ram_0738
+    STA clear_text_ticks
     LDA player_y_lo
     STA ptr_lo
     LDA player_y_hi
