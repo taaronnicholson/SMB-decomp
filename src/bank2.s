@@ -593,7 +593,7 @@ SetPlayerFacingBit:
     STA zp_4F
     LDA zp_50
     BEQ @B2_9E1D
-    LDA ram_0749
+    LDA scroll_draw_ok
     BNE @B2_9E1E
     LDA ppu_buffer_idx
     CMP #$18

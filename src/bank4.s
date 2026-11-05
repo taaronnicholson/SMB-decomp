@@ -826,7 +826,7 @@ Gfx_B4_ABB2:
     STX scroll_y_hi
     STX scroll_y_lo
     STX scroll_x_px
-    STX zp_3D
+    STX scroll_y_sub
     STX cutscene_fade_b
     LDA ppumask_shadow
     ORA #$06
@@ -2913,9 +2913,9 @@ FadeStepBEE7:
     STA tmp_a
     DEC tmp_b
     BMI @B4_BFD6
-    LDA zp_01
+    LDA no_nmi_yet
     BNE @B4_BFD3
-    DEC zp_01
+    DEC no_nmi_yet
     LDY #$06
     LDX #$03
     LDA #$80

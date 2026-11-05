@@ -510,8 +510,8 @@ MainLoop:
     JSR WaitForNMI
 MainLoopBody:
     LDA #$FF
-    STA ram_0749
-    STA zp_01
+    STA scroll_draw_ok
+    STA no_nmi_yet
     LDA nmi_state
     CMP #$03
     BEQ @F_C710
@@ -651,7 +651,7 @@ NMI_LC800:
 NMI_LC82F:
     DEC frame_counter
     LDA #$00
-    STA zp_01
+    STA no_nmi_yet
     LDA ppuctrl_shadow
     ORA #$80
     STA ppuctrl_shadow
@@ -1654,7 +1654,7 @@ CreditsStep:
     LDA scroll_y_hi
     ADC #$00
     STA scroll_y_hi
-    DEC zp_3D
+    DEC scroll_y_sub
     BEQ @F_CF61
     BMI @F_CF7D
     RTS
@@ -1674,7 +1674,7 @@ CreditsStep:
     RTS
 @F_CF7D:
     LDA #$07
-    STA zp_3D
+    STA scroll_y_sub
     LDA PPUSTATUS
     LDX sprite_y_tmp
     LDY #$00
@@ -1824,7 +1824,7 @@ LoadArea:
     STY fade_tbl_idx
     STY fade_tbl_pos
     DEY
-    STY ram_0749
+    STY scroll_draw_ok
     JSR ClearPpu_1F80_0F80
     LDA #$02
     JSR SwitchBank
@@ -2505,8 +2505,8 @@ ComputeFocusY_LD4FE:
     STA scroll_y_hi
     STA draw_y
     STA draw_x
-    STA zp_3C
-    STA zp_3D
+    STA scroll_x_sub
+    STA scroll_y_sub
     LDA focus_x_lo
     AND #$0F
     STA ptr_lo
@@ -2553,28 +2553,28 @@ ScrollX:
     LDA focus_x_lo
     SEC
     SBC prev_focus_x_lo
-    STA zp_3A
+    STA scroll_dx
     BMI @F_D5F2
     BNE @F_D5F5
     JMP ScrollY
 @F_D5F2:
     JMP ScrollX_LD677
 @F_D5F5:
-    LDA zp_3A
+    LDA scroll_dx
     CLC
     ADC scroll_x_px
     STA scroll_x_px
-    LDA zp_3C
+    LDA scroll_x_sub
 ScrollX_LD5FE:
     CLC
-    ADC zp_3A
-    STA zp_3C
+    ADC scroll_dx
+    STA scroll_x_sub
     CMP #$08
     BCS @F_D60A
     JMP ScrollY
 @F_D60A:
     AND #$07
-    STA zp_3C
+    STA scroll_x_sub
     LDA scroll_y_hi
     LSR a
     LDA scroll_y_lo
@@ -2641,18 +2641,18 @@ ScrollX_LD5FE:
 @F_D674:
     JMP ScrollY
 ScrollX_LD677:
-    LDA zp_3A
+    LDA scroll_dx
     CLC
     ADC scroll_x_px
     STA scroll_x_px
-    LDA zp_3C
+    LDA scroll_x_sub
     CLC
-    ADC zp_3A
-    STA zp_3C
+    ADC scroll_dx
+    STA scroll_x_sub
     CMP #$08
     BCC ScrollY
     AND #$07
-    STA zp_3C
+    STA scroll_x_sub
     LDA scroll_y_hi
     LSR a
     LDA scroll_y_lo
@@ -2697,10 +2697,10 @@ ScrollY:
     LDA focus_y_lo
     SEC
     SBC prev_focus_y_lo
-    STA zp_3B
+    STA scroll_dy
     BMI @F_D6E5
     BNE @F_D6E8
-    LDA zp_3D
+    LDA scroll_y_sub
     BMI @F_D6E2
     CMP #$08
     BCS @F_D708
@@ -2710,7 +2710,7 @@ ScrollY:
 @F_D6E5:
     JMP @F_D75E
 @F_D6E8:
-    LDA zp_3B
+    LDA scroll_dy
     CLC
     ADC scroll_y_lo
     CMP #$F0
@@ -2722,20 +2722,20 @@ ScrollY:
     LDA scroll_y_hi
     ADC #$00
     STA scroll_y_hi
-    LDA zp_3D
+    LDA scroll_y_sub
     CLC
-    ADC zp_3B
-    STA zp_3D
+    ADC scroll_dy
+    STA scroll_y_sub
     CMP #$08
     BCS @F_D708
 @F_D707:
     RTS
 @F_D708:
-    LDA ram_0749
+    LDA scroll_draw_ok
     BEQ @F_D707
-    LDA zp_3D
+    LDA scroll_y_sub
     AND #$07
-    STA zp_3D
+    STA scroll_y_sub
     LDA scroll_y_hi
     LSR a
     LDA scroll_y_lo
@@ -2784,7 +2784,7 @@ ScrollY:
     STA map_read_lo
     RTS
 @F_D75E:
-    LDA zp_3B
+    LDA scroll_dy
     CLC
     ADC scroll_y_lo
     BCS @F_D769
@@ -2796,19 +2796,19 @@ ScrollY:
     LDA scroll_y_hi
     ADC #$FF
     STA scroll_y_hi
-    LDA zp_3D
+    LDA scroll_y_sub
     CLC
-    ADC zp_3B
-    STA zp_3D
+    ADC scroll_dy
+    STA scroll_y_sub
     BMI @F_D77B
 @F_D77A:
     RTS
 @F_D77B:
-    LDA ram_0749
+    LDA scroll_draw_ok
     BEQ @F_D77A
-    LDA zp_3D
+    LDA scroll_y_sub
     AND #$07
-    STA zp_3D
+    STA scroll_y_sub
     LDA scroll_y_hi
     LSR a
     LDA scroll_y_lo
@@ -2873,23 +2873,23 @@ ScrollY_LD7C7:
     AND #$01
     BNE @F_D801
     LDA meta_tl_ptr_lo
-    STA zp_3E
+    STA draw_top_ptr_lo
     LDA meta_tl_ptr_hi
-    STA zp_3F
+    STA draw_top_ptr_hi
     LDA meta_bl_ptr_lo
-    STA zp_40
+    STA draw_bot_ptr_lo
     LDA meta_bl_ptr_hi
-    STA zp_41
+    STA draw_bot_ptr_hi
     JMP @F_D811
 @F_D801:
     LDA meta_tr_ptr_lo
-    STA zp_3E
+    STA draw_top_ptr_lo
     LDA meta_tr_ptr_hi
-    STA zp_3F
+    STA draw_top_ptr_hi
     LDA meta_br_ptr_lo
-    STA zp_40
+    STA draw_bot_ptr_lo
     LDA meta_br_ptr_hi
-    STA zp_41
+    STA draw_bot_ptr_hi
 @F_D811:
     LDA tmp_ptr_lo
     STA ppu_buffer,x
@@ -2915,7 +2915,7 @@ ScrollY_LD7C7:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_40),y
+    LDA (draw_bot_ptr_lo),y
     STA ppu_buffer,x
     DEX
     LDA map_read_lo
@@ -2936,10 +2936,10 @@ ScrollY_LD7C7:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_3E),y
+    LDA (draw_top_ptr_lo),y
     STA ppu_buffer,x
     DEX
-    LDA (zp_40),y
+    LDA (draw_bot_ptr_lo),y
     STA ppu_buffer,x
     DEX
     LDA map_read_lo
@@ -2988,12 +2988,12 @@ ScrollY_LD7C7:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_3E),y
+    LDA (draw_top_ptr_lo),y
     STA ppu_buffer,x
     DEX
     DEC draw_row_count
     BEQ @F_D8E6
-    LDA (zp_40),y
+    LDA (draw_bot_ptr_lo),y
     STA ppu_buffer,x
     DEX
     LDA map_read_lo
@@ -3009,7 +3009,7 @@ ScrollY_LD7C7:
     LDX ppu_buffer_idx
     LDA #$00
     STA ppu_buffer,x
-    STA ram_0749
+    STA scroll_draw_ok
     PLA
     STA map_read_hi
     PLA
@@ -3039,10 +3039,10 @@ ScrollY_LD8F7:
     LDA map_bank
     JSR SwitchBankKeepX
     LDA (map_read_lo),y
-    STA ram_0370,x
+    STA attr_cells_a,x
     LDY tmp_ptr_hi
     LDA (map_read_lo),y
-    STA ram_0381,x
+    STA attr_cells_b1,x
     LDA map_read_lo
     CLC
     ADC map_width
@@ -3076,22 +3076,22 @@ ScrollY_LD8F7:
     LDA #$00
     JSR SwitchBankKeepX
     LDX tmp_ptr_hi
-    LDY ram_0370,x
+    LDY attr_cells_a,x
     LDA (meta_attr_ptr_lo),y
     AND #$03
     STA tmp_ptr_lo
-    LDY ram_0381,x
+    LDY attr_cells_b1,x
     LDA (meta_attr_ptr_lo),y
     AND #$0C
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
     INX
-    LDY ram_0370,x
+    LDY attr_cells_a,x
     LDA (meta_attr_ptr_lo),y
     AND #$30
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
-    LDY ram_0381,x
+    LDY attr_cells_b1,x
     LDA (meta_attr_ptr_lo),y
     AND #$C0
     ORA tmp_ptr_lo
@@ -3113,7 +3113,7 @@ ScrollY_LD8F7:
     BPL @F_D943
     LDA #$00
     STA ppu_buffer,y
-    STA ram_0749
+    STA scroll_draw_ok
     PLA
     STA map_read_hi
     PLA
@@ -3127,23 +3127,23 @@ ScrollY_LD9BD:
     AND #$01
     BNE @F_D9DB
     LDA meta_tl_ptr_lo
-    STA zp_3E
+    STA draw_top_ptr_lo
     LDA meta_tl_ptr_hi
-    STA zp_3F
+    STA draw_top_ptr_hi
     LDA meta_tr_ptr_lo
-    STA zp_40
+    STA draw_bot_ptr_lo
     LDA meta_tr_ptr_hi
-    STA zp_41
+    STA draw_bot_ptr_hi
     JMP @F_D9EB
 @F_D9DB:
     LDA meta_bl_ptr_lo
-    STA zp_3E
+    STA draw_top_ptr_lo
     LDA meta_bl_ptr_hi
-    STA zp_3F
+    STA draw_top_ptr_hi
     LDA meta_br_ptr_lo
-    STA zp_40
+    STA draw_bot_ptr_lo
     LDA meta_br_ptr_hi
-    STA zp_41
+    STA draw_bot_ptr_hi
 @F_D9EB:
     LDA NametableRowHi,y
     STA ppu_buffer,x
@@ -3183,7 +3183,7 @@ ScrollY_LD9BD:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_40),y
+    LDA (draw_bot_ptr_lo),y
     STA ppu_buffer,x
     DEX
     INC map_read_lo
@@ -3201,10 +3201,10 @@ ScrollY_LD9BD:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_3E),y
+    LDA (draw_top_ptr_lo),y
     STA ppu_buffer,x
     DEX
-    LDA (zp_40),y
+    LDA (draw_bot_ptr_lo),y
     STA ppu_buffer,x
     DEX
     INC map_read_lo
@@ -3256,12 +3256,12 @@ ScrollY_LD9BD:
     TAY
     LDA #$00
     JSR SwitchBankKeepX
-    LDA (zp_3E),y
+    LDA (draw_top_ptr_lo),y
     STA ppu_buffer,x
     DEX
     DEC tmp_ptr_lo
     BEQ @F_DAD2
-    LDA (zp_40),y
+    LDA (draw_bot_ptr_lo),y
     STA ppu_buffer,x
     DEX
     INC map_read_lo
@@ -3274,7 +3274,7 @@ ScrollY_LD9BD:
     LDX ppu_buffer_idx
     LDA #$00
     STA ppu_buffer,x
-    STA ram_0749
+    STA scroll_draw_ok
     PLA
     STA map_read_hi
     PLA
@@ -3339,7 +3339,7 @@ F_DAE3:
     JSR SwitchBankKeepX
 @F_DB47:
     LDA (map_read_lo),y
-    STA ram_0370,y
+    STA attr_cells_a,y
     DEY
     BPL @F_DB47
     LDA map_read_lo
@@ -3352,7 +3352,7 @@ F_DAE3:
     LDY #$0F
 @F_DB5E:
     LDA (map_read_lo),y
-    STA ram_0380,y
+    STA attr_cells_b,y
     DEY
     BPL @F_DB5E
     TXA
@@ -3361,11 +3361,11 @@ F_DAE3:
     LDA #$00
     JSR SwitchBankKeepX
 @F_DB6F:
-    LDY ram_0370,x
+    LDY attr_cells_a,x
     LDA (meta_attr_ptr_lo),y
     AND #$03
     STA tmp_ptr_lo
-    LDY ram_0380,x
+    LDY attr_cells_b,x
     LDA (meta_attr_ptr_lo),y
     AND #$30
     ORA tmp_ptr_lo
@@ -3374,12 +3374,12 @@ F_DAE3:
     TXA
     AND #$0F
     TAX
-    LDY ram_0370,x
+    LDY attr_cells_a,x
     LDA (meta_attr_ptr_lo),y
     AND #$0C
     ORA tmp_ptr_lo
     STA tmp_ptr_lo
-    LDY ram_0380,x
+    LDY attr_cells_b,x
     LDA (meta_attr_ptr_lo),y
     AND #$C0
     ORA tmp_ptr_lo
@@ -3395,7 +3395,7 @@ F_DAE3:
     LDY ppu_buffer_idx
     LDA #$00
     STA ppu_buffer,y
-    STA ram_0749
+    STA scroll_draw_ok
     RTS
 FilterCollectedTile:
     STX tmp_d
@@ -6549,16 +6549,16 @@ RunTileEffects_LF27E:
     STA tmp_b
     PLA
     STA tmp_a
-    LDX zp_40
+    LDX draw_bot_ptr_lo
     RTS
 QueueMapTileDraw:
-    STA zp_3E
+    STA draw_top_ptr_lo
     CMP #$D3
     BNE @F_F298
     LDA #$00
-    STA ram_0749
+    STA scroll_draw_ok
 @F_F298:
-    STX zp_40
+    STX draw_bot_ptr_lo
     LDA tmp_a
     PHA
     LDA tmp_b
@@ -6642,7 +6642,7 @@ QueueMapTileDraw:
     LDA #$02
     STA ppu_copy_buf_02,x
     STA ppu_copy_buf_07,x
-    LDY zp_3E
+    LDY draw_top_ptr_lo
     LDA (meta_bl_ptr_lo),y
     STA ppu_copy_buf_03,x
     LDA (meta_tl_ptr_lo),y
@@ -6662,9 +6662,9 @@ QueueMapTileDraw:
     STA ppu_copy_buf_0A,x
     LDA tmp_ptr_hi
     STA ppu_buffer,x
-    LDA zp_01
+    LDA no_nmi_yet
     BNE @F_F36C
-    DEC zp_01
+    DEC no_nmi_yet
     BNE @F_F318
 @F_F36C:
     TXA
@@ -7774,7 +7774,7 @@ PlayerState1E_LFAF7:
     LDA #$02
     BNE @F_FB0C
 @F_FB72:
-    LDA zp_01
+    LDA no_nmi_yet
     BEQ @F_FBCA
     INX
     CPX #$30
@@ -7815,7 +7815,7 @@ PlayerState1E_LFAF7:
     STX saved_x
     JMP (ptr_lo)
 @F_FBBD:
-    LDA zp_01
+    LDA no_nmi_yet
     BEQ @F_FBCA
     DEX
     BPL @F_FB86
@@ -7860,7 +7860,7 @@ PlayerState1E_LFAF7:
     STX saved_x
     JMP (ptr_lo)
 @F_FC0D:
-    LDA zp_01
+    LDA no_nmi_yet
     BEQ @F_FC1C
     INX
     CPX #$30

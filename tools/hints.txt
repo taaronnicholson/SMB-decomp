@@ -1031,3 +1031,18 @@ ram 00FB respawn_x_hi
 ram 00BD anim_cursor                ; index (or frame countdown) into the scripted player animation: ExitWalkAnim, BonusAscentEndAnim; frame timer in the swim states $0C/$0D
 ram 00BE swim_anim_step             ; step counter of the swim animation (states $0C/$0D)
 ram 0090 half_speed_toggle          ; flipped every frame in PlayerState0D so walk_speed alternates 0/1
+
+; naming pass 31 (RAM): scrolling and map tile drawing; the value ranges below were seen in the emulator watch (zp_3A 0..1, zp_3B signed, zp_3C/3D 0..7, zp_3F/41 = $8C..$8F pointer high bytes)
+ram 003A scroll_dx                  ; ScrollX: focus_x - prev_focus_x this frame (signed)
+ram 003B scroll_dy                  ; ScrollY: focus_y - prev_focus_y this frame (signed)
+ram 003C scroll_x_sub               ; pixels scrolled since the last 8-pixel column was queued (0..7)
+ram 003D scroll_y_sub               ; same for rows (also a row-wipe counter in the IRQ/NMI helper at F_CF52)
+ram 003E draw_top_ptr_lo            ; ScrollX/ScrollY: metatile plane for the top half of the column being drawn (TL or TR by column parity); QueueMapTileDraw reuses zp_3E for the tile id
+ram 003F draw_top_ptr_hi
+ram 0040 draw_bot_ptr_lo            ; the bottom-half plane (BL or BR); QueueMapTileDraw reuses zp_40 to save X
+ram 0041 draw_bot_ptr_hi
+ram 0001 no_nmi_yet                 ; $FF at the start of each main loop pass, cleared by NMI; QueueMapTileDraw checks it
+ram 0749 scroll_draw_ok             ; $FF at the start of a frame; ScrollY draws new rows only while it is set; queuing a $D3 tile clears it
+ram 0370 attr_cells_a               ; map cells gathered for the attribute-table update of the rows/columns being drawn (17 entries)
+ram 0380 attr_cells_b               ; second gathered column (base used by the row-draw variant at F_DAE3)
+ram 0381 attr_cells_b1              ; the same second column as the column-draw variant (F_D8F7) addresses it
